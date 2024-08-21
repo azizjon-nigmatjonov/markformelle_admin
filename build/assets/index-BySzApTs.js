@@ -1,1 +1,0 @@
-import{j as e}from"./index-CEODRvTF.js";import{H as r,C as s}from"./index-BvoQFcBW.js";const t=[{label:"settings",link:"/settings/profile"},{label:"profile_info"}],o=()=>e.jsxs(e.Fragment,{children:[e.jsx(r,{extra:e.jsx(s,{items:t,progmatic:!0,type:"link"})}),e.jsx("div",{className:"container"})]});export{o as default};
