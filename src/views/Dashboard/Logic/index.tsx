@@ -34,11 +34,11 @@ export const TableData = () => {
 export const FetchFunction = () => {
   const { data, isLoading } = useCQuery({
     key: `GET_DRIVER_HOME`,
-    endpoint: `/home`,
+    endpoint: `/WEB_ALL?code=01&podr_id=614`,
     params: {
       // page: 1,
     },
   });
-
-  return { bodyData: data?.data ?? [], isLoading };
+  
+  return { bodyData: data ?? [], isLoading };
 };

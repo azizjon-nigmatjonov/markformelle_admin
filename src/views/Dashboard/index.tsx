@@ -1,9 +1,13 @@
 import CBreadcrumbs from "../../components/CElements/CBreadcrumbs";
-import CCard from "../../components/CElements/CCard";
 import { Header } from "../../components/UI/Header";
-import { breadCrumbItems } from "./Logic";
+import MachineCard from "./Card";
+import { breadCrumbItems, FetchFunction } from "./Logic";
 
 const Dashboard = () => {
+  const { bodyData } = FetchFunction();
+
+  console.log("bodyData", bodyData);
+
   return (
     <>
       <Header
@@ -12,7 +16,11 @@ const Dashboard = () => {
       ></Header>
 
       <div className="container">
-        <CCard title="statistics"></CCard>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-8 gap-5">
+          {bodyData.map((machine: any, index: number) => (
+            <MachineCard key={index} machine={machine} />
+          ))}
+        </div>
       </div>
     </>
   );

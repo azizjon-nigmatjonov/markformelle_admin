@@ -2,7 +2,6 @@ import { useQuery } from "react-query";
 import request from "../../utils/request";
 import { createUrl } from "../../utils/createUrl";
 import toast from "react-hot-toast";
-import { getStoredFilters } from "../../components/UI/Filter/Logic";
 
 export const customRequest = async (arg: any, endpoint: any) => {
   const params = arg.queryKey[1];
@@ -11,7 +10,7 @@ export const customRequest = async (arg: any, endpoint: any) => {
   try {
     const response: any = await request.get(createUrl(endpoint, params, param));
 
-    if (response.success) {
+    if (response) {
       return response;
     } else {
       throw Error();
@@ -35,10 +34,7 @@ const useCQuery = ({
   endpoint: any;
   options?: any;
 }) => {
-  const { filterParams } = getStoredFilters({});
-  const { page, perPage } = filterParams;
-  params.page = page || 1;
-  params.perPage = perPage || 10;
+  // const { filterParams } = getStoredFilters({});
 
   return useQuery(
     [key, { ...params, id: null }, param],

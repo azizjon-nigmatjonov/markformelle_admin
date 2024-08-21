@@ -27,8 +27,7 @@ interface Path {
 
 interface routeType {
   sidebar: boolean;
-  value: string; // Assuming value is a string; change as needed
-  // Add other properties if they exist
+  value: string;
 }
 
 const Router = () => {

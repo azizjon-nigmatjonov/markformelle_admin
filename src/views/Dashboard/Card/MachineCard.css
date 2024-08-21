@@ -1,0 +1,33 @@
+
+.machine-card {
+    /* margin-bottom: 20px; */
+    
+    transition: background-color 0.3s ease;
+  }
+
+  .custom.cardinside{
+    padding-top: 0px;
+  }
+  .custom.green {
+    background-color: #6CCE65;
+  }
+  .custom.orange {
+    background-color: #FF9C27;
+  }
+  
+  .custom.purple {
+    background-color: #8099F1;
+  }
+  
+  .custom.grey {
+    background-color: #C0C0C0;
+  }
+  
+  .custom.red {
+    background-color: #FF6060;
+  }
+
+.custom.black {
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
