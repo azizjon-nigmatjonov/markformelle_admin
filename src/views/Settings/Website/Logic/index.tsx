@@ -1,10 +1,10 @@
 export const breadCrumbItems = [
     {
-      label: "Sozlamalar",
+      label: "settings",
       link: "/settings/website",
     },
     {
-      label: "Website Sozlamalari",
+      label: "website_settings",
     },
   ];
   

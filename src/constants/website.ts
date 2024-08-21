@@ -35,7 +35,7 @@ export const ColorConstants = {
   error: "#E82F0F",
   error50: "#FEF3F2",
 
-  main: "#DD431F",
+  main: "#ab077e",
   main60: "#CC4901",
   main80: "#662400",
   main50: "#FFEFE6",
@@ -85,7 +85,7 @@ export const primaryColorConstants = {
 };
 
 export const mainColorConstants = {
-  main: "#DD431F",
+  main: "#ab077e",
   main60: "#CC4901",
   main80: "#662400",
   main50: "#FFEFE6",

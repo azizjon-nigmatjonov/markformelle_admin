@@ -1,4 +1,4 @@
 export const breadCrumbItems = [
-  { label: "Sozlamalar", link: "/settings/profile" },
-  { label: "Profil ma'lumotlari" },
+  { label: "settings", link: "/settings/profile" },
+  { label: "profile_info" },
 ];

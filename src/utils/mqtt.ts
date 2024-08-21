@@ -6,7 +6,7 @@ const options: any = {
   host: 'tb5e5171.ala.asia-southeast1.emqxsl.com',
   port: 8084,
   path: '/mqtt',  // Check if the server expects a specific path
-  username: "teeztaxi",
+  username: "test",
   password: "XFUdQkqH5FG2GMA"
   // Additional options like username, password, etc. can be added here
 };
