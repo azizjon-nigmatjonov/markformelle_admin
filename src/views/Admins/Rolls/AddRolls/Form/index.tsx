@@ -1,13 +1,13 @@
 import { CircularProgress } from "@mui/material";
-import HFTextField from "../../../../../components/FormElements/HFTextField";
+// import HFTextField from "../../../../../components/FormElements/HFTextField";
 
 export const RollForm = ({
   id,
-  control,
-  rollData,
+  // control,
+  // rollData,
   handleSubmit,
   onSubmit,
-  setValue,
+  // setValue,
   isLoading = false,
 }: {
   id?: any;
@@ -20,13 +20,13 @@ export const RollForm = ({
 }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <HFTextField
+      {/* <HFTextField
         name="name"
         control={control}
         placeholder="e.g.Admin 1"
         setValue={setValue}
         defaultValue={rollData?.name}
-      />
+      /> */}
       <div className="fixed top-[90px] right-20px">
         {isLoading ? (
           <div className="custom-btn">

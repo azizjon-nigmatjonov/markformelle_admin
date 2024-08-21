@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import { RollList } from "./List";
 import { RollForm } from "./Form";
 import { useEffect, useState } from "react";
-import { SectionBtnHeader } from "../../../../components/UI/SectionBtnHeader";
+// import { SectionBtnHeader } from "../../../../components/UI/SectionBtnHeader";
 
 const NewRolls = () => {
   const schema = Validation();
@@ -88,7 +88,7 @@ const NewRolls = () => {
       <Header sticky={true}>
         <CBreadcrumbs items={breadCrumbsItems} progmatic={true} type="link" />
       </Header>
-      <div className="container">
+      {/* <div className="container">
         <SectionBtnHeader
           title={id === ":create" ? "Yangi rol yaratish" : "Rolni tahrirlash"}
           text={
@@ -97,7 +97,7 @@ const NewRolls = () => {
               : "Admin panel boshqaruvchini tahrirlash"
           }
         />
-      </div>
+      </div> */}
       <div className="container divide-y-[1px] divide-[var(--gray20)] w-[80%] my-5">
         <Rolls text="Yangi rol nomi">
           <RollForm

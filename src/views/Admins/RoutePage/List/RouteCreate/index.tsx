@@ -12,7 +12,6 @@ interface Props {
 
 export const RouteCreate = ({
   handleClose = () => {},
-  newRouteList = [],
 }: Props) => {
   
   const schema = Validation();
