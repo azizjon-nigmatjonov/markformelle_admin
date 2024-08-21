@@ -45,7 +45,7 @@ export const Sidebar = () => {
 
           <div
             className={`overflow-y-scroll remove-scroll overflow-x-hidden ${
-              collapsed ? "" : "px-[14px]"
+              collapsed ? "" : "pr-[14px]"
             }`}
             style={{ height: "calc(100vh - 140px)" }}
           >

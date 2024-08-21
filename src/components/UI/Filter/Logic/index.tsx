@@ -88,7 +88,7 @@ export const getStoredFilters = ({ idForFilter }: { idForFilter?: string }) => {
     return {};
   }, [filterDefaults[pageName], pageName]);
 
-  return { filterParams: filters };
+  return { filters };
 };
 
 export const FilterFunctions = ({

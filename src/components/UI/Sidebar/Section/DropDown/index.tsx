@@ -81,7 +81,7 @@ export const OneDropdown = ({
       <div className="overflow-hidden">
         <NavLink to={path} className={`menu_link2 flex items-center steps`}>
           <p
-            className={`flex justify-between capitalize menu_link cursor-pointer text-sm font-medium text-[#151515] whitespace-nowrap pr-10`}
+            className={`flex justify-between capitalize menu_link cursor-pointer text-sm font-medium text-[var(--black)] whitespace-nowrap pr-10`}
             onClick={() => clearFilter()}
           >
             <div className="flex space-x-2">

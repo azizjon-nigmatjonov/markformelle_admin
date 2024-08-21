@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useMemo } from "react";
 import BackButton from "../../UI/Buttons/BackButton";
 import CSearchInput from "../CSearchInput";
+import { useTranslation } from "react-i18next";
 // import { NotificationIcon } from "../../UI/IconGenerator/Svg";
 
 interface Props {
@@ -33,6 +34,7 @@ const CBreadcrumbs = ({
   delay = 500,
   progmatic = false,
 }: Props) => {
+  const {t} = useTranslation()
   const navigate = useNavigate();
 
   const navigateLink = useMemo(() => {
@@ -65,10 +67,10 @@ const CBreadcrumbs = ({
                   onClick={() => navigateHandler(item.link, index)}
                   className="breadcrumb-label"
                 >
-                  {item.label}
+                  {t(item.label)}
                 </div>
               ) : (
-                <div className="breadcrumb-label">{item.label}</div>
+                <div className="breadcrumb-label">{t(item.label)}</div>
               )}
             </div>
           ))}

@@ -6,12 +6,9 @@ import { breadCrumbItems, FetchFunction } from "./Logic";
 const Dashboard = () => {
   const { bodyData } = FetchFunction();
 
-  console.log("bodyData", bodyData);
-
   return (
     <>
       <Header
-        sticky={true}
         extra={<CBreadcrumbs items={breadCrumbItems} progmatic={true} />}
       ></Header>
 

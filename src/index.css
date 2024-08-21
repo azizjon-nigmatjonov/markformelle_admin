@@ -144,7 +144,7 @@ body {
 }
 
 .menu_link.active {
-  border-left-color: #ff5b01;
+  border-left-color: var(--main);
   background: linear-gradient(
     90deg,
     rgba(255, 195, 162, 0.3) 0%,
@@ -153,7 +153,7 @@ body {
 }
 
 .menu_link2.active {
-  border-left-color: #ff5b01;
+  border-left-color: var(--main);
   background: linear-gradient(
     90deg,
     rgba(255, 195, 162, 0.3) 0%,
@@ -166,7 +166,7 @@ body {
 }
 
 .menu_link2:hover {
-  border-left: 2px solid #ff5b01;
+  border-left: 2px solid var(--main);
 }
 
 .menu_link3.active {
@@ -176,18 +176,17 @@ body {
 .menus .active {
   background: linear-gradient(
     90deg,
-    rgba(255, 195, 162, 0.3) 0%,
+    rgba(154, 42, 124, 0.3) 0%,
     rgba(255, 91, 1, 0) 100%
   );
-}
-.menus .active {
   position: relative;
 }
+
 .menus .active::after {
   content: '';
-  width: 2px;
+  width: 3px;
   height: 100%;
-  background-color: #ff5b01;
+  background-color: var(--main);
   position: absolute;
   left: 0;
 }
