@@ -15,8 +15,8 @@ import { useTranslation } from "react-i18next";
 
 const Profile = () => {
   const [logout, setLogout] = useState(false);
-  const {t} = useTranslation()
-  const dispatch = useDispatch()
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
   const {
     control,
     setValue,
@@ -25,11 +25,9 @@ const Profile = () => {
     mode: "onSubmit",
   });
   const { checkPermission } = usePermissions();
-
-
   const Logout = () => {
     dispatch(authActions.logout());
-    sessionStorage.removeItem('has_route')
+    sessionStorage.removeItem("has_route");
     window.location.reload();
   };
 
@@ -92,7 +90,9 @@ const Profile = () => {
             </div>
           </div>
 
-          <h2 className="mt-10 font-medium mb-2 text-2xl">{t("set_new_password")}</h2>
+          <h2 className="mt-10 font-medium mb-2 text-2xl">
+            {t("set_new_password")}
+          </h2>
           <div className="w-1/2 grid grid-cols-2 gap-4">
             <HFTextField
               name="old_password"

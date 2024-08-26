@@ -24,14 +24,15 @@ export const Header = ({
 }: Props) => {
   const collapsed = useSelector((state: any) => state.sidebar.collapsed);
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
+  
   return (
-    <div className={`h-[70px] relative z-[98] bg-white w-full ${openHeader ? '' : 'hidden'}`}>
+    <div className={`h-[60px] relative z-[98] bg-white w-full ${openHeader ? '' : 'hidden'}`}>
       <div
         className={cls.header}
         {...props}
         style={{ width: `calc(100vw - ${collapsed ? "40px" : "280px"})` }}
       >
-        <div className="w-full mr-5">{extra}</div>
+        <div className="w-full">{extra}</div>
         <div className="flex items-center">
           {children ? (
             children

@@ -9,7 +9,7 @@ const BackButton = ({ link }: { link: string }) => {
 
   return (
     <button type="button" className="BackButton" onClick={() => navigate(link)}>
-      <WidgetsIcon className="icon" />
+      <WidgetsIcon className="icon" style={{ color: "var(--main)" }}  />
       <ArrowForwardIosIcon className='arrow'/>
     </button>
   );

@@ -30,7 +30,7 @@ export const FetchFunction = () => {
 
 export const breadCrumbs = [
   { label: "Admin", link: "/admins/admin" },
-  { label: "Adminlar" },
+  { label: "admins" },
 ];
 
 export const TableData = () => {
