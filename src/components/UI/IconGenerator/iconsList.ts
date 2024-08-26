@@ -1,33 +1,35 @@
-import CottageIcon from "@mui/icons-material/Cottage";
-import SettingsIcon from "@mui/icons-material/Settings";
-import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import GamepadIcon from "@mui/icons-material/Gamepad";
-import DescriptionIcon from "@mui/icons-material/Description";
+import {
+  AdminsIcon,
+  Dashboard,
+  PagesIcon,
+  RolsIcon,
+  SettingIcon,
+  UsersIcon,
+} from "./Svg/Sidebar";
 
 export const iconsList = [
   {
     name: "dashboard",
-    component: CottageIcon,
+    component: Dashboard,
   },
   {
     name: "admins",
-    component: ManageAccountsIcon,
+    component: AdminsIcon,
   },
   {
     name: "users",
-    component: SupervisorAccountIcon,
+    component: UsersIcon,
   },
   {
     name: "rolls_icon",
-    component: GamepadIcon,
+    component: RolsIcon,
   },
   {
     name: "settings",
-    component: SettingsIcon,
+    component: SettingIcon,
   },
   {
     name: "pages",
-    component: DescriptionIcon,
+    component: PagesIcon,
   },
 ];

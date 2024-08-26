@@ -9,9 +9,14 @@ import { useState } from "react";
 import CModal from "../../../components/CElements/CModal";
 import CancelButton from "../../../components/UI/Buttons/Cancel";
 import { usePermissions } from "../../../hooks/usePermissions";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../../store/auth/auth.slice";
+import { useTranslation } from "react-i18next";
 
 const Profile = () => {
   const [logout, setLogout] = useState(false);
+  const {t} = useTranslation()
+  const dispatch = useDispatch()
   const {
     control,
     setValue,
@@ -23,14 +28,14 @@ const Profile = () => {
 
 
   const Logout = () => {
-    // dispatch(authActions.logout());
+    dispatch(authActions.logout());
     sessionStorage.removeItem('has_route')
     window.location.reload();
   };
 
   return (
     <>
-      <form className="px-5">
+      <form className="container">
         <CCard style={{ minHeight: "auto" }}>
           <div className="flex justify-between">
             <div className="flex items-center space-x-8">
@@ -46,8 +51,8 @@ const Profile = () => {
                 <HFTextField
                   name="name"
                   control={control}
-                  placeholder="Ism"
-                  label="Ism"
+                  placeholder="name"
+                  label="name"
                   setValue={setValue}
                   required={true}
                   // defaultValue={user?.name}
@@ -67,8 +72,8 @@ const Profile = () => {
                 <HFTextField
                   name="email"
                   control={control}
-                  placeholder="Login"
-                  label="Login"
+                  placeholder="login"
+                  label="login"
                   setValue={setValue}
                   required={true}
                   // defaultValue={user?.email}
@@ -87,20 +92,20 @@ const Profile = () => {
             </div>
           </div>
 
-          <h2 className="mt-10 font-medium mb-2 text-2xl">Parolni yangilash</h2>
+          <h2 className="mt-10 font-medium mb-2 text-2xl">{t("set_new_password")}</h2>
           <div className="w-1/2 grid grid-cols-2 gap-4">
             <HFTextField
               name="old_password"
               control={control}
-              placeholder="Parol"
-              label="Parol"
+              placeholder={t("password")}
+              label={t("password")}
               setValue={setValue}
             />
             <HFTextField
               name="new_password"
               control={control}
-              placeholder="Yangi parol"
-              label="Yangi parol"
+              placeholder={t("new_password")}
+              label={t("new_password")}
               setValue={setValue}
             />
           </div>
@@ -126,13 +131,13 @@ const Profile = () => {
           footerActive={false}
         >
           <p className="text-[var(--danger)] font-medium">
-            Akkaunt dan chiqmoqchimisiz!
+            {t("do_you_want_to_leave_account")}
           </p>
 
           <div className="grid gap-2 grid-cols-2 mt-8">
-            <CancelButton text="Yo'q" onClick={() => setLogout(false)} />
+            <CancelButton text="no" onClick={() => setLogout(false)} />
             <button className="custom-btn" onClick={() => Logout()}>
-              Ha
+              {t("yes")}
             </button>
           </div>
         </CModal>

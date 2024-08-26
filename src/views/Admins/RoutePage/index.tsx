@@ -9,7 +9,7 @@ import { useGetQueries } from "../../../hooks/useGetQueries";
 
 export const breadCrumbs = [
   { label: "Routes", link: "/admins/routes" },
-  { label: "Routes sahifasi" },
+  { label: "Страница ROUTES" },
 ];
 
 const RoutePage = () => {
@@ -25,7 +25,6 @@ const RoutePage = () => {
   return (
     <>
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />}>
-        
         <div className="ml-5">
           <AddButton
             onClick={() => navigateQuery({ modal: "open" })}
@@ -39,11 +38,11 @@ const RoutePage = () => {
         <div className="flex items-start justify-between">
           <div>
             <h1 className="text-[#101828] text-lg font-semibold">
-              Yangi sahifa va permission qo'shish
+              Добавить новую страницу и разрешение
             </h1>
             <p className="text-[#475467] text-sm font-normal">
-              Permission boshqaruvi uchun yangi sahifa va permission qo'shish
-              joyi
+              Добавьте новую страницу и разрешение на управление разрешениями.
+              место
             </p>
           </div>
         </div>

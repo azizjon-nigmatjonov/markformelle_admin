@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import CTable from "../../../components/CElements/CTable";
 import AddButton from "../../../components/UI/Buttons/AddButton";
-// import SectionHeader from "../../../components/UI/Sections/Header";
 import usePageRouter from "../../../hooks/useObjectRouter";
 import { Header } from "../../../components/UI/Header";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
@@ -50,7 +49,7 @@ const Rolls = () => {
           />
         </div>
       </Header>
-      <div className="px-5">
+      <div className="container">
         <CTable
           headColumns={headColumns}
           bodyColumns={bodyColumns}

@@ -33,12 +33,15 @@ export const Sidebar = () => {
       <div className="overflow-y-scroll remove-scroll">
         <div>
           <button
-            className={`w-full h-[70px] border-b border-[var(--gray30)] flex items-center justify-center ${
-              collapsed ? "" : "px-16px"
+            className={`w-full h-[70px] border-b border-[var(--gray30)] flex items-center ${
+              collapsed ? "justify-center" : "px-16px justify-between"
             }`}
             onClick={() => dispatch(sidebarActions.setOpenHeader(!openHeader))}
           >
+            <div></div>
             {!openHeader ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
+
+        
           </button>
 
           <div
