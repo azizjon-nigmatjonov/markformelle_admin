@@ -1,6 +1,6 @@
-import CBreadcrumbs from "../../components/CElements/CBreadcrumbs";
-import CSelect from "../../components/CElements/CSelect";
-import { Header } from "../../components/UI/Header";
+import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
+import CSelect from "../../../components/CElements/CSelect";
+import { Header } from "../../../components/UI/Header";
 import MachineCard from "./Card";
 import { breadCrumbItems, FetchFunction } from "./Logic";
 

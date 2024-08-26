@@ -1,16 +1,26 @@
 import {
   AdminsIcon,
+  AnalyticsIcon,
   Dashboard,
   PagesIcon,
   RolsIcon,
   SettingIcon,
   UsersIcon,
+  ZipIcon,
 } from "./Svg/Sidebar";
 
 export const iconsList = [
   {
     name: "dashboard",
     component: Dashboard,
+  },
+  {
+    name: "zip",
+    component: ZipIcon,
+  },
+  {
+    name: "analytics",
+    component: AnalyticsIcon,
   },
   {
     name: "admins",

@@ -1,7 +1,7 @@
-import CCard from "../../../components/CElements/CCard";
-import { ListSkeleton } from "../../../components/CElements/CSkeleton/ListSkeleton";
-import IconGenerator from "../../../components/UI/IconGenerator";
-import { formatNumberWithSpaces } from "../../../utils/formatMoney";
+import CCard from "../../../../components/CElements/CCard";
+import { ListSkeleton } from "../../../../components/CElements/CSkeleton/ListSkeleton";
+import IconGenerator from "../../../../components/UI/IconGenerator";
+import { formatNumberWithSpaces } from "../../../../utils/formatMoney";
 
 interface Props {
   data: any;

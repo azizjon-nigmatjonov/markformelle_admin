@@ -1,4 +1,4 @@
-import useCQuery from "../../../hooks/useCQuery";
+import useCQuery from "../../../../hooks/useCQuery";
 
 export const breadCrumbItems = [
   { label: "dashboard", link: "/dashboard/dashboard" },
