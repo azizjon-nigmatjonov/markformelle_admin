@@ -44,7 +44,7 @@ const SidebarSection = ({ list, collapsed = false }: Props) => {
             const isLastItem = index === Object.entries(list).length - 1;
 
             return visibleSidebarItems?.length > 1 ? (
-              <div className={collapsed ? "" : ""}>
+              <div>
                 <button
                   className={`accordion group ${
                     activeIndex === key ? "active" : ""

@@ -1,9 +1,8 @@
-// import { NotificationIcon } from "../IconGenerator/Svg";
 import cls from "./style.module.scss";
 import Notification from "./Notification";
 import { useSelector } from "react-redux";
 import { ReactNode } from "react";
-// import { OrderDriver } from "./OrderDriver";
+
 
 interface Props {
   title?: string;
@@ -24,12 +23,13 @@ export const Header = ({
   ...props
 }: Props) => {
   const collapsed = useSelector((state: any) => state.sidebar.collapsed);
+  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   return (
-    <div className="h-[70px] relative mb-5 z-[98] bg-white w-full">
+    <div className={`h-[70px] relative z-[98] bg-white w-full ${openHeader ? '' : 'hidden'}`}>
       <div
         className={cls.header}
         {...props}
-        style={{ width: `calc(100vw - ${collapsed ? "70px" : "280px"})` }}
+        style={{ width: `calc(100vw - ${collapsed ? "40px" : "280px"})` }}
       >
         <div className="w-full mr-5">{extra}</div>
         <div className="flex items-center">

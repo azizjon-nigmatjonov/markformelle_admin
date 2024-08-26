@@ -108,7 +108,7 @@ const Router = () => {
     dispatch(websiteActions.setNewRoutes({ ...newRoutes }));
   }, []);
 
-  if (token) {
+  if (!token) {
     return (
       <Suspense fallback={"Loading..."}>
         <Routes>

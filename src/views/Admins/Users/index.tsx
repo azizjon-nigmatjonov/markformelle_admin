@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import CTable from "../../../components/CElements/CTable";
 import AddButton from "../../../components/UI/Buttons/AddButton";
+// import SectionHeader from "../../../components/UI/Sections/Header";
 import usePageRouter from "../../../hooks/useObjectRouter";
 import Form from "./Form";
 import adminService from "../../../services/admins";
@@ -9,11 +10,12 @@ import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { FetchFunction, TableData, breadCrumbs } from "./Logic";
 import { FilterFunctions } from "../../../components/UI/Filter/Logic";
 
-const Admins = () => {
+const Users = () => {
   const { navigateQuery } = usePageRouter();
   const { getQueries } = usePageRouter();
   const query = getQueries();
   const { headColumns } = TableData();
+
   const [filterParams, setFilterParams]: any = useState({});
   const { bodyColumns, isLoading, refetch } = FetchFunction();
   const { collectFilter, storeFilters } = FilterFunctions({
@@ -80,4 +82,4 @@ const Admins = () => {
     </>
   );
 };
-export default Admins;
+export default Users;

@@ -48,6 +48,7 @@ const Login = () => {
   });
 
   const onSubmit = (data: any) => {
+    dispatch(authActions.login({ access_token: "111" }))
     login.mutate(data);
   };
 

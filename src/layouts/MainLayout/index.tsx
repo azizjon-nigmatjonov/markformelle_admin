@@ -8,6 +8,7 @@ import { Toaster } from "react-hot-toast";
 
 const MainLayout = () => {
   const alertData = useSelector((state: any) => state.website.alert);
+
   return (
     <div className={cls.layout}>
       <div>

@@ -6,11 +6,13 @@ import { useEffect } from "react";
 import { FoldButton } from "./FoldButton";
 import { useDispatch, useSelector } from "react-redux";
 import { sidebarActions } from "../../../store/sidebar";
-import { projectName } from "../../../constants/website";
+import UnfoldLessIcon from "@mui/icons-material/UnfoldLess";
+import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
 
 export const Sidebar = () => {
   const { userInfo, routes } = getWebsiteData();
   const collapsed = useSelector((state: any) => state.sidebar.collapsed);
+  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,24 +26,20 @@ export const Sidebar = () => {
     <div
       className={cls.sidebar}
       style={{
-        width: collapsed ? "70px" : "280px",
+        width: collapsed ? "40px" : "280px",
         overflow: collapsed ? "" : "hidden",
       }}
     >
       <div className="overflow-y-scroll remove-scroll">
         <div>
-          <div
-            className={`w-full h-[70px] border-b border-[var(--gray30)] flex items-center ${
+          <button
+            className={`w-full h-[70px] border-b border-[var(--gray30)] flex items-center justify-center ${
               collapsed ? "" : "px-16px"
             }`}
+            onClick={() => dispatch(sidebarActions.setOpenHeader(!openHeader))}
           >
-            {!collapsed ? (
-              <p className="font-medium text-xl">{projectName}</p>
-            ) : (
-              <p className="font-medium text-xl whitespace-nowrap">{projectName}</p>
-              // <img className="mx-auto" src="/logo.svg" alt="logo" />
-            )}
-          </div>
+            {!openHeader ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
+          </button>
 
           <div
             className={`overflow-y-scroll remove-scroll overflow-x-hidden ${
