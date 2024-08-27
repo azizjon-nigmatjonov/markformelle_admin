@@ -8,6 +8,8 @@ import { breadCrumbItems } from "./Logic";
 import Progress from "../../../components/UI/Progress";
 import { CPeriodPicker } from "../../../components/CElements/CPeriodPicker";
 import StatisticsGender from "./GenderRegions";
+import Calendar from "./Calendar";
+import LineChart from "./LineChart";
 
 const progressData = [
   { name: "Tikuv moshinasi 1", quantity: 20, percentage: 10 },
@@ -23,19 +25,24 @@ const progressData = [
 
 const cardData = [
   {
-    count: 1,
-    percent: 10,
+    count: 22,
+    percent: 90,
     title: "Ishlaganlar",
   },
   {
-    count: 1,
-    percent: 10,
+    count: 3,
+    percent: 30,
     title: "buzulganlar",
+  },
+  {
+    count: 5,
+    percent: 60,
+    title: "toxtab turganlar",
   },
   {
     count: 1,
     percent: 10,
-    title: "toxtab turganlar",
+    title: "yopiq",
   },
 ];
 
@@ -144,6 +151,14 @@ const DashboardAnalytics = () => {
             </div>
           </div>
           <AnalyticsBarchart grapData={[]} loading={false} />
+        </CCard>
+
+        <CCard>
+          <LineChart />
+        </CCard>
+
+        <CCard classes="mt-5">
+          <Calendar />
         </CCard>
       </div>
     </div>

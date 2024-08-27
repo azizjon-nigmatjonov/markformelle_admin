@@ -3,12 +3,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 60px;
+  height: 50px;
   border-bottom: 1px solid var(--border);
   position: fixed;
   top: 0;
   z-index: 99;
   background-color: white;
+  // overflow: hidden;
   // &.sticky {
   //   position: sticky;
   //   top: 0;

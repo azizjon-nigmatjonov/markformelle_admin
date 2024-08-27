@@ -26,7 +26,7 @@ export const Header = ({
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   
   return (
-    <div className={`h-[60px] relative z-[98] bg-white w-full ${openHeader ? '' : 'hidden'}`}>
+    <div className={`h-[50px] relative z-[98] bg-white w-full ${openHeader ? '' : 'hidden'}`}>
       <div
         className={cls.header}
         {...props}

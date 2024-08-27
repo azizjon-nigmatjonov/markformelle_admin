@@ -27,19 +27,19 @@ const CSearchInput = ({
 
   return (
     <div
-      className={`relative bg-white rounded-[8px] flex justify-center items-center h-[40px] px-5 ${
-        value ? "border border-[var(--primary)]" : "common-shadow"
+      className={`relative bg-white rounded-[8px] flex border justify-center items-center h-[35px] px-5 ${
+        value ? " border-[var(--primary)]" : "border-[var(--border)]"
       }`}
     >
       <div className="absolute top-1/2 -translate-y-1/2 left-3">
-        <SearchIcon fill={value ? 'var(--primary)' : "#9092A3"} />
+        <SearchIcon fill={value ? "var(--primary)" : "var(--gray30)"} />
       </div>
       <input
         onChange={(e) => debounce(e.target.value)}
         defaultValue={defaultValue}
         type="text"
         placeholder="Qidiruv..."
-        className={`w-[150px] bg-transparent h-full outline-none pr-5 text-[var(--black)] placeholder-gray rounded-[8px] ${classes}`}
+        className={`w-[150px] bg-transparent h-full outline-none pr-5 text-[var(--black)] placeholder-[var(--gray30)] rounded-[8px] ${classes}`}
       />
     </div>
   );

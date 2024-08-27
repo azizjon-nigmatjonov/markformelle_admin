@@ -1,9 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import CDriver from "../../../../components/CElements/CDivider";
-import {
-  CloseIcon,
-  DeleteIcon,
-} from "../../../../components/UI/IconGenerator/Svg";
+import { CloseIcon } from "../../../../components/UI/IconGenerator/Svg";
 import { notificationActions } from "../../../../store/notification";
 import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import VolumeUpIcon from "@mui/icons-material/VolumeUp";
@@ -50,9 +47,9 @@ export const NitifList = ({ setOpen, list }: Props) => {
               )}
             </button>
 
-            <button onClick={() => dispatch(notificationActions.setList([]))}>
+            {/* <button onClick={() => dispatch(notificationActions.setList([]))}>
               <DeleteIcon />
-            </button>
+            </button> */}
             <button onClick={() => setOpen(false)}>
               <CloseIcon />
             </button>

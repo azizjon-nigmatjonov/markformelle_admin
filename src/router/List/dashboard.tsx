@@ -8,7 +8,7 @@ const DashboardAnalytics = lazy(
 export const dashboardList = [
   {
     parent: "dashboard",
-    link: "dashboard",
+    link: "knitting_machines",
     sidebar: true,
     title: "dashboardavto",
     icon: "zip",

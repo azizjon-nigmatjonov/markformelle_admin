@@ -12,7 +12,7 @@ export const ColorConstants = {
   lightGray: "#F1F1F5",
   lightestGray: "#D5D5DC",
   darkerGray: "#3C4254",
-  gray: "#858592",
+  gray: "#9092A3",
 
   darkGray: "#92929D",
   darkestGray: "#696974",

@@ -6,7 +6,7 @@ interface Props {
   fill?: any
 }
 
-const IconGenerator: FC<Props> = ({ icon, fill, ...props }) => {
+const IconGenerator: FC<Props> = ({ icon, ...props }) => {
   
   const findedIcon = iconsList.find((el) => el.name === icon);  
   if (!findedIcon) return null;

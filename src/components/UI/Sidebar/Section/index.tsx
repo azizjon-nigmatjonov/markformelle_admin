@@ -12,7 +12,7 @@ import { filterActions } from "../../../../store/filterParams";
 interface Props {
   list: any;
   collapsed: boolean;
-  handleNavigate: (val: any) => void
+  handleNavigate: (val: any) => void;
 }
 
 const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {

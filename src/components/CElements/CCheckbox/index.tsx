@@ -16,7 +16,7 @@ const CCheckbox = ({
   return (
     <div
       onClick={() => handleCheck(element)}
-      className="flex items-center gap-2 cursor-pointer px-16px rounded-lg common-shadow h-[40px] w-full whitespace-nowrap"
+      className="flex items-center gap-2 cursor-pointer px-[12px] rounded-lg border border-[var(--gray20)] h-[35px] w-full whitespace-nowrap"
     >
       <div className="w-[18px] h-[18px]">
         <div
