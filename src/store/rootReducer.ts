@@ -25,10 +25,10 @@ const notificationPersistConfig = {
   storage,
 };
 
-// const sidebarPersistConfig = {
-//   key: "sidebar",
-//   storage,
-// };
+const sidebarPersistConfig = {
+  key: "sidebar",
+  storage,
+};
 
 const filterPersistConfig = {
   key: "filter",
@@ -44,7 +44,7 @@ const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
   tableSize: persistReducer(tableSizePersistConfig, tableSizeReducer),
   notification: persistReducer(notificationPersistConfig, notificationReducer),
-  sidebar: sidebarReducer,
+  sidebar: persistReducer(sidebarPersistConfig, sidebarReducer),
   filter: persistReducer(filterPersistConfig, filterReducer),
   table: persistReducer(tablePersistConfig, tableReducer),
   website: websiteReducer,
