@@ -1,7 +1,7 @@
 import { memo, useState } from "react";
 import IconGenerator from "../../IconGenerator";
 import { useTranslation } from "react-i18next";
-import { NavLink, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { ArrowIcon } from "../../IconGenerator/Svg";
 import cls from "./style.module.scss";
 import { SectionData } from "../Logic";
@@ -12,12 +12,12 @@ import { filterActions } from "../../../../store/filterParams";
 interface Props {
   list: any;
   collapsed: boolean;
+  handleNavigate: (val: any) => void
 }
 
-const SidebarSection = ({ list, collapsed = false }: Props) => {
+const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
   const location = useLocation();
   const { getParentName } = SectionData();
-
   const { t } = useTranslation();
 
   const [activeIndex, setActiveIndex] = useState(getParentName());
@@ -71,7 +71,13 @@ const SidebarSection = ({ list, collapsed = false }: Props) => {
                     </div>
                   )}
 
-                  {collapsed && <DropDown title={key} value={value} />}
+                  {collapsed && (
+                    <DropDown
+                      title={key}
+                      value={value}
+                      handleNavigate={handleNavigate}
+                    />
+                  )}
                 </button>
 
                 {!collapsed && (
@@ -88,9 +94,9 @@ const SidebarSection = ({ list, collapsed = false }: Props) => {
                           return (
                             el.sidebar && (
                               <>
-                                <NavLink
+                                <button
                                   key={el.id}
-                                  to={el.path}
+                                  onClick={() => handleNavigate(el)}
                                   className={`${
                                     i < 100
                                       ? "steps__item steps__item--active"
@@ -108,9 +114,9 @@ const SidebarSection = ({ list, collapsed = false }: Props) => {
                                     } flex gap-2 capitalize menu_link cursor-pointer text-sm font-medium text-[#151515] `}
                                   >
                                     <IconGenerator icon={el.icon} />
-                                    <span>{el.title}</span>
+                                    <span>{t(el.title)}</span>
                                   </p>
-                                </NavLink>
+                                </button>
                               </>
                             )
                           );
@@ -125,30 +131,28 @@ const SidebarSection = ({ list, collapsed = false }: Props) => {
                 {!isLastItem && <div className="accordion-line"></div>}
               </div>
             ) : (
-              <div
-                className="menus group"
-                onClick={() => clearFilter()}
-              >
-                 {collapsed ? (
+              <div className="menus group" onClick={() => clearFilter()}>
+                {collapsed ? (
                   <OneDropdown
                     title={t(key)}
-                    path={visibleSidebarItems?.[0]?.path}
+                    path={visibleSidebarItems?.[0]}
                     icon={visibleSidebarItems?.[0]?.icon}
                     // sidebarCounts={sidebarCounts}
                     clearFilter={clearFilter}
+                    handleNavigate={handleNavigate}
                   />
                 ) : (
                   ""
                 )}
-                <NavLink
-                  to={visibleSidebarItems?.[0]?.path}
+                <button
+                  onClick={() => handleNavigate(visibleSidebarItems?.[0])}
                   className={`menu_link3 w-full h-[40px] flex items-center capitalize ${
                     collapsed ? "justify-center" : "gap-x-3 pl-3 ml-[-11px]"
                   }`}
                 >
                   <IconGenerator icon={visibleSidebarItems?.[0]?.icon} />
                   {!collapsed && <>{t(visibleSidebarItems?.[0]?.title)}</>}
-                </NavLink>
+                </button>
                 {!collapsed && <div className="accordion-line"></div>}
               </div>
             );

@@ -7,14 +7,15 @@ import useAuth from "../../services/auth/useAuth";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { authActions } from "../../store/auth/auth.slice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import usePageRouter from "../../hooks/useObjectRouter";
 
 const Login = () => {
   const [password, setPassword] = useState(true);
-  const { navigateTo } = usePageRouter()
+  const { navigateTo } = usePageRouter();
   const dispatch = useDispatch();
+  const link = useSelector((state: any) => state.auth.link);
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -31,7 +32,7 @@ const Login = () => {
       onSuccess: (value: any) => {
         if (value) {
           dispatch(authActions.login(value));
-          navigateTo('/')
+          navigateTo("/");
           window.location.reload();
         }
       },
@@ -48,8 +49,16 @@ const Login = () => {
   });
 
   const onSubmit = (data: any) => {
-    dispatch(authActions.login({ access_token: "111" }))
-    login.mutate(data);
+    dispatch(authActions.login({ access_token: "111" }));
+    if (link) {
+      navigateTo(link);
+    }
+    setTimeout(() => {
+      dispatch(authActions.setLink(""));
+    }, 500);
+    console.log(data);
+
+    // login.mutate(data);
   };
 
   return (
@@ -62,13 +71,13 @@ const Login = () => {
           <img src="/logo-full.svg" alt="logo" />
         </div> */}
 
-        <h2 className="text-2xl font-[600]">Tizimga kirish</h2>
+        <h2 className="text-2xl font-[600]">Вход в систему</h2>
 
         <div className="mt-[18px] space-y-5">
           <HFInput
             name="email"
             register={register}
-            placeholder="Email"
+            placeholder="Электронная почта"
             classesInput="bg-[#FAFAFB] border border-[#F1F1F5]"
             errors={errors}
             icon={<UserIcon />}
@@ -78,7 +87,7 @@ const Login = () => {
               name="password"
               register={register}
               errors={errors}
-              placeholder="Parol"
+              placeholder="Пароль"
               classesInput="bg-[#FAFAFB] border border-[#F1F1F5]"
               type={password ? "password" : "text"}
               icon={<PasswordIcon />}

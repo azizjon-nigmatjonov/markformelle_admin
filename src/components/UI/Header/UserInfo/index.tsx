@@ -1,24 +1,31 @@
-import usePageRouter from "../../../../hooks/useObjectRouter";
 import cls from "./style.module.scss";
 import ImageFrame from "../../ImageFrame";
 // import { usePermissions } from "../../../../hooks/usePermissions";
 interface Props {
   userInfo: any;
   collapsed: boolean;
+  handleNavigate: (val: any) => void;
 }
 
-const UserInfo = ({ userInfo = [], collapsed = false }: Props) => {
-  const { navigateTo } = usePageRouter();
+const UserInfo = ({
+  userInfo = [],
+  collapsed = false,
+  handleNavigate,
+}: Props) => {
   // const { checkAdditionals } = usePermissions();
 
   // if (!checkAdditionals("profile_info")) return <></>;
-  
+
   return (
     <div
       className={cls.wrapper}
-      onClick={() => navigateTo("/settings/profile")}
+      onClick={() => handleNavigate({ auth: true, path: "/settings/profile" })}
     >
-      <div className={`flex items-center ${collapsed ? 'justify-center w-full' : 'space-x-[10px]'}`}>
+      <div
+        className={`flex items-center ${
+          collapsed ? "justify-center w-full" : "space-x-[10px]"
+        }`}
+      >
         <div className={cls.image}>
           <ImageFrame image={userInfo?.image} />
         </div>

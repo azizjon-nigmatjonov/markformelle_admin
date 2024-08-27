@@ -614,7 +614,7 @@ export const UserIcon = ({
   </svg>
 );
 
-export const PasswordIcon = () => (
+export const PasswordIcon = ({ fill = "var(--main)" }) => (
   <svg
     width="24"
     height="24"
@@ -624,35 +624,35 @@ export const PasswordIcon = () => (
   >
     <path
       d="M11.1017 18.875H7.87502C7.30669 18.875 6.80252 18.8567 6.35335 18.7925C3.94252 18.5267 3.29169 17.39 3.29169 14.2917V9.70833C3.29169 6.61 3.94252 5.47333 6.35335 5.2075C6.80252 5.14333 7.30669 5.125 7.87502 5.125H11.0467"
-      stroke="#858592"
+      stroke={fill}
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M14.7684 5.125H16.125C16.6934 5.125 17.1975 5.14333 17.6467 5.2075C20.0575 5.47333 20.7084 6.61 20.7084 9.70833V14.2917C20.7084 17.39 20.0575 18.5267 17.6467 18.7925C17.1975 18.8567 16.6934 18.875 16.125 18.875H14.7684"
-      stroke="#858592"
+      stroke={fill}
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M14.75 2.83301V21.1663"
-      stroke="#858592"
+      stroke={fill}
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M11.1701 12.0003H11.1783"
-      stroke="#858592"
+      stroke={fill}
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M7.50359 12.0003H7.51182"
-      stroke="#858592"
+      stroke={fill}
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"

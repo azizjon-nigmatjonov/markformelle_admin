@@ -1,13 +1,17 @@
 import { useTranslation } from "react-i18next";
 import IconGenerator from "../../../../../components/UI/IconGenerator";
-import { NavLink } from "react-router-dom";
 
 interface Props {
   title: any;
   value: any;
+  handleNavigate: (link: any) => void;
 }
 
-export const DropDown = ({ value, title }: Props) => {
+export const DropDown = ({
+  value,
+  title,
+  handleNavigate = () => {},
+}: Props) => {
   const { t } = useTranslation();
   return (
     <div className="mt-[-40px]">
@@ -27,9 +31,9 @@ export const DropDown = ({ value, title }: Props) => {
                     return (
                       el.sidebar && (
                         <>
-                          <NavLink
+                          <button
                             key={el.id}
-                            to={el.path}
+                            onClick={() => handleNavigate(el)}
                             className={`${
                               i < 100
                                 ? "steps__item steps__item--active"
@@ -46,9 +50,9 @@ export const DropDown = ({ value, title }: Props) => {
                               } flex gap-2 capitalize menu_link cursor-pointer text-sm font-medium text-[#151515] whitespace-nowrap`}
                             >
                               <IconGenerator icon={el.icon} />
-                              <span>{el.title}</span>
+                              <span>{t(el.title)}</span>
                             </p>
-                          </NavLink>
+                          </button>
                         </>
                       )
                     );
@@ -70,16 +74,21 @@ export const OneDropdown = ({
   icon = "",
   path = "/",
   clearFilter = () => {},
+  handleNavigate = () => {},
 }: {
   title: string;
   icon: string;
   path: string;
   clearFilter: () => void;
+  handleNavigate: (link: any) => void;
 }) => {
   return (
     <div className="absolute left-[35px] group-hover:block hidden bg-white whitespace-nowrap common-shadow rounded-[12px] z-[99] p-2">
       <div className="overflow-hidden">
-        <NavLink to={path} className={`menu_link2 flex items-center steps`}>
+        <button
+          onClick={() => handleNavigate(path)}
+          className={`menu_link2 flex items-center steps`}
+        >
           <p
             className={`flex justify-between capitalize menu_link cursor-pointer text-sm font-medium text-[var(--black)] whitespace-nowrap pr-10`}
             onClick={() => clearFilter()}
@@ -89,7 +98,7 @@ export const OneDropdown = ({
               <span>{title}</span>
             </div>
           </p>
-        </NavLink>
+        </button>
       </div>
     </div>
   );

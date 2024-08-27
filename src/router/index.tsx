@@ -3,9 +3,9 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { websiteActions } from "../store/website/index";
 import MainLayout from "../layouts/MainLayout";
-import AuthLayout from "../layouts/AuthLayout";
-import Login from "../views/Auth/Login";
-import Registration from "../views/Auth/Registration";
+// import AuthLayout from "../layouts/AuthLayout";
+// import Login from "../views/Auth/Login";
+// import Registration from "../views/Auth/Registration";
 import { routeList } from "./List";
 import ErrorBoundary from "../utils/ErrorBoundary";
 import { PageFallbackInner } from "../components/UI/PageFallback";
@@ -23,6 +23,7 @@ interface Path {
   custom_permissions: any;
   single_page: boolean;
   parent_icon: string;
+  auth: boolean;
 }
 
 interface routeType {
@@ -33,7 +34,7 @@ interface routeType {
 const Router = () => {
   const dispatch = useDispatch();
   const userInfo = useSelector((state: any) => state.auth.user);
-  const token = useSelector((state: any) => state.auth.token);
+  // const link = useSelector((state: any) => state.auth.token);
   const [list, setList] = useState<string[]>([]);
   const [listNew, setListNew] = useState<string[]>([]);
   const storedRoutes = useSelector((state: any) => state.website.routes);
@@ -51,6 +52,7 @@ const Router = () => {
     custom_permissions,
     single_page,
     parent_icon,
+    auth,
   }: Path) => {
     const path = `${parent}/${link}${childlink ? `/${childlink}` : ""}`;
 
@@ -65,6 +67,7 @@ const Router = () => {
       link,
       parent_icon,
       single_page,
+      auth,
     };
 
     const permissions = userInfo?.permissions ?? [];
@@ -108,21 +111,21 @@ const Router = () => {
     dispatch(websiteActions.setNewRoutes({ ...newRoutes }));
   }, []);
 
-  if (!token) {
-    return (
-      <Suspense fallback={"Loading..."}>
-        <Routes>
-          <Route path="/" element={<AuthLayout />}>
-            <Route index element={<Navigate to="/login" />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="registration" element={<Registration />} />
-            <Route path="*" element={<Navigate to="/login" />} />
-          </Route>
-          <Route path="*" element={<Navigate to="/login" />} />
-        </Routes>
-      </Suspense>
-    );
-  }
+  // if (!!link) {
+  //   return (
+  //     <Suspense fallback={"Loading..."}>
+  //       <Routes>
+  //         <Route path="/" element={<AuthLayout />}>
+  //           <Route index element={<Navigate to="/login" />} />
+  //           <Route path="/login" element={<Login />} />
+  //           <Route path="registration" element={<Registration />} />
+  //           <Route path="*" element={<Navigate to="/login" />} />
+  //         </Route>
+  //         <Route path="*" element={<Navigate to="/login" />} />
+  //       </Routes>
+  //     </Suspense>
+  //   );
+  // }
 
   return (
     <Suspense fallback={<PageFallbackInner />}>
@@ -139,6 +142,7 @@ const Router = () => {
                 custom_permissions: route?.permissions ?? [],
                 single_page: route?.single_page ?? false,
                 parent_icon: route?.parent_icon ?? "",
+                auth: route?.auth ?? false,
               })}
               key={index}
               element={

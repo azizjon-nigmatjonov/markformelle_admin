@@ -8,12 +8,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { sidebarActions } from "../../../store/sidebar";
 import UnfoldLessIcon from "@mui/icons-material/UnfoldLess";
 import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
+import usePageRouter from "../../../hooks/useObjectRouter";
+import { authActions } from "../../../store/auth/auth.slice";
 
 export const Sidebar = () => {
   const { userInfo, routes } = getWebsiteData();
   const collapsed = useSelector((state: any) => state.sidebar.collapsed);
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const dispatch = useDispatch();
+  const token = useSelector((state: any) => state.auth.token);
+  const { navigateTo } = usePageRouter();
 
   useEffect(() => {
     if (!sessionStorage.getItem("has_route")) {
@@ -21,6 +25,15 @@ export const Sidebar = () => {
       window.location.reload();
     }
   }, []);
+
+
+  const handleNavigate = (obj: any) => {
+    if (obj?.auth && !token) {
+      dispatch(authActions.setLink(obj.path));
+    } else {
+      navigateTo(obj.path);
+    }
+  };
 
   return (
     <div
@@ -40,9 +53,9 @@ export const Sidebar = () => {
           >
             <div></div>
             {!openHeader ? (
-              <UnfoldMoreIcon style={{ color: "var(--main)" }} />
+              <UnfoldMoreIcon style={{ color: "var(--gray30)" }} />
             ) : (
-              <UnfoldLessIcon style={{ color: "var(--main)" }} />
+              <UnfoldLessIcon style={{ color: "var(--gray30)" }} />
             )}
           </button>
 
@@ -52,7 +65,7 @@ export const Sidebar = () => {
             }`}
             style={{ height: "calc(100vh - 140px)" }}
           >
-            <SidebarSection list={routes} collapsed={collapsed} />
+            <SidebarSection list={routes} collapsed={collapsed} handleNavigate={handleNavigate} />
           </div>
         </div>
         <div
@@ -60,7 +73,7 @@ export const Sidebar = () => {
             collapsed ? "" : "px-16px"
           }`}
         >
-          <UserInfo userInfo={userInfo} collapsed={collapsed} />
+          <UserInfo userInfo={userInfo} collapsed={collapsed} handleNavigate={handleNavigate} />
         </div>
 
         {/* <img

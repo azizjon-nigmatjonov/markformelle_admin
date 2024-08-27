@@ -11,6 +11,7 @@ export const settingList = [
     icon: "settings",
     parent_icon: "price_control",
     element: <WebsiteSettings />,
+    auth: true,
   },
   {
     parent: "settings",

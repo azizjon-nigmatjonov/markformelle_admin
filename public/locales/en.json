@@ -1,3 +1,7 @@
 {
-  "finance": "Finance"
+  "finance": "Финансы",
+  "dashboard": "Панель управления",
+  "dashboardavto": "Приборная панель автомобиля",
+  "dashboard_analytics": "Приборная панел Свод",
+  "settings": "Настройки"
 }

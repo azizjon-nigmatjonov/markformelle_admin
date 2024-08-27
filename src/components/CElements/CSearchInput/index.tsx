@@ -27,8 +27,8 @@ const CSearchInput = ({
 
   return (
     <div
-      className={`relative bg-white rounded-[8px] border flex justify-center items-center h-[40px] px-5 ${
-        value ? "border-[var(--primary)]" : "border-[var(--gray20)] common-shadow"
+      className={`relative bg-white rounded-[8px] flex justify-center items-center h-[40px] px-5 ${
+        value ? "border border-[var(--primary)]" : "common-shadow"
       }`}
     >
       <div className="absolute top-1/2 -translate-y-1/2 left-3">
@@ -39,7 +39,7 @@ const CSearchInput = ({
         defaultValue={defaultValue}
         type="text"
         placeholder="Qidiruv..."
-        className={`w-[150px] bg-transparent h-full outline-none pl-5 pr-5 text-[var(--black)] placeholder-gray rounded-[8px] ${classes}`}
+        className={`w-[150px] bg-transparent h-full outline-none pr-5 text-[var(--black)] placeholder-gray rounded-[8px] ${classes}`}
       />
     </div>
   );

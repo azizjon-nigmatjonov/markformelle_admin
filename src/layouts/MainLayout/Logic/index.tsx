@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { memo, useEffect, useMemo } from "react";
 import { authActions } from "../../../store/auth/auth.slice";
 import { ColorConstants } from "../../../constants/website";
+import CModal from "../../../components/CElements/CModal";
+import Login from "../../../views/Auth/Login";
 
 export const BackButtonRoute = () => {
   const { fromRoutes } = useGetQueries();
@@ -96,3 +98,18 @@ export const ColorData = memo(() => {
 
   return "";
 });
+
+export const CheckLogin = () => {
+  const link = useSelector((state: any) => state.auth.link);
+  const dispatch = useDispatch();
+
+  return (
+    <CModal
+      open={!!link}
+      footerActive={false}
+      handleClose={() => dispatch(authActions.setLink(""))}
+    >
+      <Login />
+    </CModal>
+  );
+};

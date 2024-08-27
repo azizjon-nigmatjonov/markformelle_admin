@@ -13,6 +13,7 @@ export const adminList = [
     title: "admins",
     icon: "admins",
     element: <Admins />,
+    auth: true,
   },
   {
     parent: "admins",
@@ -21,6 +22,7 @@ export const adminList = [
     title: "users",
     icon: "users",
     element: <Users />,
+    auth: true,
   },
   {
     parent: "admins",
@@ -29,6 +31,7 @@ export const adminList = [
     title: "Rollar",
     icon: "rolls_icon",
     element: <Rolls />,
+    auth: true,
   },
   {
     parent: "admins",
@@ -56,5 +59,6 @@ export const adminList = [
     icon: "pages",
     element: <RoutePage />,
     permissions: ["add_permission", "delete_permisson"],
+    auth: true,
   },
 ];
