@@ -15,20 +15,12 @@ const Dashboard = () => {
   const [list, setList]: any = useState([]);
 
   const filterCheckbox = (val: string) => {
-    let list: any = [...checked];
+    let list: any = checked.filter((i: string) => i !== "all") ?? [];
 
-    if (val === "all" || list.length > 3) {
-      if (list.includes("all")) {
-        list = list.filter((i: string) => i !== "all");
-      } else {
-        list = [...list, "all"];
-      }
+    if (list.includes(val)) {
+      list = list.filter((i: string) => i !== val);
     } else {
-      if (list.includes(val)) {
-        list = list.filter((i: string) => i !== val);
-      } else {
-        list = [...list, val];
-      }
+      list = [...list, val];
     }
 
     setChecked(list);
@@ -38,12 +30,13 @@ const Dashboard = () => {
     const data: any = [];
     if (!val) {
       setSearchVal([]);
+      setList(bodyData);
       return;
     }
     bodyData?.forEach((obj: any) => {
       searchedWords.forEach((word: string) => {
         if (word in obj) {
-          if (obj[word].includes(val)) {
+          if (obj[word].toString().includes(val)) {
             data.push({ name: word, value: obj[word] });
           }
         }
@@ -58,6 +51,14 @@ const Dashboard = () => {
     if (checked.length && !checked.includes("all")) {
       bodyData.forEach((element: any) => {
         if (element.no_connnection == "true" && checked.includes("grey")) {
+          listData.push(element);
+        } else if (
+          element.yarn_replacement == "true" &&
+          element.pkol_knit - element.fkol_knit === 0 &&
+          element.pkol_knit === 0 &&
+          element.capacity &&
+          checked.includes("blue")
+        ) {
           listData.push(element);
         } else if (element.pkol_knit == 0) {
         } else if (
@@ -79,12 +80,6 @@ const Dashboard = () => {
           element.not_broken == "true" &&
           element.machine_is_on == "false"
         ) {
-        } else if (
-          element.not_broken == "false" &&
-          element.machine_is_on == "false" &&
-          checked.includes("grey")
-        ) {
-          listData.push(element);
         } else if (
           element.not_broken == "true" &&
           element.machine_is_on == "true" &&
@@ -125,19 +120,25 @@ const Dashboard = () => {
           />
           <CCheckButton
             color="#6cce65"
-            element={{ label: "Планируется" }}
+            element={{ label: "работает" }}
             checked={checked.includes("green")}
             handleCheck={() => filterCheckbox("green")}
           />
           <CCheckButton
             color="#8099f1"
-            element={{ label: "НЕ ПОДКЛЮЧЕНА" }}
+            element={{ label: "нет плана" }}
+            checked={checked.includes("blue")}
+            handleCheck={() => filterCheckbox("blue")}
+          />
+          <CCheckButton
+            color="var(--gray30)"
+            element={{ label: "сломан" }}
             checked={checked.includes("grey")}
             handleCheck={() => filterCheckbox("grey")}
           />
           <CCheckButton
             color="#fb6060"
-            element={{ label: "Останов" }}
+            element={{ label: "остановлено" }}
             checked={checked.includes("red")}
             handleCheck={() => filterCheckbox("red")}
           />
@@ -147,9 +148,9 @@ const Dashboard = () => {
           {searchVal?.length ? (
             <div className="absolute left-0 top-full bg-white shadow-lg rounded-[12px] w-full overflow-scroll max-h-[400px]">
               <ul className="space-y-2 py-2">
-                {searchVal.map((item: any) => (
+                {searchVal.map((item: any, index: number) => (
                   <li
-                    key={item.value}
+                    key={index}
                     onClick={() => handleCheck(item)}
                     className="hover:bg-[var(--border)] py-1 px-4 cursor-pointer"
                   >
