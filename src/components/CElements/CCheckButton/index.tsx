@@ -21,7 +21,7 @@ const CCheckButton = ({
       className={`flex items-center gap-2 cursor-pointer px-12px rounded-[8px] border border-[var(--border)] h-[35px] w-full whitespace-nowrap`}
       style={{
         backgroundColor: checked ? color : "",
-        color: checked ? "white" : "var(--black)",
+        color: checked ? "white" : "var(--gray)",
       }}
     >
       <p>{t(element.label)}</p>

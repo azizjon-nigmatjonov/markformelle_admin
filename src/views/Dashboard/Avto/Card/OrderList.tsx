@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, Typography } from "@mui/joy";
 import Sheet from "@mui/joy/Sheet";
+import useCQuery from "../../../../hooks/useCQuery";
 
 interface Order {
   id: number;
@@ -18,23 +19,34 @@ interface OrderListProps {
 }
 
 const OrderList: React.FC<OrderListProps> = ({ machineId }) => {
-  const [orderData, setOrderData] = useState<Order[]>([]);
+  // const [orderData, setOrderData] = useState<Order[]>([]);
 
-  useEffect(() => {
-    fetchOrderData(machineId); // Pass the machineId to fetchOrderData
-  }, [machineId]); // Re-fetch data when machineId changes
+  const { data: orderData, isLoading } = useCQuery({
+    key: `GET_DRIVER_HOME`,
+    endpoint: `https://retoolapi.dev/qAMz9q/data`,
+    params: {
+      // page: 1,
+    },
+    options: {
+      enabled: !!machineId,
+    },
+  });
 
-  const fetchOrderData = async (machineId: number) => {
-    try {
-      const response = await fetch(
-        `https://retoolapi.dev/VLMg5q/machines?machine_id=${machineId}`
-      );
-      const data: Order[] = await response.json();
-      setOrderData(data);
-    } catch (error) {
-      console.error("Error fetching order data:", error);
-    }
-  };
+  // useEffect(() => {
+  //   fetchOrderData(machineId); // Pass the machineId to fetchOrderData
+  // }, [machineId]); // Re-fetch data when machineId changes
+
+  // const fetchOrderData = async (machineId: number) => {
+  //   try {
+  //     const response = await fetch(
+  //       `https://retoolapi.dev/VLMg5q/machines?machine_id=${machineId}`
+  //     );
+  //     const data: Order[] = await response.json();
+  //     setOrderData(data);
+  //   } catch (error) {
+  //     console.error("Error fetching order data:", error);
+  //   }
+  // };
 
   return (
     <Sheet
@@ -45,7 +57,7 @@ const OrderList: React.FC<OrderListProps> = ({ machineId }) => {
         borderRadius: "sm",
       }}
     >
-      {orderData.map((order) => (
+      {orderData.map((order: any) => (
         <Card key={order.id} sx={{ marginBottom: 2 }}>
           <CardContent>
             <Typography>{`Order No: ${order.order_no}`}</Typography>

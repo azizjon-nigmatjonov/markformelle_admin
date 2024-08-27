@@ -93,7 +93,7 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine }) => {
   const [checked2, setChecked2] = React.useState(machine.not_broken == "true");
 
   return (
-    <ModalDialog sx={{ height: "70vh", width: "40vw" }}>
+    <ModalDialog sx={{ width: "40vw" }}>
       <ModalClose />
       <Typography></Typography>
       <Typography></Typography>

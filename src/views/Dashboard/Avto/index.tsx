@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import CSearchInput from "../../../components/CElements/CSearchInput";
 import { Header } from "../../../components/UI/Header";
@@ -6,20 +6,32 @@ import { breadCrumbItems, FetchFunction } from "./Logic";
 import MachineCard from "./Card";
 import CCheckButton from "../../../components/CElements/CCheckButton";
 
-const searchedWords = ["stop_mins", "ip_address", "message"];
+const searchedWords = ["podr_id_knitt", "ip_address", "message", "name"];
 
 const Dashboard = () => {
   const { bodyData } = FetchFunction();
   const [searchVal, setSearchVal]: any = useState([]);
-  const [checked, setChecked]: any = useState(["grey", "green", "red"]);
+  const [checked, setChecked]: any = useState(["all"]);
   const [list, setList]: any = useState([]);
 
   const filterCheckbox = (val: string) => {
-    if (checked.includes(val)) {
-      setChecked(checked.filter((i: string) => i !== val));
+    let list: any = [...checked];
+
+    if (val === "all" || list.length > 3) {
+      if (list.includes("all")) {
+        list = list.filter((i: string) => i !== "all");
+      } else {
+        list = [...list, "all"];
+      }
     } else {
-      setChecked((prev: string) => [...prev, val]);
+      if (list.includes(val)) {
+        list = list.filter((i: string) => i !== val);
+      } else {
+        list = [...list, val];
+      }
     }
+
+    setChecked(list);
   };
 
   const searchWods = (val: string) => {
@@ -43,7 +55,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     let listData: any = [];
-    if (checked.length) {
+    if (checked.length && !checked.includes("all")) {
       bodyData.forEach((element: any) => {
         if (element.no_connnection == "true" && checked.includes("grey")) {
           listData.push(element);
@@ -97,13 +109,39 @@ const Dashboard = () => {
         data.push(element);
       }
     });
-
+    setSearchVal([]);
     setList(data);
   };
 
   return (
     <>
       <Header extra={<CBreadcrumbs items={breadCrumbItems} progmatic={true} />}>
+        <div className="mr-5 flex space-x-5">
+          <CCheckButton
+            color="var(--main)"
+            element={{ label: "Все" }}
+            checked={checked.includes("all")}
+            handleCheck={() => filterCheckbox("all")}
+          />
+          <CCheckButton
+            color="#6cce65"
+            element={{ label: "Планируется" }}
+            checked={checked.includes("green")}
+            handleCheck={() => filterCheckbox("green")}
+          />
+          <CCheckButton
+            color="#8099f1"
+            element={{ label: "НЕ ПОДКЛЮЧЕНА" }}
+            checked={checked.includes("grey")}
+            handleCheck={() => filterCheckbox("grey")}
+          />
+          <CCheckButton
+            color="#fb6060"
+            element={{ label: "Останов" }}
+            checked={checked.includes("red")}
+            handleCheck={() => filterCheckbox("red")}
+          />
+        </div>
         <div className="w-[240px] relative">
           <CSearchInput handleChange={searchWods} />
           {searchVal?.length ? (
@@ -123,26 +161,6 @@ const Dashboard = () => {
           ) : (
             ""
           )}
-        </div>
-        <div className="ml-5 flex space-x-5">
-          <CCheckButton
-            color="#6cce65"
-            element={{ label: "Планируется" }}
-            checked={checked.includes("green")}
-            handleCheck={() => filterCheckbox("green")}
-          />
-          <CCheckButton
-            color="#8099f1"
-            element={{ label: "НЕ ПОДКЛЮЧЕНА" }}
-            checked={checked.includes("grey")}
-            handleCheck={() => filterCheckbox("grey")}
-          />
-          <CCheckButton
-            color="#fb6060"
-            element={{ label: "Останов" }}
-            checked={checked.includes("red")}
-            handleCheck={() => filterCheckbox("red")}
-          />
         </div>
       </Header>
 
