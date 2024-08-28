@@ -36,7 +36,7 @@ export const ColorConstants = {
   error50: "#FEF3F2",
 
   main: "#ab077e",
-  main60: "#e96fc7",
+  main60: "#ab077eab",
   main80: "#ab077e11",
   main50: "#FFEFE6",
   main500: "#FF5B01",

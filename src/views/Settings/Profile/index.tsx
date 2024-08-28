@@ -12,6 +12,7 @@ import { usePermissions } from "../../../hooks/usePermissions";
 import { useDispatch } from "react-redux";
 import { authActions } from "../../../store/auth/auth.slice";
 import { useTranslation } from "react-i18next";
+import usePageRouter from "../../../hooks/useObjectRouter";
 
 const Profile = () => {
   const [logout, setLogout] = useState(false);
@@ -25,8 +26,10 @@ const Profile = () => {
     mode: "onSubmit",
   });
   const { checkPermission } = usePermissions();
+  const { navigateTo } = usePageRouter()
   const Logout = () => {
     dispatch(authActions.logout());
+    navigateTo("/")
     sessionStorage.removeItem("has_route");
     window.location.reload();
   };
@@ -49,8 +52,8 @@ const Profile = () => {
                 <HFTextField
                   name="name"
                   control={control}
-                  placeholder="name"
-                  label="name"
+                  placeholder={t("name")}
+                  label={t("name")}
                   setValue={setValue}
                   required={true}
                   // defaultValue={user?.name}
@@ -59,8 +62,8 @@ const Profile = () => {
                 <HFInputMask
                   name="phone"
                   control={control}
-                  label={`contact_number`}
-                  placeholder={`contact_number`}
+                  label={t("phone_number")}
+                  placeholder={t("phone_number")}
                   required={true}
                   mask={"+\\9\\9\\8 99 999 99 99"}
                   setValue={setValue}
@@ -70,8 +73,8 @@ const Profile = () => {
                 <HFTextField
                   name="email"
                   control={control}
-                  placeholder="login"
-                  label="login"
+                  placeholder={t("login")}
+                  label={t("login")}
                   setValue={setValue}
                   required={true}
                   // defaultValue={user?.email}
@@ -82,7 +85,7 @@ const Profile = () => {
             </div>
             <div>
               <CustomBtn
-                text="logout_profile"
+                text={t("logout_profile")}
                 icon={<LogoutIcon />}
                 handleClick={() => setLogout(true)}
                 type="button"
@@ -120,7 +123,7 @@ const Profile = () => {
               }`}
             >
               <EditIcon />
-              <span className="ml-2">Taxrirlash</span>
+              <span className="ml-2">{t("edit")}</span>
             </button>
           </div>
         </div>

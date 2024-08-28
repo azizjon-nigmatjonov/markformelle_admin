@@ -120,34 +120,70 @@ export const CountBtns = ({
   }, [bodyData]);
 
   return (
-    <div className="mr-5 flex space-x-5">
+    <div className="mr-5 flex space-x-4">
       <CCheckButton
         color="var(--main60)"
-        element={{ label: "Все " + (counts?.working + counts?.no_plan + counts?.broken + counts?.stopped) }}
+        element={{
+          label: (
+            <p className="font-[600]">
+              Все{" "}
+              <span className="font-bold">
+                {counts?.working +
+                  counts?.no_plan +
+                  counts?.broken +
+                  counts?.stopped}
+              </span>
+            </p>
+          ),
+        }}
         checked={checked.includes("all")}
         handleCheck={() => filterCheckbox("all")}
       />
       <CCheckButton
         color="#6cce65"
-        element={{ label: "Работает " + counts?.working }}
+        element={{
+          label: (
+            <p className="font-[600]">
+              Работает <span className="font-bold">{counts?.working}</span>
+            </p>
+          ),
+        }}
         checked={checked.includes("green")}
         handleCheck={() => filterCheckbox("green")}
       />
       <CCheckButton
         color="#8099f1"
-        element={{ label: "Нет плана " + counts?.no_plan }}
+        element={{
+          label: (
+            <p className="font-[600]">
+              Нет плана <span className="font-bold">{counts?.no_plan}</span>
+            </p>
+          ),
+        }}
         checked={checked.includes("blue")}
         handleCheck={() => filterCheckbox("blue")}
       />
       <CCheckButton
         color="var(--gray30)"
-        element={{ label: "Сломан " + counts?.broken }}
+        element={{
+          label: (
+            <p className="font-[600]">
+              Сломан <span className="font-bold">{counts?.broken}</span>
+            </p>
+          ),
+        }}
         checked={checked.includes("grey")}
         handleCheck={() => filterCheckbox("grey")}
       />
       <CCheckButton
         color="#fb6060"
-        element={{ label: "Остановлено " + counts?.stopped }}
+        element={{
+          label: (
+            <p className="font-[600]">
+              Остановлено <span className="font-bold">{counts?.stopped}</span>
+            </p>
+          ),
+        }}
         checked={checked.includes("red")}
         handleCheck={() => filterCheckbox("red")}
       />

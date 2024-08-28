@@ -1,7 +1,8 @@
 {
-  "finance": "Финансы",
-  "dashboard": "Панель управления",
-  "dashboardavto": "Приборная панель автомобиля",
-  "dashboard_analytics": "Приборная панел Свод",
-  "settings": "Настройки"
+  "finance": "Moliya",
+  "dashboard": "Tikuv bo'limi",
+  "dashboardavto": "Tikuv mashinalar paneli",
+  "dashboard_analytics": "Tikuv mashinalar statistikasi",
+  "search": "Qidiruv",
+  "settings": "Sozlamalar"
 }

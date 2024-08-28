@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useDebounce from "../../../hooks/useDebounce";
 import { CloseIcon, SearchIcon } from "../../UI/IconGenerator/Svg";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   handleChange: (val: any) => void;
@@ -15,6 +16,7 @@ const CSearchInput = ({
   classes = "",
   defaultValue = "",
 }: Props) => {
+  const { t } = useTranslation();
   const [value, setValue]: any = useState(null);
   const debounce = useDebounce((search: any) => {
     setValue(search);
@@ -27,7 +29,7 @@ const CSearchInput = ({
 
   return (
     <div
-      className={`relative bg-white rounded-[8px] flex border justify-between items-center h-[35px] px-5 ${
+      className={`relative bg-white rounded-[8px] flex border justify-between items-center h-[35px] common-shadow px-5 ${
         value ? " border-[var(--primary)]" : "border-[var(--border)]"
       }`}
     >
@@ -39,7 +41,7 @@ const CSearchInput = ({
         onChange={(e) => debounce(e.target.value)}
         defaultValue={defaultValue}
         type="text"
-        placeholder="Qidiruv..."
+        placeholder={t("search")}
         className={`w-[150px] mx-5 bg-transparent h-full outline-none pr-5 text-[var(--black)] placeholder-[var(--gray)] rounded-[8px] ${classes}`}
       />
       {value?.length ? (

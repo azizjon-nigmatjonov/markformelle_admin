@@ -7,7 +7,7 @@ const RoutePage = lazy(() => import("../../views/Admins/RoutePage"));
 
 export const adminList = [
   {
-    parent: "admins",
+    parent: "access",
     link: "admin",
     sidebar: true,
     title: "admins",
@@ -16,7 +16,7 @@ export const adminList = [
     auth: true,
   },
   {
-    parent: "admins",
+    parent: "access",
     link: "users",
     sidebar: true,
     title: "users",
@@ -25,16 +25,16 @@ export const adminList = [
     auth: true,
   },
   {
-    parent: "admins",
+    parent: "access",
     link: "rolls",
     sidebar: true,
-    title: "Rollar",
+    title: "rolls",
     icon: "rolls_icon",
     element: <Rolls />,
     auth: true,
   },
   {
-    parent: "admins",
+    parent: "access",
     link: "rolls/create",
     sidebar: false,
     title: "rolls",
@@ -43,7 +43,7 @@ export const adminList = [
     single_page: true,
   },
   {
-    parent: "admins",
+    parent: "access",
     link: "rolls/:id",
     sidebar: false,
     title: "edit_roll",
@@ -52,7 +52,7 @@ export const adminList = [
     single_page: true,
   },
   {
-    parent: "admins",
+    parent: "access",
     link: "routes",
     sidebar: true,
     title: "pages",

@@ -72,6 +72,7 @@ const Dashboard = () => {
           element.not_broken == "true" &&
           element.machine_is_on == "true" &&
           element.rotation == 0 &&
+          element.no_connnection === "false" &&
           checked.includes("red")
         ) {
           listData.push(element);
@@ -104,7 +105,7 @@ const Dashboard = () => {
           setChecked={setChecked}
           bodyData={bodyData}
         />
-        <div className="w-[240px] relative">
+        <div className="w-[200px] relative">
           <CSearchInput handleChange={searchWods} />
           {searchVal?.length ? (
             <div className="absolute left-0 top-full bg-white shadow-lg rounded-[12px] w-full overflow-scroll max-h-[400px]">

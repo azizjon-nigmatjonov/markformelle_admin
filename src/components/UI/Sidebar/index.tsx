@@ -53,9 +53,9 @@ export const Sidebar = () => {
           >
             <div></div>
             {!openHeader ? (
-              <UnfoldMoreIcon style={{ color: "var(--gray30)" }} />
+              <UnfoldMoreIcon style={{ color: "var(--gray)" }} />
             ) : (
-              <UnfoldLessIcon style={{ color: "var(--gray30)" }} />
+              <UnfoldLessIcon style={{ color: "var(--gray)" }} />
             )}
           </button>
 

@@ -1,7 +1,8 @@
 {
-  "finance": "Финансы",
-  "dashboard": "Панель управления",
-  "dashboardavto": "Приборная панель автомобиля",
-  "dashboard_analytics": "Приборная панел Свод",
-  "settings": "Настройки"
+  "finance": "Finance",
+  "dashboard": "Kniting department",
+  "dashboardavto": "Kniting machines",
+  "dashboard_analytics": "Kniting machines' statistics",
+  "search": "Search",
+  "settings": "Settings"
 }

@@ -20,7 +20,7 @@
   }
   
   .custom.grey {
-    background-color: #C0C0C0;
+    background-color: var(--gray30);
   }
   
   .custom.red {
