@@ -8,6 +8,7 @@ interface Props {
   delay?: number;
   classes?: string;
   defaultValue?: string | number;
+  handleSubmit?: (val: any) => void;
 }
 
 const CSearchInput = ({
@@ -15,6 +16,7 @@ const CSearchInput = ({
   delay = 0,
   classes = "",
   defaultValue = "",
+  handleSubmit = () => {},
 }: Props) => {
   const { t } = useTranslation();
   const [value, setValue]: any = useState(null);
@@ -24,8 +26,16 @@ const CSearchInput = ({
   }, delay);
 
   useEffect(() => {
-    if (defaultValue) setValue(defaultValue);
+    setValue(defaultValue);
   }, [defaultValue]);
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter" && value) {
+      handleSubmit(value);
+      console.log('1');
+      
+    }
+  };
 
   return (
     <div
@@ -41,11 +51,17 @@ const CSearchInput = ({
         onChange={(e) => debounce(e.target.value)}
         defaultValue={defaultValue}
         type="text"
+        onKeyUp={handleKeyPress}
         placeholder={t("search")}
-        className={`w-[150px] mx-5 bg-transparent h-full outline-none pr-5 text-[var(--black)] placeholder-[var(--gray)] rounded-[8px] ${classes}`}
+        className={`w-[140px] mx-5 bg-transparent h-full outline-none pr-5 text-[var(--black)] placeholder-[var(--gray)] rounded-[8px] ${classes}`}
       />
       {value?.length ? (
-        <button onClick={() => setValue("")}>
+        <button
+          onClick={() => {
+            setValue("");
+            handleChange("");
+          }}
+        >
           <CloseIcon />
         </button>
       ) : (

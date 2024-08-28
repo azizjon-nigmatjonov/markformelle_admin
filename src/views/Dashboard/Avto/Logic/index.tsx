@@ -50,12 +50,14 @@ interface Props {
   setChecked: (val: any) => void;
   checked: any;
   bodyData: any;
+  setSearch: (val: string) => void
 }
 
 export const CountBtns = ({
   checked,
   setChecked = () => {},
   bodyData = [],
+  setSearch = () => {}
 }: Props) => {
   const filterCheckbox = (val: string) => {
     let list: any = checked.filter((i: string) => i !== "all") ?? [];
@@ -66,6 +68,7 @@ export const CountBtns = ({
       list = [val];
     }
 
+    setSearch("")
     setChecked(list);
   };
 
@@ -120,7 +123,7 @@ export const CountBtns = ({
   }, [bodyData]);
 
   return (
-    <div className="mr-5 flex space-x-4">
+    <div className="flex space-x-4">
       <CCheckButton
         color="var(--main60)"
         element={{

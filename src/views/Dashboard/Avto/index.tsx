@@ -4,7 +4,7 @@ import CSearchInput from "../../../components/CElements/CSearchInput";
 import { Header } from "../../../components/UI/Header";
 import { breadCrumbItems, CountBtns, FetchFunction } from "./Logic";
 import MachineCard from "./Card";
-import CCheckButton from "../../../components/CElements/CCheckButton";
+import CDriver from "../../../components/CElements/CDivider";
 
 const searchedWords = ["podr_id_knitt", "ip_address", "message", "name"];
 
@@ -13,8 +13,10 @@ const Dashboard = () => {
   const [searchVal, setSearchVal]: any = useState([]);
   const [checked, setChecked]: any = useState(["all"]);
   const [list, setList]: any = useState([]);
+  const [search, setSearch] = useState("");
 
   const searchWods = (val: string) => {
+    setSearch(val);
     const data: any = [];
     if (!val) {
       setSearchVal([]);
@@ -24,7 +26,7 @@ const Dashboard = () => {
     bodyData?.forEach((obj: any) => {
       searchedWords.forEach((word: string) => {
         if (word in obj) {
-          if (obj[word].toString().includes(val)) {
+          if (obj[word].toString().toLocaleLowerCase().includes(val.toLocaleLowerCase())) {
             data.push({ name: word, value: obj[word] });
           }
         }
@@ -93,6 +95,31 @@ const Dashboard = () => {
         data.push(element);
       }
     });
+    setSearch(obj.value);
+    setSearchVal([]);
+    setList(data);
+  };
+
+  const handleSearch = (value: string) => {
+    const data: any = [];
+    const sameData: any = [];
+    bodyData.forEach((element: any) => {
+      searchVal.forEach((obj: any) => {
+        let currnetEl =
+          typeof element[obj.name] === "number"
+            ? element[obj.name].toString()
+            : element[obj.name];
+        currnetEl = currnetEl.toLocaleLowerCase();
+        if (
+          currnetEl.includes(value.toLocaleLowerCase()) &&
+          !sameData.includes(element[obj.name])
+        ) {
+          data.push(element);
+          sameData.push(element[obj.name]);
+        }
+      });
+    });
+
     setSearchVal([]);
     setList(data);
   };
@@ -104,9 +131,15 @@ const Dashboard = () => {
           checked={checked}
           setChecked={setChecked}
           bodyData={bodyData}
+          setSearch={setSearch}
         />
-        <div className="w-[200px] relative">
-          <CSearchInput handleChange={searchWods} />
+        <CDriver direction="vertical" />
+        <div className="w-[220px] relative">
+          <CSearchInput
+            defaultValue={search}
+            handleChange={searchWods}
+            handleSubmit={handleSearch}
+          />
           {searchVal?.length ? (
             <div className="absolute left-0 top-full bg-white shadow-lg rounded-[12px] w-full overflow-scroll max-h-[400px]">
               <ul className="space-y-2 py-2">

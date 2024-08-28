@@ -49,9 +49,9 @@ export const Header = ({
               {titleIn ? "/" + titleIn : ""}
             </h3>
           )}
-          <div className="h-[20px] w-[2px] bg-[var(--gray20)] ml-5"></div>
+          <div className="h-[20px] w-[2px] bg-[var(--gray20)] mx-5"></div>
 
-          <div className="ml-5 flex items-center space-x-5">
+          <div className="flex items-center space-x-5">
             <LangDropdown />
             {/* <OrderDriver /> */}
             <Notification />
