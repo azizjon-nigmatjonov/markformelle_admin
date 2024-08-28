@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import CSearchInput from "../../../components/CElements/CSearchInput";
 import { Header } from "../../../components/UI/Header";
-import { breadCrumbItems, FetchFunction } from "./Logic";
+import { breadCrumbItems, CountBtns, FetchFunction } from "./Logic";
 import MachineCard from "./Card";
 import CCheckButton from "../../../components/CElements/CCheckButton";
 
@@ -13,18 +13,6 @@ const Dashboard = () => {
   const [searchVal, setSearchVal]: any = useState([]);
   const [checked, setChecked]: any = useState(["all"]);
   const [list, setList]: any = useState([]);
-
-  const filterCheckbox = (val: string) => {
-    let list: any = checked.filter((i: string) => i !== "all") ?? [];
-
-    if (list.includes(val)) {
-      list = list.filter((i: string) => i !== val);
-    } else {
-      list = [val];
-    }
-
-    setChecked(list);
-  };
 
   const searchWods = (val: string) => {
     const data: any = [];
@@ -111,38 +99,11 @@ const Dashboard = () => {
   return (
     <>
       <Header extra={<CBreadcrumbs items={breadCrumbItems} progmatic={true} />}>
-        <div className="mr-5 flex space-x-5">
-          <CCheckButton
-            color="var(--main60)"
-            element={{ label: "Все" }}
-            checked={checked.includes("all")}
-            handleCheck={() => filterCheckbox("all")}
-          />
-          <CCheckButton
-            color="#6cce65"
-            element={{ label: "работает" }}
-            checked={checked.includes("green")}
-            handleCheck={() => filterCheckbox("green")}
-          />
-          <CCheckButton
-            color="#8099f1"
-            element={{ label: "нет плана" }}
-            checked={checked.includes("blue")}
-            handleCheck={() => filterCheckbox("blue")}
-          />
-          <CCheckButton
-            color="var(--gray30)"
-            element={{ label: "сломан" }}
-            checked={checked.includes("grey")}
-            handleCheck={() => filterCheckbox("grey")}
-          />
-          <CCheckButton
-            color="#fb6060"
-            element={{ label: "остановлено" }}
-            checked={checked.includes("red")}
-            handleCheck={() => filterCheckbox("red")}
-          />
-        </div>
+        <CountBtns
+          checked={checked}
+          setChecked={setChecked}
+          bodyData={bodyData}
+        />
         <div className="w-[240px] relative">
           <CSearchInput handleChange={searchWods} />
           {searchVal?.length ? (
