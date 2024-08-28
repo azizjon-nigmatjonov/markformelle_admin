@@ -16,7 +16,7 @@ export const DropDown = ({
 
   return (
     <div className="mt-[-40px]">
-      <div className="absolute left-[35px] group-hover:block hidden w-auto z-[99]">
+      <div className="absolute left-[40px] group-hover:block hidden w-auto z-[99]">
         <div className="relative">
           <div className="absolute left-[-7px] top-[15px] w-[15px] h-[15px] rotate-[45deg] bg-white border border-[var(--gray20)] z-[33] card-shadow"></div>
           <div className="relative z-[99] bg-white card-shadow min-w-[200px] rounded-[12px] border border-[var(--gray20)] pt-2">
@@ -84,7 +84,7 @@ export const OneDropdown = ({
   handleNavigate: (link: any) => void;
 }) => {
   return (
-    <div className="absolute left-[35px] group-hover:block hidden bg-white whitespace-nowrap common-shadow rounded-[12px] z-[99] p-2">
+    <div className="absolute left-[40px] group-hover:block hidden bg-white whitespace-nowrap common-shadow rounded-[12px] z-[99] p-2">
       <div className="overflow-hidden">
         <button
           onClick={() => handleNavigate(path)}

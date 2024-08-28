@@ -129,25 +129,25 @@ export const CountBtns = ({
       />
       <CCheckButton
         color="#6cce65"
-        element={{ label: "работает " + counts?.working }}
+        element={{ label: "Работает " + counts?.working }}
         checked={checked.includes("green")}
         handleCheck={() => filterCheckbox("green")}
       />
       <CCheckButton
         color="#8099f1"
-        element={{ label: "нет плана " + counts?.no_plan }}
+        element={{ label: "Нет плана " + counts?.no_plan }}
         checked={checked.includes("blue")}
         handleCheck={() => filterCheckbox("blue")}
       />
       <CCheckButton
         color="var(--gray30)"
-        element={{ label: "сломан " + counts?.broken }}
+        element={{ label: "Сломан " + counts?.broken }}
         checked={checked.includes("grey")}
         handleCheck={() => filterCheckbox("grey")}
       />
       <CCheckButton
         color="#fb6060"
-        element={{ label: "остановлено " + counts?.stopped }}
+        element={{ label: "Остановлено " + counts?.stopped }}
         checked={checked.includes("red")}
         handleCheck={() => filterCheckbox("red")}
       />

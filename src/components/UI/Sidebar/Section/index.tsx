@@ -58,6 +58,7 @@ const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
                   >
                     <IconGenerator
                       icon={value?.[0]?.parent_icon || value[0].icon}
+                      fill="var(--black)"
                     />
                     {!collapsed && (
                       <span className="text-[var(--black)] font-medium">
@@ -113,7 +114,10 @@ const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
                                       isLastItem ? "mb-2" : ""
                                     } flex gap-2 capitalize menu_link cursor-pointer text-sm font-medium text-[#151515] `}
                                   >
-                                    <IconGenerator icon={el.icon} />
+                                    <IconGenerator
+                                      icon={el.icon}
+                                      fill="var(--black)"
+                                    />
                                     <span>{t(el.title)}</span>
                                   </p>
                                 </button>
@@ -150,7 +154,10 @@ const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
                     collapsed ? "justify-center" : "gap-x-3 pl-3 ml-[-11px]"
                   }`}
                 >
-                  <IconGenerator icon={visibleSidebarItems?.[0]?.icon} />
+                  <IconGenerator
+                    icon={visibleSidebarItems?.[0]?.icon}
+                    fill="var(--black)"
+                  />
                   {!collapsed && <>{t(visibleSidebarItems?.[0]?.title)}</>}
                 </button>
                 {!collapsed && <div className="accordion-line"></div>}

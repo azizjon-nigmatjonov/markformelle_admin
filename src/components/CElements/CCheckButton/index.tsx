@@ -24,7 +24,7 @@ const CCheckButton = ({
         color: checked ? "white" : "var(--gray)",
       }}
     >
-      <p>{t(element.label)}</p>
+      <p className="font-medium">{t(element.label)}</p>
     </div>
   );
 };

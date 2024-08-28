@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useDebounce from "../../../hooks/useDebounce";
-import { SearchIcon } from "../../UI/IconGenerator/Svg";
+import { CloseIcon, SearchIcon } from "../../UI/IconGenerator/Svg";
 
 interface Props {
   handleChange: (val: any) => void;
@@ -11,7 +11,7 @@ interface Props {
 
 const CSearchInput = ({
   handleChange = () => {},
-  delay = 500,
+  delay = 0,
   classes = "",
   defaultValue = "",
 }: Props) => {
@@ -31,16 +31,24 @@ const CSearchInput = ({
         value ? " border-[var(--primary)]" : "border-[var(--border)]"
       }`}
     >
-      <div className="absolute top-1/2 -translate-y-1/2 right-5">
+      <div className="absolute top-1/2 -translate-y-1/2 left-3">
         <SearchIcon fill={value ? "var(--primary)" : "var(--gray30)"} />
       </div>
       <input
+        value={value}
         onChange={(e) => debounce(e.target.value)}
         defaultValue={defaultValue}
         type="text"
         placeholder="Qidiruv..."
-        className={`w-[150px] bg-transparent h-full outline-none pr-5 text-[var(--black)] placeholder-[var(--gray)] rounded-[8px] ${classes}`}
+        className={`w-[150px] mx-5 bg-transparent h-full outline-none pr-5 text-[var(--black)] placeholder-[var(--gray)] rounded-[8px] ${classes}`}
       />
+      {value?.length ? (
+        <button onClick={() => setValue("")}>
+          <CloseIcon />
+        </button>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

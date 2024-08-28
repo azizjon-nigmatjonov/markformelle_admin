@@ -1,7 +1,7 @@
 {
   "finance": "Финансы",
-  "dashboard": "Панель управления",
-  "dashboardavto": "Aвтомобил",
-  "dashboard_analytics": "Свод",
+  "dashboard": "Вязального участка",
+  "dashboardavto": "Вязальные машины",
+  "dashboard_analytics": "Статистика вязания",
   "settings": "Настройки"
 }

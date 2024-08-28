@@ -12,15 +12,15 @@ import Calendar from "./Calendar";
 import LineChart from "./LineChart";
 
 const progressData = [
-  { name: "Tikuv moshinasi 1", quantity: 20, percentage: 10 },
-  { name: "Tikuv moshinasi 2", quantity: 30, percentage: 90 },
-  { name: "Tikuv moshinasi 3", quantity: 50, percentage: 60 },
-  { name: "Tikuv moshinasi 4", quantity: 20, percentage: 20 },
-  { name: "Tikuv moshinasi 5", quantity: 70, percentage: 30 },
-  { name: "Tikuv moshinasi 6", quantity: 50, percentage: 50 },
-  { name: "Tikuv moshinasi 7", quantity: 10, percentage: 10 },
-  { name: "Tikuv moshinasi 8", quantity: 0, percentage: 0 },
-  { name: "Tikuv moshinasi 9", quantity: 10, percentage: 10 },
+  { name: "Tikuv moshina nomi 1", quantity: 20, percentage: 10 },
+  { name: "Tikuv moshina nomi 2", quantity: 30, percentage: 90 },
+  { name: "Tikuv moshina nomi 3", quantity: 50, percentage: 60 },
+  { name: "Tikuv moshina nomi 4", quantity: 20, percentage: 20 },
+  { name: "Tikuv moshina nomi 5", quantity: 70, percentage: 30 },
+  { name: "Tikuv moshina nomi 6", quantity: 50, percentage: 50 },
+  { name: "Tikuv moshina nomi 7", quantity: 10, percentage: 10 },
+  { name: "Tikuv moshina nomi 8", quantity: 0, percentage: 0 },
+  { name: "Tikuv moshina nomi 9", quantity: 10, percentage: 10 },
 ];
 
 const cardData = [
@@ -48,19 +48,24 @@ const cardData = [
 
 const progress = [
   {
-    name: "1",
+    name: "Mashina 1",
     count: 10,
-    value: 40,
+    value: 10,
   },
   {
-    name: "2",
+    name: "Mashina 2",
+    count: 80,
+    value: 90,
+  },
+  {
+    name: " Mashina 3",
     count: 30,
-    value: 70,
+    value: 30,
   },
   {
-    name: "3",
-    count: 0,
-    value: 0,
+    name: " Mashina 4",
+    count: 30,
+    value: 30,
   },
 ];
 
@@ -79,9 +84,24 @@ const DashboardAnalytics = () => {
           ))}
         </div>
 
+        <CCard classes="mt-5">
+          <div className="flex justify-between mb-10">
+            <h3 className="mb-5 text-2xl font-medium">
+              Статистика по номеру плана
+            </h3>
+            <div className="w-[220px]">
+              <CPeriodPicker
+                handleValue={() => {}}
+                placeholder="Выберите время"
+              />
+            </div>
+          </div>
+          <AnalyticsBarchart grapData={[]} loading={false} />
+        </CCard>
+
         <CCard style={{ minHeight: 0 }} classes="my-5">
           <div className="flex justify-between mb-10">
-            <h3 className="mb-5 text-2xl font-medium">To'quv moshinalari</h3>
+            <h3 className="mb-5 text-2xl font-medium">Tikuv mashinalari bajargan plan</h3>
             <div className="w-[220px]">
               <CPeriodPicker
                 handleValue={() => {}}
@@ -100,7 +120,7 @@ const DashboardAnalytics = () => {
 
         <CCard>
           <div className="flex justify-between mb-10">
-            <h3 className="mb-5 text-2xl font-medium">Necha foiz ishladi</h3>
+            <h3 className="mb-5 text-2xl font-medium">Tikuv mashinalari necha foiz ishlagani</h3>
             <div className="w-[220px]">
               <CPeriodPicker
                 handleValue={() => {}}
@@ -121,9 +141,9 @@ const DashboardAnalytics = () => {
               <LinearProgress
                 variant="determinate"
                 sx={{
-                  backgroundColor: "#FFEFE6",
+                  backgroundColor: "var(--main80)",
                   "& .MuiLinearProgress-bar": {
-                    backgroundColor: "#FF7C34",
+                    backgroundColor: "var(--main)",
                   },
                   marginTop: "3px",
                   borderRadius: 5,
@@ -136,21 +156,6 @@ const DashboardAnalytics = () => {
 
         <CCard classes="mt-5">
           <StatisticsGender />
-        </CCard>
-
-        <CCard classes="mt-5">
-          <div className="flex justify-between mb-10">
-            <h3 className="mb-5 text-2xl font-medium">
-              Mashina raqami bo'yicha statistika
-            </h3>
-            <div className="w-[220px]">
-              <CPeriodPicker
-                handleValue={() => {}}
-                placeholder="Выберите время"
-              />
-            </div>
-          </div>
-          <AnalyticsBarchart grapData={[]} loading={false} />
         </CCard>
 
         <CCard>

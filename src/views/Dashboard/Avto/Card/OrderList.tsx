@@ -23,7 +23,7 @@ const OrderList: React.FC<OrderListProps> = ({ machineId }) => {
 
   const { data: orderData, isLoading } = useCQuery({
     key: `GET_DRIVER_HOME`,
-    endpoint: `https://retoolapi.dev/qAMz9q/data`,
+    endpoint: `https://retoolapi.dev/VLMg5q/machines?machine_name=A-046`,
     params: {
       // page: 1,
     },

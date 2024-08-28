@@ -5,11 +5,18 @@ const valueFormatter = (value: number | null) => `${value}mm`;
 const chartSetting = {
   yAxis: [
     {
-      label: "Soni foizda",
+      label: "План",
     },
   ],
-  series: [{ dataKey: "seoul", label: "No'mer", valueFormatter,  color: "var(--main)", }],
-  height: 300,
+  series: [
+    {
+      dataKey: "plan",
+      // label: "Plan nomer 1",
+      valueFormatter,
+      color: "var(--primary60)",
+    },
+  ],
+  height: 500,
   sx: {
     [`& .${axisClasses.directionY} .${axisClasses.label}`]: {
       transform: "translateX(-10px)",
@@ -19,11 +26,12 @@ const chartSetting = {
 
 const dataset = [
   {
-    london: 59,
-    paris: 57,
-    newYork: 86,
-    seoul: 21,
-    month: "777",
+    plan: 21,
+    number: "План нo 1",
+  },
+  {
+    plan: 51,
+    number: "План нo 2",
   },
 ];
 
@@ -46,11 +54,12 @@ const AnalyticsBarchart = ({
           xAxis={[
             {
               scaleType: "band",
-              dataKey: "month",
+              dataKey: "number",
               tickPlacement: "middle",
               tickLabelPlacement: "middle",
             },
           ]}
+
           {...chartSetting}
         />
       )}

@@ -8,8 +8,13 @@ import {
   UsersIcon,
   ZipIcon,
 } from "./Svg/Sidebar";
+import knitingImage from '/images/kniting.png'
 
 export const iconsList = [
+  // {
+  //   name: "kniting",
+  //   component: knitingImage
+  // },
   {
     name: "dashboard",
     component: Dashboard,

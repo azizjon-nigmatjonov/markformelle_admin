@@ -37,7 +37,7 @@ const StartProgress = ({ size = 50, color, value = 5, regionName, regionSize, ic
             {icon ? <p>Icon</p> : <p className={`text-lg  font-semibold absolute top-0 left-0 bottom-0 right-0 flex items-center justify-center`}>{value}%</p>}
         </Box>
         <div>
-            <p className='text-base font-semibold text-[var(--black)]'>{regionSize} ta</p>
+            <p className='text-base font-semibold text-[var(--black)]'>{regionSize} plan to'ldirildi</p>
             <p className='text-sm text-[var(--gray)] font-normal'>{regionName}</p>
         </div>
     </div>

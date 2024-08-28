@@ -1,7 +1,6 @@
 import { useMemo } from "react";
 import PStaticsHeader from "./Header";
 import RegionsPie from "./Regions";
-import CCard from "../../../../components/CElements/CCard";
 
 const StatisticsGender = () => {
   const isLoading = false;

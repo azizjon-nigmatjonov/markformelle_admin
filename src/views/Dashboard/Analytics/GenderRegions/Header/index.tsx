@@ -37,15 +37,15 @@ const StaticsHeader = memo(({ data, loading }: { data: any, loading: boolean }) 
                 </div>
                 : <div className='flex items-center justify-between border-b pb-6 border-[var(--lineGray)]'>
                     <div>
-                        <p className='text-[var(--darkerGray)] text-3xl font-semibold'>Umumiy {percentage.allUsers} ta</p>
+                        <p className='text-[var(--darkerGray)] text-3xl font-semibold'>Umumiy {31} ta</p>
                         <div className='flex items-center gap-6 mt-1'>
                             <div className='flex items-center gap-2'>
                                 <div className='h-2 w-2 rounded-full bg-[var(--ink)]' />
-                                <p>{gender.men} ta</p>
+                                <p>Working ta</p>
                             </div>
                             <div className='flex items-center gap-2'>
                                 <div className='h-2 w-2 rounded-full bg-[#FF35BA]' />
-                                <p>{gender.female} ta</p>
+                                <p>Stopped ta</p>
                             </div>
                         </div>
                     </div>
