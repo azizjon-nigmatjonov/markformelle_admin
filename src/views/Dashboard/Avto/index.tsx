@@ -20,7 +20,7 @@ const Dashboard = () => {
     if (list.includes(val)) {
       list = list.filter((i: string) => i !== val);
     } else {
-      list = [...list, val];
+      list = [val];
     }
 
     setChecked(list);
@@ -54,9 +54,9 @@ const Dashboard = () => {
           listData.push(element);
         } else if (
           element.yarn_replacement == "true" &&
-          element.pkol_knit - element.fkol_knit === 0 &&
           element.pkol_knit === 0 &&
-          element.capacity &&
+          element.machine_is_on === "true" &&
+          element.no_connnection === "false" &&
           checked.includes("blue")
         ) {
           listData.push(element);
@@ -113,7 +113,7 @@ const Dashboard = () => {
       <Header extra={<CBreadcrumbs items={breadCrumbItems} progmatic={true} />}>
         <div className="mr-5 flex space-x-5">
           <CCheckButton
-            color="var(--main)"
+            color="var(--main60)"
             element={{ label: "Все" }}
             checked={checked.includes("all")}
             handleCheck={() => filterCheckbox("all")}

@@ -44,3 +44,8 @@ export const FetchFunction = () => {
   
   return { bodyData: data ?? [], isLoading };
 };
+
+
+export const CountBtns = () => {
+  
+}
