@@ -114,7 +114,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
               {machine.name}
             </Typography>
             <WifiOff sx={{ fontSize: 60 }} />
-            <Typography flex={"center"} fontSize={16} fontStyle="SemiBold" fontWeight={"bold"}>
+            <Typography flex={"center"} textAlign={"center"} fontSize={16} fontStyle="SemiBold" fontWeight={"bold"}>
               Нет соединения
             </Typography>
             <Typography fontSize={16} fontStyle="SemiBold" fontWeight={"bold"}>

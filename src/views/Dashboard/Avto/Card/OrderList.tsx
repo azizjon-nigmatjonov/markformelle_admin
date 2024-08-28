@@ -1,52 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Card, CardContent, Typography } from "@mui/joy";
 import Sheet from "@mui/joy/Sheet";
 import useCQuery from "../../../../hooks/useCQuery";
-
-interface Order {
-  id: number;
-  order_no: number;
-  machine_id: number;
-  artikul: string;
-  pkol_knit: number;
-  starting_date: string;
-  finishing_date: string;
-  closed: string;
-}
+import { Skeleton } from "@mui/material";
 
 interface OrderListProps {
-  machineId: number; // Define the type of machineId prop
+  machineName: string; // Define the type of machineId prop
 }
 
-const OrderList: React.FC<OrderListProps> = ({ machineId }) => {
-  // const [orderData, setOrderData] = useState<Order[]>([]);
-
+const OrderList: React.FC<OrderListProps> = ({ machineName }) => {
   const { data: orderData, isLoading } = useCQuery({
-    key: `GET_DRIVER_HOME`,
-    endpoint: `https://retoolapi.dev/VLMg5q/machines?machine_name=A-046`,
+    key: `GET_ORDER_LIST`,
+    endpoint: `https://retoolapi.dev/VLMg5q/machines?machine_name={machineName}`,
     params: {
       // page: 1,
     },
     options: {
-      enabled: !!machineId,
+      enabled: !!machineName,
     },
   });
-
-  // useEffect(() => {
-  //   fetchOrderData(machineId); // Pass the machineId to fetchOrderData
-  // }, [machineId]); // Re-fetch data when machineId changes
-
-  // const fetchOrderData = async (machineId: number) => {
-  //   try {
-  //     const response = await fetch(
-  //       `https://retoolapi.dev/VLMg5q/machines?machine_id=${machineId}`
-  //     );
-  //     const data: Order[] = await response.json();
-  //     setOrderData(data);
-  //   } catch (error) {
-  //     console.error("Error fetching order data:", error);
-  //   }
-  // };
 
   return (
     <Sheet
@@ -57,18 +29,26 @@ const OrderList: React.FC<OrderListProps> = ({ machineId }) => {
         borderRadius: "sm",
       }}
     >
-      {orderData.map((order: any) => (
-        <Card key={order.id} sx={{ marginBottom: 2 }}>
-          <CardContent>
-            <Typography>{`Order No: ${order.order_no}`}</Typography>
-            <Typography>{`Artikul: ${order.artikul}`}</Typography>
-            <Typography>{`Plan Kg: ${order.pkol_knit}`}</Typography>
-            <Typography>{`Starting Date: ${order.starting_date}`}</Typography>
-            <Typography>{`Finishing Date: ${order.finishing_date}`}</Typography>
-            <Typography>{`Closed: ${order.closed}`}</Typography>
-          </CardContent>
-        </Card>
-      ))}
+      {isLoading ? (
+        <div>
+          <Skeleton style={{ height: "200px" }} />
+          <Skeleton style={{ height: "200px" }} />
+          <Skeleton style={{ height: "200px" }} />
+        </div>
+      ) : (
+        orderData.map((order: any) => (
+          <Card key={order.id} sx={{ marginBottom: 2 }}>
+            <CardContent>
+              <Typography>{`Order No: ${order.order_no}`}</Typography>
+              <Typography>{`Artikul: ${order.artikul}`}</Typography>
+              <Typography>{`Plan Kg: ${order.plan_kg}`} кг</Typography>
+              <Typography>{`Starting Date: ${order.starting_date}`}</Typography>
+              <Typography>{`Finishing Date: ${order.finishing_date}`}</Typography>
+              <Typography>{`Closed: ${order.closed}`}</Typography>
+            </CardContent>
+          </Card>
+        ))
+      )}
     </Sheet>
   );
 };

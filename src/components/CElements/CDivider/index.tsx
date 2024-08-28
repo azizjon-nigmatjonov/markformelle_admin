@@ -6,8 +6,8 @@ interface Props {
 }
 
 const CDriver = ({ title, classes, direction = "horizantal" }: Props) => {
-  if ((direction = "vertical")) {
-    return <div className="h-[20px] w-[2px] bg-[var(--gray20)] mx-5"></div>;
+  if (direction === "vertical") {
+    return <div className={`h-[20px] w-[2px] bg-[var(--gray20)] mx-5 ${classes}`}></div>;
   }
 
   if (direction === "horizantal") {

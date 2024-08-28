@@ -20,6 +20,7 @@ import {
 } from "@mui/joy";
 import { Bolt, Speed } from "@mui/icons-material";
 import OrderList from "./OrderList";
+import CDriver from "../../../../components/CElements/CDivider";
 
 interface Machine {
   id: number;
@@ -93,7 +94,7 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine }) => {
   const [checked2, setChecked2] = React.useState(machine.not_broken == "true");
 
   return (
-    <ModalDialog sx={{ width: "40vw" }}>
+    <ModalDialog sx={{ width: "50vw" }}>
       <ModalClose />
       <Typography></Typography>
       <Typography></Typography>
@@ -111,21 +112,14 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine }) => {
                 <Typography>Номер машины </Typography>
                 <Typography>{machine.name}</Typography>
               </ListItem>
-              <ListDivider />
+              <CDriver direction="horizantal" />
               <ListItem
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
                 <Typography>IP адрес </Typography>
                 <Typography>{machine.ip_address}</Typography>
               </ListItem>
-              <ListDivider
-                sx={{
-                  mt: 5,
-                  height: 3,
-                  opacity: 100,
-                  backgroundColor: "gray",
-                }}
-              />
+              <CDriver direction="horizantal" />
               <ListItem
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
@@ -179,11 +173,7 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine }) => {
                 </Typography>
               </ListItem>
             </List>
-            <Divider
-              orientation="vertical"
-              sx={{ mb: 5, width: 2, opacity: 100, backgroundColor: "gray" }}
-            />
-
+            <CDriver direction="vertical" classes="h-[400px]" />
             <Stack
               spacing={2}
               sx={{ width: 300 }}
@@ -313,7 +303,7 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine }) => {
           </Stack>
         </TabPanel>
         <TabPanel value={1}>
-          <OrderList machineId={machine.id} />
+          <OrderList machineName={machine.name} />
         </TabPanel>
       </Tabs>
     </ModalDialog>
