@@ -61,7 +61,7 @@ export const DropDown = ({
       <div className="absolute left-[38px] group-hover:block hidden w-auto z-[99]">
         <div className="relative">
           <div className="absolute left-[-7px] top-[15px] w-[15px] h-[15px] rotate-[45deg] bg-white border border-[var(--gray20)] z-[33]"></div>
-          <div className="relative z-[99] bg-white card-shadow min-w-[200px] rounded-[12px] border border-[var(--gray20)] pt-2">
+          <div className="relative z-[99] bg-white card-shadow min-w-[200px] rounded-[12px] border border-[var(--gray20)] pt-2 ${el.children}">
             <div
               className={`flex items-center space-x-3 pb-2 border-b border-[var(--border)] pl-3`}
             >
@@ -77,14 +77,16 @@ export const DropDown = ({
                   if (el.title && el.title.trim() !== "") {
                     return (
                       el.sidebar && (
-                        <SectionBtns
-                          index={i}
-                          handleNavigate={handleNavigate}
-                          clearFilter={() => {}}
-                          el={el}
-                          children={el.children}
-                          isLastItem={isLastItem}
-                        />
+                        <div key={i} className={el?.children?.length ? 'pb-2 mr-5' : ''}>
+                          <SectionBtns
+                            index={i}
+                            handleNavigate={handleNavigate}
+                            clearFilter={() => {}}
+                            el={el}
+                            children={el.children}
+                            isLastItem={isLastItem}
+                          />
+                        </div>
                       )
                     );
                   } else {

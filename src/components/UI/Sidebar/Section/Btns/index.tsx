@@ -66,7 +66,7 @@ export const SectionBtns = ({
           >
             <p
               onClick={() => clearFilter()}
-              className={`flex gap-2 capitalize menu_link cursor-pointer text-sm font-medium text-[#151515] `}
+              className={`flex gap-2 capitalize menu_link cursor-pointer text-sm font-medium text-[#151515] whitespace-nowrap`}
             >
               <IconGenerator icon={el.icon} fill="var(--black)" />
               <span>{t(el.title)}</span>
