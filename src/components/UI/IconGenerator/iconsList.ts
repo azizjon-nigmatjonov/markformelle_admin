@@ -2,6 +2,8 @@ import {
   AdminsIcon,
   AnalyticsIcon,
   Dashboard,
+  IncreasingIcon,
+  KnitingIcon,
   PagesIcon,
   RolsIcon,
   SettingIcon,
@@ -10,10 +12,18 @@ import {
 } from "./Svg/Sidebar";
 
 export const iconsList = [
-  // {
-  //   name: "kniting",
-  //   component: knitingImage
-  // },
+  {
+    name: "increasing",
+    component: IncreasingIcon
+  },
+  {
+    name: "machines",
+    component: KnitingIcon
+  },
+  {
+    name: "kniting",
+    component: KnitingIcon
+  },
   {
     name: "dashboard",
     component: Dashboard,

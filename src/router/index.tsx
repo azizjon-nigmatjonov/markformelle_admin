@@ -3,9 +3,6 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { websiteActions } from "../store/website/index";
 import MainLayout from "../layouts/MainLayout";
-// import AuthLayout from "../layouts/AuthLayout";
-// import Login from "../views/Auth/Login";
-// import Registration from "../views/Auth/Registration";
 import { routeList } from "./List";
 import ErrorBoundary from "../utils/ErrorBoundary";
 import { PageFallbackInner } from "../components/UI/PageFallback";
@@ -16,7 +13,7 @@ const defaults = { ...routeParents };
 interface Path {
   parent: string;
   link: string;
-  childlink?: string;
+  childLink?: string;
   title: string;
   icon: string;
   sidebar: boolean;
@@ -24,6 +21,7 @@ interface Path {
   single_page: boolean;
   parent_icon: string;
   auth: boolean;
+  children?: any;
 }
 
 interface routeType {
@@ -37,15 +35,16 @@ const Router = () => {
   // const link = useSelector((state: any) => state.auth.token);
   const [list, setList] = useState<string[]>([]);
   const [listNew, setListNew] = useState<string[]>([]);
+  const [childList, setChildList] = useState<string[]>([]);
   const storedRoutes = useSelector((state: any) => state.website.routes);
 
-  const [routes, setRoutes] = useState({ ...defaults });
+  const [routes, setRoutes]: any = useState({ ...defaults });
   const [newRoutes, setNewRoutes] = useState({ ...defaults });
 
   const getPath = ({
     parent = "",
     link,
-    childlink,
+    childLink,
     title,
     icon,
     sidebar,
@@ -53,9 +52,9 @@ const Router = () => {
     single_page,
     parent_icon,
     auth,
+    children,
   }: Path) => {
-    const path = `${parent}/${link}${childlink ? `/${childlink}` : ""}`;
-
+    const path = `${parent}/${link}${childLink ? `/${childLink}` : ""}`;
     const obj = {
       path: path,
       sidebar,
@@ -68,10 +67,54 @@ const Router = () => {
       parent_icon,
       single_page,
       auth,
+      children,
     };
 
-    const permissions = userInfo?.permissions ?? [];
-    const found = permissions?.find((i: routeType) => i.value === path);
+    // if (childLink) {
+    //   const newPath = `${parent}/${link}${childLink ? `/${childLink}` : ""}`;
+
+    //   if (list.includes(obj.id)) {
+    //     const oldArray = routes[obj.parent] ?? [];
+    //     const newArr: any = [];
+
+    //     let oldObj: any = {};
+
+    //     oldArray.forEach((i: any) => {
+    //       if (i.id === obj.id) {
+    //         oldObj = { ...i };
+    //       } else {
+    //         newArr.push(i);
+    //       }
+    //     });
+
+    //     const oldObjectNewVersion: any = { ...oldObj };
+    //     oldObjectNewVersion.path = newPath;
+    //     oldObjectNewVersion.id = newPath;
+
+    //     oldObjectNewVersion.children = [...oldObjectNewVersion.children, obj];
+
+    //     newArr.push(oldObjectNewVersion);
+
+    //     setTimeout(() => {
+    //       if (!childList.includes(oldObjectNewVersion.id)) {
+    //         const newObjCopy = { ...routes };
+    //         newObjCopy[oldObjectNewVersion.parent] = newArr;
+
+    //         setChildList((prev) => [...prev, oldObjectNewVersion.id]);
+    //       }
+    //     }, 100);
+
+    //     // delete routes[obj.parent];
+    //     console.log("routes", routes);
+
+    //     // setRoutes({ ...routes, [obj.parent]: newArr });
+    //   }
+
+    //   return newPath;
+    // }
+
+    // const permissions = userInfo?.permissions ?? [];
+    // const found = permissions?.find((i: routeType) => i.value === path);
 
     if (!listNew.includes(obj.id)) {
       setNewRoutes((prev: any) => ({
@@ -81,18 +124,14 @@ const Router = () => {
       setListNew((prev) => [...prev, obj.id]);
     }
 
-    if (found?.permissions?.includes("index") || single_page || 1) {
-      if (!list.includes(obj.id)) {
-        setRoutes((prev: any) => ({
-          ...prev,
-          [parent]: [...prev[parent], obj],
-        }));
-        setList((prev) => [...prev, obj.id]);
-      }
-      return path;
+    if (!list.includes(obj.id)) {
+      setRoutes((prev: any) => ({
+        ...prev,
+        [parent]: [...prev[parent], obj],
+      }));
+      setList((prev) => [...prev, obj.id]);
     }
-
-    return "";
+    return path;
   };
 
   const navigator = useMemo(() => {
@@ -143,6 +182,8 @@ const Router = () => {
                 single_page: route?.single_page ?? false,
                 parent_icon: route?.parent_icon ?? "",
                 auth: route?.auth ?? false,
+                childLink: route?.childLink ?? "",
+                children: route?.children ?? [],
               })}
               key={index}
               element={

@@ -8,6 +8,7 @@ import { SectionData } from "../Logic";
 import { DropDown, OneDropdown } from "./DropDown";
 import { useDispatch } from "react-redux";
 import { filterActions } from "../../../../store/filterParams";
+import { SectionBtns } from "./Btns";
 
 interface Props {
   list: any;
@@ -16,7 +17,6 @@ interface Props {
 }
 
 const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
-  const location = useLocation();
   const { getParentName } = SectionData();
   const { t } = useTranslation();
 
@@ -29,7 +29,7 @@ const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
   const clearFilter = () => {
     dispatch(filterActions.clearFilterData());
   };
-
+  
   const dispatch = useDispatch();
   return (
     <div className={`${cls.section} ${collapsed ? "py-[10px]" : "p-[10px]"}`}>
@@ -95,32 +95,14 @@ const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
                           return (
                             el.sidebar && (
                               <>
-                                <button
-                                  key={el.id}
-                                  onClick={() => handleNavigate(el)}
-                                  className={`${
-                                    i < 100
-                                      ? "steps__item steps__item--active"
-                                      : "steps__item"
-                                  } menu_link2 flex items-center steps ${
-                                    location.pathname.startsWith(el.path)
-                                      ? "active"
-                                      : ""
-                                  }`}
-                                >
-                                  <p
-                                    onClick={() => clearFilter()}
-                                    className={`${
-                                      isLastItem ? "mb-2" : ""
-                                    } flex gap-2 capitalize menu_link cursor-pointer text-sm font-medium text-[#151515] `}
-                                  >
-                                    <IconGenerator
-                                      icon={el.icon}
-                                      fill="var(--black)"
-                                    />
-                                    <span>{t(el.title)}</span>
-                                  </p>
-                                </button>
+                                <SectionBtns
+                                  index={i}
+                                  handleNavigate={handleNavigate}
+                                  clearFilter={clearFilter}
+                                  el={el}
+                                  children={el.children}
+                                  isLastItem={isLastItem}
+                                />
                               </>
                             )
                           );
