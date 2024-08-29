@@ -17,6 +17,7 @@ import ViewDayOutlinedIcon from "@mui/icons-material/ViewDayOutlined";
 import { Bolt, WifiOff } from "@mui/icons-material";
 
 import ModalCard from "./ModalCard";
+import { useScreenSize } from "../../../../hooks/useScreenSize";
 
 interface Machine {
   id: number;
@@ -50,11 +51,12 @@ interface MachineCardProps {
 }
 
 const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
-  const [cardColor, setCardColor] = useState<string>(""); // Initialize card color state
+  const [cardColor, setCardColor] = useState<string>(""); 
+  const smallDesktop = useScreenSize("smallDesktop")
 
   useEffect(() => {
-    setCardColor(getCardColor()); // Update card color when component mounts or machine data changes
-  }, [machine]); // Re-run effect when machine data changes
+    setCardColor(getCardColor());
+  }, [machine]);
 
   const getCardColor = (): string => {
     if (machine.no_connnection == "true") {
@@ -158,7 +160,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
               determinate
               sx={{
                 // mb: "0px",
-                "--CircularProgress-size": "110px",
+                "--CircularProgress-size": smallDesktop ? "90px" : "110px",
                 "--CircularProgress-trackThickness": "10px",
                 "--CircularProgress-progressThickness": "10px",
               }}

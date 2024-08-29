@@ -58,7 +58,7 @@ const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
                   >
                     <IconGenerator
                       icon={value?.[0]?.parent_icon || value[0].icon}
-                      fill="var(--gray)"
+                      fill="var(--black)"
                     />
                     {!collapsed && (
                       <span className="text-[var(--black)] font-medium">
@@ -156,7 +156,7 @@ const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
                 >
                   <IconGenerator
                     icon={visibleSidebarItems?.[0]?.icon}
-                    fill="var(--gray)"
+                    fill="var(--black)"
                   />
                   {!collapsed && <>{t(visibleSidebarItems?.[0]?.title)}</>}
                 </button>

@@ -1,15 +1,15 @@
 export const useLangs = () => {
   const langList = [
     {
-      label: <div>🇷🇺 Рус</div>,
+      label: <div>Русский</div>,
       value: "ru",
     },
     {
-      label: <div>🏴󠁧󠁢󠁥󠁮󠁧󠁿 Eng</div>,
+      label: <div>English</div>,
       value: "en",
     },
     {
-      label: <div>🇺🇿 Uzb</div>,
+      label: <div>O'zbekcha</div>,
       value: "uz",
     },
   ];

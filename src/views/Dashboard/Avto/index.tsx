@@ -161,7 +161,7 @@ const Dashboard = () => {
       </Header>
 
       <div className="container">
-        <div className="grid grid-cols-11 gap-5">
+        <div className="grid grid-cols-11 gap-3 2xl:gap-5">
           {list.map((machine: any, index: number) => (
             <MachineCard key={index} machine={machine} />
           ))}
