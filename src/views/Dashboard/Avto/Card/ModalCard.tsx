@@ -21,6 +21,12 @@ import {
 import { Bolt, Speed } from "@mui/icons-material";
 import OrderList from "./OrderList";
 import CDriver from "../../../../components/CElements/CDivider";
+import "./MachineCard.css";
+import toast from "react-hot-toast";
+import {
+  CloseIcon,
+  WarningIcon,
+} from "../../../../components/UI/IconGenerator/Svg";
 
 interface Machine {
   id: number;
@@ -51,9 +57,10 @@ interface Machine {
 
 interface MachineCardProps {
   machine: Machine;
+  setOpen: (val: boolean) => void;
 }
 
-const ModalCard: React.FC<MachineCardProps> = ({ machine }) => {
+const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen }) => {
   const [cardColor, setCardColor] = React.useState<string>(""); // Initialize card color state
 
   React.useEffect(() => {
@@ -94,16 +101,16 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine }) => {
   const [checked2, setChecked2] = React.useState(machine.not_broken == "true");
 
   return (
-    <ModalDialog sx={{ width: "50vw" }}>
+    <ModalDialog sx={{ width: "900px" }}>
       <ModalClose />
       <Typography></Typography>
       <Typography></Typography>
-      <Tabs aria-label="Basic tabs" defaultValue={0}>
+      <Tabs aria-label="Basic tabs" defaultValue={0} sx={{ width: "100%" }}>
         <TabList>
           <Tab>Информация о машине</Tab>
           <Tab>Информация о предстоящих заказах</Tab>
         </TabList>
-        <TabPanel value={0}>
+        <TabPanel value={0} style={{ width: "100%" }}>
           <Stack spacing={2} direction="row">
             <List aria-labelledby="decorated-list-demo">
               <ListItem
@@ -180,9 +187,9 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine }) => {
               justifyContent="space-between"
               alignItems="center"
             >
-              <Stack sx={{ width: 250 }}>
-                <List>
-                  <ListItem
+              <Stack sx={{ width: "100%" }}>
+                <ul className="flex flex-col space-y-5">
+                  <li
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
@@ -195,9 +202,9 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine }) => {
                       startDecorator={checked1 ? "Вкл" : "Отк"}
                       onChange={(event) => setChecked1(event.target.checked)}
                     />
-                  </ListItem>
-                  <ListDivider />
-                  <ListItem
+                  </li>
+                  {/* <ListDivider /> */}
+                  <li
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
@@ -210,40 +217,41 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine }) => {
                       startDecorator={checked2 ? "Работает" : "Сломан"}
                       onChange={(event) => setChecked2(event.target.checked)}
                     />
-                  </ListItem>
-                </List>
+                  </li>
+                </ul>
               </Stack>
-              <Card
-                className={`machine-card custom ${cardColor}`}
-                sx={{ width: 250 }}
-              >
-                <List aria-labelledby="decorated-list-demo">
-                  <ListItem
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography>Скорость </Typography>
-                    <Typography endDecorator={<Speed />}>
-                      {machine.rotation}
-                    </Typography>
-                  </ListItem>
+              {checked2 ? (
+                <Card
+                  className={`machine-card custom ${cardColor}`}
+                  sx={{ width: 250 }}
+                >
+                  <List aria-labelledby="decorated-list-demo">
+                    <ListItem
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography>Скорость </Typography>
+                      <Typography endDecorator={<Speed />}>
+                        {machine.rotation}
+                      </Typography>
+                    </ListItem>
 
-                  <ListItem
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography>Эффективность </Typography>
-                    <Typography endDecorator={<Bolt />}>
-                      {machine.efficiency}
-                    </Typography>
-                  </ListItem>
-                </List>
-                <CardContent sx={{ mx: "auto", alignItems: "center" }}>
-                  {/* <Typography
+                    <ListItem
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography>Эффективность </Typography>
+                      <Typography endDecorator={<Bolt />}>
+                        {machine.efficiency}
+                      </Typography>
+                    </ListItem>
+                  </List>
+                  <CardContent sx={{ mx: "auto", alignItems: "center" }}>
+                    {/* <Typography
                     fontSize={18}
                     fontStyle="SemiBold"
                     fontWeight={"bold"}
@@ -251,59 +259,95 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine }) => {
                     {machine.name}
                   </Typography> */}
 
-                  <CircularProgress
-                    variant="soft"
-                    color="success"
-                    value={
-                      Number(machine.fakt_percentage) > 100
-                        ? 100
-                        : Number(machine.fakt_percentage)
-                    }
-                    determinate
-                    sx={{
-                      // mb: "0px",
-                      "--CircularProgress-size": "120px",
-                      "--CircularProgress-trackThickness": "10px",
-                      "--CircularProgress-progressThickness": "10px",
-                    }}
-                  >
-                    <Stack spacing={0} alignItems={"center"}>
-                      <Typography>{machine.fkol_knit}</Typography>
-                      <Divider
-                        orientation="horizontal"
-                        sx={{
-                          height: 2,
-                          backgroundColor: "gray",
-                          opacity: 0.5,
-                        }}
-                        style={{ background: "black" }}
-                      />
-                      <Typography>{machine.pkol_knit + " Kg"}</Typography>
+                    <CircularProgress
+                      variant="soft"
+                      color="success"
+                      value={
+                        Number(machine.fakt_percentage) > 100
+                          ? 100
+                          : Number(machine.fakt_percentage)
+                      }
+                      determinate
+                      sx={{
+                        // mb: "0px",
+                        "--CircularProgress-size": "120px",
+                        "--CircularProgress-trackThickness": "10px",
+                        "--CircularProgress-progressThickness": "10px",
+                      }}
+                    >
+                      <Stack spacing={0} alignItems={"center"}>
+                        <Typography>{machine.fkol_knit}</Typography>
+                        <Divider
+                          orientation="horizontal"
+                          sx={{
+                            height: 2,
+                            backgroundColor: "gray",
+                            opacity: 0.5,
+                          }}
+                          style={{ background: "black" }}
+                        />
+                        <Typography>{machine.pkol_knit + " Kg"}</Typography>
 
-                      {/* <Typography startDecorator={<SpeedIcon />}>
+                        {/* <Typography startDecorator={<SpeedIcon />}>
                         {machine.rotation}
                       </Typography> */}
-                    </Stack>
-                  </CircularProgress>
-                  {/* Display other machine information */}
-                </CardContent>
-              </Card>
-              <Stack
-                spacing={5}
-                direction={"row"}
-                justifyContent={"space-between"}
-                sx={{ width: 250 }}
-              >
-                <Button fullWidth>Сохранить</Button>
-                <Button fullWidth variant="outlined">
-                  Выйти
-                </Button>
-              </Stack>
+                      </Stack>
+                    </CircularProgress>
+                    {/* Display other machine information */}
+                  </CardContent>
+                </Card>
+              ) : (
+                <div className="w-full h-full border-t border-[var(--border)] pt-5">
+                  <h3 className="mb-5">Причина поломки</h3>
+                  <div className="mb-10">
+                    <div className="bg-[var(--fire)] p-2 rounded-[4px] flex space-x-3 relative">
+                      <WarningIcon />
+                      <span>Кабелида носозлик #mexanik</span>
+
+                      <button className="absolute flex items-center justify-center right-[-8px] top-[-8px] rounded-full w-[20px] h-[20px] bg-white border border-[var(--border)]">
+                        <CloseIcon />
+                      </button>
+                    </div>
+                  </div>
+                  <p className="mb-2 text-[var(--gray)]">Введите причину поломки</p>
+                  <textarea
+                    className="p-4 bg-transparent border border-[var(--border)] rounded-[8px] w-full"
+                    rows={5}
+                  ></textarea>
+
+                  <Stack
+                    spacing={1}
+                    direction={"row"}
+                    justifyContent={"space-between"}
+                    sx={{ width: "100%" }}
+                    mt={2}
+                  >
+                    <Button
+                      onClick={() => {
+                        setOpen(false);
+                        toast.success("Отправлено успешно, Спасибо!");
+                      }}
+                      fullWidth
+                    >
+                      Отправить
+                    </Button>
+                    <Button
+                      onClick={() => setOpen(false)}
+                      fullWidth
+                      variant="outlined"
+                    >
+                      Отменить
+                    </Button>
+                  </Stack>
+                </div>
+              )}
             </Stack>
           </Stack>
         </TabPanel>
-        <TabPanel value={1}>
-          <OrderList machineName={machine.name} />
+        <TabPanel value={1} style={{ width: "50%" }}>
+          <Stack>
+            <OrderList machineName={machine.name} />
+          </Stack>
         </TabPanel>
       </Tabs>
     </ModalDialog>

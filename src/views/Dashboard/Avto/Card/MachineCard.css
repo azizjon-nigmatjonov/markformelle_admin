@@ -1,33 +1,31 @@
-
 .machine-card {
-    /* margin-bottom: 20px; */
-    
-    transition: background-color 0.3s ease;
-  }
+  /* margin-bottom: 20px; */
 
-  .custom.cardinside{
-    padding-top: 0px;
-  }
-  .custom.green {
-    background-color: #6CCE65;
-  }
-  .custom.orange {
-    background-color: #FF9C27;
-  }
-  
-  .custom.purple {
-    background-color: #8099F1;
-  }
-  
-  .custom.grey {
-    background-color: var(--gray30);
-  }
-  
-  .custom.red {
-    background-color: #FF6060;
-  }
+  transition: background-color 0.3s ease;
+}
+
+.custom.cardinside {
+  padding-top: 0px;
+}
+.custom.green {
+  background-color: #6cce65;
+}
+.custom.orange {
+  background-color: #ff9c27;
+}
+
+.custom.purple {
+  background-color: #8099f1;
+}
+
+.custom.grey {
+  background-color: var(--gray30);
+}
+
+.custom.red {
+  background-color: #ff6060;
+}
 
 .custom.black {
-    background-color: rgba(0, 0, 0, 0.4);
-  }
-  
+  background-color: rgba(0, 0, 0, 0.4);
+}

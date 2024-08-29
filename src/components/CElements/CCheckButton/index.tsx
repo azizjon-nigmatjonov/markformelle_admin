@@ -14,7 +14,7 @@ const CCheckButton = ({
   return (
     <div
       onClick={() => handleCheck(element)}
-      className={`flex items-center gap-2 common-shadow cursor-pointer px-12px rounded-[8px] border h-[35px] w-full whitespace-nowrap`}
+      className={`flex items-center gap-2 cursor-pointer px-12px rounded-full border-[2px] h-[35px] w-full whitespace-nowrap`}
       style={{
         backgroundColor: checked ? color : "",
         color: checked ? "white" : "var(--gray)",

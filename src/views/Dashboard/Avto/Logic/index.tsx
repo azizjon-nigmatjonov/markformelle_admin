@@ -123,7 +123,7 @@ export const CountBtns = ({
   }, [bodyData]);
 
   return (
-    <div className="flex space-x-4">
+    <div className="flex space-x-3">
       <CCheckButton
         color="var(--main60)"
         element={{

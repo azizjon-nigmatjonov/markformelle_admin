@@ -18,20 +18,6 @@ const request = axios.create({
 const errorHandler = (error: any) => {
   const status = error.response?.status;
   const refresh_token = store.getState().auth.token;
-  // const dispatch = useDispatch();
-
-  // console.log('error', error);
-
-  // if(!!error.message){
-  //   console.log('error');
-
-  //     return websiteActions.setAlertData({
-  //       title: `${error.message}`,
-  //       translation: "common",
-  //       type: 'error'
-  //     })
-
-  // }
 
   toast.error(error?.response?.data?.error?.message ?? "Error");
   if (status === 403) {

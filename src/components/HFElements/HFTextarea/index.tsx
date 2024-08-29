@@ -10,15 +10,15 @@ import { useEffect } from "react";
 export const FieldUI = ({
   value,
   defaultValue,
-  onChange,
+  onChange = () => {},
   props,
   error,
 }: {
-  value: any;
-  defaultValue: string;
-  onChange: (val: any) => void;
-  props: any;
-  error: any;
+  value?: any;
+  defaultValue?: string;
+  onChange?: (val: any) => void;
+  props?: any;
+  error?: any;
 }) => {
   const handleChange = (val: any) => {
     onChange(val);
@@ -31,7 +31,7 @@ export const FieldUI = ({
   }, [defaultValue])
 
   return (
-    <>
+    <div className="HFTextarea">
       <TextareaAutosize
         // size="small"
         defaultValue={defaultValue}
@@ -46,7 +46,7 @@ export const FieldUI = ({
           {error.message}
         </p>
       )}
-    </>
+    </div>
   );
 };
 interface Props {
@@ -82,7 +82,7 @@ const HFTextarea = ({
           defaultValue={defaultValue}
           rules={{ ...rules }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
-            <div className="HFTextarea p-5 relative">
+            <div className="p-5 relative">
               <FieldUI
                 onChange={onChange}
                 value={value}

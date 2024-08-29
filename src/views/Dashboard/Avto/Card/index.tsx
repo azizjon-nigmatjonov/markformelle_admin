@@ -90,7 +90,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
     ) {
       return "red";
     } else {
-      return ""; // Handle any other case if needed
+      return "";
     }
   };
   const [open, setOpen] = React.useState(false);
@@ -114,7 +114,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
               {machine.name}
             </Typography>
             <WifiOff sx={{ fontSize: 60 }} />
-            <Typography flex={"center"} textAlign={"center"} fontSize={16} fontStyle="SemiBold" fontWeight={"bold"}>
+            <Typography flex={"center"} textAlign={"center"} fontSize={14} fontStyle="SemiBold" fontWeight={"bold"}>
               Нет соединения
             </Typography>
             <Typography fontSize={16} fontStyle="SemiBold" fontWeight={"bold"}>
@@ -212,7 +212,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
           alignItems: "center",
         }}
       >
-        <ModalCard machine={machine} />
+        <ModalCard machine={machine} setOpen={setOpen} />
       </Modal>
     </>
   );
