@@ -6,15 +6,12 @@ import { useEffect } from "react";
 import { FoldButton } from "./FoldButton";
 import { useDispatch, useSelector } from "react-redux";
 import { sidebarActions } from "../../../store/sidebar";
-import UnfoldLessIcon from "@mui/icons-material/UnfoldLess";
-import UnfoldMoreIcon from "@mui/icons-material/UnfoldMore";
 import usePageRouter from "../../../hooks/useObjectRouter";
 import { authActions } from "../../../store/auth/auth.slice";
 
-export const Sidebar = () => {
+export const Sidebar = ({ openHeader }: { openHeader?: boolean }) => {
   const { userInfo, routes } = getWebsiteData();
   const collapsed = useSelector((state: any) => state.sidebar.collapsed);
-  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const dispatch = useDispatch();
   const token = useSelector((state: any) => state.auth.token);
   const { navigateTo } = usePageRouter();
@@ -25,7 +22,6 @@ export const Sidebar = () => {
       window.location.reload();
     }
   }, []);
-
 
   const handleNavigate = (obj: any) => {
     if (obj?.auth && !token) {
@@ -39,41 +35,34 @@ export const Sidebar = () => {
     <div
       className={cls.sidebar}
       style={{
-        width: collapsed ? "40px" : "280px",
+        width: collapsed ? "60px" : "0",
         overflow: collapsed ? "" : "hidden",
       }}
     >
       <div className="overflow-y-scroll remove-scroll">
-        <div>
-          <button
-            className={`w-full h-[50px] common-shadow flex items-center ${
-              collapsed ? "justify-center" : "px-16px justify-between"
-            }`}
-            onClick={() => dispatch(sidebarActions.setOpenHeader(!openHeader))}
-          >
-            <div></div>
-            {!openHeader ? (
-              <UnfoldMoreIcon style={{ color: "var(--gray)" }} />
-            ) : (
-              <UnfoldLessIcon style={{ color: "var(--gray)" }} />
-            )}
-          </button>
-
-          <div
-            className={`overflow-y-scroll remove-scroll overflow-x-hidden ${
-              collapsed ? "" : "pr-[14px]"
-            }`}
-            style={{ height: "calc(100vh - 140px)" }}
-          >
-            <SidebarSection list={routes} collapsed={collapsed} handleNavigate={handleNavigate} />
-          </div>
+        <div
+          className={`overflow-y-scroll remove-scroll overflow-x-hidden ${
+            collapsed ? "" : "pr-[14px]"
+          }`}
+          style={{ height: `calc(100vh - ${openHeader ? '50px' : '0px'}` }}
+        >
+          <SidebarSection
+            list={routes}
+            collapsed={collapsed}
+            handleNavigate={handleNavigate}
+          />
         </div>
+
         <div
           className={`absolute bottom-0 h-[70px] flex items-center w-full z-[2] bg-white ${
             collapsed ? "" : "px-16px"
           }`}
         >
-          <UserInfo userInfo={userInfo} collapsed={collapsed} handleNavigate={handleNavigate} />
+          <UserInfo
+            userInfo={userInfo}
+            collapsed={collapsed}
+            handleNavigate={handleNavigate}
+          />
         </div>
 
         {/* <img

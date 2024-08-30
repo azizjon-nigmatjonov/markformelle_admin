@@ -10,6 +10,7 @@ interface Props {
   children?: any;
   handleNavigate: (val: any) => void;
   clearFilter?: () => void;
+  active: boolean
 }
 
 const Btn = ({ el, index, isLastItem, handleNavigate, clearFilter = () => {} }: Props) => {
@@ -45,6 +46,7 @@ export const SectionBtns = ({
   handleNavigate,
   clearFilter = () => {},
   children = [],
+  active
 }: Props) => {
   const { t } = useTranslation();
 
@@ -66,7 +68,7 @@ export const SectionBtns = ({
           >
             <p
               onClick={() => clearFilter()}
-              className={`flex gap-2 capitalize menu_link cursor-pointer text-sm font-medium text-[#151515] whitespace-nowrap`}
+              className={`flex gap-2 capitalize menu_link cursor-pointer text-sm font-medium text-[#151515] whitespace-nowrap ${active ? 'active' : ''}`}
             >
               <IconGenerator icon={el.icon} fill="var(--black)" />
               <span>{t(el.title)}</span>
@@ -85,6 +87,7 @@ export const SectionBtns = ({
                   handleNavigate={handleNavigate}
                   clearFilter={clearFilter}
                   el={item}
+                  active={true}
                 />
               ))}
             </div>
@@ -104,6 +107,7 @@ export const SectionBtns = ({
       el={el}
       children={el.children}
       isLastItem={isLastItem}
+      active={false}
     />
   );
 };

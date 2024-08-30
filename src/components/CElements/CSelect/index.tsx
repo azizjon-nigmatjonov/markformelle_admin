@@ -77,7 +77,7 @@ const CSelect = ({
               open ? "rotate-[180deg]" : ""
             }`}
           >
-            <ArrowDownOutline />
+            <ArrowDownOutline width={15} />
           </div>
         </div>
         {placeholder && !currentValue && currentValue !== 0 && currentValue !== false ? (

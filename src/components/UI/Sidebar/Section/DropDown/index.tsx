@@ -8,46 +8,6 @@ interface Props {
   handleNavigate: (link: any) => void;
 }
 
-const Btn = ({
-  el,
-  index,
-  handleNavigate = () => {},
-  isLastItem,
-}: {
-  index: number;
-  el: any;
-  handleNavigate: (link: any) => void;
-  isLastItem: boolean;
-}) => {
-  const { t } = useTranslation();
-  return (
-    <button
-      key={el.id}
-      onClick={() => handleNavigate(el)}
-      className={`${
-        index < 100 ? "steps__item steps__item--active" : "steps__item"
-      } menu_link2 flex items-center steps ${
-        location.pathname.substring(1).startsWith(el.path) ? "active" : ""
-      }`}
-    >
-      <p
-        className={`${
-          isLastItem ? "mb-2" : ""
-        } flex gap-x-4 capitalize menu_link cursor-pointer font-medium whitespace-nowrap text-[var(--gray)]`}
-      >
-        <IconGenerator
-          icon={el.icon}
-          fill={
-            location.pathname.substring(1).startsWith(el.path)
-              ? "var(--main)"
-              : "var(--gray)"
-          }
-        />
-        <span>{t(el.title)}</span>
-      </p>
-    </button>
-  );
-};
 
 export const DropDown = ({
   value,
@@ -77,12 +37,13 @@ export const DropDown = ({
                   if (el.title && el.title.trim() !== "") {
                     return (
                       el.sidebar && (
-                        <div key={i} className={el?.children?.length ? 'pb-2 mr-5' : ''}>
+                        <div key={i} className={el?.children?.length ? 'pb-2 pr-3' : ''}>
                           <SectionBtns
                             index={i}
                             handleNavigate={handleNavigate}
                             clearFilter={() => {}}
                             el={el}
+                            active={true}
                             children={el.children}
                             isLastItem={isLastItem}
                           />

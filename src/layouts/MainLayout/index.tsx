@@ -8,11 +8,12 @@ import { Toaster } from "react-hot-toast";
 
 const MainLayout = () => {
   const alertData = useSelector((state: any) => state.website.alert);
+  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   
   return (
     <div className={cls.layout}>
-      <div>
-        <Sidebar />
+      <div className={openHeader ?  'mt-[50px]' : 'mt-0'}>
+        <Sidebar openHeader={openHeader} />
       </div>
       <div className={cls.content}>
         <Outlet />

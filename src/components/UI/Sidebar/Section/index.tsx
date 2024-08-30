@@ -1,7 +1,6 @@
 import { memo, useState } from "react";
 import IconGenerator from "../../IconGenerator";
 import { useTranslation } from "react-i18next";
-import { useLocation } from "react-router-dom";
 import { ArrowIcon } from "../../IconGenerator/Svg";
 import cls from "./style.module.scss";
 import { SectionData } from "../Logic";
@@ -102,6 +101,7 @@ const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
                                   el={el}
                                   children={el.children}
                                   isLastItem={isLastItem}
+                                  active={true}
                                 />
                               </>
                             )
