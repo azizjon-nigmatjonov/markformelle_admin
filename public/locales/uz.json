@@ -1,8 +1,8 @@
 {
   "finance": "Moliya",
   "dashboard": "Tikuv bo'limi",
-  "dashboardavto": "Tikuv mashinalar paneli",
-  "dashboard_analytics": "Tikuv mashinalar statistikasi",
-  "search": "Qidiruv",
+  "dashboardavto": "Панель швейной машины",
+  "dashboard_analytics": "Статистика швейных машин",
+  "search": "Қидирув",
   "settings": "Sozlamalar"
 }
