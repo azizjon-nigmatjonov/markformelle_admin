@@ -53,6 +53,58 @@ const dataset = [
     plan: 98,
     number: "План нo 7",
   },
+  {
+    plan: 8,
+    number: "План нo 8",
+  },
+  {
+    plan: 48,
+    number: "План нo 9",
+  },
+  {
+    plan: 38,
+    number: "План нo 10",
+  },
+  {
+    plan: 58,
+    number: "План нo 11",
+  },
+  {
+    plan: 48,
+    number: "План нo 12",
+  },
+  {
+    plan: 98,
+    number: "План нo 13",
+  },
+  {
+    plan: 158,
+    number: "План нo 14",
+  },
+  {
+    plan: 38,
+    number: "План нo 15",
+  },
+  {
+    plan: 28,
+    number: "План нo 16",
+  },
+  {
+    plan: 28,
+    number: "План нo 17",
+  },
+  {
+    plan: 38,
+    number: "План нo 18",
+  },
+  {
+    plan: 48,
+    number: "План нo 19",
+  },
+  {
+    plan: 8,
+    number: "План нo 20",
+  },
 ];
 
 const AnalyticsBarchart = ({

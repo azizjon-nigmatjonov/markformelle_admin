@@ -7,6 +7,7 @@ import { AnalyticCard } from "./Card";
 import { breadCrumbItems } from "./Logic";
 import Progress from "../../../components/UI/Progress";
 import { CPeriodPicker } from "../../../components/CElements/CPeriodPicker";
+import CSelect from "../../../components/CElements/CSelect";
 
 const progressData = [
   { name: "Название швейной машины 1", quantity: 20, percentage: 10 },
@@ -18,53 +19,60 @@ const progressData = [
   { name: "Название швейной машины 7", quantity: 10, percentage: 10 },
   { name: "Название швейной машины 8", quantity: 0, percentage: 0 },
   { name: "Название швейной машины 9", quantity: 10, percentage: 10 },
+  { name: "Название швейной машины 10", quantity: 10, percentage: 10 },
+  { name: "Название швейной машины 11", quantity: 1, percentage: 0 },
+  { name: "Название швейной машины 12", quantity: 20, percentage: 20 },
+  { name: "Название швейной машины 13", quantity: 30, percentage: 30 },
+  { name: "Название швейной машины 14", quantity: 0, percentage: 0 },
+  { name: "Название швейной машины 15", quantity: 40, percentage: 40 },
+  { name: "Название швейной машины 16", quantity: 30, percentage: 30 },
 ];
 
 const cardData = [
   {
     count: 22,
     percent: 90,
-    title: "Ishlaganlar",
-  },
-  {
-    count: 3,
-    percent: 30,
-    title: "buzulganlar",
+    title: "Работает",
   },
   {
     count: 5,
     percent: 60,
-    title: "toxtab turganlar",
+    title: "Нет плана",
+  },
+  {
+    count: 3,
+    percent: 30,
+    title: "Сломан",
   },
   {
     count: 1,
     percent: 10,
-    title: "yopiq",
+    title: "Остановлено",
   },
 ];
 
-const progress = [
-  {
-    name: "Mashina 1",
-    count: 10,
-    value: 10,
-  },
-  {
-    name: "Mashina 2",
-    count: 80,
-    value: 90,
-  },
-  {
-    name: " Mashina 3",
-    count: 30,
-    value: 30,
-  },
-  {
-    name: " Mashina 4",
-    count: 30,
-    value: 30,
-  },
-];
+// const progress = [
+//   {
+//     name: "Mashina 1",
+//     count: 10,
+//     value: 10,
+//   },
+//   {
+//     name: "Mashina 2",
+//     count: 80,
+//     value: 90,
+//   },
+//   {
+//     name: " Mashina 3",
+//     count: 30,
+//     value: 30,
+//   },
+//   {
+//     name: " Mashina 4",
+//     count: 30,
+//     value: 30,
+//   },
+// ];
 
 const DashboardAnalytics = () => {
   const loading = false;
@@ -82,15 +90,20 @@ const DashboardAnalytics = () => {
         </div>
 
         <CCard classes="mt-5">
-          <div className="flex justify-between mb-10">
+          <div className="flex justify-between mb-10 border-b border-[var(--border)] pb-5">
             <h3 className="mb-5 text-2xl font-medium">
               Статистика по номеру плана
             </h3>
-            <div className="w-[220px]">
-              <CPeriodPicker
-                handleValue={() => {}}
-                placeholder="Выберите время"
-              />
+            <div className="flex space-x-5 w-[440px]">
+              <div className="w-full">
+                <CPeriodPicker
+                  handleValue={() => {}}
+                  placeholder="Выберите время"
+                />
+              </div>
+              <div className="w-full">
+                <CSelect options={[]} />
+              </div>
             </div>
           </div>
           <AnalyticsBarchart grapData={[]} loading={false} />
@@ -98,7 +111,9 @@ const DashboardAnalytics = () => {
 
         <CCard style={{ minHeight: 0 }} classes="my-5">
           <div className="flex justify-between mb-10">
-            <h3 className="mb-5 text-2xl font-medium">План, сделанный на швейных машинах</h3>
+            <h3 className="mb-5 text-2xl font-medium">
+              План, сделанный на швейных машинах
+            </h3>
             <div className="w-[220px]">
               <CPeriodPicker
                 handleValue={() => {}}
@@ -110,7 +125,7 @@ const DashboardAnalytics = () => {
             {loading ? (
               <Skeleton height={200} />
             ) : (
-              <Progress size={70} color="var(--main)" data={progressData} />
+              <Progress size={70} color="var(--primary)" data={progressData} />
             )}
           </div>
         </CCard>

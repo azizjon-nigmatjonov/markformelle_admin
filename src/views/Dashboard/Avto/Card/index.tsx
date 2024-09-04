@@ -51,8 +51,9 @@ interface MachineCardProps {
 }
 
 const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
-  const [cardColor, setCardColor] = useState<string>(""); 
-  const smallDesktop = useScreenSize("smallDesktop")
+  const [cardColor, setCardColor] = useState<string>("");
+  const smallDesktop = useScreenSize("smallDesktop");
+  const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
     setCardColor(getCardColor());
@@ -95,7 +96,6 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
       return "";
     }
   };
-  const [open, setOpen] = React.useState(false);
 
   return (
     <>
@@ -116,7 +116,13 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
               {machine.name}
             </Typography>
             <WifiOff sx={{ fontSize: 60 }} />
-            <Typography flex={"center"} textAlign={"center"} fontSize={14} fontStyle="SemiBold" fontWeight={"bold"}>
+            <Typography
+              flex={"center"}
+              textAlign={"center"}
+              fontSize={14}
+              fontStyle="SemiBold"
+              fontWeight={"bold"}
+            >
               Нет соединения
             </Typography>
             <Typography fontSize={16} fontStyle="SemiBold" fontWeight={"bold"}>
@@ -145,7 +151,11 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
               {machine.defect_num}
             </Typography>
 
-            <Typography fontSize={18} fontStyle="SemiBold" fontWeight={"bold"}>
+            <Typography
+              fontSize={smallDesktop ? 10 : 18}
+              fontStyle="SemiBold"
+              fontWeight={"bold"}
+            >
               {machine.name}
             </Typography>
             <Typography>{machine.artikul}</Typography>
@@ -160,10 +170,13 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
               determinate
               sx={{
                 // mb: "0px",
-                "--CircularProgress-size": smallDesktop ? "90px" : "110px",
-                "--CircularProgress-trackThickness": "10px",
-                "--CircularProgress-progressThickness": "10px",
+                "--CircularProgress-size": smallDesktop ? "70px" : "110px",
+                "--CircularProgress-trackThickness": smallDesktop ? "" : "10px",
+                "--CircularProgress-progressThickness": smallDesktop
+                  ? ""
+                  : "10px",
               }}
+              className={`${cardColor}`}
             >
               <Stack spacing={0} alignItems={"center"}>
                 <Typography>{machine.fkol_knit}</Typography>
@@ -180,7 +193,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
               </Stack>
             </CircularProgress>
             {/* Display other machine information */}
-
+            <div className="my-2"> </div>
             <Typography
               position={"absolute"}
               bottom={"2px"}

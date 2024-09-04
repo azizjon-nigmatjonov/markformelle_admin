@@ -1,15 +1,19 @@
-export const StatusList = [
+export const FourStatus = [
     {
-      label: "Aktiv",
-      value: "active",
+        name: "working",
+        value: "working"
     },
     {
-      label: "No aktiv",
-      value: "inactice",
+        name: "broken",
+        value: "broken"
     },
     {
-      label: "Bekor qilingan",
-      value: "banned",
+        name: "broken",
+        value: "broken"
     },
-  ];
+    {
+        name: "broken",
+        value: "broken"
+    },
   
+]

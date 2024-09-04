@@ -1,4 +1,3 @@
-import { ListIcon } from "./Svg";
 import {
   AdminsIcon,
   AnalyticsIcon,
@@ -10,24 +9,25 @@ import {
   SettingIcon,
   UsersIcon,
   ZipIcon,
+  ListIconSidebar,
 } from "./Svg/Sidebar";
 
 export const iconsList = [
   {
     name: "list",
-    component: ListIcon
+    component: ListIconSidebar,
   },
   {
     name: "increasing",
-    component: IncreasingIcon
+    component: IncreasingIcon,
   },
   {
     name: "machines",
-    component: KnitingIcon
+    component: KnitingIcon,
   },
   {
     name: "kniting",
-    component: KnitingIcon
+    component: KnitingIcon,
   },
   {
     name: "dashboard",
