@@ -13,6 +13,9 @@ import { useDispatch } from "react-redux";
 import { authActions } from "../../../store/auth/auth.slice";
 import { useTranslation } from "react-i18next";
 import usePageRouter from "../../../hooks/useObjectRouter";
+import { Header } from "../../../components/UI/Header";
+import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
+import { breadCrumbItems } from "./Logic";
 
 const Profile = () => {
   const [logout, setLogout] = useState(false);
@@ -26,16 +29,19 @@ const Profile = () => {
     mode: "onSubmit",
   });
   const { checkPermission } = usePermissions();
-  const { navigateTo } = usePageRouter()
+  const { navigateTo } = usePageRouter();
   const Logout = () => {
     dispatch(authActions.logout());
-    navigateTo("/")
+    navigateTo("/");
     sessionStorage.removeItem("has_route");
     window.location.reload();
   };
 
   return (
     <>
+      <Header
+        extra={<CBreadcrumbs items={breadCrumbItems} progmatic={true} />}
+      ></Header>
       <form className="container">
         <CCard style={{ minHeight: "auto" }}>
           <div className="flex justify-between">

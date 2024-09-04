@@ -27,8 +27,6 @@
     text-transform: uppercase;
   }
 
-
-
   .menu {
     &__link {
       padding: 0 $paddingBlock;
@@ -76,4 +74,9 @@
 
 .menu_link {
   position: relative;
+}
+
+.menu_link_sidebar {
+  position: relative;
+  margin-left: 50px;
 }

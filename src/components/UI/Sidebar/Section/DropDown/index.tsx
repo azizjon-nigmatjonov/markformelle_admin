@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import IconGenerator from "../../../../../components/UI/IconGenerator";
 import { SectionBtns } from "../Btns";
+import { useLocation } from "react-router-dom";
 
 interface Props {
   title: any;
@@ -8,20 +9,20 @@ interface Props {
   handleNavigate: (link: any) => void;
 }
 
-
 export const DropDown = ({
   value,
   title,
   handleNavigate = () => {},
 }: Props) => {
   const { t } = useTranslation();
+  const location = useLocation();
 
   return (
     <div className="mt-[-40px]">
-      <div className="absolute left-[38px] group-hover:block hidden w-auto z-[99]">
+      <div className="absolute left-[50px] group-hover:block hidden w-auto z-[99]">
         <div className="relative">
           <div className="absolute left-[-7px] top-[15px] w-[15px] h-[15px] rotate-[45deg] bg-white border border-[var(--gray20)] z-[33]"></div>
-          <div className="relative z-[99] bg-white card-shadow min-w-[200px] rounded-[12px] border border-[var(--gray20)] pt-2 ${el.children}">
+          <div className="relative z-[99] bg-white card-shadow min-w-[200px] rounded-[12px] border border-[var(--gray20)] pt-2">
             <div
               className={`flex items-center space-x-3 pb-2 border-b border-[var(--border)] pl-3`}
             >
@@ -37,13 +38,18 @@ export const DropDown = ({
                   if (el.title && el.title.trim() !== "") {
                     return (
                       el.sidebar && (
-                        <div key={i} className={el?.children?.length ? 'pb-2 pr-3' : ''}>
+                        <div
+                          key={i}
+                          className={el?.children?.length ? "pb-2 pr-3" : ""}
+                        >
                           <SectionBtns
                             index={i}
                             handleNavigate={handleNavigate}
                             clearFilter={() => {}}
                             el={el}
-                            active={true}
+                            active={location.pathname
+                              .substring(1)
+                              .startsWith(el.path)}
                             children={el.children}
                             isLastItem={isLastItem}
                           />
@@ -77,7 +83,7 @@ export const OneDropdown = ({
   handleNavigate: (link: any) => void;
 }) => {
   return (
-    <div className="absolute left-[38px] group-hover:block hidden bg-white whitespace-nowrap common-shadow rounded-[12px] z-[99] p-2">
+    <div className="absolute left-[40px] group-hover:block hidden bg-white whitespace-nowrap common-shadow rounded-[12px] z-[99] p-2">
       <div className="overflow-hidden">
         <button
           onClick={() => handleNavigate(path)}

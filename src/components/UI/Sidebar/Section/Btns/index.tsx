@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import IconGenerator from "../../../IconGenerator";
 import { useState } from "react";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { useLocation } from "react-router-dom";
 
 interface Props {
   el: any;
@@ -10,10 +11,17 @@ interface Props {
   children?: any;
   handleNavigate: (val: any) => void;
   clearFilter?: () => void;
-  active: boolean
+  active: boolean;
 }
 
-const Btn = ({ el, index, isLastItem, handleNavigate, clearFilter = () => {} }: Props) => {
+const Btn = ({
+  el,
+  index,
+  isLastItem,
+  handleNavigate,
+  clearFilter = () => {},
+  active = false,
+}: Props) => {
   const { t } = useTranslation();
 
   return (
@@ -22,17 +30,18 @@ const Btn = ({ el, index, isLastItem, handleNavigate, clearFilter = () => {} }: 
       onClick={() => handleNavigate(el)}
       className={`${
         index < 100 ? "steps__item steps__item--active" : "steps__item"
-      } menu_link2 flex items-center steps ${
-        location.pathname.startsWith(el.path) ? "active" : ""
-      }`}
+      } menu_link2 flex items-center steps ${active ? "active" : ""}`}
     >
       <p
         onClick={() => clearFilter()}
         className={`${
           isLastItem ? "mb-2" : ""
-        } flex gap-2 capitalize menu_link cursor-pointer text-sm font-medium text-[#151515] `}
+        } flex gap-2 capitalize menu_link menu_inner_link cursor-pointer text-sm font-medium ${active ? 'active text-[var(--main)]' : 'text-[var(--gray)]'}`}
       >
-        <IconGenerator icon={el.icon} fill="var(--black)" />
+        <IconGenerator
+          icon={el.icon}
+          fill={active ? "var(--main)" : "var(--gray)"}
+        />
         <span>{t(el.title)}</span>
       </p>
     </button>
@@ -46,10 +55,11 @@ export const SectionBtns = ({
   handleNavigate,
   clearFilter = () => {},
   children = [],
-  active
+  active,
 }: Props) => {
   const { t } = useTranslation();
-
+  const location = useLocation();
+  
   if (children?.length) {
     const [open, setOpen] = useState(false);
     return (
@@ -68,18 +78,23 @@ export const SectionBtns = ({
           >
             <p
               onClick={() => clearFilter()}
-              className={`flex gap-2 capitalize menu_link cursor-pointer text-sm font-medium text-[#151515] whitespace-nowrap ${active ? 'active' : ''}`}
+              className={`flex gap-2 capitalize menu_link cursor-pointer text-sm font-medium whitespace-nowrap ${active ? 'text-[var(--main)]' : 'text-[var(--gray)]'}`}
             >
-              <IconGenerator icon={el.icon} fill="var(--black)" />
+              <IconGenerator
+                icon={el.icon}
+                fill={active ? "var(--main)" : "var(--gray)"}
+              />
               <span>{t(el.title)}</span>
             </p>
 
             <div className={open ? "rotate-[180deg]" : ""}>
-              <ArrowDropDownIcon style={{ color: "var(--gray)" }} />
+              <ArrowDropDownIcon
+                style={{ color: active ? "var(--main)" : "var(--gray)" }}
+              />
             </div>
           </div>
           {open ? (
-            <div className="ml-5">
+            <div className="pl-5">
               {children.map((item: any, i: number) => (
                 <Btn
                   key={i}
@@ -87,7 +102,7 @@ export const SectionBtns = ({
                   handleNavigate={handleNavigate}
                   clearFilter={clearFilter}
                   el={item}
-                  active={true}
+                  active={location.pathname.substring(1).startsWith(item.path)}
                 />
               ))}
             </div>
@@ -107,7 +122,7 @@ export const SectionBtns = ({
       el={el}
       children={el.children}
       isLastItem={isLastItem}
-      active={false}
+      active={active}
     />
   );
 };

@@ -5,7 +5,7 @@ interface Props {
 
 export const FoldButton = ({ collapsed, setCollapsed = () => {} }: Props) => {
   return (
-    <div className="fixed z-[97]" style={{ top: 'calc(100vh - 70px - 50vh)', left: `${collapsed ? "61px" : "2px"}` }}>
+    <div className="fixed z-[97]" style={{ top: 'calc(100vh - 70px - 50vh)', left: `${collapsed ? "51px" : "2px"}` }}>
       <button
         onClick={() => setCollapsed(!collapsed)}
         className="group w-[12px] h-[40px] flex items-center justify-center"

@@ -35,7 +35,7 @@ export const Sidebar = ({ openHeader }: { openHeader?: boolean }) => {
     <div
       className={cls.sidebar}
       style={{
-        width: collapsed ? "60px" : "0",
+        width: collapsed ? "50px" : "0",
         overflow: collapsed ? "" : "hidden",
       }}
     >
