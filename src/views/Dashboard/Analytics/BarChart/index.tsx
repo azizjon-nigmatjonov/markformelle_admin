@@ -33,6 +33,26 @@ const dataset = [
     plan: 51,
     number: "План нo 2",
   },
+  {
+    plan: 40,
+    number: "План нo 3",
+  },
+  {
+    plan: 70,
+    number: "План нo 4",
+  },
+  {
+    plan: 50,
+    number: "План нo 5",
+  },
+  {
+    plan: 77,
+    number: "План нo 6",
+  },
+  {
+    plan: 98,
+    number: "План нo 7",
+  },
 ];
 
 const AnalyticsBarchart = ({

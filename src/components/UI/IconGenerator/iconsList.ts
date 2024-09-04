@@ -1,3 +1,4 @@
+import { ListIcon } from "./Svg";
 import {
   AdminsIcon,
   AnalyticsIcon,
@@ -12,6 +13,10 @@ import {
 } from "./Svg/Sidebar";
 
 export const iconsList = [
+  {
+    name: "list",
+    component: ListIcon
+  },
   {
     name: "increasing",
     component: IncreasingIcon

@@ -1,4 +1,5 @@
 import { lazy } from "react";
+import { AnalyticsPlan } from "../../views/Dashboard/Plan";
 
 const Dashboard = lazy(() => import("../../views/Dashboard/Avto"));
 const DashboardAnalytics = lazy(
@@ -36,6 +37,17 @@ export const dashboardList = [
         element: <DashboardAnalytics />,
         auth: false,
       },
+      {
+        parent: "dashboard",
+        link: "analytics",
+        childLink: "plan",
+        path: "dashboard/analytics/plan",
+        sidebar: false,
+        title: "dashboard_analytics_plan",
+        icon: "list",
+        element: <AnalyticsPlan />,
+        auth: false,
+      },
     ],
   },
   {
@@ -47,6 +59,17 @@ export const dashboardList = [
     title: "dashboard_analytics_machines",
     icon: "increasing",
     element: <DashboardAnalytics />,
+    auth: false,
+  },
+  {
+    parent: "dashboard",
+    link: "analytics",
+    childLink: "plan",
+    path: "dashboard/analytics/plan",
+    sidebar: false,
+    title: "dashboard_analytics_plan",
+    icon: "list",
+    element: <AnalyticsPlan />,
     auth: false,
   },
 ];

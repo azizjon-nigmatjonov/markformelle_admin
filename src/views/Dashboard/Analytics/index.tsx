@@ -1,4 +1,4 @@
-import { LinearProgress, Skeleton } from "@mui/material";
+import { Skeleton } from "@mui/material";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import CCard from "../../../components/CElements/CCard";
 import { Header } from "../../../components/UI/Header";
@@ -7,20 +7,17 @@ import { AnalyticCard } from "./Card";
 import { breadCrumbItems } from "./Logic";
 import Progress from "../../../components/UI/Progress";
 import { CPeriodPicker } from "../../../components/CElements/CPeriodPicker";
-import StatisticsGender from "./GenderRegions";
-import Calendar from "./Calendar";
-import LineChart from "./LineChart";
 
 const progressData = [
-  { name: "Tikuv moshina nomi 1", quantity: 20, percentage: 10 },
-  { name: "Tikuv moshina nomi 2", quantity: 30, percentage: 90 },
-  { name: "Tikuv moshina nomi 3", quantity: 50, percentage: 60 },
-  { name: "Tikuv moshina nomi 4", quantity: 20, percentage: 20 },
-  { name: "Tikuv moshina nomi 5", quantity: 70, percentage: 30 },
-  { name: "Tikuv moshina nomi 6", quantity: 50, percentage: 50 },
-  { name: "Tikuv moshina nomi 7", quantity: 10, percentage: 10 },
-  { name: "Tikuv moshina nomi 8", quantity: 0, percentage: 0 },
-  { name: "Tikuv moshina nomi 9", quantity: 10, percentage: 10 },
+  { name: "Название швейной машины 1", quantity: 20, percentage: 10 },
+  { name: "Название швейной машины 2", quantity: 30, percentage: 90 },
+  { name: "Название швейной машины 3", quantity: 50, percentage: 60 },
+  { name: "Название швейной машины 4", quantity: 20, percentage: 20 },
+  { name: "Название швейной машины 5", quantity: 70, percentage: 30 },
+  { name: "Название швейной машины 6", quantity: 50, percentage: 50 },
+  { name: "Название швейной машины 7", quantity: 10, percentage: 10 },
+  { name: "Название швейной машины 8", quantity: 0, percentage: 0 },
+  { name: "Название швейной машины 9", quantity: 10, percentage: 10 },
 ];
 
 const cardData = [
@@ -101,7 +98,7 @@ const DashboardAnalytics = () => {
 
         <CCard style={{ minHeight: 0 }} classes="my-5">
           <div className="flex justify-between mb-10">
-            <h3 className="mb-5 text-2xl font-medium">Tikuv mashinalari bajargan plan</h3>
+            <h3 className="mb-5 text-2xl font-medium">План, сделанный на швейных машинах</h3>
             <div className="w-[220px]">
               <CPeriodPicker
                 handleValue={() => {}}
@@ -118,7 +115,7 @@ const DashboardAnalytics = () => {
           </div>
         </CCard>
 
-        <CCard>
+        {/* <CCard>
           <div className="flex justify-between mb-10">
             <h3 className="mb-5 text-2xl font-medium">Tikuv mashinalari necha foiz ishlagani</h3>
             <div className="w-[220px]">
@@ -164,7 +161,7 @@ const DashboardAnalytics = () => {
 
         <CCard classes="mt-5">
           <Calendar />
-        </CCard>
+        </CCard> */}
       </div>
     </div>
   );
