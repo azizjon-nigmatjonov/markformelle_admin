@@ -1,38 +1,39 @@
 import { PercentCard } from "./PercentCard";
-import { useEffect, useState } from "react";
-import HealingIcon from '@mui/icons-material/Healing';
-import BuildIcon from '@mui/icons-material/Build';
+import HealingIcon from "@mui/icons-material/Healing";
+import BuildIcon from "@mui/icons-material/Build";
 
 interface IProps {
-  data: {
-    men: number;
-    women: number;
-  };
+  data: any
 }
 const StatisticsCard = ({ data }: IProps) => {
-  const setDates = useState<any>([])[1];
-
-
-  useEffect(() => {
-    setDates([{ label: "Haftalik", value: "weekly" }]);
-  }, []);
-  // let total: number = data?.men + data?.women;
-
   return (
     <div className="flex items-center divide-x-2 divide-[var(--lineGray)]">
       <PercentCard
         icon={<HealingIcon />}
-        text="Ishlagan"
-        percent={Number(data?.men)}
+        text="Работает"
+        percent={data.working}
+        color="var(--success)"
+      />
+       <PercentCard
+        icon={<BuildIcon />}
+        text="Нет плана"
+        percent={data.no_plan}
+        color="var(--primary70)"
+      />
+       <PercentCard
+        icon={<BuildIcon />}
+        text="Сломан"
+        percent={data.stopped}
+        color="var(--gray)"
       />
       <PercentCard
         icon={<BuildIcon />}
-        text="Toxtab qolgan"
-        percent={Number(data?.women)}
-        color="red"
+        text="Остановлено"
+        percent={data.stopped}
+        color="var(--error)"
       />
     </div>
-  )
+  );
 };
 
 export default StatisticsCard;

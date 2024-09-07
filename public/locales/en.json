@@ -4,5 +4,6 @@
   "dashboardavto": "Kniting machines",
   "dashboard_analytics": "Kniting machines' statistics",
   "search": "Search",
-  "settings": "Settings"
+  "settings": "Settings",
+    "dashboard_analytics_plan": "Plan statistics"
 }

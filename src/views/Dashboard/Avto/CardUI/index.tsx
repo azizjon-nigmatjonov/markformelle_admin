@@ -30,7 +30,7 @@ const CardList = [
     icon: "trips",
   },
   {
-    title: "Bugungi daromad",
+    title: "удалить сегодняgi daromad",
     id: "today_earning",
     icon: "earn",
   },
@@ -45,7 +45,7 @@ const CardList = [
     icon: "earn",
   },
   {
-    title: "Bugungi yurish",
+    title: "удалить сегодняgi yurish",
     id: "total_ride_today",
     icon: "trips",
   },

@@ -87,7 +87,7 @@ const Filters = ({
                       className="cancel-btn"
                       onClick={() => clearFilter("all")}
                     >
-                      Tozalash
+                      удалить
                     </button>
                   </div>
                 </div>

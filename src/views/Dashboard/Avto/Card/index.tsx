@@ -18,6 +18,7 @@ import { Bolt, WifiOff } from "@mui/icons-material";
 
 import ModalCard from "./ModalCard";
 import { useScreenSize } from "../../../../hooks/useScreenSize";
+import { ResponsivePie } from "@nivo/pie";
 
 interface Machine {
   id: number;
@@ -36,7 +37,7 @@ interface Machine {
   new_rolls: number;
   defect_num: number;
   capacity: string;
-
+  nplan: number;
   order_no: number;
   artikul: string;
   lot_no: string;
@@ -44,6 +45,8 @@ interface Machine {
   pkol_knit: number;
   fakt_percentage: number;
   message: string;
+  zakaz: string;
+  art: string;
 }
 
 interface MachineCardProps {
@@ -52,7 +55,7 @@ interface MachineCardProps {
 
 const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
   const [cardColor, setCardColor] = useState<string>("");
-  const smallDesktop = useScreenSize("smallDesktop");
+  const desktop = useScreenSize("desktop");
   const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
@@ -115,17 +118,17 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
             <Typography fontSize={18} fontStyle="SemiBold" fontWeight={"bold"}>
               {machine.name}
             </Typography>
-            <WifiOff sx={{ fontSize: 60 }} />
+            <WifiOff sx={{ fontSize: desktop ? 30 : 60 }} />
             <Typography
               flex={"center"}
               textAlign={"center"}
-              fontSize={14}
+              fontSize={desktop ? 10 : 14}
               fontStyle="SemiBold"
               fontWeight={"bold"}
             >
               Нет соединения
             </Typography>
-            <Typography fontSize={16} fontStyle="SemiBold" fontWeight={"bold"}>
+            <Typography fontSize={desktop ? 10 : 14} fontStyle="SemiBold" fontWeight={"bold"}>
               {machine.ip_address}
             </Typography>
           </CardContent>
@@ -152,13 +155,24 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
             </Typography>
 
             <Typography
-              fontSize={smallDesktop ? 10 : 18}
+              fontSize={desktop ? 10 : 18}
               fontStyle="SemiBold"
               fontWeight={"bold"}
             >
               {machine.name}
             </Typography>
-            <Typography>{machine.artikul}</Typography>
+            <p className="mb-1">{machine.artikul}</p>
+            {/* <div className="w-[70px] h-[70px] screen:w-[80px] screen:h-[80px] mt-3">
+              <ResponsivePie
+                data={responsiveData}
+                innerRadius={0.7}
+                activeOuterRadiusOffset={4}
+                enableArcLinkLabels={false}
+                isInteractive={true}
+                enableArcLabels={false}
+                colors={["white", "var(--success)"]}
+              />
+            </div> */}
             <CircularProgress
               variant="soft"
               color="success"
@@ -170,30 +184,30 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
               determinate
               sx={{
                 // mb: "0px",
-                "--CircularProgress-size": smallDesktop ? "70px" : "110px",
-                "--CircularProgress-trackThickness": smallDesktop ? "" : "10px",
-                "--CircularProgress-progressThickness": smallDesktop
-                  ? ""
+                "--CircularProgress-size": desktop ? "70px" : "110px",
+                "--CircularProgress-trackThickness": desktop ? "" : "10px",
+                "--CircularProgress-progressThickness": desktop
+                  ? "5px"
                   : "10px",
               }}
               className={`${cardColor}`}
             >
               <Stack spacing={0} alignItems={"center"}>
-                <Typography>{machine.fkol_knit}</Typography>
+                <p className={`${desktop ? 'text-[10px]' : 'text-sm'}`}>{machine.fkol_knit}</p>
                 <Divider
                   orientation="horizontal"
-                  sx={{ height: 2, backgroundColor: "gray", opacity: 0.5 }}
+                  sx={{ height: desktop ? 1 : 2, backgroundColor: "gray", opacity: 0.5 }}
                   style={{ background: "black" }}
                 />
-                <Typography>{machine.pkol_knit + " Kg"}</Typography>
+                <p className={`${desktop ? 'text-[10px]' : 'text-sm'}`}>{machine.pkol_knit + " Kg"}</p>
 
-                <Typography startDecorator={<SpeedIcon />}>
+                <Typography fontSize={desktop ? '10px' : '14px'} startDecorator={<SpeedIcon style={{ fontSize: desktop ? 15 : 20 }} />}>
                   {machine.rotation}
                 </Typography>
               </Stack>
             </CircularProgress>
             {/* Display other machine information */}
-            <div className="my-2"> </div>
+            <div className="mt-2"></div>
             <Typography
               position={"absolute"}
               bottom={"2px"}

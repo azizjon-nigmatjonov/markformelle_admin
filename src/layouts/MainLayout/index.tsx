@@ -12,7 +12,7 @@ const MainLayout = () => {
   
   return (
     <div className={cls.layout}>
-      <div className={openHeader ?  'mt-[50px]' : 'mt-0'}>
+      <div>
         <Sidebar openHeader={openHeader} />
       </div>
       <div className={cls.content}>

@@ -45,7 +45,7 @@ interface Machine {
   new_rolls: number;
   defect_num: number;
   capacity: string;
-
+  nplan: number;
   order_no: number;
   artikul: string;
   lot_no: string;
@@ -53,6 +53,8 @@ interface Machine {
   pkol_knit: number;
   fakt_percentage: number;
   message: string;
+  zakaz: string;
+  art: string
 }
 
 interface MachineCardProps {
@@ -131,14 +133,14 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen }) => {
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
                 <Typography>Номер заказа </Typography>
-                <Typography>{machine.order_no}</Typography>
+                <Typography>{machine.zakaz}</Typography>
               </ListItem>
               <ListDivider />
               <ListItem
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
                 <Typography>Артикул </Typography>
-                <Typography>{machine.artikul}</Typography>
+                <Typography>{machine.art}</Typography>
               </ListItem>
               <ListDivider />
               <ListItem
@@ -160,7 +162,7 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen }) => {
               >
                 <Typography>План </Typography>
                 <Typography>
-                  {machine.pkol_knit == undefined ? "0" : machine.pkol_knit} кг
+                  {machine.nplan == undefined ? "0" : machine.nplan} кг
                 </Typography>
               </ListItem>
               <ListDivider />

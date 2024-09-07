@@ -56,19 +56,19 @@ const Body = ({ list = [] }: { list?: any; month?: any }) => {
             <div className={cls.cell} key={index}>
               <span className="font-medium">{index + 1}</span>
               <Lighter
-                text={`${element.passenger_count} ta`}
+                text={`${element.passenger_count}`}
                 icon={"var(--primary)"}
               />
               <Lighter
-                text={`${element.driver_count} ta`}
+                text={`${element.driver_count}`}
                 icon={"var(--green)"}
               />
               <Lighter
-                text={`${element.trip_count} ta`}
+                text={`${element.trip_count}`}
                 icon={"red"}
               />
               <Lighter
-                text={`${element.bookings_count} ta`}
+                text={`${element.bookings_count}`}
                 icon={"var(--gray20)"}
               />
             </div>

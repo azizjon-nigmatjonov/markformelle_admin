@@ -25,7 +25,7 @@ export const PermissionItem = ({
               onClick={() => handleCheck([], "all")}
               className="text-[var(--gray40)] underline mb-5 font-medium"
             >
-              Bekor qilish
+              Отменить
             </button>
           ) : ( */}
             <button

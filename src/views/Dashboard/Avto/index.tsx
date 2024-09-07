@@ -6,7 +6,7 @@ import { breadCrumbItems, CountBtns, FetchFunction } from "./Logic";
 import MachineCard from "./Card";
 import CDriver from "../../../components/CElements/CDivider";
 
-const searchedWords = ["podr_id_knitt", "ip_address", "message", "name"];
+const searchedWords = ["podr_id_knitt", "ip_address", "message", "name", "art"];
 
 const Dashboard = () => {
   const { bodyData } = FetchFunction();
@@ -161,7 +161,7 @@ const Dashboard = () => {
       </Header>
 
       <div className="container">
-        <div className="grid grid-cols-11 gap-3 2xl:gap-5">
+        <div className="grid grid-cols-11 gap-3">
           {list.map((machine: any, index: number) => (
             <MachineCard key={index} machine={machine} />
           ))}

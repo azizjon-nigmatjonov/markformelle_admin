@@ -2,7 +2,8 @@
   "finance": "Moliya",
   "dashboard": "Тикув бўлими",
   "dashboardavto": "Панель швейной машины",
-  "dashboard_analytics": "Статистика швейных машин",
+  "dashboard_analytics": "Статистика машин",
   "search": "Қидирув",
-  "settings": "Созламалар"
+  "settings": "Созламалар",
+  "dashboard_analytics_plan": "План статистикаси"
 }

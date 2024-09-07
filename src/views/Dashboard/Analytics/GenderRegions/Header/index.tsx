@@ -1,61 +1,53 @@
-import { useMemo, memo } from 'react'
-import StatisticsCard from '../Statistics'
-import { Skeleton } from '@mui/material';
+import { memo } from "react";
+import StatisticsCard from "../Statistics";
+import { Skeleton } from "@mui/material";
 
-const StaticsHeader = memo(({ data, loading }: { data: any, loading: boolean }) => {
+const StaticsHeader = memo(({ loading }: { loading: boolean }) => {
+  return (
+    <>
+      {loading ? (
+        <div className="flex items-center justify-between">
+          <div>
+            <Skeleton variant="rectangular" width={210} height={50} />
+            <Skeleton
+              variant="rounded"
+              width={150}
+              height={20}
+              sx={{ marginTop: 1 }}
+            />
+          </div>
+          <Skeleton variant="circular" width={70} height={70} />
+        </div>
+      ) : (
+        <div className="flex items-center justify-between border-b pb-6 border-[var(--lineGray)]">
+          <div>
+            {/* <p className='text-[var(--darkerGray)] text-3xl font-semibold'>всего {data.all}</p> */}
+            <div className="flex items-center gap-6 mt-1">
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-[4px] bg-[var(--success)]" />
+                <p>Работает</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-[4px] bg-[var(--primary70)]" />
+                <p>Нет плана</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-[var(--gray)]" />
+                <p>Сломан</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-[var(--error)]" />
+                <p>Остановлено</p>
+              </div>
+            </div>
+          </div>
+          <StatisticsCard
+            data={{ working: 100, no_plan: 10, broken: 5, stopped: 3 }}
+          />
+        </div>
+      )}
+    </>
+  );
+});
 
-    const gender: any = useMemo(() => {
-        if (!data) return [];
-        return {
-            men: data?.map((val: any) => val.male_users).reduce((a: number, b: number) => { return a + b }, 0),
-            female: data?.map((val: any) => val.female_users).reduce((a: number, b: number) => { return a + b }, 0),
-        }
-    }, [data])
-
-
-
-    const percentage: any = useMemo(() => {
-        const allUsers = gender.men + gender.female
-        const men = Math.round(gender.men ? (gender.men / allUsers) * 100 : 0)
-
-        const female = Math.round(gender.female ? (gender.female / allUsers) * 100 : 0)
-
-        return { allUsers, men, female }
-    }, [gender, data])
-
-
-
-    return (
-        <>
-            {loading ?
-                <div className='flex items-center justify-between'>
-                    <div>
-                        <Skeleton variant="rectangular" width={210} height={50} />
-                        <Skeleton variant="rounded" width={150} height={20} sx={{ marginTop: 1 }} />
-                    </div>
-                    <Skeleton variant="circular" width={70} height={70} />
-                </div>
-                : <div className='flex items-center justify-between border-b pb-6 border-[var(--lineGray)]'>
-                    <div>
-                        <p className='text-[var(--darkerGray)] text-3xl font-semibold'>Umumiy {31} ta</p>
-                        <div className='flex items-center gap-6 mt-1'>
-                            <div className='flex items-center gap-2'>
-                                <div className='h-2 w-2 rounded-full bg-[var(--ink)]' />
-                                <p>Working ta</p>
-                            </div>
-                            <div className='flex items-center gap-2'>
-                                <div className='h-2 w-2 rounded-full bg-[#FF35BA]' />
-                                <p>Stopped ta</p>
-                            </div>
-                        </div>
-                    </div>
-                    <StatisticsCard data={{ men: percentage.men, women: percentage.female }} />
-
-                </div>
-            }
-        </>
-
-    )
-})
-
-export default StaticsHeader
+export default StaticsHeader;

@@ -17,7 +17,7 @@ export const PercentCard = ({
       style={{ flexDirection: column ? "column" : "row" }}
     >
       <div
-        className="border-[3px] w-[70px] h-[70px] rounded-full flex items-center justify-center"
+        className="border-[2px] w-[50px] h-[50px] rounded-full flex items-center justify-center"
         style={{ borderColor: color }}
       >
         {icon}

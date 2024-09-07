@@ -20,7 +20,7 @@ export const NitifList = ({ setOpen, list }: Props) => {
     <>
       <div className="bg-white rounded-[12px] absolute right-0 top-full w-[460px] z-[99] border border-[var(--gray20)] common-shadow">
         <div className="flex items-center justify-between p-5 pb-0">
-          <h3 className="text-[var(--gray90)] text-lg">Bildirishnomalar</h3>
+          <h3 className="text-[var(--gray90)] text-lg">Уведомления</h3>
           <div className="flex space-x-5">
             <button
               className={

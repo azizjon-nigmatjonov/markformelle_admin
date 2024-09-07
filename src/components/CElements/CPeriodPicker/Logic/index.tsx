@@ -67,15 +67,15 @@ export const DateData = ({
 export const DateLabel = () => {
   const today = dayjs();
   const shortcutsItems: PickersShortcutsItem<DateRange<Dayjs>>[] = [
-    { label: "Tozalash", getValue: () => [null, null] },
+    { label: "удалить", getValue: () => [null, null] },
     {
-      label: "Bugun",
+      label: "удалить сегодня",
       getValue: () => {
         return [today, today];
       },
     },
     {
-      label: "Kecha",
+      label: "вчера",
       getValue: () => {
         return [
           today.startOf("day").subtract(1, "day"),
@@ -84,45 +84,45 @@ export const DateLabel = () => {
       },
     },
     {
-      label: "Bu xafta",
+      label: "На этой неделе",
       getValue: () => {
         return [today.startOf("week"), today.endOf("week")];
       },
     },
     {
-      label: "Avvalgi xafta",
+      label: "предыдущая неделя",
       getValue: () => {
         const prevWeek = today.subtract(7, "day");
         return [prevWeek.startOf("week"), prevWeek.endOf("week")];
       },
     },
     {
-      label: "Oxirgi 7 kun",
+      label: "последние 7 дней",
       getValue: () => {
         return [today.subtract(7, "day"), today];
       },
     },
     {
-      label: "Bu oy",
+      label: "в этом месяце",
       getValue: () => {
         return [today.startOf("month"), today.endOf("month")];
       },
     },
     {
-      label: "Avvalgi oy",
+      label: "предыдущий месяц",
       getValue: () => {
         const prevMonth = today.startOf("month").subtract(1, "month");
         return [prevMonth, prevMonth.endOf("month")];
       },
     },
     {
-      label: "Bu yil",
+      label: "в этом году",
       getValue: () => {
         return [today.startOf("year"), today.endOf("year")];
       },
     },
     {
-      label: "Avvalgi yil",
+      label: "предыдущий год",
       getValue: () => {
         const startOfNextYear = today.startOf("year").subtract(1, "year");
         return [startOfNextYear, startOfNextYear.endOf("year")];

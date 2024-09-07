@@ -3,6 +3,9 @@ export default {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      screens: {
+        desktop: "1600px",
+      },
       spacing: {
         "0px": "0px",
         px: "1px",

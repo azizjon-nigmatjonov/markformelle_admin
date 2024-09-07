@@ -44,8 +44,11 @@ export const Sidebar = ({ openHeader }: { openHeader?: boolean }) => {
           className={`overflow-y-scroll remove-scroll overflow-x-hidden ${
             collapsed ? "" : "pr-[14px]"
           }`}
-          style={{ height: `calc(100vh - ${openHeader ? '50px' : '0px'}` }}
+          style={{ height: "100vh" }}
         >
+          <button className="h-[50px] text-xl flex justify-center w-full items-center">
+            M
+          </button>
           <SidebarSection
             list={routes}
             collapsed={collapsed}
@@ -64,12 +67,6 @@ export const Sidebar = ({ openHeader }: { openHeader?: boolean }) => {
             handleNavigate={handleNavigate}
           />
         </div>
-
-        {/* <img
-          className="absolute w-full left-0 top-1/2 -translate-y-1/2 z-[1]"
-          src="/svg/shadow.svg"
-          alt="shdow"
-        /> */}
       </div>
 
       <FoldButton

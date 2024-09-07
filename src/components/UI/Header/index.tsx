@@ -43,7 +43,7 @@ export const Header = ({
         <div
           className={cls.header}
           {...props}
-          style={{ width: `100vw` }}
+          style={{ width: collapsed ? 'calc(100vw - 50px)' : '', left: collapsed ? '50px' : '' }}
         >
           <div className="w-full">
             {/* <div className={`w-[50px] mr-3`}>

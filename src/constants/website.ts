@@ -3,6 +3,8 @@ export const ColorConstants = {
   blue90: "#287EFF",
   blue10: "#EDF4FF",
 
+  success: "#6cce65",
+
   black: "#151515",
   black50: "#15151550",
   black80: "#15151580",
@@ -29,6 +31,7 @@ export const ColorConstants = {
   primary: "#2E90FA",
   primary50: "#EFF8FF",
   primary60: "#0086C9",
+  primary70: "#8099f1",
 
   pink60: "#DD2590",
 

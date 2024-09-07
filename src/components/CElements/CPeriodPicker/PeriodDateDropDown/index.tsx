@@ -47,10 +47,10 @@ export const PeriodDateDropDown = ({
         </div>
         <div className="btns">
           <button className="cancel-btn" onClick={() => handleDropdown()}>
-            Bekor qilish
+            Отменить
           </button>
           <button className="custom-btn" onClick={() => handleSubmit()}>
-            Tanlash
+            Выбирать
           </button>
         </div>
       </div>
