@@ -18,7 +18,6 @@ import { Bolt, WifiOff } from "@mui/icons-material";
 
 import ModalCard from "./ModalCard";
 import { useScreenSize } from "../../../../hooks/useScreenSize";
-import { ResponsivePie } from "@nivo/pie";
 
 interface Machine {
   id: number;

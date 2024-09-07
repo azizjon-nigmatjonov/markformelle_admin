@@ -7,6 +7,7 @@ import { useMemo } from "react";
 import BackButton from "../../UI/Buttons/BackButton";
 import CSearchInput from "../CSearchInput";
 import { useTranslation } from "react-i18next";
+import { useScreenSize } from "../../../hooks/useScreenSize";
 // import { NotificationIcon } from "../../UI/IconGenerator/Svg";
 
 interface Props {
@@ -34,9 +35,9 @@ const CBreadcrumbs = ({
   delay = 500,
   progmatic = false,
 }: Props) => {
-  const {t} = useTranslation()
+  const { t } = useTranslation();
   const navigate = useNavigate();
-
+  const smallDesktop = useScreenSize("smallDesktop");
   const navigateLink = useMemo(() => {
     if (items[0]?.link) return items[0]?.link;
     if (progmatic) return -1;
@@ -55,25 +56,51 @@ const CBreadcrumbs = ({
           className={`CBreadcrumbs ${size} ${className}`}
           separator={<NavigateNextIcon fontSize="small" color="disabled" />}
         >
-          {items?.map((item: any, index: number) => (
-            <div
-              key={index}
-              className={`breadcrumb-item ${item?.link ? "" : "last"} ${type}`}
-            >
-              {icon}
-              {withDefautlIcon && <FolderIcon />}
-              {type === "link" && item?.link ? (
+          {items?.map((item: any, index: number) =>
+            !smallDesktop ? (
+              <div
+                key={index}
+                className={`breadcrumb-item ${
+                  item?.link ? "" : "last"
+                } ${type}`}
+              >
+                {icon}
+                {withDefautlIcon && <FolderIcon />}
+                {type === "link" && item?.link ? (
+                  <div
+                    onClick={() => navigateHandler(item.link, index)}
+                    className="breadcrumb-label"
+                  >
+                    {t(item.label)}
+                  </div>
+                ) : (
+                  <div className="breadcrumb-label">{t(item.label)}</div>
+                )}
+              </div>
+            ) : (
+              index === items.length - 1 && (
                 <div
-                  onClick={() => navigateHandler(item.link, index)}
-                  className="breadcrumb-label"
+                  key={index}
+                  className={`breadcrumb-item ${
+                    item?.link ? "" : "last"
+                  } ${type}`}
                 >
-                  {t(item.label)}
+                  {icon}
+                  {withDefautlIcon && <FolderIcon />}
+                  {type === "link" && item?.link ? (
+                    <div
+                      onClick={() => navigateHandler(item.link, index)}
+                      className="breadcrumb-label"
+                    >
+                      {t(item.label)}
+                    </div>
+                  ) : (
+                    <div className="breadcrumb-label">{t(item.label)}</div>
+                  )}
                 </div>
-              ) : (
-                <div className="breadcrumb-label">{t(item.label)}</div>
-              )}
-            </div>
-          ))}
+              )
+            )
+          )}
         </Breadcrumbs>
       </div>
       {handleSearch ? (
@@ -83,7 +110,9 @@ const CBreadcrumbs = ({
           delay={delay}
           defaultValue={defaultValue}
         />
-      ) : ""}
+      ) : (
+        ""
+      )}
     </div>
   );
 };

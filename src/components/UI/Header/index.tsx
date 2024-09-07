@@ -43,14 +43,12 @@ export const Header = ({
         <div
           className={cls.header}
           {...props}
-          style={{ width: collapsed ? 'calc(100vw - 50px)' : '', left: collapsed ? '50px' : '' }}
+          style={{
+            width: collapsed ? "calc(100vw - 50px)" : "",
+            left: collapsed ? "50px" : "",
+          }}
         >
-          <div className="w-full">
-            {/* <div className={`w-[50px] mr-3`}>
-              <img src="/logo-full.svg" alt="logo" />
-            </div> */}
-            {extra}
-          </div>
+          <div className="w-full">{extra}</div>
           <div className="flex items-center">
             {children ? (
               children
