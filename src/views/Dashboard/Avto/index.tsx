@@ -6,7 +6,14 @@ import { breadCrumbItems, CountBtns, FetchFunction } from "./Logic";
 import MachineCard from "./Card";
 import CDriver from "../../../components/CElements/CDivider";
 
-const searchedWords = ["podr_id_knitt", "ip_address", "message", "name", "art"];
+const searchedWords = [
+  "podr_id_knitt",
+  "ip_address",
+  "message",
+  "name",
+  "art",
+  "zakaz",
+];
 
 const Dashboard = () => {
   const { bodyData } = FetchFunction();
@@ -18,6 +25,7 @@ const Dashboard = () => {
   const searchWods = (val: string) => {
     setSearch(val);
     const data: any = [];
+    const list: any = [];
     if (!val) {
       setSearchVal([]);
       setList(bodyData);
@@ -26,8 +34,15 @@ const Dashboard = () => {
     bodyData?.forEach((obj: any) => {
       searchedWords.forEach((word: string) => {
         if (word in obj) {
-          if (obj[word].toString().toLocaleLowerCase().includes(val.toLocaleLowerCase())) {
+          if (
+            obj[word]
+              .toString()
+              .toLocaleLowerCase()
+              .includes(val.toLocaleLowerCase()) &&
+            !list.includes(obj[word])
+          ) {
             data.push({ name: word, value: obj[word] });
+            list.push(obj[word]);
           }
         }
       });

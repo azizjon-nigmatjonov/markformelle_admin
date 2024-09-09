@@ -40,6 +40,25 @@ export const FetchFunction = () => {
       // page: 1,
     },
   });
-  
+
   return { bodyData: data ?? [], isLoading };
 };
+
+export const TabList = [
+  {
+    name: "Список",
+    id: "machines",
+  },
+  {
+    name: "План",
+    id: "plan",
+  },
+  {
+    name: "Статус",
+    id: "status",
+  },
+  {
+    name: "Дефекты",
+    id: "defects",
+  },
+];

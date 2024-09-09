@@ -4,8 +4,8 @@ import CCard from "../../../components/CElements/CCard";
 import { CPeriodPicker } from "../../../components/CElements/CPeriodPicker";
 import CSelect from "../../../components/CElements/CSelect";
 import { Header } from "../../../components/UI/Header";
-import AnalyticsBarchart from "../Analytics/BarChart";
-import { AnalyticCard } from "../Analytics/Card";
+import AnalyticsBarchart from "../Machines/BarChart";
+import { AnalyticCard } from "../Machines/Card";
 import { breadCrumbItems } from "./Logic";
 import Progress from "../../../components/UI/Progress";
 

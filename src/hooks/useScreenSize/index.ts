@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 
 export const useScreenSize = (status: string) => {
-  const desktop = 1700;
-  const smallDesktop = 1500;
+  const desktop = 1920;
+  const smallDesktop = 1700;
   const macbook = 1400;
   const mobile = 768;
   const small = 540;

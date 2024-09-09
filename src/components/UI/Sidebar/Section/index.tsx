@@ -1,7 +1,6 @@
 import { memo, useState } from "react";
 import IconGenerator from "../../IconGenerator";
 import { useTranslation } from "react-i18next";
-import { ArrowIcon } from "../../IconGenerator/Svg";
 import cls from "./style.module.scss";
 import { SectionData } from "../Logic";
 import { DropDown, OneDropdown } from "./DropDown";
@@ -28,7 +27,7 @@ const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
   const clearFilter = () => {
     dispatch(filterActions.clearFilterData());
   };
-  
+
   const dispatch = useDispatch();
   return (
     <div className={`${cls.section} ${collapsed ? "py-[10px]" : "p-[10px]"}`}>
@@ -59,17 +58,7 @@ const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
                       icon={value?.[0]?.parent_icon || value[0].icon}
                       fill="var(--black)"
                     />
-                    {!collapsed && (
-                      <span className="text-[var(--black)] font-medium">
-                        {t(key)}
-                      </span>
-                    )}
                   </div>
-                  {!collapsed && (
-                    <div>
-                      <ArrowIcon isOpen={activeIndex === key} />
-                    </div>
-                  )}
 
                   {collapsed && (
                     <DropDown

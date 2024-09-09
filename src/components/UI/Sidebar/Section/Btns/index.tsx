@@ -36,7 +36,7 @@ const Btn = ({
         onClick={() => clearFilter()}
         className={`${
           isLastItem ? "mb-2" : ""
-        } flex gap-2 capitalize menu_link menu_inner_link cursor-pointer text-sm font-medium ${active ? 'active text-[var(--main)]' : 'text-[var(--gray)]'}`}
+        } flex gap-2 menu_link menu_inner_link cursor-pointer text-sm font-medium ${active ? 'active text-[var(--main)]' : 'text-[var(--gray)]'}`}
       >
         <IconGenerator
           icon={el.icon}
@@ -78,7 +78,7 @@ export const SectionBtns = ({
           >
             <p
               onClick={() => clearFilter()}
-              className={`flex gap-2 capitalize menu_link cursor-pointer text-sm font-medium whitespace-nowrap ${active ? 'text-[var(--main)]' : 'text-[var(--gray)]'}`}
+              className={`flex gap-2 menu_link cursor-pointer text-sm font-medium whitespace-nowrap ${active ? 'text-[var(--main)]' : 'text-[var(--gray)]'}`}
             >
               <IconGenerator
                 icon={el.icon}

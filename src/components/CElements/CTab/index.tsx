@@ -20,7 +20,7 @@ interface Props {
 }
 
 export default function CTabs({
-  passRouter = true,
+  passRouter = false,
   currentTab = {},
   setCurrentTab = () => { },
   tabList = [],

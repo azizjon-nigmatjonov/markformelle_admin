@@ -31,8 +31,8 @@ const SettingDropdown = ({
 };
 
 export const HeaderSettings = ({
-  totalCount,
-  len = 0,
+  // totalCount,
+  // len = 0,
   filterParams,
   tableActions,
   pageName,
@@ -115,9 +115,9 @@ export const HeaderSettings = ({
   return (
     <div className="h-[40px] flex items-center justify-between px-5">
       <p className="text-[var(--gray)]">
-        {totalCount
-          ? formatNumberWithSpaces(totalCount) + ` tadan 1-${len} tasi`
-          : ""}
+        {/* {totalCount
+          ? formatNumberWithSpaces(totalCount) + ` 1-${len}`
+          : ""} */}
       </p>
       <div className="flex items-center space-x-5">
         <DeleteElements

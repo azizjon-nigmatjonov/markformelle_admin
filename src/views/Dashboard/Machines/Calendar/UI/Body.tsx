@@ -4,13 +4,13 @@ import Lighter from "./Lighter";
 import cls from "./style.module.scss";
 
 const DAYS = [
-  "Dushanba",
-  "Seshanba",
-  "Chorshanba",
-  "Payshanba",
-  "Juma",
-  "Shanba",
-  "Yakshanba",
+  "Понедельник",
+  "Вторник",
+  "Среда",
+  "Четверг",
+  "Пятница",
+  "Суббота",
+  "Воскресенье",
 ];
 
 const Body = ({ list = [] }: { list?: any; month?: any }) => {
@@ -53,7 +53,7 @@ const Body = ({ list = [] }: { list?: any; month?: any }) => {
           ))}
 
           {list?.map((element: any, index: number) => (
-            <div className={cls.cell} key={index}>
+            <div className={`${cls.cell} group`} key={index}>
               <span className="font-medium">{index + 1}</span>
               <Lighter
                 text={`${element.passenger_count}`}
@@ -71,6 +71,7 @@ const Body = ({ list = [] }: { list?: any; month?: any }) => {
                 text={`${element.bookings_count}`}
                 icon={"var(--gray20)"}
               />
+              
             </div>
           ))}
         </div>

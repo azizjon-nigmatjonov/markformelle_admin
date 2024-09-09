@@ -61,7 +61,7 @@ export default function CTab({
     },
     "& .MuiButtonBase-root": {
       background: "#white",
-      borderRadius: "10px",
+      borderRadius: "8px",
       color: "#111",
       textTransform: "none",
       fontSize: "14px",
@@ -77,7 +77,7 @@ export default function CTab({
       color: "#fff !important",
     },
     "& .MuiTabs-indicator": {
-      borderRadius: "10px",
+      borderRadius: "8px",
       backgroundColor: ColorConstants.main,
       height: "100%",
     },

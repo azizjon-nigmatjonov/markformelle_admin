@@ -23,32 +23,20 @@ const Header = () => {
 
       <div className="flex text-[14px] text-[var(--gray)] space-x-[30px] font-medium">
         <div className="flex gap-1 items-center">
-          <div
-            className="w-[20px] h-[20px] rounded-full"
-            style={{ backgroundColor: "var(--primary)" }}
-          ></div>
-          Ishlayotganlar
+          <div className="w-[20px] h-[20px] rounded-full bg-[var(--success)]"></div>
+          Работает
         </div>
         <div className="flex gap-1 items-center">
-          <div
-            className="w-[20px] h-[20px] rounded-full"
-            style={{ backgroundColor: "var(--primary)" }}
-          ></div>
-          Buzulganlar
+          <div className="w-[20px] h-[20px] rounded-full bg-[var(--primary)]"></div>
+          Нет плана
         </div>
         <div className="flex gap-1 items-center">
-          <div
-            className="w-[20px] h-[20px] rounded-full"
-            style={{ backgroundColor: "var(--primary)" }}
-          ></div>
-          Kutlyatgonlar
+          <div className="w-[20px] h-[20px] rounded-full bg-[var(--gray)]"></div>
+          Сломан
         </div>
         <div className="flex gap-1 items-center">
-          <div
-            className="w-[20px] h-[20px] rounded-full"
-            style={{ backgroundColor: "var(--primary)" }}
-          ></div>
-          Toxtaganlar
+          <div className="w-[20px] h-[20px] rounded-full bg-[var(--error)]"></div>
+          Остановлено
         </div>
       </div>
     </div>
