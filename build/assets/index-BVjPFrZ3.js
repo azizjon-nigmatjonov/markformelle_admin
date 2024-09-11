@@ -1,1 +1,0 @@
-import{i}from"./index-DRACHr32.js";const s={getList:e=>i.get(`/admins?q=${e==null?void 0:e.q}&page=${e.page}`),createAdmin:e=>i.post("/admins",e),updateAdmin:(e,m)=>i.put(`/admins/${m}`,e),deleteAdmin:e=>i.delete(`/admins/${e}`),getAdmin:e=>i.get(`/admins/${e}`)};export{s as a};

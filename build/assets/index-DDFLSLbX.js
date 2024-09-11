@@ -1,1 +1,0 @@
-import{i as t}from"./index-DRACHr32.js";const o={deleteElement:e=>t.delete(`/roles/${e}`),getElement:e=>t.get(`/roles/${e}`),getList:()=>t.get("/roles"),createElement:e=>t.post("/roles",e),updateElement:(e,r)=>t.put(`/roles/${r}`,e)};export{o as r};
