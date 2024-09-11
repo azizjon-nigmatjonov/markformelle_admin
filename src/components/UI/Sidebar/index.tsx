@@ -9,7 +9,7 @@ import { sidebarActions } from "../../../store/sidebar";
 import usePageRouter from "../../../hooks/useObjectRouter";
 import { authActions } from "../../../store/auth/auth.slice";
 
-export const Sidebar = ({ openHeader }: { openHeader?: boolean }) => {
+export const Sidebar = () => {
   const { userInfo, routes } = getWebsiteData();
   const collapsed = useSelector((state: any) => state.sidebar.collapsed);
   const dispatch = useDispatch();
@@ -46,7 +46,7 @@ export const Sidebar = ({ openHeader }: { openHeader?: boolean }) => {
           }`}
           style={{ height: "100vh" }}
         >
-          <button className="h-[50px] text-xl flex justify-center w-full items-center">
+          <button className="h-[50px] text-xl flex justify-center w-full items-center border-b border-[var(--border)]">
             M
           </button>
           <SidebarSection

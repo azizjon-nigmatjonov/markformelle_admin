@@ -24,7 +24,7 @@ export const RouteList = ({
   if (!newRouteList?.length) {
     return (
       <div className="w-full flex justify-center mt-10">
-        <img className="w-[200px]" src="/public/images/no-data.png" alt="no data" />
+        <img className="w-[200px]" src="/images/no-data.png" alt="no data" />
       </div>
     );
   }

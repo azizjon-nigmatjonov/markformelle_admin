@@ -1,19 +1,28 @@
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "../../components/UI/Sidebar";
 import cls from "./style.module.scss";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CAlert from "../../components/CElements/CAlert";
 import { BackButtonRoute, CheckLogin, ColorData } from "./Logic";
 import { Toaster } from "react-hot-toast";
+import { ResizeIcon } from "../../components/UI/IconGenerator/Svg/Sidebar";
+import { sidebarActions } from "../../store/sidebar";
 
 const MainLayout = () => {
   const alertData = useSelector((state: any) => state.website.alert);
-  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
-  
+  const resize = useSelector((state: any) => state.sidebar.resize);
+  const dispatch = useDispatch();
+
+  const handleResize = () => {
+    dispatch(sidebarActions.setCollapsed(resize ? false : true))
+    dispatch(sidebarActions.setOpenHeader(resize ? false : true))
+    dispatch(sidebarActions.setResize(!resize));
+  };
+
   return (
     <div className={cls.layout}>
-      <div>
-        <Sidebar openHeader={openHeader} />
+      <div className="border-r border-[var(--border)]">
+        <Sidebar />
       </div>
       <div className={cls.content}>
         <Outlet />
@@ -24,6 +33,10 @@ const MainLayout = () => {
       {alertData?.title && <CAlert data={alertData} />}
       <ColorData />
       <CheckLogin />
+
+      <button className="fixed right-3 bottom-3" onClick={() => handleResize()}>
+        <ResizeIcon />
+      </button>
     </div>
   );
 };

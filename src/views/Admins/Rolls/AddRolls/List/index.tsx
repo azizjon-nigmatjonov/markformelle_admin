@@ -29,7 +29,7 @@ export const RollList = ({
       <div className="w-full flex justify-center mt-10">
         <img
           className="w-[200px]"
-          src="/public/images/no-data.png"
+          src="/images/no-data.png"
           alt="no data"
         />
       </div>

@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   collapsed: false,
   openHeader: false,
+  resize: false
 };
 
 export const { actions: sidebarActions, reducer: sidebarReducer } = createSlice(
@@ -15,6 +16,9 @@ export const { actions: sidebarActions, reducer: sidebarReducer } = createSlice(
       },
       setOpenHeader: (state: any, { payload }) => {
         state.openHeader = payload;
+      },
+      setResize: (state: any, { payload }) => {
+        state.resize = payload;
       },
     },
   }

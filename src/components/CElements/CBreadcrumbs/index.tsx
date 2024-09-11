@@ -51,7 +51,7 @@ const CBreadcrumbs = ({
   return (
     <div className="flex items-center justify-between w-full z-[99] relative">
       <div className="CBreadcrumbs-wrapper mr-5">
-        {navigateLink && <BackButton link={navigateLink} />}
+        {navigateLink || navigateLink === -1 ? <BackButton link={navigateLink} /> : ""}
         <Breadcrumbs
           className={`CBreadcrumbs ${size} ${className}`}
           separator={<NavigateNextIcon fontSize="small" color="disabled" />}

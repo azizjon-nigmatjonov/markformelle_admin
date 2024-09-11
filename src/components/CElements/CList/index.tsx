@@ -1,67 +1,40 @@
-import { useMemo } from "react";
-import { WrapperCard } from "../../../components/UI/WrapperCard";
-import CLabel from "../CLabel";
-import { Reasons } from "../../../constants/reason";
+import { useTranslation } from "react-i18next";
+import { ArrowDownFilled } from "../../UI/IconGenerator/Svg";
+import { Closer } from "../../UI/Closer";
+
 interface Props {
-  title?: string;
-  list: [];
+  title: string;
+  open: boolean;
+  setOpen: (val: any) => void;
+  children: any;
 }
 
-const CList = ({ title, list = [] }: Props) => {
-  const newList = useMemo(() => {
-    return list?.map((item: any) => {
-      const found = Reasons.find((el: any) => el.value === item.reason_id);
-      return {
-        ...found,
-        ...item,
-      };
-    });
-  }, [list]);
+export const CList = ({
+  title = "name",
+  children,
+  open = false,
+  setOpen = () => {},
+}: Props) => {
+  const { t } = useTranslation();
   return (
-    <WrapperCard classes="p-[0px] w-full mx-[0px]">
-      {title && (
-        <CLabel
-          title={title}
-          styles={{
-            fontSize: "18px",
-            fontWeight: 600,
-            paddingBlock: "16px",
-            paddingInline: "24px",
-          }}
-        />
-      )}
-      {newList?.length ? (
-        <ul className="divide-y-[1px] divide-[#EAECF0]">
-          {newList.map((item: any) => (
-            <div className="flex items-center justify-between py-4 px-6 border-t-[1px] border-[#EAECF0]">
-              <div className="flex items-center gap-3">
-                <div
-                  className={`w-[10px] h-[10px] rounded-full`}
-                  style={{ backgroundColor: item.color }}
-                />
-                <li>{item.label}</li>
-              </div>
-              <div
-                className={`py-[2px] px-2 rounded-2xl`}
-                style={{ backgroundColor: item.color + "15" }}
-              >
-                <p
-                  className="text-xs font-medium"
-                  style={{ color: item.color }}
-                >
-                  {item.count}
-                </p>
-              </div>
-            </div>
-          ))}
-        </ul>
-      ) : (
-        <div className="flex justify-center my-5">
-          <img src="/images/no-data.png" width={200} alt="empty" />
+    <div className="relative">
+      <div
+        onClick={() => setOpen(!open)}
+        className="flex items-center justify-between space-x-4 cursor-pointer"
+      >
+        <h3>{t(title)}</h3>
+        <div className={open ? "" : "rotate-[180deg]"}>
+          <ArrowDownFilled />
         </div>
+      </div>
+      {open ? (
+        <div className="absolute w-full left-0 top-full bg-white common-shadow p-3 z-[92] rounded-[8px] border border-[var(--border)]">
+          {children}
+        </div>
+      ) : (
+        ""
       )}
-    </WrapperCard>
+      {open && <Closer handleClose={() => setOpen(false)} />}
+    </div>
   );
 };
-
-export default CList;

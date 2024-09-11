@@ -60,7 +60,7 @@ const CTable = ({
   idForTable,
   disablePagination = false,
   autoHeight = false,
-  limitList = [10, 30, 50],
+  limitList = [10, 50, 100, 500],
   filterParams = { page: 1, perPage: 10 },
   handleFilterParams = () => {},
   handleActions = () => {},
@@ -322,37 +322,8 @@ const CTable = ({
     handleActions(el, status);
   };
 
-  // useEffect(() => {
-  //   if (tableRef.current) {
-  //     const rect = tableRef.current.getBoundingClientRect();
-  //     setTablePosition({
-  //       top: rect.top - 40,
-  //       left: rect.left,
-  //     });
-  //   }
-  // }, [collapsed, tableRef]);
-
   return (
     <div className="relative">
-      {/* <div
-        className="sticky z-[90] bg-red-500 left-0"
-        style={{ top: `${tablePosition?.top || 0}px` }}
-      >
-        <div className="relative w-full">
-          {showScroll && (
-            <button
-              onMouseDown={handleMouseDown}
-              style={{
-                position: "absolute",
-                left: buttonPosition,
-                cursor: "pointer",
-                zIndex: "1",
-              }}
-              className={`w-[30%] top-[10px] h-[12px] px-4 bg-[var(--gray30)] rounded-[8px] justify-between flex items-center space-x-1 border border-[var(--gray20)]`}
-            ></button>
-          )}
-        </div>
-      </div> */}
       <div className="border border-[var(--gray20)] common-shadow rounded-[18px] overflow-hidden bg-white">
         {tableSetting ? (
           <HeaderSettings

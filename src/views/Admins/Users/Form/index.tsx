@@ -12,7 +12,7 @@ const Form = ({ refetch, id }: { refetch: () => void; id: string }) => {
 
   return (
     <CModal
-      title={id ? "Ma'lumotni tahrirlash" : "add_new_admin"}
+      title={id ? "edit" : "add"}
       open={true}
       handleClose={() => navigateQuery({ id: "" })}
       footerActive={false}

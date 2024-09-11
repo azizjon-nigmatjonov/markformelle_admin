@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Closer } from "../../../../UI/Closer";
-import { formatNumberWithSpaces } from "../../../../../utils/formatMoney";
 import { MenuItem } from "./MenuItems";
 import { DeleteElements } from "./Delete";
 import { tableStoreActions } from "../../../../../store/table";
@@ -17,7 +16,7 @@ const SettingDropdown = ({
 }) => {
   return (
     <div className="absolute right-0 top-[25px] bg-white border border-[var(--gray20)] common-shadow rounded-[12px] z-[92] min-w-[150px] min-h-[100px] whitespace-nowrap p-5">
-      <ul className="grid gap-y-5 max-h-[400px] overflow-y-scroll designed-scroll">
+      <ul className="grid gap-y-5 max-h-[400px] overflow-y-scroll remove-scroll designed-scroll">
         {menuList.map((item: {}, index: number) => (
           <MenuItem
             key={index}

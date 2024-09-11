@@ -58,7 +58,7 @@ const Admins = () => {
       >
         <div className="ml-5">
           <AddButton
-            text="new_admin"
+            text="add"
             onClick={() => navigateQuery({ id: "create" })}
           />
         </div>

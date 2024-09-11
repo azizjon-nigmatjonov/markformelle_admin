@@ -822,32 +822,6 @@ export const PartnersIcon = () => (
 );
 
 export const ArrowUp = ({ fill }: { fill?: any }) => (
-  // <svg
-  //   width="18"
-  //   height="18"
-  //   viewBox="0 0 18 18"
-  //   fill="none"
-  //   xmlns="http://www.w3.org/2000/svg"
-  // >
-  //   <rect opacity="0.1" y="0.5" width="36" height="36" rx="8" fill="#0BD976"/>
-  //   <path
-  //     d="M13.5523 7.1775L8.99977 2.625L4.44727 7.1775"
-  //     stroke={fill}
-  //     strokeWidth="2"
-  //     strokeMiterlimit="10"
-  //     strokeLinecap="round"
-  //     strokeLinejoin="round"
-  //   />
-  //   <path
-  //     d="M9 15.3749V2.75244"
-  //     stroke={fill}
-  //     strokeWidth="2"
-  //     strokeMiterlimit="10"
-  //     strokeLinecap="round"
-  //     strokeLinejoin="round"
-  //   />
-  // </svg>
-
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width="36"
