@@ -35,7 +35,7 @@ export const TableData = () => {
 };
 
 export const FetchFunction = () => {
-  const { data, isLoading } = useCQuery({
+  const { data, isLoading, refetch } = useCQuery({
     key: `GET_DRIVER_HOME`,
     endpoint: `/WEB_ALL?code=01&podr_id=614`,
     params: {
@@ -43,7 +43,7 @@ export const FetchFunction = () => {
     },
   });
 
-  return { bodyData: data ?? [], isLoading };
+  return { bodyData: data ?? [], isLoading, refetch };
 };
 
 interface Props {

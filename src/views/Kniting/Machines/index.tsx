@@ -14,11 +14,17 @@ const searchedWords = [
 ];
 
 const KnitingMachines = () => {
-  const { bodyData } = FetchFunction();
+  const { bodyData, refetch } = FetchFunction();
   const [searchVal, setSearchVal]: any = useState([]);
   const [checked, setChecked]: any = useState(["all"]);
   const [list, setList]: any = useState([]);
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    setTimeout(() => {
+      refetch()
+    }, 10000);
+  }, [])
 
   const searchWods = (val: string) => {
     setSearch(val);

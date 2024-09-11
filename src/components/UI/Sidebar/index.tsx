@@ -46,9 +46,9 @@ export const Sidebar = () => {
           }`}
           style={{ height: "100vh" }}
         >
-          <button className="h-[50px] text-xl flex justify-center w-full items-center border-b border-[var(--border)]">
-            M
-          </button>
+          <div className="h-[50px] text-xl flex justify-center w-full items-center border-b border-[var(--border)] px-1">
+            <img src="/images/logo.png" alt="logo" />
+          </div>
           <SidebarSection
             list={routes}
             collapsed={collapsed}
