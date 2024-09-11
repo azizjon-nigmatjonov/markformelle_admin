@@ -17,7 +17,6 @@ import ViewDayOutlinedIcon from "@mui/icons-material/ViewDayOutlined";
 import { Bolt, WifiOff } from "@mui/icons-material";
 
 import ModalCard from "./ModalCard";
-import { useScreenSize } from "../../../../hooks/useScreenSize";
 
 interface Machine {
   id: number;
@@ -54,7 +53,6 @@ interface MachineCardProps {
 
 const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
   const [cardColor, setCardColor] = useState<string>("");
-  const desktop = useScreenSize("desktop");
   const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
@@ -114,20 +112,20 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
               justifyContent: "space-between",
             }}
           >
-            <Typography fontSize={18} fontStyle="SemiBold" fontWeight={"bold"}>
+            <Typography fontSize={16} fontStyle="SemiBold" fontWeight={"bold"}>
               {machine.name}
             </Typography>
-            <WifiOff sx={{ fontSize: desktop ? 30 : 60 }} />
+            <WifiOff sx={{ fontSize: 40 }} />
             <Typography
               flex={"center"}
               textAlign={"center"}
-              fontSize={desktop ? 10 : 14}
+              fontSize={14}
               fontStyle="SemiBold"
               fontWeight={"bold"}
             >
               Нет соединения
             </Typography>
-            <Typography fontSize={desktop ? 10 : 14} fontStyle="SemiBold" fontWeight={"bold"}>
+            <Typography fontSize={14} fontStyle="SemiBold" fontWeight={"bold"}>
               {machine.ip_address}
             </Typography>
           </CardContent>
@@ -154,7 +152,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
             </Typography>
 
             <Typography
-              fontSize={desktop ? 10 : 18}
+              fontSize={16}
               fontStyle="SemiBold"
               fontWeight={"bold"}
             >
@@ -183,24 +181,22 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
               determinate
               sx={{
                 // mb: "0px",
-                "--CircularProgress-size": desktop ? "70px" : "110px",
-                "--CircularProgress-trackThickness": desktop ? "" : "10px",
-                "--CircularProgress-progressThickness": desktop
-                  ? "5px"
-                  : "10px",
+                "--CircularProgress-size": "100px",
+                "--CircularProgress-trackThickness": "10px",
+                "--CircularProgress-progressThickness": "10px",
               }}
               className={`${cardColor}`}
             >
               <Stack spacing={0} alignItems={"center"}>
-                <p className={`${desktop ? 'text-[10px]' : 'text-sm'}`}>{machine.fkol_knit}</p>
+                <p className={'text-sm'}>{machine.fkol_knit}</p>
                 <Divider
                   orientation="horizontal"
-                  sx={{ height: desktop ? 1 : 2, backgroundColor: "gray", opacity: 0.5 }}
+                  sx={{ height: 2, backgroundColor: "gray", opacity: 0.5 }}
                   style={{ background: "black" }}
                 />
-                <p className={`${desktop ? 'text-[10px]' : 'text-sm'}`}>{machine.pkol_knit + " Kg"}</p>
+                <p className={`text-[13px]`}>{machine.pkol_knit + " Kg"}</p>
 
-                <Typography fontSize={desktop ? '10px' : '14px'} startDecorator={<SpeedIcon style={{ fontSize: desktop ? 15 : 20 }} />}>
+                <Typography fontSize={'13px'} startDecorator={<SpeedIcon style={{ fontSize: 18 }} />}>
                   {machine.rotation}
                 </Typography>
               </Stack>

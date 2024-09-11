@@ -44,7 +44,7 @@ input {
       display: none;
     }
 
-    @include common-shadow;
+    // @include common-shadow;
     border: 1px solid var(--gray20);
 
     &.Mui-focused {

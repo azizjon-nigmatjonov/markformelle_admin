@@ -1,5 +1,3 @@
-import CCard from "../../../../components/CElements/CCard";
-import PieChart from "../../../../components/UI/PieChart/index";
 // import CSelect from "../../../../components/CElements/CSelect";
 import { useMemo, useState } from "react";
 import {
@@ -9,7 +7,8 @@ import {
     SelectChangeEvent,
 } from "@mui/material";
 import { useQuery } from "react-query";
-import statistics from "../../../../services/statistics";
+import CCard from "../../../../../../../components/CElements/CCard";
+import statistics from "../../../../../../../services/statistics";
 
 const coins = [
     { symbol: "ADA", amount: 200, color: "#FFC542", inUSD: 1.48 },
@@ -88,7 +87,7 @@ export default function RegionStats() {
                         </FormControl>
                     </div>
 
-                    <PieChart coins={coins} />
+                    {/* <PieChart coins={coins} /> */}
                     {coins.map((coin) => {
                         return (
                             <div className="flex justify-between">

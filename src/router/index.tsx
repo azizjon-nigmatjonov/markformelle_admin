@@ -31,11 +31,9 @@ interface routeType {
 
 const Router = () => {
   const dispatch = useDispatch();
-  const userInfo = useSelector((state: any) => state.auth.user);
   // const link = useSelector((state: any) => state.auth.token);
   const [list, setList] = useState<string[]>([]);
   const [listNew, setListNew] = useState<string[]>([]);
-  const [childList, setChildList] = useState<string[]>([]);
   const storedRoutes = useSelector((state: any) => state.website.routes);
 
   const [routes, setRoutes]: any = useState({ ...defaults });

@@ -1,6 +1,4 @@
-import CBreadcrumbs from "../../../../components/CElements/CBreadcrumbs";
 import { Header } from "../../../../components/UI/Header";
-import { breadCrumbItems } from "./Logic";
 import CTabs from "../../../../components/CElements/CTab";
 import { TabList } from "./Logic";
 import { useState } from "react";
@@ -28,20 +26,18 @@ const KnitingdAnalytics = () => {
   return (
     <div>
       <Header
-        extra={<CBreadcrumbs items={breadCrumbItems} progmatic={true} />}
+        extra={
+          <div className="inline-block">
+            <CTabs
+              tabList={TabList}
+              currentTab={currentTab}
+              handleTabClick={setCurrentTab}
+            />
+          </div>
+        }
       ></Header>
 
-      <div className="container">
-        <div className="inline-block">
-          <CTabs
-            tabList={TabList}
-            currentTab={currentTab}
-            handleTabClick={setCurrentTab}
-          />
-        </div>
-
-        {CurrentPage(currentTab.id)}
-      </div>
+      <div className="container">{CurrentPage(currentTab.id)}</div>
     </div>
   );
 };

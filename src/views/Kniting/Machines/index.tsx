@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import CSearchInput from "../../../components/CElements/CSearchInput";
 import { Header } from "../../../components/UI/Header";
-import { breadCrumbItems, CountBtns, FetchFunction } from "./Logic";
+import { CountBtns, FetchFunction } from "./Logic";
 import MachineCard from "./Card";
-import CDriver from "../../../components/CElements/CDivider";
 
 const searchedWords = [
   "podr_id_knitt",
@@ -141,42 +139,44 @@ const KnitingMachines = () => {
 
   return (
     <>
-      <Header extra={<CBreadcrumbs items={breadCrumbItems} progmatic={true} />}>
+      <Header
+        extra={
+          <div className="w-[220px] relative">
+            <CSearchInput
+              defaultValue={search}
+              handleChange={searchWods}
+              handleSubmit={handleSearch}
+            />
+            {searchVal?.length ? (
+              <div className="absolute left-0 top-full bg-white shadow-lg rounded-[12px] w-full overflow-scroll max-h-[400px]">
+                <ul className="space-y-2 py-2">
+                  {searchVal.map((item: any, index: number) => (
+                    <li
+                      key={index}
+                      onClick={() => handleCheck(item)}
+                      className="hover:bg-[var(--border)] py-1 px-4 cursor-pointer"
+                    >
+                      <button>{item.value}</button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
+        }
+      >
         <CountBtns
           checked={checked}
           setChecked={setChecked}
           bodyData={bodyData}
           setSearch={setSearch}
         />
-        <CDriver direction="vertical" />
-        <div className="w-[220px] relative">
-          <CSearchInput
-            defaultValue={search}
-            handleChange={searchWods}
-            handleSubmit={handleSearch}
-          />
-          {searchVal?.length ? (
-            <div className="absolute left-0 top-full bg-white shadow-lg rounded-[12px] w-full overflow-scroll max-h-[400px]">
-              <ul className="space-y-2 py-2">
-                {searchVal.map((item: any, index: number) => (
-                  <li
-                    key={index}
-                    onClick={() => handleCheck(item)}
-                    className="hover:bg-[var(--border)] py-1 px-4 cursor-pointer"
-                  >
-                    <button>{item.value}</button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
       </Header>
 
-      <div className="container">
-        <div className="grid grid-cols-11 gap-3">
+      <div className="p-5 overflow-scroll w-[1700px] desktop:w-full">
+        <div className={`grid grid-cols-11 gap-3`}>
           {list.map((machine: any, index: number) => (
             <MachineCard key={index} machine={machine} />
           ))}
