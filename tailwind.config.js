@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       screens: {
-        desktop: "1540px",
+        desktop: "1440px",
       },
       spacing: {
         "0px": "0px",

@@ -158,7 +158,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
             >
               {machine.name}
             </Typography>
-            <p className="mb-1">{machine.artikul}</p>
+            <p>{machine.artikul}</p>
             {/* <div className="w-[70px] h-[70px] screen:w-[80px] screen:h-[80px] mt-3">
               <ResponsivePie
                 data={responsiveData}
@@ -181,7 +181,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
               determinate
               sx={{
                 // mb: "0px",
-                "--CircularProgress-size": "100px",
+                "--CircularProgress-size": "97px",
                 "--CircularProgress-trackThickness": "10px",
                 "--CircularProgress-progressThickness": "10px",
               }}
