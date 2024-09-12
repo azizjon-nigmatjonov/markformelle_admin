@@ -11,8 +11,6 @@ import {
 import "./MachineCard.css"; // Import CSS file for styling
 import SpeedIcon from "@mui/icons-material/Speed";
 import ViewDayOutlinedIcon from "@mui/icons-material/ViewDayOutlined";
-// import PriorityHighOutlinedIcon from "@mui/icons-material/PriorityHighOutlined";
-// import PlaylistRemoveIcon from "@mui/icons-material/PlaylistRemove";
 
 import { Bolt, WifiOff } from "@mui/icons-material";
 
@@ -96,7 +94,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
       return "";
     }
   };
-
+  
   return (
     <>
       <Card
@@ -104,6 +102,24 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
         className={`machine-card custom ${cardColor}`}
         onClick={() => setOpen(true)}
       >
+        {machine.name === "A-046" ? (
+          <div className="absolute top-5 bg-black text-white z-[2]">
+            <div>
+              <span>Width</span>: {window.screen.width}
+            </div>
+            <div>
+              <span>Height</span>:  {window.screen.height}
+            </div>
+            <div>
+              <span>Size</span>: {window.screen.width}
+            </div>
+            <div>
+              <span>Pixel</span>: {window.screen.pixelDepth}
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
         {machine.no_connnection == "true" && (
           <CardContent
             sx={{
@@ -151,11 +167,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
               {machine.defect_num}
             </Typography>
 
-            <Typography
-              fontSize={16}
-              fontStyle="SemiBold"
-              fontWeight={"bold"}
-            >
+            <Typography fontSize={16} fontStyle="SemiBold" fontWeight={"bold"}>
               {machine.name}
             </Typography>
             <p>{machine.artikul}</p>
@@ -188,7 +200,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
               className={`${cardColor}`}
             >
               <Stack spacing={0} alignItems={"center"}>
-                <p className={'text-sm'}>{machine.fkol_knit}</p>
+                <p className={"text-sm"}>{machine.fkol_knit}</p>
                 <Divider
                   orientation="horizontal"
                   sx={{ height: 2, backgroundColor: "gray", opacity: 0.5 }}
@@ -196,7 +208,10 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
                 />
                 <p className={`text-[13px]`}>{machine.pkol_knit + " Kg"}</p>
 
-                <Typography fontSize={'13px'} startDecorator={<SpeedIcon style={{ fontSize: 18 }} />}>
+                <Typography
+                  fontSize={"13px"}
+                  startDecorator={<SpeedIcon style={{ fontSize: 18 }} />}
+                >
                   {machine.rotation}
                 </Typography>
               </Stack>
