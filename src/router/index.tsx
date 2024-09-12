@@ -1,6 +1,6 @@
-import { Suspense, useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { websiteActions } from "../store/website/index";
 import MainLayout from "../layouts/MainLayout";
 import { routeList } from "./List";
@@ -24,17 +24,17 @@ interface Path {
   children?: any;
 }
 
-interface routeType {
-  sidebar: boolean;
-  value: string;
-}
+// interface routeType {
+//   sidebar: boolean;
+//   value: string;
+// }
 
 const Router = () => {
   const dispatch = useDispatch();
   // const link = useSelector((state: any) => state.auth.token);
   const [list, setList] = useState<string[]>([]);
   const [listNew, setListNew] = useState<string[]>([]);
-  const storedRoutes = useSelector((state: any) => state.website.routes);
+  // const storedRoutes = useSelector((state: any) => state.website.routes);
 
   const [routes, setRoutes]: any = useState({ ...defaults });
   const [newRoutes, setNewRoutes] = useState({ ...defaults });
@@ -86,16 +86,16 @@ const Router = () => {
     return path;
   };
 
-  const navigator = useMemo(() => {
-    for (const key in storedRoutes) {
-      if (storedRoutes[key]?.length) {
-        if (storedRoutes[key].find((item: routeType) => item.sidebar)) {
-          return storedRoutes[key].find((item: routeType) => item.sidebar)
-            ?.path;
-        }
-      }
-    }
-  }, [storedRoutes]);
+  // const navigator = useMemo(() => {
+  //   for (const key in storedRoutes) {
+  //     if (storedRoutes[key]?.length) {
+  //       if (storedRoutes[key].find((item: routeType) => item.sidebar)) {
+  //         return storedRoutes[key].find((item: routeType) => item.sidebar)
+  //           ?.path;
+  //       }
+  //     }
+  //   }
+  // }, [storedRoutes]);
 
   useEffect(() => {
     dispatch(websiteActions.setRoutes({ ...routes }));
@@ -150,10 +150,10 @@ const Router = () => {
 
           <Route
             index
-            element={<Navigate to={"/" + navigator || "settings/test"} />}
+            element={<Navigate to={"/kniting/knitting_machines"} />}
           />
         </Route>
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="*" element={<Navigate to="/kniting/knitting_machines" />} />
       </Routes>
     </Suspense>
   );

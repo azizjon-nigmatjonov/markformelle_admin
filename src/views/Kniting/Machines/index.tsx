@@ -181,7 +181,7 @@ const KnitingMachines = () => {
       </Header>
 
       <div className="p-5">
-        <div className={`grid overflow-x-scroll w-[1600px] desktop:w-auto grid-cols-11 gap-3`}>
+        <div className={`grid overflow-x-scroll w-[1600px] desktop:overflow-hidden desktop:w-auto grid-cols-11 gap-3`}>
           {list.map((machine: any, index: number) => (
             <MachineCard key={index} machine={machine} />
           ))}
