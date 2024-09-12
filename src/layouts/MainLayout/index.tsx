@@ -34,7 +34,7 @@ const MainLayout = () => {
       <ColorData />
       <CheckLogin />
 
-      <button className="fixed right-3 bottom-3" onClick={() => handleResize()}>
+      <button className="fixed right-3 bottom-3 z-[99]" onClick={() => handleResize()}>
         <ResizeIcon />
       </button>
     </div>
