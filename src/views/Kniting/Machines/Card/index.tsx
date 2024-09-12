@@ -15,7 +15,6 @@ import ViewDayOutlinedIcon from "@mui/icons-material/ViewDayOutlined";
 import { Bolt, WifiOff } from "@mui/icons-material";
 
 import ModalCard from "./ModalCard";
-import { useScreenSize } from "../../../../hooks/useScreenSize";
 
 interface Machine {
   id: number;
@@ -53,7 +52,6 @@ interface MachineCardProps {
 const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
   const [cardColor, setCardColor] = useState<string>("");
   const [open, setOpen] = React.useState(false);
-  const ipod = useScreenSize("ipod");
 
   useEffect(() => {
     setCardColor(getCardColor());
