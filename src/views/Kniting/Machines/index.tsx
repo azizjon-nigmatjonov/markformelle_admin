@@ -20,7 +20,7 @@ const KnitingMachines = () => {
   const [checked, setChecked]: any = useState(["all"]);
   const [list, setList]: any = useState([]);
   const [search, setSearch] = useState("");
-
+  
   useEffect(() => {
     setInterval(() => {
       refetch();
@@ -181,7 +181,7 @@ const KnitingMachines = () => {
       </Header>
 
       <div className="p-5">
-        <div className={`grid grid-cols-11 gap-3`}>
+        <div className={`grid overflow-scroll w-[1700px] desktop:w-auto grid-cols-11 gap-3`}>
           {list.map((machine: any, index: number) => (
             <MachineCard key={index} machine={machine} />
           ))}

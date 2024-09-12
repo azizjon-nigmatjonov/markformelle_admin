@@ -15,6 +15,7 @@ import ViewDayOutlinedIcon from "@mui/icons-material/ViewDayOutlined";
 import { Bolt, WifiOff } from "@mui/icons-material";
 
 import ModalCard from "./ModalCard";
+import { useScreenSize } from "../../../../hooks/useScreenSize";
 
 interface Machine {
   id: number;
@@ -52,6 +53,7 @@ interface MachineCardProps {
 const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
   const [cardColor, setCardColor] = useState<string>("");
   const [open, setOpen] = React.useState(false);
+  const ipod = useScreenSize("ipod");
 
   useEffect(() => {
     setCardColor(getCardColor());
@@ -94,7 +96,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
       return "";
     }
   };
-  
+
   return (
     <>
       <Card
@@ -102,24 +104,6 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
         className={`machine-card custom ${cardColor}`}
         onClick={() => setOpen(true)}
       >
-        {machine.name === "A-046" ? (
-          <div className="absolute top-5 bg-black text-white z-[2]">
-            <div>
-              <span>Width</span>: {window.screen.width}
-            </div>
-            <div>
-              <span>Height</span>:  {window.screen.height}
-            </div>
-            <div>
-              <span>Size</span>: {window.screen.width}
-            </div>
-            <div>
-              <span>Pixel</span>: {window.screen.pixelDepth}
-            </div>
-          </div>
-        ) : (
-          ""
-        )}
         {machine.no_connnection == "true" && (
           <CardContent
             sx={{
