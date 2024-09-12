@@ -14,8 +14,8 @@ const MainLayout = () => {
   const dispatch = useDispatch();
 
   const handleResize = () => {
-    dispatch(sidebarActions.setCollapsed(resize ? false : true))
-    dispatch(sidebarActions.setOpenHeader(resize ? false : true))
+    dispatch(sidebarActions.setCollapsed(resize ? false : true));
+    dispatch(sidebarActions.setOpenHeader(resize ? false : true));
     dispatch(sidebarActions.setResize(!resize));
   };
 
@@ -34,8 +34,11 @@ const MainLayout = () => {
       <ColorData />
       <CheckLogin />
 
-      <button className="fixed right-3 bottom-3 z-[99]" onClick={() => handleResize()}>
-        <ResizeIcon />
+      <button
+        className="fixed right-3 bottom-3 z-[99]"
+        onClick={() => handleResize()}
+      >
+        <ResizeIcon fill={resize ? 'black' : 'var(--gray)'} />
       </button>
     </div>
   );

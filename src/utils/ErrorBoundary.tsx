@@ -27,7 +27,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
         <div className="flex items-center flex-col text-center text-[var(--black)] mt-20">
           <h1 className="text-3xl flex space-x-2 font-medium">
             <WarningIcon />
-            <span>Xatolik yuz berdi!</span>
+            <span>Произошла ошибка!</span>
           </h1>
           <p className="text-[var(--gray)] mt-5 mb-10">
             Error: {this.state.error && this.state.error.toString()}

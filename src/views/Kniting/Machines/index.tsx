@@ -20,7 +20,7 @@ const KnitingMachines = () => {
   const [checked, setChecked]: any = useState(["all"]);
   const [list, setList]: any = useState([]);
   const [search, setSearch] = useState("");
-  
+
   useEffect(() => {
     setInterval(() => {
       refetch();
@@ -81,6 +81,9 @@ const KnitingMachines = () => {
             element.pkol_knit - element.fkol_knit < 30 &&
             element.pkol_knit - element.fkol_knit > 0
           ) {
+            if (checked.includes("green")) {
+              listData.push(element);
+            }
           } else {
             if (checked.includes("green")) {
               listData.push(element);
@@ -181,10 +184,16 @@ const KnitingMachines = () => {
       </Header>
 
       <div className="p-5">
-        <div className={`grid overflow-x-scroll w-[1600px] desktop:overflow-hidden desktop:w-auto grid-cols-11 gap-3`}>
-          {list.map((machine: any, index: number) => (
-            <MachineCard key={index} machine={machine} />
-          ))}
+        <div
+          className={`grid overflow-x-scroll w-[1600px] desktop:overflow-hidden desktop:w-auto grid-cols-11 gap-3`}
+        >
+          {list.map((machine: any, index: number) =>
+            machine.idlocation ? (
+              <MachineCard key={index} machine={machine} />
+            ) : (
+              <div key={index}></div>
+            )
+          )}
         </div>
       </div>
     </>

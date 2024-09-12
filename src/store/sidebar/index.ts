@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   collapsed: false,
-  openHeader: false,
+  openHeader: true,
   resize: false
 };
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CCheckButton from "../../../../components/CElements/CCheckButton";
 import useCQuery from "../../../../hooks/useCQuery";
 
@@ -43,21 +43,39 @@ export const FetchFunction = () => {
     },
   });
 
-  return { bodyData: data ?? [], isLoading, refetch };
+  const newData = useMemo(() => {
+    if (!data?.length) return [];
+
+    const arr: any = [];
+    const existingIds = data.map((item: any) => item.idlocation);
+    const maxId = Math.max(...data.map((item: any) => item.idlocation));
+    
+    for (let index = 1; index < maxId + 1; index++) {
+      if (existingIds.includes(index)) {
+        arr.push(data.find((item: any) => item.idlocation === index));
+      } else {
+        arr.push({});
+      }
+    }
+
+    return arr;
+  }, [data]);
+  
+  return { bodyData: newData, isLoading, refetch };
 };
 
 interface Props {
   setChecked: (val: any) => void;
   checked: any;
   bodyData: any;
-  setSearch: (val: string) => void
+  setSearch: (val: string) => void;
 }
 
 export const CountBtns = ({
   checked,
   setChecked = () => {},
   bodyData = [],
-  setSearch = () => {}
+  setSearch = () => {},
 }: Props) => {
   const filterCheckbox = (val: string) => {
     let list: any = checked.filter((i: string) => i !== "all") ?? [];
@@ -68,7 +86,7 @@ export const CountBtns = ({
       list = [val];
     }
 
-    setSearch("")
+    setSearch("");
     setChecked(list);
   };
 
@@ -103,6 +121,7 @@ export const CountBtns = ({
           element.pkol_knit - element.fkol_knit < 30 &&
           element.pkol_knit - element.fkol_knit > 0
         ) {
+          obj.working += 1
         } else {
           obj.working += 1;
         }
