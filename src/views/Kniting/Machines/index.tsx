@@ -3,6 +3,7 @@ import CSearchInput from "../../../components/CElements/CSearchInput";
 import { Header } from "../../../components/UI/Header";
 import { CountBtns, FetchFunction } from "./Logic";
 import MachineCard from "./Card";
+import CDriver from "../../../components/CElements/CDivider";
 
 const searchedWords = [
   "podr_id_knitt",
@@ -22,9 +23,9 @@ const KnitingMachines = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      refetch()
+      refetch();
     }, 10000);
-  }, [])
+  }, []);
 
   const searchWods = (val: string) => {
     setSearch(val);
@@ -145,40 +146,38 @@ const KnitingMachines = () => {
 
   return (
     <>
-      <Header
-        extra={
-          <div className="w-[220px] relative">
-            <CSearchInput
-              defaultValue={search}
-              handleChange={searchWods}
-              handleSubmit={handleSearch}
-            />
-            {searchVal?.length ? (
-              <div className="absolute left-0 top-full bg-white shadow-lg rounded-[12px] w-full overflow-scroll max-h-[400px]">
-                <ul className="space-y-2 py-2">
-                  {searchVal.map((item: any, index: number) => (
-                    <li
-                      key={index}
-                      onClick={() => handleCheck(item)}
-                      className="hover:bg-[var(--border)] py-1 px-4 cursor-pointer"
-                    >
-                      <button>{item.value}</button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : (
-              ""
-            )}
-          </div>
-        }
-      >
+      <Header>
         <CountBtns
           checked={checked}
           setChecked={setChecked}
           bodyData={bodyData}
           setSearch={setSearch}
         />
+        <CDriver direction="vertical" />
+        <div className="w-[220px] relative">
+          <CSearchInput
+            defaultValue={search}
+            handleChange={searchWods}
+            handleSubmit={handleSearch}
+          />
+          {searchVal?.length ? (
+            <div className="absolute left-0 top-full bg-white shadow-lg rounded-[12px] w-full overflow-scroll max-h-[400px]">
+              <ul className="space-y-2 py-2">
+                {searchVal.map((item: any, index: number) => (
+                  <li
+                    key={index}
+                    onClick={() => handleCheck(item)}
+                    className="hover:bg-[var(--border)] py-1 px-4 cursor-pointer"
+                  >
+                    <button>{item.value}</button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
       </Header>
 
       <div className="p-5 overflow-scroll w-[1700px] desktop:w-full">

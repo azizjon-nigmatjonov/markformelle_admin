@@ -5,6 +5,8 @@ export default {
     extend: {
       screens: {
         desktop: "1440px",
+        small_desktop: "1280px",
+        ipod: "940px",
       },
       spacing: {
         "0px": "0px",
