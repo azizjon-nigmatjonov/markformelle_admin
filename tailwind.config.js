@@ -8,7 +8,6 @@ export default {
         small_desktop: "1280px",
         ipod: "940px",
       },
-      
       spacing: {
         "0px": "0px",
         px: "1px",
