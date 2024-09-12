@@ -32,14 +32,12 @@ const CSearchInput = ({
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter" && value) {
       handleSubmit(value);
-      console.log('1');
-      
     }
   };
 
   return (
     <div
-      className={`relative bg-white rounded-[8px] flex border justify-between items-center h-[35px] common-shadow px-5 ${
+      className={`relative bg-white rounded-[8px] flex border justify-between items-center h-[35px] px-5 ${
         value ? " border-[var(--primary)]" : "border-[var(--border)]"
       }`}
     >

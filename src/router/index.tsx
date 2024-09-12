@@ -68,52 +68,6 @@ const Router = () => {
       children,
     };
 
-    // if (childLink) {
-    //   const newPath = `${parent}/${link}${childLink ? `/${childLink}` : ""}`;
-
-    //   if (list.includes(obj.id)) {
-    //     const oldArray = routes[obj.parent] ?? [];
-    //     const newArr: any = [];
-
-    //     let oldObj: any = {};
-
-    //     oldArray.forEach((i: any) => {
-    //       if (i.id === obj.id) {
-    //         oldObj = { ...i };
-    //       } else {
-    //         newArr.push(i);
-    //       }
-    //     });
-
-    //     const oldObjectNewVersion: any = { ...oldObj };
-    //     oldObjectNewVersion.path = newPath;
-    //     oldObjectNewVersion.id = newPath;
-
-    //     oldObjectNewVersion.children = [...oldObjectNewVersion.children, obj];
-
-    //     newArr.push(oldObjectNewVersion);
-
-    //     setTimeout(() => {
-    //       if (!childList.includes(oldObjectNewVersion.id)) {
-    //         const newObjCopy = { ...routes };
-    //         newObjCopy[oldObjectNewVersion.parent] = newArr;
-
-    //         setChildList((prev) => [...prev, oldObjectNewVersion.id]);
-    //       }
-    //     }, 100);
-
-    //     // delete routes[obj.parent];
-    //     console.log("routes", routes);
-
-    //     // setRoutes({ ...routes, [obj.parent]: newArr });
-    //   }
-
-    //   return newPath;
-    // }
-
-    // const permissions = userInfo?.permissions ?? [];
-    // const found = permissions?.find((i: routeType) => i.value === path);
-
     if (!listNew.includes(obj.id)) {
       setNewRoutes((prev: any) => ({
         ...prev,

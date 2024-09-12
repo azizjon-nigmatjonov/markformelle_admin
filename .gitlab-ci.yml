@@ -12,7 +12,7 @@ before_script:
   - yarn -v
 
 build:
-  stage: build
+  stage: dist
   image: node:20
   script:
     - echo "VITE_BASE_URL=VITE_BASE_URL"
@@ -21,7 +21,7 @@ build:
     - yarn build
   artifacts:
     paths:
-      - build/
+      - dist/
 
 deploy:
   stage: deploy
@@ -32,6 +32,6 @@ deploy:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "cd $PROJECT_PATH"
   script:
-    - scp -r ./build/* $SSH_USER@$SSH_HOST:$PROJECT_PATH
+    - scp -r ./dist/* $SSH_USER@$SSH_HOST:$PROJECT_PATH
   only:
     - main
