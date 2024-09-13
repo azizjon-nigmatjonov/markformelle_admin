@@ -36,5 +36,6 @@
   "stopped": "Остановлено",
   "article": "Артикул",
   "machine_power": "Мощность машины",
-  "kniting_machine": "Вязальная машина"
+  "kniting_machine": "Вязальная машина",
+  "plan_amount": "Количество планов"
 }

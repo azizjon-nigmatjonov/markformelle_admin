@@ -355,196 +355,20 @@ input {
   }
 }
 
+.app-container {
+  display: flex;
+}
+
+.main-content {
+  flex: 1;
+  padding: 15px;
+}
+
 .machine-grid {
   display: grid;
   grid-template-columns: repeat(11, 1fr);
   gap: 15px;
-}
-
-$maxWidthContainer: 1440;
-$maxWidth: 1920;
-
-// Corrected Mixin
-@mixin adaptiveValue(
-  $property,
-  $startSize,
-  $minSize,
-  $type,
-  $maxWidthContainer,
-  $maxWidth
-) {
-  $addSize: $startSize - $minSize;
-
-  @if $type == 1 {
-    // For smaller widths than container width
-    #{$property}: #{$startSize}px;
-    @media (max-width: #{$maxWidthContainer}px) {
-      #{$property}: calc(
-        #{$minSize}px + #{$addSize} * ((100vw - 375px) / #{$maxWidthContainer -
-              375})
-      );
-    }
-  } @else if $type == 2 {
-    // For larger widths than container width
-    #{$property}: #{$startSize}px;
-    @media (min-width: #{$maxWidthContainer}px) {
-      #{$property}: calc(
-        #{$minSize}px + #{$addSize} * ((100vw - 375px) / #{$maxWidth - 375})
-      );
-    }
-  } @else {
-    // General case
-    #{$property}: calc(
-      #{$minSize}px + #{$addSize} * ((100vw - 375px) / #{$maxWidth - 375})
-    );
-  }
-}
-
-@mixin resAdaptCards($cardWidth, $rowGap, $columnGap) {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax($cardWidth, 1fr));
-  gap: $rowGap $columnGap;
-}
-
-.grid-machines-dashboard {
-  .title {
-    font-weight: bold;
-    @include adaptiveValue(font-size, 14, 14, 1, $maxWidthContainer, $maxWidth);
-
-    @media (max-width: 980px) {
-      font-size: 8px;
-    }
-    @media (max-width: 940px) {
-      font-size: 16px;
-    }
-  }
-
-  .circular {
-    --CircularProgress-size: 5.8rem;
-    --CircularProgress-trackThickness: 0.6rem;
-    --CircularProgress-progressThickness: 0.6rem;
-
-    @include adaptiveValue(font-size, 12, 10, 1, $maxWidthContainer, $maxWidth);
-
-    @media (max-width: 1100px) {
-      --CircularProgress-size: 4.5rem;
-      --CircularProgress-trackThickness: 0.4rem;
-      --CircularProgress-progressThickness: 0.4rem;
-    }
-
-    @media (max-width: 980px) {
-      --CircularProgress-size: 3.5rem;
-      --CircularProgress-trackThickness: 0.3rem;
-      --CircularProgress-progressThickness: 0.3rem;
-    }
-
-    @media (max-width: 940px) {
-      --CircularProgress-size: 7rem;
-      --CircularProgress-trackThickness: 0.6rem;
-      --CircularProgress-progressThickness: 0.6rem;
-    }
-  }
-
-  .circular {
-    p {
-      @media (max-width: 980px) {
-        font-size: 8px;
-      }
-    }
-  }
-
-  .circular .stack {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0;
-  }
-
-  // Text elements
-  .circular .stack p {
-    margin: 0;
-    @include adaptiveValue(font-size, 14, 8, 1, $maxWidthContainer, $maxWidth);
-  }
-
-  .circular .stack .divider {
-    height: 2px;
-    background-color: gray;
-    opacity: 0.5;
-    background: black;
-  }
-
-  .circular .stack .weight {
-    @include adaptiveValue(
-      font-size,
-      0.7rem,
-      0.5rem,
-      1,
-      $maxWidthContainer,
-      $maxWidth
-    );
-  }
-
-  .circular {
-    .MuiStack-root {
-      p {
-        @media (max-width: 980px) {
-          font-size: 8px !important;
-        }
-        @media (max-width: 940px) {
-          font-size: 12px !important;
-        }
-      }
-    }
-  }
-
-  .circular .stack .typography {
-    display: flex;
-    align-items: center;
-    @include adaptiveValue(font-size, 12, 6, 1, $maxWidthContainer, $maxWidth);
-
-    @media (max-width: 980px) {
-      font-size: 1px !important;
-    }
-    @media (max-width: 940px) {
-      font-size: 12px !important;
-    }
-  }
-
-  .circular .stack .typography .icon {
-    @include adaptiveValue(font-size, 18, 14, 1, $maxWidthContainer, $maxWidth);
-    margin-right: 4px;
-
-    @media (max-width: 980px) {
-      font-size: 20px;
-    }
-    @media (max-width: 940px) {
-      font-size: 18px;
-    }
-  }
-  .icon-connection {
-    font-size: 25px !important;
-    @media (max-width: 980px) {
-      font-size: 12px !important;
-    }
-    @media (max-width: 940px) {
-      font-size: 25px !important;
-    }
-  }
-  .MuiCard-root {
-    .MuiTypography-root {
-      font-size: 12px;
-      @media (max-width: 980px) {
-        font-size: 8px;
-      }
-      @media (max-width: 940px) {
-        font-size: 12px;
-      }
-    }
-  }
-  .circular {
- 
-    .MuiSvgIcon-root {
-      width: 10px;
-    }
+  @media (max-width: 980px) {
+    zoom: 0.5;
   }
 }

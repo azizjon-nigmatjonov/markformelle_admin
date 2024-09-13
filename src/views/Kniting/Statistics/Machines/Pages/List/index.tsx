@@ -69,6 +69,7 @@ export const MachineList = () => {
         title: t("plans"),
         id: ["plans", "id"],
         click: "custom",
+        width: 300,
         render: (val: any) => {
           return (
             <CList
@@ -76,17 +77,29 @@ export const MachineList = () => {
               setOpen={(opened: any) => setOpen(opened ? val[1] : false)}
               title="plans"
             >
-              <ul>
+              <ul className="space-y-5">
                 {val?.[0]?.map((item: any, index: number) => (
-                  <li key={index} className="py-2">
+                  <li key={index} className="px-2 border border-[var(--border)] rounded-[8px]">
                     <div>
-                      <div>
-                        <span>
-                          {t("plan")} {index + 1}
-                        </span>
+                      <div className="border-b border-[var(--border)] py-2 flex justify-between">
+                        <span>{t("plan_amount")}:</span>
+                        <span className="font-bold"> {item.plan} kg</span>
                       </div>
-                      <div>
-                        <p>{item.status}</p>
+                      <div className="border-b border-[var(--border)] py-2 flex justify-between">
+                        <span>{t("actual_plan")}:</span>
+                        <span className="font-bold"> {item.plan + 50} kg</span>
+                      </div>
+                      <div className="border-b border-[var(--border)] py-2 flex justify-between">
+                        <span>{t("start_date")}:</span>
+                        <span className="font-bold"> 14.09.2024</span>
+                      </div>
+                      <div className="border-b border-[var(--border)] py-2 flex justify-between">
+                        <span>{t("end_date")}:</span>
+                        <span className="font-bold"> 20.09.2024</span>
+                      </div>
+                      <div className="py-2 flex justify-between">
+                        <span>{t("estimated_date")}:</span>
+                        <span className="font-bold"> 20.09.2024</span>
                       </div>
                     </div>
                   </li>
@@ -113,12 +126,39 @@ export const MachineList = () => {
         title: t("machine_power"),
         id: "capacity",
       },
+      {
+        title: t("start_date"),
+        id: "start_date",
+        render: () => <>14.09.2024</>,
+      },
+      {
+        title: t("end_date"),
+        id: "end_date",
+        render: () => (
+          <div>
+            <span>20.09.2024 </span>
+            <span className="text-[var(--gray)]">(осталось 6 дней)</span>
+          </div>
+        ),
+      },
+      {
+        title: t("estimated_end_date"),
+        id: "estimated_end_date",
+        render: () => (
+          <p className="text-[var(--gray)] font-bold">20.09.2024</p>
+        ),
+      },
+      {
+        title: t("machine_place"),
+        id: "machine_place",
+        render: () => <>1 линия, 1 машина</>,
+      },
     ];
   }, [open]);
 
   const handleActions = (el: any, type: string) => {
     if (type === "view") {
-      navigateTo(`/kniting/machine/${el.id}`)
+      navigateTo(`/kniting/machine/${el.id}`);
     }
   };
 

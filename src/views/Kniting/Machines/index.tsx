@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CSearchInput from "../../../components/CElements/CSearchInput";
 import { Header } from "../../../components/UI/Header";
 import { CountBtns, FetchFunction } from "./Logic";
@@ -20,6 +20,8 @@ const KnitingMachines = () => {
   const [checked, setChecked]: any = useState(["all"]);
   const [list, setList]: any = useState([]);
   const [search, setSearch] = useState("");
+  const gridRef: any = useRef(null);
+  const [active, setActive] = useState(false);
 
   useEffect(() => {
     setInterval(() => {
@@ -147,6 +149,66 @@ const KnitingMachines = () => {
     setList(data);
   };
 
+  const [zoomPoint, setZoomPoint] = useState(1);
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+
+  useEffect(() => {
+    if (gridRef.current) {
+      const { clientWidth, clientHeight } = gridRef.current;
+
+      setDimensions({
+        width: clientWidth,
+        height: clientHeight,
+      });
+    }
+
+    const handleResize = () => {
+      if (gridRef.current) {
+        setDimensions({
+          width: gridRef.current.clientWidth,
+          height: gridRef.current.clientHeight,
+        });
+      }
+    };
+
+    if (active) {
+      handleResize();
+    }
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [active]);
+
+  const calculateZoom = () => {
+    const screenWidth = window.screen.width;
+    const screenHeight = window.screen.height;
+
+    const widthScale = screenWidth / dimensions.width;
+    const heightScale = screenHeight / dimensions.height;
+
+    const scaleFactor = Math.min(widthScale, heightScale);
+
+    if (screenWidth > 940) {
+      setZoomPoint(scaleFactor);
+    } else {
+      setZoomPoint(1)
+    }
+  };
+
+  useEffect(() => {
+    calculateZoom();
+  }, [dimensions.width]);
+
+  useEffect(() => {
+    if (list?.length) {
+      setTimeout(() => {
+        setActive(true);
+      }, 100);
+    }
+  }, [list, dimensions]);
+
   return (
     <>
       <Header>
@@ -183,9 +245,9 @@ const KnitingMachines = () => {
         </div>
       </Header>
 
-      <div className="p-5">
+      <div className="p-5" ref={gridRef} style={{ zoom: zoomPoint }}>
         <div
-          className={`grid-machines-dashboard grid overflow-x-scroll remove-scroll w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-3 md:gap-1 small_desktop:gap-3`}
+          className={`grid-machines-dashboard grid overflow-x-scroll remove-scroll w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-3`}
         >
           {list.map((machine: any, index: number) =>
             machine.idlocation ? (
