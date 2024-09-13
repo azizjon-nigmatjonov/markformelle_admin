@@ -110,20 +110,20 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
               justifyContent: "space-between",
             }}
           >
-            <Typography fontSize={16} fontStyle="SemiBold" fontWeight={"bold"}>
+            <p className="title">
               {machine.name}
-            </Typography>
-            <WifiOff sx={{ fontSize: 40 }} />
+            </p>
+            <WifiOff sx={{ fontSize: "2rem" }} className="icon-connection" />
             <Typography
               flex={"center"}
               textAlign={"center"}
-              fontSize={14}
+              fontSize={"0.7rem"}
               fontStyle="SemiBold"
               fontWeight={"bold"}
             >
               Нет соединения
             </Typography>
-            <Typography fontSize={14} fontStyle="SemiBold" fontWeight={"bold"}>
+            <Typography fontSize={"0.7rem"} fontStyle="SemiBold" fontWeight={"bold"}>
               {machine.ip_address}
             </Typography>
           </CardContent>
@@ -149,10 +149,10 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
               {machine.defect_num}
             </Typography>
 
-            <Typography fontSize={16} fontStyle="SemiBold" fontWeight={"bold"}>
+            <p className="title">
               {machine.name}
-            </Typography>
-            <p>{machine.artikul}</p>
+            </p>
+            <p className="title">{machine.artikul}</p>
             {/* <div className="w-[70px] h-[70px] screen:w-[80px] screen:h-[80px] mt-3">
               <ResponsivePie
                 data={responsiveData}
@@ -174,24 +174,23 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
               }
               determinate
               sx={{
-                // mb: "0px",
-                "--CircularProgress-size": "97px",
-                "--CircularProgress-trackThickness": "10px",
-                "--CircularProgress-progressThickness": "10px",
+                "--CircularProgress-size": "5.8rem",
+                "--CircularProgress-trackThickness": "0.6rem",
+                "--CircularProgress-progressThickness": "0.6rem",
               }}
-              className={`${cardColor}`}
+              className={`${cardColor} circular`}
             >
               <Stack spacing={0} alignItems={"center"}>
-                <p className={"text-sm"}>{machine.fkol_knit}</p>
+                <p className={"text-[12px]"}>{machine.fkol_knit}</p>
                 <Divider
                   orientation="horizontal"
                   sx={{ height: 2, backgroundColor: "gray", opacity: 0.5 }}
                   style={{ background: "black" }}
                 />
-                <p className={`text-[13px]`}>{machine.pkol_knit + " Kg"}</p>
+                <p className={`text-[0.7rem]`}>{machine.pkol_knit + " Kg"}</p>
 
                 <Typography
-                  fontSize={"13px"}
+                  fontSize={"12px"}
                   startDecorator={<SpeedIcon style={{ fontSize: 18 }} />}
                 >
                   {machine.rotation}
@@ -204,14 +203,15 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
               position={"absolute"}
               bottom={"2px"}
               right={"7px"}
+              fontSize={"0.8rem"}
               startDecorator={
-                <Bolt sx={{ marginRight: "-10px" }} fontSize="small" />
+                <Bolt sx={{ marginRight: "-5px", fontSize: "1rem" }} />
               }
             >
               {machine.efficiency + "%"}
             </Typography>
             <Typography
-              fontSize={12}
+              fontSize={"0.8rem"}
               position={"absolute"}
               bottom={"2px"}
               left={"5px"}

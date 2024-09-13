@@ -185,7 +185,7 @@ const KnitingMachines = () => {
 
       <div className="p-5">
         <div
-          className={`grid overflow-x-scroll w-[1600px] desktop:overflow-hidden desktop:w-auto grid-cols-11 gap-3`}
+          className={`grid-machines-dashboard grid overflow-x-scroll remove-scroll w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-3 md:gap-1 small_desktop:gap-3`}
         >
           {list.map((machine: any, index: number) =>
             machine.idlocation ? (
