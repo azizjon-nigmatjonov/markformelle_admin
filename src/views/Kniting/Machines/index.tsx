@@ -260,6 +260,7 @@ const KnitingMachines = () => {
         <div
           className={`grid-machines-dashboard grid overflow-x-scroll remove-scroll w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-3`}
         >
+          
           {list.map((machine: any, index: number) =>
             machine.idlocation ? (
               <MachineCard key={index} machine={machine} cardHeight={cardHeight} />
