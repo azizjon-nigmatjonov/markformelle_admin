@@ -117,7 +117,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine, cardHeight }) => {
               justifyContent: "space-between",
             }}
           >
-            <Typography fontSize={small_destop ? '24px' : "18px"} fontStyle="SemiBold" fontWeight={"bold"}>
+            <Typography fontSize={small_destop ? '28px' : "18px"} fontStyle="SemiBold" fontWeight={"bold"}>
               {machine.name}
             </Typography>
             <WifiOff sx={{ fontSize: 60 }} />
@@ -148,14 +148,14 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine, cardHeight }) => {
                 {machine.new_rolls}
               </Typography>
 
-              <Typography fontSize={small_destop ? '18px' : "16px"} position={"absolute"} top={"2px"} right={"5px"}>
+              <Typography fontSize={small_destop ? '24px' : "16px"} position={"absolute"} top={"2px"} right={"5px"}>
                 {machine.defect_num}
               </Typography>
 
-              <Typography fontSize={18} fontStyle="SemiBold" fontWeight={"bold"}>
+              <Typography fontSize={small_destop ? '28px' : "18px"} fontStyle="SemiBold" fontWeight={"bold"}>
                 {machine.name}
               </Typography>
-              <Typography>{machine.artikul}</Typography>
+              <Typography fontSize={small_destop ? '28px' : "18px"}>{machine.artikul}</Typography>
             </div>
 
             <CircularProgress
@@ -196,7 +196,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine, cardHeight }) => {
                 position={"absolute"}
                 bottom={"2px"}
                 right={"7px"}
-                fontSize={small_destop ? '18px' : "12px"}
+                fontSize={small_destop ? '22px' : "12px"}
                 startDecorator={
                   <Bolt sx={{ marginRight: "-10px" }} fontSize="small" />
                 }
@@ -204,7 +204,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine, cardHeight }) => {
                 {machine.efficiency + "%"}
               </Typography>
               <Typography
-                fontSize={small_destop ? '18px' : "12px"}
+                fontSize={small_destop ? '20px' : "12px"}
                 position={"absolute"}
                 bottom={"2px"}
                 left={"5px"}

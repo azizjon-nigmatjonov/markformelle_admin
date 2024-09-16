@@ -214,3 +214,8 @@ export const CountBtns = ({
     </div>
   );
 };
+
+
+export const CardLogic = () => {
+  
+}
