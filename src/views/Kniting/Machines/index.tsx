@@ -264,7 +264,7 @@ const KnitingMachines = () => {
             machine.idlocation ? (
               <MachineCard key={index} machine={machine} cardHeight={cardHeight} />
             ) : (
-              <div key={index}></div>
+              <div key={index}>empty</div>
             )
           )}
         </div>
