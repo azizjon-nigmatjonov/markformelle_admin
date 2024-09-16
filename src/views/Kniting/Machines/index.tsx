@@ -195,6 +195,8 @@ const KnitingMachines = () => {
 
     if (screenWidth < 980 && screenWidth > 940) {
       setCardHeight((screenWidth + screenHeight) / 7)
+    } else if (screenWidth > 1920) {
+      setCardHeight((screenWidth + screenHeight) / 7)
     } else {
       setCardHeight(0)
     }
