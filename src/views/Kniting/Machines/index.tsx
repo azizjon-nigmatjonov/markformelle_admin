@@ -202,7 +202,7 @@ const KnitingMachines = () => {
     }
 
     if (screenWidth > 940) {
-      setZoomPoint(scaleFactor - (open ? 0.04 : 0));
+      setZoomPoint(scaleFactor - (open ? 0.03 : 0));
     } else {
       setZoomPoint(1)
     }
