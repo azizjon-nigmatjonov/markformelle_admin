@@ -50,14 +50,15 @@ interface Machine {
 
 interface MachineCardProps {
   machine: Machine;
+  cardHeight: number
 }
 
-const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
+const MachineCard: React.FC<MachineCardProps> = ({ machine, cardHeight }) => {
   const [cardColor, setCardColor] = useState<string>("");
   const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
-    setCardColor(getCardColor()); 
+    setCardColor(getCardColor());
   }, [machine]);
 
   const getCardColor = (): string => {
@@ -101,7 +102,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
   return (
     <>
       <Card
-        sx={{ pt: 0 }}
+        sx={{ pt: 0, height: cardHeight }}
         className={`machine-card custom ${cardColor}`}
         onClick={() => setOpen(true)}
       >
@@ -127,29 +128,31 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
         )}
 
         {machine.no_connnection != "true" && (
-          <CardContent sx={{ mx: "auto", alignItems: "center" }}>
-            <Typography
-              position={"absolute"}
-              top={"2px"}
-              left={"5px"}
-              startDecorator={
-                <ViewDayOutlinedIcon
-                  sx={{ marginRight: "-5px" }}
-                  fontSize="small"
-                />
-              }
-            >
-              {machine.new_rolls}
-            </Typography>
+          <CardContent sx={{ mx: "auto", alignItems: "center", justifyItems: 'center', display: 'flex' }}>
+            <div>
+              <Typography
+                position={"absolute"}
+                top={"2px"}
+                left={"5px"}
+                startDecorator={
+                  <ViewDayOutlinedIcon
+                    sx={{ marginRight: "-5px" }}
+                    fontSize="small"
+                  />
+                }
+              >
+                {machine.new_rolls}
+              </Typography>
 
-            <Typography position={"absolute"} top={"2px"} right={"5px"}>
-              {machine.defect_num}
-            </Typography>
+              <Typography position={"absolute"} top={"2px"} right={"5px"}>
+                {machine.defect_num}
+              </Typography>
 
-            <Typography fontSize={18} fontStyle="SemiBold" fontWeight={"bold"}>
-              {machine.name}
-            </Typography>
-            <Typography>{machine.artikul}</Typography>
+              <Typography fontSize={18} fontStyle="SemiBold" fontWeight={"bold"}>
+                {machine.name}
+              </Typography>
+              <Typography>{machine.artikul}</Typography>
+            </div>
             <CircularProgress
               variant="soft"
               color="success"
@@ -182,24 +185,25 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
             </CircularProgress>
             {/* Display other machine information */}
 
-            <Typography
-              position={"absolute"}
-              bottom={"2px"}
-              right={"7px"}
-              startDecorator={
-                <Bolt sx={{ marginRight: "-10px" }} fontSize="small" />
-              }
-            >
-              {machine.efficiency + "%"}
-            </Typography>
-            <Typography
-              fontSize={12}
-              position={"absolute"}
-              bottom={"2px"}
-              left={"5px"}
-            >
-              {machine.soft_version}
-            </Typography>
+            <div>
+              <Typography
+                position={"absolute"}
+                bottom={"2px"}
+                right={"7px"}
+                startDecorator={
+                  <Bolt sx={{ marginRight: "-10px" }} fontSize="small" />
+                }
+              >
+                {machine.efficiency + "%"}
+              </Typography>
+              <Typography
+                fontSize={12}
+                position={"absolute"}
+                bottom={"2px"}
+                left={"5px"}
+              >
+                {machine.soft_version}
+              </Typography></div>
           </CardContent>
         )}
       </Card>

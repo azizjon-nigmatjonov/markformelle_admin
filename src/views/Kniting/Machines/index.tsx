@@ -22,6 +22,7 @@ const KnitingMachines = () => {
   const [search, setSearch] = useState("");
   const gridRef: any = useRef(null);
   const [active, setActive] = useState(false);
+  const [cardHeight, setCardHeight] = useState(150)
 
   useEffect(() => {
     setInterval(() => {
@@ -184,7 +185,8 @@ const KnitingMachines = () => {
   const calculateZoom = () => {
     const screenWidth = window.screen.width;
     const screenHeight = window.screen.height;
-
+    console.log('screenHeight', screenHeight / 7 - 12);
+    setCardHeight((screenWidth + screenHeight) / 7)
     const widthScale = screenWidth / dimensions.width;
     const heightScale = screenHeight / dimensions.height;
 
@@ -251,7 +253,7 @@ const KnitingMachines = () => {
         >
           {list.map((machine: any, index: number) =>
             machine.idlocation ? (
-              <MachineCard key={index} machine={machine} />
+              <MachineCard key={index} machine={machine} cardHeight={cardHeight} />
             ) : (
               <div key={index}></div>
             )

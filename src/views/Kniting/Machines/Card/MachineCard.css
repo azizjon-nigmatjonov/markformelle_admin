@@ -54,11 +54,11 @@
 .MuiCircularProgress-root.black {
   background-color: rgba(0, 0, 0, 0.4) !important;
 }
-/* 
+
 .MuiCard-root {
-  .MuiTypography-root.MuiTypography-body-md {
-    @media (max-width: 1400px) {
-      font-size: 12px;
-    }
+  .MuiCardContent-root {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
-} */
+}
