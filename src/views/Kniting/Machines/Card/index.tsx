@@ -17,6 +17,7 @@ import ViewDayOutlinedIcon from "@mui/icons-material/ViewDayOutlined";
 import { Bolt, WifiOff } from "@mui/icons-material";
 
 import ModalCard from "./ModalCard";
+import { useScreenSize } from "../../../../hooks/useScreenSize";
 
 interface Machine {
   id: number;
@@ -99,6 +100,8 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine, cardHeight }) => {
     }
   };
 
+  const small_destop = useScreenSize("small_destop")
+
   return (
     <>
       <Card
@@ -114,7 +117,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine, cardHeight }) => {
               justifyContent: "space-between",
             }}
           >
-            <Typography fontSize={18} fontStyle="SemiBold" fontWeight={"bold"}>
+            <Typography fontSize={small_destop ? '24px' : "18px"} fontStyle="SemiBold" fontWeight={"bold"}>
               {machine.name}
             </Typography>
             <WifiOff sx={{ fontSize: 60 }} />
@@ -128,7 +131,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine, cardHeight }) => {
         )}
 
         {machine.no_connnection != "true" && (
-          <CardContent sx={{ mx: "auto", alignItems: "center", justifyItems: 'center', display: 'flex' }}>
+          <CardContent sx={{ mx: "auto", alignItems: "center", justifyItems: 'center', display: 'flex', width: '100%', height: '100%' }}>
             <div>
               <Typography
                 position={"absolute"}
@@ -140,11 +143,12 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine, cardHeight }) => {
                     fontSize="small"
                   />
                 }
+                fontSize={small_destop ? '24px' : "16px"}
               >
                 {machine.new_rolls}
               </Typography>
 
-              <Typography position={"absolute"} top={"2px"} right={"5px"}>
+              <Typography fontSize={small_destop ? '18px' : "16px"} position={"absolute"} top={"2px"} right={"5px"}>
                 {machine.defect_num}
               </Typography>
 
@@ -153,6 +157,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine, cardHeight }) => {
               </Typography>
               <Typography>{machine.artikul}</Typography>
             </div>
+
             <CircularProgress
               variant="soft"
               color="success"
@@ -164,25 +169,26 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine, cardHeight }) => {
               determinate
               sx={{
                 // mb: "0px",
-                "--CircularProgress-size": "110px",
-                "--CircularProgress-trackThickness": "10px",
-                "--CircularProgress-progressThickness": "10px",
+                "--CircularProgress-size": small_destop ? '150px' : "120px",
+                "--CircularProgress-trackThickness": small_destop ? '15px' : "10px",
+                "--CircularProgress-progressThickness": small_destop ? '15px' : "10px",
               }}
             >
               <Stack spacing={0} alignItems={"center"}>
-                <Typography>{machine.fkol_knit}</Typography>
+                <Typography fontSize={small_destop ? '20px' : "16px"}>{machine.fkol_knit}</Typography>
                 <Divider
                   orientation="horizontal"
                   sx={{ height: 2, backgroundColor: "gray", opacity: 0.5 }}
                   style={{ background: "black" }}
                 />
-                <Typography>{machine.pkol_knit + " Kg"}</Typography>
+                <Typography fontSize={small_destop ? '20px' : "16px"}>{machine.pkol_knit + " Kg"}</Typography>
 
-                <Typography startDecorator={<SpeedIcon />}>
+                <Typography fontSize={small_destop ? '20px' : "16px"} startDecorator={<SpeedIcon />}>
                   {machine.rotation}
                 </Typography>
               </Stack>
             </CircularProgress>
+
             {/* Display other machine information */}
 
             <div>
@@ -190,6 +196,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine, cardHeight }) => {
                 position={"absolute"}
                 bottom={"2px"}
                 right={"7px"}
+                fontSize={small_destop ? '18px' : "12px"}
                 startDecorator={
                   <Bolt sx={{ marginRight: "-10px" }} fontSize="small" />
                 }
@@ -197,7 +204,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine, cardHeight }) => {
                 {machine.efficiency + "%"}
               </Typography>
               <Typography
-                fontSize={12}
+                fontSize={small_destop ? '18px' : "12px"}
                 position={"absolute"}
                 bottom={"2px"}
                 left={"5px"}

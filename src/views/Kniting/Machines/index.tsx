@@ -4,7 +4,7 @@ import { Header } from "../../../components/UI/Header";
 import { CountBtns, FetchFunction } from "./Logic";
 import MachineCard from "./Card";
 import CDriver from "../../../components/CElements/CDivider";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const searchedWords = [
   "podr_id_knitt",
@@ -24,7 +24,7 @@ const KnitingMachines = () => {
   const gridRef: any = useRef(null);
   const [active, setActive] = useState(false);
   const [cardHeight, setCardHeight] = useState(0)
-  // const openHeader = useSelector((state: any) => state.sidebar.openHeader);
+  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
 
   useEffect(() => {
     setInterval(() => {
@@ -184,7 +184,7 @@ const KnitingMachines = () => {
     };
   }, [active]);
 
-  const calculateZoom = () => {
+  const calculateZoom = (open: boolean) => {
     const screenWidth = window.screen.width;
     const screenHeight = window.screen.height;
 
@@ -202,15 +202,15 @@ const KnitingMachines = () => {
     }
 
     if (screenWidth > 940) {
-      setZoomPoint(scaleFactor);
+      setZoomPoint(scaleFactor - (open ? 0.04 : 0));
     } else {
       setZoomPoint(1)
     }
   };
 
   useEffect(() => {
-    calculateZoom();
-  }, [dimensions.width]);
+    calculateZoom(openHeader);
+  }, [dimensions.width, openHeader]);
 
   useEffect(() => {
     if (list?.length) {
