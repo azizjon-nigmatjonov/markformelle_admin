@@ -102,7 +102,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine, cardHeight }) => {
   return (
     <>
       <Card
-        sx={{ pt: 0, height: cardHeight }}
+        sx={{ pt: 0, height: cardHeight ? cardHeight : 'auto' }}
         className={`machine-card custom ${cardColor}`}
         onClick={() => setOpen(true)}
       >
