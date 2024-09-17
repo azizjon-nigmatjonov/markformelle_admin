@@ -93,7 +93,7 @@ export const MyCard = ({ machine }: Props) => {
                     <div className='flex flex-col items-center justify-center absolute top-1/2 -translate-y-1/2'>
                         <div className='image'><WifiOff /></div>
                         <p className='sub-title font-semibold'>Нет соединения</p>
-                        <p className='text'>{machine.ip_address}</p>
+                        <p className='text-error'>{machine.ip_address}</p>
                     </div>
                 </div>
             )}
