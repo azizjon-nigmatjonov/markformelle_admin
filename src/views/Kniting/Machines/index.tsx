@@ -250,12 +250,12 @@ const KnitingMachines = () => {
       <div className="px-2 py-2 lg:p-3" ref={gridRef}>
         <div
           className={`grid-machines-dashboard grid overflow-x-scroll remove-scroll w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-3 md:gap-[1px] lg:gap-3`}
-          style={{ height: checked?.[0] !== 'all' ? 'auto' : window.screen.width < 940 ? 'auto' : openHeader ? 'calc(100vh - 70px)' : window.screen.width < 980 ? 'calc(100vh - 20px)' : 'calc(100vh - 22px)' }}
+          style={{ height: checked?.[0] !== 'all' || search.length ? 'auto' : window.screen.width < 940 ? 'auto' : openHeader ? 'calc(100vh - 70px)' : window.screen.width < 980 ? 'calc(100vh - 20px)' : 'calc(100vh - 22px)' }}
 
         >
           {list.map((machine: any, index: number) =>
             machine.idlocation ? (
-              <div key={index} style={{ width: '100%', height: checked?.[0] !== 'all' ? 'calc((100vh / 7) - 18px)' : '100%' }}>
+              <div key={index} style={{ width: '100%', height: checked?.[0] !== 'all' || search.length ? 'calc((100vh / 7) - 18px)' : '100%' }}>
                 <MyCard machine={machine} zoomPoint={zoomPoint} />
               </div>
             ) : (
