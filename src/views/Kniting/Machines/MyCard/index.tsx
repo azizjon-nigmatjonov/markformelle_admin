@@ -110,7 +110,7 @@ export const MyCard = ({ machine }: Props) => {
                         </div>
                     </div>
                     <div className={`w-full flex justify-center py-1 absolute top-[57%] left-1/2 -translate-x-1/2 -translate-y-1/2`}>
-                        <CircularProgress strokeWidth={window.screen.width > 1920 ? 20 : size > 130 ? 15 : 5} value={Number(machine.fakt_percentage) > 100
+                        <CircularProgress strokeWidth={window.screen.width > 1500 ? 15 : 5} value={Number(machine.fakt_percentage) > 100
                             ? 100
                             : Number(machine.fakt_percentage)} maxValue={100} size={size} >
                             <div>
