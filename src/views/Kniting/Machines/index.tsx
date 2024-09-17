@@ -26,13 +26,22 @@ const KnitingMachines = () => {
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
 
   useEffect(() => {
+    let interval: any; // Declare the interval variable
+
     if (!searchVal?.length) {
-      setInterval(() => {
-        refetch();
-      }, 10000);
+        // Set the interval only when searchVal is inactive (empty)
+        interval = setInterval(() => {
+            refetch();
+        }, 10000);
     }
 
-  }, [searchVal]);
+    // Cleanup function to clear the interval
+    return () => {
+        if (interval) {
+            clearInterval(interval); // Clear the interval when searchVal changes or component unmounts
+        }
+    };
+}, [searchVal, refetch]); // Include refetch as a dependency
 
   const searchWods = (val: string) => {
     setSearch(val);
