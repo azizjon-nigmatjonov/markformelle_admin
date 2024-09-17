@@ -26,10 +26,13 @@ const KnitingMachines = () => {
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
 
   useEffect(() => {
-    setInterval(() => {
-      refetch();
-    }, 10000);
-  }, []);
+    if (!searchVal?.length) {
+      setInterval(() => {
+        refetch();
+      }, 10000);
+    }
+
+  }, [searchVal]);
 
   const searchWods = (val: string) => {
     setSearch(val);
@@ -246,7 +249,7 @@ const KnitingMachines = () => {
           )}
         </div>
       </Header>
-          
+
       <div className="px-2 py-2 lg:p-3" ref={gridRef}>
         <div
           className={`grid-machines-dashboard grid overflow-x-scroll remove-scroll w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-3 md:gap-[1px] lg:gap-3`}
