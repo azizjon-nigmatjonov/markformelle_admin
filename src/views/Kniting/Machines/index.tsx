@@ -26,22 +26,10 @@ const KnitingMachines = () => {
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
 
   useEffect(() => {
-    let interval: any; // Declare the interval variable
-
-    if (!searchVal?.length) {
-        // Set the interval only when searchVal is inactive (empty)
-        interval = setInterval(() => {
-            refetch();
-        }, 10000);
-    }
-
-    // Cleanup function to clear the interval
-    return () => {
-        if (interval) {
-            clearInterval(interval); // Clear the interval when searchVal changes or component unmounts
-        }
-    };
-}, [searchVal, refetch]); // Include refetch as a dependency
+    setInterval(() => {
+      refetch();
+    }, 10000);
+  }, []); // Include refetch as a dependency
 
   const searchWods = (val: string) => {
     setSearch(val);
@@ -73,6 +61,7 @@ const KnitingMachines = () => {
   };
 
   useEffect(() => {
+    if (search?.length) return
     let listData: any = [];
     if (checked.length && !checked.includes("all")) {
       bodyData.forEach((element: any) => {
@@ -124,7 +113,7 @@ const KnitingMachines = () => {
     }
 
     setList(listData);
-  }, [bodyData, checked]);
+  }, [bodyData, checked, search]);
 
   const handleCheck = (obj: any) => {
     const data: any = [];
