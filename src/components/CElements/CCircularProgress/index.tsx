@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import './style.scss';
 
 type CircularProgressProps = {
@@ -20,8 +20,14 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
 }) => {
     const radius = (size - strokeWidth) / 2;
     const circumference = 2 * Math.PI * radius;
+    
+    // Calculate progress based on value and maxValue
     const progress = Math.min((value / maxValue) * 100, 100);
-    const dashOffset = circumference - (progress / 100) * circumference;
+
+    // Use useMemo for efficient calculation
+    const dashOffset = useMemo(() => {
+        return circumference - (progress / 100) * circumference;
+    }, [progress, circumference]); // Depend on progress and circumference
 
     return (
         <div className="circular-progress" style={{ width: size, height: size }}>
@@ -37,7 +43,7 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
                 />
                 <circle
                     className="circle-progress"
-                    stroke="#4caf50"
+                    stroke="#1f7a1f"
                     fill="transparent"
                     strokeWidth={strokeWidth}
                     r={radius}
@@ -49,9 +55,6 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
             </svg>
             <div className="circular-progress-text">
                 {children}
-                {/* <span className="value">{value.toFixed(2)}</span>
-        <span className="max">/ {maxValue.toFixed(2)} {unit}</span>
-        {label && <span className="label">{label}</span>} */}
             </div>
         </div>
     );

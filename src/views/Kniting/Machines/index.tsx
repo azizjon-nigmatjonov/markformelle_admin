@@ -210,7 +210,7 @@ const KnitingMachines = () => {
       }, 100);
     }
   }, [list, dimensions]);
-
+  console.log('checked', checked);
   return (
     <>
       <Header>
@@ -246,16 +246,16 @@ const KnitingMachines = () => {
           )}
         </div>
       </Header>
-
+          
       <div className="p-5" ref={gridRef}>
         <div
-          className={`grid-machines-dashboard grid overflow-x-scroll remove-scroll w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-[6px] lg:gap-3`}
-          style={{ height: window.screen.width < 940 ? 'auto' : openHeader ? 'calc(100vh - 70px)' : 'calc(100vh - 30px)' }}
+          className={`grid-machines-dashboard grid overflow-x-scroll remove-scroll w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-3 md:gap-[3px] lg:gap-3`}
+          style={{ height: checked?.[0] !== 'all' ? 'auto' : window.screen.width < 940 ? 'auto' : openHeader ? 'calc(100vh - 70px)' : 'calc(100vh - 25px)' }}
 
         >
           {list.map((machine: any, index: number) =>
             machine.idlocation ? (
-              <div key={index} style={{ width: '100%', height: '100%' }}>
+              <div key={index} style={{ width: '100%', height: checked?.[0] !== 'all' ? 'calc((100vh / 7) - 18px)' : '100%' }}>
                 <MyCard machine={machine} zoomPoint={zoomPoint} />
               </div>
             ) : (

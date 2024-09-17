@@ -35,7 +35,7 @@ $maxWidthContainer: 1400;
 }
 
 .mycard.green {
-    background-color: #6cce65;
+    background-color: #6cce65 !important;
 }
 
 .mycard.orange {
@@ -61,17 +61,18 @@ $maxWidthContainer: 1400;
 
 .wrapper {
     @include adapviteValue(padding, 8, 4, 1);
-    padding-top: 2px !important;
-    padding-bottom: 2px !important;
+    padding: 6px 12px;
+    // padding-top: 2px !important;
+    // padding-bottom: 2px !important;
 }
 
 .title {
-    @include adapviteValue(font-size, 18, 9, 1);
+    @include adapviteValue(font-size, 24, 9, 1);
     font-weight: bold;
 }
 
 .sub-title {
-    @include adapviteValue(font-size, 16, 9, 1);
+    @include adapviteValue(font-size, 22, 9, 1);
 
     svg {
         @include adapviteValue(width, 20, 10, 1);
@@ -80,6 +81,12 @@ $maxWidthContainer: 1400;
 
 .text {
     @include adapviteValue(font-size, 16, 9, 1);
+
+    
+    &.inner {
+        @include adapviteValue(font-size, 17, 9, 1);
+        font-weight: 700;
+    }
 
     svg {
         @include adapviteValue(width, 20, 10, 1);

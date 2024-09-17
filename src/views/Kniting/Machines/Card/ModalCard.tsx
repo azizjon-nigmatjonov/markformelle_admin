@@ -60,9 +60,10 @@ interface Machine {
 interface MachineCardProps {
   machine: Machine;
   setOpen: (val: boolean) => void;
+  version?: number
 }
 
-const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => {} }) => {
+const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => {}, version = 0 }) => {
   const [cardColor, setCardColor] = React.useState<string>(""); // Initialize card color state
 
   React.useEffect(() => {
@@ -121,14 +122,23 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => {} }) 
                 <Typography>Номер машины </Typography>
                 <Typography>{machine.name}</Typography>
               </ListItem>
-              <CDriver direction="horizantal" />
+              <ListDivider />
               <ListItem
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
                 <Typography>IP адрес </Typography>
                 <Typography>{machine.ip_address}</Typography>
               </ListItem>
-              <CDriver direction="horizantal" />
+              <ListDivider />
+              <ListItem
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
+                <Typography>Версия </Typography>
+                <Typography>
+                  {machine.soft_version}
+                </Typography>
+              </ListItem>
+              <ListDivider />
               <ListItem
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
@@ -181,6 +191,7 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => {} }) 
                   {Number(machine.pkol_knit) - Number(machine.fkol_knit)} кг
                 </Typography>
               </ListItem>
+              <ListDivider />
             </List>
             <CDriver direction="vertical" classes="h-[400px]" />
             <Stack

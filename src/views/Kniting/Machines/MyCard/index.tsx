@@ -6,9 +6,11 @@ import CircularProgress from '../../../../components/CElements/CCircularProgress
 import { Bolt, WifiOff } from "@mui/icons-material";
 import { Modal } from '@mui/joy';
 import ModalCard from '../Card/ModalCard';
+import SpeedIcon from "@mui/icons-material/Speed";
+
 interface Props {
     machine: any;
-    zoomPoint: number
+    zoomPoint: number;
 }
 
 export const MyCard = ({ machine }: Props) => {
@@ -17,9 +19,9 @@ export const MyCard = ({ machine }: Props) => {
 
     const updateSize = () => {
         if (window.screen.width < 980 && window.screen.width > 940) {
-            setSize(cardRef?.current?.clientWidth * 0.50);
+            setSize(cardRef?.current?.clientHeight * 0.65);
         } else {
-            setSize(cardRef?.current?.clientWidth * 0.55);
+            setSize(cardRef?.current?.clientHeight * 0.70);
         }
     };
 
@@ -102,27 +104,31 @@ export const MyCard = ({ machine }: Props) => {
                             <ViewDayOutlinedIcon />
                             <span> {machine.new_rolls}</span>
                         </div>
-                        <p className="title">{machine.name}</p>
+                        <p className="title absolute left-1/2 -translate-x-1/2">{machine.name}</p>
                         <div className='sub-title'>
                             {machine.defect_num}
                         </div>
                     </div>
-                    <div className={`w-full flex justify-center py-1 ${window.screen.width < 940 || window.screen.width > 980 ? '' : 'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'}`}>
-                        <CircularProgress strokeWidth={window.screen.width > 1920 ? 20 : size > 80 ? 10 : 5} value={Number(machine.fakt_percentage) > 100
+                    <div className={`w-full flex justify-center py-1 absolute top-[57%] left-1/2 -translate-x-1/2 -translate-y-1/2`}>
+                        <CircularProgress strokeWidth={window.screen.width > 1920 ? 20 : size > 80 ? 15 : 5} value={Number(machine.fakt_percentage) > 100
                             ? 100
                             : Number(machine.fakt_percentage)} maxValue={100} size={size} >
                             <div>
                                 <p className='text inner'>{machine.fkol_knit}</p>
-                                <div className='w-full h-[1px] bg-[var(--border)]'></div>
+                                <div className='w-full h-[1px] bg-[var(--black)] mb-[4px]'></div>
                                 <p className='text inner'>
                                     {machine.pkol_knit + " Kg"}
                                 </p>
+                                <div className='inline-flex justify-center relative text inner ml-[15px]'>
+                                    <div className='absolute left-[-2px] rotate-[90deg]'><SpeedIcon /></div> <span>{machine.rotation}</span>
+                                </div>
                             </div>
                         </CircularProgress>
                     </div>
                     <div className='flex justify-between items-end'>
-                        <p className='text'>{machine.soft_version}</p>
-                        <p className='text'><Bolt />{machine.efficiency + "%"}</p>
+                        <p></p>
+                        {/* <p className='text'>{machine.soft_version}</p> */}
+                        <p className='sub-title'><Bolt />{machine.efficiency + "%"}</p>
                     </div>
                 </div>
             )}
