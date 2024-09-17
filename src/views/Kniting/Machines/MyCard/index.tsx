@@ -19,7 +19,7 @@ export const MyCard = ({ machine }: Props) => {
 
     const updateSize = () => {
         if (window.screen.width < 980 && window.screen.width > 940) {
-            setSize(cardRef?.current?.clientHeight * 0.65);
+            setSize(cardRef?.current?.clientHeight * 0.67);
         } else {
             setSize(cardRef?.current?.clientHeight * 0.70);
         }
