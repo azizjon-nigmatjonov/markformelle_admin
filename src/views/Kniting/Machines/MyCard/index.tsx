@@ -117,7 +117,7 @@ export const MyCard = ({ machine }: Props) => {
                                 <p className='text inner'>{machine.fkol_knit}</p>
                                 <div className='w-full h-[1px] bg-[var(--black)] mb-[4px]'></div>
                                 <p className='text inner'>
-                                    {machine.pkol_knit + " Kg"}
+                                    {machine.pkol_knit.toString().substring(0, machine.pkol_knit.toString().indexOf('.') ? machine.pkol_knit.toString().indexOf('.')+2 : machine.pkol_knit.length) + " Kg"}
                                 </p>
                                 <div className='inline-flex justify-center relative text inner ml-[15px]'>
                                     <div className='absolute left-[0px] rotate-[90deg]'><SpeedIcon /></div> <span>{machine.rotation}</span>
