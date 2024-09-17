@@ -60,10 +60,9 @@ interface Machine {
 interface MachineCardProps {
   machine: Machine;
   setOpen: (val: boolean) => void;
-  version?: number
 }
 
-const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => {}, version = 0 }) => {
+const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => { } }) => {
   const [cardColor, setCardColor] = React.useState<string>(""); // Initialize card color state
 
   React.useEffect(() => {
@@ -104,14 +103,14 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => {}, ve
   const [checked2, setChecked2] = React.useState(machine.not_broken == "true");
 
   return (
-    <ModalDialog sx={{ width: "900px" }}>
+    <ModalDialog sx={{ width: "900px", minHeight: '558px' }}>
       <ModalClose />
       <Typography></Typography>
       <Typography></Typography>
       <Tabs aria-label="Basic tabs" defaultValue={0} sx={{ width: "100%" }}>
         <TabList>
           <Tab>Информация о машине</Tab>
-          <Tab>Информация о предстоящих заказах</Tab>
+          <Tab>Заказы в очереди</Tab>
         </TabList>
         <TabPanel value={0} style={{ width: "100%" }}>
           <Stack spacing={2} direction="row">
@@ -133,12 +132,12 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => {}, ve
               <ListItem
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
-                <Typography>Версия </Typography>
+                <Typography>Версия программы </Typography>
                 <Typography>
                   {machine.soft_version}
                 </Typography>
               </ListItem>
-              <ListDivider />
+              <ListDivider sx={{ background: 'var(--gray)' }} />
               <ListItem
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
@@ -359,7 +358,7 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => {}, ve
         </TabPanel>
         <TabPanel value={1} style={{ width: "50%" }}>
           <Stack>
-            <OrderList machineName={machine.name} />
+            <OrderList machineName={machine.id} />
           </Stack>
         </TabPanel>
       </Tabs>

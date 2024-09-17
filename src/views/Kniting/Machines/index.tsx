@@ -210,7 +210,7 @@ const KnitingMachines = () => {
       }, 100);
     }
   }, [list, dimensions]);
-  console.log('checked', checked);
+
   return (
     <>
       <Header>

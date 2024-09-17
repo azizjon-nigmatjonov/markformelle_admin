@@ -1,24 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, Typography } from "@mui/joy";
 import Sheet from "@mui/joy/Sheet";
-import useCQuery from "../../../../hooks/useCQuery";
 import { Skeleton } from "@mui/material";
+import axios from "axios";
 
 interface OrderListProps {
-  machineName: string; // Define the type of machineId prop
+  machineName: number; // Define the type of machineId prop
 }
 
 const OrderList: React.FC<OrderListProps> = ({ machineName }) => {
-  const { data: orderData, isLoading } = useCQuery({
-    key: `GET_ORDER_LIST`,
-    endpoint: `https://retoolapi.dev/VLMg5q/machines?machine_name={machineName}`,
-    params: {
-      // page: 1,
-    },
-    options: {
-      enabled: !!machineName,
-    },
-  });
+  const [data, setData] = useState({ loading: true, list: [] });
+
+  useEffect(() => {
+    axios(`https://retoolapi.dev/VLMg5q/machines?machine_id=${machineName - 70}`).then((res: any) => {
+      
+      setData({ list: res?.data ?? [], loading: false })
+    }).catch(() => {
+      setData({ list: [], loading: false })
+    })
+  }, [])
 
   return (
     <Sheet
@@ -29,14 +29,14 @@ const OrderList: React.FC<OrderListProps> = ({ machineName }) => {
         borderRadius: "sm",
       }}
     >
-      {isLoading ? (
+      {data.loading ? (
         <div>
           <Skeleton style={{ height: "200px" }} />
           <Skeleton style={{ height: "200px" }} />
           <Skeleton style={{ height: "200px" }} />
         </div>
       ) : (
-        orderData.map((order: any) => (
+        data.list?.map((order: any) => (
           <Card key={order.id} sx={{ marginBottom: 2 }}>
             <CardContent>
               <Typography>{`Order No: ${order.order_no}`}</Typography>
@@ -49,6 +49,10 @@ const OrderList: React.FC<OrderListProps> = ({ machineName }) => {
           </Card>
         ))
       )}
+      {!data.loading && !data.list?.length ? <div className="flex justify-center flex-col items-center h-full w-full">
+        <img width={200} src="/images/no-data.png" alt="data" />
+        <p>Нет информации</p>
+      </div> : ''}
     </Sheet>
   );
 };
