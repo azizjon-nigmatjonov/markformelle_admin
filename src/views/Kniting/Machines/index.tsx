@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import CSearchInput from "../../../components/CElements/CSearchInput";
 import { Header } from "../../../components/UI/Header";
 import { CountBtns, FetchFunction } from "./Logic";
-import MachineCard from "./Card";
 import CDriver from "../../../components/CElements/CDivider";
 import { useSelector } from "react-redux";
+import { MyCard } from "./MyCard";
 
 const searchedWords = [
   "podr_id_knitt",
@@ -23,7 +23,6 @@ const KnitingMachines = () => {
   const [search, setSearch] = useState("");
   const gridRef: any = useRef(null);
   const [active, setActive] = useState(false);
-  const [cardHeight, setCardHeight] = useState(0)
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
 
   useEffect(() => {
@@ -184,33 +183,25 @@ const KnitingMachines = () => {
     };
   }, [active]);
 
-  const calculateZoom = (open: boolean) => {
+  const calculateZoom = () => {
     const screenWidth = window.screen.width;
     const screenHeight = window.screen.height;
 
     const widthScale = screenWidth / dimensions.width;
     const heightScale = screenHeight / dimensions.height;
-    
+
     const scaleFactor = Math.min(widthScale, heightScale);
 
-    if (screenWidth < 980 && screenWidth > 940) {
-      setCardHeight((screenWidth + screenHeight) / 7)
-    } else if (screenWidth > 1920) {
-      setCardHeight((screenWidth + screenHeight) / 7)
-    } else {
-      setCardHeight(0)
-    }
-
     if (screenWidth > 940) {
-      setZoomPoint(scaleFactor - (open ? 0.03 : 0));
+      setZoomPoint(scaleFactor);
     } else {
       setZoomPoint(1)
     }
   };
 
   useEffect(() => {
-    calculateZoom(openHeader);
-  }, [dimensions.width, openHeader]);
+    calculateZoom();
+  }, [dimensions.width]);
 
   useEffect(() => {
     if (list?.length) {
@@ -256,14 +247,17 @@ const KnitingMachines = () => {
         </div>
       </Header>
 
-      <div className="p-5" ref={gridRef} style={{ zoom: zoomPoint }}>
+      <div className="p-5" ref={gridRef}>
         <div
-          className={`grid-machines-dashboard grid overflow-x-scroll remove-scroll w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-3`}
+          className={`grid-machines-dashboard grid overflow-x-scroll remove-scroll w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-[6px] lg:gap-3`}
+          style={{ height: window.screen.width < 940 ? 'auto' : openHeader ? 'calc(100vh - 70px)' : 'calc(100vh - 30px)' }}
+
         >
-          
           {list.map((machine: any, index: number) =>
             machine.idlocation ? (
-              <MachineCard key={index} machine={machine} cardHeight={cardHeight} />
+              <div key={index} style={{ width: '100%', height: '100%' }}>
+                <MyCard machine={machine} zoomPoint={zoomPoint} />
+              </div>
             ) : (
               <div key={index}></div>
             )

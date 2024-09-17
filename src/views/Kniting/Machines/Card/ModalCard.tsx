@@ -62,7 +62,7 @@ interface MachineCardProps {
   setOpen: (val: boolean) => void;
 }
 
-const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen }) => {
+const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => {} }) => {
   const [cardColor, setCardColor] = React.useState<string>(""); // Initialize card color state
 
   React.useEffect(() => {

@@ -51,10 +51,9 @@ interface Machine {
 
 interface MachineCardProps {
   machine: Machine;
-  cardHeight: number
 }
 
-const MachineCard: React.FC<MachineCardProps> = ({ machine, cardHeight }) => {
+const MachineCard: React.FC<MachineCardProps> = ({ machine }) => {
   const [cardColor, setCardColor] = useState<string>("");
   const [open, setOpen] = React.useState(false);
 
@@ -105,7 +104,7 @@ const MachineCard: React.FC<MachineCardProps> = ({ machine, cardHeight }) => {
   return (
     <>
       <Card
-        sx={{ pt: 0, height: cardHeight ? cardHeight : 'auto' }}
+        sx={{ pt: 0 }}
         className={`machine-card custom ${cardColor}`}
         onClick={() => setOpen(true)}
       >
