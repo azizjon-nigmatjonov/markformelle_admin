@@ -247,10 +247,10 @@ const KnitingMachines = () => {
         </div>
       </Header>
           
-      <div className="p-5" ref={gridRef}>
+      <div className="p-3 lg:p-5" ref={gridRef}>
         <div
           className={`grid-machines-dashboard grid overflow-x-scroll remove-scroll w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-3 md:gap-[3px] lg:gap-3`}
-          style={{ height: checked?.[0] !== 'all' ? 'auto' : window.screen.width < 940 ? 'auto' : openHeader ? 'calc(100vh - 70px)' : 'calc(100vh - 25px)' }}
+          style={{ height: checked?.[0] !== 'all' ? 'auto' : window.screen.width < 940 ? 'auto' : openHeader ? 'calc(100vh - 70px)' : 'calc(100vh - 20px)' }}
 
         >
           {list.map((machine: any, index: number) =>
