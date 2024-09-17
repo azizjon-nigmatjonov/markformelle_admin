@@ -114,10 +114,10 @@ export const MyCard = ({ machine }: Props) => {
                             ? 100
                             : Number(machine.fakt_percentage)} maxValue={100} size={size} >
                             <div>
-                                <p className='text inner'>{machine.fkol_knit}</p>
+                                <p className='text inner'>{machine.fkol_knit.toString().substring(0, machine.fkol_knit.toString().indexOf('.') !== -1 ? machine.fkol_knit.toString().indexOf('.')+2 : machine.fkol_knit.length) + " Kg"}</p>
                                 <div className='w-full h-[1px] bg-[var(--black)] mb-[4px]'></div>
                                 <p className='text inner'>
-                                    {machine.pkol_knit.toString().substring(0, machine.pkol_knit.toString().indexOf('.') ? machine.pkol_knit.toString().indexOf('.')+2 : machine.pkol_knit.length) + " Kg"}
+                                    {machine.pkol_knit.toString().substring(0, machine.pkol_knit.toString().indexOf('.') !== -1 ? machine.pkol_knit.toString().indexOf('.')+2 : machine.pkol_knit.length) + " Kg"}
                                 </p>
                                 <div className='inline-flex justify-center relative text inner ml-[15px]'>
                                     <div className='absolute left-[0px] rotate-[90deg]'><SpeedIcon /></div> <span>{machine.rotation}</span>
