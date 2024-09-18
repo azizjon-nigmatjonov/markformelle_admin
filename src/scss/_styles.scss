@@ -368,7 +368,7 @@ input {
   display: grid;
   grid-template-columns: repeat(11, 1fr);
   gap: 15px;
-  @media (max-width: 1000px) {
+  @media (max-width: 1440px) {
     zoom: 0.5;
   }
 }
