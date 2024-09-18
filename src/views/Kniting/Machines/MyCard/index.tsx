@@ -18,7 +18,7 @@ export const MyCard = ({ machine }: Props) => {
     const cardRef: any = useRef(null);
 
     const updateSize = () => {
-        if (window.screen.width < 980 && window.screen.width > 940) {
+        if (window.screen.width < 1000 && window.screen.width > 940) {
             setSize(cardRef?.current?.clientHeight * 0.69);
         } else {
             setSize(cardRef?.current?.clientHeight * 0.70);
@@ -110,7 +110,7 @@ export const MyCard = ({ machine }: Props) => {
                         </div>
                     </div>
                     <div className={`w-full flex justify-center py-1 absolute top-[57%] left-1/2 -translate-x-1/2 -translate-y-1/2`}>
-                        <CircularProgress strokeWidth={window.screen.width > 1400 ? 15 : window.screen.width < 980 ? 9 : 5} value={Number(machine.fakt_percentage) > 100
+                        <CircularProgress strokeWidth={window.screen.width > 1400 ? 15 : window.screen.width < 1000 ? 9 : 5} value={Number(machine.fakt_percentage) > 100
                             ? 100
                             : Number(machine.fakt_percentage)} maxValue={100} size={size} >
                             <div>
