@@ -14,7 +14,7 @@ const CalendarUI = ({ list = [], month, loading }: Props) => {
     <div className="rounded-[18px]  bg-white border border-[var(--lineGray)]">
       <Header />
 
-      {loading ? <div className="h-[1000px] mt-[-220px]">
+      {loading ? <div className="h-[1200px] mt-[-220px]">
         <Skeleton style={{ height: "100%", borderRadius: "14px" }} />
       </div> : <Body list={list} month={month} />}
     </div>
