@@ -61,7 +61,7 @@ const KnitingMachines = () => {
   };
 
   useEffect(() => {
-    if (search?.length) return
+    if (search?.length) return;
     let listData: any = [];
     if (checked.length && !checked.includes("all")) {
       bodyData.forEach((element: any) => {
@@ -196,7 +196,7 @@ const KnitingMachines = () => {
     if (screenWidth > 940) {
       setZoomPoint(scaleFactor);
     } else {
-      setZoomPoint(1)
+      setZoomPoint(1);
     }
   };
 
@@ -231,7 +231,7 @@ const KnitingMachines = () => {
           {searchVal?.length ? (
             <div className="absolute left-0 top-full bg-white shadow-lg rounded-[12px] w-full overflow-scroll max-h-[400px]">
               <ul className="space-y-2 py-2">
-                {searchVal.map((item: any, index: number) => (
+                {searchVal?.map((item: any, index: number) => (
                   <li
                     key={index}
                     onClick={() => handleCheck(item)}
@@ -251,12 +251,31 @@ const KnitingMachines = () => {
       <div className="px-2 py-2 lg:p-3" ref={gridRef}>
         <div
           className={`grid-machines-dashboard grid overflow-x-scroll remove-scroll w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-3 md:gap-[1px] lg:gap-3`}
-          style={{ height: checked?.[0] !== 'all' || search.length ? 'auto' : window.screen.width < 940 ? 'auto' : openHeader ? 'calc(100vh - 75px)' : window.screen.width < 1440 ? 'calc(100vh - 20px)' : 'calc(100vh - 25px)' }}
-
+          style={{
+            height:
+              checked?.[0] !== "all" || search.length
+                ? "auto"
+                : window.screen.width < 940
+                ? "auto"
+                : openHeader
+                ? "calc(100vh - 75px)"
+                : window.screen.width < 1440
+                ? "calc(100vh - 20px)"
+                : "calc(100vh - 25px)",
+          }}
         >
-          {list.map((machine: any, index: number) =>
+          {list?.map((machine: any, index: number) =>
             machine.idlocation ? (
-              <div key={index} style={{ width: '100%', height: checked?.[0] !== 'all' || search.length ? 'calc((100vh / 7) - 18px)' : '100%' }}>
+              <div
+                key={index}
+                style={{
+                  width: "100%",
+                  height:
+                    checked?.[0] !== "all" || search.length
+                      ? "calc((100vh / 7) - 18px)"
+                      : "100%",
+                }}
+              >
                 <MyCard machine={machine} zoomPoint={zoomPoint} />
               </div>
             ) : (

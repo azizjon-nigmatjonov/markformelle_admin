@@ -47,7 +47,7 @@ export const Sidebar = () => {
           style={{ height: "100vh" }}
         >
           <div className="h-[50px] text-xl flex justify-center w-full items-center border-b border-[var(--border)] px-1">
-            <img src="/images/logo.png" alt="logo" />
+            <img src="/images/logo_mini.png" alt="logo" />
           </div>
           <SidebarSection
             list={routes}

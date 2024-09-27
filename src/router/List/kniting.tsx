@@ -2,10 +2,13 @@ import { lazy } from "react";
 import { AnalyticsPlan } from "../../views/Kniting/Statistics/Plan";
 
 const KnitingMachines = lazy(() => import("../../views/Kniting/Machines"));
-const KnitingdAnalytics = lazy(() => import("../../views/Kniting/Statistics/Machines"));
+const KnitingdAnalytics = lazy(
+  () => import("../../views/Kniting/Statistics/Machines")
+);
 const KnitingMachine = lazy(
   () => import("../../views/Kniting/Machines/SinglePage")
 );
+const KnitingProcess = lazy(() => import("../../views/Kniting/Process"));
 
 export const knitingList = [
   {
@@ -16,6 +19,15 @@ export const knitingList = [
     parent_icon: <img width={18} src="/images/kniting.png" alt="kniting" />,
     icon: "kniting",
     element: <KnitingMachines />,
+    auth: false,
+  },
+  {
+    parent: "kniting",
+    link: "knitting_process",
+    sidebar: true,
+    title: "process",
+    icon: <img width={18} src="/images/process.png" alt="kniting" />,
+    element: <KnitingProcess />,
     auth: false,
   },
   {
