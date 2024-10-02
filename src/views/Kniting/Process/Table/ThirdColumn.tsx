@@ -6,7 +6,7 @@ const list = [
 
 const list2 = [
   {
-    value: "120 ч",
+    value: "120 kg",
   },
 ];
 
