@@ -202,7 +202,7 @@ const KnitingMachines = () => {
 
   useEffect(() => {
     calculateZoom();
-  }, [dimensions.width]);
+  }, [dimensions.width, dimensions.height]);
 
   useEffect(() => {
     if (list?.length) {
