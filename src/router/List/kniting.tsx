@@ -25,7 +25,7 @@ export const knitingList = [
     parent: "kniting",
     link: "knitting_process",
     sidebar: true,
-    title: "process",
+    title: "couriers_dashboard",
     icon: <img width={18} src="/images/process.png" alt="kniting" />,
     element: <KnitingProcess />,
     auth: false,
