@@ -6,6 +6,8 @@ const useTimer = () => {
   const [seconds, setSeconds] = useState(0);
 
   useEffect(() => {
+    console.log("seconds", seconds);
+
     const interval = setInterval(() => {
       setSeconds((prevSeconds) => {
         if (prevSeconds === 59) {

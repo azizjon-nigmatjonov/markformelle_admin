@@ -1,393 +1,176 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CCard from "../../../../components/CElements/CCard";
 import useTimer from "../../../../hooks/useTimer";
 import "./style.scss";
+import { MachineConstantList } from "../../../../constants/machines";
 
 export const FirstColumn = () => {
   const { timerFN } = useTimer();
-  const [effect, setEffect] = useState(false);
+  const [effect, setEffect] = useState<string[]>([]);
+  const [newList, setNewList] = useState<any[]>([]);
+
+  // Delay time between each card rotation
+  const ROTATION_DELAY = 120;
+
+  useEffect(() => {
+    let arr = [...MachineConstantList];
+
+    arr = arr.map((item: any, index: number) => ({
+      ...item,
+      roll_count: index,
+    }));
+
+    const reversedList = arr.reverse().splice(0, 9);
+    setNewList(reversedList);
+  }, []);
+
+  // Sequential card rotation logic
+  useEffect(() => {
+    if (newList.length > 0) {
+      rotateCardsSequentially();
+    }
+  }, [newList]);
+
+  const rotateCardsSequentially = () => {
+    newList.forEach((item, index) => {
+      setTimeout(() => {
+        setEffect((prevEffect) => [...prevEffect, item.name]);
+      }, index * ROTATION_DELAY); // Delay each card rotation by 4 seconds
+    });
+  };
 
   return (
-    <div className="grid grid-cols-1 grid-rows-2 gap-y-3 h-full">
-      <CCard classes="h-full">
-        <div className="flex flex-col space-y-2 h-full">
-          <div className="grid grid-cols-2 gap-2 h-[75%]">
+    <CCard classes="h-full">
+      <div className="grid flex-col grid-flow-row-dense gap-y-2 h-full grid-rows-4">
+        <div className="grid grid-flow-row-dense grid-cols-4 gap-2 row-span-3">
+          {/* Big Card */}
+          {newList?.slice(0, 1).map((item) => (
             <div
-              onClick={() => setEffect(true)}
-              className={`card relative w-full h-full ${
-                effect ? "rotated" : ""
+              key={item.name}
+              className={`card col-span-3 relative h-full ${
+                effect.includes(item.name) ? "rotated" : ""
               }`}
             >
               <div className="bg-[#6cce65] rounded-xl h-full px-2">
                 <div className="frontofcard flex flex-col items-center font-medium h-full justify-center">
-                  <h2 className="text-[80px] font-bold">A-046</h2>
+                  <h2 className="text-6xl small_desktop:text-[120px] font-bold title-big mb-2">
+                    {item.name}
+                  </h2>
 
-                  <p className="text-[36px]">34 рулон</p>
+                  <p className="text-5xl small_desktop:text-[60px]">
+                    {item.roll_count} рулон
+                  </p>
 
-                  <p className="text-[36px] text-red-700">{timerFN()}</p>
+                  <p className="text-5xl small_desktop:text-[60px] text-red-700">
+                    {timerFN()}
+                  </p>
                 </div>
               </div>
               <div className="bg-[#6cce65] rounded-xl h-full px-2 backofcard">
                 <div className="flex flex-col items-center font-medium h-full justify-center">
-                  <h2 className="text-[80px] font-bold">A-034</h2>
+                  <h2 className="text-6xl small_desktop:text-[120px] font-bold title-big mb-2">
+                    {item.name}
+                  </h2>
 
-                  <p className="text-[36px]">30 рулон</p>
+                  <p className="text-5xl small_desktop:text-[60px]">
+                    3 {item.roll_count} рулон
+                  </p>
 
-                  <p className="text-[36px] text-red-700">{timerFN()}</p>
+                  <p className="text-5xl small_desktop:text-[60px] text-red-700">
+                    {timerFN()}
+                  </p>
                 </div>
               </div>
             </div>
+          ))}
 
-            {/* Mini Cards Row */}
-            <div className="grid grid-cols-3 grid-rows-3 gap-2">
-              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
-                <div className="flex flex-col items-center font-medium h-full justify-center">
-                  <h2 className="font-bold">A-031</h2>
+          {/* Mini Cards Row */}
+          <div className="grid grid-cols-1 grid-rows-3 gap-2">
+            {newList.slice(1, 4).map((item) => (
+              <div
+                key={item.name}
+                className={`h-full card ${
+                  effect.includes(item.name) ? "rotated" : ""
+                }`}
+              >
+                <div className="frontofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
+                  <div className="flex flex-col items-center font-medium h-full justify-center">
+                    <h2 className="font-bold small_desktop:text-5xl mb-2">
+                      {item.name}
+                    </h2>
 
-                  <p className="text-sm">31 рулон</p>
+                    <p className="text-sm small_desktop:text-3xl font-semibold">
+                      {item.roll_count} рулон
+                    </p>
 
-                  <p className="text-sm text-red-700">{timerFN()}</p>
+                    <p className="text-sm small_desktop:text-3xl text-red-700">
+                      {timerFN()}
+                    </p>
+                  </div>
+                </div>
+                <div className="backofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
+                  <div className="flex flex-col items-center font-medium h-full justify-center">
+                    <h2 className="font-bold small_desktop:text-5xl mb-2">
+                      {item.name}
+                    </h2>
+
+                    <p className="text-sm small_desktop:text-3xl font-semibold">
+                      {item.roll_count} рулон
+                    </p>
+
+                    <p className="text-sm small_desktop:text-3xl text-red-700">
+                      {timerFN()}
+                    </p>
+                  </div>
                 </div>
               </div>
-              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
-                <div className="flex flex-col items-center font-medium h-full justify-center">
-                  <h2 className="font-bold">A-031</h2>
-
-                  <p className="text-sm">31 рулон</p>
-
-                  <p className="text-sm text-red-700">{timerFN()}</p>
-                </div>
-              </div>
-              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
-                <div className="flex flex-col items-center font-medium h-full justify-center">
-                  <h2 className="font-bold">A-031</h2>
-
-                  <p className="text-sm">31 рулон</p>
-
-                  <p className="text-sm text-red-700">{timerFN()}</p>
-                </div>
-              </div>
-              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
-                <div className="flex flex-col items-center font-medium h-full justify-center">
-                  <h2 className="font-bold">A-031</h2>
-
-                  <p className="text-sm">31 рулон</p>
-
-                  <p className="text-sm text-red-700">{timerFN()}</p>
-                </div>
-              </div>
-              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
-                <div className="flex flex-col items-center font-medium h-full justify-center">
-                  <h2 className="font-bold">A-031</h2>
-
-                  <p className="text-sm">31 рулон</p>
-
-                  <p className="text-sm text-red-700">{timerFN()}</p>
-                </div>
-              </div>
-              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
-                <div className="flex flex-col items-center font-medium h-full justify-center">
-                  <h2 className="font-bold">A-031</h2>
-
-                  <p className="text-sm">31 рулон</p>
-
-                  <p className="text-sm text-red-700">{timerFN()}</p>
-                </div>
-              </div>
-              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
-                <div className="flex flex-col items-center font-medium h-full justify-center">
-                  <h2 className="font-bold">A-031</h2>
-
-                  <p className="text-sm">31 рулон</p>
-
-                  <p className="text-sm text-red-700">{timerFN()}</p>
-                </div>
-              </div>
-              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
-                <div className="flex flex-col items-center font-medium h-full justify-center">
-                  <h2 className="font-bold">A-031</h2>
-
-                  <p className="text-sm">31 рулон</p>
-
-                  <p className="text-sm text-red-700">{timerFN()}</p>
-                </div>
-              </div>
-              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
-                <div className="flex flex-col items-center font-medium h-full justify-center">
-                  <h2 className="font-bold">A-031</h2>
-
-                  <p className="text-sm">31 рулон</p>
-
-                  <p className="text-sm text-red-700">{timerFN()}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Big Card */}
-          </div>
-
-          {/* Last Row */}
-          <div className="grid grid-cols-6 gap-x-2 h-[25%]">
-            <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
-              <div className="flex flex-col items-center font-medium h-full justify-center">
-                <h2 className="font-bold">A-031</h2>
-
-                <p className="text-sm">31 рулон</p>
-
-                <p className="text-sm text-red-700">{timerFN()}</p>
-              </div>
-            </div>
-            <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
-              <div className="flex flex-col items-center font-medium h-full justify-center">
-                <h2 className="font-bold">A-031</h2>
-
-                <p className="text-sm">31 рулон</p>
-
-                <p className="text-sm text-red-700">{timerFN()}</p>
-              </div>
-            </div>
-            <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
-              <div className="flex flex-col items-center font-medium h-full justify-center">
-                <h2 className="font-bold">A-031</h2>
-
-                <p className="text-sm">31 рулон</p>
-
-                <p className="text-sm text-red-700">{timerFN()}</p>
-              </div>
-            </div>
-            <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
-              <div className="flex flex-col items-center font-medium h-full justify-center">
-                <h2 className="font-bold">A-031</h2>
-
-                <p className="text-sm">31 рулон</p>
-
-                <p className="text-sm text-red-700">{timerFN()}</p>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
-      </CCard>
 
-      <CCard classes="h-full">
-        <div className="grid grid-cols-6 grid-rows-4 gap-2 h-full">
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
+        {/* Last Row */}
+        <div className="grid grid-cols-4 gap-x-2 ">
+          {newList.slice(4, 8).map((item) => (
+            <div
+              key={item.name}
+              className={`h-full card ${
+                effect.includes(item.name) ? "rotated" : ""
+              }`}
+            >
+              <div className="frontofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
+                <div className="flex flex-col items-center font-medium h-full justify-center">
+                  <h2 className="font-bold small_desktop:text-5xl mb-2">
+                    {item.name}
+                  </h2>
 
-              <p className="text-sm">20 рулон</p>
+                  <p className="text-sm small_desktop:text-3xl font-semibold">
+                    {item.roll_count} рулон
+                  </p>
 
-              <p className="text-sm text-red-700">{timerFN()}</p>
+                  <p className="text-sm small_desktop:text-3xl text-red-700">
+                    {timerFN()}
+                  </p>
+                </div>
+              </div>
+              <div className="backofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
+                <div className="flex flex-col items-center font-medium h-full justify-center">
+                  <h2 className="font-bold small_desktop:text-5xl mb-2">
+                    {item.name}
+                  </h2>
+
+                  <p className="text-sm small_desktop:text-3xl font-semibold">
+                    {item.roll_count} рулон
+                  </p>
+
+                  <p className="text-sm small_desktop:text-3xl text-red-700">
+                    {timerFN()}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
-          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
-            <div className="flex flex-col items-center font-medium h-full justify-center">
-              <h2 className="font-bold">A-046</h2>
-
-              <p className="text-sm">20 рулон</p>
-
-              <p className="text-sm text-red-700">{timerFN()}</p>
-            </div>
-          </div>
+          ))}
         </div>
-      </CCard>
-    </div>
+      </div>
+    </CCard>
   );
 };

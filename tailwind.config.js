@@ -4,6 +4,7 @@ export default {
   theme: {
     extend: {
       screens: {
+        bigDesktop: '1540',
         desktop: "1400px",
         small_desktop: "1280px",
         ipod: "940px",
