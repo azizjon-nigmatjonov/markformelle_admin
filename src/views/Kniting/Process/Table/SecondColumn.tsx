@@ -38,15 +38,15 @@ export const SecondColumn = () => {
     {
       title: "Список грузчиков",
       renderHead: () => (
-        <h3 className="small_desktop:text-xl font-semibold text-[var(--gray)]">
+        <h3 className="small_desktop:text-2xl font-semibold text-[var(--gray)]">
           Список грузчиков
         </h3>
       ),
       width: 330,
       id: ["workers", "order"],
       render: (val: any) => (
-        <div className="flex items-center space-x-3">
-          <div>
+        <div className="flex items-center space-x-3 py-4">
+          <div className="w-[40px]">
             {val[1] === 0 ? (
               <img className="w-[40px]" src="/images/medal_1.png" alt="first" />
             ) : val[1] === 1 ? (
@@ -65,32 +65,36 @@ export const SecondColumn = () => {
               />
             )}
           </div>
-          <p className="small_desktop:text-2xl font-semibold">{val[0]}</p>
+          <p className="small_desktop:text-4xl font-semibold whitespace-nowrap">
+            {val[0]}
+          </p>
         </div>
       ),
     },
     {
       title: "C начала месяца",
       renderHead: () => (
-        <h3 className="small_desktop:text-lg font-semibold text-[var(--gray)]">
+        <h3 className="small_desktop:text-2xl font-semibold text-[var(--gray)]">
           C начала месяца
         </h3>
       ),
+      width: 140,
       id: "by_month",
       render: (val: string) => (
-        <p className="small_desktop:text-2xl font-semibold">{val}</p>
+        <p className="small_desktop:text-3xl font-semibold">{val}</p>
       ),
     },
     {
       title: "В этой смене",
       id: "by_day",
       renderHead: () => (
-        <h3 className="small_desktop:text-lg font-semibold text-[var(--gray)]">
+        <h3 className="small_desktop:text-2xl font-semibold text-[var(--gray)] py-4">
           В этой смене
         </h3>
       ),
+      width: 140,
       render: (val: string) => (
-        <p className="small_desktop:text-2xl font-semibold">{val}</p>
+        <p className="small_desktop:text-3xl font-semibold">{val}</p>
       ),
     },
   ];
@@ -103,6 +107,7 @@ export const SecondColumn = () => {
         filterParams={{}}
         disablePagination={true}
         tableSetting={false}
+        isResizeble={false}
       />
     </div>
   );
