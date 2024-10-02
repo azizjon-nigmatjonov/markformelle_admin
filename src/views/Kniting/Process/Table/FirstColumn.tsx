@@ -13,14 +13,18 @@ export const FirstColumn = () => {
   const ROTATION_DELAY = 120;
 
   useEffect(() => {
-    let arr = [...MachineConstantList];
+    let arr: any = [];
 
-    arr = arr.map((item: any, index: number) => ({
-      ...item,
-      roll_count: index,
-    }));
+    MachineConstantList.forEach((item: any, index: number) => {
+      if (index < 40 && index > 29) {
+        arr.push({
+          ...item,
+          roll_count: index,
+        });
+      }
+    });
 
-    const reversedList = arr.reverse().splice(0, 9);
+    const reversedList = arr.reverse();
     setNewList(reversedList);
   }, []);
 
@@ -42,12 +46,12 @@ export const FirstColumn = () => {
   return (
     <CCard classes="h-full">
       <div className="grid flex-col grid-flow-row-dense gap-y-2 h-full grid-rows-4">
-        <div className="grid grid-flow-row-dense grid-cols-4 gap-2 row-span-3">
+        <div className="grid grid-flow-row-dense grid-cols-3 gap-2 row-span-2">
           {/* Big Card */}
           {newList?.slice(0, 1).map((item) => (
             <div
               key={item.name}
-              className={`card col-span-3 relative h-full ${
+              className={`card col-span-2 relative h-full ${
                 effect.includes(item.name) ? "rotated" : ""
               }`}
             >
@@ -73,7 +77,7 @@ export const FirstColumn = () => {
                   </h2>
 
                   <p className="text-5xl small_desktop:text-[60px]">
-                    3 {item.roll_count} рулон
+                    {item.roll_count} рулон
                   </p>
 
                   <p className="text-5xl small_desktop:text-[60px] text-red-700">
@@ -85,8 +89,8 @@ export const FirstColumn = () => {
           ))}
 
           {/* Mini Cards Row */}
-          <div className="grid grid-cols-1 grid-rows-3 gap-2">
-            {newList.slice(1, 4).map((item) => (
+          <div className="grid grid-cols-1 grid-rows-2 gap-2">
+            {newList.slice(1, 3).map((item) => (
               <div
                 key={item.name}
                 className={`h-full card ${
@@ -129,8 +133,8 @@ export const FirstColumn = () => {
         </div>
 
         {/* Last Row */}
-        <div className="grid grid-cols-4 gap-x-2 ">
-          {newList.slice(4, 8).map((item) => (
+        <div className="grid grid-cols-3 gap-2 row-span-2">
+          {newList.slice(4, 12).map((item) => (
             <div
               key={item.name}
               className={`h-full card ${
