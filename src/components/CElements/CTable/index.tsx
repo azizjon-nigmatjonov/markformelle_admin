@@ -142,7 +142,7 @@ const CTable = ({
     let list = [];
 
     if (bodyColumns.length < filterParams.perPage) {
-      for (let i = 0; i <  filterParams.perPage; i++) {
+      for (let i = 0; i < filterParams.perPage; i++) {
         const obj: Record<string, any> = {};
         headColumns.forEach((col) => {
           obj[col.title] = "";
@@ -323,8 +323,8 @@ const CTable = ({
   };
 
   return (
-    <div className="relative">
-      <div className="border border-[var(--gray20)] common-shadow rounded-[18px] overflow-hidden bg-white">
+    <div className="relative h-full">
+      <div className="border border-[var(--gray20)] common-shadow rounded-[18px] h-full overflow-hidden bg-white">
         {tableSetting ? (
           <HeaderSettings
             totalCount={meta.totalCount}
@@ -340,7 +340,7 @@ const CTable = ({
         )}
         <div
           id="table"
-          className={`overflow-x-scroll designed-scroll ${
+          className={` ${
             tableSetting ? "border-t border-[var(--gray20)]" : ""
           }`}
           ref={tableRef}

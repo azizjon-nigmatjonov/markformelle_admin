@@ -30,7 +30,7 @@ const CCard = ({
       ) : (
         ""
       )}
-      <div className="p-5">{children}</div>
+      <div className="p-3 h-full">{children}</div>
       {footer ? (
         <div className="p-5 border-t border-[var(--gray20)]">{footer}</div>
       ) : (

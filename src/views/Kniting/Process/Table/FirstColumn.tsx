@@ -1,127 +1,390 @@
+import CCard from "../../../../components/CElements/CCard";
+import useTimer from "../../../../hooks/useTimer";
+
 export const FirstColumn = () => {
+  const { timerFN } = useTimer();
   return (
-    <div className="border-r border-[var(--gray30)] container">
-      <div
-        className="grid grid-cols-1 grid-rows-2 gap-y-3"
-        style={{ height: "calc(100vh - 40px)" }}
-      >
-        <div className="grid grid-cols-2 gap-3">
-          <div className="grid grid-cols-3 grid-rows-3 gap-3">
-            <div className="bg-green-500 rounded-3xl flex items-center justify-center text-2xl">
-              251
-            </div>
-            <div className="bg-green-500 rounded-3xl flex items-center justify-center text-2xl">
-              252
-            </div>
-            <div className="bg-green-500 rounded-3xl flex items-center justify-center text-2xl">
-              253
-            </div>
-            <div className="bg-green-500 rounded-3xl flex items-center justify-center text-2xl">
-              254
-            </div>
-            <div className="bg-green-500 rounded-3xl flex items-center justify-center text-2xl">
-              255
-            </div>
-            <div className="bg-green-500 rounded-3xl flex items-center justify-center text-2xl">
-              256
-            </div>
-            <div className="bg-green-500 rounded-3xl flex items-center justify-center text-2xl">
-              253
-            </div>
-            <div className="bg-green-500 rounded-3xl flex items-center justify-center text-2xl">
-              254
-            </div>
-            <div className="bg-green-500 rounded-3xl flex items-center justify-center text-2xl">
-              255
-            </div>
-          </div>
-          <div className="bg-green-500 h-full rounded-3xl flex items-center justify-center flex-col">
-            <div>
-              <h2 className="text-[56px]">250</h2>
+    <div className="grid grid-cols-1 grid-rows-2 gap-y-3 h-full">
+      <CCard classes="h-full">
+        <div className="flex flex-col space-y-2 h-full">
+          <div className="grid grid-cols-2 gap-2 h-[75%]">
+            {/* Mini Cards Row */}
+            <div className="grid grid-cols-3 grid-rows-3 gap-2">
+              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
+                <div className="flex flex-col items-center font-medium h-full justify-center">
+                  <h2 className="font-bold">A-031</h2>
+
+                  <p className="text-sm">31 рулон</p>
+
+                  <p className="text-sm text-red-700">{timerFN()}</p>
+                </div>
+              </div>
+              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
+                <div className="flex flex-col items-center font-medium h-full justify-center">
+                  <h2 className="font-bold">A-031</h2>
+
+                  <p className="text-sm">31 рулон</p>
+
+                  <p className="text-sm text-red-700">{timerFN()}</p>
+                </div>
+              </div>
+              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
+                <div className="flex flex-col items-center font-medium h-full justify-center">
+                  <h2 className="font-bold">A-031</h2>
+
+                  <p className="text-sm">31 рулон</p>
+
+                  <p className="text-sm text-red-700">{timerFN()}</p>
+                </div>
+              </div>
+              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
+                <div className="flex flex-col items-center font-medium h-full justify-center">
+                  <h2 className="font-bold">A-031</h2>
+
+                  <p className="text-sm">31 рулон</p>
+
+                  <p className="text-sm text-red-700">{timerFN()}</p>
+                </div>
+              </div>
+              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
+                <div className="flex flex-col items-center font-medium h-full justify-center">
+                  <h2 className="font-bold">A-031</h2>
+
+                  <p className="text-sm">31 рулон</p>
+
+                  <p className="text-sm text-red-700">{timerFN()}</p>
+                </div>
+              </div>
+              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
+                <div className="flex flex-col items-center font-medium h-full justify-center">
+                  <h2 className="font-bold">A-031</h2>
+
+                  <p className="text-sm">31 рулон</p>
+
+                  <p className="text-sm text-red-700">{timerFN()}</p>
+                </div>
+              </div>
+              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
+                <div className="flex flex-col items-center font-medium h-full justify-center">
+                  <h2 className="font-bold">A-031</h2>
+
+                  <p className="text-sm">31 рулон</p>
+
+                  <p className="text-sm text-red-700">{timerFN()}</p>
+                </div>
+              </div>
+              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
+                <div className="flex flex-col items-center font-medium h-full justify-center">
+                  <h2 className="font-bold">A-031</h2>
+
+                  <p className="text-sm">31 рулон</p>
+
+                  <p className="text-sm text-red-700">{timerFN()}</p>
+                </div>
+              </div>
+              <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
+                <div className="flex flex-col items-center font-medium h-full justify-center">
+                  <h2 className="font-bold">A-031</h2>
+
+                  <p className="text-sm">31 рулон</p>
+
+                  <p className="text-sm text-red-700">{timerFN()}</p>
+                </div>
+              </div>
             </div>
 
-            {/* <div>
-              <p>31 ta</p>
+            {/* Big Card */}
+            <div className="bg-[#6cce65] rounded-xl h-full px-2">
+              <div className="flex flex-col items-center font-medium h-full justify-center">
+                <h2 className="text-[70px] font-bold">A-046</h2>
+
+                <p className="text-[36px]">34 рулон</p>
+
+                <p className="text-[36px] text-red-700">{timerFN()}</p>
+              </div>
             </div>
-            <div>
-              <span>1:33:00</span>
-            </div> */}
+          </div>
+
+          {/* Last Row */}
+          <div className="grid grid-cols-6 gap-x-2 h-[25%]">
+            <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
+              <div className="flex flex-col items-center font-medium h-full justify-center">
+                <h2 className="font-bold">A-031</h2>
+
+                <p className="text-sm">31 рулон</p>
+
+                <p className="text-sm text-red-700">{timerFN()}</p>
+              </div>
+            </div>
+            <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
+              <div className="flex flex-col items-center font-medium h-full justify-center">
+                <h2 className="font-bold">A-031</h2>
+
+                <p className="text-sm">31 рулон</p>
+
+                <p className="text-sm text-red-700">{timerFN()}</p>
+              </div>
+            </div>
+            <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
+              <div className="flex flex-col items-center font-medium h-full justify-center">
+                <h2 className="font-bold">A-031</h2>
+
+                <p className="text-sm">31 рулон</p>
+
+                <p className="text-sm text-red-700">{timerFN()}</p>
+              </div>
+            </div>
+            <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
+              <div className="flex flex-col items-center font-medium h-full justify-center">
+                <h2 className="font-bold">A-031</h2>
+
+                <p className="text-sm">31 рулон</p>
+
+                <p className="text-sm text-red-700">{timerFN()}</p>
+              </div>
+            </div>
+            <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
+              <div className="flex flex-col items-center font-medium h-full justify-center">
+                <h2 className="font-bold">A-031</h2>
+
+                <p className="text-sm">31 рулон</p>
+
+                <p className="text-sm text-red-700">{timerFN()}</p>
+              </div>
+            </div>
+            <div className="bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-auto">
+              <div className="flex flex-col items-center font-medium h-full justify-center">
+                <h2 className="font-bold">A-031</h2>
+
+                <p className="text-sm">31 рулон</p>
+
+                <p className="text-sm text-red-700">{timerFN()}</p>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="grid grid-cols-6 grid-rows-3 gap-3 border-t border-[var(--gray30)] pt-3">
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            251
+      </CCard>
+
+      <CCard classes="h-full">
+        <div className="grid grid-cols-6 grid-rows-4 gap-2 h-full">
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            252
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            253
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            254
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            255
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            256
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            251
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            252
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            253
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            254
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            255
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            256
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            251
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            252
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            253
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            254
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            255
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
-          <div className="bg-orange-500 rounded-3xl flex items-center justify-center text-2xl">
-            256
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
+          </div>
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
+          </div>
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
+          </div>
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
+          </div>
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
+          </div>
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
+          </div>
+          <div className="bg-[#ff9c27] rounded-xl flex items-center justify-center text-2xl">
+            <div className="flex flex-col items-center font-medium h-full justify-center">
+              <h2 className="font-bold">A-046</h2>
+
+              <p className="text-sm">20 рулон</p>
+
+              <p className="text-sm text-red-700">{timerFN()}</p>
+            </div>
           </div>
         </div>
-        {/* <div className="grid grid-cols-6 grid-rows-3 gap-3 border-t border-[var(--gray30)] pt-3">
-          <div className="bg-gray-300 h-full rounded-3xl"></div>
-          <div className="bg-gray-300 h-full rounded-3xl"></div>
-          <div className="bg-gray-300 h-full rounded-3xl"></div>
-          <div className="bg-gray-300 h-full rounded-3xl"></div>
-          <div className="bg-gray-300 h-full rounded-3xl"></div>
-          <div className="bg-gray-300 h-full rounded-3xl"></div>
-          <div className="bg-gray-300 h-full rounded-3xl"></div>
-          <div className="bg-gray-300 h-full rounded-3xl"></div>
-          <div className="bg-gray-300 h-full rounded-3xl"></div>
-          <div className="bg-gray-300 h-full rounded-3xl"></div>
-          <div className="bg-gray-300 h-full rounded-3xl"></div>
-          <div className="bg-gray-300 h-full rounded-3xl"></div>
-          <div className="bg-gray-300 h-full rounded-3xl"></div>
-          <div className="bg-gray-300 h-full rounded-3xl"></div>
-          <div className="bg-gray-300 h-full rounded-3xl"></div>
-        </div> */}
-      </div>
+      </CCard>
     </div>
   );
 };

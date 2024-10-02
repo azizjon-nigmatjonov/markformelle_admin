@@ -1,59 +1,87 @@
+import CTable from "../../../../components/CElements/CTable";
+
 const list = [
   {
-    name: "Azizjon Nigmatjonov",
+    workers: "Azizjon Nigmatjonov",
+    by_month: "1455 КГ",
+    by_day: "120 КГ",
+    order: 0,
   },
   {
-    name: "Sardorbek",
+    workers: "Sardorbek",
+    by_month: "1455 КГ",
+    by_day: "120 КГ",
+    order: 1,
   },
   {
-    name: "Nurmat",
+    workers: "Nurmat",
+    by_month: "1455 КГ",
+    by_day: "120 КГ",
+    order: 2,
   },
   {
-    name: "Shaxboz",
+    workers: "Shaxboz",
+    by_month: "1455 КГ",
+    by_day: "120 КГ",
+    order: 4,
+  },
+  {
+    workers: "Yusuf",
+    by_month: "1455 КГ",
+    by_day: "120 КГ",
+    order: 4,
   },
 ];
 
 export const SecondColumn = () => {
+  const headColumns = [
+    {
+      title: "Список работников",
+      id: ["workers", "order"],
+      render: (val: any) => (
+        <div className="flex items-center space-x-3">
+          <div>
+            {val[1] === 0 ? (
+              <img className="w-[30px]" src="/images/medal_1.png" alt="first" />
+            ) : val[1] === 1 ? (
+              <img
+                className="w-[30px]"
+                src="/images/medal_2.png"
+                alt="second"
+              />
+            ) : val[1] === 2 ? (
+              <img className="w-[30px]" src="/images/medal_3.png" alt="third" />
+            ) : (
+              <img
+                className="w-[28px]"
+                src="/images/danger.png"
+                alt={`last ${val[1]}`}
+              />
+            )}
+          </div>
+          <p>{val[0]}</p>
+        </div>
+      ),
+    },
+    {
+      title: "C начала месяца",
+      id: "by_month",
+    },
+    {
+      title: "В это смене",
+      id: "by_day",
+    },
+  ];
   return (
-    <div className="border-r border-[var(--gray30)] h-full container">
-      <h2 className="font-semibold text-2xl pb-3">List of workers</h2>
-      <ul className="grid grid-cols-1 gap-y-3 mt-2">
-        {list.map((item: any, index: number) => (
-          <li
-            key={index}
-            className="flex space-x-2 text-xl font-medium items-center"
-          >
-            <div>
-              {index === 0 ? (
-                <img
-                  className="w-[40px]"
-                  src="/images/medal_1.png"
-                  alt="first"
-                />
-              ) : index === 1 ? (
-                <img
-                  className="w-[40px]"
-                  src="/images/medal_2.png"
-                  alt="second"
-                />
-              ) : index === 2 ? (
-                <img
-                  className="w-[40px]"
-                  src="/images/medal_3.png"
-                  alt="third"
-                />
-              ) : (
-                <img
-                  className="w-[40px]"
-                  src="/images/danger.png"
-                  alt={`last ${index}`}
-                />
-              )}
-            </div>
-            <p>{item.name}</p>
-          </li>
-        ))}
-      </ul>
+    <div className="h-full">
+      <CTable
+        headColumns={headColumns}
+        bodyColumns={list}
+        handleFilterParams={() => {}}
+        filterParams={{}}
+        disablePagination={true}
+        tableSetting={false}
+      />
     </div>
   );
 };

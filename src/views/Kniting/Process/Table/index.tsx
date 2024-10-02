@@ -1,20 +1,19 @@
 import { FirstColumn } from "./FirstColumn";
 import { SecondColumn } from "./SecondColumn";
-import { ThirdColumn } from "./ThirdColumn";
 
 export const ProcessTable = () => {
   return (
     <div>
-      <div className="flex min-h-[100vh]">
-        <div className="w-[45%]">
+      <div className="flex p-3 space-x-3" style={{ height: "100vh" }}>
+        <div className="w-[50%]">
           <FirstColumn />
         </div>
-        <div className="w-[25%]">
+        <div className="w-[50%]">
           <SecondColumn />
         </div>
-        <div className="w-[30%]">
+        {/* <div className="w-[30%]">
           <ThirdColumn />
-        </div>
+        </div> */}
       </div>
     </div>
   );
