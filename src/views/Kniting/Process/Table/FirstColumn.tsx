@@ -1,17 +1,11 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import CCard from "../../../../components/CElements/CCard";
 import useTimer from "../../../../hooks/useTimer";
 import "./style.scss";
-import { MachineConstantList } from "../../../../constants/machines";
 
 export const FirstColumn = () => {
   const { timerFN } = useTimer();
   const [effect, setEffect] = useState(false);
-  console.log(MachineConstantList);
-
-  const newList = useMemo(() => {
-    return MachineConstantList ?? [];
-  }, [MachineConstantList]);
 
   return (
     <div className="grid grid-cols-1 grid-rows-2 gap-y-3 h-full">
