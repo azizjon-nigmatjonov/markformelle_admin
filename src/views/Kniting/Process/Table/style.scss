@@ -1,0 +1,27 @@
+.card {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s ease-in-out;
+}
+
+.card.rotated {
+    transform: rotateY(180deg);
+}
+
+.frontofcard,
+.backofcard {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+
+.frontofcard {
+}
+
+.backofcard {
+    transform: rotateY(180deg);
+    left: 0;
+    top: 0;
+    z-index: 3;
+}

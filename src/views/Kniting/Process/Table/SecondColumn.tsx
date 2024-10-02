@@ -36,7 +36,7 @@ const list = [
 export const SecondColumn = () => {
   const headColumns = [
     {
-      title: "Список работников",
+      title: "Список грузчиков",
       id: ["workers", "order"],
       render: (val: any) => (
         <div className="flex items-center space-x-3">
@@ -68,7 +68,7 @@ export const SecondColumn = () => {
       id: "by_month",
     },
     {
-      title: "В это смене",
+      title: "В этой смене",
       id: "by_day",
     },
   ];
