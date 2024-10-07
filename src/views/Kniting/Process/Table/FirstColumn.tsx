@@ -55,34 +55,26 @@ export const FirstColumn = () => {
                 effect.includes(item.name) ? "rotated" : ""
               }`}
             >
-              <div className="bg-[#6cce65] rounded-xl h-full px-2">
-                <div className="frontofcard flex flex-col items-center font-medium h-full justify-center">
-                  <h2 className="text-6xl small_desktop:text-[120px] font-bold title-big mb-2">
+              <div className="frontofcard card bg-[#6cce65] rounded-xl h-full px-2">
+                <div className="flex flex-col items-center font-medium h-full justify-center">
+                  <h2 className="main-title font-bold title-big mb-2">
                     {item.name}
                   </h2>
 
-                  <p className="text-5xl small_desktop:text-[60px]">
-                    {item.roll_count} рулон
-                  </p>
+                  <p className="main-sub-text">{item.roll_count} рулон</p>
 
-                  <p className="text-5xl small_desktop:text-[60px] text-red-700">
-                    {timerFN()}
-                  </p>
+                  <p className="main-sub-text text-red-700">{timerFN()}</p>
                 </div>
               </div>
-              <div className="bg-[#6cce65] rounded-xl h-full px-2 backofcard">
+              <div className="backofcard card bg-[#6cce65] rounded-xl h-full px-2">
                 <div className="flex flex-col items-center font-medium h-full justify-center">
-                  <h2 className="text-6xl small_desktop:text-[120px] font-bold title-big mb-2">
+                  <h2 className="main-title font-bold title-big mb-2">
                     {item.name}
                   </h2>
 
-                  <p className="text-5xl small_desktop:text-[60px]">
-                    {item.roll_count} рулон
-                  </p>
+                  <p className="main-sub-text">{item.roll_count} рулон</p>
 
-                  <p className="text-5xl small_desktop:text-[60px] text-red-700">
-                    {timerFN()}
-                  </p>
+                  <p className="main-sub-text text-red-700">{timerFN()}</p>
                 </div>
               </div>
             </div>
@@ -97,34 +89,28 @@ export const FirstColumn = () => {
                   effect.includes(item.name) ? "rotated" : ""
                 }`}
               >
-                <div className="frontofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
+                <div className="card frontofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
                   <div className="flex flex-col items-center font-medium h-full justify-center">
-                    <h2 className="font-bold small_desktop:text-5xl mb-2">
-                      {item.name}
-                    </h2>
+                    <h2 className="font-bold title mb-2">{item.name}</h2>
 
-                    <p className="text-sm small_desktop:text-3xl font-semibold">
+                    <p className="sub-text font-semibold">
                       {item.roll_count} рулон
                     </p>
 
-                    <p className="text-sm small_desktop:text-3xl text-red-700">
-                      {timerFN()}
-                    </p>
+                    <p className="sub-text text-red-700">{timerFN()}</p>
                   </div>
                 </div>
-                <div className="backofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
+                <div className="card backofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
                   <div className="flex flex-col items-center font-medium h-full justify-center">
                     <h2 className="font-bold small_desktop:text-5xl mb-2">
                       {item.name}
                     </h2>
 
-                    <p className="text-sm small_desktop:text-3xl font-semibold">
+                    <p className="sub-text font-semibold">
                       {item.roll_count} рулон
                     </p>
 
-                    <p className="text-sm small_desktop:text-3xl text-red-700">
-                      {timerFN()}
-                    </p>
+                    <p className="sub-text text-red-700">{timerFN()}</p>
                   </div>
                 </div>
               </div>
@@ -143,17 +129,15 @@ export const FirstColumn = () => {
             >
               <div className="frontofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
                 <div className="flex flex-col items-center font-medium h-full justify-center">
-                  <h2 className="font-bold small_desktop:text-5xl mb-2">
+                  <h2 className="sub-title font-bold small_desktop:text-5xl mb-2">
                     {item.name}
                   </h2>
 
-                  <p className="text-sm small_desktop:text-3xl font-semibold">
+                  <p className="sub-text font-semibold">
                     {item.roll_count} рулон
                   </p>
 
-                  <p className="text-sm small_desktop:text-3xl text-red-700">
-                    {timerFN()}
-                  </p>
+                  <p className="sub-text text-red-700">{timerFN()}</p>
                 </div>
               </div>
               <div className="backofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
@@ -162,13 +146,11 @@ export const FirstColumn = () => {
                     {item.name}
                   </h2>
 
-                  <p className="text-sm small_desktop:text-3xl font-semibold">
+                  <p className="sub-text font-semibold">
                     {item.roll_count} рулон
                   </p>
 
-                  <p className="text-sm small_desktop:text-3xl text-red-700">
-                    {timerFN()}
-                  </p>
+                  <p className="sub-text text-red-700">{timerFN()}</p>
                 </div>
               </div>
             </div>

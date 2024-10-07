@@ -1,4 +1,5 @@
 import CTable from "../../../../components/CElements/CTable";
+import "./style.scss";
 
 const list = [
   {
@@ -42,7 +43,7 @@ export const SecondColumn = () => {
           Список грузчиков
         </h3>
       ),
-      width: 330,
+      // width: 330,
       id: ["workers", "order"],
       render: (val: any) => (
         <div className="flex items-center space-x-3 py-4">
@@ -65,9 +66,7 @@ export const SecondColumn = () => {
               />
             )}
           </div>
-          <p className="small_desktop:text-4xl font-semibold whitespace-nowrap">
-            {val[0]}
-          </p>
+          <p className="title whitespace-nowrap">{val[0]}</p>
         </div>
       ),
     },
@@ -78,11 +77,9 @@ export const SecondColumn = () => {
           C начала месяца
         </h3>
       ),
-      width: 140,
+      // width: 140,
       id: "by_month",
-      render: (val: string) => (
-        <p className="small_desktop:text-3xl font-semibold">{val}</p>
-      ),
+      render: (val: string) => <p className="text">{val}</p>,
     },
     {
       title: "В этой смене",
@@ -92,14 +89,12 @@ export const SecondColumn = () => {
           В этой смене
         </h3>
       ),
-      width: 140,
-      render: (val: string) => (
-        <p className="small_desktop:text-3xl font-semibold">{val}</p>
-      ),
+      // width: 140,
+      render: (val: string) => <p className="text">{val}</p>,
     },
   ];
   return (
-    <div className="h-full">
+    <div className="h-full table">
       <CTable
         headColumns={headColumns}
         bodyColumns={list}
