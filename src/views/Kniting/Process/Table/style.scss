@@ -74,11 +74,11 @@ $maxWidthContainer: 1800;
 
 .table {
     .title {
-        @include adapviteValue(font-size, 44, 17, 1);
+        @include adapviteValue(font-size, 40, 17, 1);
         font-weight: bold;
     }
     .text {
-        @include adapviteValue(font-size, 26, 17, 1);
+        @include adapviteValue(font-size, 28, 17, 1);
         font-weight: bold;
     }
 }

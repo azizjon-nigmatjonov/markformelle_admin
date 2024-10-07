@@ -7,13 +7,13 @@ export const ProcessTable = () => {
   return (
     <div>
       <div
-        className="flex p-3 space-x-3"
+        className="flex p-3 space-x-2 small_desktop:space-x-3"
         style={{ height: openHeader ? "calc(100vh - 50px)" : "100vh" }}
       >
-        <div className="w-[50%]">
+        <div className="w-[48%]">
           <FirstColumn />
         </div>
-        <div className="w-[50%]">
+        <div className="w-[52%]">
           <SecondColumn />
         </div>
         {/* <div className="w-[30%]">

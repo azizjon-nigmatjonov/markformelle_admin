@@ -1,5 +1,4 @@
 import { useState } from "react";
-import CCheck from "../../../../components/CElements/CCheck";
 
 const list = [
   {
@@ -33,13 +32,23 @@ export const ModalBtn = () => {
   return (
     <div className="grid grid-cols-2 gap-2">
       {list.map((item: any) => (
-        <CCheck
-          key={item.value}
-          label={item.title}
-          value={item.value}
-          checked={checked}
+        <div
+          key={item}
+          className={`border rounded-[8px] px-3 h-[40px] flex items-center justify-center cursor-pointer ${
+            checked === item.value
+              ? "border-[var(--primary)] bg-[var(--primary)]"
+              : "border-[var(--gray30)]"
+          }`}
           onClick={() => setCheked(item.value)}
-        />
+        >
+          <p
+            className={`${
+              checked === item.value ? "text-white" : "text-[var(--gray)]"
+            }`}
+          >
+            {item.title}
+          </p>
+        </div>
       ))}
     </div>
   );
