@@ -23,12 +23,7 @@ import OrderList from "./OrderList";
 import CDriver from "../../../../components/CElements/CDivider";
 import "./MachineCard.css";
 import toast from "react-hot-toast";
-import {
-  CloseIcon,
-  WarningIcon,
-} from "../../../../components/UI/IconGenerator/Svg";
 import { ModalBtn } from "./Btn";
-import CCheck from "../../../../components/CElements/CCheck";
 
 interface Machine {
   id: number;
@@ -68,11 +63,11 @@ const ModalCard: React.FC<MachineCardProps> = ({
   machine,
   setOpen = () => {},
 }) => {
-  const [cardColor, setCardColor] = React.useState<string>(""); // Initialize card color state
+  const [cardColor, setCardColor] = React.useState<string>("");
 
   React.useEffect(() => {
-    setCardColor(getCardColor()); // Update card color when component mounts or machine data changes
-  }, [machine]); // Re-run effect when machine data changes
+    setCardColor(getCardColor());
+  }, [machine]);
   const getCardColor = (): string => {
     if (
       machine.rotation > 0 &&
@@ -99,7 +94,7 @@ const ModalCard: React.FC<MachineCardProps> = ({
     ) {
       return "red";
     } else {
-      return ""; // Handle any other case if needed
+      return "";
     }
   };
   const [checked1, setChecked1] = React.useState(
