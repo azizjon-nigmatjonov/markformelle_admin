@@ -265,7 +265,7 @@ const KnitingMachines = () => {
           }}
         >
           {list?.map((machine: any, index: number) =>
-            machine.idlocation ? (
+            machine?.idlocation ? (
               <div
                 key={index}
                 style={{

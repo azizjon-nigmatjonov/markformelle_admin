@@ -47,12 +47,12 @@ export const FetchFunction = () => {
     if (!data?.length) return [];
 
     const arr: any = [];
-    const existingIds = data.map((item: any) => item.idlocation);
-    const maxId = Math.max(...data.map((item: any) => item.idlocation));
-    
+    const existingIds = data?.map((item: any) => item.idlocation);
+    const maxId = Math.max(...data?.map((item: any) => item.idlocation));
+
     for (let index = 1; index < maxId + 1; index++) {
       if (existingIds.includes(index)) {
-        arr.push(data.find((item: any) => item.idlocation === index));
+        arr.push(data?.find((item: any) => item.idlocation === index));
       } else {
         arr.push({});
       }
@@ -61,8 +61,6 @@ export const FetchFunction = () => {
     return arr;
   }, [data]);
 
-
-  
   return { bodyData: newData, isLoading, refetch };
 };
 
@@ -123,7 +121,7 @@ export const CountBtns = ({
           element.pkol_knit - element.fkol_knit < 30 &&
           element.pkol_knit - element.fkol_knit > 0
         ) {
-          obj.working += 1
+          obj.working += 1;
         } else {
           obj.working += 1;
         }
@@ -215,7 +213,4 @@ export const CountBtns = ({
   );
 };
 
-
-export const CardLogic = () => {
-  
-}
+export const CardLogic = () => {};
