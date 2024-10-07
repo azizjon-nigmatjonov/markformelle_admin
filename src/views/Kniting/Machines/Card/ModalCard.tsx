@@ -27,6 +27,8 @@ import {
   CloseIcon,
   WarningIcon,
 } from "../../../../components/UI/IconGenerator/Svg";
+import { ModalBtn } from "./Btn";
+import CCheck from "../../../../components/CElements/CCheck";
 
 interface Machine {
   id: number;
@@ -54,7 +56,7 @@ interface Machine {
   fakt_percentage: number;
   message: string;
   zakaz: string;
-  art: string
+  art: string;
 }
 
 interface MachineCardProps {
@@ -62,7 +64,10 @@ interface MachineCardProps {
   setOpen: (val: boolean) => void;
 }
 
-const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => { } }) => {
+const ModalCard: React.FC<MachineCardProps> = ({
+  machine,
+  setOpen = () => {},
+}) => {
   const [cardColor, setCardColor] = React.useState<string>(""); // Initialize card color state
 
   React.useEffect(() => {
@@ -103,7 +108,7 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => { } })
   const [checked2, setChecked2] = React.useState(machine.not_broken == "true");
 
   return (
-    <ModalDialog sx={{ width: "900px", minHeight: '558px' }}>
+    <ModalDialog sx={{ width: "900px", minHeight: "558px" }}>
       <ModalClose />
       <Typography></Typography>
       <Typography></Typography>
@@ -113,7 +118,7 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => { } })
           <Tab>Заказы в очереди</Tab>
         </TabList>
         <TabPanel value={0} style={{ width: "100%" }}>
-          <Stack spacing={2} direction="row">
+          <div className="flex">
             <List aria-labelledby="decorated-list-demo">
               <ListItem
                 style={{ display: "flex", justifyContent: "space-between" }}
@@ -133,11 +138,9 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => { } })
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
                 <Typography>Версия программы </Typography>
-                <Typography>
-                  {machine.soft_version}
-                </Typography>
+                <Typography>{machine.soft_version}</Typography>
               </ListItem>
-              <ListDivider sx={{ background: 'var(--gray)' }} />
+              <ListDivider sx={{ background: "var(--gray)" }} />
               <ListItem
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
@@ -195,7 +198,7 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => { } })
             <CDriver direction="vertical" classes="h-[400px]" />
             <Stack
               spacing={2}
-              sx={{ width: 300 }}
+              sx={{ width: "50%" }}
               justifyContent="space-between"
               alignItems="center"
             >
@@ -215,7 +218,6 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => { } })
                       onChange={(event) => setChecked1(event.target.checked)}
                     />
                   </li>
-                  {/* <ListDivider /> */}
                   <li
                     style={{
                       display: "flex",
@@ -263,14 +265,6 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => { } })
                     </ListItem>
                   </List>
                   <CardContent sx={{ mx: "auto", alignItems: "center" }}>
-                    {/* <Typography
-                    fontSize={18}
-                    fontStyle="SemiBold"
-                    fontWeight={"bold"}
-                  >
-                    {machine.name}
-                  </Typography> */}
-
                     <CircularProgress
                       variant="soft"
                       color="success"
@@ -281,7 +275,6 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => { } })
                       }
                       determinate
                       sx={{
-                        // mb: "0px",
                         "--CircularProgress-size": "120px",
                         "--CircularProgress-trackThickness": "10px",
                         "--CircularProgress-progressThickness": "10px",
@@ -299,29 +292,17 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => { } })
                           style={{ background: "black" }}
                         />
                         <Typography>{machine.pkol_knit + " Kg"}</Typography>
-
-                        {/* <Typography startDecorator={<SpeedIcon />}>
-                        {machine.rotation}
-                      </Typography> */}
                       </Stack>
                     </CircularProgress>
-                    {/* Display other machine information */}
                   </CardContent>
                 </Card>
               ) : (
                 <div className="w-full h-full border-t border-[var(--border)] pt-5">
                   <h3 className="mb-5">Причина поломки</h3>
-                  <div className="mb-10">
-                    <div className="bg-[var(--fire)] p-2 rounded-[4px] flex space-x-3 relative">
-                      <WarningIcon />
-                      <span>Кабелида носозлик #mexanik</span>
-
-                      <button className="absolute flex items-center justify-center right-[-8px] top-[-8px] rounded-full w-[20px] h-[20px] bg-white border border-[var(--border)]">
-                        <CloseIcon />
-                      </button>
-                    </div>
-                  </div>
-                  <p className="mb-2 text-[var(--gray)]">Введите причину поломки</p>
+                  <ModalBtn />
+                  <p className="mb-2 text-[var(--gray)] mt-3">
+                    Введите причину поломки
+                  </p>
                   <textarea
                     className="p-4 bg-transparent border border-[var(--border)] rounded-[8px] w-full"
                     rows={5}
@@ -354,9 +335,9 @@ const ModalCard: React.FC<MachineCardProps> = ({ machine, setOpen = () => { } })
                 </div>
               )}
             </Stack>
-          </Stack>
+          </div>
         </TabPanel>
-        <TabPanel value={1} style={{ width: "50%" }}>
+        <TabPanel value={1}>
           <Stack>
             <OrderList machineName={machine.id} />
           </Stack>
