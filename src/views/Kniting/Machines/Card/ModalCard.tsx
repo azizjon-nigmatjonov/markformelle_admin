@@ -107,6 +107,7 @@ const ModalCard: React.FC<MachineCardProps> = ({
       <ModalClose />
       <Typography></Typography>
       <Typography></Typography>
+
       <Tabs aria-label="Basic tabs" defaultValue={0} sx={{ width: "100%" }}>
         <TabList>
           <Tab>Информация о машине</Tab>
