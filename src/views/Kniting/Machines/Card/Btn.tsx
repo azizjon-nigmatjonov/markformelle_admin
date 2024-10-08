@@ -29,6 +29,7 @@ const list = [
 
 export const ModalBtn = () => {
   const [checked, setCheked] = useState(1);
+
   return (
     <div className="grid grid-cols-2 gap-2">
       {list.map((item: any) => (
