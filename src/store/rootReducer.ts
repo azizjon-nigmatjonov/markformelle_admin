@@ -9,6 +9,7 @@ import { notificationReducer } from "./notification";
 import { sidebarReducer } from "./sidebar";
 import { filterReducer } from "./filterParams";
 import { tableReducer } from "./table";
+import { machineReducer } from "./machine/machine.slice";
 
 const authPersistConfig = {
   key: "auth",
@@ -40,6 +41,11 @@ const tablePersistConfig = {
   storage,
 };
 
+const machinePersistConfig = {
+  key: "machine",
+  storage,
+};
+
 const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
   tableSize: persistReducer(tableSizePersistConfig, tableSizeReducer),
@@ -47,6 +53,7 @@ const rootReducer = combineReducers({
   sidebar: persistReducer(sidebarPersistConfig, sidebarReducer),
   filter: persistReducer(filterPersistConfig, filterReducer),
   table: persistReducer(tablePersistConfig, tableReducer),
+  machine: persistReducer(machinePersistConfig, machineReducer),
   website: websiteReducer,
   mqtt: mqttReducer,
 });

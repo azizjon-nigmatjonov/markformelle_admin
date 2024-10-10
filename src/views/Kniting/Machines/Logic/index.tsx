@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import CCheckButton from "../../../../components/CElements/CCheckButton";
 import useCQuery from "../../../../hooks/useCQuery";
+import { useDispatch, useSelector } from "react-redux";
+import { mashineActions } from "../../../../store/machine/machine.slice";
 
 export const breadCrumbItems = [
   { label: "dashboard", link: "/dashboard/dashboard" },
@@ -77,6 +79,7 @@ export const CountBtns = ({
   bodyData = [],
   setSearch = () => {},
 }: Props) => {
+  const dispatch = useDispatch();
   const filterCheckbox = (val: string) => {
     let list: any = checked.filter((i: string) => i !== "all") ?? [];
 
@@ -91,6 +94,48 @@ export const CountBtns = ({
   };
 
   const [counts, setCounts]: any = useState({});
+  const machine_info = useSelector((state: any) => state.machine.machine_info);
+
+  const TimerFn = (id: number) => {
+    let time = 1;
+
+    setInterval(() => {
+      dispatch(
+        mashineActions.setMachineTimer({
+          id,
+          payload: { timer: (time += 1), animation: false },
+        })
+      );
+    }, 1000);
+  };
+
+  const AnimateFn = (id: number) => {
+    dispatch(
+      mashineActions.setMachineTimer({
+        id,
+        payload: { timer: 1800001, animation: true },
+      })
+    );
+  };
+
+  const HandleAnimation = (id: number) => {
+    if (!machine_info?.[id]?.timer) {
+      TimerFn(id);
+    } else {
+      if (machine_info?.[id]?.timer > 1800000) {
+        AnimateFn(id);
+      }
+    }
+  };
+
+  const RemoveFn = (id: number) => {
+    dispatch(
+      mashineActions.setMachineTimer({
+        id,
+        payload: { timer: 0, animation: false },
+      })
+    );
+  };
 
   useEffect(() => {
     let obj: any = {
@@ -103,12 +148,14 @@ export const CountBtns = ({
     bodyData.forEach((element: any) => {
       if (element.no_connnection == "true") {
         obj.broken += 1;
+        RemoveFn(element.idlocation);
       } else if (
         element.yarn_replacement == "true" &&
         element.pkol_knit === 0 &&
         element.machine_is_on === "true" &&
         element.no_connnection === "false"
       ) {
+        RemoveFn(element.idlocation);
         obj.no_plan += 1;
       } else if (element.pkol_knit == 0) {
       } else if (
@@ -121,8 +168,10 @@ export const CountBtns = ({
           element.pkol_knit - element.fkol_knit < 30 &&
           element.pkol_knit - element.fkol_knit > 0
         ) {
+          RemoveFn(element.idlocation);
           obj.working += 1;
         } else {
+          RemoveFn(element.idlocation);
           obj.working += 1;
         }
       } else if (
@@ -134,6 +183,7 @@ export const CountBtns = ({
         element.machine_is_on == "true" &&
         element.rotation == 0
       ) {
+        HandleAnimation(element.idlocation);
         obj.stopped += 1;
       }
     });
