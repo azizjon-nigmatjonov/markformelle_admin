@@ -130,7 +130,9 @@ const KnitingMachines = () => {
         if (
           element.not_broken == "true" &&
           element.machine_is_on == "true" &&
-          element.rotation == 0
+          element.rotation == 0 &&
+          element.no_connnection === "false" &&
+          element.pkol_knit !== 0
         ) {
           newList.push({ time: obj.time + 1, id: obj.id });
         }
@@ -138,7 +140,9 @@ const KnitingMachines = () => {
         if (
           element.not_broken == "true" &&
           element.machine_is_on == "true" &&
-          element.rotation == 0
+          element.rotation == 0 &&
+          element.no_connnection === "false" &&
+          element.pkol_knit !== 0
         ) {
           newList.push({ time: 0, id: element.id });
         }

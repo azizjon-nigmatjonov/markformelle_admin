@@ -98,20 +98,20 @@ $maxWidthContainer: 1600;
 }
 
 .animate-breath {
-    animation: breathe 4s ease-in-out infinite;
+    animation: breathe 1s ease-in-out infinite;
 }
 
 @keyframes breathe {
     0% {
-        transform: scale(1); // Initial state, no scale
+        // transform: scale(1); // Initial state, no scale
         background-color: #ff6060; // Full opacity red
     }
     50% {
-        transform: scale(1.05); // Slightly scale up
-        background-color: #ff606055; // Half opacity red
+        // transform: scale(1.05); // Slightly scale up
+        background-color: #e74848; // Half opacity red
     }
     100% {
-        transform: scale(1); // Back to normal size
+        // transform: scale(1); // Back to normal size
         background-color: #ff6060; // Full opacity red
     }
 }

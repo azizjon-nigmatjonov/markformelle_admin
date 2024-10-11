@@ -67,7 +67,9 @@ export const MyCard = ({ machine, time = 0 }: Props) => {
     } else if (
       machine.not_broken == "true" &&
       machine.machine_is_on == "true" &&
-      machine.rotation == 0
+      machine.rotation == 0 &&
+      machine.no_connnection === "false" &&
+      machine.pkol_knit !== 0
     ) {
       return "red";
     } else {
@@ -90,7 +92,7 @@ export const MyCard = ({ machine, time = 0 }: Props) => {
           setOpen(!open);
         }}
         className={`h-full w-full wrapper relative mycard ${cardColor} ${
-          time > 180000 ? "animate-breath" : ""
+          time > 1 ? "animate-breath" : ""
         }`}
         style={{
           zoom:
@@ -101,7 +103,7 @@ export const MyCard = ({ machine, time = 0 }: Props) => {
               : 0.6,
         }}
       >
-        {machine.no_connnection == "true" && (
+        {machine.no_connnection == "true" ? (
           <div className="flex flex-col items-center">
             <p className="title">{machine.name}</p>
             <div className="flex flex-col items-center justify-center absolute top-[60%] -translate-y-1/2">
@@ -112,8 +114,10 @@ export const MyCard = ({ machine, time = 0 }: Props) => {
               <p className="text-error">{machine.ip_address}</p>
             </div>
           </div>
+        ) : (
+          ""
         )}
-        {machine.no_connnection != "true" && (
+        {machine.no_connnection !== "true" && (
           <div className="flex flex-col justify-between h-full">
             <div className="flex justify-between items-center">
               <div className="sub-title">
