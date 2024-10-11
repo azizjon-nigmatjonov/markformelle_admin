@@ -10,6 +10,7 @@ import {
   UsersIcon,
   ZipIcon,
   ListIconSidebar,
+  CouriersIcon,
 } from "./Svg/Sidebar";
 
 export const iconsList = [
@@ -60,5 +61,9 @@ export const iconsList = [
   {
     name: "pages",
     component: PagesIcon,
+  },
+  {
+    name: "couriers",
+    component: CouriersIcon,
   },
 ];
