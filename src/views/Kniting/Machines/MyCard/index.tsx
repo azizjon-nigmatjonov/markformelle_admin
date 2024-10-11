@@ -92,7 +92,7 @@ export const MyCard = ({ machine, time = 0 }: Props) => {
           setOpen(!open);
         }}
         className={`h-full w-full wrapper relative mycard ${cardColor} ${
-          time > 180000 ? "animate-breath" : ""
+          time > 180 ? "animate-breath" : ""
         }`}
         style={{
           zoom:
