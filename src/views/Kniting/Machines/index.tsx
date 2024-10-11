@@ -5,7 +5,7 @@ import { CountBtns, FetchFunction } from "./Logic";
 import CDriver from "../../../components/CElements/CDivider";
 import { useDispatch, useSelector } from "react-redux";
 import { MyCard } from "./MyCard";
-import { mashineActions } from "../../../store/machine/machine.slice";
+import { machineActions } from "../../../store/machine/machine.slice";
 
 const searchedWords = [
   "podr_id_knitt",
@@ -26,6 +26,7 @@ const KnitingMachines = () => {
   const [active, setActive] = useState(false);
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const dispatch = useDispatch();
+  const machineInfo = useSelector((state: any) => state.machine.machine_info);
 
   useEffect(() => {
     setInterval(() => {
@@ -116,6 +117,35 @@ const KnitingMachines = () => {
 
     setList(listData);
   }, [bodyData, checked, search]);
+
+  useEffect(() => {
+    if (!machineInfo) return;
+    let newList: any = [...machineInfo];
+    bodyData?.forEach((element: any) => {
+      const obj: any = newList.find((item: any) => item.id === element.id);
+
+      if (obj?.id) {
+        newList = newList.filter((item: any) => item.id !== obj.id);
+
+        if (
+          element.not_broken == "true" &&
+          element.machine_is_on == "true" &&
+          element.rotation == 0
+        ) {
+          newList.push({ time: obj.time + 1, id: obj.id });
+        }
+      } else {
+        if (
+          element.not_broken == "true" &&
+          element.machine_is_on == "true" &&
+          element.rotation == 0
+        ) {
+          newList.push({ time: 0, id: element.id });
+        }
+      }
+    });
+    dispatch(machineActions.setMachineTimer(newList));
+  }, [bodyData]);
 
   const handleCheck = (obj: any) => {
     const data: any = [];
@@ -278,7 +308,14 @@ const KnitingMachines = () => {
                       : "100%",
                 }}
               >
-                <MyCard machine={machine} zoomPoint={zoomPoint} />
+                <MyCard
+                  machine={machine}
+                  time={
+                    machineInfo.find((item: any) => item.id === machine.id)
+                      ?.time
+                  }
+                  zoomPoint={zoomPoint}
+                />
               </div>
             ) : (
               <div key={index}></div>
