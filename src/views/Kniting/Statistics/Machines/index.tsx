@@ -1,7 +1,7 @@
-import { Header } from "../../../../components/UI/Header";
-import CTabs from "../../../../components/CElements/CTab";
-import { TabList } from "./Logic";
-import { useState } from "react";
+// import { Header } from "../../../../components/UI/Header";
+// import CTabs from "../../../../components/CElements/CTab";
+// import { TabList } from "./Logic";
+// import { useState } from "react";
 // import { MachineList } from "./Pages/List";
 // import { MachineStatus } from "./Pages/Status";
 // import { MachinePlans } from "./Pages/Plan";
@@ -9,7 +9,7 @@ import { useState } from "react";
 // import { CPeriodPicker } from "../../../../components/CElements/CPeriodPicker";
 
 const KnitingdAnalytics = () => {
-  const [currentTab, setCurrentTab] = useState({ name: "", id: "list" });
+  // const [currentTab, setCurrentTab] = useState({ name: "", id: "list" });
 
   // const CurrentPage = (tab: string) => {
   //   switch (tab) {
@@ -28,7 +28,7 @@ const KnitingdAnalytics = () => {
 
   return (
     <div>
-      <Header
+      {/* <Header
         extra={
           <div className="inline-block">
             <CTabs
@@ -39,8 +39,7 @@ const KnitingdAnalytics = () => {
           </div>
         }
       >
-        {/* <CPeriodPicker handleValue={() => {}} placeholder="Время" /> */}
-      </Header>
+      </Header> */}
 
       {/* <div className="container">{CurrentPage(currentTab?.id)}</div> */}
     </div>

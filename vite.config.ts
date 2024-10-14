@@ -22,7 +22,6 @@ export default defineConfig({
   resolve: {
     alias: {
       components: "/src/components",
-      assets: "/src/assets",
       hooks: "/src/hooks",
       layout: "/src/layout",
       scss: "/src/scss",
