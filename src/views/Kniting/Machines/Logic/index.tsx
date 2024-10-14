@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import CCheckButton from "../../../../components/CElements/CCheckButton";
 import useCQuery from "../../../../hooks/useCQuery";
-// import { useDispatch, useSelector } from "react-redux";
-// import { machineActions } from "../../../../store/machine/machine.slice";
 
 export const breadCrumbItems = [
   { label: "dashboard", link: "/dashboard/dashboard" },
@@ -143,6 +141,8 @@ export const CountBtns = ({
       working: 0,
       stopped: 0,
       broken: 0,
+      replace_needle: 0,
+      replace_yarn: 0,
     };
 
     bodyData.forEach((element: any) => {
@@ -206,6 +206,7 @@ export const CountBtns = ({
         checked={checked.includes("all")}
         handleCheck={() => filterCheckbox("all")}
       />
+
       <CCheckButton
         color="#6cce65"
         element={{
@@ -231,11 +232,24 @@ export const CountBtns = ({
         handleCheck={() => filterCheckbox("blue")}
       />
       <CCheckButton
+        color="#8099f1"
+        element={{
+          label: (
+            <p className="font-[600]">
+              Нет пряжи{" "}
+              <span className="font-bold">{counts?.replace_needle}</span>
+            </p>
+          ),
+        }}
+        checked={checked.includes("red_needle")}
+        handleCheck={() => filterCheckbox("red_needle")}
+      />
+      <CCheckButton
         color="var(--gray30)"
         element={{
           label: (
             <p className="font-[600]">
-              Сломан <span className="font-bold">{counts?.broken}</span>
+              Ремонт машины <span className="font-bold">{counts?.broken}</span>
             </p>
           ),
         }}
@@ -253,6 +267,19 @@ export const CountBtns = ({
         }}
         checked={checked.includes("red")}
         handleCheck={() => filterCheckbox("red")}
+      />
+      <CCheckButton
+        color="#fb6060"
+        element={{
+          label: (
+            <p className="font-[600]">
+              Замена игла{" "}
+              <span className="font-bold">{counts?.replace_yarn}</span>
+            </p>
+          ),
+        }}
+        checked={checked.includes("red_yarn")}
+        handleCheck={() => filterCheckbox("red_yarn")}
       />
     </div>
   );

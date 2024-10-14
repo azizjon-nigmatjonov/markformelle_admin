@@ -10,10 +10,9 @@ import SpeedIcon from "@mui/icons-material/Speed";
 interface Props {
   machine: any;
   zoomPoint: number;
-  time?: 0;
 }
 
-export const MyCard = ({ machine, time = 0 }: Props) => {
+export const MyCard = ({ machine }: Props) => {
   const [size, setSize] = useState<number>(50);
   const cardRef: any = useRef(null);
   const updateSize = () => {
@@ -73,14 +72,12 @@ export const MyCard = ({ machine, time = 0 }: Props) => {
     ) {
       return "red";
     } else {
-      return ""; // Handle any other case if needed
+      return "";
     }
   };
 
   useEffect(() => {
-    // if (machine_info) {
     setCardColor(getCardColor());
-    // }
   }, [machine]);
 
   return (
@@ -92,7 +89,14 @@ export const MyCard = ({ machine, time = 0 }: Props) => {
           setOpen(!open);
         }}
         className={`h-full w-full wrapper relative mycard ${cardColor} ${
-          time > 180 ? "animate-breath" : ""
+          Number(machine.stop_mins) >= 30 &&
+          machine.not_broken == "true" &&
+          machine.machine_is_on == "true" &&
+          machine.rotation == 0 &&
+          machine.no_connnection === "false" &&
+          machine.pkol_knit !== 0
+            ? "animate-breath"
+            : ""
         }`}
         style={{
           zoom:

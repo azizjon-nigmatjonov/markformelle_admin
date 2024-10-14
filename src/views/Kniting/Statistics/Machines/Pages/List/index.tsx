@@ -12,7 +12,8 @@ export const MachineList = () => {
   const [open, setOpen]: any = useState(false);
 
   const bodyColumns = useMemo(() => {
-    return MachineConstantList.map((item: any, index: number) => {
+    if (!MachineConstantList?.length) return [];
+    return MachineConstantList?.map((item: any, index: number) => {
       return {
         ...item,
         status:
@@ -79,7 +80,10 @@ export const MachineList = () => {
             >
               <ul className="space-y-5">
                 {val?.[0]?.map((item: any, index: number) => (
-                  <li key={index} className="px-2 border border-[var(--border)] rounded-[8px]">
+                  <li
+                    key={index}
+                    className="px-2 border border-[var(--border)] rounded-[8px]"
+                  >
                     <div>
                       <div className="border-b border-[var(--border)] py-2 flex justify-between">
                         <span>{t("plan_amount")}:</span>
