@@ -6,7 +6,7 @@ import { MachineList } from "./Pages/List";
 import { MachineStatus } from "./Pages/Status";
 import { MachinePlans } from "./Pages/Plan";
 import { MachineDefects } from "./Pages/Defects";
-import { CPeriodPicker } from "../../../../components/CElements/CPeriodPicker";
+// import { CPeriodPicker } from "../../../../components/CElements/CPeriodPicker";
 
 const KnitingdAnalytics = () => {
   const [currentTab, setCurrentTab] = useState({ name: "", id: "list" });
@@ -37,10 +37,10 @@ const KnitingdAnalytics = () => {
           </div>
         }
       >
-        <CPeriodPicker handleValue={() => {}} placeholder="Время" />
+        {/* <CPeriodPicker handleValue={() => {}} placeholder="Время" /> */}
       </Header>
 
-      <div className="container">{CurrentPage(currentTab.id)}</div>
+      <div className="container">{CurrentPage(currentTab?.id)}</div>
     </div>
   );
 };
