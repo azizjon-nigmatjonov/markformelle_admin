@@ -49,6 +49,7 @@ export const MachineList = () => {
         id: "status",
         width: 140,
         render: (val: string) => {
+          if (!val?.length) return "";
           return (
             <div
               className={`px-4 ${
@@ -72,6 +73,7 @@ export const MachineList = () => {
         click: "custom",
         width: 300,
         render: (val: any) => {
+          if (!val?.length) return "";
           return (
             <CList
               open={open === val?.[1]}

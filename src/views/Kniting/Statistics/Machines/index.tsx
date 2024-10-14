@@ -13,6 +13,8 @@ const KnitingdAnalytics = () => {
 
   const CurrentPage = (tab: string) => {
     switch (tab) {
+      case "list":
+        return <MachineList />;
       case "status":
         return <MachineStatus />;
       case "plan":
