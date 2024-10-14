@@ -1,9 +1,8 @@
-import { lazy } from "react";
-const Admins = lazy(() => import("../../views/Admins/Admins"));
-const Users = lazy(() => import("../../views/Admins/Users"));
-const Rolls = lazy(() => import("../../views/Admins/Rolls"));
-const NewRolls = lazy(() => import("../../views/Admins/Rolls/AddRolls"));
-const RoutePage = lazy(() => import("../../views/Admins/RoutePage"));
+import Admins from "../../views/Admins/Admins";
+import Rolls from "../../views/Admins/Rolls";
+import NewRolls from "../../views/Admins/Rolls/AddRolls";
+import RoutePage from "../../views/Admins/RoutePage";
+import Users from "../../views/Admins/Users";
 
 export const adminList = [
   {

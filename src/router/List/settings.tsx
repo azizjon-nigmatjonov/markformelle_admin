@@ -1,6 +1,5 @@
-import { lazy } from "react";
-const WebsiteSettings = lazy(() => import("../../views/Settings/Website"));
-const Profile = lazy(() => import("../../views/Settings/Profile"));
+import WebsiteSettings from "../../views/Settings/Website";
+import Profile from "../../views/Settings/Profile";
 
 export const settingList = [
   {
@@ -19,7 +18,7 @@ export const settingList = [
     sidebar: false,
     title: "Profile page",
     icon: "profile",
-    element: <Profile />
+    element: <Profile />,
   },
   {
     parent: "settings",

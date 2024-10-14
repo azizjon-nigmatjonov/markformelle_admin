@@ -1,14 +1,8 @@
-import { lazy } from "react";
 import { AnalyticsPlan } from "../../views/Kniting/Statistics/Plan";
-
-const KnitingMachines = lazy(() => import("../../views/Kniting/Machines"));
-const KnitingdAnalytics = lazy(
-  () => import("../../views/Kniting/Statistics/Machines")
-);
-const KnitingMachine = lazy(
-  () => import("../../views/Kniting/Machines/SinglePage")
-);
-const KnitingProcess = lazy(() => import("../../views/Kniting/Process"));
+import KnitingMachines from "../../views/Kniting/Machines";
+import KnitingProcess from "../../views/Kniting/Process";
+import KnitingdAnalytics from "../../views/Kniting/Statistics/Machines";
+import KnitingMachine from "../../views/Kniting/Machines/SinglePage";
 
 export const knitingList = [
   {
