@@ -8,11 +8,10 @@ export default defineConfig({
   publicDir: "public",
   build: {
     outDir: "dist",
-    assetsDir: "assets",
   },
   server: {
     port: 7777,
-    host: true,
+    // host: true,
   },
   css: {
     preprocessorOptions: {
