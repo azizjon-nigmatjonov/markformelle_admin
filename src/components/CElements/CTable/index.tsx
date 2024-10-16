@@ -72,6 +72,8 @@ const CTable = ({
   const [headColHeight, setHeadColHeight] = useState(45);
   const [tableHeight, setTableHeight] = useState(500);
   //   const { currentSort } = useGetQueries();
+  console.log("tableHeight", tableHeight);
+
   const [currentIndex, setCurrentIndex] = useState(null);
   const [currDelete, setCurrDelete] = useState<any>({});
   const dispatch = useDispatch();
