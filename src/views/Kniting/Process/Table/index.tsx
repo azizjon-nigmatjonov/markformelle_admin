@@ -1,37 +1,37 @@
 import { useSelector } from "react-redux";
-import { FirstColumn } from "./FirstColumn";
-import { SecondColumn } from "./SecondColumn";
-import useCQuery from "../../../../hooks/useCQuery";
-import { useEffect } from "react";
+// import { FirstColumn } from "./FirstColumn";
+// import { SecondColumn } from "./SecondColumn";
+// import useCQuery from "../../../../hooks/useCQuery";
+// import { useEffect } from "react";
 
 export const ProcessTable = () => {
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
-  const { data, isLoading, refetch } = useCQuery({
-    key: `GET_GRUZ`,
-    endpoint: `http://10.10.6.21:8083/get_sotrudn_data`,
-    params: {
-      // page: 1,
-    },
-  });
+  // const { data, isLoading, refetch } = useCQuery({
+  //   key: `GET_GRUZ`,
+  //   endpoint: `http://10.10.6.21:8083/get_sotrudn_data`,
+  //   params: {
+  //     // page: 1,
+  //   },
+  // });
 
-  const {
-    data: cardsData,
-    isLoading: cardLoading,
-    refetch: refetchCards,
-  } = useCQuery({
-    key: `GET_CARDS_DATA`,
-    endpoint: `http://10.10.6.21:8083/get_roll_data`,
-    params: {
-      // page: 1,
-    },
-  });
+  // const {
+  //   data: cardsData,
+  //   isLoading: cardLoading,
+  //   refetch: refetchCards,
+  // } = useCQuery({
+  //   key: `GET_CARDS_DATA`,
+  //   endpoint: `http://10.10.6.21:8083/get_roll_data`,
+  //   params: {
+  //     // page: 1,
+  //   },
+  // });
 
-  useEffect(() => {
-    setTimeout(() => {
-      refetch();
-      refetchCards();
-    }, 60000);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     refetch();
+  //     refetchCards();
+  //   }, 60000);
+  // }, []);
   // // useEffect(() => {
   // //   axios.get("http://10.10.6.21:8083/get_roll_data").then((res) => {
   // //     console.log(res);
@@ -68,10 +68,10 @@ export const ProcessTable = () => {
       style={{ height: openHeader ? "calc(100vh - 50px)" : "100vh" }}
     >
       <div className="w-[48%]">
-        <FirstColumn data={cardsData?.dashboard_data} isLoading={cardLoading} />
+        {/* <FirstColumn data={cardsData?.dashboard_data} isLoading={cardLoading} /> */}
       </div>
       <div className="w-[52%]">
-        <SecondColumn data={data?.dashboard_data} isLoading={isLoading} />
+        {/* <SecondColumn data={data?.dashboard_data} isLoading={isLoading} /> */}
       </div>
       {/* <div className="w-[30%]">
           <ThirdColumn />
