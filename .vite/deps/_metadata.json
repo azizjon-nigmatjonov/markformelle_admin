@@ -1,0 +1,154 @@
+{
+  "hash": "d861c2ae",
+  "configHash": "6a3e42cb",
+  "lockfileHash": "1c987ebe",
+  "browserHash": "9fa81bd8",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "caa019e7",
+      "needsInterop": true
+    },
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "013a2bf4",
+      "needsInterop": true
+    },
+    "react/jsx-runtime": {
+      "src": "../../node_modules/react/jsx-runtime.js",
+      "file": "react_jsx-runtime.js",
+      "fileHash": "19f3180c",
+      "needsInterop": true
+    },
+    "@mui/icons-material/Apps": {
+      "src": "../../node_modules/@mui/icons-material/Apps.js",
+      "file": "@mui_icons-material_Apps.js",
+      "fileHash": "ddc6df80",
+      "needsInterop": true
+    },
+    "@mui/icons-material/Close": {
+      "src": "../../node_modules/@mui/icons-material/Close.js",
+      "file": "@mui_icons-material_Close.js",
+      "fileHash": "7902913b",
+      "needsInterop": true
+    },
+    "@mui/icons-material/DarkMode": {
+      "src": "../../node_modules/@mui/icons-material/DarkMode.js",
+      "file": "@mui_icons-material_DarkMode.js",
+      "fileHash": "41ef6e0e",
+      "needsInterop": true
+    },
+    "@mui/icons-material/KeyboardArrowRight": {
+      "src": "../../node_modules/@mui/icons-material/KeyboardArrowRight.js",
+      "file": "@mui_icons-material_KeyboardArrowRight.js",
+      "fileHash": "a969182f",
+      "needsInterop": true
+    },
+    "@mui/icons-material/Logout": {
+      "src": "../../node_modules/@mui/icons-material/Logout.js",
+      "file": "@mui_icons-material_Logout.js",
+      "fileHash": "35bff666",
+      "needsInterop": true
+    },
+    "@mui/icons-material/Reorder": {
+      "src": "../../node_modules/@mui/icons-material/Reorder.js",
+      "file": "@mui_icons-material_Reorder.js",
+      "fileHash": "9f06a098",
+      "needsInterop": true
+    },
+    "@mui/icons-material/Warning": {
+      "src": "../../node_modules/@mui/icons-material/Warning.js",
+      "file": "@mui_icons-material_Warning.js",
+      "fileHash": "9c9c19b1",
+      "needsInterop": true
+    },
+    "@mui/material": {
+      "src": "../../node_modules/@mui/material/index.js",
+      "file": "@mui_material.js",
+      "fileHash": "9b0666f7",
+      "needsInterop": false
+    },
+    "i18next": {
+      "src": "../../node_modules/i18next/dist/esm/i18next.js",
+      "file": "i18next.js",
+      "fileHash": "22c7a7a3",
+      "needsInterop": false
+    },
+    "i18next-browser-languagedetector": {
+      "src": "../../node_modules/i18next-browser-languagedetector/dist/esm/i18nextBrowserLanguageDetector.js",
+      "file": "i18next-browser-languagedetector.js",
+      "fileHash": "7855dc57",
+      "needsInterop": false
+    },
+    "i18next-http-backend": {
+      "src": "../../node_modules/i18next-http-backend/esm/index.js",
+      "file": "i18next-http-backend.js",
+      "fileHash": "e942ab2b",
+      "needsInterop": false
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "58917313",
+      "needsInterop": true
+    },
+    "react-i18next": {
+      "src": "../../node_modules/react-i18next/dist/es/index.js",
+      "file": "react-i18next.js",
+      "fileHash": "b563110e",
+      "needsInterop": false
+    },
+    "react-query": {
+      "src": "../../node_modules/react-query/es/index.js",
+      "file": "react-query.js",
+      "fileHash": "4b360567",
+      "needsInterop": false
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/react-router-dom/dist/index.js",
+      "file": "react-router-dom.js",
+      "fileHash": "e5b876b9",
+      "needsInterop": false
+    },
+    "zustand": {
+      "src": "../../node_modules/zustand/esm/index.mjs",
+      "file": "zustand.js",
+      "fileHash": "c04c1811",
+      "needsInterop": false
+    },
+    "zustand/middleware": {
+      "src": "../../node_modules/zustand/esm/middleware.mjs",
+      "file": "zustand_middleware.js",
+      "fileHash": "1141127a",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-TMKJMMJP": {
+      "file": "chunk-TMKJMMJP.js"
+    },
+    "chunk-AGL3XMSE": {
+      "file": "chunk-AGL3XMSE.js"
+    },
+    "chunk-PGH7BBDT": {
+      "file": "chunk-PGH7BBDT.js"
+    },
+    "chunk-2AGJP4EQ": {
+      "file": "chunk-2AGJP4EQ.js"
+    },
+    "chunk-DBVXJCBU": {
+      "file": "chunk-DBVXJCBU.js"
+    },
+    "chunk-PXGXHSBJ": {
+      "file": "chunk-PXGXHSBJ.js"
+    },
+    "chunk-KL4SNAOQ": {
+      "file": "chunk-KL4SNAOQ.js"
+    },
+    "chunk-PLDDJCW6": {
+      "file": "chunk-PLDDJCW6.js"
+    }
+  }
+}

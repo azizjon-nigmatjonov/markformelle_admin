@@ -4,13 +4,15 @@ import react from "@vitejs/plugin-react";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  // base: "./assets",
   publicDir: "public",
   build: {
     outDir: "dist",
+    assetsDir: "assets",
   },
   server: {
-    host: true,
     port: 7777,
+    host: true,
   },
   css: {
     preprocessorOptions: {
@@ -22,7 +24,6 @@ export default defineConfig({
   resolve: {
     alias: {
       components: "/src/components",
-      assets: "/src/assets",
       hooks: "/src/hooks",
       layout: "/src/layout",
       scss: "/src/scss",

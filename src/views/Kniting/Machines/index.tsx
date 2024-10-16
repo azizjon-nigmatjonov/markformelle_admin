@@ -3,9 +3,9 @@ import CSearchInput from "../../../components/CElements/CSearchInput";
 import { Header } from "../../../components/UI/Header";
 import { CountBtns, FetchFunction } from "./Logic";
 import CDriver from "../../../components/CElements/CDivider";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { MyCard } from "./MyCard";
-import { mashineActions } from "../../../store/machine/machine.slice";
+// import { mashineActions } from "../../../store/machine/machine.slice";
 
 const searchedWords = [
   "podr_id_knitt",
@@ -25,7 +25,7 @@ const KnitingMachines = () => {
   const gridRef: any = useRef(null);
   const [active, setActive] = useState(false);
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   useEffect(() => {
     setInterval(() => {

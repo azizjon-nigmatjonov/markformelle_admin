@@ -7,7 +7,7 @@ import { Bolt, WifiOff } from "@mui/icons-material";
 import { Modal } from "@mui/joy";
 import ModalCard from "../Card/ModalCard";
 import SpeedIcon from "@mui/icons-material/Speed";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 interface Props {
   machine: any;
   zoomPoint: number;
@@ -23,8 +23,6 @@ export const MyCard = ({ machine }: Props) => {
       setSize(cardRef?.current?.clientHeight * 0.7);
     }
   };
-  const machine_info = useSelector((state: any) => state.machine.machine_info);
-  console.log("machine_info", machine_info);
 
   useEffect(() => {
     updateSize();
