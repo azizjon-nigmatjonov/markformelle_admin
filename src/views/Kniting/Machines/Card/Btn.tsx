@@ -28,7 +28,7 @@ const list = [
 ];
 
 export const ModalBtn = () => {
-  const [checked, setCheked] = useState(1);
+  const [checked, setCheked] = useState(0);
 
   return (
     <div className="grid grid-cols-2 gap-2">
@@ -37,14 +37,14 @@ export const ModalBtn = () => {
           key={item}
           className={`border rounded-[8px] px-3 h-[40px] flex items-center justify-center cursor-pointer ${
             checked === item.value
-              ? "border-[var(--primary)] bg-[var(--primary)]"
+              ? "border-[#FF9C27] bg-[#FEE5C7]"
               : "border-[var(--gray30)]"
           }`}
           onClick={() => setCheked(item.value)}
         >
           <p
             className={`${
-              checked === item.value ? "text-white" : "text-[var(--gray)]"
+              checked === item.value ? "text-black" : "text-[var(--gray)]"
             }`}
           >
             {item.title}

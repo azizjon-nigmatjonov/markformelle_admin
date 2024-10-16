@@ -84,7 +84,7 @@ export const AnalyticsPlan = () => {
 
       <div className="container">
         <div className="grid grid-cols-4 gap-x-5">
-          {cardData.map((item) => (
+          {cardData?.map((item) => (
             <AnalyticCard key={item.title} el={item} />
           ))}
         </div>

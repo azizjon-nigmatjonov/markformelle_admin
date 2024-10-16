@@ -7,7 +7,6 @@ import { Bolt, WifiOff } from "@mui/icons-material";
 import { Modal } from "@mui/joy";
 import ModalCard from "../Card/ModalCard";
 import SpeedIcon from "@mui/icons-material/Speed";
-// import { useSelector } from "react-redux";
 interface Props {
   machine: any;
   zoomPoint: number;
@@ -67,18 +66,18 @@ export const MyCard = ({ machine }: Props) => {
     } else if (
       machine.not_broken == "true" &&
       machine.machine_is_on == "true" &&
-      machine.rotation == 0
+      machine.rotation == 0 &&
+      machine.no_connnection === "false" &&
+      machine.pkol_knit !== 0
     ) {
       return "red";
     } else {
-      return ""; // Handle any other case if needed
+      return "";
     }
   };
 
   useEffect(() => {
-    // if (machine_info) {
     setCardColor(getCardColor());
-    // }
   }, [machine]);
 
   return (
@@ -89,7 +88,16 @@ export const MyCard = ({ machine }: Props) => {
           e.stopPropagation();
           setOpen(!open);
         }}
-        className={`h-full w-full wrapper relative mycard ${cardColor}`}
+        className={`h-full w-full wrapper relative mycard ${cardColor} ${
+          Number(machine.stop_mins) >= 30 &&
+          machine.not_broken == "true" &&
+          machine.machine_is_on == "true" &&
+          machine.rotation == 0 &&
+          machine.no_connnection === "false" &&
+          machine.pkol_knit !== 0
+            ? "animate-breath"
+            : ""
+        }`}
         style={{
           zoom:
             window.screen.width < 940
@@ -99,7 +107,7 @@ export const MyCard = ({ machine }: Props) => {
               : 0.6,
         }}
       >
-        {machine.no_connnection == "true" && (
+        {machine.no_connnection == "true" ? (
           <div className="flex flex-col items-center">
             <p className="title">{machine.name}</p>
             <div className="flex flex-col items-center justify-center absolute top-[60%] -translate-y-1/2">
@@ -110,8 +118,10 @@ export const MyCard = ({ machine }: Props) => {
               <p className="text-error">{machine.ip_address}</p>
             </div>
           </div>
+        ) : (
+          ""
         )}
-        {machine.no_connnection != "true" && (
+        {machine.no_connnection !== "true" && (
           <div className="flex flex-col justify-between h-full">
             <div className="flex justify-between items-center">
               <div className="sub-title">

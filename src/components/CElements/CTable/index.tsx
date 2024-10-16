@@ -72,6 +72,8 @@ const CTable = ({
   const [headColHeight, setHeadColHeight] = useState(45);
   const [tableHeight, setTableHeight] = useState(500);
   //   const { currentSort } = useGetQueries();
+  console.log("tableHeight", tableHeight);
+
   const [currentIndex, setCurrentIndex] = useState(null);
   const [currDelete, setCurrDelete] = useState<any>({});
   const dispatch = useDispatch();
@@ -351,7 +353,7 @@ const CTable = ({
               totalCount={meta.totalCount}
               currentLimit={filterParams.perPage}
               loader={isLoading}
-              height={tableHeight}
+              height={0}
               passRouter={passRouter}
               filterParams={filterParams}
               handleFilterParams={handleFilterParams}
@@ -453,7 +455,7 @@ const CTable = ({
                         {newHeadColumns.map((column: any, colIndex: number) => (
                           <CTableCell
                             key={colIndex}
-                            className={`overflow-ellipsis ${tableHeight}`}
+                            className={`overflow-ellipsis`}
                             style={{
                               minWidth: "max-content",
                               padding: "0 4px",

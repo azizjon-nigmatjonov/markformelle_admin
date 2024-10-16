@@ -5,7 +5,6 @@ import { CountBtns, FetchFunction } from "./Logic";
 import CDriver from "../../../components/CElements/CDivider";
 import { useSelector } from "react-redux";
 import { MyCard } from "./MyCard";
-// import { mashineActions } from "../../../store/machine/machine.slice";
 
 const searchedWords = [
   "podr_id_knitt",
@@ -25,7 +24,6 @@ const KnitingMachines = () => {
   const gridRef: any = useRef(null);
   const [active, setActive] = useState(false);
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
-  // const dispatch = useDispatch();
 
   useEffect(() => {
     setInterval(() => {
@@ -108,6 +106,8 @@ const KnitingMachines = () => {
           checked.includes("red")
         ) {
           listData.push(element);
+        } else if (checked.includes("red_yarn")) {
+        } else if (checked.includes("red_needle")) {
         }
       });
     } else {
