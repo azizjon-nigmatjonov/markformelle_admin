@@ -1,80 +1,81 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import CCard from "../../../../components/CElements/CCard";
 import useTimer from "../../../../hooks/useTimer";
 import "./style.scss";
-import { MachineConstantList } from "../../../../constants/machines";
+import { Skeleton } from "@mui/material";
 
-export const FirstColumn = () => {
+interface Props {
+  data: any;
+  isLoading: boolean;
+}
+
+export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
   const { timerFN } = useTimer();
   const [effect, setEffect] = useState<string[]>([]);
-  const [newList, setNewList] = useState<any[]>([]);
-
-  // Delay time between each card rotation
   const ROTATION_DELAY = 120;
 
-  useEffect(() => {
-    let arr: any = [];
+  const newData = useMemo(() => {
+    if (!data?.length) return [];
+    const arr =
+      data?.sort((a: any, b: any) => b.COUNT_RECORDS - a.COUNT_RECORDS) ?? [];
 
-    MachineConstantList.forEach((item: any, index: number) => {
-      if (index < 40 && index > 29) {
-        arr.push({
-          ...item,
-          roll_count: index,
-        });
-      }
-    });
-
-    const reversedList = arr.reverse();
-    setNewList(reversedList);
-  }, []);
-
-  // Sequential card rotation logic
-  useEffect(() => {
-    if (newList.length > 0) {
-      rotateCardsSequentially();
-    }
-  }, [newList]);
-
-  const rotateCardsSequentially = () => {
-    newList.forEach((item, index) => {
+    return arr.map((item: any, index: number) => {
       setTimeout(() => {
-        setEffect((prevEffect) => [...prevEffect, item.name]);
-      }, index * ROTATION_DELAY); // Delay each card rotation by 4 seconds
+        setEffect((prevEffect) => [...prevEffect, item.OBORUD_NUNBER]);
+      }, index * ROTATION_DELAY);
+
+      return {
+        ...item,
+        time: item?.HOURS_MINUTES_SECONDS_SINCE_30ST_ROLL?.substring(0, 4),
+      };
     });
-  };
+  }, [data]);
+
+  if (isLoading) {
+    return (
+      <CCard classes="h-full">
+        <div className="grid grid-cols-2 gap-3">
+          <Skeleton style={{ height: "150px" }} />
+          <Skeleton style={{ height: "150px" }} />
+        </div>
+      </CCard>
+    );
+  }
 
   return (
     <CCard classes="h-full">
       <div className="grid flex-col grid-flow-row-dense gap-y-2 h-full grid-rows-4">
         <div className="grid grid-flow-row-dense grid-cols-3 gap-2 row-span-2">
           {/* Big Card */}
-          {newList?.slice(0, 1).map((item) => (
+          {newData?.slice(0, 1).map((item: any) => (
             <div
-              key={item.name}
+              key={item.OBORUD_NUNBER}
               className={`card col-span-2 relative h-full ${
-                effect.includes(item.name) ? "rotated" : ""
+                effect.includes(item.OBORUD_NUNBER) ? "rotated" : ""
               }`}
             >
               <div className="frontofcard card bg-[#6cce65] rounded-xl h-full px-2">
                 <div className="flex flex-col items-center font-medium h-full justify-center">
                   <h2 className="main-title font-bold title-big mb-2">
-                    {item.name}
+                    {item.OBORUD_NUNBER}
                   </h2>
 
-                  <p className="main-sub-text">{item.roll_count} рулон</p>
+                  <p className="main-sub-text">{item.COUNT_RECORDS} рулон</p>
 
-                  <p className="main-sub-text text-red-700">{timerFN()}</p>
+                  <p className="main-sub-text text-red-700">{item?.time}</p>
                 </div>
               </div>
               <div className="backofcard card bg-[#6cce65] rounded-xl h-full px-2">
                 <div className="flex flex-col items-center font-medium h-full justify-center">
                   <h2 className="main-title font-bold title-big mb-2">
-                    {item.name}
+                    {item.OBORUD_NUNBER}
                   </h2>
 
-                  <p className="main-sub-text">{item.roll_count} рулон</p>
+                  <p className="main-sub-text">{item.COUNT_RECORDS} рулон</p>
 
-                  <p className="main-sub-text text-red-700">{timerFN()}</p>
+                  <p className="main-sub-text text-red-700">
+                    {item?.time || timerFN}
+                  </p>
                 </div>
               </div>
             </div>
@@ -82,22 +83,26 @@ export const FirstColumn = () => {
 
           {/* Mini Cards Row */}
           <div className="grid grid-cols-1 grid-rows-2 gap-2">
-            {newList.slice(1, 3).map((item) => (
+            {newData.slice(1, 3).map((item: any) => (
               <div
-                key={item.name}
+                key={item.OBORUD_NUNBER}
                 className={`h-full card ${
-                  effect.includes(item.name) ? "rotated" : ""
+                  effect.includes(item.OBORUD_NUNBER) ? "rotated" : ""
                 }`}
               >
                 <div className="card frontofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
                   <div className="flex flex-col items-center font-medium h-full justify-center">
-                    <h2 className="font-bold title mb-2">{item.name}</h2>
+                    <h2 className="font-bold title mb-2">
+                      {item.OBORUD_NUNBER}
+                    </h2>
 
                     <p className="sub-text font-semibold">
-                      {item.roll_count} рулон
+                      {item.COUNT_RECORDS} рулон
                     </p>
 
-                    <p className="sub-text text-red-700">{timerFN()}</p>
+                    <p className="sub-text text-red-700">
+                      {item.time || timerFN()}
+                    </p>
                   </div>
                 </div>
                 <div className="card backofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
@@ -107,10 +112,11 @@ export const FirstColumn = () => {
                     </h2>
 
                     <p className="sub-text font-semibold">
-                      {item.roll_count} рулон
+                      {item.COUNT_RECORDS} рулон
                     </p>
-
-                    <p className="sub-text text-red-700">{timerFN()}</p>
+                    <p className="sub-text text-red-700">
+                      {item.time || timerFN()}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -120,7 +126,7 @@ export const FirstColumn = () => {
 
         {/* Last Row */}
         <div className="grid grid-cols-3 gap-2 row-span-2">
-          {newList.slice(4, 12).map((item) => (
+          {newData.slice(4, 12).map((item: any) => (
             <div
               key={item.name}
               className={`h-full card ${
@@ -134,10 +140,12 @@ export const FirstColumn = () => {
                   </h2>
 
                   <p className="sub-text font-semibold">
-                    {item.roll_count} рулон
+                    {item.COUNT_RECORDS} рулон
                   </p>
 
-                  <p className="sub-text text-red-700">{timerFN()}</p>
+                  <p className="sub-text text-red-700">
+                    {item.time || timerFN()}
+                  </p>
                 </div>
               </div>
               <div className="backofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
@@ -147,10 +155,12 @@ export const FirstColumn = () => {
                   </h2>
 
                   <p className="sub-text font-semibold">
-                    {item.roll_count} рулон
+                    {item.COUNT_RECORDS} рулон
                   </p>
 
-                  <p className="sub-text text-red-700">{timerFN()}</p>
+                  <p className="sub-text text-red-700">
+                    {item.time || timerFN()}
+                  </p>
                 </div>
               </div>
             </div>

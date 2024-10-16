@@ -351,7 +351,7 @@ const CTable = ({
               totalCount={meta.totalCount}
               currentLimit={filterParams.perPage}
               loader={isLoading}
-              height={tableHeight}
+              height={0}
               passRouter={passRouter}
               filterParams={filterParams}
               handleFilterParams={handleFilterParams}
@@ -453,7 +453,7 @@ const CTable = ({
                         {newHeadColumns.map((column: any, colIndex: number) => (
                           <CTableCell
                             key={colIndex}
-                            className={`overflow-ellipsis ${tableHeight}`}
+                            className={`overflow-ellipsis`}
                             style={{
                               minWidth: "max-content",
                               padding: "0 4px",
