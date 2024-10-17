@@ -105,7 +105,7 @@ export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
         .toLocaleString("en-US")
         .replace(",", " ");
 
-      if (index < 8) {
+      if (index < 12) {
         newArr.push({
           ...item,
           KOL_IN_MONTH: formatedMonth,
