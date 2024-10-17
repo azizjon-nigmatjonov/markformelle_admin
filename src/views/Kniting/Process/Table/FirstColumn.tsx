@@ -21,7 +21,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
 
     return arr.map((item: any, index: number) => {
       setTimeout(() => {
-        setEffect((prevEffect) => [...prevEffect, item.OBORUD_NUNBER]);
+        setEffect((prevEffect) => [...prevEffect, item.OBORUD_NUMBER]);
       }, index * ROTATION_DELAY);
 
       return {
@@ -49,15 +49,15 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
           {/* Big Card */}
           {newData?.slice(0, 1).map((item: any) => (
             <div
-              key={item.OBORUD_NUNBER}
+              key={item.OBORUD_NUMBER}
               className={`card col-span-2 relative h-full ${
-                effect.includes(item.OBORUD_NUNBER) ? "rotated" : ""
+                effect.includes(item.OBORUD_NUMBER) ? "rotated" : ""
               }`}
             >
               <div className="frontofcard card bg-[#6cce65] rounded-xl h-full px-2">
                 <div className="flex flex-col items-center font-medium h-full justify-center">
                   <h2 className="main-title font-bold title-big mb-2">
-                    {item.OBORUD_NUNBER}
+                    {item.OBORUD_NUMBER}
                   </h2>
 
                   <p className="main-sub-text">{item.COUNT_RECORDS} рулон</p>
@@ -68,13 +68,13 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
               <div className="backofcard card bg-[#6cce65] rounded-xl h-full px-2">
                 <div className="flex flex-col items-center font-medium h-full justify-center">
                   <h2 className="main-title font-bold title-big mb-2">
-                    {item.OBORUD_NUNBER}
+                    {item.OBORUD_NUMBER}
                   </h2>
 
                   <p className="main-sub-text">{item.COUNT_RECORDS} рулон</p>
 
                   <p className="main-sub-text text-red-700">
-                    {item?.time || timerFN}
+                    {item?.time || timerFN()}
                   </p>
                 </div>
               </div>
@@ -85,15 +85,15 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
           <div className="grid grid-cols-1 grid-rows-2 gap-2">
             {newData.slice(1, 3).map((item: any) => (
               <div
-                key={item.OBORUD_NUNBER}
+                key={item.OBORUD_NUMBER}
                 className={`h-full card ${
-                  effect.includes(item.OBORUD_NUNBER) ? "rotated" : ""
+                  effect.includes(item.OBORUD_NUMBER) ? "rotated" : ""
                 }`}
               >
                 <div className="card frontofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
                   <div className="flex flex-col items-center font-medium h-full justify-center">
                     <h2 className="font-bold title mb-2">
-                      {item.OBORUD_NUNBER}
+                      {item.OBORUD_NUMBER}
                     </h2>
 
                     <p className="sub-text font-semibold">
