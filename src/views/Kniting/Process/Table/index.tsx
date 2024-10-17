@@ -24,7 +24,7 @@ export const ProcessTable = () => {
   });
 
   useEffect(() => {
-    setTimeout(() => {
+    setInterval(() => {
       refetch();
       refetchCards();
     }, 60000);

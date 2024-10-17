@@ -25,25 +25,25 @@ export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
               <div className="w-[40px]">
                 {val[1] === 1 ? (
                   <img
-                    className="w-[35px]"
+                    className="w-[40px]"
                     src="/images/medal_1.png"
                     alt="first"
                   />
                 ) : val[1] === 2 ? (
                   <img
-                    className="w-[35px]"
+                    className="w-[40px]"
                     src="/images/medal_2.png"
                     alt="second"
                   />
                 ) : val[1] === 3 ? (
                   <img
-                    className="w-[35px]"
+                    className="w-[40px]"
                     src="/images/medal_3.png"
                     alt="third"
                   />
                 ) : (
                   <img
-                    className="w-[33px]"
+                    className="w-[35px]"
                     src="/images/danger.png"
                     alt={`last ${val[1]}`}
                   />
@@ -105,7 +105,7 @@ export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
         .toLocaleString("en-US")
         .replace(",", " ");
 
-      if (index < 6) {
+      if (index < 8) {
         newArr.push({
           ...item,
           KOL_IN_MONTH: formatedMonth,
