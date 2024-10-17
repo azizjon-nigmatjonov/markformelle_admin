@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import CTable from "../../../../components/CElements/CTable";
 import "./style.scss";
 
@@ -8,7 +8,6 @@ interface Props {
 }
 
 export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
-  const [totalValue, setTotalValue] = useState({});
   const headColumns = useMemo(() => {
     return [
       {
@@ -125,7 +124,6 @@ export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
       .replace(",", " ");
     return [...newArr, totalObj];
   }, [data]);
-  console.log("bodyData", bodyData);
 
   return (
     <div className="h-full table w-full">

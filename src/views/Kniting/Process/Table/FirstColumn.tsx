@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import CCard from "../../../../components/CElements/CCard";
-import useTimer from "../../../../hooks/useTimer";
 import "./style.scss";
 import { Skeleton } from "@mui/material";
+import { useCalucaleTime } from "../../../../hooks/useCalucaleTime";
 
 interface Props {
   data: any;
@@ -10,9 +10,9 @@ interface Props {
 }
 
 export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
-  const { timerFN } = useTimer();
   const [effect, setEffect] = useState<string[]>([]);
   const ROTATION_DELAY = 120;
+  const { GetTime } = useCalucaleTime();
 
   const newData = useMemo(() => {
     if (!data?.length) return [];
@@ -62,7 +62,10 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
 
                   <p className="main-sub-text">{item.COUNT_RECORDS} рулон</p>
 
-                  <p className="main-sub-text text-red-700">{item?.time}</p>
+                  <p className="main-sub-text text-red-700">
+                    {" "}
+                    {GetTime(item.DATE_CONTROL_FOR_TIMER)}
+                  </p>
                 </div>
               </div>
               <div className="backofcard card bg-[#6cce65] rounded-xl h-full px-2">
@@ -74,7 +77,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                   <p className="main-sub-text">{item.COUNT_RECORDS} рулон</p>
 
                   <p className="main-sub-text text-red-700">
-                    {item?.time || timerFN()}
+                    {GetTime(item.DATE_CONTROL_FOR_TIMER)}
                   </p>
                 </div>
               </div>
@@ -101,7 +104,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                     </p>
 
                     <p className="sub-text text-red-700">
-                      {item.time || timerFN()}
+                      {GetTime(item.DATE_CONTROL_FOR_TIMER)}
                     </p>
                   </div>
                 </div>
@@ -115,7 +118,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                       {item.COUNT_RECORDS} рулон
                     </p>
                     <p className="sub-text text-red-700">
-                      {item.time || timerFN()}
+                      {GetTime(item.DATE_CONTROL_FOR_TIMER)}
                     </p>
                   </div>
                 </div>
@@ -144,7 +147,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                   </p>
 
                   <p className="sub-text text-red-700">
-                    {item.time || timerFN()}
+                    {GetTime(item.DATE_CONTROL_FOR_TIMER)}
                   </p>
                 </div>
               </div>
@@ -159,7 +162,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                   </p>
 
                   <p className="sub-text text-red-700">
-                    {item.time || timerFN()}
+                    {GetTime(item.DATE_CONTROL_FOR_TIMER)}
                   </p>
                 </div>
               </div>
