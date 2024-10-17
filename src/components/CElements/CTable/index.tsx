@@ -44,6 +44,7 @@ interface Props {
   filterParams: any;
   handleActions?: (val: any, val2?: any) => void;
   idForTable?: string;
+  footer?: any;
 }
 
 const CTable = ({
@@ -65,6 +66,7 @@ const CTable = ({
   handleFilterParams = () => {},
   handleActions = () => {},
   tableSetting = true,
+  footer,
 }: Props) => {
   const tableSize = useSelector((state: any) => state.tableSize.tableSize);
   const location = useLocation();
@@ -602,6 +604,9 @@ const CTable = ({
           />
         ) : (
           ""
+        )}
+        {footer && (
+          <div className="border-t border-[var(--border)] px-3">{footer}</div>
         )}
       </div>
     </div>
