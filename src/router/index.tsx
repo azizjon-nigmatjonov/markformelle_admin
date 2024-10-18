@@ -1,11 +1,10 @@
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { websiteActions } from "../store/website/index";
 import MainLayout from "../layouts/MainLayout";
 import { routeList } from "./List";
 import ErrorBoundary from "../utils/ErrorBoundary";
-import { PageFallbackInner } from "../components/UI/PageFallback";
 import { routeParents } from "../constants/routeParents";
 
 const defaults = { ...routeParents };
@@ -119,43 +118,35 @@ const Router = () => {
   // }
 
   return (
-    <Suspense fallback={<PageFallbackInner />}>
-      <Routes>
-        <Route path="/" element={<MainLayout />}>
-          {routeList?.map((route: any, index) => (
-            <Route
-              path={getPath({
-                parent: route.parent,
-                link: route.link,
-                sidebar: route.sidebar,
-                title: route.title,
-                icon: route.icon,
-                custom_permissions: route?.permissions ?? [],
-                single_page: route?.single_page ?? false,
-                parent_icon: route?.parent_icon ?? "",
-                auth: route?.auth ?? false,
-                childLink: route?.childLink ?? "",
-                children: route?.children ?? [],
-              })}
-              key={index}
-              element={
-                <ErrorBoundary>
-                  <Suspense fallback={<PageFallbackInner />}>
-                    {route.element}
-                  </Suspense>
-                </ErrorBoundary>
-              }
-            />
-          ))}
-
+    <Routes>
+      <Route path="/" element={<MainLayout />}>
+        {routeList?.map((route: any, index) => (
           <Route
-            index
-            element={<Navigate to={"/kniting/knitting_machines"} />}
+            path={getPath({
+              parent: route.parent,
+              link: route.link,
+              sidebar: route.sidebar,
+              title: route.title,
+              icon: route.icon,
+              custom_permissions: route?.permissions ?? [],
+              single_page: route?.single_page ?? false,
+              parent_icon: route?.parent_icon ?? "",
+              auth: route?.auth ?? false,
+              childLink: route?.childLink ?? "",
+              children: route?.children ?? [],
+            })}
+            key={index}
+            element={<ErrorBoundary>{route.element}</ErrorBoundary>}
           />
-        </Route>
-        <Route path="*" element={<Navigate to="/kniting/knitting_machines" />} />
-      </Routes>
-    </Suspense>
+        ))}
+
+        <Route
+          index
+          element={<Navigate to={"/knitting/knitting_machines"} />}
+        />
+      </Route>
+      <Route path="*" element={<Navigate to="/knitting/knitting_machines" />} />
+    </Routes>
   );
 };
 

@@ -1,9 +1,11 @@
 import { adminList } from "./admins";
-import { knitingList } from "./kniting";
+import { knittingList } from "./knitting";
 import { settingList } from "./settings";
+import { wareHouse } from "./warehouse";
 
 export const routeList = [
   ...settingList,
-  ...knitingList,
-  ...adminList
+  ...knittingList,
+  ...wareHouse,
+  ...adminList,
 ];

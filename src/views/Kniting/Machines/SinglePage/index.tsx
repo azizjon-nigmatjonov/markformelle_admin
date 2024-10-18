@@ -4,18 +4,18 @@ import CBreadcrumbs from "../../../../components/CElements/CBreadcrumbs";
 
 import CCard from "../../../../components/CElements/CCard";
 
-const KnitingMachine = () => {
+const knittingMachine = () => {
   const { id } = useParams();
 
   const breadCrumbItems = [
-    { label: "kniting", link: "/kniting/analytics/machines" },
-    { label: "kniting_machine", link: "/dashboard/dashboard" },
+    { label: "knitting", link: "/knitting/analytics/machines" },
+    { label: "knitting_machine", link: "/dashboard/dashboard" },
   ];
 
   return (
     <>
       <Header
-        extra={<CBreadcrumbs items={breadCrumbItems} progmatic={true}  />}
+        extra={<CBreadcrumbs items={breadCrumbItems} progmatic={true} />}
       ></Header>
       <div className="container">
         <CCard title="Статистика по плану">{id}</CCard>
@@ -24,4 +24,4 @@ const KnitingMachine = () => {
   );
 };
 
-export default KnitingMachine;
+export default knittingMachine;

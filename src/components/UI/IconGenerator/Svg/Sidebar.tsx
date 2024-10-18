@@ -62,7 +62,7 @@ export const IncreasingIcon = ({ fill = "#000D26" }) => (
   </svg>
 );
 
-export const KnitingIcon = ({ fill = "#000D26" }) => (
+export const knittingIcon = ({ fill = "#000D26" }) => (
   <svg
     width="24"
     height="24"

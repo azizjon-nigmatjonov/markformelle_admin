@@ -15,7 +15,7 @@ const searchedWords = [
   "zakaz",
 ];
 
-const KnitingMachines = () => {
+const KnittingMachines = () => {
   const { bodyData, refetch } = FetchFunction();
   const [searchVal, setSearchVal]: any = useState([]);
   const [checked, setChecked]: any = useState(["all"]);
@@ -29,7 +29,7 @@ const KnitingMachines = () => {
     setInterval(() => {
       refetch();
     }, 10000);
-  }, []); // Include refetch as a dependency
+  }, []);
 
   const searchWods = (val: string) => {
     setSearch(val);
@@ -290,4 +290,4 @@ const KnitingMachines = () => {
   );
 };
 
-export default KnitingMachines;
+export default KnittingMachines;

@@ -34,7 +34,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           </p>
           <div>
             <button
-              onClick={() => (location.href = "/kniting/knitting_machines")}
+              onClick={() => (location.href = "/knitting/knitting_machines")}
               className="custom-btn"
             >
               Вязальные машины

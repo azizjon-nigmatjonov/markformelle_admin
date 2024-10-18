@@ -8,7 +8,7 @@ import { MachinePlans } from "./Pages/Plan";
 import { MachineDefects } from "./Pages/Defects";
 import { CPeriodPicker } from "../../../../components/CElements/CPeriodPicker";
 
-const KnitingdAnalytics = () => {
+const knittingdAnalytics = () => {
   const [currentTab, setCurrentTab] = useState({ name: "", id: "list" });
 
   const CurrentPage = (tab: string) => {
@@ -45,4 +45,4 @@ const KnitingdAnalytics = () => {
   );
 };
 
-export default KnitingdAnalytics;
+export default knittingdAnalytics;

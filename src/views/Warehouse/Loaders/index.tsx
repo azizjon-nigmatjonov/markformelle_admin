@@ -1,7 +1,7 @@
 import { Header } from "../../../components/UI/Header";
 import { ProcessTable } from "./Table";
 
-const WarehouseLoaders = () => {
+const KnittingProcess = () => {
   return (
     <>
       <Header />
@@ -10,4 +10,4 @@ const WarehouseLoaders = () => {
   );
 };
 
-export default WarehouseLoaders;
+export default KnittingProcess;

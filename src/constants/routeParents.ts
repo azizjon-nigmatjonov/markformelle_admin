@@ -1,5 +1,6 @@
 export const routeParents = {
-  kniting: [],
+  knitting: [],
+  warehouse: [],
   access: [],
   settings: [],
 };

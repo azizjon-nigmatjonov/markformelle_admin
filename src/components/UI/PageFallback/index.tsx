@@ -4,7 +4,7 @@ import cls from "./style.module.scss";
 const PageFallback = () => {
   return (
     <div className={cls.fallbackPage}>
-      <img src="/logo-full.svg" alt="logo" width={300} />
+      <CircularProgress size={120} />
     </div>
   );
 };
@@ -17,4 +17,4 @@ export const PageFallbackInner = () => {
       <CircularProgress size={120} />
     </div>
   );
-}
+};

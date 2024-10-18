@@ -164,7 +164,7 @@ export const MachineList = () => {
 
   const handleActions = (el: any, type: string) => {
     if (type === "view") {
-      navigateTo(`/kniting/machine/${el.id}`);
+      navigateTo(`/knitting/machine/${el.id}`);
     }
   };
 

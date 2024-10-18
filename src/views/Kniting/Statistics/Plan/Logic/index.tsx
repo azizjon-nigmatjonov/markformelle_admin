@@ -2,7 +2,7 @@ import useCQuery from "../../../../../hooks/useCQuery";
 
 export const breadCrumbItems = [
   { label: "dashboard", link: "/dashboard/dashboard" },
-  { label: "kniting_analytics_plans", link: "/dashboard/dashboard" },
+  { label: "knitting_analytics_plans", link: "/dashboard/dashboard" },
 ];
 
 export const TableData = () => {
@@ -40,6 +40,6 @@ export const FetchFunction = () => {
       // page: 1,
     },
   });
-  
+
   return { bodyData: data ?? [], isLoading };
 };

@@ -71,10 +71,10 @@ const CTable = ({
   const tableSize = useSelector((state: any) => state.tableSize.tableSize);
   const location = useLocation();
   const tableSettings: Record<string, any> = {};
-  const [headColHeight, setHeadColHeight] = useState(45);
-  const [tableHeight, setTableHeight] = useState(500);
-  //   const { currentSort } = useGetQueries();
-  console.log("tableHeight", tableHeight);
+  // const [headColHeight, setHeadColHeight] = useState(45);
+  // const [tableHeight, setTableHeight] = useState(500);
+  // //   const { currentSort } = useGetQueries();
+  // console.log("tableHeight", tableHeight);
 
   const [currentIndex, setCurrentIndex] = useState(null);
   const [currDelete, setCurrDelete] = useState<any>({});
@@ -193,7 +193,7 @@ const CTable = ({
         resizer.style.height = `${table.offsetHeight}px`;
 
         col.appendChild(resizer);
-        setHeadColHeight(col.offsetHeight);
+        // setHeadColHeight(col.offsetHeight);
         createResizableColumn(col, resizer, idx);
       });
     };
@@ -289,7 +289,7 @@ const CTable = ({
 
   const handleGetHeightFn = () => {
     if (autoHeight) {
-      setTableHeight(0);
+      // setTableHeight(0);
       return;
     }
     let res = 0;
@@ -297,9 +297,9 @@ const CTable = ({
       if (item?.ref) res = res + item.ref.offsetHeight;
     });
 
-    const currentHeight = res + headColHeight + 2;
-    if (currentHeight && currentHeight > 400) setTableHeight(currentHeight);
-    else setTableHeight(500);
+    // const currentHeight = res + headColHeight + 2;
+    // if (currentHeight && currentHeight > 400) setTableHeight(currentHeight);
+    // else setTableHeight(500);
   };
 
   const handleBodycolRef = (item: any, e: any) => {
@@ -415,22 +415,6 @@ const CTable = ({
                           : column?.id === "index"
                           ? "№"
                           : t(column.title)}
-                        {/* {column?.filter && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      right: "10px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                    }}
-                  >
-                    <CFilter
-                      currentSort={currentSort}
-                      up={`up_${column.id}`}
-                      down={`down_${column.id}`}
-                    />
-                  </div>
-                )} */}
                       </div>
                     </CTableHeadCell>
                   ))}
@@ -448,11 +432,11 @@ const CTable = ({
                       <TableRow
                         key={rowIndex}
                         ref={(e) => handleBodycolRef(item, e)}
-                        className={
+                        className={`${
                           clickable && !item.empty && checkPermission("view")
                             ? "clickable"
                             : ""
-                        }
+                        }`}
                       >
                         {newHeadColumns.map((column: any, colIndex: number) => (
                           <CTableCell

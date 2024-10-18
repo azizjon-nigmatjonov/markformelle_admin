@@ -1,9 +1,9 @@
 {
   "finance": "Финансы",
-  "kniting": "Вязального участка",
-  "knitingavto": "Вязальные машины",
-  "kniting_analytics": "Статистика вязания",
-  "kniting_analytics_machines": "Статистика машины",
+  "knitting": "Вязального участка",
+  "knittingavto": "Вязальные машины",
+  "knitting_analytics": "Статистика вязания",
+  "knitting_analytics_machines": "Статистика машины",
   "access": "Доступы",
   "users": "Все пользователи",
   "rolls": "Роль пользователя",
@@ -22,7 +22,7 @@
   "settings": "Настройки",
   "yes": "Да",
   "no": "Нет",
-  "kniting_analytics_plan": "Статистика плана",
+  "knitting_analytics_plan": "Статистика плана",
   "add": "Добавить",
   "no_information": "Информация недоступна",
   "plan": "План",
@@ -36,7 +36,8 @@
   "stopped": "Остановлено",
   "article": "Артикул",
   "machine_power": "Мощность машины",
-  "kniting_machine": "Вязальная машина",
+  "knitting_machine": "Вязальная машина",
   "plan_amount": "Количество планов",
-  "couriers_dashboard": "Грузчик дашбоард "
+  "couriers_dashboard": "Грузчик дашбоард ",
+  "warehouse": "Склад сурового"
 }

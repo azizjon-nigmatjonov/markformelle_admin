@@ -3,7 +3,7 @@ import {
   AnalyticsIcon,
   Dashboard,
   IncreasingIcon,
-  KnitingIcon,
+  knittingIcon,
   PagesIcon,
   RolsIcon,
   SettingIcon,
@@ -24,11 +24,11 @@ export const iconsList = [
   },
   {
     name: "machines",
-    component: KnitingIcon,
+    component: knittingIcon,
   },
   {
-    name: "kniting",
-    component: KnitingIcon,
+    name: "knitting",
+    component: knittingIcon,
   },
   {
     name: "dashboard",
