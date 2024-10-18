@@ -20,7 +20,7 @@ export const knittingList = [
     link: "loaders",
     sidebar: true,
     title: "Дашборд грузчики 614",
-    icon: "couriers",
+    icon: <img width={22} src="/images/fork-loader.png" alt="loader" />,
     element: <KnittingProcess />,
     auth: false,
   },

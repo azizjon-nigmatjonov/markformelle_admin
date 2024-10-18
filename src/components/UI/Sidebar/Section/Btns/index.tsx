@@ -36,12 +36,11 @@ const Btn = ({
         onClick={() => clearFilter()}
         className={`${
           isLastItem ? "mb-2" : ""
-        } flex gap-2 menu_link menu_inner_link cursor-pointer text-sm font-medium ${active ? 'active text-[var(--main)]' : 'text-[var(--gray)]'}`}
+        } flex gap-2 menu_link menu_inner_link cursor-pointer text-sm font-medium ${
+          active ? "active text-[var(--main)]" : "text-[var(--gray)]"
+        }`}
       >
-        <IconGenerator
-          icon={el.icon}
-          fill={active ? "var(--main)" : "var(--gray)"}
-        />
+        <IconGenerator icon={el.icon} fill="var(--black)" />
         <span>{t(el.title)}</span>
       </p>
     </button>
@@ -59,7 +58,7 @@ export const SectionBtns = ({
 }: Props) => {
   const { t } = useTranslation();
   const location = useLocation();
-  
+
   if (children?.length) {
     const [open, setOpen] = useState(false);
     return (
@@ -78,18 +77,20 @@ export const SectionBtns = ({
           >
             <p
               onClick={() => clearFilter()}
-              className={`flex gap-2 menu_link cursor-pointer text-sm font-medium whitespace-nowrap ${active ? 'text-[var(--main)]' : 'text-[var(--gray)]'}`}
+              className={`flex gap-2 menu_link cursor-pointer text-sm font-medium whitespace-nowrap ${
+                active ? "text-[var(--black)]" : "text-[var(--gray)]"
+              }`}
             >
               <IconGenerator
                 icon={el.icon}
-                fill={active ? "var(--main)" : "var(--gray)"}
+                fill={active ? "var(--black)" : "var(--black)"}
               />
               <span>{t(el.title)}</span>
             </p>
 
             <div className={open ? "rotate-[180deg]" : ""}>
               <ArrowDropDownIcon
-                style={{ color: active ? "var(--main)" : "var(--gray)" }}
+                style={{ color: active ? "var(--black)" : "var(--gray)" }}
               />
             </div>
           </div>

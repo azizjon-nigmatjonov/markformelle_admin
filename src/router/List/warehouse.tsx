@@ -9,7 +9,7 @@ export const wareHouse = [
     parent_icon: (
       <img width={18} src="/images/wherehouse.png" alt="warehouse" />
     ),
-    icon: "couriers",
+    icon: <img width={22} src="/images/fork-loader.png" alt="loader" />,
     element: <WarehouseLoaders />,
     auth: false,
   },
