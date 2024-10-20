@@ -32,15 +32,13 @@ export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
         .toLocaleString("en-US")
         .replace(",", " ");
 
-      if (index < 12) {
-        newArr.push({
-          ...item,
-          KOL_IN_MONTH: formatedMonth,
-          KOL_TODAY: formatedDay,
-          order: index + 1,
-          FIO: `${naming[1]}`,
-        });
-      }
+      newArr.push({
+        ...item,
+        KOL_IN_MONTH: formatedMonth,
+        KOL_TODAY: formatedDay,
+        order: index + 1,
+        FIO: `${naming[1]}`,
+      });
     }) ?? [];
 
     totalObj.KOL_IN_MONTH = parseInt(totalObj.KOL_IN_MONTH)
@@ -162,7 +160,7 @@ export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
   // console.log("FooterData", FooterData);
 
   return (
-    <div className="w-full h-full table">
+    <div className="w-full h-full table pb-[40px]">
       <CTable
         headColumns={headColumns}
         bodyColumns={bodyData}

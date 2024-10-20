@@ -71,6 +71,7 @@ const CTable = ({
   const tableSize = useSelector((state: any) => state.tableSize.tableSize);
   const location = useLocation();
   const tableSettings: Record<string, any> = {};
+  const [colProperties, setColProperties]: any = useState({});
   // const [headColHeight, setHeadColHeight] = useState(45);
   // const [tableHeight, setTableHeight] = useState(500);
   // //   const { currentSort } = useGetQueries();
@@ -132,13 +133,13 @@ const CTable = ({
     return data;
   }, [pageColumns, headColumns, pageName, tableSetting]);
 
-  useEffect(() => {
-    const tableEl = document.getElementById("table");
-    const moveXel = tableEl?.querySelector(".wrapper");
-    if (moveXel) {
-      moveXel.scrollTo(1200, 0); // Scrolls to 12000 pixels to the right
-    }
-  }, []);
+  // useEffect(() => {
+  //   const tableEl = document.getElementById("table");
+  //   const moveXel = tableEl?.querySelector(".wrapper");
+  //   if (moveXel) {
+  //     moveXel.scrollTo(1200, 0); // Scrolls to 12000 pixels to the right
+  //   }
+  // }, []);
 
   const bodySource = useMemo(() => {
     if (!bodyColumns?.length) return [];
@@ -179,6 +180,25 @@ const CTable = ({
   }, [bodyColumns, filterParams.perPage, filterParams.page, headColumns]);
 
   useEffect(() => {
+    const table = document.getElementById("resizeMe");
+    if (!table) return;
+    const newObj: any = { all: 0 };
+    const cols = table.querySelectorAll("th");
+
+    [].forEach.call(cols, function (col: any, idx: number) {
+      const resizer = document.createElement("span");
+      resizer.classList.add("resizer");
+      resizer.style.height = `${table.offsetHeight}px`;
+
+      col.appendChild(resizer);
+
+      newObj[idx] = col.offsetWidth;
+      newObj.all += col.offsetWidth
+    });
+    setColProperties(newObj);
+  }, []);
+
+  useEffect(() => {
     if (!isResizeble) return;
 
     const createResizableTable = function (table: any) {
@@ -193,7 +213,8 @@ const CTable = ({
         resizer.style.height = `${table.offsetHeight}px`;
 
         col.appendChild(resizer);
-        // setHeadColHeight(col.offsetHeight);
+        // setHeadColHeight(col.offset);
+
         createResizableColumn(col, resizer, idx);
       });
     };
@@ -349,7 +370,7 @@ const CTable = ({
           }`}
           ref={tableRef}
         >
-          <div className="wrapper">
+          <div className="wrapper overflow-y-scroll">
             <CTableWrapper
               count={meta.pageCount}
               totalCount={meta.totalCount}
@@ -436,13 +457,19 @@ const CTable = ({
                           clickable && !item.empty && checkPermission("view")
                             ? "clickable"
                             : ""
+                        } ${
+                          rowIndex === bodyColumns.length - 1
+                            ? "fixed bottom-5 rounded-b-2xl right-3 bg-white w-full border-t border-[var(--border)]"
+                            : ""
                         }`}
+                        style={{ width: rowIndex === bodyColumns.length - 1 ? colProperties?.all + 15 : '' }}
                       >
                         {newHeadColumns.map((column: any, colIndex: number) => (
                           <CTableCell
                             key={colIndex}
                             className={`overflow-ellipsis`}
                             style={{
+                              width: colProperties[colIndex] + 6 || "auto",
                               minWidth: "max-content",
                               padding: "0 4px",
                               position: tableSettings?.[pageName]?.find(
