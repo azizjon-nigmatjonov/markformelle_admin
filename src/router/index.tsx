@@ -140,12 +140,9 @@ const Router = () => {
           />
         ))}
 
-        <Route
-          index
-          element={<Navigate to={"/knitting/knitting_machines"} />}
-        />
+        <Route index element={<Navigate to={"/knitting/machines"} />} />
       </Route>
-      <Route path="*" element={<Navigate to="/knitting/knitting_machines" />} />
+      <Route path="*" element={<Navigate to="/knitting/machines" />} />
     </Routes>
   );
 };
