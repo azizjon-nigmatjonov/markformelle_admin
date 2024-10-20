@@ -40,7 +40,7 @@ const Btn = ({
           active ? "active text-[var(--main)]" : "text-[var(--gray)]"
         }`}
       >
-        <IconGenerator icon={el.icon} fill="var(--black)" />
+        <IconGenerator icon={el.icon} fill={active ? 'var(--main)' : 'var(--gray)'} />
         <span>{t(el.title)}</span>
       </p>
     </button>
@@ -83,7 +83,7 @@ export const SectionBtns = ({
             >
               <IconGenerator
                 icon={el.icon}
-                fill={active ? "var(--black)" : "var(--black)"}
+                fill={active ? "var(--main)" : "var(--gray)"}
               />
               <span>{t(el.title)}</span>
             </p>

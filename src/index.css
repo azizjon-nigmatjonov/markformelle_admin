@@ -134,30 +134,26 @@ body {
   /* margin-left: 3px; */
 }
 
-.menu_link.active:hover::before {
-  content: none;
-}
-
 .menu_link {
   padding-left: 10px;
 }
 
 .menu_link.active {
-  border-left: 2px solid var(--black);
-  /* &::before {
+  position: relative;
+  &::before {
     content: '';
     width: 2px;
     height: 100%;
-
     position: absolute;
-    left: 0px;
+    left: 0;
     top: 0;
-  } */
-  /* background: linear-gradient(
+    background-color: var(--main);
+  }
+  background: linear-gradient(
     90deg,
     rgba(255, 195, 162, 0.3) 0%,
     rgba(30, 26, 23, 0) 100%
-  ); */
+  );
   span {
     color: var(--black);
   }
