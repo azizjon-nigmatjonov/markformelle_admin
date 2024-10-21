@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CTable from "../../../../components/CElements/CTable";
 import "./style.scss";
 
@@ -8,13 +8,16 @@ interface Props {
 }
 
 export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
-  const bodyData = useMemo(() => {
+  const [total, setTotal]: any = useState({});
+  const [bodyData, setBodyData] = useState([]);
+
+  useEffect(() => {
     const arr = data?.sort((a: any, b: any) => b.KOL_IN_MONTH - a.KOL_IN_MONTH);
     const newArr: any = [];
     const totalObj: any = {
-      KOL_IN_MONTH: 0,
-      KOL_TODAY: 0,
-      FIO: "Общий",
+      month: 0,
+      day: 0,
+      title: "Общий",
       order: 0,
       TABN: "123",
     };
@@ -22,8 +25,8 @@ export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
     arr?.forEach((item: any, index: number) => {
       const naming = item.FIO.trim().split(" ").slice(0, 2);
 
-      totalObj.KOL_IN_MONTH += item.KOL_IN_MONTH;
-      totalObj.KOL_TODAY += item.KOL_TODAY;
+      totalObj.month += item.KOL_IN_MONTH;
+      totalObj.day += item.KOL_TODAY;
 
       const formatedMonth = parseInt(item.KOL_IN_MONTH)
         .toLocaleString("en-US")
@@ -32,24 +35,26 @@ export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
         .toLocaleString("en-US")
         .replace(",", " ");
 
-      if (index < 12) {
-        newArr.push({
-          ...item,
-          KOL_IN_MONTH: formatedMonth,
-          KOL_TODAY: formatedDay,
-          order: index + 1,
-          FIO: `${naming[1]}`,
-        });
-      }
+      newArr.push({
+        ...item,
+        KOL_IN_MONTH: formatedMonth,
+        KOL_TODAY: formatedDay,
+        order: index + 1,
+        FIO: `${naming[1]}`,
+      });
     }) ?? [];
 
-    totalObj.KOL_IN_MONTH = parseInt(totalObj.KOL_IN_MONTH)
+    totalObj.month = parseInt(totalObj.month)
       .toLocaleString("en-US")
       .replace(",", " ");
-    totalObj.KOL_TODAY = parseInt(totalObj.KOL_TODAY)
+    totalObj.day = parseInt(totalObj.day)
       .toLocaleString("en-US")
       .replace(",", " ");
-    return [...newArr, totalObj];
+    setBodyData(newArr);
+
+    setTimeout(() => {
+      setTotal(totalObj);
+    }, 0);
   }, [data]);
 
   const headColumns = useMemo(() => {
@@ -134,33 +139,6 @@ export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
     ];
   }, [bodyData]);
 
-  // const FooterData = useMemo(() => {
-  //   const totalObj: any = {
-  //     KOL_IN_MONTH: 0,
-  //     KOL_TODAY: 0,
-  //     FIO: "Общий",
-  //     order: 0,
-  //     TABN: "123",
-  //   };
-
-  //   data?.forEach((item: any) => {
-  //     totalObj.KOL_IN_MONTH += item.KOL_IN_MONTH;
-  //     totalObj.KOL_TODAY += item.KOL_TODAY;
-  //   }) ?? [];
-
-  //   totalObj.KOL_IN_MONTH = parseInt(totalObj.KOL_IN_MONTH)
-  //     .toLocaleString("en-US")
-  //     .replace(",", " ");
-
-  //   totalObj.KOL_TODAY = parseInt(totalObj.KOL_TODAY)
-  //     .toLocaleString("en-US")
-  //     .replace(",", " ");
-
-  //   return totalObj;
-  // }, [data]);
-
-  // console.log("FooterData", FooterData);
-
   return (
     <div className="w-full h-full table">
       <CTable
@@ -172,19 +150,8 @@ export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
         tableSetting={false}
         isResizeble={false}
         isLoading={isLoading}
+        footer={total}
       />
-
-      {/* <div
-        className="fixed z-[3] right-4 bottom-[20px] bg-white border-t border-[var(--border)] h-[50px]"
-        style={{ width: "calc(50% - 10px)" }}
-      >
-        <ul className="px-4 flex items-center justify-between h-full">
-          <li className="w-[35%] flex items-center justify-between font-medium text-2xl">
-            <h3>Общий</h3>
-            <span>{bodyData.length}</span>
-          </li>
-        </ul>
-      </div> */}
     </div>
   );
 };

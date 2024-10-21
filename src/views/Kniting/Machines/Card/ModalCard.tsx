@@ -90,7 +90,9 @@ const ModalCard: React.FC<MachineCardProps> = ({
     } else if (
       machine.not_broken == "true" &&
       machine.machine_is_on == "true" &&
-      machine.rotation == 0
+      machine.rotation == 0 &&
+      machine.no_connnection === "false" &&
+      machine.pkol_knit !== 0
     ) {
       return "red";
     } else {
@@ -100,6 +102,7 @@ const ModalCard: React.FC<MachineCardProps> = ({
   const [checked1, setChecked1] = React.useState(
     machine.machine_is_on == "true"
   );
+
   const [checked2, setChecked2] = React.useState(machine.not_broken == "true");
 
   return (
@@ -119,7 +122,7 @@ const ModalCard: React.FC<MachineCardProps> = ({
               <ListItem
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
-                <Typography>Номер машины </Typography>
+                <Typography>Название машины </Typography>
                 <Typography>{machine.name}</Typography>
               </ListItem>
               <ListDivider />

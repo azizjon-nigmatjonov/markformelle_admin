@@ -81,4 +81,8 @@ $maxWidthContainer: 1800;
         @include adapviteValue(font-size, 28, 19, 1);
         font-weight: bold;
     }
+    .footer_text {
+        @include adapviteValue(font-size, 38, 30, 1);
+        font-weight: bold;
+    }
 }

@@ -1,4 +1,4 @@
-import WarehouseLoaders from "../../views/Kniting/Process";
+import WarehouseLoaders from "../../views/Warehouse/Loaders";
 
 export const wareHouse = [
   {

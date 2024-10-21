@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import CCard from "../../../../components/CElements/CCard";
 import "./style.scss";
 import { Skeleton } from "@mui/material";
-import { useCalucaleTime } from "../../../../hooks/useCalucaleTime";
+import { useCalculateTime } from "../../../../hooks/useCalucaleTime";
 
 interface Props {
   data: any;
@@ -12,7 +12,7 @@ interface Props {
 export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
   const [effect, setEffect] = useState<string[]>([]);
   const ROTATION_DELAY = 120;
-  const { GetTime } = useCalucaleTime();
+  const { GetTime } = useCalculateTime();
 
   const newData = useMemo(() => {
     if (!data?.length) return [];

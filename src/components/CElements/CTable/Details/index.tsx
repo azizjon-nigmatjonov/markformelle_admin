@@ -1,5 +1,5 @@
 import { Paper } from "@mui/material";
-import EmptyDataComponent from "../../../UI/EmptyDataComponent";
+// import EmptyDataComponent from "../../../UI/EmptyDataComponent";
 import "./style.scss";
 import { ReactNode } from "react";
 import TableLoader from "./TableLoader";
@@ -90,7 +90,7 @@ export const CTableBody = ({
       <TableLoader isVisible={loader} rowsCount={rowsCount} />
       <tbody className="CTableBody" {...props} ref={ref}>
         {!loader && children}
-        <EmptyDataComponent isVisible={dataLength < 1 && !loader} />
+        {/* <EmptyDataComponent isVisible={dataLength < 1 && !loader} /> */}
       </tbody>
     </>
   );
@@ -132,4 +132,3 @@ export const CTableCell = ({
     </td>
   );
 };
-

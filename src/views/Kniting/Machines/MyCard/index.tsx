@@ -152,7 +152,7 @@ export const MyCard = ({ machine }: Props) => {
                     : Number(machine.fakt_percentage)
                 }
                 maxValue={100}
-                size={size}
+                size={window.screen.width < 940 ? 110 : size}
               >
                 <div>
                   <p className="text inner">

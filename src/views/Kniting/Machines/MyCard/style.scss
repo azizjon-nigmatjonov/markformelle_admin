@@ -182,27 +182,34 @@ $maxWidthContainer: 1600;
 
 @media (max-width: 940px) {
     .wrapper {
-        padding: 8px;
-        padding-top: 8px !important;
+        padding: 2px 6px;
+        // padding-top: 2px !important;
+        // padding-bottom: 2px !important;
     }
 
     .title {
-        font-size: 18px;
+        font-size: 16px;
+        font-weight: bold;
     }
 
     .sub-title {
-        font-size: 16px;
+        font-size: 14px;
 
         svg {
-            width: 20px;
+            width: 15px;
         }
     }
 
     .text {
-        font-size: 13px;
+        font-size: 16px;
+
+        &.inner {
+            font-size: 13px;
+            font-weight: 700;
+        }
 
         svg {
-            width: 20px;
+            width: 14px;
         }
     }
 
@@ -217,43 +224,43 @@ $maxWidthContainer: 1600;
     }
 }
 
-@media (max-width: 760px) {
-    .title {
-        font-size: 24px;
-        font-weight: bold;
-    }
+// @media (max-width: 760px) {
+//     .title {
+//         font-size: 24px;
+//         font-weight: bold;
+//     }
 
-    .sub-title {
-        font-size: 22px;
+//     .sub-title {
+//         font-size: 22px;
 
-        svg {
-            width: 20px;
-        }
-    }
+//         svg {
+//             width: 20px;
+//         }
+//     }
 
-    .text {
-        font-size: 16px;
+//     .text {
+//         font-size: 16px;
 
-        &.inner {
-            font-size: 17px;
-            font-weight: 700;
-        }
+//         &.inner {
+//             font-size: 17px;
+//             font-weight: 700;
+//         }
 
-        svg {
-            width: 20px;
-        }
-    }
+//         svg {
+//             width: 20px;
+//         }
+//     }
 
-    .text-error {
-        font-size: 20px;
-    }
+//     .text-error {
+//         font-size: 20px;
+//     }
 
-    .image {
-        svg {
-            width: 40px;
-        }
-    }
-}
+//     .image {
+//         svg {
+//             width: 40px;
+//         }
+//     }
+// }
 
 @media (min-width: 1440px) {
     .image {

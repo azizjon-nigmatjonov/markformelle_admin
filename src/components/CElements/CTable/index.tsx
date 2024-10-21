@@ -179,24 +179,26 @@ const CTable = ({
     );
   }, [bodyColumns, filterParams.perPage, filterParams.page, headColumns]);
 
+  const [active, setActive] = useState(false);
+
   useEffect(() => {
-    const table = document.getElementById("resizeMe");
+    const table = document.getElementById("table");
     if (!table) return;
     const newObj: any = { all: 0 };
     const cols = table.querySelectorAll("th");
 
     [].forEach.call(cols, function (col: any, idx: number) {
-      const resizer = document.createElement("span");
-      resizer.classList.add("resizer");
-      resizer.style.height = `${table.offsetHeight}px`;
-
-      col.appendChild(resizer);
-
       newObj[idx] = col.offsetWidth;
-      newObj.all += col.offsetWidth
     });
+
+    newObj.all = table.offsetWidth;
+
     setColProperties(newObj);
-  }, []);
+
+    setTimeout(() => {
+      setActive(true);
+    }, 900);
+  }, [active]);
 
   useEffect(() => {
     if (!isResizeble) return;
@@ -370,7 +372,9 @@ const CTable = ({
           }`}
           ref={tableRef}
         >
-          <div className="wrapper overflow-y-scroll">
+          <div
+            className={`wrapper ${footer ? "pb-[50px] overflow-hidden" : ""}`}
+          >
             <CTableWrapper
               count={meta.pageCount}
               totalCount={meta.totalCount}
@@ -457,19 +461,13 @@ const CTable = ({
                           clickable && !item.empty && checkPermission("view")
                             ? "clickable"
                             : ""
-                        } ${
-                          rowIndex === bodyColumns.length - 1
-                            ? "fixed bottom-5 rounded-b-2xl right-3 bg-white w-full border-t border-[var(--border)]"
-                            : ""
                         }`}
-                        style={{ width: rowIndex === bodyColumns.length - 1 ? colProperties?.all + 15 : '' }}
                       >
                         {newHeadColumns.map((column: any, colIndex: number) => (
                           <CTableCell
                             key={colIndex}
                             className={`overflow-ellipsis`}
                             style={{
-                              width: colProperties[colIndex] + 6 || "auto",
                               minWidth: "max-content",
                               padding: "0 4px",
                               position: tableSettings?.[pageName]?.find(
@@ -599,6 +597,35 @@ const CTable = ({
                   : ""}
               </CTableBody>
             </CTableWrapper>
+            {footer && active ? (
+              <div
+                className="border-t border-[var(--border)] bg-white px-3 fixed bottom-3 rounded-b-lg right-4 w-full flex overflow-hidden whitespace-nowrap"
+                style={{ width: colProperties?.all - 5 }}
+              >
+                <div
+                  style={{ width: colProperties?.[0] }}
+                  className="px-3 py-1 border-r border-[var(--border)]"
+                >
+                  <p className="footer_text flex justify-between pr-8">
+                    {footer.title} <span>{bodyColumns.length}</span>
+                  </p>
+                </div>
+                <div
+                  style={{ width: colProperties?.[1] }}
+                  className="px-3 py-1 border-r border-[var(--border)]"
+                >
+                  <p className="footer_text">{footer.month}</p>
+                </div>
+                <div
+                  style={{ width: colProperties?.[2] }}
+                  className="px-3 py-1"
+                >
+                  <p className="footer_text">{footer.day}</p>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
 
@@ -616,9 +643,10 @@ const CTable = ({
         ) : (
           ""
         )}
-        {footer && (
+
+        {/* {footer && (
           <div className="border-t border-[var(--border)] px-3">{footer}</div>
-        )}
+        )} */}
       </div>
     </div>
   );

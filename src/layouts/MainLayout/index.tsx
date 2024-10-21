@@ -38,7 +38,7 @@ const MainLayout = () => {
         className="fixed right-3 bottom-3 z-[99]"
         onClick={() => handleResize()}
       >
-        <ResizeIcon fill={resize ? 'black' : 'var(--gray)'} />
+        <ResizeIcon fill={resize ? "black" : "var(--gray)"} />
       </button>
     </div>
   );

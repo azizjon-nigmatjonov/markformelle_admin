@@ -72,7 +72,7 @@ const KnittingMachines = () => {
           element.pkol_knit === 0 &&
           element.machine_is_on === "true" &&
           element.no_connnection === "false" &&
-          checked.includes("blue")
+          (checked.includes("blue") || checked.includes("red_yarn"))
         ) {
           listData.push(element);
         } else if (element.pkol_knit == 0) {
@@ -250,9 +250,12 @@ const KnittingMachines = () => {
         </div>
       </Header>
 
-      <div className="px-2 py-2 lg:p-3" ref={gridRef}>
+      <div
+        className="px-2 py-2 lg:p-3 h-[95vh] overflow-scroll remove-scroll ipod:h-auto ipod:overflow-unset"
+        ref={gridRef}
+      >
         <div
-          className={`grid-machines-dashboard grid overflow-x-scroll remove-scroll w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-3 md:gap-[1px] lg:gap-3`}
+          className={`grid-machines-dashboard grid w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-3 md:gap-[1px] lg:gap-3`}
           style={{
             height:
               checked?.[0] !== "all" || search.length
@@ -273,7 +276,9 @@ const KnittingMachines = () => {
                 style={{
                   width: "100%",
                   height:
-                    checked?.[0] !== "all" || search.length
+                    window.screen.width < 940
+                      ? "120px"
+                      : checked?.[0] !== "all" || search.length
                       ? "calc((100vh / 7) - 18px)"
                       : "100%",
                 }}
