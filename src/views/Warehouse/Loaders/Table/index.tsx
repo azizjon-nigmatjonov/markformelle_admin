@@ -26,11 +26,19 @@ export const ProcessTable = () => {
       className="flex p-3 space-x-1 small_desktop:space-x-3"
       style={{ height: openHeader ? "calc(100vh - 50px)" : "100vh" }}
     >
-      <div className="grid grid-cols-4 gap-x-3 w-full">
-        <FirstColumn data={data?.data} isLoading={isLoading} />
-        <SecondColumn data={data?.data} isLoading={isLoading} />
-        <ThirdColumn data={data?.data} isLoading={isLoading} />
-        <FourthColumn data={data?.data} isLoading={isLoading} />
+      <div className="grid grid-flow-row-dense grid-cols-6 gap-x-3 w-full">
+        <div>
+          <FirstColumn data={data?.data} isLoading={isLoading} />
+        </div>
+        <div>
+          <SecondColumn data={data?.data} isLoading={isLoading} />
+        </div>
+        <div>
+          <ThirdColumn data={data?.data} isLoading={isLoading} />
+        </div>
+        <div className="col-span-3">
+          <FourthColumn data={data?.dashboard_data} isLoading={isLoading} />
+        </div>
       </div>
     </div>
   );
