@@ -37,7 +37,7 @@ const CSearchInput = ({
 
   return (
     <div
-      className={`relative bg-white rounded-[8px] flex border justify-between items-center h-[35px] px-5 ${
+      className={`relative bg-white rounded-[8px] flex border justify-between items-center h-[25px] desktop:h-[35px] px-5 ${
         value ? " border-[var(--primary)]" : "border-[var(--border)]"
       }`}
     >

@@ -643,10 +643,6 @@ const CTable = ({
         ) : (
           ""
         )}
-
-        {/* {footer && (
-          <div className="border-t border-[var(--border)] px-3">{footer}</div>
-        )} */}
       </div>
     </div>
   );

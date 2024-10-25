@@ -12,13 +12,17 @@ const OrderList: React.FC<OrderListProps> = ({ machineName }) => {
   const [data, setData] = useState({ loading: true, list: [] });
 
   useEffect(() => {
-    axios(`https://retoolapi.dev/VLMg5q/machines?machine_id=${machineName - 70}`).then((res: any) => {
-      
-      setData({ list: res?.data ?? [], loading: false })
-    }).catch(() => {
-      setData({ list: [], loading: false })
-    })
-  }, [])
+    axios
+      .get(
+        `https://retoolapi.dev/VLMg5q/machines?machine_id=${machineName - 70}`
+      )
+      .then((res: any) => {
+        setData({ list: res?.data ?? [], loading: false });
+      })
+      .catch(() => {
+        setData({ list: [], loading: false });
+      });
+  }, []);
 
   return (
     <Sheet
@@ -49,10 +53,14 @@ const OrderList: React.FC<OrderListProps> = ({ machineName }) => {
           </Card>
         ))
       )}
-      {!data.loading && !data.list?.length ? <div className="flex justify-center flex-col items-center h-full w-full">
-        <img width={200} src="/images/no-data.png" alt="data" />
-        <p>Нет информации</p>
-      </div> : ''}
+      {!data.loading && !data.list?.length ? (
+        <div className="flex justify-center flex-col items-center h-full w-full">
+          <img width={200} src="/images/no-data.png" alt="data" />
+          <p>Нет информации</p>
+        </div>
+      ) : (
+        ""
+      )}
     </Sheet>
   );
 };

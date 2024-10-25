@@ -52,6 +52,8 @@ interface Machine {
   message: string;
   zakaz: string;
   art: string;
+  reason?: string;
+  model: string;
 }
 
 interface MachineCardProps {
@@ -81,7 +83,7 @@ const ModalCard: React.FC<MachineCardProps> = ({
       machine.not_broken == "true" &&
       machine.machine_is_on == "false"
     ) {
-      return "purple";
+      return "blue";
     } else if (
       machine.not_broken == "false" &&
       machine.machine_is_on == "false"
@@ -105,6 +107,12 @@ const ModalCard: React.FC<MachineCardProps> = ({
 
   const [checked2, setChecked2] = React.useState(machine.not_broken == "true");
 
+  const getWeight = (item: any) => {
+    const num: any = Number(item.pkol_knit) - Number(item.fkol_knit) || 0;
+
+    return Number(num.toFixed(2));
+  };
+
   return (
     <ModalDialog sx={{ width: "900px", minHeight: "558px" }}>
       <ModalClose />
@@ -122,10 +130,30 @@ const ModalCard: React.FC<MachineCardProps> = ({
               <ListItem
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
-                <Typography>Название машины </Typography>
+                <Typography>Номер машины</Typography>
                 <Typography>{machine.name}</Typography>
               </ListItem>
               <ListDivider />
+              <ListItem
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
+                <Typography>Название машины</Typography>
+                <Typography>{machine.model}</Typography>
+              </ListItem>
+              <ListDivider />
+              {/* {machine?.reason ? (
+                <>
+                  <ListItem
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <Typography>Статус машины </Typography>
+                    <Typography>{machine.message}</Typography>
+                  </ListItem>
+                  <ListDivider />
+                </>
+              ) : (
+                ""
+              )} */}
               <ListItem
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
@@ -188,9 +216,7 @@ const ModalCard: React.FC<MachineCardProps> = ({
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
                 <Typography>Остатка </Typography>
-                <Typography>
-                  {Number(machine.pkol_knit) - Number(machine.fkol_knit)} кг
-                </Typography>
+                <Typography>{getWeight(machine)} кг</Typography>
               </ListItem>
               <ListDivider />
             </List>

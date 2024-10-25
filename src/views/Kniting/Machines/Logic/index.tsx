@@ -7,6 +7,88 @@ export const breadCrumbItems = [
   { label: "dashboardavto", link: "/dashboard/dashboard" },
 ];
 
+export const DataObjects = {
+  working: 0,
+  no_plan: 0,
+  no_yarn: 0,
+  fixing: 0,
+  no_connnection: 0,
+  reload: 0,
+  cleaning: 0,
+  stopped: 0,
+  no_status: 0,
+  reload_yarn: 0,
+};
+
+export const CheckData = (machine: any) => {
+  if (!machine.idlocation) return "";
+
+  if (machine.rotation > 0) {
+    return "working";
+  }
+
+  if (
+    (machine.rotation == 0 || !machine.rotation) &&
+    machine.machine_is_on === "true" &&
+    machine.no_connnection === "false" &&
+    machine.pkol_knit === 0 &&
+    machine.yarn_replacement == "true" &&
+    machine.reason !== "Ремонт"
+  ) {
+    if (machine.reason === "Нет пряжи") {
+      return "no_yarn";
+    } else {
+      return "no_plan";
+    }
+  }
+
+  if (machine.reason === "Ремонт" && machine.no_connnection === "false") {
+    return "fixing";
+  }
+
+  if (machine.no_connnection === "true" && machine.reason !== "Ремонт") {
+    return "no_connnection";
+  }
+
+  if (
+    (machine.rotation == 0 || !machine.rotation) &&
+    machine.reason === "Замена пряжи"
+  ) {
+    return "reload";
+  }
+
+  if (
+    (machine.rotation == 0 || !machine.rotation) &&
+    machine.reason === "Замена игл"
+  ) {
+    return "reload_yarn";
+  }
+
+  if (
+    machine.reason === "Очистка" &&
+    (machine.rotation == 0 || !machine.rotation)
+  ) {
+    return "cleaning";
+  }
+
+  if (
+    (machine.rotation == 0 || !machine.rotation) &&
+    (machine.reason?.includes("Остановлена меньше 30 ми") || !machine.reason)
+  ) {
+    return "stopped";
+  }
+
+  if (
+    (machine.rotation == 0 || !machine.rotation) &&
+    machine.pkol_knit != 0 &&
+    Number(machine.stop_mins) >= 30 &&
+    (machine.reason?.includes("Ожидание причины останова") || !machine.reason)
+  ) {
+    return "no_status";
+  }
+  return "";
+};
+
 export const TableData = () => {
   const headColumns = [
     {
@@ -46,6 +128,19 @@ export const FetchFunction = () => {
   const newData = useMemo(() => {
     if (!data?.length) return [];
 
+    const obj: any = {
+      working: "green",
+      no_plan: "blue",
+      no_yarn: "blue",
+      fixing: "grey",
+      no_connnection: "grey",
+      reload: "red",
+      cleaning: "red",
+      stopped: "red",
+      no_status: "red",
+      reload_yarn: "red",
+    };
+
     const arr: any = [];
     const existingIds = data?.map((item: any) => item.idlocation);
     const maxId = Math.max(...data?.map((item: any) => item.idlocation));
@@ -58,7 +153,30 @@ export const FetchFunction = () => {
       }
     }
 
-    return arr;
+    return arr.map((machine: any) => {
+      const new_status = { color: "red", status: "stopped" };
+
+      if (CheckData(machine) in obj && machine.idlocation) {
+        if (
+          CheckData(machine) === "stopped" &&
+          Number(machine.stop_mins) <= 10
+        ) {
+          new_status.color = "green";
+          new_status.status = "working";
+        } else {
+          new_status.color = obj[CheckData(machine)];
+          new_status.status = CheckData(machine);
+        }
+      } else {
+        new_status.color = "";
+        new_status.status = "";
+      }
+
+      return {
+        ...machine,
+        new_status,
+      };
+    });
   }, [data]);
 
   return { bodyData: newData, isLoading, refetch };
@@ -71,13 +189,16 @@ interface Props {
   setSearch: (val: string) => void;
 }
 
+interface Counts {
+  [key: string]: number; // This allows any string key with a number value
+}
+
 export const CountBtns = ({
   checked,
   setChecked = () => {},
   bodyData = [],
   setSearch = () => {},
 }: Props) => {
-  // const dispatch = useDispatch();
   const filterCheckbox = (val: string) => {
     let list: any = checked.filter((i: string) => i !== "all") ?? [];
 
@@ -91,55 +212,13 @@ export const CountBtns = ({
     setChecked(list);
   };
 
-  const [counts, setCounts]: any = useState({});
+  const [counts, setCounts] = useState<Counts>({});
 
   useEffect(() => {
-    let obj: any = {
-      no_plan: 0,
-      working: 0,
-      stopped: 0,
-      broken: 0,
-      replace_needle: 0,
-      replace_yarn: 0,
-    };
-
-    bodyData.forEach((element: any) => {
-      if (element.no_connnection == "true") {
-        obj.broken += 1;
-      } else if (
-        element.yarn_replacement == "true" &&
-        element.pkol_knit === 0 &&
-        element.machine_is_on === "true" &&
-        element.no_connnection === "false"
-      ) {
-        obj.replace_yarn += 1;
-        obj.no_plan += 1;
-      } else if (element.pkol_knit == 0) {
-      } else if (
-        element.rotation > 0 &&
-        element.not_broken == "true" &&
-        element.machine_is_on == "true"
-      ) {
-        if (
-          element.yarn_replacement == "true" &&
-          element.pkol_knit - element.fkol_knit < 30 &&
-          element.pkol_knit - element.fkol_knit > 0
-        ) {
-          obj.working += 1;
-        } else {
-          obj.working += 1;
-        }
-      } else if (
-        element.not_broken == "true" &&
-        element.machine_is_on == "false"
-      ) {
-        obj.replace_needle += 1;
-      } else if (
-        element.not_broken == "true" &&
-        element.machine_is_on == "true" &&
-        element.rotation == 0
-      ) {
-        obj.stopped += 1;
+    const obj: any = { ...DataObjects };
+    bodyData.forEach((machine: any) => {
+      if (machine.new_status.status in obj) {
+        obj[machine.new_status.status] += 1;
       }
     });
 
@@ -147,18 +226,15 @@ export const CountBtns = ({
   }, [bodyData]);
 
   return (
-    <div className="flex space-x-3">
+    <div className="flex space-x-1 desktop:space-x-2">
       <CCheckButton
         color="var(--main60)"
         element={{
           label: (
-            <p className="font-[600]">
+            <p className="text-[10px] desktop:text-sm font-[600]">
               Все{" "}
               <span className="font-bold">
-                {counts?.working +
-                  counts?.no_plan +
-                  counts?.broken +
-                  counts?.stopped}
+                {Object.values(counts).reduce((acc, item) => acc + item, 0)}
               </span>
             </p>
           ),
@@ -166,80 +242,118 @@ export const CountBtns = ({
         checked={checked.includes("all")}
         handleCheck={() => filterCheckbox("all")}
       />
-
       <CCheckButton
         color="#6cce65"
         element={{
           label: (
-            <p className="font-[600]">
+            <p className="text-[10px] desktop:text-sm font-[600]">
               Работает <span className="font-bold">{counts?.working}</span>
             </p>
           ),
         }}
-        checked={checked.includes("green")}
-        handleCheck={() => filterCheckbox("green")}
+        checked={checked.includes("working")}
+        handleCheck={() => filterCheckbox("working")}
       />
       <CCheckButton
         color="#8099f1"
         element={{
           label: (
-            <p className="font-[600]">
+            <p className="text-[10px] desktop:text-sm font-[600]">
               Нет плана <span className="font-bold">{counts?.no_plan}</span>
             </p>
           ),
         }}
-        checked={checked.includes("blue")}
-        handleCheck={() => filterCheckbox("blue")}
+        checked={checked.includes("no_plan")}
+        handleCheck={() => filterCheckbox("no_plan")}
       />
       <CCheckButton
         color="#8099f1"
         element={{
           label: (
-            <p className="font-[600]">
-              Нет пряжи{" "}
-              <span className="font-bold">{counts?.replace_needle}</span>
+            <p className="text-[10px] desktop:text-sm font-[600]">
+              Нет пряжи <span className="font-bold">{counts?.no_yarn}</span>
             </p>
           ),
         }}
-        checked={checked.includes("red_needle")}
-        handleCheck={() => filterCheckbox("red_needle")}
+        checked={checked.includes("no_yarn")}
+        handleCheck={() => filterCheckbox("no_yarn")}
       />
       <CCheckButton
         color="var(--gray30)"
         element={{
           label: (
-            <p className="font-[600]">
-              Ремонт машины <span className="font-bold">{counts?.broken}</span>
+            <p className="text-[10px] desktop:text-sm font-[600]">
+              Ремонт <span className="font-bold">{counts?.fixing}</span>
             </p>
           ),
         }}
-        checked={checked.includes("grey")}
-        handleCheck={() => filterCheckbox("grey")}
+        checked={checked.includes("fixing")}
+        handleCheck={() => filterCheckbox("fixing")}
       />
       <CCheckButton
         color="#fb6060"
         element={{
           label: (
-            <p className="font-[600]">
+            <p className="text-[10px] desktop:text-sm font-[600]">
+              Замена игл{" "}
+              <span className="font-bold">{counts?.reload_yarn}</span>
+            </p>
+          ),
+        }}
+        checked={checked.includes("reload_yarn")}
+        handleCheck={() => filterCheckbox("reload_yarn")}
+      />
+
+      <CCheckButton
+        color="#fb6060"
+        element={{
+          label: (
+            <p className="text-[10px] desktop:text-sm font-[600]">
+              Перезаправка <span className="font-bold">{counts?.reload}</span>
+            </p>
+          ),
+        }}
+        checked={checked.includes("reload")}
+        handleCheck={() => filterCheckbox("reload")}
+      />
+
+      <CCheckButton
+        color="#fb6060"
+        element={{
+          label: (
+            <p className="text-[10px] desktop:text-sm font-[600]">
+              Очистка <span className="font-bold">{counts?.cleaning}</span>
+            </p>
+          ),
+        }}
+        checked={checked.includes("cleaning")}
+        handleCheck={() => filterCheckbox("cleaning")}
+      />
+
+      {/* <CCheckButton
+        color="#fb6060"
+        element={{
+          label: (
+            <p className="text-[10px] desktop:text-sm font-[600]">
               Остановлено <span className="font-bold">{counts?.stopped}</span>
             </p>
           ),
         }}
-        checked={checked.includes("red")}
-        handleCheck={() => filterCheckbox("red")}
-      />
+        checked={checked.includes("stopped")}
+        handleCheck={() => filterCheckbox("stopped")}
+      /> */}
+
       <CCheckButton
         color="#fb6060"
         element={{
           label: (
-            <p className="font-[600]">
-              Замена игла{" "}
-              <span className="font-bold">{counts?.replace_yarn}</span>
+            <p className="text-[10px] desktop:text-sm font-[600]">
+              Без статуса <span className="font-bold">{counts?.no_status}</span>
             </p>
           ),
         }}
-        checked={checked.includes("red_yarn")}
-        handleCheck={() => filterCheckbox("red_yarn")}
+        checked={checked.includes("no_status")}
+        handleCheck={() => filterCheckbox("no_status")}
       />
     </div>
   );

@@ -1,13 +1,13 @@
-import "./style.scss";
 import CCard from "../../../../components/CElements/CCard";
+import "./style.scss";
 import { Skeleton } from "@mui/material";
 
 interface Props {
-  isLoading: boolean;
   data: any;
+  isLoading: boolean;
 }
 
-export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
+export const FourthColumn = ({ data = [], isLoading = true }: Props) => {
   console.log(data);
   if (isLoading) {
     return (
@@ -20,5 +20,5 @@ export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
     );
   }
 
-  return <CCard classes="h-full">2</CCard>;
+  return <CCard classes="h-full">4</CCard>;
 };

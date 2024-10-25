@@ -64,50 +64,9 @@ const KnittingMachines = () => {
     if (search?.length) return;
     let listData: any = [];
     if (checked.length && !checked.includes("all")) {
-      bodyData.forEach((element: any) => {
-        if (element.no_connnection == "true" && checked.includes("grey")) {
-          listData.push(element);
-        } else if (
-          element.yarn_replacement == "true" &&
-          element.pkol_knit === 0 &&
-          element.machine_is_on === "true" &&
-          element.no_connnection === "false" &&
-          (checked.includes("blue") || checked.includes("red_yarn"))
-        ) {
-          listData.push(element);
-        } else if (element.pkol_knit == 0) {
-        } else if (
-          element.rotation > 0 &&
-          element.not_broken == "true" &&
-          element.machine_is_on == "true"
-        ) {
-          if (
-            element.yarn_replacement == "true" &&
-            element.pkol_knit - element.fkol_knit < 30 &&
-            element.pkol_knit - element.fkol_knit > 0
-          ) {
-            if (checked.includes("green")) {
-              listData.push(element);
-            }
-          } else {
-            if (checked.includes("green")) {
-              listData.push(element);
-            }
-          }
-        } else if (
-          element.not_broken == "true" &&
-          element.machine_is_on == "false"
-        ) {
-        } else if (
-          element.not_broken == "true" &&
-          element.machine_is_on == "true" &&
-          element.rotation == 0 &&
-          element.no_connnection === "false" &&
-          checked.includes("red")
-        ) {
-          listData.push(element);
-        } else if (checked.includes("red_yarn")) {
-        } else if (checked.includes("red_needle")) {
+      bodyData.forEach((machine: any) => {
+        if (checked.includes(machine.new_status.status)) {
+          listData.push(machine);
         }
       });
     } else {
@@ -224,14 +183,14 @@ const KnittingMachines = () => {
           setSearch={setSearch}
         />
         <CDriver direction="vertical" />
-        <div className="w-[220px] relative">
+        <div className="w-[120px] desktop:w-[220px] relative">
           <CSearchInput
             defaultValue={search}
             handleChange={searchWods}
             handleSubmit={handleSearch}
           />
           {searchVal?.length ? (
-            <div className="absolute left-0 top-full bg-white shadow-lg rounded-[12px] w-full overflow-scroll max-h-[400px]">
+            <div className="absolute left-0 top-full bg-white shadow-lg rounded-[12px] w-full overflow-scroll max-h-[400px] remove-scroll">
               <ul className="space-y-2 py-2">
                 {searchVal?.map((item: any, index: number) => (
                   <li
@@ -254,42 +213,48 @@ const KnittingMachines = () => {
         className="px-2 py-2 lg:p-3 h-[95vh] overflow-scroll remove-scroll ipod:h-auto ipod:overflow-unset"
         ref={gridRef}
       >
-        <div
-          className={`grid-machines-dashboard grid w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-3 md:gap-[1px] lg:gap-3`}
-          style={{
-            height:
-              checked?.[0] !== "all" || search.length
-                ? "auto"
-                : window.screen.width < 940
-                ? "auto"
-                : openHeader
-                ? "calc(100vh - 75px)"
-                : window.screen.width < 1440
-                ? "calc(100vh - 20px)"
-                : "calc(100vh - 25px)",
-          }}
-        >
-          {list?.map((machine: any, index: number) =>
-            machine?.idlocation ? (
-              <div
-                key={index}
-                style={{
-                  width: "100%",
-                  height:
-                    window.screen.width < 940
-                      ? "120px"
-                      : checked?.[0] !== "all" || search.length
-                      ? "calc((100vh / 7) - 18px)"
-                      : "100%",
-                }}
-              >
-                <MyCard machine={machine} zoomPoint={zoomPoint} />
-              </div>
-            ) : (
-              <div key={index}></div>
-            )
-          )}
-        </div>
+        {list?.length ? (
+          <div
+            className={`grid-machines-dashboard grid w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-3 md:gap-[1px] lg:gap-3`}
+            style={{
+              height:
+                checked?.[0] !== "all" || search.length
+                  ? "auto"
+                  : window.screen.width < 940
+                  ? "auto"
+                  : openHeader
+                  ? "calc(100vh - 75px)"
+                  : window.screen.width < 1440
+                  ? "calc(100vh - 20px)"
+                  : "calc(100vh - 25px)",
+            }}
+          >
+            {list.map((machine: any, index: number) =>
+              machine?.idlocation ? (
+                <div
+                  key={index}
+                  style={{
+                    width: "100%",
+                    height:
+                      window.screen.width < 940
+                        ? "120px"
+                        : checked?.[0] !== "all" || search.length
+                        ? "calc((100vh / 7) - 18px)"
+                        : "100%",
+                  }}
+                >
+                  <MyCard machine={machine} zoomPoint={zoomPoint} />
+                </div>
+              ) : (
+                <div key={index}></div>
+              )
+            )}
+          </div>
+        ) : (
+          <div className="w-full flex justify-center h-[80vh] items-center">
+            <img src="/images/no-data.png" width={200} alt="no data" />
+          </div>
+        )}
       </div>
     </>
   );

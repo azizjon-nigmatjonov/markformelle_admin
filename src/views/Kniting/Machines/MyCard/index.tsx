@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import ViewDayOutlinedIcon from "@mui/icons-material/ViewDayOutlined";
 import "./style.scss";
 import CircularProgress from "../../../../components/CElements/CCircularProgress";
-// import { getAdaptiveValue } from '../../../../utils/getAdaptiveValue'
 import { Bolt, WifiOff } from "@mui/icons-material";
 import { Modal } from "@mui/joy";
 import ModalCard from "../Card/ModalCard";
@@ -37,42 +36,15 @@ export const MyCard = ({ machine }: Props) => {
   const [open, setOpen] = useState(false);
 
   const getCardColor = (): string => {
-    if (machine.no_connnection == "true") {
-      return "grey";
-    } else if (machine.pkol_knit == 0) {
-      return "purple";
-    } else if (
-      machine.rotation > 0 &&
-      machine.not_broken == "true" &&
-      machine.machine_is_on == "true"
+    if (
+      machine.yarn_replacement == "true" &&
+      machine.pkol_knit - machine.fkol_knit < 40 &&
+      machine.pkol_knit - machine.fkol_knit > 0 &&
+      machine.rotation > 0
     ) {
-      if (
-        machine.yarn_replacement == "true" &&
-        machine.pkol_knit - machine.fkol_knit < 30 &&
-        machine.pkol_knit - machine.fkol_knit > 0
-      ) {
-        return "orange";
-      } else return "green";
-    } else if (
-      machine.not_broken == "true" &&
-      machine.machine_is_on == "false"
-    ) {
-      return "purple";
-    } else if (
-      machine.not_broken == "false" &&
-      machine.machine_is_on == "false"
-    ) {
-      return "grey";
-    } else if (
-      machine.not_broken == "true" &&
-      machine.machine_is_on == "true" &&
-      machine.rotation == 0 &&
-      machine.no_connnection === "false" &&
-      machine.pkol_knit !== 0
-    ) {
-      return "red";
+      return "orange";
     } else {
-      return "";
+      return machine.new_status.color;
     }
   };
 
@@ -94,7 +66,9 @@ export const MyCard = ({ machine }: Props) => {
           machine.machine_is_on == "true" &&
           machine.rotation == 0 &&
           machine.no_connnection === "false" &&
-          machine.pkol_knit !== 0
+          machine.pkol_knit !== 0 &&
+          (machine.reason?.includes("Ожидание причины останова") ||
+            !machine.reason)
             ? "animate-breath"
             : ""
         }`}
@@ -187,7 +161,6 @@ export const MyCard = ({ machine }: Props) => {
             </div>
             <div className="flex justify-between items-end">
               <p></p>
-              {/* <p className='text'>{machine.soft_version}</p> */}
               <p className="sub-title">
                 <Bolt />
                 {machine.efficiency + "%"}
