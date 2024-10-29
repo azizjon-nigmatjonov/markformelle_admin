@@ -186,7 +186,7 @@ const ModalCard: React.FC<MachineCardProps> = ({
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
                 <Typography>Лот пряжи </Typography>
-                <Typography>{machine.lot_no}</Typography>
+                <Typography>{machine.lotno}</Typography>
               </ListItem>
               <ListDivider />
               <ListItem

@@ -252,7 +252,7 @@ const KnittingMachines = () => {
           </div>
         ) : (
           <div className="w-full flex justify-center h-[80vh] items-center">
-            <img src="/images/no-data.png" width={200} alt="no data" />
+            {/* <img src="/images/no-data.png" width={200} alt="no data" /> */}
           </div>
         )}
       </div>
