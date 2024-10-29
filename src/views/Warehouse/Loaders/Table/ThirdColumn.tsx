@@ -1,5 +1,6 @@
 import { Skeleton } from "@mui/material";
 import CCard from "../../../../components/CElements/CCard";
+import { CellCardWrapper } from "./Card";
 
 interface Props {
   data: any;
@@ -7,18 +8,13 @@ interface Props {
 }
 
 export const ThirdColumn = ({ data = [], isLoading = true }: Props) => {
-  console.log(data);
-  
   if (isLoading) {
     return (
       <CCard classes="h-full">
-        <div className="grid grid-cols-1 gap-y-3">
-          <Skeleton style={{ height: "150px" }} />
-          <Skeleton style={{ height: "150px" }} />
-        </div>
+        <Skeleton style={{ height: "150px" }} />
       </CCard>
     );
   }
 
-  return <CCard classes="h-full">3</CCard>;
+  return <CellCardWrapper data={data} title="Клетки нет в зоне" />;
 };

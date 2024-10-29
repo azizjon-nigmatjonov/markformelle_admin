@@ -64,7 +64,7 @@ $xl2: 24px;
   }
   &::-webkit-scrollbar-track {
     border-radius: 4px;
-    border: 1px solid var(--gray20);
+    border: 1px solid transparent;
   }
   &::-webkit-scrollbar-thumb {
     background: var(--gray30);
@@ -76,6 +76,7 @@ $xl2: 24px;
 }
 .designed-scroll {
   @include design-scroll;
+  scroll-behavior: smooth;
 }
 @mixin smooth-scroll() {
   scroll-behavior: smooth;

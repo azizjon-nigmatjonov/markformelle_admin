@@ -1,6 +1,7 @@
 import "./style.scss";
 import CCard from "../../../../components/CElements/CCard";
 import { Skeleton } from "@mui/material";
+import { CellCardWrapper } from "./Card";
 
 interface Props {
   isLoading: boolean;
@@ -8,17 +9,13 @@ interface Props {
 }
 
 export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
-  console.log(data);
   if (isLoading) {
     return (
       <CCard classes="h-full">
-        <div className="grid grid-cols-1 gap-y-3">
-          <Skeleton style={{ height: "150px" }} />
-          <Skeleton style={{ height: "150px" }} />
-        </div>
+        <Skeleton style={{ height: "150px" }} />
       </CCard>
     );
   }
 
-  return <CCard classes="h-full">2</CCard>;
+  return <CellCardWrapper data={data} title="Пустые клетки" />;
 };

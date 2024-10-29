@@ -11,14 +11,14 @@ export const ProcessTable = () => {
 
   const { data, isLoading, refetch } = useCQuery({
     key: `GET_GRUZ`,
-    endpoint: `http://10.10.6.21:8083/get_sotrudn_data_612`,
+    endpoint: `http://10.10.6.21:8083/get_dashboard_data_612`,
     params: {},
   });
 
   useEffect(() => {
     setInterval(() => {
       refetch();
-    }, 60000);
+    }, 10000);
   }, []);
 
   return (
@@ -26,18 +26,30 @@ export const ProcessTable = () => {
       className="flex p-3 space-x-1 small_desktop:space-x-3"
       style={{ height: openHeader ? "calc(100vh - 50px)" : "100vh" }}
     >
-      <div className="grid grid-flow-row-dense grid-cols-6 gap-x-3 w-full">
+      <div className="grid grid-flow-row-dense grid-cols-6 gap-x-1 small_desktop:gap-x-3 w-full">
         <div>
-          <FirstColumn data={data?.data} isLoading={isLoading} />
+          <FirstColumn
+            data={data?.dashboard_data?.ready_cells}
+            isLoading={isLoading}
+          />
         </div>
         <div>
-          <SecondColumn data={data?.data} isLoading={isLoading} />
+          <SecondColumn
+            data={data?.dashboard_data?.empty_cells}
+            isLoading={isLoading}
+          />
         </div>
         <div>
-          <ThirdColumn data={data?.data} isLoading={isLoading} />
+          <ThirdColumn
+            data={data?.dashboard_data?.cells_without_zon}
+            isLoading={isLoading}
+          />
         </div>
         <div className="col-span-3">
-          <FourthColumn data={data?.dashboard_data} isLoading={isLoading} />
+          <FourthColumn
+            data={data?.dashboard_data?.sotrudn_data}
+            isLoading={isLoading}
+          />
         </div>
       </div>
     </div>

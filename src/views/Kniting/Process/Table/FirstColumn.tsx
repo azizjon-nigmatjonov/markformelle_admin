@@ -37,19 +37,18 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
     return (
       <CCard classes="h-full">
         <div className="grid grid-cols-2 gap-3">
-          <Skeleton style={{ height: "150px" }} />
-          <Skeleton style={{ height: "150px" }} />
+          <Skeleton style={{ height: "250px" }} />
         </div>
       </CCard>
     );
   }
 
   return (
-    <CCard classes="h-full">
+    <CCard classes="h-full" childClasses="h-full">
       <div className="grid flex-col grid-flow-row-dense gap-y-2 h-full grid-rows-4">
         <div className="grid grid-flow-row-dense grid-cols-3 gap-2 row-span-2">
           {/* Big Card */}
-          {newData?.slice(0, 1).map((item: any) => (
+          {newData?.slice(0, 1)?.map((item: any) => (
             <div
               key={item.OBORUD_NUMBER}
               className={`card col-span-2 relative h-full ${
@@ -57,7 +56,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
               }`}
             >
               <div className="frontofcard card bg-[#6cce65] rounded-xl h-full px-2">
-                <div className="flex flex-col items-center font-medium h-full justify-center">
+                <div className="flex w-full flex-col items-center font-medium h-full justify-center">
                   <h2 className="main-title font-bold title-big mb-2">
                     {item.OBORUD_NUMBER}
                   </h2>
@@ -71,7 +70,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                 </div>
               </div>
               <div className="backofcard card bg-[#6cce65] rounded-xl h-full px-2">
-                <div className="flex flex-col items-center font-medium h-full justify-center">
+                <div className="flex w-full flex-col items-center font-medium h-full justify-center">
                   <h2 className="main-title font-bold title-big mb-2">
                     {item.OBORUD_NUMBER}
                   </h2>
@@ -96,7 +95,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                 }`}
               >
                 <div className="card frontofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
-                  <div className="flex flex-col items-center font-medium h-full justify-center">
+                  <div className="flex w-full flex-col items-center font-medium h-full justify-center">
                     <h2 className="font-bold title mb-2">
                       {item.OBORUD_NUMBER}
                     </h2>
@@ -111,7 +110,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                   </div>
                 </div>
                 <div className="card backofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
-                  <div className="flex flex-col items-center font-medium h-full justify-center">
+                  <div className="flex w-full flex-col items-center font-medium h-full justify-center">
                     <h2 className="font-bold small_desktop:text-5xl mb-2">
                       {item.OBORUD_NUMBER}
                     </h2>
@@ -139,7 +138,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
               }`}
             >
               <div className="frontofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
-                <div className="flex flex-col items-center font-medium h-full justify-center">
+                <div className="flex flex-col w-full items-center font-medium h-full justify-center">
                   <h2 className="sub-title font-bold small_desktop:text-5xl mb-2">
                     {item.OBORUD_NUMBER}
                   </h2>
@@ -154,7 +153,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                 </div>
               </div>
               <div className="backofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
-                <div className="flex flex-col items-center font-medium h-full justify-center">
+                <div className="flex w-full flex-col items-center font-medium h-full justify-center">
                   <h2 className="font-bold small_desktop:text-5xl mb-2">
                     {item.OBORUD_NUMBER}
                   </h2>

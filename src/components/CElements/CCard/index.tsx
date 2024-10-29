@@ -7,6 +7,7 @@ interface Props {
   title?: string;
   footer?: ReactNode;
   extra?: ReactNode;
+  childClasses?: string;
 }
 
 const CCard = ({
@@ -16,21 +17,22 @@ const CCard = ({
   title = "",
   footer,
   extra,
+  childClasses = "",
 }: Props) => {
   return (
     <div
-      className={`bg-white rounded-[18px] min-h-[200px] border border-[var(--gray20)] common-shadow ${classes}`}
+      className={`bg-white rounded-[18px] min-h-[200px] border border-[var(--gray20)] common-shadow relative ${classes}`}
       style={style}
     >
       {title ? (
-        <div className="p-5 border-b border-[var(--gray20)] flex justify-between items-center">
-          <h2 className="text-lg font-medium">{title}</h2>
+        <div className="px-5 h-[50px] border-b border-[var(--gray20)] flex justify-between items-center w-full">
+          <h2 className="text-sm small_desktop:text-lg font-medium">{title}</h2>
           <div>{extra}</div>
         </div>
       ) : (
         ""
       )}
-      <div className="p-3 h-full">{children}</div>
+      <div className={`p-3 ${childClasses}`}>{children}</div>
       {footer ? (
         <div className="p-5 border-t border-[var(--gray20)]">{footer}</div>
       ) : (

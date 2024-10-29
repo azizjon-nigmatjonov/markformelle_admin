@@ -40,7 +40,7 @@ interface Machine {
 
   order_no: number;
   artikul: string;
-  lot_no: string;
+  lotno: string;
   fkol_knit: number;
   pkol_knit: number;
   fakt_percentage: number;
