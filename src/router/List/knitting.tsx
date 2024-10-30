@@ -11,7 +11,7 @@ export const knittingList = [
     sidebar: true,
     title: "knittingavto",
     parent_icon: <img width={18} src="/images/kniting.png" alt="knitting" />,
-    icon: "knitting",
+    icon: <img width={18} src="/images/kniting.png" alt="knitting" />,
     element: <KnittingMachines />,
     auth: false,
   },

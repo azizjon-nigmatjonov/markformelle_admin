@@ -52,6 +52,14 @@ export const FourthColumn = ({ isLoading = true, data = [] }: Props) => {
       .replace(",", " ");
     setBodyData(newArr);
 
+    if (arr.length < 12) {
+      newArr.push({
+        FIO: totalObj.title,
+        KOL_IN_MONTH: totalObj.month,
+        KOL_TODAY: totalObj.day,
+      });
+    }
+
     setTimeout(() => {
       setTotal(totalObj);
     }, 0);
@@ -62,7 +70,7 @@ export const FourthColumn = ({ isLoading = true, data = [] }: Props) => {
       {
         title: "Список грузчиков",
         renderHead: () => (
-          <h3 className="small_desktop:text-2xl font-semibold text-[var(--gray)] text-center w-full">
+          <h3 className="text-sm small_desktop:text-xl desktop:text-2xl font-semibold text-[var(--gray)] text-center w-full">
             Список грузчиков
           </h3>
         ),
@@ -100,8 +108,10 @@ export const FourthColumn = ({ isLoading = true, data = [] }: Props) => {
               </div>
             ) : (
               <div className="flex items-center justify-between w-full">
-                <p className="title whitespace-nowrap">{val?.[0]}</p>
-                <p className="title whitespace-nowrap">{bodyData.length}</p>
+                <p className="footer_text whitespace-nowrap">{val?.[0]}</p>
+                <p className="footer_text whitespace-nowrap pr-5 desktop:pr-10">
+                  {bodyData.length}
+                </p>
               </div>
             )}
             {val?.[1] ? (
@@ -116,25 +126,49 @@ export const FourthColumn = ({ isLoading = true, data = [] }: Props) => {
         title: "C начала месяца",
         width: "30%",
         renderHead: () => (
-          <h3 className="small_desktop:text-2xl font-semibold text-[var(--gray)] text-center">
+          <h3 className="text-sm small_desktop:text-xl desktop:text-2xl font-semibold text-[var(--gray)] text-center">
             C начала месяца
           </h3>
         ),
         // width: 140,
-        id: "KOL_IN_MONTH",
-        render: (val: string) => <p className="text">{val}</p>,
+        id: ["KOL_IN_MONTH", "order"],
+        render: (val: string) => <p className={`text`}>{val[0]}</p>,
       },
       {
         title: "В этой смене",
         width: "30%",
-        id: "KOL_TODAY",
+        id: ["KOL_TODAY", "order"],
         renderHead: () => (
-          <h3 className="small_desktop:text-2xl font-semibold text-[var(--gray)] py-4 text-center">
+          <h3 className="text-sm small_desktop:text-xl desktop:text-2xl font-semibold text-[var(--gray)] py-4 text-center">
             В этой смене
           </h3>
         ),
         // width: 140,
-        render: (val: string) => <p className="text">{val}</p>,
+        render: (val: string) => <p className={`text`}>{val[0]}</p>,
+      },
+      {
+        title: "priyom",
+        width: "30%",
+        id: ["KOL_TODAY", "order"],
+        renderHead: () => (
+          <h3 className="text-sm small_desktop:text-xl desktop:text-2xl font-semibold text-[var(--gray)] py-4 text-center">
+            приемка
+          </h3>
+        ),
+        // width: 140,
+        render: (val: string) => <p className={`text`}>{}</p>,
+      },
+      {
+        title: "prixod",
+        width: "30%",
+        id: ["KOL_TODAY", "order"],
+        renderHead: () => (
+          <h3 className="text-sm small_desktop:text-xl desktop:text-2xl font-semibold text-[var(--gray)] py-4 text-center">
+            отборка
+          </h3>
+        ),
+        // width: 140,
+        render: (val: string) => <p className={`text`}>{}</p>,
       },
     ];
   }, [bodyData]);
@@ -150,7 +184,7 @@ export const FourthColumn = ({ isLoading = true, data = [] }: Props) => {
         tableSetting={false}
         isResizeble={false}
         isLoading={isLoading}
-        footer={total}
+        footer={bodyData?.length < 12 ? 0 : total}
       />
     </div>
   );

@@ -1,5 +1,6 @@
+import { useSelector } from "react-redux";
 import CCard from "../../../../components/CElements/CCard";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
 interface Props {
   data: any;
@@ -7,87 +8,95 @@ interface Props {
 }
 
 export const CellCardWrapper = ({ data = [], title = "" }: Props) => {
+  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const wrapperRef: any = useRef(null);
-  const [height, setHeight]: any = useState("auto");
-  const [scrollPoint, setScrollPoint] = useState(0);
+  // const [height, setHeight]: any = useState("auto");
+  // const [scrollPoint, setScrollPoint] = useState(0);
 
-  useEffect(() => {
-    if (wrapperRef.current) {
-      setTimeout(() => {
-        setHeight(wrapperRef.current.offsetHeight - 80);
-      }, 1000);
-    }
+  // useEffect(() => {
+  //   if (wrapperRef.current) {
+  //     setTimeout(() => {
+  //       setHeight(wrapperRef.current.offsetHeight - 80);
+  //     }, 1000);
+  //   }
 
-    setInterval(() => {
-      if (wrapperRef?.current) {
-        setScrollPoint(wrapperRef.current.scrollTop);
-      }
-    }, 1000);
-  }, []);
+  //   // setInterval(() => {
+  //   //   if (wrapperRef?.current) {
+  //   //     setScrollPoint(wrapperRef.current.scrollTop);
+  //   //   }
+  //   // }, 1000);
+  // }, []);
 
-  const scrollToBottom = () => {
-    if (wrapperRef.current) {
-      const wrapperHeight = wrapperRef.current.clientHeight;
-      wrapperRef.current.scrollTop = Math.max(
-        wrapperRef.current.scrollTop +
-          wrapperHeight -
-          wrapperRef.current.clientHeight / 11 -
-          50,
-        0
-      );
-    }
-  };
+  // const scrollToBottom = () => {
+  //   if (wrapperRef.current) {
+  //     const wrapperHeight = wrapperRef.current.clientHeight;
+  //     wrapperRef.current.scrollTop = Math.max(
+  //       wrapperRef.current.scrollTop +
+  //         wrapperHeight -
+  //         wrapperRef.current.clientHeight / 11 -
+  //         50,
+  //       0
+  //     );
+  //   }
+  // };
 
-  const scrollUpByHeight = () => {
-    if (wrapperRef.current) {
-      const wrapperHeight = wrapperRef.current.clientHeight;
-      wrapperRef.current.scrollTop = Math.max(
-        wrapperRef.current.scrollTop - wrapperHeight,
-        0
-      );
-    }
-  };
+  // const scrollUpByHeight = () => {
+  //   if (wrapperRef.current) {
+  //     const wrapperHeight = wrapperRef.current.clientHeight;
+  //     wrapperRef.current.scrollTop = Math.max(
+  //       wrapperRef.current.scrollTop - wrapperHeight,
+  //       0
+  //     );
+  //   }
+  // };
 
   return (
-    <CCard
-      title={title}
-      classes="h-full"
-      childClasses={data.length > 10 ? "pr-0" : ""}
-    >
+    <CCard title={title} classes="h-full">
       <div
-        className={`space-y-3 overflow-y-scroll pb-[50px] ${
-          data.length > 10 ? "designed-scroll" : "remove-scroll"
-        }`}
-        style={{ height: "calc(100vh - 100px)" }}
+        className={`space-y-1 desktop:space-y-2 overflow-y-scroll pb-[50px] remove-scroll`}
+        style={{
+          height: openHeader ? "calc(100vh - 170px)" : "calc(100vh - 110px)",
+        }}
         ref={wrapperRef}
       >
         {data?.map((item: any, index: number) => (
           <div
-            className={`card grid relative  gap-x-2 card-shadow px-1 small_desktop:px-3 ${
+            className={`card grid relative gap-x-2 card-shadow px-1 small_desktop:px-3 ${
               item.COUNT_PACK ? "grid-cols-2" : ""
             }`}
-            style={{ height: height / 11 }}
+            style={{ height: "calc(100vh / 17 - 2px)" }}
             key={index}
           >
             {/* <div className="bg-[var(--black)] w-[6px] h-[6px] rounded-full absolute left-2 top-3"></div> */}
             <div
-              className={`name space-x-1 small_desktop:space-x-3`}
+              className={`name`}
               style={{
                 flexDirection: item.COUNT_PACK ? "row" : "row",
               }}
             >
-              <h3 className="text">{item.CELL?.substring(0, 3)}</h3>
-              <h4>{item.CELL?.substring(3)}</h4>
+              <h3
+                className="title-cards"
+                style={{ fontSize: "calc((50 / 100) * 100vh / 17)" }}
+              >
+                <span>{item.CELL?.substring(0, 3)}</span>
+                <span>{item.CELL?.substring(3)}</span>
+              </h3>
+              {/* <h4 className="title-cards"></h4> */}
             </div>
             {item.COUNT_PACK && (
               <div className="count">
-                <p>{item.COUNT_PACK}</p>
+                <p
+                  className="title-cards"
+                  style={{ fontSize: "calc((50 / 100) * 100vh / 17)" }}
+                >
+                  {item.COUNT_PACK}
+                </p>
               </div>
             )}
           </div>
         ))}
 
-        {scrollPoint > 50 && (
+        {/* {scrollPoint > 50 && (
           <button
             onClick={() => scrollUpByHeight()}
             className="text-center w-full rotate-[180deg] absolute bg-white top-0 left-0"
@@ -125,12 +134,12 @@ export const CellCardWrapper = ({ data = [], title = "" }: Props) => {
               </div>
             </div>
           </button>
-        )}
+        )} */}
 
-        {data.length > 10 ? (
+        {/* {data.length > 10 ? (
           <button
             onClick={() => scrollToBottom()}
-            className="text-center w-full absolute bottom-0 h-[50px] left-0 bg-white"
+            className="text-center w-full absolute bottom-0 h-[50px] left-0 bg-white rounded-2xl"
           >
             <div className="scrolldown-container">
               <div className="scrolldown-btn">
@@ -167,7 +176,7 @@ export const CellCardWrapper = ({ data = [], title = "" }: Props) => {
           </button>
         ) : (
           ""
-        )}
+        )} */}
       </div>
     </CCard>
   );

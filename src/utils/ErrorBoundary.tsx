@@ -29,15 +29,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
             <WarningIcon />
             <span>Произошла ошибка!</span>
           </h1>
-          <p className="text-[var(--gray)] mt-5 mb-10">
+          {/* <p className="text-[var(--gray)] mt-5 mb-10">
             Error: {this.state.error && this.state.error.toString()}
-          </p>
+          </p> */}
           <div>
-            <button
-              onClick={() => (location.href = "/knitting/knitting_machines")}
-              className="custom-btn"
-            >
-              Вязальные машины
+            <button onClick={() => location.reload()} className="custom-btn">
+              Перезакружит
             </button>
           </div>
         </div>

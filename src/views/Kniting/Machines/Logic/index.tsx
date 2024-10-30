@@ -86,6 +86,11 @@ export const CheckData = (machine: any) => {
   ) {
     return "no_status";
   }
+
+  if (machine.no_connnection === "true") {
+    return "fixing";
+  }
+
   return "";
 };
 
@@ -190,7 +195,7 @@ interface Props {
 }
 
 interface Counts {
-  [key: string]: number; // This allows any string key with a number value
+  [key: string]: number;
 }
 
 export const CountBtns = ({

@@ -12,6 +12,7 @@ export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
   const [bodyData, setBodyData] = useState([]);
 
   useEffect(() => {
+    if (!data?.length) return;
     const arr = data?.sort((a: any, b: any) => b.KOL_IN_MONTH - a.KOL_IN_MONTH);
     const newArr: any = [];
     const totalObj: any = {
@@ -51,6 +52,14 @@ export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
       .toLocaleString("en-US")
       .replace(",", " ");
     setBodyData(newArr);
+
+    if (arr.length < 12) {
+      newArr.push({
+        FIO: totalObj.title,
+        KOL_IN_MONTH: totalObj.month,
+        KOL_TODAY: totalObj.day,
+      });
+    }
 
     setTimeout(() => {
       setTotal(totalObj);
@@ -121,20 +130,24 @@ export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
           </h3>
         ),
         // width: 140,
-        id: "KOL_IN_MONTH",
-        render: (val: string) => <p className="text">{val}</p>,
+        id: ["KOL_IN_MONTH", "order"],
+        render: (val: string) => (
+          <p className={`text ${val[1] ? "" : "footer_text"}`}>{val[0]}</p>
+        ),
       },
       {
         title: "В этой смене",
         width: "30%",
-        id: "KOL_TODAY",
+        id: ["KOL_TODAY", "order"],
         renderHead: () => (
           <h3 className="small_desktop:text-2xl font-semibold text-[var(--gray)] py-4 text-center">
             В этой смене
           </h3>
         ),
         // width: 140,
-        render: (val: string) => <p className="text">{val}</p>,
+        render: (val: string) => (
+          <p className={`text ${val[1] ? "" : "footer_text"}`}>{val[0]}</p>
+        ),
       },
     ];
   }, [bodyData]);

@@ -16,7 +16,7 @@ const searchedWords = [
 ];
 
 const KnittingMachines = () => {
-  const { bodyData, refetch } = FetchFunction();
+  const { bodyData, refetch, isLoading } = FetchFunction();
   const [searchVal, setSearchVal]: any = useState([]);
   const [checked, setChecked]: any = useState(["all"]);
   const [list, setList]: any = useState([]);
@@ -173,6 +173,10 @@ const KnittingMachines = () => {
     }
   }, [list, dimensions]);
 
+  if (isLoading) {
+    return "Закрузка...";
+  }
+
   return (
     <>
       <Header>
@@ -251,9 +255,7 @@ const KnittingMachines = () => {
             )}
           </div>
         ) : (
-          <div className="w-full flex justify-center h-[80vh] items-center">
-            {/* <img src="/images/no-data.png" width={200} alt="no data" /> */}
-          </div>
+          ""
         )}
       </div>
     </>

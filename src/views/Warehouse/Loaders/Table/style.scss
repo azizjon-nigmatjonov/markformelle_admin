@@ -74,16 +74,45 @@ $maxWidthContainer: 1800;
 
 .table {
     .title {
-        @include adapviteValue(font-size, 30, 19, 1);
+        @include adapviteValue(font-size, 20, 14, 1);
         font-weight: bold;
     }
     .text {
-        @include adapviteValue(font-size, 28, 19, 1);
+        @include adapviteValue(font-size, 24, 14, 1);
         font-weight: bold;
     }
     .footer_text {
-        @include adapviteValue(font-size, 38, 22, 1);
+        @include adapviteValue(font-size, 28, 20, 1);
         font-weight: bold;
+    }
+}
+
+.title-cards {
+    @include adapviteValue(font-size, 80, 60, 1);
+    font-weight: 600;
+}
+
+@media (max-width: 3000px) {
+    .title-cards {
+        @include adapviteValue(font-size, 60, 44, 1);
+    }
+}
+
+@media (max-width: 2000px) {
+    .title-cards {
+        @include adapviteValue(font-size, 46, 40, 1);
+    }
+}
+
+@media (max-width: 1700px) {
+    .title-cards {
+        @include adapviteValue(font-size, 40, 24, 1);
+    }
+}
+
+@media (max-width: 1280px) {
+    .title-cards {
+        @include adapviteValue(font-size, 30, 22, 1);
     }
 }
 
@@ -101,19 +130,6 @@ $maxWidthContainer: 1800;
         flex-direction: column;
         align-items: center;
         text-align: center;
-
-        h3 {
-            @include adapviteValue(font-size, 32, 16, 1);
-            font-weight: 600;
-            // letter-spacing: 2px;
-            // line-height: 32px;
-        }
-        h4 {
-            @include adapviteValue(font-size, 32, 16, 1);
-            font-weight: 600;
-            // letter-spacing: 2px;
-            // line-height: 24px;
-        }
     }
 
     .count {
@@ -123,7 +139,6 @@ $maxWidthContainer: 1800;
         align-items: center;
         justify-content: flex-end;
         p {
-            @include adapviteValue(font-size, 32, 16, 1);
             border-radius: 8px;
             background-color: #6cce6511;
             font-weight: bold;

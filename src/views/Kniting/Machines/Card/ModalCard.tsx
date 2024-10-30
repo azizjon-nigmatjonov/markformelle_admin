@@ -24,6 +24,7 @@ import CDriver from "../../../../components/CElements/CDivider";
 import "./MachineCard.css";
 import toast from "react-hot-toast";
 import { ModalBtn } from "./Btn";
+import axios from "axios";
 
 interface Machine {
   id: number;
@@ -113,6 +114,31 @@ const ModalCard: React.FC<MachineCardProps> = ({
     return Number(num.toFixed(2));
   };
 
+  const createStatus = () => {
+    const obj = {
+      code_req: "003",
+      code_device: "163",
+      sign_device: "A-067",
+      tabn_id: 12418,
+      id_req: 241030150818,
+      time_req: "2024-10-30.15:08:18",
+      desc: "Датчики",
+      rotation: "21.2",
+      reason: "Остановлена меньше 30 мин.",
+      ver: "V3.8.4one",
+      streams: 1,
+      lengthrot: 0.0,
+      factqty: 0.0,
+      planid: 18249,
+      idletime: 0,
+      mtype: 0,
+    };
+
+    axios.post("http://10.40.140.6:8051/CUT_CONTR", obj).then((res) => {
+      console.log("res", res);
+    });
+  };
+
   return (
     <ModalDialog sx={{ width: "900px", minHeight: "558px" }}>
       <ModalClose />
@@ -141,19 +167,6 @@ const ModalCard: React.FC<MachineCardProps> = ({
                 <Typography>{machine.model}</Typography>
               </ListItem>
               <ListDivider />
-              {/* {machine?.reason ? (
-                <>
-                  <ListItem
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <Typography>Статус машины </Typography>
-                    <Typography>{machine.message}</Typography>
-                  </ListItem>
-                  <ListDivider />
-                </>
-              ) : (
-                ""
-              )} */}
               <ListItem
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
@@ -201,7 +214,7 @@ const ModalCard: React.FC<MachineCardProps> = ({
               >
                 <Typography>План </Typography>
                 <Typography>
-                  {machine.nplan == undefined ? "0" : machine.nplan} кг
+                  № {machine.nplan == undefined ? "0" : machine.nplan}
                 </Typography>
               </ListItem>
               <ListDivider />
@@ -342,7 +355,8 @@ const ModalCard: React.FC<MachineCardProps> = ({
                   >
                     <Button
                       onClick={() => {
-                        setOpen(false);
+                        // setOpen(false);
+                        createStatus();
                         toast.success("Отправлено успешно, Спасибо!");
                       }}
                       fullWidth
