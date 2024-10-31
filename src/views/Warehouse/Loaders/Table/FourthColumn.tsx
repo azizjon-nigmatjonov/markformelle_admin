@@ -50,7 +50,6 @@ export const FourthColumn = ({ isLoading = true, data = [] }: Props) => {
     totalObj.day = parseInt(totalObj.day)
       .toLocaleString("en-US")
       .replace(",", " ");
-    setBodyData(newArr);
 
     if (arr.length < 12) {
       newArr.push({
@@ -59,7 +58,7 @@ export const FourthColumn = ({ isLoading = true, data = [] }: Props) => {
         KOL_TODAY: totalObj.day,
       });
     }
-
+    setBodyData(newArr.slice(0, 6));
     setTimeout(() => {
       setTotal(totalObj);
     }, 0);
@@ -147,16 +146,16 @@ export const FourthColumn = ({ isLoading = true, data = [] }: Props) => {
         render: (val: string) => <p className={`text`}>{val[0]}</p>,
       },
       {
-        title: "priyom",
+        title: "приём",
         width: "30%",
         id: ["KOL_TODAY", "order"],
         renderHead: () => (
           <h3 className="text-sm small_desktop:text-xl desktop:text-2xl font-semibold text-[var(--gray)] py-4 text-center">
-            приемка
+            приём
           </h3>
         ),
         // width: 140,
-        render: (val: string) => <p className={`text`}>{}</p>,
+        render: () => <p className={`text`}>{}</p>,
       },
       {
         title: "prixod",
@@ -168,24 +167,43 @@ export const FourthColumn = ({ isLoading = true, data = [] }: Props) => {
           </h3>
         ),
         // width: 140,
-        render: (val: string) => <p className={`text`}>{}</p>,
+        render: () => <p className={`text`}>{}</p>,
       },
     ];
   }, [bodyData]);
 
   return (
-    <div className="w-full h-full table">
-      <CTable
-        headColumns={headColumns}
-        bodyColumns={bodyData}
-        handleFilterParams={() => {}}
-        filterParams={{}}
-        disablePagination={true}
-        tableSetting={false}
-        isResizeble={false}
-        isLoading={isLoading}
-        footer={bodyData?.length < 12 ? 0 : total}
-      />
+    <div className="grid grid-cols-1 h-full gap-y-3">
+      <div className="">
+        <div className="w-full h-full table">
+          <CTable
+            headColumns={headColumns}
+            bodyColumns={bodyData}
+            handleFilterParams={() => {}}
+            filterParams={{}}
+            disablePagination={true}
+            tableSetting={false}
+            isResizeble={false}
+            isLoading={isLoading}
+            footer={bodyData?.length < 12 ? 0 : total}
+          />
+        </div>
+      </div>
+      <div className="h">
+        <div className="w-full h-full table">
+          <CTable
+            headColumns={headColumns}
+            bodyColumns={bodyData}
+            handleFilterParams={() => {}}
+            filterParams={{}}
+            disablePagination={true}
+            tableSetting={false}
+            isResizeble={false}
+            isLoading={isLoading}
+            footer={bodyData?.length < 12 ? 0 : total}
+          />
+        </div>
+      </div>
     </div>
   );
 };
