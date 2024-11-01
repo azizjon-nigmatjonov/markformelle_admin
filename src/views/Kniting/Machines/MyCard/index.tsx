@@ -6,12 +6,14 @@ import { Bolt, WifiOff } from "@mui/icons-material";
 import { Modal } from "@mui/joy";
 import ModalCard from "../Card/ModalCard";
 import SpeedIcon from "@mui/icons-material/Speed";
+import useDeviceHeight from "../../../../hooks/useDeviceHeight";
 interface Props {
   machine: any;
   zoomPoint: number;
 }
 
 export const MyCard = ({ machine }: Props) => {
+  const { getFontSize } = useDeviceHeight();
   const [size, setSize] = useState<number>(50);
   const cardRef: any = useRef(null);
   const updateSize = () => {
@@ -88,8 +90,30 @@ export const MyCard = ({ machine }: Props) => {
               <div className="image">
                 <WifiOff />
               </div>
-              <p className="sub-title font-semibold">Нет соединения</p>
-              <p className="text-error">{machine.ip_address}</p>
+              <p
+                className="sub-title font-semibold"
+                style={{
+                  fontSize: getFontSize({
+                    count: 7,
+                    percent: 16,
+                    type: "machine",
+                  }),
+                }}
+              >
+                Нет соединения
+              </p>
+              <p
+                className="text-error"
+                style={{
+                  fontSize: getFontSize({
+                    count: 7,
+                    percent: 16,
+                    type: "machine",
+                  }),
+                }}
+              >
+                {machine.ip_address}
+              </p>
             </div>
           </div>
         ) : (
@@ -98,38 +122,76 @@ export const MyCard = ({ machine }: Props) => {
         {machine.no_connnection !== "true" && (
           <div className="flex flex-col justify-between h-full">
             <div className="flex justify-between items-center">
-              <div className="sub-title">
+              <div
+                className="sub-title"
+                style={{
+                  fontSize: getFontSize({
+                    count: 7,
+                    percent: 15,
+                    type: "machine",
+                  }),
+                }}
+              >
                 <ViewDayOutlinedIcon />
                 <span> {machine.new_rolls}</span>
               </div>
-              <p className="title absolute left-1/2 -translate-x-1/2">
+              <p
+                className="title absolute left-1/2 -translate-x-1/2"
+                style={{
+                  fontSize: getFontSize({
+                    count: 7,
+                    percent: 19,
+                    type: "machine",
+                  }),
+                }}
+              >
                 {machine.name}
               </p>
-              <div className="sub-title">{machine.defect_num}</div>
+              <div
+                className="sub-title"
+                style={{
+                  fontSize: getFontSize({
+                    count: 7,
+                    percent: 15,
+                    type: "machine",
+                  }),
+                }}
+              >
+                {machine.defect_num}
+              </div>
             </div>
             <div
               className={`w-full flex justify-center py-1 absolute top-[57%] desktop:top-[60%] bigDesktop:top-[57%] left-1/2 -translate-x-1/2 -translate-y-1/2`}
             >
               <CircularProgress
-                strokeWidth={
-                  window.screen.width > 1540
-                    ? 15
-                    : window.screen.width < 1440
-                    ? 12
-                    : window.screen.width < 1280
-                    ? 9
-                    : 5
-                }
+                strokeWidth={getFontSize({
+                  count: 7,
+                  percent: 8,
+                  type: "machine",
+                })}
                 value={
                   Number(machine.fakt_percentage) > 100
                     ? 100
                     : Number(machine.fakt_percentage)
                 }
                 maxValue={100}
-                size={window.screen.width < 940 ? 110 : size}
+                size={getFontSize({
+                  count: 7,
+                  percent: 100,
+                  type: "machine",
+                })}
               >
                 <div>
-                  <p className="text inner">
+                  <p
+                    className="text inner"
+                    style={{
+                      fontSize: getFontSize({
+                        count: 7,
+                        percent: 13.5,
+                        type: "machine",
+                      }),
+                    }}
+                  >
                     {machine.fkol_knit
                       .toString()
                       .substring(
@@ -140,7 +202,16 @@ export const MyCard = ({ machine }: Props) => {
                       )}
                   </p>
                   <div className="w-full h-[1px] bg-[var(--black)] mb-[4px]"></div>
-                  <p className="text inner">
+                  <p
+                    className="text inner"
+                    style={{
+                      fontSize: getFontSize({
+                        count: 7,
+                        percent: 13.5,
+                        type: "card",
+                      }),
+                    }}
+                  >
                     {machine.pkol_knit
                       .toString()
                       .substring(
@@ -150,7 +221,16 @@ export const MyCard = ({ machine }: Props) => {
                           : machine.pkol_knit.length
                       ) + " Kg"}
                   </p>
-                  <div className="inline-flex justify-center relative text inner ml-[15px]">
+                  <div
+                    className="inline-flex justify-center relative text inner ml-[15px]"
+                    style={{
+                      fontSize: getFontSize({
+                        count: 7,
+                        percent: 13.5,
+                        type: "machine",
+                      }),
+                    }}
+                  >
                     <div className="absolute left-[0px] rotate-[90deg]">
                       <SpeedIcon />
                     </div>{" "}
@@ -161,7 +241,16 @@ export const MyCard = ({ machine }: Props) => {
             </div>
             <div className="flex justify-between items-end">
               <p></p>
-              <p className="sub-title">
+              <p
+                className="sub-title"
+                style={{
+                  fontSize: getFontSize({
+                    count: 7,
+                    percent: 13,
+                    type: "machine",
+                  }),
+                }}
+              >
                 <Bolt />
                 {machine.efficiency + "%"}
               </p>

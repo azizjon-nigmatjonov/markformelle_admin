@@ -18,12 +18,12 @@ export const HeaderFoldButton = ({
       >
         <div className="relative w-[28px]">
           <div
-            className={`h-[3px] w-[15px] bg-[var(--gray30)] absolute left-0 top-0 duration-200 breath ${
+            className={`h-[3px] w-[15px] bg-[var(--gray30)] absolute left-0 top-0 duration-200 ${
               !collapsed ? "rotate-[30deg]" : "rotate-[-30deg]"
             }`}
           ></div>
           <div
-            className={`h-[3px] w-[15px] bg-[var(--gray30)] absolute right-0 top-0 duration-200 breath ${
+            className={`h-[3px] w-[15px] bg-[var(--gray30)] absolute right-0 top-0 duration-200 ${
               !collapsed ? "rotate-[-30deg]" : "rotate-[30deg]"
             }`}
           ></div>

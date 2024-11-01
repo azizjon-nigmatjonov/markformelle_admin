@@ -18,12 +18,12 @@ export const FoldButton = ({ collapsed, setCollapsed = () => {} }: Props) => {
       >
         <div className="relative h-[25px]">
           <div
-            className={`w-[3px] h-[13.5px] bg-[var(--gray30)] absolute left-0 top-0 duration-200 breath ${
+            className={`w-[3px] h-[13.5px] bg-[var(--gray30)] absolute left-0 top-0 duration-200 ${
               collapsed ? "rotate-[30deg]" : "rotate-[-30deg]"
             }`}
           ></div>
           <div
-            className={`w-[3px] h-[13.5px] bg-[var(--gray30)] absolute left-0 bottom-0 duration-200 breath ${
+            className={`w-[3px] h-[13.5px] bg-[var(--gray30)] absolute left-0 bottom-0 duration-200 ${
               collapsed ? "rotate-[-30deg]" : "rotate-[30deg]"
             }`}
           ></div>

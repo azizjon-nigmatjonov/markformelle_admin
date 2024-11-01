@@ -67,10 +67,11 @@ $maxWidthContainer: 1600;
 }
 
 .sub-title {
-    @include adapviteValue(font-size, 20, 10, 1);
+    @include adapviteValue(font-size, 20, 14, 1);
     font-weight: 500;
     svg {
-        @include adapviteValue(width, 24, 10, 1);
+        @include adapviteValue(width, 26, 18, 1);
+        font-size: 32px;
     }
 }
 
@@ -123,7 +124,7 @@ $maxWidthContainer: 1600;
     }
 
     .sub-title {
-        font-size: 18px;
+        font-size: 20px;
 
         svg {
             width: 20px;
@@ -155,7 +156,7 @@ $maxWidthContainer: 1600;
     }
 
     .sub-title {
-        font-size: 14px;
+        font-size: 18px;
 
         svg {
             width: 17px;

@@ -14,14 +14,14 @@ import PageFallback from "./components/UI/PageFallback";
 function App() {
   return (
     <Suspense fallback={<PageFallback />}>
-      <div className="app">
+      <div className="app" id="app">
         <QueryClientProvider client={queryClient}>
           <Provider store={store}>
             <PersistGate persistor={persistor}>
               {/* <ThemeProvider theme={themeMui}> */}
-                <BrowserRouter>
-                  <Router />
-                </BrowserRouter>
+              <BrowserRouter>
+                <Router />
+              </BrowserRouter>
               {/* </ThemeProvider> */}
             </PersistGate>
           </Provider>

@@ -6,6 +6,7 @@ import CDriver from "../../../components/CElements/CDivider";
 import { useSelector } from "react-redux";
 import { MyCard } from "./MyCard";
 import { LoadingComponent } from "../../../components/UI/Loading";
+import useDeviceHeight from "../../../hooks/useDeviceHeight";
 
 const searchedWords = [
   "podr_id_knitt",
@@ -25,7 +26,7 @@ const KnittingMachines = () => {
   const gridRef: any = useRef(null);
   const [active, setActive] = useState(false);
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
-
+  const { getHeight, getFontSize } = useDeviceHeight();
   useEffect(() => {
     const refetching = setInterval(() => {
       refetch();
@@ -224,8 +225,12 @@ const KnittingMachines = () => {
       >
         {list?.length ? (
           <div
-            className={`grid-machines-dashboard grid w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-3 md:gap-[1px] lg:gap-3`}
+            className={`grid-machines-dashboard grid w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-[3px] small_desktop:gap-3`}
             style={{
+              minWidth:
+                window?.screen?.width < 940
+                  ? "1600px"
+                  : window?.screen?.width - 200,
               height:
                 checked?.[0] !== "all" || search.length
                   ? "auto"
@@ -244,12 +249,11 @@ const KnittingMachines = () => {
                   key={index}
                   style={{
                     width: "100%",
-                    height:
-                      window.screen.width < 940
-                        ? "120px"
-                        : checked?.[0] !== "all" || search.length
-                        ? "calc((100vh / 7) - 18px)"
-                        : "100%",
+                    height: getHeight({
+                      count: 7,
+                      type: "machine",
+                      minus: openHeader ? 19 : 13,
+                    }),
                   }}
                 >
                   <MyCard machine={machine} zoomPoint={zoomPoint} />
