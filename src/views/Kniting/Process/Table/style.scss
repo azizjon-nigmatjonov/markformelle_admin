@@ -86,3 +86,10 @@ $maxWidthContainer: 1800;
         font-weight: bold;
     }
 }
+
+.sticky-sub-header-process {
+    position: sticky;
+    inset: 0px 100px 100px 0px;
+    background-color: white;
+    z-index: 2;
+}

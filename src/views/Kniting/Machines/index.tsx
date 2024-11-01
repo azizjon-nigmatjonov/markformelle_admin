@@ -27,9 +27,13 @@ const KnittingMachines = () => {
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
 
   useEffect(() => {
-    setInterval(() => {
+    const refetching = setInterval(() => {
       refetch();
-    }, 10000);
+    }, 20000);
+
+    return () => {
+      clearInterval(refetching);
+    };
   }, []);
 
   const searchWods = (val: string) => {

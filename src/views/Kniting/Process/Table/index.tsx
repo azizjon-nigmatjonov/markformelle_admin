@@ -4,6 +4,7 @@ import { SecondColumn } from "./SecondColumn";
 import useCQuery from "../../../../hooks/useCQuery";
 import { useEffect } from "react";
 import { LoadingComponent } from "../../../../components/UI/Loading";
+import CCard from "../../../../components/CElements/CCard";
 
 export const ProcessTable = () => {
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
@@ -25,10 +26,13 @@ export const ProcessTable = () => {
   });
 
   useEffect(() => {
-    setInterval(() => {
+    const refetching = setInterval(() => {
       refetch();
       refetchCards();
     }, 60000);
+    return () => {
+      clearInterval(refetching);
+    };
   }, []);
 
   if (isLoading || cardLoading) {
@@ -44,7 +48,9 @@ export const ProcessTable = () => {
         <FirstColumn data={cardsData?.dashboard_data ?? []} isLoading={false} />
       </div>
       <div className="w-[52%] h-full overflow-y-scroll remove-scroll">
-        <SecondColumn data={data?.dashboard_data ?? []} isLoading={false} />
+        <CCard>
+          <SecondColumn data={data?.dashboard_data ?? []} isLoading={false} />
+        </CCard>
       </div>
     </div>
   );

@@ -28,9 +28,13 @@ export const ProcessTable = () => {
   }, [data]);
 
   useEffect(() => {
-    setInterval(() => {
+    const refetching = setInterval(() => {
       refetch();
-    }, 10000);
+    }, 30000);
+
+    return () => {
+      clearInterval(refetching);
+    };
   }, []);
 
   if (isLoading) {

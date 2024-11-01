@@ -8,7 +8,6 @@ interface Props {
 }
 
 export const FourthColumn = ({ data = [] }: Props) => {
-  if (!data?.length) return "";
   const [total, setTotal]: any = useState({});
   const [bodyData, setBodyData] = useState([]);
   const { getHeight, getFontSize } = useDeviceHeight();

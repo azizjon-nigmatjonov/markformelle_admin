@@ -13,6 +13,7 @@ export const CellCardWrapper = ({ data = [], title }: Props) => {
     <CCard>
       <div
         className="border-b pb-2 sticky-header"
+        style={{ width: wrapperRef?.current?.offsetWidth }}
         // style={{ height: getHeight({ type: "card", count: 26 }) }}
       >
         <h2

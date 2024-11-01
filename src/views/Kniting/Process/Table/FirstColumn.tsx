@@ -3,6 +3,7 @@ import CCard from "../../../../components/CElements/CCard";
 import "./style.scss";
 import { Skeleton } from "@mui/material";
 import { useCalculateTime } from "../../../../hooks/useCalucaleTime";
+import EmptyDataComponent from "../../../../components/UI/EmptyDataComponent";
 
 interface Props {
   data: any;
@@ -13,6 +14,16 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
   const [effect, setEffect] = useState<string[]>([]);
   const ROTATION_DELAY = 120;
   const { GetTime } = useCalculateTime();
+
+  if (isLoading) {
+    return (
+      <CCard classes="h-full">
+        <div className="grid grid-cols-2 gap-3">
+          <Skeleton style={{ height: "250px" }} />
+        </div>
+      </CCard>
+    );
+  }
 
   const newData = useMemo(() => {
     if (!data?.length) return [];
@@ -33,16 +44,14 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
     });
   }, [data]);
 
-  if (isLoading) {
+  if (!newData?.length) {
     return (
-      <CCard classes="h-full">
-        <div className="grid grid-cols-2 gap-3">
-          <Skeleton style={{ height: "250px" }} />
-        </div>
-      </CCard>
+      <EmptyDataComponent
+        isVisible={true}
+        title="Нет гатовые клетки для отгрузки"
+      />
     );
   }
-
   return (
     <CCard classes="h-full" childClasses="h-full">
       <div className="grid flex-col grid-flow-row-dense gap-y-2 h-full grid-rows-4">
@@ -65,7 +74,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
 
                   <p className="main-sub-text text-red-700">
                     {" "}
-                    {GetTime(item.DATE_CONTROL_FOR_TIMER)}
+                    {GetTime(item?.DATE_CONTROL_FOR_TIMER)}
                   </p>
                 </div>
               </div>
@@ -78,7 +87,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                   <p className="main-sub-text">{item.COUNT_RECORDS} рулон</p>
 
                   <p className="main-sub-text text-red-700">
-                    {GetTime(item.DATE_CONTROL_FOR_TIMER)}
+                    {GetTime(item?.DATE_CONTROL_FOR_TIMER)}
                   </p>
                 </div>
               </div>
@@ -105,7 +114,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                     </p>
 
                     <p className="sub-text text-red-700">
-                      {GetTime(item.DATE_CONTROL_FOR_TIMER)}
+                      {GetTime(item?.DATE_CONTROL_FOR_TIMER)}
                     </p>
                   </div>
                 </div>
@@ -119,7 +128,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                       {item.COUNT_RECORDS} рулон
                     </p>
                     <p className="sub-text text-red-700">
-                      {GetTime(item.DATE_CONTROL_FOR_TIMER)}
+                      {GetTime(item?.DATE_CONTROL_FOR_TIMER)}
                     </p>
                   </div>
                 </div>
@@ -148,7 +157,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                   </p>
 
                   <p className="sub-text text-red-700">
-                    {GetTime(item.DATE_CONTROL_FOR_TIMER)}
+                    {GetTime(item?.DATE_CONTROL_FOR_TIMER)}
                   </p>
                 </div>
               </div>
@@ -163,7 +172,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                   </p>
 
                   <p className="sub-text text-red-700">
-                    {GetTime(item.DATE_CONTROL_FOR_TIMER)}
+                    {GetTime(item?.DATE_CONTROL_FOR_TIMER)}
                   </p>
                 </div>
               </div>

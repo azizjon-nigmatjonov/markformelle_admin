@@ -34,7 +34,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           </p> */}
           <div>
             <button onClick={() => location.reload()} className="custom-btn">
-              Перезакружит
+              Перезакрузит
             </button>
           </div>
         </div>
