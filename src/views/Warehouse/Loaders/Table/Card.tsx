@@ -1,62 +1,35 @@
-import { useSelector } from "react-redux";
 import CCard from "../../../../components/CElements/CCard";
 import { useRef } from "react";
-
+import useDeviceHeight from "../../../../hooks/useDeviceHeight";
 interface Props {
   data: any;
-  title: string;
+  title: any;
 }
 
-export const CellCardWrapper = ({ data = [], title = "" }: Props) => {
-  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
+export const CellCardWrapper = ({ data = [], title }: Props) => {
   const wrapperRef: any = useRef(null);
-  // const [height, setHeight]: any = useState("auto");
-  // const [scrollPoint, setScrollPoint] = useState(0);
-
-  // useEffect(() => {
-  //   if (wrapperRef.current) {
-  //     setTimeout(() => {
-  //       setHeight(wrapperRef.current.offsetHeight - 80);
-  //     }, 1000);
-  //   }
-
-  //   // setInterval(() => {
-  //   //   if (wrapperRef?.current) {
-  //   //     setScrollPoint(wrapperRef.current.scrollTop);
-  //   //   }
-  //   // }, 1000);
-  // }, []);
-
-  // const scrollToBottom = () => {
-  //   if (wrapperRef.current) {
-  //     const wrapperHeight = wrapperRef.current.clientHeight;
-  //     wrapperRef.current.scrollTop = Math.max(
-  //       wrapperRef.current.scrollTop +
-  //         wrapperHeight -
-  //         wrapperRef.current.clientHeight / 11 -
-  //         50,
-  //       0
-  //     );
-  //   }
-  // };
-
-  // const scrollUpByHeight = () => {
-  //   if (wrapperRef.current) {
-  //     const wrapperHeight = wrapperRef.current.clientHeight;
-  //     wrapperRef.current.scrollTop = Math.max(
-  //       wrapperRef.current.scrollTop - wrapperHeight,
-  //       0
-  //     );
-  //   }
-  // };
-
+  const { getHeight, getFontSize } = useDeviceHeight();
   return (
-    <CCard title={title} classes="h-full">
+    <CCard>
       <div
-        className={`space-y-1 desktop:space-y-2 overflow-y-scroll pb-[50px] remove-scroll`}
-        style={{
-          height: openHeader ? "calc(100vh - 170px)" : "calc(100vh - 110px)",
-        }}
+        className="border-b pb-2 sticky-header"
+        // style={{ height: getHeight({ type: "card", count: 26 }) }}
+      >
+        <h2
+          style={{
+            fontSize: getFontSize({
+              type: "card",
+              count: 14,
+              percent: 40,
+            }),
+          }}
+          className="font-semibold text-[var(--black)] text-center small_desktop:whitespace-nowrap"
+          dangerouslySetInnerHTML={{ __html: title }}
+        ></h2>
+      </div>
+
+      <div
+        className={`space-y-1 desktop:space-y-2 overflow-y-scroll pb-[50px] remove-scroll mt-3`}
         ref={wrapperRef}
       >
         {data?.map((item: any, index: number) => (
@@ -64,7 +37,7 @@ export const CellCardWrapper = ({ data = [], title = "" }: Props) => {
             className={`card grid relative gap-x-2 card-shadow px-1 small_desktop:px-3 ${
               item.COUNT_PACK ? "grid-cols-2" : ""
             }`}
-            style={{ height: "calc(100vh / 17 - 2px)" }}
+            style={{ height: getHeight({ type: "card", count: 18 }) }}
             key={index}
           >
             {/* <div className="bg-[var(--black)] w-[6px] h-[6px] rounded-full absolute left-2 top-3"></div> */}
@@ -76,9 +49,15 @@ export const CellCardWrapper = ({ data = [], title = "" }: Props) => {
             >
               <h3
                 className="title-cards"
-                style={{ fontSize: "calc((50 / 100) * 100vh / 17)" }}
+                style={{
+                  fontSize: getFontSize({
+                    type: "card",
+                    count: 14,
+                    percent: 47,
+                  }),
+                }}
               >
-                <span>{item.CELL?.substring(0, 3)}</span>
+                <span className="mr-1">{item.CELL?.substring(0, 3)}</span>
                 <span>{item.CELL?.substring(3)}</span>
               </h3>
               {/* <h4 className="title-cards"></h4> */}
@@ -87,7 +66,13 @@ export const CellCardWrapper = ({ data = [], title = "" }: Props) => {
               <div className="count">
                 <p
                   className="title-cards"
-                  style={{ fontSize: "calc((50 / 100) * 100vh / 17)" }}
+                  style={{
+                    fontSize: getFontSize({
+                      type: "card",
+                      count: 14,
+                      percent: 40,
+                    }),
+                  }}
                 >
                   {item.COUNT_PACK}
                 </p>

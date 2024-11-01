@@ -24,7 +24,7 @@ const MainLayout = () => {
       <div className="border-r border-[var(--border)]">
         <Sidebar />
       </div>
-      <div className={cls.content}>
+      <div className={`${cls.content} remove-scroll`}>
         <Outlet />
       </div>
 

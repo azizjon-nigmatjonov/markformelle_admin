@@ -134,7 +134,7 @@ const ModalCard: React.FC<MachineCardProps> = ({
       mtype: 0,
     };
 
-    axios.post("http://10.40.140.6:8051/CUT_CONTR", obj).then((res) => {
+    axios.post("http://10.40.140.6:8051/CUT_CONTR/", obj).then((res) => {
       console.log("res", res);
     });
   };

@@ -5,6 +5,7 @@ import { CountBtns, FetchFunction } from "./Logic";
 import CDriver from "../../../components/CElements/CDivider";
 import { useSelector } from "react-redux";
 import { MyCard } from "./MyCard";
+import { LoadingComponent } from "../../../components/UI/Loading";
 
 const searchedWords = [
   "podr_id_knitt",
@@ -174,7 +175,7 @@ const KnittingMachines = () => {
   }, [list, dimensions]);
 
   if (isLoading) {
-    return "Закрузка...";
+    return <LoadingComponent />;
   }
 
   return (

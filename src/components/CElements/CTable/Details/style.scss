@@ -103,7 +103,7 @@
   height: auto;
 
   th {
-    padding: 6px 4px !important;
+    padding: 0 4px !important;
     border-right: 1px solid var(--gray20);
     border-bottom: 1px solid var(--gray20);
     border-radius: 0 !important;
@@ -130,7 +130,7 @@
 }
 
 .MuiTableRow-root {
-  height: 45px !important;
+  height: 50px !important;
 
   &:last-child {
     .CTableCell {
@@ -159,7 +159,7 @@
 }
 
 thead {
-  height: 60px;
+  height: 50px;
   th {
     position: relative;
     padding: 0 !important;

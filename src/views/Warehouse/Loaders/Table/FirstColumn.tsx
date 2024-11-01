@@ -11,11 +11,18 @@ interface Props {
 export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
   if (isLoading) {
     return (
-      <CCard classes="h-full">
+      <CCard classes="h-full remove-scroll">
         <Skeleton style={{ height: "150px" }} />
       </CCard>
     );
   }
 
-  return <CellCardWrapper data={data} title="Готовые клетки" />;
+  return (
+    <CellCardWrapper
+      data={data}
+      title={` <p>
+          Готовые клетки
+        </p>`}
+    />
+  );
 };
