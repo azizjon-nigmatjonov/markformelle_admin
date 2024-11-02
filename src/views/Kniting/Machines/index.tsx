@@ -26,7 +26,7 @@ const KnittingMachines = () => {
   const gridRef: any = useRef(null);
   const [active, setActive] = useState(false);
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
-  const { getHeight, getFontSize } = useDeviceHeight();
+  const { getHeight } = useDeviceHeight();
   useEffect(() => {
     const refetching = setInterval(() => {
       refetch();
@@ -231,16 +231,7 @@ const KnittingMachines = () => {
                 window?.screen?.width < 940
                   ? "1600px"
                   : window?.screen?.width - 200,
-              height:
-                checked?.[0] !== "all" || search.length
-                  ? "auto"
-                  : window.screen.width < 940
-                  ? "auto"
-                  : openHeader
-                  ? "calc(100vh - 75px)"
-                  : window.screen.width < 1440
-                  ? "calc(100vh - 20px)"
-                  : "calc(100vh - 25px)",
+              minHeight: window.screen.height - (openHeader ? 250 : 150),
             }}
           >
             {list.map((machine: any, index: number) =>
@@ -252,7 +243,14 @@ const KnittingMachines = () => {
                     height: getHeight({
                       count: 7,
                       type: "machine",
-                      minus: openHeader ? 19 : 13,
+                      minus:
+                        window.screen.width < 980
+                          ? openHeader
+                            ? 18
+                            : 12
+                          : openHeader
+                          ? 37
+                          : 30,
                     }),
                   }}
                 >

@@ -20,9 +20,9 @@ export const SecondColumn = ({ isLoading = true, data = [] }: Props) => {
   return (
     <CellCardWrapper
       data={data}
-      title={`    <p>
+      title={`   
           Пустые клетки
-        </p>`}
+        `}
     />
   );
 };

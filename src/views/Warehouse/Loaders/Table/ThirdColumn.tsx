@@ -19,9 +19,9 @@ export const ThirdColumn = ({ data = [], isLoading = true }: Props) => {
   return (
     <CellCardWrapper
       data={data}
-      title={`<p>
+      title={`
           Нет в зоне
-        </p>`}
+        `}
     />
   );
 };

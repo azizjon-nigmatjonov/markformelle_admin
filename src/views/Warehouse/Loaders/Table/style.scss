@@ -89,7 +89,7 @@ $maxWidthContainer: 1800;
 
 .title-cards {
     @include adapviteValue(font-size, 80, 60, 1);
-    font-weight: 600;
+    font-weight: 500;
 }
 
 @media (max-width: 3000px) {
@@ -152,7 +152,7 @@ $maxWidthContainer: 1800;
 
 .sticky-sub-header {
     position: sticky;
-    inset: 40px 100px 100px 0px;
+    inset: 35px 100px 100px 0px;
     background-color: white;
     z-index: 2;
     border-top: 1px solid var(--border);
@@ -164,11 +164,11 @@ $maxWidthContainer: 1800;
     background-color: white;
     display: flex;
     align-items: center;
-    border-top: 1px solid var(--border);
+    // border-top: 1px solid var(--border);
 }
 
 .absolute-el {
-    border-top: 1px solid var(--border);
+    // border-top: 1px solid var(--border);
     position: absolute;
     bottom: 0px;
     left: 0;

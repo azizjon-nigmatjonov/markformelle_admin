@@ -25,7 +25,7 @@ const useDeviceHeight = () => {
     switch (type) {
       case "machine":
         return height < 600
-          ? (percent / 100) * (height / (count - count / 4))
+          ? (percent / 100) * (height / (count - count / 3.3))
           : (percent / 100) * (height / count);
       case "card":
         return height < 600

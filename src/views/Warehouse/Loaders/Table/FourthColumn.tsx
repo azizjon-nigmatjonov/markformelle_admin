@@ -170,30 +170,28 @@ export const FourthColumn = ({ data = [] }: Props) => {
                 fontSize: getFontSize({
                   type: "card",
                   count: 14,
-                  percent: 32,
+                  percent: 38,
                 }),
               }}
-              className="font-bold text-[var(--black)] text-center whitespace-nowrap uppercase"
+              className="font-semibold text-[var(--gray)] text-center whitespace-nowrap"
             >
               Список грузчиков
             </h2>
           </div>
-          <div className={`overflow-y-scroll remove-scroll`}>
+          <div className={`overflow-y-scroll remove-scroll pt-[2px]`}>
             {bodyData?.map((item: any, index: number) => (
               <div
-                className={`row flex items-center ${
-                  index !== 0 ? "border-t border-[var(--border)] " : ""
-                }`}
-                style={{ height: getHeight({ type: "card", count: 24 }) }}
+                className={`row flex items-center border-b border-[var(--border)]`}
+                style={{ height: getHeight({ type: "card", count: 23.5 }) }}
                 key={index}
               >
                 {headColumns.slice(0, 1).map((headCol: any, headInd) => (
                   <div
                     key={headInd}
-                    className="cell flex space-x-2 items-center"
+                    className="cell flex space-x-3 items-center"
                   >
                     <div
-                      className="w-[40px]"
+                      className="w-[40px] flex justify-center"
                       style={{ width: getHeight({ type: "card", count: 26 }) }}
                     >
                       {item.order === 1 ? (
@@ -220,7 +218,7 @@ export const FourthColumn = ({ data = [] }: Props) => {
                           src="/images/danger.png"
                           alt={`last ${item.order}`}
                           style={{
-                            width: getHeight({ type: "card", count: 28 }),
+                            width: getHeight({ type: "card", count: 30 }),
                           }}
                         />
                       )}
@@ -232,7 +230,7 @@ export const FourthColumn = ({ data = [] }: Props) => {
                         fontSize: getFontSize({
                           type: "card",
                           count: 14,
-                          percent: 30,
+                          percent: 37,
                         }),
                       }}
                     >
@@ -243,9 +241,10 @@ export const FourthColumn = ({ data = [] }: Props) => {
               </div>
             ))}
           </div>
+
           <div
             className={`${bodyData.length < 7 ? "absolute-el" : "sticky-el"}`}
-            style={{ height: getHeight({ type: "card", count: 20 }) }}
+            style={{ height: getHeight({ type: "card", count: 23 }) }}
           >
             <p
               className="font-bold flex justify-between w-full"
@@ -272,21 +271,19 @@ export const FourthColumn = ({ data = [] }: Props) => {
                 fontSize: getFontSize({
                   type: "card",
                   count: 14,
-                  percent: 32,
+                  percent: 38,
                 }),
               }}
-              className="font-bold text-[var(--black)] text-center whitespace-nowrap uppercase"
+              className="font-semibold text-[var(--gray)] text-center whitespace-nowrap"
             >
               C начала месяца
             </h2>
           </div>
-          <div className={`overflow-y-scroll remove-scroll`}>
+          <div className={`overflow-y-scroll remove-scroll pt-[2px]`}>
             {bodyData?.map((item: any, index: number) => (
               <div
-                className={`row flex items-center ${
-                  index !== 0 ? "border-t border-[var(--border)] " : ""
-                }`}
-                style={{ height: getHeight({ type: "card", count: 24 }) }}
+                className={`row flex items-center border-b border-[var(--border)]`}
+                style={{ height: getHeight({ type: "card", count: 23.5 }) }}
                 key={index}
               >
                 {headColumns.slice(1, 2).map((headCol: any, headInd) => (
@@ -297,7 +294,7 @@ export const FourthColumn = ({ data = [] }: Props) => {
                         fontSize: getFontSize({
                           type: "card",
                           count: 14,
-                          percent: 30,
+                          percent: 37,
                         }),
                       }}
                     >
@@ -310,7 +307,7 @@ export const FourthColumn = ({ data = [] }: Props) => {
           </div>
           <div
             className={`${bodyData.length < 7 ? "absolute-el" : "sticky-el"}`}
-            style={{ height: getHeight({ type: "card", count: 20 }) }}
+            style={{ height: getHeight({ type: "card", count: 23 }) }}
           >
             <p
               className="font-bold"
@@ -337,21 +334,19 @@ export const FourthColumn = ({ data = [] }: Props) => {
                 fontSize: getFontSize({
                   type: "card",
                   count: 14,
-                  percent: 32,
+                  percent: 38,
                 }),
               }}
-              className="font-bold text-[var(--black)] text-center whitespace-nowrap uppercase"
+              className="font-semibold text-[var(--gray)] text-center whitespace-nowrap"
             >
               В этой смене
             </h2>
           </div>
-          <div className={`overflow-y-scroll remove-scroll`}>
+          <div className={`overflow-y-scroll remove-scroll pt-[2px]`}>
             {bodyData?.map((item: any, index: number) => (
               <div
-                className={`row flex items-center ${
-                  index !== 0 ? "border-t border-[var(--border)] " : ""
-                }`}
-                style={{ height: getHeight({ type: "card", count: 24 }) }}
+                className={`row flex items-center border-b border-[var(--border)]`}
+                style={{ height: getHeight({ type: "card", count: 23.5 }) }}
                 key={index}
               >
                 {headColumns.slice(2, 3).map((headCol: any, headInd) => (
@@ -362,7 +357,7 @@ export const FourthColumn = ({ data = [] }: Props) => {
                         fontSize: getFontSize({
                           type: "card",
                           count: 14,
-                          percent: 30,
+                          percent: 37,
                         }),
                       }}
                     >
@@ -375,7 +370,7 @@ export const FourthColumn = ({ data = [] }: Props) => {
           </div>
           <div
             className={`${bodyData.length < 7 ? "absolute-el" : "sticky-el"}`}
-            style={{ height: getHeight({ type: "card", count: 20 }) }}
+            style={{ height: getHeight({ type: "card", count: 23 }) }}
           >
             <p
               className="font-bold"

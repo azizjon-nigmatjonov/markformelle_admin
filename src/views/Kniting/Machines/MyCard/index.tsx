@@ -14,25 +14,25 @@ interface Props {
 
 export const MyCard = ({ machine }: Props) => {
   const { getFontSize } = useDeviceHeight();
-  const [size, setSize] = useState<number>(50);
+  // const [size, setSize] = useState<number>(50);
   const cardRef: any = useRef(null);
-  const updateSize = () => {
-    if (window.screen.width < 1200 && window.screen.width > 940) {
-      setSize(cardRef?.current?.clientHeight * 0.69);
-    } else {
-      setSize(cardRef?.current?.clientHeight * 0.7);
-    }
-  };
+  // const updateSize = () => {
+  //   if (window.screen.width < 1200 && window.screen.width > 940) {
+  //     setSize(cardRef?.current?.clientHeight * 0.69);
+  //   } else {
+  //     setSize(cardRef?.current?.clientHeight * 0.7);
+  //   }
+  // };
 
-  useEffect(() => {
-    updateSize();
+  // useEffect(() => {
+  //   updateSize();
 
-    window.addEventListener("resize", updateSize);
+  //   window.addEventListener("resize", updateSize);
 
-    return () => {
-      window.removeEventListener("resize", updateSize);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("resize", updateSize);
+  //   };
+  // }, []);
 
   const [cardColor, setCardColor] = useState<string>("");
   const [open, setOpen] = useState(false);
@@ -161,7 +161,7 @@ export const MyCard = ({ machine }: Props) => {
               </div>
             </div>
             <div
-              className={`w-full flex justify-center py-1 absolute top-[57%] desktop:top-[60%] bigDesktop:top-[57%] left-1/2 -translate-x-1/2 -translate-y-1/2`}
+              className={`w-full flex justify-center py-1 absolute top-[58%] left-1/2 -translate-x-1/2 -translate-y-1/2`}
             >
               <CircularProgress
                 strokeWidth={getFontSize({
@@ -177,7 +177,7 @@ export const MyCard = ({ machine }: Props) => {
                 maxValue={100}
                 size={getFontSize({
                   count: 7,
-                  percent: 100,
+                  percent: 93,
                   type: "machine",
                 })}
               >
@@ -222,7 +222,6 @@ export const MyCard = ({ machine }: Props) => {
                       ) + " Kg"}
                   </p>
                   <div
-                    className="inline-flex justify-center relative text inner ml-[15px]"
                     style={{
                       fontSize: getFontSize({
                         count: 7,
@@ -231,10 +230,44 @@ export const MyCard = ({ machine }: Props) => {
                       }),
                     }}
                   >
-                    <div className="absolute left-[0px] rotate-[90deg]">
-                      <SpeedIcon />
-                    </div>{" "}
-                    <span>{machine.rotation}</span>
+                    {/* <div className="absolute top-[0px] right-[40px]">
+                      <div className="rotate-[90deg]"></div>
+                    </div>{" "} */}
+                    <div className="flex items-center justify-center font-semibold pl-5">
+                      <div
+                        className="rotate-[90deg] mt-[-24px]"
+                        style={{
+                          marginTop: -getFontSize({
+                            count: 7,
+                            percent: 20,
+                            type: "machine",
+                          }),
+                        }}
+                      >
+                        <SpeedIcon
+                          style={{
+                            fontSize: getFontSize({
+                              count: 7,
+                              percent: 17,
+                              type: "machine",
+                            }),
+                          }}
+                        />
+                        {/* <svg
+                          width={getFontSize({
+                            count: 7,
+                            percent: 15,
+                            type: "machine",
+                          })}
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="#000"
+                        >
+                          <path d="M20 13C20 15.2091 19.1046 17.2091 17.6569 18.6569L19.0711 20.0711C20.8807 18.2614 22 15.7614 22 13 22 7.47715 17.5228 3 12 3 6.47715 3 2 7.47715 2 13 2 15.7614 3.11929 18.2614 4.92893 20.0711L6.34315 18.6569C4.89543 17.2091 4 15.2091 4 13 4 8.58172 7.58172 5 12 5 16.4183 5 20 8.58172 20 13ZM15.293 8.29297 10.793 12.793 12.2072 14.2072 16.7072 9.70718 15.293 8.29297Z"></path>
+                        </svg> */}
+                      </div>
+                      <span className="ml-[2px]">{machine.rotation}</span>
+                    </div>
                   </div>
                 </div>
               </CircularProgress>

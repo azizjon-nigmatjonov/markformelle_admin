@@ -10,7 +10,7 @@ export const CellCardWrapper = ({ data = [], title }: Props) => {
   const wrapperRef: any = useRef(null);
   const { getHeight, getFontSize } = useDeviceHeight();
   return (
-    <CCard>
+    <CCard classes="p-[0]" childClasses="small_desktop:p-2">
       <div
         className="border-b pb-2 sticky-header"
         style={{ width: wrapperRef?.current?.offsetWidth }}
@@ -21,12 +21,25 @@ export const CellCardWrapper = ({ data = [], title }: Props) => {
             fontSize: getFontSize({
               type: "card",
               count: 14,
-              percent: 40,
+              percent: 37,
             }),
           }}
-          className="font-semibold text-[var(--black)] text-center small_desktop:whitespace-nowrap"
-          dangerouslySetInnerHTML={{ __html: title }}
-        ></h2>
+          className="font-bold text-[var(--black)] flex items-center justify-between small_desktop:whitespace-nowrap relative"
+        >
+          <span className="ml-[-1px]">{title}</span>
+          <span
+            style={{
+              fontSize: getFontSize({
+                type: "card",
+                count: 14,
+                percent: 32,
+              }),
+            }}
+            className="mr-[-5px] mt-1"
+          >
+            {data.length ? `(1${data.length})` : ""}
+          </span>
+        </h2>
       </div>
 
       <div

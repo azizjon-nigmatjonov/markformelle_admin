@@ -42,28 +42,33 @@ export const ProcessTable = () => {
   }
 
   return (
-    <div className="flex p-3 space-x-1 small_desktop:space-x-3">
-      <div className="grid grid-flow-row-dense grid-cols-6 gap-x-1 small_desktop:gap-x-3 w-full">
-        <div>
-          <FirstColumn
-            data={newData?.dashboard_data?.ready_cells}
-            isLoading={isLoading}
-          />
+    <div className="flex p-3 space-x-1 small_desktop:space-x-2">
+      <div className="grid grid-cols-2 gap-x-1 small_desktop:gap-x-2 w-full">
+        <div className="grid grid-cols-3 gap-x-1 small_desktop:gap-x-2">
+          <div>
+            <FirstColumn
+              data={newData?.dashboard_data?.ready_cells}
+              isLoading={isLoading}
+            />
+          </div>
+          <div>
+            <SecondColumn
+              data={newData?.dashboard_data?.empty_cells}
+              isLoading={isLoading}
+            />
+          </div>
+          <div>
+            <ThirdColumn
+              data={newData?.dashboard_data?.cells_without_zon}
+              isLoading={isLoading}
+            />
+          </div>
         </div>
-        <div>
-          <SecondColumn
-            data={newData?.dashboard_data?.empty_cells}
-            isLoading={isLoading}
-          />
-        </div>
-        <div>
-          <ThirdColumn
-            data={newData?.dashboard_data?.cells_without_zon}
-            isLoading={isLoading}
-          />
-        </div>
-        <div className="col-span-3 space-y-3">
-          <CCard half={true} classes="designed-scroll">
+        <div className="space-y-2">
+          <CCard
+            half={true}
+            childClasses="small_desktop:p-2 small_desktop:pt-1"
+          >
             <div className="flex items-center justify-center w-full sticky-header">
               <h2
                 className="uppercase text-[var(--black)] font-bold"
@@ -71,7 +76,7 @@ export const ProcessTable = () => {
                   fontSize: getFontSize({
                     type: "card",
                     count: 14,
-                    percent: 38,
+                    percent: 37,
                   }),
                 }}
               >
@@ -79,9 +84,15 @@ export const ProcessTable = () => {
               </h2>
             </div>
 
-            <FourthColumn data={newData?.upper} isLoading={isLoading} />
+            <FourthColumn
+              data={[...newData?.upper, ...newData?.down]}
+              isLoading={isLoading}
+            />
           </CCard>
-          <CCard half={true}>
+          <CCard
+            half={true}
+            childClasses="small_desktop:p-2 small_desktop:pt-1"
+          >
             <div className="flex items-center justify-center w-full sticky-header">
               <h2
                 className="uppercase text-[var(--black)] font-bold"
@@ -89,7 +100,7 @@ export const ProcessTable = () => {
                   fontSize: getFontSize({
                     type: "card",
                     count: 14,
-                    percent: 38,
+                    percent: 37,
                   }),
                 }}
               >
