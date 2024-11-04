@@ -21,7 +21,7 @@ export const CellCardWrapper = ({ data = [], title }: Props) => {
             fontSize: getFontSize({
               type: "card",
               count: 14,
-              percent: 37,
+              percent: 36.5,
             }),
           }}
           className="font-bold text-[var(--black)] flex items-center justify-between small_desktop:whitespace-nowrap relative"
@@ -32,12 +32,12 @@ export const CellCardWrapper = ({ data = [], title }: Props) => {
               fontSize: getFontSize({
                 type: "card",
                 count: 14,
-                percent: 32,
+                percent: 31,
               }),
             }}
             className="mr-[-5px] mt-1"
           >
-            {data.length ? `(1${data.length})` : ""}
+            {data.length ? `(${data.length})` : ""}
           </span>
         </h2>
       </div>

@@ -10,30 +10,12 @@ import useDeviceHeight from "../../../../hooks/useDeviceHeight";
 interface Props {
   machine: any;
   zoomPoint: number;
+  refetch: any;
 }
 
-export const MyCard = ({ machine }: Props) => {
+export const MyCard = ({ machine, refetch }: Props) => {
   const { getFontSize } = useDeviceHeight();
-  // const [size, setSize] = useState<number>(50);
   const cardRef: any = useRef(null);
-  // const updateSize = () => {
-  //   if (window.screen.width < 1200 && window.screen.width > 940) {
-  //     setSize(cardRef?.current?.clientHeight * 0.69);
-  //   } else {
-  //     setSize(cardRef?.current?.clientHeight * 0.7);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   updateSize();
-
-  //   window.addEventListener("resize", updateSize);
-
-  //   return () => {
-  //     window.removeEventListener("resize", updateSize);
-  //   };
-  // }, []);
-
   const [cardColor, setCardColor] = useState<string>("");
   const [open, setOpen] = useState(false);
 
@@ -49,6 +31,10 @@ export const MyCard = ({ machine }: Props) => {
       return machine.new_status.color;
     }
   };
+
+  useEffect(() => {
+    refetch();
+  }, [open]);
 
   useEffect(() => {
     setCardColor(getCardColor());
@@ -85,7 +71,18 @@ export const MyCard = ({ machine }: Props) => {
       >
         {machine.no_connnection == "true" ? (
           <div className="flex flex-col items-center">
-            <p className="title">{machine.name}</p>
+            <p
+              className="title"
+              style={{
+                fontSize: getFontSize({
+                  count: 7,
+                  percent: 19,
+                  type: "machine",
+                }),
+              }}
+            >
+              {machine.name}
+            </p>
             <div className="flex flex-col items-center justify-center absolute top-[60%] -translate-y-1/2">
               <div className="image">
                 <WifiOff />
@@ -253,20 +250,10 @@ export const MyCard = ({ machine }: Props) => {
                             }),
                           }}
                         />
-                        {/* <svg
-                          width={getFontSize({
-                            count: 7,
-                            percent: 15,
-                            type: "machine",
-                          })}
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="#000"
-                        >
-                          <path d="M20 13C20 15.2091 19.1046 17.2091 17.6569 18.6569L19.0711 20.0711C20.8807 18.2614 22 15.7614 22 13 22 7.47715 17.5228 3 12 3 6.47715 3 2 7.47715 2 13 2 15.7614 3.11929 18.2614 4.92893 20.0711L6.34315 18.6569C4.89543 17.2091 4 15.2091 4 13 4 8.58172 7.58172 5 12 5 16.4183 5 20 8.58172 20 13ZM15.293 8.29297 10.793 12.793 12.2072 14.2072 16.7072 9.70718 15.293 8.29297Z"></path>
-                        </svg> */}
                       </div>
-                      <span className="ml-[2px]">{machine.rotation}</span>
+                      <span className="ml-[2px]">
+                        {machine.rotation || "0.0"}
+                      </span>
                     </div>
                   </div>
                 </div>

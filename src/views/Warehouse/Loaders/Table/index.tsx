@@ -84,10 +84,7 @@ export const ProcessTable = () => {
               </h2>
             </div>
 
-            <FourthColumn
-              data={[...newData?.upper, ...newData?.down]}
-              isLoading={isLoading}
-            />
+            <FourthColumn data={newData?.upper} isLoading={isLoading} />
           </CCard>
           <CCard
             half={true}

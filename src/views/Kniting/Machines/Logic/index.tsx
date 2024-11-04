@@ -20,11 +20,92 @@ export const DataObjects = {
   reload_yarn: 0,
 };
 
+export const CheckDataReason = (machine: any) => {
+  if (machine.no_connnection === "true" && machine.reason !== "Ремонт") {
+    return "no_connnection";
+  }
+
+  if (machine.not_broken == "false" && machine.machine_is_on == "false") {
+    return "no_connnection";
+  }
+
+  if (
+    machine.rotation > 0 &&
+    machine.not_broken == "true" &&
+    machine.machine_is_on == "true"
+  ) {
+    if (
+      machine.yarn_replacement == "true" &&
+      machine.pkol_knit - machine.fkol_knit < 30 &&
+      machine.pkol_knit - machine.fkol_knit > 0
+    ) {
+      return "working";
+    } else return "working";
+  }
+
+  if (!machine.idlocation) return "";
+  if (
+    (machine.rotation == 0 || !machine.rotation) &&
+    (machine.reason?.includes("Остановлена меньше 30 ми") || !machine.reason)
+  ) {
+    return "stopped";
+  }
+
+  if (
+    (machine.rotation == 0 || !machine.rotation) &&
+    machine.pkol_knit != 0 &&
+    Number(machine.stop_mins) >= 30 &&
+    (machine.reason?.includes("Ожидание причины останова") || !machine.reason)
+  ) {
+    return "no_status";
+  }
+
+  switch (machine.reason) {
+    case "Ремонт":
+    case "Ремонт машины":
+      return "fixing";
+    case "Замена пряжи":
+      return "reload_yarn";
+    case "Замена иглы":
+      return "reload";
+    case "Чистка машины":
+      return "cleaning";
+    case "Нет пряжи":
+      return "no_yarn";
+    case "Нет плана":
+      return "no_plan";
+    case "Перезаправка":
+      return "reload";
+    default:
+      return "";
+  }
+};
+
 export const CheckData = (machine: any) => {
   if (!machine.idlocation) return "";
 
-  if (machine.rotation > 0) {
-    return "working";
+  if (machine.no_connnection === "true" && machine.reason !== "Ремонт") {
+    return "no_connnection";
+  } else if (machine.pkol_knit == 0) {
+    if (machine.reason === "Нет пряжи") {
+      return "no_yarn";
+    } else {
+      return "no_plan";
+    }
+  }
+
+  if (
+    machine.rotation > 0 &&
+    machine.not_broken == "true" &&
+    machine.machine_is_on == "true"
+  ) {
+    if (
+      machine.yarn_replacement == "true" &&
+      machine.pkol_knit - machine.fkol_knit < 30 &&
+      machine.pkol_knit - machine.fkol_knit > 0
+    ) {
+      return "working";
+    } else return "working";
   }
 
   if (
@@ -42,11 +123,15 @@ export const CheckData = (machine: any) => {
     }
   }
 
+  if (machine.not_broken == "true" && machine.machine_is_on == "false") {
+    return "no_plan";
+  }
+
   if (machine.reason === "Ремонт" && machine.no_connnection === "false") {
     return "fixing";
   }
 
-  if (machine.no_connnection === "true" && machine.reason !== "Ремонт") {
+  if (machine.not_broken == "false" && machine.machine_is_on == "false") {
     return "no_connnection";
   }
 
@@ -91,7 +176,31 @@ export const CheckData = (machine: any) => {
     return "fixing";
   }
 
-  return "";
+  if (machine.reason === "Перезаправка" && machine.rotation == 0) {
+    return "reload";
+  }
+  if (machine.reason === "Нет пряжи") {
+    return "no_yarn";
+  }
+
+  switch (machine.reason.toLowerCase()) {
+    case "ремонт машины":
+      return "fixing";
+    case "замена иглы":
+      return "reload";
+    case "замена пряжи":
+      return "reload_yarn";
+    case "чистка машины":
+      return "cleaning";
+    case "нет пряжи":
+      return "no_yarn";
+    case "нет плана":
+      return "no_plan";
+    case "перезаправка":
+      return "reload";
+    default:
+      return "stopped";
+  }
 };
 
 export const TableData = () => {
@@ -167,15 +276,26 @@ export const FetchFunction = () => {
           Number(machine.stop_mins) <= 10
         ) {
           new_status.color = "green";
-          new_status.status = "working";
         } else {
           new_status.color = obj[CheckData(machine)];
-          new_status.status = CheckData(machine);
         }
       } else {
         new_status.color = "";
+      }
+
+      if (CheckDataReason(machine) in obj && machine.idlocation) {
+        if (
+          CheckDataReason(machine) === "stopped" &&
+          Number(machine.stop_mins) <= 10
+        ) {
+          new_status.status = "working";
+        } else {
+          new_status.status = CheckDataReason(machine);
+        }
+      } else {
         new_status.status = "";
       }
+      // CheckDataReason
 
       return {
         ...machine,

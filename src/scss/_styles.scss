@@ -516,3 +516,29 @@ input {
     font-size: calc((30 / 100) * 40px);
   }
 }
+
+.MuiAlert-colorInfo {
+  display: flex;
+  align-items: center;
+  padding: 6px !important;
+
+  .MuiAlert-icon {
+    // margin-left: -5px;
+    margin-right: 6px;
+  }
+  .MuiAlert-message {
+    position: relative;
+    padding: 0 0 0 10px;
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 1.5px;
+      height: 93%;
+      background-color: #2d9dd9;
+      border-radius: 4px;
+    }
+  }
+}

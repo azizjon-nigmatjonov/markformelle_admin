@@ -60,13 +60,22 @@ const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
                     />
                   </div>
 
-                  {collapsed && (
-                    <DropDown
-                      title={key}
-                      value={value}
-                      handleNavigate={handleNavigate}
-                    />
-                  )}
+                  {window?.screen?.width < 980
+                    ? collapsed &&
+                      activeIndex === key && (
+                        <DropDown
+                          title={key}
+                          value={value}
+                          handleNavigate={handleNavigate}
+                        />
+                      )
+                    : collapsed && (
+                        <DropDown
+                          title={key}
+                          value={value}
+                          handleNavigate={handleNavigate}
+                        />
+                      )}
                 </button>
 
                 {!collapsed && (

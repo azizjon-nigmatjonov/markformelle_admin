@@ -225,13 +225,16 @@ const KnittingMachines = () => {
       >
         {list?.length ? (
           <div
-            className={`grid-machines-dashboard grid w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-[3px] small_desktop:gap-3`}
+            className={`grid-machines-dashboard grid w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-[3px] small_desktop:gap-2`}
             style={{
               minWidth:
                 window?.screen?.width < 940
                   ? "1600px"
                   : window?.screen?.width - 200,
-              minHeight: window.screen.height - (openHeader ? 250 : 150),
+              minHeight:
+                checked.length && !checked.includes("all")
+                  ? "auto"
+                  : window.screen.height - (openHeader ? 250 : 150),
             }}
           >
             {list.map((machine: any, index: number) =>
@@ -246,15 +249,19 @@ const KnittingMachines = () => {
                       minus:
                         window.screen.width < 980
                           ? openHeader
-                            ? 18
-                            : 12
+                            ? 16
+                            : 8.5
                           : openHeader
-                          ? 37
-                          : 30,
+                          ? 34
+                          : 27,
                     }),
                   }}
                 >
-                  <MyCard machine={machine} zoomPoint={zoomPoint} />
+                  <MyCard
+                    machine={machine}
+                    zoomPoint={zoomPoint}
+                    refetch={refetch}
+                  />
                 </div>
               ) : (
                 <div key={index}></div>

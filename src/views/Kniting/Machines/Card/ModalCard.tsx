@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
 import ModalClose from "@mui/joy/ModalClose";
 import Typography from "@mui/joy/Typography";
 import {
@@ -25,6 +25,8 @@ import "./MachineCard.css";
 import toast from "react-hot-toast";
 import { ModalBtn } from "./Btn";
 import axios from "axios";
+import { statusReasonsRu } from "../../../../constants/status";
+import { Alert } from "@mui/material";
 
 interface Machine {
   id: number;
@@ -55,6 +57,7 @@ interface Machine {
   art: string;
   reason?: string;
   model: string;
+  planid?: number;
 }
 
 interface MachineCardProps {
@@ -62,15 +65,19 @@ interface MachineCardProps {
   setOpen: (val: boolean) => void;
 }
 
-const ModalCard: React.FC<MachineCardProps> = ({
-  machine,
-  setOpen = () => {},
-}) => {
-  const [cardColor, setCardColor] = React.useState<string>("");
+const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
+  const [cardColor, setCardColor] = useState<string>("");
+  const [checkedReason, setCheckedReason]: any = useState("1");
+  const [descriptionText, setDescriptionText] = useState("");
+  const [alertInfo, setAlertInfo]: any = useState({
+    type: "error",
+    title: "",
+  });
 
-  React.useEffect(() => {
+  useEffect(() => {
     setCardColor(getCardColor());
   }, [machine]);
+
   const getCardColor = (): string => {
     if (
       machine.rotation > 0 &&
@@ -102,11 +109,9 @@ const ModalCard: React.FC<MachineCardProps> = ({
       return "";
     }
   };
-  const [checked1, setChecked1] = React.useState(
-    machine.machine_is_on == "true"
-  );
+  const [checked1, setChecked1] = useState(machine.machine_is_on == "true");
 
-  const [checked2, setChecked2] = React.useState(machine.not_broken == "true");
+  const [checked2, setChecked2] = useState(machine.not_broken == "true");
 
   const getWeight = (item: any) => {
     const num: any = Number(item.pkol_knit) - Number(item.fkol_knit) || 0;
@@ -115,28 +120,83 @@ const ModalCard: React.FC<MachineCardProps> = ({
   };
 
   const createStatus = () => {
+    if (machine.no_connnection === "false") {
+      setAlertInfo({
+        title: "Вы можете изменить только статус <br/> 'Нет соединения' !",
+        type: "error",
+      });
+      return;
+    }
+    const now = new Date();
+
+    const year = String(now.getFullYear()).slice(-2); // Last two digits of the year
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+
+    // const obj = {
+    //   code_req: "003",
+    //   code_device: "163",
+    //   sign_device: machine.name,
+    //   tabn_id: 12418,
+    //   id_req: `${year}${month}${day}${hours}${minutes}${seconds}`,
+    //   time_req: `${year}-${month}-${day}.${hours}:${minutes}:${seconds}`,
+    //   desc: "Датчики",
+    //   rotation: machine.rotation,
+    //   reason: statusReasonsRu[checkedReason],
+    //   ver: machine.soft_version,
+    //   streams: 1,
+    //   lengthrot: 0.0,
+    //   factqty: 0.0,
+    //   planid: machine.planid,
+    //   idletime: 0,
+    //   mtype: 0,
+    // };
+
     const obj = {
-      code_req: "003",
-      code_device: "163",
-      sign_device: "A-067",
-      tabn_id: 12418,
-      id_req: 241030150818,
-      time_req: "2024-10-30.15:08:18",
-      desc: "Датчики",
-      rotation: "21.2",
-      reason: "Остановлена меньше 30 мин.",
-      ver: "V3.8.4one",
-      streams: 1,
-      lengthrot: 0.0,
-      factqty: 0.0,
-      planid: 18249,
-      idletime: 0,
-      mtype: 0,
+      code_req: "006",
+      code_device: machine.id,
+      sign_device: machine.name,
+      id_req: `${year}${month}${day}${hours}${minutes}${seconds}`,
+      time_req: `${year}-${month}-${day}.${hours}:${minutes}:${seconds}`,
+      desc: descriptionText || statusReasonsRu[checkedReason],
+      reason: statusReasonsRu[checkedReason],
+      reasoncode: checkedReason,
     };
 
-    axios.post("http://10.40.140.6:8051/CUT_CONTR/", obj).then((res) => {
-      console.log("res", res);
-    });
+    axios
+      .post("http://10.40.140.6:8051/CUT_CONTR", obj)
+      .then((res: any) => {
+        const value = res?.data ?? {};
+        const newObj = {
+          ...machine,
+          ...value,
+          code_req: "003",
+          time_req: `${year}-${month}-${day}.${hours}:${minutes}:${seconds}`,
+          reason: statusReasonsRu[checkedReason],
+          reasoncode: checkedReason,
+        };
+        axios
+          .post("http://10.40.140.6:8051/CUT_CONTR", newObj)
+          .then(() => {
+            toast.success(`${machine.name} статус машины обновлен!`);
+            setOpen(false);
+
+            axios
+              .post("http://10.40.140.6:8051/CUT_CONTR", obj)
+              .then((resp) => {
+                console.log("1111", resp);
+              });
+          })
+          .catch(() => {
+            toast.success("Ошибка сервера!");
+          });
+      })
+      .catch(() => {
+        toast.success("Ошибка сервера!");
+      });
   };
 
   return (
@@ -157,7 +217,9 @@ const ModalCard: React.FC<MachineCardProps> = ({
                 style={{ display: "flex", justifyContent: "space-between" }}
               >
                 <Typography>Номер машины</Typography>
-                <Typography>{machine.name}</Typography>
+                <Typography>
+                  {machine.name} ({machine.id})
+                </Typography>
               </ListItem>
               <ListDivider />
               <ListItem
@@ -165,6 +227,13 @@ const ModalCard: React.FC<MachineCardProps> = ({
               >
                 <Typography>Название машины</Typography>
                 <Typography>{machine.model}</Typography>
+              </ListItem>
+              <ListDivider />
+              <ListItem
+                style={{ display: "flex", justifyContent: "space-between" }}
+              >
+                <Typography>Статус машины</Typography>
+                <Typography>{machine.reason}</Typography>
               </ListItem>
               <ListDivider />
               <ListItem
@@ -237,11 +306,15 @@ const ModalCard: React.FC<MachineCardProps> = ({
             <Stack
               spacing={2}
               sx={{ width: "50%" }}
-              justifyContent="space-between"
+              justifyContent={checked2 ? "" : "space-between"}
               alignItems="center"
             >
               <Stack sx={{ width: "100%" }}>
-                <ul className="flex flex-col space-y-5">
+                <ul
+                  className={`flex flex-col space-y-5 ${
+                    checked2 ? "mb-10" : ""
+                  }`}
+                >
                   <li
                     style={{
                       display: "flex",
@@ -337,14 +410,29 @@ const ModalCard: React.FC<MachineCardProps> = ({
               ) : (
                 <div className="w-full h-full border-t border-[var(--border)] pt-5">
                   <h3 className="mb-5">Причина поломки</h3>
-                  <ModalBtn />
+                  <ModalBtn
+                    checkedReason={checkedReason}
+                    setCheckedReason={setCheckedReason}
+                  />
                   <p className="mb-2 text-[var(--gray)] mt-3">
                     Введите причину поломки
                   </p>
                   <textarea
-                    className="p-4 bg-transparent border border-[var(--border)] rounded-[8px] w-full"
+                    className="p-4 bg-transparent border border-[var(--border)] outline-none focus:border-[var(--primary)] rounded-[8px] w-full"
                     rows={5}
+                    onChange={(e: any) => setDescriptionText(e.target.value)}
                   ></textarea>
+
+                  {alertInfo.title && (
+                    <div className="bg-[#fdeded] rounded-lg mt-5">
+                      <Alert severity={alertInfo?.type}>
+                        <p
+                          className="text-xl font-medium"
+                          dangerouslySetInnerHTML={{ __html: alertInfo.title }}
+                        ></p>
+                      </Alert>
+                    </div>
+                  )}
 
                   <Stack
                     spacing={1}
@@ -357,7 +445,6 @@ const ModalCard: React.FC<MachineCardProps> = ({
                       onClick={() => {
                         // setOpen(false);
                         createStatus();
-                        toast.success("Отправлено успешно, Спасибо!");
                       }}
                       fullWidth
                     >

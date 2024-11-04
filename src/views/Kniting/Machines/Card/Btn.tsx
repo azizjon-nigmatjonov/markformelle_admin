@@ -1,53 +1,35 @@
-import { useState } from "react";
+import { statusReasonsRu } from "../../../../constants/status";
 
-const list = [
-  {
-    title: "Ремонт машины",
-    value: 1,
-  },
-  {
-    title: "Замена игла",
-    value: 2,
-  },
-  {
-    title: "Замена пряжи",
-    value: 3,
-  },
-  {
-    title: "Чистка машины",
-    value: 4,
-  },
-  {
-    title: "Нет пряжи",
-    value: 5,
-  },
-  {
-    title: "Нет плана",
-    value: 6,
-  },
-];
+interface Props {
+  checkedReason: string;
+  setCheckedReason: (val: string) => void;
+}
 
-export const ModalBtn = () => {
-  const [checked, setCheked] = useState(0);
-
+export const ModalBtn = ({
+  checkedReason = "1",
+  setCheckedReason = () => {},
+}: Props) => {
   return (
     <div className="grid grid-cols-2 gap-2">
-      {list.map((item: any) => (
+      {Object.keys(statusReasonsRu).map((item: any) => (
         <div
           key={item}
           className={`border rounded-[8px] px-3 h-[40px] flex items-center justify-center cursor-pointer ${
-            checked === item.value
+            checkedReason == item
               ? "border-[#FF9C27] bg-[#FEE5C7]"
               : "border-[var(--gray30)]"
           }`}
-          onClick={() => setCheked(item.value)}
+          onClick={(e: any) => {
+            e.stopPropagation();
+            setCheckedReason(item);
+          }}
         >
           <p
             className={`${
-              checked === item.value ? "text-black" : "text-[var(--gray)]"
+              checkedReason == item ? "text-black" : "text-[var(--gray)]"
             }`}
           >
-            {item.title}
+            {statusReasonsRu[item]}
           </p>
         </div>
       ))}
