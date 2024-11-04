@@ -5,8 +5,8 @@ import { CountBtns, FetchFunction } from "./Logic";
 import CDriver from "../../../components/CElements/CDivider";
 import { useSelector } from "react-redux";
 import { MyCard } from "./MyCard";
-import { LoadingComponent } from "../../../components/UI/Loading";
 import useDeviceHeight from "../../../hooks/useDeviceHeight";
+import { MachinSkeletons } from "./Skeleton";
 
 const searchedWords = [
   "podr_id_knitt",
@@ -23,6 +23,7 @@ const KnittingMachines = () => {
   const [checked, setChecked]: any = useState(["all"]);
   const [list, setList]: any = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
   const gridRef: any = useRef(null);
   const [active, setActive] = useState(false);
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
@@ -36,6 +37,12 @@ const KnittingMachines = () => {
       clearInterval(refetching);
     };
   }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(isLoading);
+    }, 1500);
+  }, [isLoading]);
 
   const searchWods = (val: string) => {
     setSearch(val);
@@ -179,10 +186,6 @@ const KnittingMachines = () => {
     }
   }, [list, dimensions]);
 
-  if (isLoading) {
-    return <LoadingComponent />;
-  }
-
   return (
     <>
       <Header>
@@ -219,11 +222,13 @@ const KnittingMachines = () => {
         </div>
       </Header>
 
+      {loading ? <MachinSkeletons openHeader={openHeader} /> : ""}
+
       <div
         className="px-2 py-2 lg:p-3 h-[95vh] overflow-scroll remove-scroll ipod:h-auto ipod:overflow-unset"
         ref={gridRef}
       >
-        {list?.length ? (
+        {list?.length && !loading ? (
           <div
             className={`grid-machines-dashboard grid w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-[3px] small_desktop:gap-2`}
             style={{

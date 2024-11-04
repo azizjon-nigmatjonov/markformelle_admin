@@ -1,21 +1,29 @@
 import { FirstColumn } from "./FirstColumn";
 import { SecondColumn } from "./SecondColumn";
 import useCQuery from "../../../../hooks/useCQuery";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ThirdColumn } from "./ThirdColumn";
 import { FourthColumn } from "./FourthColumn";
 import CCard from "../../../../components/CElements/CCard";
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
-import { LoadingComponent } from "../../../../components/UI/Loading";
+import { WarehouseSkeleton } from "./Skeleton";
+import { useSelector } from "react-redux";
 
 export const ProcessTable = () => {
-  // const openHeader = useSelector((state: any) => state.sidebar.openHeader);
+  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
+  const [loading, setLoading] = useState(true);
   const { getFontSize } = useDeviceHeight();
   const { data, isLoading, refetch } = useCQuery({
     key: `GET_GRUZ`,
     endpoint: `http://10.10.6.21:8083/get_dashboard_data_612`,
     params: {},
   });
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(isLoading);
+    }, 1500);
+  }, [isLoading]);
 
   const newData = useMemo(() => {
     const upper: any = data?.dashboard_data?.sotrudn_data?.filter(
@@ -37,8 +45,8 @@ export const ProcessTable = () => {
     };
   }, []);
 
-  if (isLoading) {
-    return <LoadingComponent />;
+  if (loading) {
+    return <WarehouseSkeleton openHeader={openHeader} />;
   }
 
   return (
@@ -46,22 +54,13 @@ export const ProcessTable = () => {
       <div className="grid grid-cols-2 gap-x-1 small_desktop:gap-x-2 w-full">
         <div className="grid grid-cols-3 gap-x-1 small_desktop:gap-x-2">
           <div>
-            <FirstColumn
-              data={newData?.dashboard_data?.ready_cells}
-              isLoading={isLoading}
-            />
+            <FirstColumn data={newData?.dashboard_data?.ready_cells} />
           </div>
           <div>
-            <SecondColumn
-              data={newData?.dashboard_data?.empty_cells}
-              isLoading={isLoading}
-            />
+            <SecondColumn data={newData?.dashboard_data?.empty_cells} />
           </div>
           <div>
-            <ThirdColumn
-              data={newData?.dashboard_data?.cells_without_zon}
-              isLoading={isLoading}
-            />
+            <ThirdColumn data={newData?.dashboard_data?.cells_without_zon} />
           </div>
         </div>
         <div className="space-y-2">
@@ -84,7 +83,7 @@ export const ProcessTable = () => {
               </h2>
             </div>
 
-            <FourthColumn data={newData?.upper} isLoading={isLoading} />
+            <FourthColumn data={newData?.upper} />
           </CCard>
           <CCard
             half={true}
@@ -105,7 +104,7 @@ export const ProcessTable = () => {
               </h2>
             </div>
 
-            <FourthColumn data={newData?.down} isLoading={isLoading} />
+            <FourthColumn data={newData?.down} />
           </CCard>
         </div>
       </div>

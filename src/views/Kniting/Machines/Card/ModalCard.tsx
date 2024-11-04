@@ -183,12 +183,6 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
           .then(() => {
             toast.success(`${machine.name} статус машины обновлен!`);
             setOpen(false);
-
-            axios
-              .post("http://10.40.140.6:8051/CUT_CONTR", obj)
-              .then((resp) => {
-                console.log("1111", resp);
-              });
           })
           .catch(() => {
             toast.success("Ошибка сервера!");

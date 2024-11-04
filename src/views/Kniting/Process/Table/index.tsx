@@ -3,8 +3,8 @@ import { FirstColumn } from "./FirstColumn";
 import { SecondColumn } from "./SecondColumn";
 import useCQuery from "../../../../hooks/useCQuery";
 import { useEffect } from "react";
-import { LoadingComponent } from "../../../../components/UI/Loading";
 import CCard from "../../../../components/CElements/CCard";
+import { ProcessSkeleton } from "./Skeleton";
 
 export const ProcessTable = () => {
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
@@ -35,23 +35,31 @@ export const ProcessTable = () => {
     };
   }, []);
 
-  if (isLoading || cardLoading) {
-    return <LoadingComponent />;
-  }
-
   return (
     <div
-      className="flex p-3 space-x-1 small_desktop:space-x-3"
+      className="p-3"
       style={{ height: openHeader ? "calc(100vh - 50px)" : "100vh" }}
     >
-      <div className="w-[48%]">
-        <FirstColumn data={cardsData?.dashboard_data ?? []} isLoading={false} />
-      </div>
-      <div className="w-[52%] h-full overflow-y-scroll remove-scroll">
-        <CCard>
-          <SecondColumn data={data?.dashboard_data ?? []} isLoading={false} />
-        </CCard>
-      </div>
+      {isLoading || cardLoading ? (
+        <ProcessSkeleton openHeader={openHeader} />
+      ) : (
+        <div className="flex space-x-1 small_desktop:space-x-2">
+          <div className="w-[48%]">
+            <FirstColumn
+              data={cardsData?.dashboard_data ?? []}
+              isLoading={false}
+            />
+          </div>
+          <div className="w-[52%] h-full overflow-y-scroll remove-scroll">
+            <CCard>
+              <SecondColumn
+                data={data?.dashboard_data ?? []}
+                isLoading={false}
+              />
+            </CCard>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

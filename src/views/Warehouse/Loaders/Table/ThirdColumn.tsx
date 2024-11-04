@@ -1,21 +1,10 @@
-import { Skeleton } from "@mui/material";
-import CCard from "../../../../components/CElements/CCard";
 import { CellCardWrapper } from "./Card";
 
 interface Props {
   data: any;
-  isLoading: boolean;
 }
 
-export const ThirdColumn = ({ data = [], isLoading = true }: Props) => {
-  if (isLoading) {
-    return (
-      <CCard classes="h-full">
-        <Skeleton style={{ height: "150px" }} />
-      </CCard>
-    );
-  }
-
+export const ThirdColumn = ({ data = [] }: Props) => {
   return (
     <CellCardWrapper
       data={data}

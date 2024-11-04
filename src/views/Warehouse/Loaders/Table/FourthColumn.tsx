@@ -3,7 +3,6 @@ import "./style.scss";
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
 
 interface Props {
-  isLoading: boolean;
   data: any;
 }
 

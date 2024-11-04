@@ -24,21 +24,27 @@ export const CellCardWrapper = ({ data = [], title }: Props) => {
               percent: 36.5,
             }),
           }}
-          className="font-bold text-[var(--black)] flex items-center justify-between small_desktop:whitespace-nowrap relative"
+          className={`font-bold text-[var(--black)] flex items-center small_desktop:whitespace-nowrap relative ${
+            data.length ? "justify-between" : "justify-center"
+          }`}
         >
           <span className="ml-[-1px]">{title}</span>
-          <span
-            style={{
-              fontSize: getFontSize({
-                type: "card",
-                count: 14,
-                percent: 31,
-              }),
-            }}
-            className="mr-[-5px] mt-1"
-          >
-            {data.length ? `(${data.length})` : ""}
-          </span>
+          {data.length ? (
+            <span
+              style={{
+                fontSize: getFontSize({
+                  type: "card",
+                  count: 14,
+                  percent: 31,
+                }),
+              }}
+              className="mr-[-5px] mt-1"
+            >
+              {data.length ? `(${data.length})` : ""}
+            </span>
+          ) : (
+            ""
+          )}
         </h2>
       </div>
 
