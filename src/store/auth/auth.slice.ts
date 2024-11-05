@@ -5,6 +5,7 @@ const initialState = {
   token: "",
   link: "",
   lang: "ru",
+  version: "",
 };
 
 export const { actions: authActions, reducer: authReducer } = createSlice({
@@ -22,6 +23,9 @@ export const { actions: authActions, reducer: authReducer } = createSlice({
     },
     setLang: (state, { payload }) => {
       state.lang = payload;
+    },
+    setVersion: (state, { payload }) => {
+      state.version = payload;
     },
     logout: () => initialState,
   },

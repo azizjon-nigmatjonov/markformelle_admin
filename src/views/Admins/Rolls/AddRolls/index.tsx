@@ -88,7 +88,7 @@ const NewRolls = () => {
       <Header sticky={true}>
         <CBreadcrumbs items={breadCrumbsItems} progmatic={true} type="link" />
       </Header>
-      {/* <div className="container">
+      {/* <div className="p-2 desktop:p-3">
         <SectionBtnHeader
           title={id === ":create" ? "Yangi rol yaratish" : "Rolni tahrirlash"}
           text={

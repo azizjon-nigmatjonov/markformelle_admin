@@ -24,7 +24,9 @@ const useDeviceHeight = () => {
   const getFontSize: any = ({ type = "", count = 0, percent = 0 }: Props) => {
     switch (type) {
       case "machine":
-        return height < 600
+        return height > 1200
+          ? (percent / 100) * (height / count / 1.7)
+          : height < 600
           ? (percent / 100) * (height / (count - count / 3.3))
           : (percent / 100) * (height / count);
       case "card":

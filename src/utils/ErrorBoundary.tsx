@@ -32,9 +32,9 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           {/* <p className="text-[var(--gray)] mt-5 mb-10">
             Error: {this.state.error && this.state.error.toString()}
           </p> */}
-          <div>
+          <div className="mt-5">
             <button onClick={() => location.reload()} className="custom-btn">
-              Перезакрузит
+              Перезакрузитъ
             </button>
           </div>
         </div>

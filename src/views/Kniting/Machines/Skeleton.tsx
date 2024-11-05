@@ -36,3 +36,25 @@ export const MachinSkeletons = ({ openHeader }: Props) => {
     </div>
   );
 };
+
+export const MachineListSkeleton = ({ openHeader }: Props) => {
+  const { getHeight } = useDeviceHeight();
+  return (
+    <div className="p-2 desktop:p-3">
+      <OneSkeleton
+        height={getHeight({
+          count: 1,
+          type: "machine",
+          minus:
+            window.screen.width < 980
+              ? openHeader
+                ? 70
+                : 20
+              : openHeader
+              ? 200
+              : 150,
+        })}
+      />
+    </div>
+  );
+};

@@ -2,11 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import CSearchInput from "../../../components/CElements/CSearchInput";
 import { Header } from "../../../components/UI/Header";
 import { CountBtns, FetchFunction } from "./Logic";
-import CDriver from "../../../components/CElements/CDivider";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MyCard } from "./MyCard";
 import useDeviceHeight from "../../../hooks/useDeviceHeight";
-import { MachinSkeletons } from "./Skeleton";
+import { MachineListSkeleton, MachinSkeletons } from "./Skeleton";
+import { ToggleBtn } from "../../../components/UI/ToggleBtn";
+import { sidebarActions } from "../../../store/sidebar";
+import { MachinesList } from "./Components/List";
 
 const searchedWords = [
   "podr_id_knitt",
@@ -18,6 +20,7 @@ const searchedWords = [
 ];
 
 const KnittingMachines = () => {
+  const dispatch = useDispatch();
   const { bodyData, refetch, isLoading } = FetchFunction();
   const [searchVal, setSearchVal]: any = useState([]);
   const [checked, setChecked]: any = useState(["all"]);
@@ -27,6 +30,7 @@ const KnittingMachines = () => {
   const gridRef: any = useRef(null);
   const [active, setActive] = useState(false);
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
+  const listType = useSelector((state: any) => state.sidebar.listType);
   const { getHeight } = useDeviceHeight();
   useEffect(() => {
     const refetching = setInterval(() => {
@@ -195,8 +199,8 @@ const KnittingMachines = () => {
           bodyData={bodyData}
           setSearch={setSearch}
         />
-        <CDriver direction="vertical" />
-        <div className="w-[120px] desktop:w-[220px] relative">
+        {/* <CDriver direction="vertical" /> */}
+        <div className="w-[120px] desktop:w-[220px] relative mx-3">
           <CSearchInput
             defaultValue={search}
             handleChange={searchWods}
@@ -220,63 +224,86 @@ const KnittingMachines = () => {
             ""
           )}
         </div>
+        {/* <CDriver direction="vertical" /> */}
+        <div>
+          <ToggleBtn
+            type={listType}
+            setType={(type) => {
+              dispatch(sidebarActions.setListType(type));
+            }}
+          />
+        </div>
       </Header>
 
-      {loading ? <MachinSkeletons openHeader={openHeader} /> : ""}
+      {loading && listType === "grid" ? (
+        <MachinSkeletons openHeader={openHeader} />
+      ) : (
+        ""
+      )}
 
-      <div
-        className="px-2 py-2 lg:p-3 h-[95vh] overflow-scroll remove-scroll ipod:h-auto ipod:overflow-unset"
-        ref={gridRef}
-      >
-        {list?.length && !loading ? (
-          <div
-            className={`grid-machines-dashboard grid w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-[3px] small_desktop:gap-2`}
-            style={{
-              minWidth:
-                window?.screen?.width < 940
-                  ? "1600px"
-                  : window?.screen?.width - 200,
-              minHeight:
-                checked.length && !checked.includes("all")
-                  ? "auto"
-                  : window.screen.height - (openHeader ? 250 : 150),
-            }}
-          >
-            {list.map((machine: any, index: number) =>
-              machine?.idlocation ? (
-                <div
-                  key={index}
-                  style={{
-                    width: "100%",
-                    height: getHeight({
-                      count: 7,
-                      type: "machine",
-                      minus:
-                        window.screen.width < 980
-                          ? openHeader
-                            ? 16
-                            : 8.5
-                          : openHeader
-                          ? 34
-                          : 27,
-                    }),
-                  }}
-                >
-                  <MyCard
-                    machine={machine}
-                    zoomPoint={zoomPoint}
-                    refetch={refetch}
-                  />
-                </div>
-              ) : (
-                <div key={index}></div>
-              )
-            )}
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
+      {loading && listType === "list" ? (
+        <MachineListSkeleton openHeader={openHeader} />
+      ) : (
+        ""
+      )}
+
+      {listType === "grid" ? (
+        <div
+          className="px-2 py-2 lg:p-3 h-[95vh] overflow-scroll remove-scroll ipod:h-auto ipod:overflow-unset"
+          ref={gridRef}
+        >
+          {list?.length && !loading ? (
+            <div
+              className={`grid-machines-dashboard grid w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-[3px] small_desktop:gap-2`}
+              style={{
+                minWidth:
+                  window?.screen?.width < 940
+                    ? "1600px"
+                    : window?.screen?.width - 200,
+                minHeight:
+                  checked.length && !checked.includes("all")
+                    ? "auto"
+                    : window.screen.height - (openHeader ? 250 : 150),
+              }}
+            >
+              {list.map((machine: any, index: number) =>
+                machine?.idlocation ? (
+                  <div
+                    key={index}
+                    style={{
+                      width: "100%",
+                      height: getHeight({
+                        count: 7,
+                        type: "machine",
+                        minus:
+                          window.screen.width < 1000
+                            ? openHeader
+                              ? 16
+                              : 8.5
+                            : openHeader
+                            ? 34
+                            : 27,
+                      }),
+                    }}
+                  >
+                    <MyCard
+                      machine={machine}
+                      zoomPoint={zoomPoint}
+                      refetch={refetch}
+                    />
+                  </div>
+                ) : (
+                  <div key={index}></div>
+                )
+              )}
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+      ) : (
+        !loading && <MachinesList list={list} />
+      )}
     </>
   );
 };

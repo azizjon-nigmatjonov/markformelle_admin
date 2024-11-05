@@ -16,11 +16,9 @@ const Usually = (
   )} ${currentTime}`;
 };
 
-const Hourly = (
-    currentTime: string,
-  ) => {
-    return `${currentTime}`;
-  };
+const Hourly = (currentTime: string) => {
+  return `${currentTime}`;
+};
 
 export const GetCurrentDate = ({
   date,
@@ -47,6 +45,6 @@ export const GetCurrentDate = ({
         symbol
       );
     default:
-      return Hourly(currentTime)
+      return Hourly(currentTime);
   }
 };

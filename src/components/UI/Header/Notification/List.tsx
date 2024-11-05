@@ -18,9 +18,9 @@ export const NitifList = ({ setOpen, list }: Props) => {
   const { checkAdditionals } = usePermissions();
   return (
     <>
-      <div className="bg-white rounded-[12px] absolute right-0 top-full w-[460px] z-[99] border border-[var(--gray20)] common-shadow">
-        <div className="flex items-center justify-between p-5 pb-0">
-          <h3 className="text-[var(--gray90)] text-lg">Уведомления</h3>
+      <div className="bg-white rounded-[12px] absolute right-0 top-full w-[460px] z-[99] border border-[var(--border)] common-shadow">
+        <div className="flex items-center justify-between p-3 pb-3">
+          <h3 className="text-[var(--black)] text-lg">Уведомления</h3>
           <div className="flex space-x-5">
             <button
               className={
@@ -55,7 +55,7 @@ export const NitifList = ({ setOpen, list }: Props) => {
             </button>
           </div>
         </div>
-        <CDriver classes="my-5" />
+        <CDriver classes="m3-5" />
         <div className="p-5 pt-0">
           {list?.length ? (
             <ul className="max-h-[400px] overflow-auto">

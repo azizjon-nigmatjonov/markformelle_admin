@@ -1,14 +1,36 @@
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import { useState } from "react";
 
 interface Props {
-    value: string
-    handleClick: (val: string) => void
+  type: string;
+  colId?: any;
+  handleSortLogic: (val: any) => void;
 }
-export const TableSort = ({ value = "up", handleClick = () => {} }: Props) => {
+export const TableSort = ({
+  type = "",
+  handleSortLogic = () => {},
+  colId,
+}: Props) => {
+  const [value, setValue] = useState("up");
+  const handleClick = (val: string) => {
+    setValue(val);
+  };
 
   return (
-    <div className={value === "down" ? 'rotate-[180deg]' : ''} onClick={() => handleClick(value === "up" ? 'down' : 'up')}>
-      <ArrowUpwardIcon />
-    </div>
+    <>
+      <button
+        onClick={() => {
+          handleSortLogic({ type, id: colId, value });
+          handleClick(value === "up" ? "down" : "up");
+        }}
+      >
+        {value === "down" ? (
+          <ArrowDownwardIcon style={{ fontSize: 16 }} />
+        ) : (
+          <ArrowUpwardIcon style={{ fontSize: 16 }} />
+        )}
+      </button>
+    </>
   );
 };

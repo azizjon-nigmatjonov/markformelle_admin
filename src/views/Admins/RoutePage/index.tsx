@@ -34,7 +34,7 @@ const RoutePage = () => {
         </div>
       </Header>
 
-      <div className="container">
+      <div className="p-2 desktop:p-3">
         <div className="flex items-start justify-between">
           <div>
             <h1 className="text-[#101828] text-lg font-semibold">

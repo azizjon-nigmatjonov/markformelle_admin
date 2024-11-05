@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   collapsed: true,
   openHeader: false,
-  resize: false
+  resize: false,
+  listType: "grid",
 };
 
 export const { actions: sidebarActions, reducer: sidebarReducer } = createSlice(
@@ -19,6 +20,9 @@ export const { actions: sidebarActions, reducer: sidebarReducer } = createSlice(
       },
       setResize: (state: any, { payload }) => {
         state.resize = payload;
+      },
+      setListType: (state: any, { payload }) => {
+        state.listType = payload;
       },
     },
   }

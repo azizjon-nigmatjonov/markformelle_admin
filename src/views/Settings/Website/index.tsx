@@ -27,7 +27,7 @@ const WebsiteSettings = () => {
       case "colors":
         return <WebsiteColors />;
       default:
-        return ""
+        return "";
     }
   };
 
@@ -39,7 +39,7 @@ const WebsiteSettings = () => {
         }
       />
 
-      <div className="container">
+      <div className="p-2 desktop:p-3">
         <div className="inline-block">
           <CTabs
             tabList={tabList}

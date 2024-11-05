@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import SettingsIcon from "@mui/icons-material/Settings";
 import { Closer } from "../../../../UI/Closer";
 import { MenuItem } from "./MenuItems";
 import { DeleteElements } from "./Delete";
 import { tableStoreActions } from "../../../../../store/table";
 import { useDispatch } from "react-redux";
+import { LinearSortIcon } from "../../../../UI/IconGenerator/Svg";
 
 const SettingDropdown = ({
   menuList = [],
@@ -15,7 +15,7 @@ const SettingDropdown = ({
   handleFilterSave: (val: any) => void;
 }) => {
   return (
-    <div className="absolute right-0 top-[25px] bg-white border border-[var(--gray20)] common-shadow rounded-[12px] z-[92] min-w-[150px] min-h-[100px] whitespace-nowrap p-5">
+    <div className="absolute right-0 top-[25px] bg-white border border-[var(--gray20)] common-shadow rounded-[12px] z-[92] min-w-[150px] whitespace-nowrap px-2 py-2">
       <ul className="grid gap-y-5 max-h-[400px] overflow-y-scroll remove-scroll designed-scroll">
         {menuList.map((item: {}, index: number) => (
           <MenuItem
@@ -31,7 +31,7 @@ const SettingDropdown = ({
 
 export const HeaderSettings = ({
   // totalCount,
-  // len = 0,
+  len = 0,
   filterParams,
   tableActions,
   pageName,
@@ -92,7 +92,7 @@ export const HeaderSettings = ({
       //   type: ""
       // },
       {
-        label: "Aktiv bo'limlar",
+        label: "Активные столбцы",
         id: "columns",
         type: "checkbox",
         data: headColumns?.map((item: { id: string; checked: boolean }) => {
@@ -112,31 +112,34 @@ export const HeaderSettings = ({
   }, [headColumns, pageColumns]);
 
   return (
-    <div className="h-[40px] flex items-center justify-between px-5">
-      <p className="text-[var(--gray)]">
-        {/* {totalCount
-          ? formatNumberWithSpaces(totalCount) + ` 1-${len}`
-          : ""} */}
-      </p>
-      <div className="flex items-center space-x-5">
-        <DeleteElements
-          filterParams={filterParams}
-          tableActions={tableActions}
-        />
+    <div className="pb-[30px]">
+      <div className="h-[30px] absolute w-full left-0 top-0 flex items-center px-3 desktop:px-5 justify-between">
+        <div>
+          <h2 className="font-bold">
+            Общий
+            <span> {len}</span>
+          </h2>
+        </div>
+        <div className="flex items-center space-x-3 h-full">
+          <DeleteElements
+            filterParams={filterParams}
+            tableActions={tableActions}
+          />
 
-        <button onClick={() => setOpen(true)} className="relative">
-          <SettingsIcon />
+          <button onClick={() => setOpen(true)} className="relative">
+            <LinearSortIcon />
 
-          {open && (
-            <SettingDropdown
-              setOpen={setOpen}
-              menuList={menuList}
-              handleFilterSave={handleFilterSave}
-            />
-          )}
-        </button>
+            {open && (
+              <SettingDropdown
+                setOpen={setOpen}
+                menuList={menuList}
+                handleFilterSave={handleFilterSave}
+              />
+            )}
+          </button>
+        </div>
+        {open && <Closer handleClose={() => setOpen(false)} classes="z-[91]" />}
       </div>
-      {open && <Closer handleClose={() => setOpen(false)} classes="z-[91]" />}
     </div>
   );
 };

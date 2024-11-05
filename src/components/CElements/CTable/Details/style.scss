@@ -1,24 +1,10 @@
 #table {
-  // max-height: 620px;
-
   .MuiList-root {
     .MuiButtonBase-root {
       display: flex;
       justify-content: space-between !important;
     }
   }
-
-  // .MuiPaper-root {
-  //   overflow: auto;
-  //   &::-webkit-scrollbar {
-  //     display: block !important;
-  //   }
-  //   .MuiList-root {
-  //     &::-webkit-scrollbar {
-  //       display: block !important;
-  //     }
-  //   }
-  // }
 }
 
 .CTableContainer {
@@ -98,8 +84,8 @@
 
 .CTableHead {
   position: sticky;
-  top: 0;
-  z-index: 2;
+  top: -2px;
+  z-index: 3;
   height: auto;
 
   th {
@@ -114,7 +100,7 @@
 }
 
 .CTableCell {
-  padding: 0 10px !important;
+  padding: 0 8px !important;
   background-color: transparent !important;
   color: var(--black);
   border-right: 1px solid var(--gray20);
@@ -153,7 +139,7 @@
 
 #table {
   .CTableContainer {
-    border-radius: 18px !important;
+    border-radius: 12px !important;
     box-shadow: none;
   }
 }
@@ -165,7 +151,7 @@ thead {
     padding: 0 !important;
     .cell {
       height: 40px;
-      padding: 10px !important;
+      // padding: 6px !important;
       color: var(--black);
       font-weight: 600;
       text-transform: uppercase;
@@ -189,7 +175,7 @@ thead {
 
 .resizer {
   position: absolute;
-  top: 14px;
+  top: 0;
   right: -12px;
   width: 28px;
   cursor: col-resize;

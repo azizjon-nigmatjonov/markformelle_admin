@@ -6,7 +6,7 @@ export const settingList = [
     parent: "settings",
     link: "website",
     sidebar: true,
-    title: "Настройки сайта",
+    title: "Системные настройки",
     icon: "settings",
     parent_icon: "settings",
     element: <WebsiteSettings />,

@@ -21,6 +21,7 @@ import { PopoverDelete } from "./Details/Actions/EditDelete/PopOver";
 import { usePermissions } from "../../../hooks/usePermissions";
 import CPagination from "./Details/Pagination";
 import { TableSettingsData } from "./Logic";
+import { TableSort } from "./Details/Sort";
 // import { TableData } from "./Logic";
 // import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 // import CustomScrollbar from "./ScrollComponent";
@@ -72,11 +73,6 @@ const CTable = ({
   const location = useLocation();
   const tableSettings: Record<string, any> = {};
   const [colProperties, setColProperties]: any = useState({});
-  // const [headColHeight, setHeadColHeight] = useState(45);
-  // const [tableHeight, setTableHeight] = useState(500);
-  // //   const { currentSort } = useGetQueries();
-  // console.log("tableHeight", tableHeight);
-
   const [currentIndex, setCurrentIndex] = useState(null);
   const [currDelete, setCurrDelete] = useState<any>({});
   const dispatch = useDispatch();
@@ -87,6 +83,33 @@ const CTable = ({
     handleFilterParams,
   });
   const storedColumns = useSelector((state: any) => state.table.columns);
+  const [active, setActive] = useState(false);
+  const [newBodyColumns, setNewBodyColumns] = useState([]);
+  const [sortData, setSortData]: any = useState({});
+
+  useEffect(() => {
+    const arr = [...bodyColumns];
+    let result: any = [];
+    const { type, value, id }: any = { ...sortData };
+    if (type === "number" && id) {
+      if (value === "up") {
+        result = arr?.sort(
+          (a: any, b: any) =>
+            parseInt(b[id].replace(/\D/g, "")) -
+            parseInt(a[id].replace(/\D/g, ""))
+        );
+      } else {
+        result = arr?.sort(
+          (a: any, b: any) =>
+            parseInt(a[id].replace(/\D/g, "")) -
+            parseInt(b[id].replace(/\D/g, ""))
+        );
+      }
+
+      setNewBodyColumns(result);
+    }
+    setNewBodyColumns(result.length ? result : arr);
+  }, [bodyColumns, sortData?.value]);
 
   const pageName: any = useMemo(() => {
     const strLen =
@@ -100,22 +123,6 @@ const CTable = ({
   }, [location, idForTable]);
 
   const pageColumns = storedColumns[pageName];
-
-  // const [buttonPosition, setButtonPosition] = useState(10);
-  // const draggingRef = useRef(false);
-  // const [scrollPosition, setScrollPosition] = useState(0);
-  // const collapsed = useSelector((state: any) => state.sidebar.collapsed);
-  // const [showScroll, setShowScroll] = useState(true);
-  // const [tablePosition, setTablePosition] = useState({ top: 140, left: 0 });
-  // const { handleMouseDown } = TableData({
-  //   tableRef,
-  //   collapsed,
-  //   scrollPosition,
-  //   draggingRef,
-  //   setScrollPosition,
-  //   setButtonPosition,
-  //   setShowScroll,
-  // });
 
   const newHeadColumns: any = useMemo(() => {
     if (!tableSetting) return headColumns;
@@ -133,29 +140,10 @@ const CTable = ({
     return data;
   }, [pageColumns, headColumns, pageName, tableSetting]);
 
-  // useEffect(() => {
-  //   const tableEl = document.getElementById("table");
-  //   const moveXel = tableEl?.querySelector(".wrapper");
-  //   if (moveXel) {
-  //     moveXel.scrollTo(1200, 0); // Scrolls to 12000 pixels to the right
-  //   }
-  // }, []);
-
   const bodySource = useMemo(() => {
-    if (!bodyColumns?.length) return [];
+    if (!newBodyColumns?.length) return [];
 
-    let list = [];
-
-    if (bodyColumns.length < filterParams.perPage) {
-      for (let i = 0; i < filterParams.perPage; i++) {
-        const obj: Record<string, any> = {};
-        headColumns.forEach((col) => {
-          obj[col.title] = "";
-          obj.empty = true;
-        });
-        list.push(bodyColumns[i] ?? obj);
-      }
-    } else list = bodyColumns;
+    let list = newBodyColumns;
 
     const checks = (status: any) => {
       if (status === undefined) return true;
@@ -177,9 +165,7 @@ const CTable = ({
             : index + 1,
       })) ?? []
     );
-  }, [bodyColumns, filterParams.perPage, filterParams.page, headColumns]);
-
-  const [active, setActive] = useState(false);
+  }, [newBodyColumns, filterParams.perPage, filterParams.page, headColumns]);
 
   useEffect(() => {
     const table = document.getElementById("table");
@@ -349,13 +335,17 @@ const CTable = ({
     handleActions(el, status);
   };
 
+  const handleSortLogic = ({ type, value, id }: any) => {
+    setSortData({ type, value, id });
+  };
+
   return (
     <div className="relative h-full">
-      <div className="border border-[var(--gray20)] common-shadow rounded-[18px] h-full overflow-hidden bg-white">
+      <div className="border border-[var(--border)] designed-scroll rounded-[12px] h-full overflow-scroll">
         {tableSetting ? (
           <HeaderSettings
             totalCount={meta.totalCount}
-            len={bodyColumns?.length}
+            len={newBodyColumns?.length}
             filterParams={filterParams}
             tableActions={tableActions}
             pageName={pageName}
@@ -368,13 +358,11 @@ const CTable = ({
         <div
           id="table"
           className={` ${
-            tableSetting ? "border-t border-[var(--gray20)]" : ""
+            tableSetting ? "border-t border-[var(--border)]" : ""
           }`}
           ref={tableRef}
         >
-          <div
-            className={`wrapper ${footer ? "pb-[50px] overflow-hidden" : ""}`}
-          >
+          <div className={`${footer ? "pb-[50px] overflow-hidden" : ""}`}>
             <CTableWrapper
               count={meta.pageCount}
               totalCount={meta.totalCount}
@@ -383,9 +371,8 @@ const CTable = ({
               height={0}
               passRouter={passRouter}
               filterParams={filterParams}
-              handleFilterParams={handleFilterParams}
               disablePagination={disablePagination}
-              dataLength={bodyColumns?.length}
+              dataLength={newBodyColumns?.length}
             >
               <CTableHead>
                 <CTableRow className="">
@@ -425,21 +412,40 @@ const CTable = ({
                           : "",
                       }}
                     >
-                      <div
-                        className="cell"
-                        style={{ textAlign: column?.textAlign || "left" }}
-                      >
-                        {column.renderHead
-                          ? Array.isArray(column.renderHead)
-                            ? column.renderHead(
-                                column.renderHead.map(
-                                  (data: any) => column[data]
+                      <div className="w-full flex items-center justify-between py-2 px-3 flex-nowrap">
+                        <div
+                          className={`uppercase ${
+                            column?.filter ? "" : "w-full"
+                          }`}
+                          style={{
+                            textAlign:
+                              column?.textAlign ||
+                              (!column?.filter && "center"),
+                          }}
+                        >
+                          {column.renderHead
+                            ? Array.isArray(column.renderHead)
+                              ? column.renderHead(
+                                  column.renderHead.map(
+                                    (data: any) => column[data]
+                                  )
                                 )
-                              )
-                            : column.renderHead()
-                          : column?.id === "index"
-                          ? "№"
-                          : t(column.title)}
+                              : column.renderHead()
+                            : column?.id === "index"
+                            ? "№"
+                            : t(column.title)}
+                        </div>
+                        {column?.filter ? (
+                          <div className="ml-2">
+                            <TableSort
+                              type={column.filter}
+                              handleSortLogic={handleSortLogic}
+                              colId={column.id}
+                            />
+                          </div>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </CTableHeadCell>
                   ))}
@@ -490,7 +496,7 @@ const CTable = ({
                           >
                             <div
                               style={{
-                                textAlign: column?.textAlign || "left",
+                                textAlign: column?.textAlign || "center",
                               }}
                             >
                               {column.id !== "actions" && !item.empty ? (
@@ -607,7 +613,7 @@ const CTable = ({
                   className="px-3 py-1 border-r border-[var(--border)]"
                 >
                   <p className="footer_text flex justify-between pr-8">
-                    {footer.title} <span>{bodyColumns.length}</span>
+                    {footer.title} <span>{newBodyColumns.length}</span>
                   </p>
                 </div>
                 <div
@@ -629,7 +635,7 @@ const CTable = ({
           </div>
         </div>
 
-        {bodyColumns?.length && !isLoading && !disablePagination ? (
+        {newBodyColumns?.length && !isLoading && !disablePagination ? (
           <CPagination
             filterParams={filterParams}
             count={meta.pageCount}
@@ -638,7 +644,7 @@ const CTable = ({
             limitList={limitList}
             passRouter={passRouter}
             handleFilterParams={handleFilterParams}
-            dataLength={bodyColumns?.length}
+            dataLength={newBodyColumns?.length}
           />
         ) : (
           ""

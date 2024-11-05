@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ModalClose from "@mui/joy/ModalClose";
 import Typography from "@mui/joy/Typography";
 import {
@@ -28,87 +28,18 @@ import axios from "axios";
 import { statusReasonsRu } from "../../../../constants/status";
 import { Alert } from "@mui/material";
 
-interface Machine {
-  id: number;
-  name: string;
-  daily_power: number;
-  ip_address: string;
-  no_connnection: string;
-  machine_is_on: string;
-  not_broken: string;
-  yarn_replacement: string;
-  rotation: number;
-  efficiency: number;
-  soft_version: string;
-  last_response_time: string;
-  stop_mins: number;
-  new_rolls: number;
-  defect_num: number;
-  capacity: string;
-  nplan: number;
-  order_no: number;
-  artikul: string;
-  lotno: string;
-  fkol_knit: number;
-  pkol_knit: number;
-  fakt_percentage: number;
-  message: string;
-  zakaz: string;
-  art: string;
-  reason?: string;
-  model: string;
-  planid?: number;
-}
-
 interface MachineCardProps {
-  machine: Machine;
+  machine: any;
   setOpen: (val: boolean) => void;
 }
 
 const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
-  const [cardColor, setCardColor] = useState<string>("");
   const [checkedReason, setCheckedReason]: any = useState("1");
   const [descriptionText, setDescriptionText] = useState("");
   const [alertInfo, setAlertInfo]: any = useState({
     type: "error",
     title: "",
   });
-
-  useEffect(() => {
-    setCardColor(getCardColor());
-  }, [machine]);
-
-  const getCardColor = (): string => {
-    if (
-      machine.rotation > 0 &&
-      machine.not_broken == "true" &&
-      machine.machine_is_on == "true"
-    ) {
-      if (machine.yarn_replacement == "true" && machine.fakt_percentage > 98) {
-        return "orange";
-      } else return "green";
-    } else if (
-      machine.not_broken == "true" &&
-      machine.machine_is_on == "false"
-    ) {
-      return "blue";
-    } else if (
-      machine.not_broken == "false" &&
-      machine.machine_is_on == "false"
-    ) {
-      return "grey";
-    } else if (
-      machine.not_broken == "true" &&
-      machine.machine_is_on == "true" &&
-      machine.rotation == 0 &&
-      machine.no_connnection === "false" &&
-      machine.pkol_knit !== 0
-    ) {
-      return "red";
-    } else {
-      return "";
-    }
-  };
   const [checked1, setChecked1] = useState(machine.machine_is_on == "true");
 
   const [checked2, setChecked2] = useState(machine.not_broken == "true");
@@ -154,39 +85,63 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
     //   idletime: 0,
     //   mtype: 0,
     // };
+    console.log(descriptionText);
 
-    const obj = {
-      code_req: "006",
+    const trash = {
+      // ...machine,
+      code_req: "003",
       code_device: machine.id,
       sign_device: machine.name,
+      tabn_id: 12210,
       id_req: `${year}${month}${day}${hours}${minutes}${seconds}`,
       time_req: `${year}-${month}-${day}.${hours}:${minutes}:${seconds}`,
-      desc: descriptionText || statusReasonsRu[checkedReason],
+      desc: "Код причины останова",
+      rotation: "0.0",
       reason: statusReasonsRu[checkedReason],
-      reasoncode: checkedReason,
+      ver: machine.soft_version,
+      streams: 1,
+      lengthrot: 0.0,
+      factqty: machine.fkol_knit,
+      planid: machine.planid,
+      idletime: +machine.stop_mins,
+      mtype: 0,
+      reasoncode: +checkedReason,
     };
 
+    // const obj = {
+    //   code_req: "003",
+    //   code_device: machine.id,
+    //   sign_device: machine.name,
+    //   id_req: `${year}${month}${day}${hours}${minutes}${seconds}`,
+    //   time_req: `${year}-${month}-${day}.${hours}:${minutes}:${seconds}`,
+    //   desc: descriptionText || statusReasonsRu[checkedReason],
+    //   reason: statusReasonsRu[checkedReason],
+    //   reasoncode: checkedReason,
+    // };
+
     axios
-      .post("http://10.40.140.6:8051/CUT_CONTR", obj)
+      .post("http://10.40.140.6:8051/CUT_CONTR", trash)
       .then((res: any) => {
-        const value = res?.data ?? {};
-        const newObj = {
-          ...machine,
-          ...value,
-          code_req: "003",
-          time_req: `${year}-${month}-${day}.${hours}:${minutes}:${seconds}`,
-          reason: statusReasonsRu[checkedReason],
-          reasoncode: checkedReason,
-        };
-        axios
-          .post("http://10.40.140.6:8051/CUT_CONTR", newObj)
-          .then(() => {
-            toast.success(`${machine.name} статус машины обновлен!`);
-            setOpen(false);
-          })
-          .catch(() => {
-            toast.success("Ошибка сервера!");
-          });
+        // const value = res?.data ?? {};
+        console.log("res", res);
+
+        // const newObj = {
+        //   ...machine,
+        //   ...value,
+        //   code_req: "003",
+        //   time_req: `${year}-${month}-${day}.${hours}:${minutes}:${seconds}`,
+        //   reason: statusReasonsRu[checkedReason],
+        //   reasoncode: checkedReason,
+        // };
+        // axios
+        //   .post("http://10.40.140.6:8051/CUT_CONTR", newObj)
+        //   .then(() => {
+        //     toast.success(`${machine.name} статус машины обновлен!`);
+        //     setOpen(false);
+        //   })
+        //   .catch(() => {
+        //     toast.success("Ошибка сервера!");
+        //   });
       })
       .catch(() => {
         toast.success("Ошибка сервера!");
@@ -341,7 +296,7 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
               </Stack>
               {checked2 ? (
                 <Card
-                  className={`machine-card custom ${cardColor}`}
+                  className={`machine-card custom ${machine.new_status.color}`}
                   sx={{ width: 250 }}
                 >
                   <List aria-labelledby="decorated-list-demo">

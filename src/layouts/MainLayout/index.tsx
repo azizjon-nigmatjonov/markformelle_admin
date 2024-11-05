@@ -7,10 +7,14 @@ import { BackButtonRoute, CheckLogin, ColorData } from "./Logic";
 import { Toaster } from "react-hot-toast";
 import { ResizeIcon } from "../../components/UI/IconGenerator/Svg/Sidebar";
 import { sidebarActions } from "../../store/sidebar";
+import { useEffect, useRef } from "react";
+import { authActions } from "../../store/auth/auth.slice";
 
 const MainLayout = () => {
+  const wrapperRef: any = useRef(null);
   const alertData = useSelector((state: any) => state.website.alert);
   const resize = useSelector((state: any) => state.sidebar.resize);
+  const ver = useSelector((state: any) => state.auth.version);
   const dispatch = useDispatch();
 
   const handleResize = () => {
@@ -19,8 +23,24 @@ const MainLayout = () => {
     dispatch(sidebarActions.setResize(!resize));
   };
 
+  useEffect(() => {
+    const now = new Date();
+    const day = now.getDate();
+
+    if (day == ver) {
+      return;
+    }
+    if (now.getHours() === 12) {
+      dispatch(authActions.setVersion(day));
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    }
+  }, [ver]);
+
   return (
-    <div className={cls.layout}>
+    <div className={cls.layout} ref={wrapperRef}>
       <div className="border-r border-[var(--border)]">
         <Sidebar />
       </div>

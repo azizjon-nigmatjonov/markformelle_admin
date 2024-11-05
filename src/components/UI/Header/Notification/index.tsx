@@ -16,7 +16,7 @@ const Notification = () => {
   return (
     <div className="relative z-[4]">
       <button
-        className={`p-2 rounded-full shadow-sm bg-white common-shadow ${
+        className={`w-[25px] h-[25px] desktop:h-[30px] desktop:w-[30px] rounded-full shadow-sm bg-white common-shadow ${
           checkAdditionals("show_notification") ? "" : "cursor-not-allowed"
         }`}
         onClick={() => {

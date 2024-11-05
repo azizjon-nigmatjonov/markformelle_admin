@@ -1,5 +1,6 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode } from "react";
 import { useSelector } from "react-redux";
+import useDeviceHeight from "../../../hooks/useDeviceHeight";
 
 interface Props {
   classes?: string;
@@ -23,31 +24,44 @@ const CCard = ({
   childClasses = "",
 }: Props) => {
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
+  const { getHeight } = useDeviceHeight();
 
-  const [height, setHeight] = useState("auto");
-
-  useEffect(() => {
+  const NewSize = (half: boolean) => {
     if (half) {
-      if (openHeader) {
-        setHeight("calc(50vh - 40px)");
-      } else {
-        setHeight("calc(50vh - 15px)");
-      }
+      return getHeight({
+        count: half ? 2 : 1,
+        type: "machine",
+        minus:
+          window.screen.width < 980
+            ? openHeader
+              ? 40
+              : 15
+            : openHeader
+            ? 105
+            : 80,
+      });
     } else {
-      if (openHeader) {
-        setHeight("calc(100vh - 70px)");
-      } else {
-        setHeight("calc(100vh - 20px)");
-      }
+      return getHeight({
+        count: 1,
+        type: "machine",
+        minus:
+          window.screen.width < 980
+            ? openHeader
+              ? 70
+              : 15
+            : openHeader
+            ? 200
+            : 150,
+      });
     }
-  }, [openHeader, half]);
+  };
 
   return (
     <div
       className={`bg-white rounded-[18px] min-h-[200px] border border-[var(--gray20)] common-shadow relative overflow-y-scroll remove-scroll ${classes}`}
       style={{
         ...style,
-        height: height,
+        height: NewSize(half),
       }}
     >
       {title ? (

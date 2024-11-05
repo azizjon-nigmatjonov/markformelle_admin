@@ -14,7 +14,6 @@ interface Props {
   filterParams: any;
   tableStyle?: object;
   wrapperStyle?: object;
-  handleFilterParams: (newPage: any) => void;
   children: ReactNode;
   disablePagination?: any;
   dataLength: number;

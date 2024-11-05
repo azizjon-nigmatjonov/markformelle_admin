@@ -60,24 +60,25 @@ export const CheckDataReason = (machine: any) => {
     return "no_status";
   }
 
-  switch (machine.reason) {
-    case "Ремонт":
-    case "Ремонт машины":
+  switch (machine.reason.toLowerCase()) {
+    case "ремонт":
       return "fixing";
-    case "Замена пряжи":
-      return "reload_yarn";
-    case "Замена иглы":
+    case "ремонт машины":
+      return "fixing";
+    case "замена иглы":
       return "reload";
-    case "Чистка машины":
+    case "замена пряжи":
+      return "reload_yarn";
+    case "чистка машины":
       return "cleaning";
-    case "Нет пряжи":
+    case "нет пряжи":
       return "no_yarn";
-    case "Нет плана":
+    case "нет плана":
       return "no_plan";
-    case "Перезаправка":
+    case "перезаправка":
       return "reload";
     default:
-      return "";
+      return "stopped";
   }
 };
 
@@ -90,7 +91,7 @@ export const CheckData = (machine: any) => {
     if (machine.reason === "Нет пряжи") {
       return "no_yarn";
     } else {
-      return "no_plan";
+      // return "no_plan";
     }
   }
 
@@ -184,6 +185,8 @@ export const CheckData = (machine: any) => {
   }
 
   switch (machine.reason.toLowerCase()) {
+    case "ремонт":
+      return "fixing";
     case "ремонт машины":
       return "fixing";
     case "замена иглы":
@@ -230,6 +233,19 @@ export const TableData = () => {
   return { headColumns };
 };
 
+export const StatusColors: any = {
+  working: "green",
+  no_plan: "blue",
+  no_yarn: "blue",
+  fixing: "grey",
+  no_connnection: "grey",
+  reload: "red",
+  cleaning: "red",
+  stopped: "red",
+  no_status: "red",
+  reload_yarn: "red",
+};
+
 export const FetchFunction = () => {
   const { data, isLoading, refetch } = useCQuery({
     key: `GET_DRIVER_HOME`,
@@ -238,22 +254,9 @@ export const FetchFunction = () => {
       // page: 1,
     },
   });
-
+  const obj: any = { ...StatusColors };
   const newData = useMemo(() => {
     if (!data?.length) return [];
-
-    const obj: any = {
-      working: "green",
-      no_plan: "blue",
-      no_yarn: "blue",
-      fixing: "grey",
-      no_connnection: "grey",
-      reload: "red",
-      cleaning: "red",
-      stopped: "red",
-      no_status: "red",
-      reload_yarn: "red",
-    };
 
     const arr: any = [];
     const existingIds = data?.map((item: any) => item.idlocation);

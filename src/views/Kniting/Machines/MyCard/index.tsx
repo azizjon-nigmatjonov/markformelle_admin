@@ -205,7 +205,7 @@ export const MyCard = ({ machine, refetch }: Props) => {
                       fontSize: getFontSize({
                         count: 7,
                         percent: 13.5,
-                        type: "card",
+                        type: "machine",
                       }),
                     }}
                   >

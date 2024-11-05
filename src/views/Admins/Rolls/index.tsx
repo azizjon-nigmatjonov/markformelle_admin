@@ -34,14 +34,17 @@ const Rolls = () => {
 
   return (
     <>
-      <Header extra={<CBreadcrumbs
-          items={breadCrumbs}
-          progmatic={true}
-          type="link"
-          handleSearch={handleSearch}
-          defaultValue={filterParams?.q}
-        />}>
-        
+      <Header
+        extra={
+          <CBreadcrumbs
+            items={breadCrumbs}
+            progmatic={true}
+            type="link"
+            handleSearch={handleSearch}
+            defaultValue={filterParams?.q}
+          />
+        }
+      >
         <div className="ml-5">
           <AddButton
             text="Yangi rol qo'shish"
@@ -49,7 +52,7 @@ const Rolls = () => {
           />
         </div>
       </Header>
-      <div className="container">
+      <div className="p-2 desktop:p-3">
         <CTable
           headColumns={headColumns}
           bodyColumns={bodyColumns}

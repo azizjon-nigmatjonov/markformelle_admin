@@ -2,6 +2,7 @@ import { useState } from "react";
 import CCheckbox from "../../../../CElements/CCheckbox";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Collapse } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const CheckBox = ({
   element,
@@ -54,6 +55,7 @@ export const MenuItem = ({
   handleFilterSave: (val: any) => void;
 }) => {
   const [collapse, setCollapse] = useState(true);
+  const { t } = useTranslation();
 
   const GetUi = (el: any) => {
     switch (el.type) {
@@ -72,7 +74,7 @@ export const MenuItem = ({
         onClick={() => setCollapse((prev: boolean) => !prev)}
         className="mb-2 flex justify-between w-full"
       >
-        <span>{element.label}</span>
+        <span>{t(element.label)}</span>
         <div className={collapse ? "rotate-[180deg]" : ""}>
           <KeyboardArrowUpIcon />
         </div>
