@@ -4,7 +4,7 @@ import { ProcessTable } from "./Table";
 const KnittingProcess = () => {
   return (
     <>
-      <Header />
+      <Header extra={<h1 className="title-header">Дашборд грузчиков 612</h1>} />
       <ProcessTable />
     </>
   );
