@@ -124,8 +124,8 @@ export const MachinesList = ({ list }: Props) => {
   }, []);
 
   return (
-    <div className="p-2 desktop:p-3">
-      <CCard classes="border-0" childClasses="p-0 small_desktop:p-0">
+    <div className="p-2">
+      <CCard classes="border-0" childClasses="p-0">
         <CTable
           headColumns={headColumns}
           bodyColumns={bodyColumns}

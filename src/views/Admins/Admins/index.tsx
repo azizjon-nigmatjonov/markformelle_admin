@@ -63,7 +63,7 @@ const Admins = () => {
           />
         </div>
       </Header>
-      <div className="p-2 desktop:p-3">
+      <div className="p-2">
         <CTable
           headColumns={headColumns}
           bodyColumns={bodyColumns.list}

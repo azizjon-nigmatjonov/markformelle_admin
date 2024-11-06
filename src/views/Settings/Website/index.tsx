@@ -39,7 +39,7 @@ const WebsiteSettings = () => {
         }
       />
 
-      <div className="p-2 desktop:p-3">
+      <div className="p-2">
         <div className="inline-block">
           <CTabs
             tabList={tabList}

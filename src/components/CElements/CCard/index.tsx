@@ -32,26 +32,26 @@ const CCard = ({
         count: half ? 2 : 1,
         type: "machine",
         minus:
-          window.screen.width < 980
+          window.screen.width < 1000
             ? openHeader
-              ? 40
-              : 15
+              ? 30
+              : 11
             : openHeader
-            ? 105
-            : 80,
+            ? 101
+            : 77,
       });
     } else {
       return getHeight({
         count: 1,
         type: "machine",
         minus:
-          window.screen.width < 980
+          window.screen.width < 1000
             ? openHeader
-              ? 70
-              : 15
+              ? 50
+              : 18
             : openHeader
-            ? 200
-            : 150,
+            ? 190
+            : 145,
       });
     }
   };
@@ -74,11 +74,9 @@ const CCard = ({
       ) : (
         ""
       )}
-      <div className={`p-2 small_desktop:p-3 h-full ${childClasses}`}>
-        {children}
-      </div>
+      <div className={`p-2 h-full ${childClasses}`}>{children}</div>
       {footer ? (
-        <div className="p-5 border-t border-[var(--gray20)]">{footer}</div>
+        <div className="p-2 border-t border-[var(--gray20)]">{footer}</div>
       ) : (
         ""
       )}

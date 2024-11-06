@@ -17,7 +17,7 @@ const knittingMachine = () => {
       <Header
         extra={<CBreadcrumbs items={breadCrumbItems} progmatic={true} />}
       ></Header>
-      <div className="p-2 desktop:p-3">
+      <div className="p-2">
         <CCard title="Статистика по плану">{id}</CCard>
       </div>
     </>

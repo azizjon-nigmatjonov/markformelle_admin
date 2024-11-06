@@ -42,7 +42,7 @@ const Profile = () => {
       <Header
         extra={<CBreadcrumbs items={breadCrumbItems} progmatic={true} />}
       ></Header>
-      <form className="p-2 desktop:p-3">
+      <form className="p-2">
         <CCard style={{ minHeight: "auto" }}>
           <div className="flex justify-between">
             <div className="flex items-center space-x-8">

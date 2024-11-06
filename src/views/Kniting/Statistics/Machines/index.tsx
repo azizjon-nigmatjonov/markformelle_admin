@@ -40,7 +40,7 @@ const knittingdAnalytics = () => {
         <CPeriodPicker handleValue={() => {}} placeholder="Время" />
       </Header>
 
-      <div className="p-2 desktop:p-3">{CurrentPage(currentTab.id)}</div>
+      <div className="p-2">{CurrentPage(currentTab.id)}</div>
     </div>
   );
 };

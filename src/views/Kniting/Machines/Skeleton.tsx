@@ -23,12 +23,12 @@ export const MachinSkeletons = ({ openHeader }: Props) => {
             count: 7,
             type: "machine",
             minus:
-              window.screen.width < 980
+              window.screen.width < 1000
                 ? openHeader
-                  ? 16
+                  ? 13.5
                   : 8.5
                 : openHeader
-                ? 34
+                ? 33
                 : 27,
           })}
         />
@@ -40,7 +40,7 @@ export const MachinSkeletons = ({ openHeader }: Props) => {
 export const MachineListSkeleton = ({ openHeader }: Props) => {
   const { getHeight } = useDeviceHeight();
   return (
-    <div className="p-2 desktop:p-3">
+    <div className="p-2">
       <OneSkeleton
         height={getHeight({
           count: 1,

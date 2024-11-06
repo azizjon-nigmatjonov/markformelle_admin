@@ -37,7 +37,7 @@ export const ProcessTable = () => {
 
   return (
     <div
-      className="p-3"
+      className="p-2"
       style={{ height: openHeader ? "calc(100vh - 50px)" : "100vh" }}
     >
       {isLoading || cardLoading ? (

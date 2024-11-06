@@ -36,7 +36,7 @@ export const Header = ({
     <>
       <HeaderFoldButton collapsed={openHeader} setCollapsed={setCollapsed} />
       <div
-        className={`h-[50px] relative z-[98] bg-white w-full ${
+        className={`h-[35px] desktop:h-[45px] relative z-[98] bg-white w-full ${
           openHeader ? "" : "hidden"
         }`}
       >
@@ -45,7 +45,7 @@ export const Header = ({
           {...props}
           style={{
             width: collapsed ? "calc(100vw - 50px)" : "",
-            left: collapsed ? "50px" : "",
+            left: collapsed ? "45px" : "",
           }}
         >
           <div className="w-full">{extra}</div>

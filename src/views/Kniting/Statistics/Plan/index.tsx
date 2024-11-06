@@ -82,7 +82,7 @@ export const AnalyticsPlan = () => {
         extra={<CBreadcrumbs items={breadCrumbItems} progmatic={true} />}
       ></Header>
 
-      <div className="p-2 desktop:p-3">
+      <div className="p-2">
         <div className="grid grid-cols-4 gap-x-5">
           {cardData?.map((item) => (
             <AnalyticCard key={item.title} el={item} />

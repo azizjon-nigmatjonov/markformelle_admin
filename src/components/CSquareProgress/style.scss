@@ -1,0 +1,41 @@
+.circular-progress {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    position: absolute;
+    transform: rotate(-90deg);
+  }
+
+  .circle-background,
+  .circle-progress {
+    transition: stroke-dashoffset 0.5s ease;
+    stroke-linecap: round;
+  }
+
+  .circular-progress-text {
+    position: absolute;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    .value {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .max {
+      font-size: 0.75rem;
+    }
+
+    .label {
+      font-size: 0.75rem;
+      color: #666;
+    }
+  }
+}

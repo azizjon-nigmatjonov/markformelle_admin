@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 50px;
+  height: 45px;
   border-bottom: 1px solid var(--border);
   border-left: 1px solid var(--border);
   position: fixed;
@@ -17,5 +17,16 @@
     font-weight: 500;
     width: 230px;
     overflow: hidden;
+  }
+}
+
+@media (max-width: 1400px) {
+  .header {
+    height: 35px;
+
+    .title {
+      font-size: 18px;
+      width: 160px;
+    }
   }
 }

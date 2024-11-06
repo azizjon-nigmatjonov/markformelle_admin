@@ -10,7 +10,7 @@ export const CellCardWrapper = ({ data = [], title }: Props) => {
   const wrapperRef: any = useRef(null);
   const { getHeight, getFontSize } = useDeviceHeight();
   return (
-    <CCard classes="p-[0]" childClasses="small_desktop:p-2">
+    <CCard classes="p-[0]" childClasses="p-2">
       <div
         className="border-b pb-2 sticky-header"
         style={{ width: wrapperRef?.current?.offsetWidth }}

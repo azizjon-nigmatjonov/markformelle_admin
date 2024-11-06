@@ -35,7 +35,7 @@ export const Sidebar = () => {
     <div
       className={cls.sidebar}
       style={{
-        width: collapsed ? "50px" : "0",
+        width: collapsed ? "45px" : "0",
         overflow: collapsed ? "" : "hidden",
       }}
     >
@@ -46,7 +46,7 @@ export const Sidebar = () => {
           }`}
           style={{ height: "100vh" }}
         >
-          <div className="h-[50px] text-xl flex justify-center w-full items-center border-b border-[var(--border)] px-1">
+          <div className="h-[35px] desktop:h-[45px] text-xl flex justify-center w-full items-center border-b border-[var(--border)] px-1">
             <img src="/images/logo_mini.png" alt="logo" />
           </div>
           <SidebarSection

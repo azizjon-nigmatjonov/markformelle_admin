@@ -35,7 +35,7 @@ export const ColorConstants = {
 
   pink60: "#DD2590",
 
-  error: "#E82F0F",
+  error: "#db5757",
   error50: "#FEF3F2",
 
   fire: "#FEE5C7",

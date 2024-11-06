@@ -4,6 +4,12 @@ const addZero = (num: number) => {
   return num < 10 ? num.toString().padStart(2, "0") : num;
 };
 
+const GetTime = (timestamp: string) => {
+  const formattedTime = dayjs(timestamp).format("HH:mm");
+
+  return formattedTime;
+};
+
 const Usually = (
   currentYear: number,
   currentMonth: number,
@@ -44,6 +50,8 @@ export const GetCurrentDate = ({
         currentTime,
         symbol
       );
+    case "time":
+      return GetTime(date);
     default:
       return Hourly(currentTime);
   }

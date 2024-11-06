@@ -15,13 +15,13 @@ export const WarehouseSkeleton = ({ openHeader }: Props) => {
             count: 1,
             type: "machine",
             minus:
-              window.screen.width < 980
+              window.screen.width < 1000
                 ? openHeader
-                  ? 75
-                  : 25
+                  ? 55
+                  : 15
                 : openHeader
-                ? 200
-                : 150,
+                ? 190
+                : 145,
           })}
         />
         <OneSkeleton
@@ -35,7 +35,7 @@ export const WarehouseSkeleton = ({ openHeader }: Props) => {
                   : 25
                 : openHeader
                 ? 200
-                : 150,
+                : 145,
           })}
         />
         <OneSkeleton
@@ -49,7 +49,7 @@ export const WarehouseSkeleton = ({ openHeader }: Props) => {
                   : 25
                 : openHeader
                 ? 200
-                : 150,
+                : 145,
           })}
         />
       </div>
@@ -59,12 +59,12 @@ export const WarehouseSkeleton = ({ openHeader }: Props) => {
             count: 2,
             type: "machine",
             minus:
-              window.screen.width < 980
+              window.screen.width < 1000
                 ? openHeader
-                  ? 40
-                  : 15
+                  ? 30
+                  : 14
                 : openHeader
-                ? 105
+                ? 101
                 : 80,
           })}
         />
@@ -73,12 +73,12 @@ export const WarehouseSkeleton = ({ openHeader }: Props) => {
             count: 2,
             type: "machine",
             minus:
-              window.screen.width < 980
+              window.screen.width < 1000
                 ? openHeader
-                  ? 40
-                  : 15
+                  ? 30
+                  : 14
                 : openHeader
-                ? 105
+                ? 101
                 : 80,
           })}
         />

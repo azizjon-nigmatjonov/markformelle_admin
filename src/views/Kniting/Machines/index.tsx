@@ -249,7 +249,7 @@ const KnittingMachines = () => {
 
       {listType === "grid" ? (
         <div
-          className="px-2 py-2 lg:p-3 h-[95vh] overflow-scroll remove-scroll ipod:h-auto ipod:overflow-unset"
+          className="px-2 py-2 h-[95vh] overflow-scroll remove-scroll ipod:h-auto ipod:overflow-unset"
           ref={gridRef}
         >
           {list?.length && !loading ? (
@@ -278,11 +278,11 @@ const KnittingMachines = () => {
                         minus:
                           window.screen.width < 1000
                             ? openHeader
-                              ? 16
-                              : 8.5
+                              ? 13
+                              : 7.7
                             : openHeader
-                            ? 34
-                            : 27,
+                            ? 33
+                            : 26,
                       }),
                     }}
                   >
