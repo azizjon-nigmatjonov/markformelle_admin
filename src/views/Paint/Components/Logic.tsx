@@ -15,6 +15,8 @@ export const MockData = [
     partia_weiht: "1800",
     recipt: "M0868-C23007.A",
     status: "stopped",
+    order: "24-511",
+    capacity: "500kl",
   },
   {
     name: "1400-6",
@@ -25,6 +27,7 @@ export const MockData = [
     partia_weiht: "1400",
     recipt: "M0868-C23007.A",
     status: "working",
+    order: "24-511",
   },
   {
     name: "1600-7",
@@ -35,6 +38,7 @@ export const MockData = [
     partia_weiht: "1600",
     recipt: "M0868-C23007.B",
     status: "working",
+    order: "24-511",
   },
   {
     name: "600-2",
@@ -45,6 +49,7 @@ export const MockData = [
     partia_weiht: "600",
     recipt: "M0868-C23007.A",
     status: "working",
+    order: "24-511",
   },
   {
     name: "1000-4",
@@ -55,6 +60,7 @@ export const MockData = [
     partia_weiht: "1000",
     recipt: "M0868-C23007.C",
     status: "working",
+    order: "24-511",
   },
   {
     name: "2000-9",
@@ -65,6 +71,7 @@ export const MockData = [
     partia_weiht: "2000",
     recipt: "M0868-C23007.A",
     status: "working",
+    order: "24-511",
   },
   {
     name: "2000-9",
@@ -75,6 +82,7 @@ export const MockData = [
     partia_weiht: "2000",
     recipt: "M0868-C23007.B",
     status: "working",
+    order: "24-511",
   },
   {
     name: "1200-5",
@@ -85,6 +93,7 @@ export const MockData = [
     partia_weiht: "1200",
     recipt: "M0868-C23007.C",
     status: "working",
+    order: "24-511",
   },
   {
     name: "2000-9",
@@ -95,6 +104,7 @@ export const MockData = [
     partia_weiht: "2000",
     recipt: "M0868-C23007.C",
     status: "working",
+    order: "24-511",
   },
   {
     name: "600-2",
@@ -105,6 +115,7 @@ export const MockData = [
     partia_weiht: "600",
     recipt: "M0868-C23007.B",
     status: "working",
+    order: "24-511",
   },
   {
     name: "250-1",
@@ -115,6 +126,7 @@ export const MockData = [
     partia_weiht: "250",
     recipt: "M0868-C23007.D",
     status: "working",
+    order: "24-511",
   },
   {
     name: "600-2",
@@ -125,6 +137,7 @@ export const MockData = [
     partia_weiht: "600",
     recipt: "M0868-C23007.A",
     status: "stopped",
+    order: "24-511",
   },
   {
     name: "600-2",
@@ -135,6 +148,7 @@ export const MockData = [
     partia_weiht: "600",
     recipt: "M0868-C23007.D",
     status: "working",
+    order: "24-511",
   },
   {
     name: "2000-9",
@@ -145,6 +159,7 @@ export const MockData = [
     partia_weiht: "2000",
     recipt: "M0868-C23007.A",
     status: "working",
+    order: "24-511",
   },
   {
     name: "1400-6",
@@ -155,6 +170,7 @@ export const MockData = [
     partia_weiht: "1400",
     recipt: "M0868-C23007.B",
     status: "working",
+    order: "24-511",
   },
   {
     name: "1000-4",
@@ -165,6 +181,7 @@ export const MockData = [
     partia_weiht: "1000",
     recipt: "M0868-C23007.C",
     status: "working",
+    order: "24-511",
   },
   {
     name: "1000-4",
@@ -175,6 +192,7 @@ export const MockData = [
     partia_weiht: "1000",
     recipt: "M0868-C23007.D",
     status: "stopped",
+    order: "24-511",
   },
   {
     name: "1400-6",
@@ -185,6 +203,7 @@ export const MockData = [
     partia_weiht: "1400",
     recipt: "M0868-C23007.C",
     status: "working",
+    order: "24-511",
   },
   {
     name: "1800-8",
@@ -195,6 +214,7 @@ export const MockData = [
     partia_weiht: "1800",
     recipt: "M0868-C23007.C",
     status: "working",
+    order: "24-511",
   },
   {
     name: "1400-6",
@@ -205,6 +225,7 @@ export const MockData = [
     partia_weiht: "1400",
     recipt: "M0868-C23007.D",
     status: "working",
+    order: "24-511",
   },
   {
     name: "1800-8",
@@ -215,6 +236,7 @@ export const MockData = [
     partia_weiht: "1800",
     recipt: "M0868-C23007.A",
     status: "working",
+    order: "24-511",
   },
   {
     name: "1200-5",
@@ -225,6 +247,7 @@ export const MockData = [
     partia_weiht: "1200",
     recipt: "M0868-C23007.C",
     status: "working",
+    order: "24-511",
   },
   {
     name: "1200-5",
@@ -235,6 +258,7 @@ export const MockData = [
     partia_weiht: "1200",
     recipt: "M0868-C23007.B",
     status: "working",
+    order: "24-511",
   },
   {
     name: "500-1",
@@ -245,6 +269,7 @@ export const MockData = [
     partia_weiht: "500",
     recipt: "M0868-C23007.B",
     status: "working",
+    order: "24-511",
   },
   {
     name: "600-2",
@@ -255,6 +280,7 @@ export const MockData = [
     partia_weiht: "600",
     recipt: "M0868-C23007.D",
     status: "working",
+    order: "24-511",
   },
   {
     name: "1600-7",
@@ -265,6 +291,7 @@ export const MockData = [
     partia_weiht: "1600",
     recipt: "M0868-C23007.D",
     status: "stopped",
+    order: "24-511",
   },
   {
     name: "250-1",
@@ -275,6 +302,7 @@ export const MockData = [
     partia_weiht: "250",
     recipt: "M0868-C23007.A",
     status: "working",
+    order: "24-511",
   },
   {
     name: "800-3",
@@ -285,6 +313,7 @@ export const MockData = [
     partia_weiht: "800",
     recipt: "M0868-C23007.B",
     status: "working",
+    order: "24-511",
   },
   {
     name: "1600-7",
@@ -295,6 +324,7 @@ export const MockData = [
     partia_weiht: "1600",
     recipt: "M0868-C23007.A",
     status: "working",
+    order: "24-511",
   },
   {
     name: "2000-9",
@@ -305,5 +335,6 @@ export const MockData = [
     partia_weiht: "2000",
     recipt: "M0868-C23007.B",
     status: "working",
+    order: "24-511",
   },
 ];

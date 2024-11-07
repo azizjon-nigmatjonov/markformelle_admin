@@ -3,6 +3,7 @@ import { Card, CardContent, Typography } from "@mui/joy";
 import Sheet from "@mui/joy/Sheet";
 import { Skeleton } from "@mui/material";
 import axios from "axios";
+import { OneSkeleton } from "../../../../components/CElements/CSkeleton/OneSkeleton";
 
 interface OrderListProps {
   machineName: number; // Define the type of machineId prop
@@ -35,9 +36,7 @@ const OrderList: React.FC<OrderListProps> = ({ machineName }) => {
     >
       {data.loading ? (
         <div>
-          <Skeleton style={{ height: "200px" }} />
-          <Skeleton style={{ height: "200px" }} />
-          <Skeleton style={{ height: "200px" }} />
+          <OneSkeleton />
         </div>
       ) : (
         data.list?.map((order: any) => (

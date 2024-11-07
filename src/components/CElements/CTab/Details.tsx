@@ -32,7 +32,7 @@ TabPanel.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-function a11yProps(index: any) {  
+function a11yProps(index: any) {
   return {
     id: `simple-tab-${index}`,
     "aria-controls": `simple-tabpanel-${index}`,
@@ -50,14 +50,14 @@ export default function CTab({
   tabList,
   value = 0,
   handleCustomClick = () => {},
-  customStyles
+  customStyles,
 }: Props) {
   const { t } = useTranslation();
-  
 
   const customization = {
     "&": {
-      width: 'auto'
+      width: "100%",
+      borderBottom: "1px solid var(--gray30)",
     },
     "& .MuiButtonBase-root": {
       background: "#white",
@@ -74,14 +74,15 @@ export default function CTab({
     },
     "& .Mui-selected": {
       transition: "0.7s",
-      color: "#fff !important",
+      // color: " !important",
     },
     "& .MuiTabs-indicator": {
-      borderRadius: "8px",
-      backgroundColor: ColorConstants.main,
+      // borderRadius: "8px",
+      backgroundColor: ColorConstants.gray20,
       height: "100%",
+      borderBottom: "2px solid var(--gray)",
     },
-    ...customStyles
+    ...customStyles,
   };
 
   return (

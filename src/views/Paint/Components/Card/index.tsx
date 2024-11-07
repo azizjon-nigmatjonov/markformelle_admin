@@ -3,6 +3,9 @@ import CircularProgress from "../../../../components/CElements/CCircularProgress
 import { GetCurrentDate } from "../../../../utils/getDate";
 import { useCalculateTime } from "../../../../hooks/useCalucaleTime";
 import { PantoneColors } from "../../../../constants/pantone";
+import { useState } from "react";
+import { PaintCardModal } from "../Modal";
+import { Modal } from "@mui/joy";
 
 interface Props {
   element: any;
@@ -10,11 +13,17 @@ interface Props {
 export const PaintPotCard = ({ element }: Props) => {
   const { getFontSize } = useDeviceHeight();
   const { GetTime } = useCalculateTime();
+  const [open, setOpen]: any = useState(false);
+
   return (
     <div
       className={`w-full h-full rounded-[12px] px-2 desktop:px-4 py-2 desktop:py-4 overflow-hidden relative ${
         element.status === "stopped" ? "red" : "green"
       }`}
+      onClick={(e: any) => {
+        e.stopPropagation();
+        setOpen(true);
+      }}
     >
       <div className="flex">
         <div className="flex flex-col justify-between">
@@ -60,18 +69,6 @@ export const PaintPotCard = ({ element }: Props) => {
               {GetCurrentDate({ type: "time", date: element.end_time })}
             </p>
           </div>
-
-          {/* <div
-            className="absolute right-[-16px] desktop:right-[-16px] bottom-0 h-full"
-            style={{
-              width: getFontSize({
-                count: 6,
-                percent: window.screen.width < 1000 ? 5 : 5,
-                type: "machine",
-              }),
-              backgroundColor: PaintColors[element.color_id],
-            }}
-          ></div> */}
         </div>
 
         <div className="footer w-full pl-4">
@@ -119,8 +116,8 @@ export const PaintPotCard = ({ element }: Props) => {
             </li>
 
             {/* <li>
-              <p className="font-semibold">24-511</p>
-            </li> */}
+            <p className="font-semibold">24-511</p>
+          </li> */}
           </ul>
         </div>
       </div>
@@ -141,28 +138,8 @@ export const PaintPotCard = ({ element }: Props) => {
         }}
       ></div>
 
-      {/* <div
-        className="z-[2]"
-        style={{
-          width: 5,
-          height: getFontSize({
-            count: 6,
-            percent: 63,
-            type: "machine",
-          }),
-          right: 100,
-          top: getFontSize({
-            count: 6,
-            percent: 10,
-            type: "machine",
-          }),
-          boxShadow: `inset -4px 0 8px rgba(0, 0, 0, 0.3)`,
-          backgroundColor: "var(--gray)",
-        }}
-      ></div> */}
-
       <div
-        className="absolute rounded-[12px] right-0"
+        className="absolute rounded-[12px] right-0 top-1/2 -translate-y-1/2"
         style={{
           width: getFontSize({
             count: 6,
@@ -171,7 +148,7 @@ export const PaintPotCard = ({ element }: Props) => {
           }),
           height: getFontSize({
             count: 6,
-            percent: 63,
+            percent: 60,
             type: "machine",
           }),
           right: getFontSize({
@@ -179,15 +156,33 @@ export const PaintPotCard = ({ element }: Props) => {
             percent: -5,
             type: "machine",
           }),
-          top: getFontSize({
-            count: 6,
-            percent: 10,
-            type: "machine",
-          }),
-          // boxShadow: `inset -4px 0 8px rgba(0, 0, 0, 0.3)`,
+          // top: getFontSize({
+          //   count: 6,
+          //   percent: 10,
+          //   type: "machine",
+          // }),
           backgroundColor: `#${PantoneColors?.[element.color_id]?.hex}`,
         }}
       ></div>
+
+      {open && (
+        <Modal
+          aria-labelledby="modal-title"
+          aria-describedby="modal-desc"
+          open={open}
+          onClose={(e: any) => {
+            e.stopPropagation();
+            setOpen(false);
+          }}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <PaintCardModal open={open} setOpen={setOpen} element={element} />
+        </Modal>
+      )}
     </div>
   );
 };
