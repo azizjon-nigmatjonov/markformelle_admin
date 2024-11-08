@@ -8,6 +8,7 @@ export const WebsiteImages = () => {
   return (
     <div>
       <CCard>
+        {window.screen.height}
         <CDriverImageUpload control={control} name="logo" />
       </CCard>
     </div>

@@ -6,6 +6,7 @@ export const ColorConstants = {
   success: "#6cce65",
 
   black: "#151515",
+  black10: "#32383e",
   black50: "#15151550",
   black80: "#15151580",
   black90: "#151515aa",
@@ -66,6 +67,7 @@ export const projectName = "Project";
 
 export const blackColorContants = {
   black: "#151515",
+
   black50: "#15151550",
   black80: "#15151580",
   black90: "#151515aa",

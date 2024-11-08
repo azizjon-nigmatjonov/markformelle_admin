@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, Typography } from "@mui/joy";
 import Sheet from "@mui/joy/Sheet";
-import { Skeleton } from "@mui/material";
 import axios from "axios";
 import { OneSkeleton } from "../../../../components/CElements/CSkeleton/OneSkeleton";
 

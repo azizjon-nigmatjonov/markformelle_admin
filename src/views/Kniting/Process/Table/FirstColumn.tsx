@@ -48,7 +48,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
     return (
       <EmptyDataComponent
         isVisible={true}
-        title="Нет гатовые клетки для отгрузки"
+        title="Нет готовых клетей для отгрузки!"
       />
     );
   }

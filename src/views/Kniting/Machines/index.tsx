@@ -254,7 +254,7 @@ const KnittingMachines = () => {
         >
           {list?.length && !loading ? (
             <div
-              className={`grid-machines-dashboard grid w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-[3px] small_desktop:gap-2`}
+              className={`grid-machines-dashboard grid w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-[3px] small_desktop:gap-1.5`}
               style={{
                 minWidth:
                   window?.screen?.width < 940
@@ -276,10 +276,14 @@ const KnittingMachines = () => {
                         count: 7,
                         type: "machine",
                         minus:
-                          window.screen.width < 1000
+                          window.screen.height < 600
                             ? openHeader
-                              ? 13
-                              : 7.7
+                              ? 11.5
+                              : 6
+                            : window.screen.height < 740
+                            ? openHeader
+                              ? 30.5
+                              : 25.5
                             : openHeader
                             ? 33
                             : 26,

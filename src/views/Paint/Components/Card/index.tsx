@@ -3,7 +3,7 @@ import CircularProgress from "../../../../components/CElements/CCircularProgress
 import { GetCurrentDate } from "../../../../utils/getDate";
 import { useCalculateTime } from "../../../../hooks/useCalucaleTime";
 import { PantoneColors } from "../../../../constants/pantone";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PaintCardModal } from "../Modal";
 import { Modal } from "@mui/joy";
 
@@ -14,7 +14,13 @@ export const PaintPotCard = ({ element }: Props) => {
   const { getFontSize } = useDeviceHeight();
   const { GetTime } = useCalculateTime();
   const [open, setOpen]: any = useState(false);
+  const [height, setHeight]: any = useState(0);
 
+  useEffect(() => {
+    if (window) {
+      setHeight(window?.screen?.height);
+    }
+  }, []);
   return (
     <div
       className={`w-full h-full rounded-[12px] px-2 desktop:px-4 py-2 desktop:py-4 overflow-hidden relative ${
@@ -30,14 +36,15 @@ export const PaintPotCard = ({ element }: Props) => {
           <CircularProgress
             strokeWidth={getFontSize({
               count: 6,
-              percent: 5.5,
+              percent: height > 1200 ? 10 : 5.5,
               type: "machine",
             })}
             value={70}
             maxValue={100}
             size={getFontSize({
               count: 6,
-              percent: 58,
+              percent:
+                height > 1200 ? 105 : height < 800 && height > 600 ? 60 : 60,
               type: "machine",
             })}
           >
@@ -46,7 +53,7 @@ export const PaintPotCard = ({ element }: Props) => {
               style={{
                 fontSize: getFontSize({
                   count: 6,
-                  percent: 14.5,
+                  percent: height > 1200 ? 25 : 15,
                   type: "machine",
                 }),
               }}
@@ -60,7 +67,7 @@ export const PaintPotCard = ({ element }: Props) => {
               style={{
                 fontSize: getFontSize({
                   count: 6,
-                  percent: window.screen.width < 1000 ? 9 : 8.7,
+                  percent: height > 1200 ? 16 : 9.5,
                   type: "machine",
                 }),
               }}
@@ -71,18 +78,19 @@ export const PaintPotCard = ({ element }: Props) => {
           </div>
         </div>
 
-        <div className="footer w-full pl-4">
+        <div className={`footer w-full pl-4`}>
           <ul
             className="w-full whitespace-nowrap"
             style={{
               fontSize: getFontSize({
                 count: 6,
-                percent: 13,
+                percent: height > 1200 ? 24 : 13,
                 type: "machine",
               }),
               lineHeight: getFontSize({
                 count: 6,
-                percent: window.screen.width < 1000 ? 1 : 0.75,
+                percent:
+                  height > 1200 ? 1 : height < 800 ? 1 : 0.75,
                 type: "machine",
               }),
             }}
@@ -93,7 +101,7 @@ export const PaintPotCard = ({ element }: Props) => {
                 style={{
                   fontSize: getFontSize({
                     count: 6,
-                    percent: 14,
+                    percent: height > 1200 ? 25 : 14,
                     type: "machine",
                   }),
                 }}
@@ -101,7 +109,7 @@ export const PaintPotCard = ({ element }: Props) => {
                 {element.name}
               </p>
             </li>
-            <li className="pt-3">
+            <li className={`${height > 1200 ? "pt-4" : "pt-3"}`}>
               <p className="font-semibold">24-511</p>
             </li>
             <li>
@@ -139,21 +147,21 @@ export const PaintPotCard = ({ element }: Props) => {
       ></div>
 
       <div
-        className="absolute rounded-[12px] right-0 top-1/2 -translate-y-1/2"
+        className="absolute rounded-[12px] top-1/2 -translate-y-1/2"
         style={{
           width: getFontSize({
             count: 6,
-            percent: 15,
+            percent: height > 1200 ? 30 : 15,
             type: "machine",
           }),
           height: getFontSize({
             count: 6,
-            percent: 60,
+            percent: height > 1200 ? 90 : 60,
             type: "machine",
           }),
           right: getFontSize({
             count: 6,
-            percent: -5,
+            percent: height > 1200 ? -15 : -5,
             type: "machine",
           }),
           // top: getFontSize({

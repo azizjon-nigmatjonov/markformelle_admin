@@ -4,3 +4,102 @@
         font-size: 14px;
     }
 }
+.zig-zag-bottom {
+    // margin: 32px 0;
+    margin-top: 0;
+    // background: #1ba1e2;
+}
+
+.zig-zag-top {
+    // margin: 32px 0;
+    margin-bottom: 0;
+    // background: #1ba1e2;
+}
+
+.zig-zag-bottom,
+.zig-zag-top {
+    // padding: 32px 0;
+}
+
+// Zigzag.scss
+
+$pink: #fb1d78;
+$width: 20px;
+$halfwidth: $width / 2;
+$thickness: 110%;
+$offset: 2px;
+$backgroundcolor: #fff;
+$linecolor: $pink;
+
+.zigzag {
+    position: absolute;
+    width: $width;
+    z-index: 1;
+    height: 100%;
+    left: calc(50% - 75px);
+    background-color: red;
+    &::before,
+    &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        left: 0;
+        right: 0;
+    }
+
+    &::before {
+        width: $width - $offset;
+        left: 43px;
+        background:
+            linear-gradient(45deg, $linecolor $halfwidth, transparent 0) 0 $halfwidth,
+            linear-gradient(135deg, $linecolor $halfwidth, transparent 0) 0 $halfwidth;
+        background-position: top left;
+        background-repeat: repeat-y;
+        background-size: $width $width;
+        height: 100%;
+    }
+
+    &::after {
+        width: $width;
+        left: 100%;
+        background:
+            linear-gradient(45deg, $backgroundcolor $halfwidth, transparent 0) 0 $halfwidth,
+            linear-gradient(135deg, $backgroundcolor $halfwidth, transparent 0) 0 $halfwidth;
+        background-position: top left;
+        background-repeat: repeat-y;
+        background-size: $width $width;
+        height: 100%;
+    }
+}
+
+$bg-color: #fff;
+$triangle-width: 18px;
+
+.box {
+    position: relative;
+    background-color: green;
+    &::before {
+        content: "";
+        position: absolute;
+        top: 0; // Aligning to the left side
+        left: -30px; // Move the pseudo-element to the left
+        width: 60px; // Set width for the triangle
+        height: 100%; // Full height of the box
+        background-size: 48px $triangle-width; // Set appropriate size for triangles
+        background-repeat: repeat-y; // Repeat vertically
+        background-position: left top;
+
+        background-image: linear-gradient(100deg, transparent 43%, green 43%, green 66%, transparent 66%),
+            linear-gradient(296deg, transparent 43%, green 43%, green 66%, transparent 66%);
+    }
+}
+
+.half {
+    height: 100%;
+    background-color: white;
+    width: 50%;
+    background-size: 100px / (2 * tan(30deg)) 100px;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1 #{2 * tan(30deg)}"><path d="M1 #{2 * tan(30deg)}L0 #{tan(30deg)} 1 0" fill="yellow"/></svg>');
+    background-repeat: repeat-y;
+    background-position: 100% 0;
+}

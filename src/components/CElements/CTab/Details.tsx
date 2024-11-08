@@ -74,7 +74,7 @@ export default function CTab({
     },
     "& .Mui-selected": {
       transition: "0.7s",
-      // color: " !important",
+      // color: "red !important",
     },
     "& .MuiTabs-indicator": {
       // borderRadius: "8px",

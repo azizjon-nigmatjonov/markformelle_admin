@@ -28,6 +28,8 @@ const useDeviceHeight = () => {
           ? (percent / 100) * (height / count / 1.7)
           : height < 600
           ? (percent / 100) * (height / (count - count / 3.3))
+          : height < 740
+          ? (percent / 100) * (height / count - 15)
           : (percent / 100) * (height / count);
       case "card":
         return height < 600

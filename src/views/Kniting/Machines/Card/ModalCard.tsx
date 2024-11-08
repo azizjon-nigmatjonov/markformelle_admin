@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ModalClose from "@mui/joy/ModalClose";
-import Typography from "@mui/joy/Typography";
 import {
   Button,
   Card,
@@ -9,7 +8,6 @@ import {
   Divider,
   List,
   ListDivider,
-  ListItem,
   ModalDialog,
   Stack,
   Switch,
@@ -27,6 +25,7 @@ import { ModalBtn } from "./Btn";
 import axios from "axios";
 import { statusReasonsRu } from "../../../../constants/status";
 import { Alert } from "@mui/material";
+import useDeviceHeight from "../../../../hooks/useDeviceHeight";
 
 interface MachineCardProps {
   machine: any;
@@ -41,7 +40,8 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
     title: "",
   });
   const [checked1, setChecked1] = useState(machine.machine_is_on == "true");
-
+  const { getFontSize } = useDeviceHeight();
+  const height = window?.screen?.height ?? 0;
   const [checked2, setChecked2] = useState(machine.not_broken == "true");
 
   const getWeight = (item: any) => {
@@ -151,8 +151,8 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
   return (
     <ModalDialog sx={{ width: "900px", minHeight: "558px" }}>
       <ModalClose />
-      <Typography></Typography>
-      <Typography></Typography>
+      <p></p>
+      <p></p>
 
       <Tabs aria-label="Basic tabs" defaultValue={0} sx={{ width: "100%" }}>
         <TabList>
@@ -161,96 +161,84 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
         </TabList>
         <TabPanel value={0} style={{ width: "100%" }}>
           <div className="flex">
-            <List aria-labelledby="decorated-list-demo">
-              <ListItem
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                <Typography>Номер машины</Typography>
-                <Typography>
+            <ul
+              className="grid grid-cols-1 paintlist text-[var(--black10)] mr-6 space-y-1 desktop:space-y-2 w-[50%]"
+              style={{
+                fontSize: getFontSize({
+                  type: "machine",
+                  count: 1,
+                  percent:
+                    height > 1200
+                      ? 2.5
+                      : height < 800 && height > 600
+                      ? 1.5
+                      : 1.5,
+                }),
+              }}
+            >
+              <li style={{ display: "flex", justifyContent: "space-between" }}>
+                <p>Номер машины</p>
+                <p>
                   {machine.name} ({machine.id})
-                </Typography>
-              </ListItem>
+                </p>
+              </li>
               <ListDivider />
-              <ListItem
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                <Typography>Название машины</Typography>
-                <Typography>{machine.model}</Typography>
-              </ListItem>
+              <li style={{ display: "flex", justifyContent: "space-between" }}>
+                <p>Название машины</p>
+                <p>{machine.model}</p>
+              </li>
               <ListDivider />
-              <ListItem
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                <Typography>Статус машины</Typography>
-                <Typography>{machine.reason}</Typography>
-              </ListItem>
+              <li style={{ display: "flex", justifyContent: "space-between" }}>
+                <p>Статус машины</p>
+                <p>{machine.reason}</p>
+              </li>
               <ListDivider />
-              <ListItem
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                <Typography>IP адрес </Typography>
-                <Typography>{machine.ip_address}</Typography>
-              </ListItem>
+              <li style={{ display: "flex", justifyContent: "space-between" }}>
+                <p>IP адрес </p>
+                <p>{machine.ip_address}</p>
+              </li>
               <ListDivider />
-              <ListItem
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                <Typography>Версия программы </Typography>
-                <Typography>{machine.soft_version}</Typography>
-              </ListItem>
+              <li style={{ display: "flex", justifyContent: "space-between" }}>
+                <p>Версия программы </p>
+                <p>{machine.soft_version}</p>
+              </li>
               <ListDivider sx={{ background: "var(--gray)" }} />
-              <ListItem
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                <Typography>Номер заказа </Typography>
-                <Typography>{machine.zakaz}</Typography>
-              </ListItem>
+              <li style={{ display: "flex", justifyContent: "space-between" }}>
+                <p>Номер заказа </p>
+                <p>{machine.zakaz}</p>
+              </li>
               <ListDivider />
-              <ListItem
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                <Typography>Артикул </Typography>
-                <Typography>{machine.art}</Typography>
-              </ListItem>
+              <li style={{ display: "flex", justifyContent: "space-between" }}>
+                <p>Артикул </p>
+                <p>{machine.art}</p>
+              </li>
               <ListDivider />
-              <ListItem
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                <Typography>Лот пряжи </Typography>
-                <Typography>{machine.lotno}</Typography>
-              </ListItem>
+              <li style={{ display: "flex", justifyContent: "space-between" }}>
+                <p>Лот пряжи </p>
+                <p>{machine.lotno}</p>
+              </li>
               <ListDivider />
-              <ListItem
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                <Typography>Мощность машины </Typography>
-                <Typography>{machine.capacity}</Typography>
-              </ListItem>
+              <li style={{ display: "flex", justifyContent: "space-between" }}>
+                <p>Мощность машины </p>
+                <p>{machine.capacity}</p>
+              </li>
               <ListDivider />
-              <ListItem
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                <Typography>План </Typography>
-                <Typography>
-                  № {machine.nplan == undefined ? "0" : machine.nplan}
-                </Typography>
-              </ListItem>
+              <li style={{ display: "flex", justifyContent: "space-between" }}>
+                <p>План </p>
+                <p>№ {machine.nplan == undefined ? "0" : machine.nplan}</p>
+              </li>
               <ListDivider />
-              <ListItem
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                <Typography>Факт </Typography>
-                <Typography>{machine.fkol_knit} кг</Typography>
-              </ListItem>
+              <li style={{ display: "flex", justifyContent: "space-between" }}>
+                <p>Факт </p>
+                <p>{machine.fkol_knit} кг</p>
+              </li>
               <ListDivider />
-              <ListItem
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                <Typography>Остатка </Typography>
-                <Typography>{getWeight(machine)} кг</Typography>
-              </ListItem>
+              <li style={{ display: "flex", justifyContent: "space-between" }}>
+                <p>Остатка </p>
+                <p>{getWeight(machine)} кг</p>
+              </li>
               <ListDivider />
-            </List>
+            </ul>
             <CDriver direction="vertical" classes="h-[400px]" />
             <Stack
               spacing={2}
@@ -271,7 +259,7 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
                       padding: 0,
                     }}
                   >
-                    <Typography sx={{ mr: 1 }}>Машина</Typography>
+                    <p className="mr-1">Машина</p>
                     <Switch
                       checked={checked1}
                       startDecorator={checked1 ? "Вкл" : "Отк"}
@@ -285,7 +273,7 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
                       padding: 0,
                     }}
                   >
-                    <Typography sx={{ mr: 1 }}>Состояние машины</Typography>
+                    <p className="mr-1">Состояние машины</p>
                     <Switch
                       checked={checked2}
                       startDecorator={checked2 ? "Работает" : "Сломан"}
@@ -300,29 +288,31 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
                   sx={{ width: 250 }}
                 >
                   <List aria-labelledby="decorated-list-demo">
-                    <ListItem
+                    <li
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
                       }}
                     >
-                      <Typography>Скорость </Typography>
-                      <Typography endDecorator={<Speed />}>
+                      <p>Скорость </p>
+                      <p>
+                        <Speed />
                         {machine.rotation}
-                      </Typography>
-                    </ListItem>
+                      </p>
+                    </li>
 
-                    <ListItem
+                    <li
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
                       }}
                     >
-                      <Typography>Эффективность </Typography>
-                      <Typography endDecorator={<Bolt />}>
+                      <p>Эффективность </p>
+                      <p>
+                        <Bolt />
                         {machine.efficiency}
-                      </Typography>
-                    </ListItem>
+                      </p>
+                    </li>
                   </List>
                   <CardContent sx={{ mx: "auto", alignItems: "center" }}>
                     <CircularProgress
@@ -340,8 +330,17 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
                         "--CircularProgress-progressThickness": "10px",
                       }}
                     >
-                      <Stack spacing={0} alignItems={"center"}>
-                        <Typography>{machine.fkol_knit}</Typography>
+                      <div
+                        className="flex flex-col items-center justify-center"
+                        style={{
+                          fontSize: getFontSize({
+                            type: "machine",
+                            count: 1,
+                            percent: 2,
+                          }),
+                        }}
+                      >
+                        <p>{machine.fkol_knit}</p>
                         <Divider
                           orientation="horizontal"
                           sx={{
@@ -351,13 +350,13 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
                           }}
                           style={{ background: "black" }}
                         />
-                        <Typography>{machine.pkol_knit + " Kg"}</Typography>
-                      </Stack>
+                        <p>{machine.pkol_knit + " Kg"}</p>
+                      </div>
                     </CircularProgress>
                   </CardContent>
                 </Card>
               ) : (
-                <div className="w-full h-full border-t border-[var(--border)] pt-5">
+                <div className="w-full h-full border-t border-[var(--border)] pt-3">
                   <h3 className="mb-5">Причина поломки</h3>
                   <ModalBtn
                     checkedReason={checkedReason}
@@ -367,8 +366,8 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
                     Введите причину поломки
                   </p>
                   <textarea
-                    className="p-4 bg-transparent border border-[var(--border)] outline-none focus:border-[var(--primary)] rounded-[8px] w-full"
-                    rows={5}
+                    className="p-3 bg-transparent border border-[var(--border)] outline-none focus:border-[var(--primary)] rounded-[8px] w-full"
+                    rows={window.screen.height < 800 ? 1 : 5}
                     onChange={(e: any) => setDescriptionText(e.target.value)}
                   ></textarea>
 
