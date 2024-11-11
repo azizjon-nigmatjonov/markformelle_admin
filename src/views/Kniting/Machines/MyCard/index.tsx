@@ -227,9 +227,6 @@ export const MyCard = ({ machine, refetch }: Props) => {
                       }),
                     }}
                   >
-                    {/* <div className="absolute top-[0px] right-[40px]">
-                      <div className="rotate-[90deg]"></div>
-                    </div>{" "} */}
                     <div className="flex items-center justify-center font-semibold pl-5">
                       <div
                         className="rotate-[90deg] mt-[-24px]"

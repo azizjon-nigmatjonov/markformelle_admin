@@ -89,8 +89,7 @@ export const PaintPotCard = ({ element }: Props) => {
               }),
               lineHeight: getFontSize({
                 count: 6,
-                percent:
-                  height > 1200 ? 1 : height < 800 ? 1 : 0.75,
+                percent: height > 1200 ? 1 : height < 800 ? 1 : 0.75,
                 type: "machine",
               }),
             }}
@@ -122,10 +121,6 @@ export const PaintPotCard = ({ element }: Props) => {
                 )}
               </p>
             </li>
-
-            {/* <li>
-            <p className="font-semibold">24-511</p>
-          </li> */}
           </ul>
         </div>
       </div>
@@ -164,11 +159,7 @@ export const PaintPotCard = ({ element }: Props) => {
             percent: height > 1200 ? -15 : -5,
             type: "machine",
           }),
-          // top: getFontSize({
-          //   count: 6,
-          //   percent: 10,
-          //   type: "machine",
-          // }),
+
           backgroundColor: `#${PantoneColors?.[element.color_id]?.hex}`,
         }}
       ></div>
