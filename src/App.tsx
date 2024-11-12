@@ -2,8 +2,6 @@ import { Suspense } from "react";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { QueryClientProvider } from "react-query";
-// import { ThemeProvider } from "@mui/styles";
-// import { themeMui } from "./theme";
 import queryClient from "./services/queryClient";
 import { BrowserRouter } from "react-router-dom";
 import Router from "./router";
@@ -18,11 +16,9 @@ function App() {
         <QueryClientProvider client={queryClient}>
           <Provider store={store}>
             <PersistGate persistor={persistor}>
-              {/* <ThemeProvider theme={themeMui}> */}
               <BrowserRouter>
                 <Router />
               </BrowserRouter>
-              {/* </ThemeProvider> */}
             </PersistGate>
           </Provider>
         </QueryClientProvider>
