@@ -1,36 +1,26 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useMemo, useState } from "react";
-import CTable from "../../../../../components/CElements/CTable";
-import CCard from "../../../../../components/CElements/CCard";
-import {
-  FormatTime,
-  GetGoursFromMinutes,
-} from "../../../../../utils/formatTime";
+import CTable from "../../../components/CElements/CTable";
+import CCard from "../../../components/CElements/CCard";
+import { FormatTime, GetGoursFromMinutes } from "../../../utils/formatTime";
 
 interface Props {
   list: any;
 }
 
-export const MachinesList = ({ list = [] }: Props) => {
+export const PaintTable = ({ list = [] }: Props) => {
   const { t } = useTranslation();
   const [headColumns, setHeadColumns]: any = useState([]);
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 10 });
   const bodyColumns = useMemo(() => {
     if (!list?.length) return [];
-    const arr: any = [];
-    let neInd = 0;
-    list.forEach((element: any, index: number) => {
-      element.machine_place = {
-        line: Math.ceil((index + 1) / 11),
-      };
 
-      if (element.idlocation) {
-        neInd += 1;
-        element.machine_place.que = neInd;
-        arr.push({ index, ...element });
-      }
+    return list.map((item: any, index: number) => {
+      return {
+        index,
+        ...item,
+      };
     });
-    return arr;
   }, [list]);
 
   useEffect(() => {

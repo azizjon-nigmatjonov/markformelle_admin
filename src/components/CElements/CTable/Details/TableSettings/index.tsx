@@ -86,11 +86,6 @@ export const HeaderSettings = ({
 
   const menuList = useMemo(() => {
     return [
-      // {
-      //   label: "Bo'lim sliderligi",
-      //   id: "",
-      //   type: ""
-      // },
       {
         label: "Активные столбцы",
         id: "columns",
@@ -113,7 +108,7 @@ export const HeaderSettings = ({
 
   return (
     <div className="pb-[30px]">
-      <div className="h-[30px] absolute w-full left-0 top-0 flex items-center px-3 desktop:px-5 justify-between">
+      <div className="h-[30px] absolute w-full left-0 top-0 flex items-center px-1 desktop:px-3 justify-between">
         <div>
           <h2 className="font-bold">
             Общий

@@ -1,17 +1,14 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useMemo, useState } from "react";
-import CTable from "../../../../../components/CElements/CTable";
-import CCard from "../../../../../components/CElements/CCard";
-import {
-  FormatTime,
-  GetGoursFromMinutes,
-} from "../../../../../utils/formatTime";
+import CTable from "../../../components/CElements/CTable";
+import CCard from "../../../components/CElements/CCard";
+import { FormatTime, GetGoursFromMinutes } from "../../../utils/formatTime";
 
 interface Props {
   list: any;
 }
 
-export const MachinesList = ({ list = [] }: Props) => {
+export const ChniTable = ({ list }: Props) => {
   const { t } = useTranslation();
   const [headColumns, setHeadColumns]: any = useState([]);
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 10 });

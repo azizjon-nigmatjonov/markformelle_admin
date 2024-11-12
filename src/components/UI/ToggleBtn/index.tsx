@@ -6,10 +6,31 @@ interface Props {
   setType: (val: string) => void;
 }
 
-export const ToggleBtn = ({ type = "list", setType = () => {} }: Props) => {
+export const ToggleBtn = ({ type = "", setType = () => {} }: Props) => {
+  // const location = useLocation();
+  // const dispatch = useDispatch();
+  // const listType = useSelector((state: any) => state.sidebar.listType);
+
+  // const pageName: any = useMemo(() => {
+  //   const strLen =
+  //     location.pathname.split("/")[2].length +
+  //     location.pathname.split("/")[1].length;
+
+  //   let result = location.pathname.substring(0, strLen + 2);
+
+  //   return result;
+  // }, [location]);
+
+  const handleToggle = (type: any) => {
+    setType(type);
+    // dispatch(sidebarActions.setListType({ pageName, payload: 123 }));
+  };
+
+  // const type = listType?.[pageName];
+
   return (
     <div
-      onClick={() => setType(type === "list" ? "grid" : "list")}
+      onClick={() => handleToggle(type === "list" ? "grid" : "list")}
       className="flex justify-between items-center"
     >
       <button className="relative flex items-center justify-between border border-[var(--border)] overflow-hidden h-[25px] desktop:h-[35px] rounded-[12px]">
