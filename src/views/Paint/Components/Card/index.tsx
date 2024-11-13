@@ -23,7 +23,7 @@ export const PaintPotCard = ({ element }: Props) => {
   }, []);
   return (
     <div
-      className={`w-full h-full rounded-[12px] px-2 desktop:px-4 py-2 desktop:py-4 overflow-hidden relative ${
+      className={`w-full h-full rounded-[12px] px-2 desktop:px-4 py-2 desktop:py-4 pb-1 desktop:pb-3 overflow-hidden relative ${
         element.status === "stopped" ? "red" : "green"
       }`}
       onClick={(e: any) => {

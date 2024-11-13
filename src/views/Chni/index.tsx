@@ -15,7 +15,7 @@ const ChniDashboard = () => {
       {type === "grid" ? (
         <ChniList />
       ) : (
-        <ChniTable list={MachineConstantList.slice(0, 60)} />
+        <ChniTable list={MachineConstantList.slice(0, 62)} />
       )}
     </>
   );

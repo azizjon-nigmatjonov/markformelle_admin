@@ -9,12 +9,13 @@ interface Props {
 
 export const MachineCardBody = ({ data = {}, count = 6 }: Props) => {
   const { getFontSize } = useDeviceHeight();
+  const height = window?.screen?.height ?? 0;
   return (
     <div className="w-full flex justify-center h-full">
       <CircularProgress
         strokeWidth={getFontSize({
           count,
-          percent: 6,
+          percent: height > 1200 ? 8 : 5,
           type: "machine",
         })}
         value={
@@ -25,20 +26,21 @@ export const MachineCardBody = ({ data = {}, count = 6 }: Props) => {
         maxValue={100}
         size={getFontSize({
           count,
-          percent: 58,
+          percent: height > 1200 ? 87 : 52,
           type: "machine",
         })}
       >
-        <div className="font-semibold">
-          <p
-            style={{
-              fontSize: getFontSize({
-                count,
-                percent: 9,
-                type: "machine",
-              }),
-            }}
-          >
+        <div
+          className="font-semibold"
+          style={{
+            fontSize: getFontSize({
+              count,
+              percent: height > 1200 ? 14 : 8,
+              type: "machine",
+            }),
+          }}
+        >
+          <p>
             {data.fkol_knit
               .toString()
               .substring(
@@ -49,15 +51,7 @@ export const MachineCardBody = ({ data = {}, count = 6 }: Props) => {
               ) || "0"}
           </p>
           <div className="w-full h-[1px] bg-[var(--black)] mb-[2px]"></div>
-          <p
-            style={{
-              fontSize: getFontSize({
-                count,
-                percent: 9,
-                type: "machine",
-              }),
-            }}
-          >
+          <p>
             {data.pkol_knit
               .toString()
               .substring(
@@ -67,22 +61,14 @@ export const MachineCardBody = ({ data = {}, count = 6 }: Props) => {
                   : data.pkol_knit.length
               ) || "0" + " Kg"}
           </p>
-          <div
-            style={{
-              fontSize: getFontSize({
-                count,
-                percent: 9,
-                type: "machine",
-              }),
-            }}
-          >
+          <div>
             <div className="flex items-center justify-center font-semibold pl-3">
               <div className="rotate-[90deg] mt-[-20px]">
                 <SpeedIcon
                   style={{
                     fontSize: getFontSize({
                       count,
-                      percent: 10,
+                      percent: height > 1200 ? 15 : 10,
                       type: "machine",
                     }),
                   }}

@@ -19,9 +19,9 @@ export const DropDown = ({
 
   return (
     <div className="mt-[-40px]">
-      <div className="absolute left-[50px] group-hover:block hidden min-w-[250px] z-[99]">
+      <div className="absolute left-[40px] group-hover:block hidden min-w-[250px] z-[99]">
         <div className="relative">
-          <div className="absolute left-[-7px] top-[15px] w-[15px] h-[15px] rotate-[45deg] bg-white border border-[var(--gray20)] z-[33]"></div>
+          <div className="absolute left-[-4px] top-[15px] w-[15px] h-[15px] rotate-[45deg] bg-white border border-[var(--gray20)] z-[33]"></div>
           <div className="relative z-[99] bg-white card-shadow min-w-[200px] rounded-[12px] border border-[var(--gray20)] pt-2">
             <div
               className={`flex items-center space-x-3 pb-2 border-b border-[var(--border)] pl-3`}

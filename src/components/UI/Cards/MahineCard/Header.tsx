@@ -8,6 +8,7 @@ interface Props {
 
 export const MachineCardHeader = ({ data, count = 6 }: Props) => {
   const { getFontSize } = useDeviceHeight();
+  const height = window?.screen?.height ?? 1;
   return (
     <div className="flex justify-between items-center px-1.5 font-semibold mb-1">
       <div
@@ -15,7 +16,7 @@ export const MachineCardHeader = ({ data, count = 6 }: Props) => {
         style={{
           fontSize: getFontSize({
             count,
-            percent: 10,
+            percent: height > 1200 ? 15 : 10,
             type: "machine",
           }),
         }}
@@ -24,7 +25,7 @@ export const MachineCardHeader = ({ data, count = 6 }: Props) => {
           style={{
             fontSize: getFontSize({
               count,
-              percent: 10,
+              percent: height > 1200 ? 15 : 10,
               type: "machine",
             }),
           }}
@@ -36,7 +37,7 @@ export const MachineCardHeader = ({ data, count = 6 }: Props) => {
         style={{
           fontSize: getFontSize({
             count,
-            percent: 13,
+            percent: height > 1200 ? 18 : 13,
             type: "machine",
           }),
         }}
@@ -47,7 +48,7 @@ export const MachineCardHeader = ({ data, count = 6 }: Props) => {
         style={{
           fontSize: getFontSize({
             count,
-            percent: 10,
+            percent: height > 1200 ? 15 : 10,
             type: "machine",
           }),
         }}
