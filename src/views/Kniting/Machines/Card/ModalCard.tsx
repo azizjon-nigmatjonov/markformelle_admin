@@ -331,12 +331,17 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
                       }}
                     >
                       <div
-                        className="flex flex-col items-center justify-center"
+                        className="flex flex-col items-center justify-center text-[var(--black)]"
                         style={{
                           fontSize: getFontSize({
                             type: "machine",
                             count: 1,
-                            percent: 2,
+                            percent:
+                              height > 1200
+                                ? 2.8
+                                : height < 800 && height > 600
+                                ? 1.8
+                                : 1.8,
                           }),
                         }}
                       >

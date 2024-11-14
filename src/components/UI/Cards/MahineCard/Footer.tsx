@@ -15,13 +15,21 @@ export const MachineCardFooter = ({ data = {}, count = 6 }: Props) => {
         style={{
           fontSize: getFontSize({
             count,
-            percent: 9,
+            percent: 8,
             type: "machine",
           }),
         }}
       >
-        <Bolt />
-        {data.efficiency ?? 0 + "%"}
+        <Bolt
+          style={{
+            fontSize: getFontSize({
+              count,
+              percent: 9,
+              type: "machine",
+            }),
+          }}
+        />
+        {data.efficiency + "%"}
       </p>
     </div>
   );

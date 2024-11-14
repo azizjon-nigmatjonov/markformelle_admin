@@ -32,8 +32,8 @@ export const PaintList = ({ data = [] }: Props) => {
           // }),
         }}
       >
-        {data.map((item: any, index: number) => (
-          <PaintPotCard key={index} element={item} />
+        {data?.map((item: any, index: number) => (
+          <PaintPotCard key={index} element={item ?? {}} />
         ))}
       </div>
     </div>

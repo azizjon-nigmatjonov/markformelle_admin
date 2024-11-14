@@ -65,7 +65,7 @@ export const MachinesList = ({ list = [] }: Props) => {
 
           return (
             <div
-              className={`px-2 py-1 flex items-center justify-center text-sm rounded-[8px] whitespace-nowrap font-medium ${val.color}`}
+              className={`py-1 flex items-center justify-center text-sm rounded-[8px] whitespace-nowrap font-medium ${val.color}`}
             >
               {t(val.status)}
             </div>

@@ -1,17 +1,16 @@
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
-import ViewDayOutlinedIcon from "@mui/icons-material/ViewDayOutlined";
 
 interface Props {
   data: any;
   count?: number;
 }
 
-export const MachineCardHeader = ({ data, count = 6 }: Props) => {
+export const MachineCardHeader = ({ data = {}, count = 6 }: Props) => {
   const { getFontSize } = useDeviceHeight();
   const height = window?.screen?.height ?? 1;
   return (
     <div className="flex justify-between items-center px-1.5 font-semibold mb-1">
-      <div
+      {/* <div
         className="flex items-center"
         style={{
           fontSize: getFontSize({
@@ -31,9 +30,9 @@ export const MachineCardHeader = ({ data, count = 6 }: Props) => {
           }}
         />
         <span> {data.new_rolls ?? 0}</span>
-      </div>
+      </div> */}
       <p
-        className="absolute left-1/2 -translate-x-1/2"
+        className="text-center w-full"
         style={{
           fontSize: getFontSize({
             count,
@@ -44,7 +43,7 @@ export const MachineCardHeader = ({ data, count = 6 }: Props) => {
       >
         {data.title}
       </p>
-      <div
+      {/* <div
         style={{
           fontSize: getFontSize({
             count,
@@ -54,7 +53,7 @@ export const MachineCardHeader = ({ data, count = 6 }: Props) => {
         }}
       >
         {data.defect_num ?? 0}
-      </div>
+      </div> */}
     </div>
   );
 };

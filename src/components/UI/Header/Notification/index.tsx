@@ -1,7 +1,7 @@
 import { useState } from "react";
 // import { NotificationData } from "./Logic";
 import { NitifList } from "./List";
-import { Badge } from "@mui/material";
+import { Badge, IconButton } from "@mui/material";
 import { NotificationIcon } from "../../../../components/UI/IconGenerator/Svg";
 import { NotificationData } from "./Logic";
 import { Closer } from "../../../../components/UI/Closer";
@@ -15,8 +15,8 @@ const Notification = () => {
 
   return (
     <div className="relative z-[4]">
-      <button
-        className={`w-[25px] h-[25px] desktop:h-[30px] desktop:w-[30px] rounded-full shadow-sm bg-white common-shadow ${
+      <IconButton
+        className={`w-[25px] h-[25px] desktop:h-[30px] desktop:w-[30px] rounded-[12px] shadow-sm bg-white common-shadow ${
           checkAdditionals("show_notification") ? "" : "cursor-not-allowed"
         }`}
         onClick={() => {
@@ -34,7 +34,7 @@ const Notification = () => {
             }
           />
         </Badge>
-      </button>
+      </IconButton>
 
       {open && <NitifList setOpen={setOpen} list={notificationList} />}
       {open && <Closer handleClose={() => setOpen(false)} />}

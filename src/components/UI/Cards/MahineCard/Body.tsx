@@ -1,6 +1,6 @@
 import CircularProgress from "../../../../components/CElements/CCircularProgress";
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
-import SpeedIcon from "@mui/icons-material/Speed";
+import { WatchIcon } from "../../IconGenerator/Svg/Machines";
 
 interface Props {
   data: any;
@@ -18,12 +18,8 @@ export const MachineCardBody = ({ data = {}, count = 6 }: Props) => {
           percent: height > 1200 ? 8 : 5,
           type: "machine",
         })}
-        value={
-          Number(data.fakt_percentage) > 100
-            ? 100
-            : Number(data.fakt_percentage)
-        }
-        maxValue={100}
+        value={Number(data.plan_fact) > 100 ? 100 : Number(data.plan_fact)}
+        maxValue={data.plan}
         size={getFontSize({
           count,
           percent: height > 1200 ? 87 : 52,
@@ -40,42 +36,29 @@ export const MachineCardBody = ({ data = {}, count = 6 }: Props) => {
             }),
           }}
         >
-          <p>
-            {data.fkol_knit
-              .toString()
-              .substring(
-                0,
-                data.fkol_knit.toString().indexOf(".") !== -1
-                  ? data.fkol_knit.toString().indexOf(".") + 2
-                  : data.fkol_knit.length
-              ) || "0"}
-          </p>
+          <p>{data.plan}</p>
           <div className="w-full h-[1px] bg-[var(--black)] mb-[2px]"></div>
-          <p>
-            {data.pkol_knit
-              .toString()
-              .substring(
-                0,
-                data.pkol_knit.toString().indexOf(".") !== -1
-                  ? data.pkol_knit.toString().indexOf(".") + 2
-                  : data.pkol_knit.length
-              ) || "0" + " Kg"}
-          </p>
-          <div>
-            <div className="flex items-center justify-center font-semibold pl-3">
-              <div className="rotate-[90deg] mt-[-20px]">
-                <SpeedIcon
-                  style={{
-                    fontSize: getFontSize({
-                      count,
-                      percent: height > 1200 ? 15 : 10,
-                      type: "machine",
-                    }),
-                  }}
-                />
-              </div>
-              <span className="ml-[2px]">{data.rotation || "0.0"}</span>
+          <p>{data.plan_fact}</p>
+
+          <div className="flex items-center">
+            <div
+              className="rotate-[90deg]"
+              style={{
+                width: getFontSize({
+                  count,
+                  percent: height > 1200 ? 15 : 9,
+                  type: "machine",
+                }),
+                height: getFontSize({
+                  count,
+                  percent: height > 1200 ? 15 : 9,
+                  type: "machine",
+                }),
+              }}
+            >
+              <WatchIcon />
             </div>
+            <p>{data.plan_hourly}</p>
           </div>
         </div>
       </CircularProgress>

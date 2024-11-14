@@ -383,7 +383,7 @@ const CTable = ({
                         column?.innerId ? column.innerId : index || column.id
                       }
                       style={{
-                        padding: "10px 4px",
+                        padding: "10px 0px",
                         minWidth: tableSize?.[pageName]?.[column.id]
                           ? tableSize?.[pageName]?.[column.id]
                           : column?.width
@@ -412,7 +412,7 @@ const CTable = ({
                           : "",
                       }}
                     >
-                      <div className="w-full flex items-center justify-between py-2 px-3 flex-nowrap">
+                      <div className="w-full flex items-center justify-between py-2 px-1 flex-nowrap">
                         <div
                           className={`uppercase ${
                             column?.filter ? "" : "w-full"
@@ -475,7 +475,7 @@ const CTable = ({
                             className={`overflow-ellipsis`}
                             style={{
                               minWidth: "max-content",
-                              padding: "0 4px",
+                              padding: "0px",
                               position: tableSettings?.[pageName]?.find(
                                 (item: any) => item?.id === column?.id
                               )?.isStiky

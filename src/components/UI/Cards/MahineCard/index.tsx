@@ -20,7 +20,7 @@ const MachinCardUI = ({ machine = {} }: Props) => {
     >
       <MachineCardHeader
         data={{
-          title: machine.name,
+          title: machine.machine_number,
           defect_num: machine.defect_num,
           new_rolls: machine.new_rolls,
         }}
@@ -28,10 +28,9 @@ const MachinCardUI = ({ machine = {} }: Props) => {
       />
       <MachineCardBody
         data={{
-          fakt_percentage: machine.fakt_percentage,
-          fkol_knit: machine.fkol_knit ?? "",
-          pkol_knit: machine.pkol_knit ?? "",
-          rotation: machine.rotation,
+          plan: machine.plan ?? "",
+          plan_hourly: machine.plan_hourly,
+          plan_fact: machine.plan_fact,
         }}
         count={6}
       />

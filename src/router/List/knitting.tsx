@@ -1,6 +1,7 @@
 // import { AnalyticsPlan } from "../../views/Kniting/Statistics/Plan";
 import KnittingMachines from "../../views/Kniting/Machines";
 import KnittingProcess from "../../views/Kniting/Process";
+// import TestComponent from "../../views/Kniting/Test";
 // import KnittingdAnalytics from "../../views/Kniting/Statistics/Machines";
 // import KnittingMachine from "../../views/Kniting/Machines/SinglePage";
 
@@ -24,6 +25,16 @@ export const knittingList = [
     element: <KnittingProcess />,
     auth: false,
   },
+  // {
+  //   parent: "knitting",
+  //   link: "test",
+  //   sidebar: true,
+  //   title: "test",
+  //   icon: "",
+  //   element: <TestComponent />,
+  //   auth: false,
+  // },
+
   // {
   //   parent: "knitting",
   //   link: "analytics",

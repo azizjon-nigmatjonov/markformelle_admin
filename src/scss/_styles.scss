@@ -576,3 +576,14 @@ input {
 .title-header {
   font-weight: 600;
 }
+
+.horizontal-container {
+  display: flex;
+  overflow-x: auto;
+  padding: 16px;
+}
+
+.MuiIconButton-sizeMedium {
+  border-radius: 12px !important;
+  padding: 0 !important;
+}

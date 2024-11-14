@@ -1,11 +1,25 @@
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
-import { Divider, ListDivider } from "@mui/joy";
+import { Button, Divider, ListDivider, Stack, Switch } from "@mui/joy";
+import { Bolt } from "@mui/icons-material";
+import { Alert } from "@mui/material";
 import CircularProgress from "../../../../components/CElements/CCircularProgress";
 import "./style.scss";
+import { useState } from "react";
+import { ModalBtn } from "../../../Kniting/Machines/Card/Btn";
 export const ChniCardList = ({ machine }: { machine: any }) => {
   const { getFontSize } = useDeviceHeight();
+  const [checked1, setChecked1] = useState(machine.machine_is_on == "true");
+  const [checked2, setChecked2] = useState(machine.not_broken == "true");
   const height = window?.screen?.height ?? 0;
-
+  const [checkedReason, setCheckedReason]: any = useState("1");
+  const [alertInfo, setAlertInfo]: any = useState({
+    type: "error",
+    title: "",
+  });
+  const [descriptionText, setDescriptionText] = useState("");
+  const createStatus = () => {
+    setAlertInfo({ type: "error", title: "No API" });
+  };
   const getWeight = (item: any) => {
     const num: any = Number(item.pkol_knit) - Number(item.fkol_knit) || 0;
 
@@ -37,9 +51,13 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
           <p>{machine.model}</p>
         </li>
         <ListDivider />
+        <li className="flex items-center justify-between ">
+          <p>Мощность машины</p> <p>{machine.capacity}</p>
+        </li>
+        <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>Статус машины</p>
-          <p>{machine.reason}</p>
+          <p>{machine.status}</p>
         </li>
         <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
@@ -66,20 +84,21 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
           <p>Лот пряжи </p>
           <p>{machine.lotno}</p>
         </li>
-        <ListDivider />
-        <li style={{ display: "flex", justifyContent: "space-between" }}>
-          <p>Мощность машины </p>
-          <p>{machine.capacity}</p>
-        </li>
+
         <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>План </p>
-          <p>№ {machine.nplan == undefined ? "0" : machine.nplan}</p>
+          <p>{machine.plan}</p>
         </li>
         <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
-          <p>Факт </p>
-          <p>{machine.fkol_knit} кг</p>
+          <p>План факт </p>
+          <p>{machine.plan_fact}</p>
+        </li>
+        <ListDivider />
+        <li style={{ display: "flex", justifyContent: "space-between" }}>
+          <p>Почасовой план </p>
+          <p>{machine.plan_fact}</p>
         </li>
         <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
@@ -87,54 +106,194 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
           <p>{getWeight(machine)} кг</p>
         </li>
         <ListDivider />
+        <li className="flex items-center justify-between ">
+          <p>Рецепт </p>{" "}
+          <div>
+            <p>M0581-C34132.A</p>
+          </div>
+        </li>
+
+        <ListDivider />
+        <li className="flex items-center justify-between ">
+          <p>ФИО сотрудника </p> <p>Сардор</p>
+        </li>
+
+        <ListDivider />
+        <li className="flex items-center justify-between ">
+          <p>Время начала</p> <p>2024.11.08 14:14</p>
+        </li>
+
+        <ListDivider />
+        <li className="flex items-center justify-between ">
+          <p>Время окончания</p> <p> 2024.11.08 21:00</p>
+        </li>
       </ul>
 
-      <div className="border-l py-3 pr-6 pl-6 w-full flex justify-center items-center">
-        <div
-          className={`inline-block p-3 rounded-[12px] ${machine.new_status.color}`}
-        >
-          <CircularProgress
-            strokeWidth={getFontSize({
-              count: 6,
-              percent: 6,
-              type: "machine",
-            })}
-            value={
-              Number(machine.fakt_percentage) > 100
-                ? 100
-                : Number(machine.fakt_percentage)
-            }
-            maxValue={100}
-            size={getFontSize({
-              count: 3,
-              percent: 80,
-              type: "machine",
-            })}
+      <div className="border-l py-3 pr-6 pl-6 w-full flex items-center flex-col">
+        <div className="w-full">
+          <ul className={`flex flex-col space-y-5 ${checked2 ? "mb-10" : ""}`}>
+            <li
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                padding: 0,
+              }}
+            >
+              <p className="mr-1">Машина</p>
+              <Switch
+                checked={checked1}
+                startDecorator={checked1 ? "Вкл" : "Отк"}
+                onChange={(event) => setChecked1(event.target.checked)}
+              />
+            </li>
+            <li
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                padding: 0,
+              }}
+            >
+              <p className="mr-1">Состояние машины</p>
+              <Switch
+                checked={checked2}
+                startDecorator={checked2 ? "Работает" : "Сломан"}
+                onChange={(event) => setChecked2(event.target.checked)}
+              />
+            </li>
+          </ul>
+        </div>
+        {checked2 ? (
+          <div
+            className={`flex flex-col items-center w-[300px] p-3 font-semibold mt-8 rounded-[12px] ${machine.new_status.color}`}
           >
-            <div
-              className="flex flex-col items-center justify-center"
+            <p
+              className="text-center w-full"
               style={{
                 fontSize: getFontSize({
+                  count: 6,
+                  percent: height > 1200 ? 24 : 20,
                   type: "machine",
-                  count: 1,
-                  percent: 2,
                 }),
               }}
             >
-              <p>{machine.fkol_knit}</p>
-              <Divider
-                orientation="horizontal"
-                sx={{
-                  height: 2,
-                  backgroundColor: "gray",
-                  opacity: 0.5,
+              {machine.machine_number}
+            </p>
+            <CircularProgress
+              strokeWidth={getFontSize({
+                count: 6,
+                percent: 6,
+                type: "machine",
+              })}
+              value={
+                Number(machine.plan_fact) > 100
+                  ? 100
+                  : Number(machine.plan_fact)
+              }
+              maxValue={100}
+              size={getFontSize({
+                count: 6,
+                percent: 100,
+                type: "machine",
+              })}
+            >
+              <div
+                className="flex flex-col"
+                style={{
+                  fontSize: getFontSize({
+                    type: "machine",
+                    count: 6,
+                    percent: 15,
+                  }),
                 }}
-                style={{ background: "black" }}
-              />
-              <p>{machine.pkol_knit + " Kg"}</p>
+              >
+                <p>{machine.plan}</p>
+                <Divider
+                  orientation="horizontal"
+                  sx={{
+                    height: 2,
+                    backgroundColor: "gray",
+                    opacity: 0.5,
+                  }}
+                  style={{ background: "black" }}
+                />
+                <p>{machine.plan_fact}</p>
+                <p>{machine.plan_fact}</p>
+              </div>
+            </CircularProgress>
+            <div className="flex justify-between items-end w-full">
+              <p></p>
+              <p
+                style={{
+                  fontSize: getFontSize({
+                    count: 6,
+                    percent: 10,
+                    type: "machine",
+                  }),
+                }}
+              >
+                <Bolt
+                  style={{
+                    fontSize: getFontSize({
+                      count: 6,
+                      percent: 12,
+                      type: "machine",
+                    }),
+                  }}
+                />
+                {machine.efficiency + "%"}
+              </p>
             </div>
-          </CircularProgress>
-        </div>
+          </div>
+        ) : (
+          <div className="w-full h-full border-t border-[var(--border)] pt-2 mt-3">
+            <h3 className="mb-5">Причина поломки</h3>
+            <ModalBtn
+              checkedReason={checkedReason}
+              setCheckedReason={setCheckedReason}
+            />
+            <p className="mb-2 text-[var(--gray)] mt-3">
+              Введите причину поломки
+            </p>
+            <textarea
+              value={descriptionText}
+              className="p-3 bg-transparent border border-[var(--border)] outline-none focus:border-[var(--primary)] rounded-[8px] w-full"
+              rows={window.screen.height < 800 ? 1 : 5}
+              onChange={(e: any) => setDescriptionText(e.target.value)}
+            ></textarea>
+
+            {alertInfo.title && (
+              <div className="bg-[#fdeded] rounded-lg mt-5">
+                <Alert severity={alertInfo?.type}>
+                  <p
+                    className="text-xl font-medium"
+                    dangerouslySetInnerHTML={{ __html: alertInfo.title }}
+                  ></p>
+                </Alert>
+              </div>
+            )}
+
+            <Stack
+              spacing={1}
+              direction={"row"}
+              justifyContent={"space-between"}
+              sx={{ width: "100%" }}
+              mt={2}
+            >
+              <Button
+                onClick={() => {
+                  // setOpen(false);
+                  createStatus();
+                }}
+                fullWidth
+              >
+                Отправить
+              </Button>
+              <Button onClick={() => {}} fullWidth variant="outlined">
+                Отменить
+              </Button>
+            </Stack>
+          </div>
+        )}
       </div>
     </div>
   );

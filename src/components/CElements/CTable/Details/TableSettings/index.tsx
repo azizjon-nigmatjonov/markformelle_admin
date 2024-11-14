@@ -4,8 +4,9 @@ import { MenuItem } from "./MenuItems";
 import { DeleteElements } from "./Delete";
 import { tableStoreActions } from "../../../../../store/table";
 import { useDispatch } from "react-redux";
-import { LinearSortIcon } from "../../../../UI/IconGenerator/Svg";
-
+import { IconButton } from "@mui/material";
+import { ListDotIcon } from "../../../../UI/IconGenerator/Svg/Machines";
+import EditIcon from "@mui/icons-material/Edit";
 const SettingDropdown = ({
   menuList = [],
   handleFilterSave,
@@ -15,7 +16,7 @@ const SettingDropdown = ({
   handleFilterSave: (val: any) => void;
 }) => {
   return (
-    <div className="absolute right-0 top-[25px] bg-white border border-[var(--gray20)] common-shadow rounded-[12px] z-[92] min-w-[150px] whitespace-nowrap px-2 py-2">
+    <div className="absolute right-4 top-[25px] bg-white border border-[var(--gray20)] common-shadow rounded-[12px] z-[92] min-w-[150px] whitespace-nowrap px-2 py-2">
       <ul className="grid gap-y-5 max-h-[400px] overflow-y-scroll remove-scroll designed-scroll">
         {menuList.map((item: {}, index: number) => (
           <MenuItem
@@ -107,23 +108,32 @@ export const HeaderSettings = ({
   }, [headColumns, pageColumns]);
 
   return (
-    <div className="pb-[30px]">
-      <div className="h-[30px] absolute w-full left-0 top-0 flex items-center px-1 desktop:px-3 justify-between">
+    <div className="pb-[40px]">
+      <div className="h-[40px] absolute w-full left-0 top-0 flex items-center px-1 desktop:px-3 justify-between">
         <div>
           <h2 className="font-bold">
             Общий
             <span> {len}</span>
           </h2>
         </div>
-        <div className="flex items-center space-x-3 h-full">
+        <div className="flex items-center space-x-1 h-full pr-2">
+          <IconButton>
+            <div className="border border-[var(--border)] h-[30px] w-[30px] rounded-[8px] flex items-center justify-center">
+              <EditIcon style={{ color: "var(--gray)" }} />
+            </div>
+          </IconButton>
+
           <DeleteElements
             filterParams={filterParams}
             tableActions={tableActions}
           />
 
-          <button onClick={() => setOpen(true)} className="relative">
-            <LinearSortIcon />
-
+          <div onClick={() => setOpen(true)} className="relative">
+            <IconButton>
+              <div className="w-[30px] h-[30px] border border-[var(--border)] rounded-[8px] items-center justify-center flex">
+                <ListDotIcon />
+              </div>
+            </IconButton>
             {open && (
               <SettingDropdown
                 setOpen={setOpen}
@@ -131,7 +141,7 @@ export const HeaderSettings = ({
                 handleFilterSave={handleFilterSave}
               />
             )}
-          </button>
+          </div>
         </div>
         {open && <Closer handleClose={() => setOpen(false)} classes="z-[91]" />}
       </div>
