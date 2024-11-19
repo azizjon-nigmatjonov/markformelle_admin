@@ -10,7 +10,7 @@ export const OrderList = () => {
       style={{
         height: getFontSize({
           count: 1,
-          percent: window.screen.height > 1200 ? 88 : 53,
+          percent: window?.screen?.height > 1200 ? 88 : 53,
           type: "machine",
         }),
       }}

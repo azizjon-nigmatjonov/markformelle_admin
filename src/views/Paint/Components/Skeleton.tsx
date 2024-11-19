@@ -23,7 +23,7 @@ export const PaintSkeletons = ({ openHeader }: Props) => {
             count: 6,
             type: "machine",
             minus:
-              window.screen.width < 1000
+              window?.screen?.width < 1000
                 ? openHeader
                   ? 13.5
                   : 8.5
@@ -46,7 +46,7 @@ export const PaintListSkeleton = ({ openHeader }: Props) => {
           count: 1,
           type: "machine",
           minus:
-            window.screen.width < 980
+            window?.screen?.width < 980
               ? openHeader
                 ? 70
                 : 20
