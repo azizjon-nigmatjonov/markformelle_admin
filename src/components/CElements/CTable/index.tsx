@@ -341,6 +341,8 @@ const CTable = ({
   };
 
   const handleDrop = (index: any) => {
+    console.log("index", index);
+
     const newItems = [...items];
     const [movedItem] = newItems.splice(draggingIndex, 1);
     newItems.splice(index, 0, movedItem);
@@ -384,13 +386,14 @@ const CTable = ({
         {tableSetting ? (
           <HeaderSettings
             totalCount={meta.totalCount}
-            len={newBodyColumns?.length}
             filterParams={filterParams}
             tableActions={tableActions}
             pageName={pageName}
             headColumns={items}
             reOrder={reOrder}
             pageColumns={pageColumns}
+            bodyColumns={newBodyColumns}
+            allColumns={bodyColumns}
           />
         ) : (
           ""
@@ -455,13 +458,15 @@ const CTable = ({
                       <div
                         draggable={reOrder}
                         onDragStart={() => handleDragStart(index)}
-                        onDragOver={(e) => e.preventDefault()}
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                        }}
                         onDrop={() => handleDrop(index)}
-                        className={`w-full flex items-center py-2 px-1 flex-nowrap ${
+                        className={`w-full flex items-center py-2 px-1 flex-nowrap hover:border-r ${
                           column?.id === "index"
                             ? "justify-center"
                             : "justify-between"
-                        }`}
+                        } ${draggingIndex === index ? "drag-and-drop" : ""}`}
                         style={{
                           color:
                             draggingIndex === index ? "var(--primary)" : "",

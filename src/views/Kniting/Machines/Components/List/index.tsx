@@ -14,7 +14,11 @@ interface Props {
 export const MachinesList = ({ list = [] }: Props) => {
   const { t } = useTranslation();
   const [headColumns, setHeadColumns]: any = useState([]);
-  const [filterParams, setFilterParams] = useState({ page: 1, perPage: 10 });
+  const [filterParams, setFilterParams] = useState({
+    page: 1,
+    perPage: 10,
+    title: "Вязальные машины",
+  });
   const bodyColumns = useMemo(() => {
     if (!list?.length) return [];
     const arr: any = [];

@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { Closer } from "../../../../UI/Closer";
 import { MenuItem } from "./MenuItems";
-import { DeleteElements } from "./Delete";
+// import { DeleteElements } from "./Delete";
 import { tableStoreActions } from "../../../../../store/table";
 import { useDispatch } from "react-redux";
 import { IconButton } from "@mui/material";
 import { ListDotIcon } from "../../../../UI/IconGenerator/Svg/Machines";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
+import ExcelDownload from "../../../../../hooks/useExcelDownload";
 const SettingDropdown = ({
   menuList = [],
   handleFilterSave,
@@ -18,7 +19,7 @@ const SettingDropdown = ({
 }) => {
   return (
     <div className="absolute right-4 top-[33px] bg-white border border-[var(--gray20)] card-shadow rounded-[12px] z-[92] min-w-[150px] whitespace-nowrap px-2 py-2">
-      <ul className="grid gap-y-5 max-h-[400px] overflow-y-scroll remove-scroll designed-scroll">
+      <ul className="grid gap-y-5 max-h-[400px] overflow-y-scroll designed-scroll">
         {menuList.map((item: {}, index: number) => (
           <MenuItem
             key={index}
@@ -32,21 +33,23 @@ const SettingDropdown = ({
 };
 
 export const HeaderSettings = ({
-  len = 0,
   filterParams,
   tableActions,
   pageName,
   reOrder,
+  bodyColumns = [],
   pageColumns = [],
   headColumns = [],
+  allColumns = [],
 }: {
   filterParams: any;
   totalCount: number | undefined;
-  len: number;
   pageName: string;
   headColumns: any;
   pageColumns: any;
   reOrder: boolean;
+  bodyColumns: any;
+  allColumns: any;
   tableActions: (el: any, status: string) => void;
 }) => {
   const [open, setOpen] = useState(false);
@@ -109,16 +112,59 @@ export const HeaderSettings = ({
     ];
   }, [headColumns, pageColumns]);
 
+  const ExcelData = useMemo(() => {
+    const keyOrder: any = headColumns?.map((item: any) => item.id) ?? [];
+    const arrayOfObjects: any = bodyColumns ?? [];
+
+    const reorderObjects = (objects: any, order: any) => {
+      if (!objects || !Array.isArray(objects)) {
+        return [];
+      }
+
+      if (!order || !Array.isArray(order)) {
+        return objects;
+      }
+
+      const arr = objects.map((obj: any) => {
+        const reorderedObj: any = {};
+        order.forEach((key: any) => {
+          if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            reorderedObj[key] = obj[key];
+          }
+        });
+
+        Object.keys(obj).forEach((key) => {
+          if (!Object.prototype.hasOwnProperty.call(reorderedObj, key)) {
+            reorderedObj[key] = obj[key];
+          }
+        });
+
+        return reorderedObj;
+      });
+
+      return arr;
+    };
+
+    // Reordered Array
+    const reorderedArray = reorderObjects(arrayOfObjects, keyOrder);
+    return reorderedArray;
+  }, [headColumns, bodyColumns]);
+
   return (
     <div className="pb-[40px]">
       <div className="h-[40px] absolute w-full left-0 top-0 flex items-center px-1 desktop:px-3 justify-between">
         <div>
           <h2 className="font-bold">
             Общий
-            <span> {len}</span>
+            <span> {bodyColumns?.length}</span>
           </h2>
         </div>
-        <div className="flex items-center space-x-1 h-full pr-2">
+        <div className="flex items-center space-x-2 h-full pr-2">
+          <ExcelDownload
+            title={filterParams?.title}
+            data={ExcelData}
+            allColumns={allColumns}
+          />
           <IconButton onClick={() => tableActions({}, "reorder")}>
             <div
               className={`border h-[30px] w-[30px] rounded-[8px] flex items-center justify-center ${
@@ -137,10 +183,10 @@ export const HeaderSettings = ({
             </div>
           </IconButton>
 
-          <DeleteElements
+          {/* <DeleteElements
             filterParams={filterParams}
             tableActions={tableActions}
-          />
+          /> */}
 
           <div onClick={() => setOpen(true)} className="relative">
             <IconButton>

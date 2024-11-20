@@ -233,3 +233,17 @@ thead {
 .MuiPaper-root {
   background-color: transparent !important;
 }
+
+.drag-and-drop {
+  background-color: var(--border);
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+    left: 0;
+    top: 35px;
+    background-color: var(--border);
+  }
+}
