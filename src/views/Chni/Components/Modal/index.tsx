@@ -38,16 +38,16 @@ export const ChniCardModal = ({ element, open = false }: Props) => {
     <ModalDialog
       sx={{
         width:
-          window.screen.height > 600 && window.screen.height < 800
+          window?.screen?.height > 600 && window?.screen?.height < 800
             ? "70vw"
             : window?.screen?.width < 1440
             ? (90 / 100) * window?.screen?.width
-            : window.screen.height > 1200
+            : window?.screen?.height > 1200
             ? (60 / 100) * window?.screen?.width
             : 1200,
         minHeight: getFontSize({
           count: 1,
-          percent: window.screen.height > 1200 ? 100 : 60,
+          percent: window?.screen?.height > 1200 ? 100 : 60,
           type: "machine",
         }),
       }}

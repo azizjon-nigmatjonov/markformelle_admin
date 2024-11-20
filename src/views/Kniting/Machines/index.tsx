@@ -32,6 +32,14 @@ const KnittingMachines = () => {
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const listType = useSelector((state: any) => state.sidebar.listType);
   const { getHeight } = useDeviceHeight();
+  const [widthWindow, setWidthWindow] = useState(0);
+  const [heightWindow, setHeightWindow] = useState(0);
+
+  useEffect(() => {
+    setHeightWindow(window?.screen?.height);
+    setWidthWindow(window?.screen?.width);
+  }, [list]);
+
   useEffect(() => {
     const refetching = setInterval(() => {
       refetch();
@@ -163,8 +171,8 @@ const KnittingMachines = () => {
   }, [active]);
 
   const calculateZoom = () => {
-    const screenWidth = window.screen.width;
-    const screenHeight = window.screen.height;
+    const screenWidth = widthWindow;
+    const screenHeight = heightWindow;
 
     const widthScale = screenWidth / dimensions.width;
     const heightScale = screenHeight / dimensions.height;
@@ -256,14 +264,11 @@ const KnittingMachines = () => {
             <div
               className={`grid-machines-dashboard grid w-[1600px] ipod:overflow-unset ipod:w-full grid-cols-11 gap-[3px] small_desktop:gap-1.5`}
               style={{
-                minWidth:
-                  window?.screen?.width < 940
-                    ? "1600px"
-                    : window?.screen?.width - 200,
+                minWidth: widthWindow < 940 ? "1600px" : widthWindow - 200,
                 minHeight:
                   checked.length && !checked.includes("all")
                     ? "auto"
-                    : window.screen.height - (openHeader ? 250 : 150),
+                    : heightWindow - (openHeader ? 250 : 150),
               }}
             >
               {list.map((machine: any, index: number) =>
@@ -276,11 +281,11 @@ const KnittingMachines = () => {
                         count: 7,
                         type: "machine",
                         minus:
-                          window.screen.height < 600
+                          heightWindow < 600
                             ? openHeader
                               ? 11.5
                               : 6
-                            : window.screen.height < 740
+                            : heightWindow < 740
                             ? openHeader
                               ? 30.5
                               : 25.5

@@ -15,7 +15,7 @@ export const ProcessSkeleton = ({ openHeader }: Props) => {
             count: 1,
             type: "machine",
             minus:
-              window.screen.width < 980
+              window?.screen?.width < 980
                 ? openHeader
                   ? 80
                   : 30
@@ -31,7 +31,7 @@ export const ProcessSkeleton = ({ openHeader }: Props) => {
             count: 1,
             type: "machine",
             minus:
-              window.screen.width < 980
+              window?.screen?.width < 980
                 ? openHeader
                   ? 80
                   : 30

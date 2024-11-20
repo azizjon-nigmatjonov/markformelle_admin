@@ -6,7 +6,7 @@ interface Props {
 }
 
 const useDeviceHeight = () => {
-  const height = window.screen.height;
+  const height = window?.screen?.height;
 
   const getHeight: any = ({ type = "", count = 0, minus = 0 }: Props) => {
     switch (type) {

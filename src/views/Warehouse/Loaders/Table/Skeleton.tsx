@@ -15,7 +15,7 @@ export const WarehouseSkeleton = ({ openHeader }: Props) => {
             count: 1,
             type: "machine",
             minus:
-              window.screen.width < 1000
+              window?.screen?.width < 1000
                 ? openHeader
                   ? 55
                   : 15
@@ -29,7 +29,7 @@ export const WarehouseSkeleton = ({ openHeader }: Props) => {
             count: 1,
             type: "machine",
             minus:
-              window.screen.width < 980
+              window?.screen?.width < 980
                 ? openHeader
                   ? 75
                   : 25
@@ -43,7 +43,7 @@ export const WarehouseSkeleton = ({ openHeader }: Props) => {
             count: 1,
             type: "machine",
             minus:
-              window.screen.width < 980
+              window?.screen?.width < 980
                 ? openHeader
                   ? 75
                   : 25
@@ -59,7 +59,7 @@ export const WarehouseSkeleton = ({ openHeader }: Props) => {
             count: 2,
             type: "machine",
             minus:
-              window.screen.width < 1000
+              window?.screen?.width < 1000
                 ? openHeader
                   ? 30
                   : 14
@@ -73,7 +73,7 @@ export const WarehouseSkeleton = ({ openHeader }: Props) => {
             count: 2,
             type: "machine",
             minus:
-              window.screen.width < 1000
+              window?.screen?.width < 1000
                 ? openHeader
                   ? 30
                   : 14

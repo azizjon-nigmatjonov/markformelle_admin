@@ -372,7 +372,7 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
                   </p>
                   <textarea
                     className="p-3 bg-transparent border border-[var(--border)] outline-none focus:border-[var(--primary)] rounded-[8px] w-full"
-                    rows={window.screen.height < 800 ? 1 : 5}
+                    rows={window?.screen?.height < 800 ? 1 : 5}
                     onChange={(e: any) => setDescriptionText(e.target.value)}
                   ></textarea>
 

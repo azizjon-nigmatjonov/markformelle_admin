@@ -62,9 +62,9 @@ export const MyCard = ({ machine, refetch }: Props) => {
         }`}
         style={{
           zoom:
-            window.screen.width < 940
+            window?.screen?.width < 940
               ? 0.8
-              : window.screen.width > 1920
+              : window?.screen?.width > 1920
               ? 1
               : 0.6,
         }}

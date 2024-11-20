@@ -32,7 +32,7 @@ const CCard = ({
         count: half ? 2 : 1,
         type: "machine",
         minus:
-          window.screen.width < 1000
+          window?.screen?.width < 1000
             ? openHeader
               ? 30
               : 11
@@ -45,7 +45,7 @@ const CCard = ({
         count: 1,
         type: "machine",
         minus:
-          window.screen.width < 1000
+          window?.screen?.width < 1000
             ? openHeader
               ? 50
               : 18

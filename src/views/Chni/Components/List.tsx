@@ -19,7 +19,7 @@ export const ChniList = ({ list = [] }: Props) => {
         //   count: 1,
         //   type: "machine",
         //   minus:
-        //     window.screen.width < 1000
+        //     window?.screen?.width < 1000
         //       ? openHeader
         //         ? 50
         //         : 18
