@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { IconButton } from "@mui/material";
 import { ListDotIcon } from "../../../../UI/IconGenerator/Svg/Machines";
 import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
 const SettingDropdown = ({
   menuList = [],
   handleFilterSave,
@@ -16,7 +17,7 @@ const SettingDropdown = ({
   handleFilterSave: (val: any) => void;
 }) => {
   return (
-    <div className="absolute right-4 top-[25px] bg-white border border-[var(--gray20)] common-shadow rounded-[12px] z-[92] min-w-[150px] whitespace-nowrap px-2 py-2">
+    <div className="absolute right-4 top-[33px] bg-white border border-[var(--gray20)] card-shadow rounded-[12px] z-[92] min-w-[150px] whitespace-nowrap px-2 py-2">
       <ul className="grid gap-y-5 max-h-[400px] overflow-y-scroll remove-scroll designed-scroll">
         {menuList.map((item: {}, index: number) => (
           <MenuItem
@@ -31,11 +32,11 @@ const SettingDropdown = ({
 };
 
 export const HeaderSettings = ({
-  // totalCount,
   len = 0,
   filterParams,
   tableActions,
   pageName,
+  reOrder,
   pageColumns = [],
   headColumns = [],
 }: {
@@ -45,6 +46,7 @@ export const HeaderSettings = ({
   pageName: string;
   headColumns: any;
   pageColumns: any;
+  reOrder: boolean;
   tableActions: (el: any, status: string) => void;
 }) => {
   const [open, setOpen] = useState(false);
@@ -117,9 +119,21 @@ export const HeaderSettings = ({
           </h2>
         </div>
         <div className="flex items-center space-x-1 h-full pr-2">
-          <IconButton>
-            <div className="border border-[var(--border)] h-[30px] w-[30px] rounded-[8px] flex items-center justify-center">
-              <EditIcon style={{ color: "var(--gray)" }} />
+          <IconButton onClick={() => tableActions({}, "reorder")}>
+            <div
+              className={`border h-[30px] w-[30px] rounded-[8px] flex items-center justify-center ${
+                reOrder ? "border-[var(--primary)]" : "border-[var(--border)]"
+              }`}
+            >
+              {reOrder ? (
+                <SaveIcon style={{ color: "var(--primary)" }} />
+              ) : (
+                <EditIcon
+                  style={{
+                    color: "var(--gray)",
+                  }}
+                />
+              )}
             </div>
           </IconButton>
 
@@ -130,8 +144,12 @@ export const HeaderSettings = ({
 
           <div onClick={() => setOpen(true)} className="relative">
             <IconButton>
-              <div className="w-[30px] h-[30px] border border-[var(--border)] rounded-[8px] items-center justify-center flex">
-                <ListDotIcon />
+              <div
+                className={`w-[30px] h-[30px] border rounded-[8px] items-center justify-center flex ${
+                  open ? "border-[var(--primary)]" : "border-[var(--border)]"
+                }`}
+              >
+                <ListDotIcon fill={open ? "var(--primary)" : "var(--gray)"} />
               </div>
             </IconButton>
             {open && (

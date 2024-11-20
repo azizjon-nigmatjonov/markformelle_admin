@@ -5,12 +5,14 @@ import { useState } from "react";
 interface Props {
   type: string;
   colId?: any;
+  sortId?: any;
   handleSortLogic: (val: any) => void;
 }
 export const TableSort = ({
   type = "",
   handleSortLogic = () => {},
   colId,
+  sortId,
 }: Props) => {
   const [value, setValue] = useState("up");
   const handleClick = (val: string) => {
@@ -18,19 +20,27 @@ export const TableSort = ({
   };
 
   return (
-    <>
-      <button
-        onClick={() => {
-          handleSortLogic({ type, id: colId, value });
-          handleClick(value === "up" ? "down" : "up");
-        }}
-      >
-        {value === "down" ? (
-          <ArrowDownwardIcon style={{ fontSize: 16 }} />
-        ) : (
-          <ArrowUpwardIcon style={{ fontSize: 16 }} />
-        )}
-      </button>
-    </>
+    <button
+      onClick={() => {
+        handleSortLogic({ type, id: colId, value });
+        handleClick(value === "up" ? "down" : "up");
+      }}
+    >
+      {value === "down" ? (
+        <ArrowDownwardIcon
+          style={{
+            fontSize: 16,
+            color: sortId === colId ? "var(--primary)" : "var(--gray)",
+          }}
+        />
+      ) : (
+        <ArrowUpwardIcon
+          style={{
+            fontSize: 16,
+            color: sortId === colId ? "var(--primary)" : "var(--gray)",
+          }}
+        />
+      )}
+    </button>
   );
 };

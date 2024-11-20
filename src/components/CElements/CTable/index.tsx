@@ -22,6 +22,8 @@ import { usePermissions } from "../../../hooks/usePermissions";
 import CPagination from "./Details/Pagination";
 import { TableSettingsData } from "./Logic";
 import { TableSort } from "./Details/Sort";
+import { tableStoreActions } from "../../../store/table";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 // import { TableData } from "./Logic";
 // import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 // import CustomScrollbar from "./ScrollComponent";
@@ -83,33 +85,10 @@ const CTable = ({
     handleFilterParams,
   });
   const storedColumns = useSelector((state: any) => state.table.columns);
+  const order = useSelector((state: any) => state.table.order);
   const [active, setActive] = useState(false);
   const [newBodyColumns, setNewBodyColumns] = useState([]);
   const [sortData, setSortData]: any = useState({});
-
-  useEffect(() => {
-    const arr = [...bodyColumns];
-    let result: any = [];
-    const { type, value, id }: any = { ...sortData };
-    if (type === "number" && id) {
-      if (value === "up") {
-        result = arr?.sort(
-          (a: any, b: any) =>
-            parseInt(b[id].replace(/\D/g, "")) -
-            parseInt(a[id].replace(/\D/g, ""))
-        );
-      } else {
-        result = arr?.sort(
-          (a: any, b: any) =>
-            parseInt(a[id].replace(/\D/g, "")) -
-            parseInt(b[id].replace(/\D/g, ""))
-        );
-      }
-
-      setNewBodyColumns(result);
-    }
-    setNewBodyColumns(result.length ? result : arr);
-  }, [bodyColumns, sortData?.value]);
 
   const pageName: any = useMemo(() => {
     const strLen =
@@ -123,22 +102,44 @@ const CTable = ({
   }, [location, idForTable]);
 
   const pageColumns = storedColumns[pageName];
+  const pageOrder = order[pageName];
 
-  const newHeadColumns: any = useMemo(() => {
-    if (!tableSetting) return headColumns;
-    const data: any = [];
-    const arr = pageColumns ?? [];
+  useEffect(() => {
+    const arr = [...bodyColumns];
+    let result: any = [];
+    const { value, id }: any = { ...sortData };
 
-    headColumns?.forEach((el: { id: string }) => {
-      let id: any = el.id;
-      if (id?.[0] && typeof id === "object") {
-        id = id.join("");
-      }
-      if (arr.includes(id)) data.push(el);
-    });
+    if (value === "up") {
+      result = arr?.sort((a: any, b: any) => {
+        const aVal = a[id] + "";
+        const bVal = b[id] + "";
 
-    return data;
-  }, [pageColumns, headColumns, pageName, tableSetting]);
+        if (isNaN(parseFloat(a[id]))) {
+          return bVal.localeCompare(aVal);
+        }
+
+        return (
+          parseInt(bVal.replace(/\D/g, "")) - parseInt(aVal.replace(/\D/g, ""))
+        );
+      });
+    } else {
+      result = arr?.sort((a: any, b: any) => {
+        const aVal = a[id] + "";
+        const bVal = b[id] + "";
+
+        if (isNaN(parseFloat(a[id]))) {
+          return aVal.localeCompare(bVal);
+        }
+
+        return (
+          parseInt(aVal.replace(/\D/g, "")) - parseInt(bVal.replace(/\D/g, ""))
+        );
+      });
+
+      setNewBodyColumns(result);
+    }
+    setNewBodyColumns(result.length ? result : arr);
+  }, [bodyColumns, sortData?.value]);
 
   const bodySource = useMemo(() => {
     if (!newBodyColumns?.length) return [];
@@ -278,37 +279,14 @@ const CTable = ({
     }
   };
 
-  // const handleAutoSize = (colID, colIdx) => {
-  //   dispatch(
-  //     tableSizeAction.setTableSize({ pageName, colID, colWidth: "auto" })
-  //   );
-  //   const element = document.getElementById(colID);
-  //   element.style.width = "auto";
-  //   element.style.minWidth = "auto";
-  //   dispatch(
-  //     tableSizeAction.setTableSettings({
-  //       pageName,
-  //       colID,
-  //       colWidth: element.offsetWidth,
-  //       isStiky: "ineffective",
-  //       colIdx,
-  //     })
-  //   );
-  // };
-
   const handleGetHeightFn = () => {
     if (autoHeight) {
-      // setTableHeight(0);
       return;
     }
     let res = 0;
     bodySource?.forEach((item: any) => {
       if (item?.ref) res = res + item.ref.offsetHeight;
     });
-
-    // const currentHeight = res + headColHeight + 2;
-    // if (currentHeight && currentHeight > 400) setTableHeight(currentHeight);
-    // else setTableHeight(500);
   };
 
   const handleBodycolRef = (item: any, e: any) => {
@@ -320,7 +298,72 @@ const CTable = ({
     }
   };
 
+  const handleSortLogic = ({ type, value, id }: any) => {
+    setSortData({ type, value, id });
+  };
+
+  const [items, setItems]: any = useState([]);
+
+  useEffect(() => {
+    if (pageOrder?.length) {
+      const arr: any = [];
+      pageOrder.forEach((element: any) => {
+        arr.push(
+          headColumns?.find((item: { id: string }) => item.id === element) ?? {}
+        );
+      });
+      setItems(arr);
+    } else {
+      setItems(headColumns);
+    }
+  }, [headColumns, pageOrder]);
+
+  const newHeadColumns: any = useMemo(() => {
+    if (!tableSetting) return items;
+    const data: any = [];
+    const arr = pageColumns ?? [];
+
+    items?.forEach((el: { id: string }) => {
+      let id: any = el.id;
+      if (id?.[0] && typeof id === "object") {
+        id = id.join("");
+      }
+      if (arr.includes(id)) data.push(el);
+    });
+
+    return data;
+  }, [pageColumns, pageName, tableSetting, items]);
+
+  const [draggingIndex, setDraggingIndex]: any = useState(null);
+
+  const handleDragStart = (index: any) => {
+    setDraggingIndex(index);
+  };
+
+  const handleDrop = (index: any) => {
+    const newItems = [...items];
+    const [movedItem] = newItems.splice(draggingIndex, 1);
+    newItems.splice(index, 0, movedItem);
+
+    setItems(newItems);
+    setDraggingIndex(null);
+  };
+  const [reOrder, setReorder] = useState(false);
+
   const tableActions = (el: any, status: string) => {
+    if (status === "reorder") {
+      if (reOrder) {
+        dispatch(
+          tableStoreActions.setOrder({
+            pageName,
+            payload: items.map((item: any) => item.id),
+          })
+        );
+      }
+
+      setReorder((prev) => !prev);
+      return;
+    }
     if (status === "delete_by") {
       setCurrDelete(el);
       return;
@@ -335,10 +378,6 @@ const CTable = ({
     handleActions(el, status);
   };
 
-  const handleSortLogic = ({ type, value, id }: any) => {
-    setSortData({ type, value, id });
-  };
-
   return (
     <div className="relative h-full">
       <div className="border border-[var(--border)] designed-scroll rounded-[12px] h-full overflow-scroll">
@@ -349,7 +388,8 @@ const CTable = ({
             filterParams={filterParams}
             tableActions={tableActions}
             pageName={pageName}
-            headColumns={headColumns}
+            headColumns={items}
+            reOrder={reOrder}
             pageColumns={pageColumns}
           />
         ) : (
@@ -412,15 +452,34 @@ const CTable = ({
                           : "",
                       }}
                     >
-                      <div className="w-full flex items-center justify-between py-2 px-1 flex-nowrap">
+                      <div
+                        draggable={reOrder}
+                        onDragStart={() => handleDragStart(index)}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={() => handleDrop(index)}
+                        className={`w-full flex items-center py-2 px-1 flex-nowrap ${
+                          column?.id === "index"
+                            ? "justify-center"
+                            : "justify-between"
+                        }`}
+                        style={{
+                          color:
+                            draggingIndex === index ? "var(--primary)" : "",
+                        }}
+                      >
+                        {column?.id !== "index" && (
+                          <div className="w-[20px]"></div>
+                        )}
                         <div
-                          className={`uppercase ${
-                            column?.filter ? "" : "w-full"
-                          }`}
+                          className={`uppercase`}
                           style={{
                             textAlign:
                               column?.textAlign ||
                               (!column?.filter && "center"),
+                            color:
+                              sortData?.id === column?.id && !reOrder
+                                ? "var(--primary)"
+                                : "",
                           }}
                         >
                           {column.renderHead
@@ -435,16 +494,27 @@ const CTable = ({
                             ? "№"
                             : t(column.title)}
                         </div>
-                        {column?.filter ? (
-                          <div className="ml-2">
-                            <TableSort
-                              type={column.filter}
-                              handleSortLogic={handleSortLogic}
-                              colId={column.id}
-                            />
+                        {column?.id !== "index" && (
+                          <div className="w-[20px]">
+                            {!reOrder ? (
+                              <TableSort
+                                type={column.filter}
+                                handleSortLogic={handleSortLogic}
+                                colId={column.id}
+                                sortId={sortData?.id}
+                              />
+                            ) : (
+                              <DragIndicatorIcon
+                                style={{
+                                  color:
+                                    draggingIndex === index
+                                      ? "var(--primary)"
+                                      : "var(--gray)",
+                                  marginRight: 5,
+                                }}
+                              />
+                            )}
                           </div>
-                        ) : (
-                          ""
                         )}
                       </div>
                     </CTableHeadCell>
