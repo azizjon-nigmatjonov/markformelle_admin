@@ -24,6 +24,7 @@ import { TableSettingsData } from "./Logic";
 import { TableSort } from "./Details/Sort";
 import { tableStoreActions } from "../../../store/table";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import useDebounce from "../../../hooks/useDebounce";
 // import { TableData } from "./Logic";
 // import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 // import CustomScrollbar from "./ScrollComponent";
@@ -89,7 +90,9 @@ const CTable = ({
   const [active, setActive] = useState(false);
   const [newBodyColumns, setNewBodyColumns] = useState([]);
   const [sortData, setSortData]: any = useState({});
-
+  const [reOrder, setReorder] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [draggingIndex, setDraggingIndex]: any = useState(null);
   const pageName: any = useMemo(() => {
     const strLen =
       location.pathname.split("/")[2].length +
@@ -107,7 +110,21 @@ const CTable = ({
   useEffect(() => {
     const arr = [...bodyColumns];
     let result: any = [];
-    const { value, id }: any = { ...sortData };
+    const { value, id, search }: any = { ...sortData };
+
+    if (value === "search") {
+      arr.forEach((obj: any) => {
+        const val = obj[id] + "";
+
+        if (val.includes(search)) {
+          result.push(obj);
+        } else {
+        }
+      });
+      setNewBodyColumns(result);
+
+      return;
+    }
 
     if (value === "up") {
       result = arr?.sort((a: any, b: any) => {
@@ -122,7 +139,7 @@ const CTable = ({
           parseInt(bVal.replace(/\D/g, "")) - parseInt(aVal.replace(/\D/g, ""))
         );
       });
-    } else {
+    } else if (value === "down") {
       result = arr?.sort((a: any, b: any) => {
         const aVal = a[id] + "";
         const bVal = b[id] + "";
@@ -135,11 +152,9 @@ const CTable = ({
           parseInt(aVal.replace(/\D/g, "")) - parseInt(bVal.replace(/\D/g, ""))
         );
       });
-
-      setNewBodyColumns(result);
     }
     setNewBodyColumns(result.length ? result : arr);
-  }, [bodyColumns, sortData?.value]);
+  }, [bodyColumns, sortData?.value, sortData?.search]);
 
   const bodySource = useMemo(() => {
     if (!newBodyColumns?.length) return [];
@@ -298,8 +313,8 @@ const CTable = ({
     }
   };
 
-  const handleSortLogic = ({ type, value, id }: any) => {
-    setSortData({ type, value, id });
+  const handleSortLogic = ({ type, value, id, search }: any) => {
+    setSortData({ type, value, id, search });
   };
 
   const [items, setItems]: any = useState([]);
@@ -332,25 +347,32 @@ const CTable = ({
     });
 
     return data;
-  }, [pageColumns, pageName, tableSetting, items]);
-
-  const [draggingIndex, setDraggingIndex]: any = useState(null);
+  }, [pageColumns, pageName, tableSetting, items, draggingIndex]);
 
   const handleDragStart = (index: any) => {
     setDraggingIndex(index);
+    handleFilterParams({ ...filterParams, drag: true });
   };
 
   const handleDrop = (index: any) => {
-    console.log("index", index);
-
-    const newItems = [...items];
+    const newItems = newHeadColumns;
     const [movedItem] = newItems.splice(draggingIndex, 1);
     newItems.splice(index, 0, movedItem);
 
-    setItems(newItems);
-    setDraggingIndex(null);
+    setTimeout(() => {
+      setItems(newItems);
+      setDraggingIndex(null);
+      setHoveredIndex(null);
+    }, 0);
   };
-  const [reOrder, setReorder] = useState(false);
+
+  const handleDragOver = (index: number) => {
+    setHoveredIndex(index);
+  };
+
+  const handleDragLeave = () => {
+    setHoveredIndex(null);
+  };
 
   const tableActions = (el: any, status: string) => {
     if (status === "reorder") {
@@ -379,6 +401,14 @@ const CTable = ({
 
     handleActions(el, status);
   };
+
+  const searchDebounce = useDebounce((search: string, id: string) => {
+    handleSortLogic({
+      value: "search",
+      id: id,
+      search,
+    });
+  }, 500);
 
   return (
     <div className="relative h-full">
@@ -426,7 +456,6 @@ const CTable = ({
                         column?.innerId ? column.innerId : index || column.id
                       }
                       style={{
-                        padding: "10px 0px",
                         minWidth: tableSize?.[pageName]?.[column.id]
                           ? tableSize?.[pageName]?.[column.id]
                           : column?.width
@@ -460,13 +489,22 @@ const CTable = ({
                         onDragStart={() => handleDragStart(index)}
                         onDragOver={(e) => {
                           e.preventDefault();
+                          handleDragOver(index);
                         }}
+                        onDragLeave={handleDragLeave}
                         onDrop={() => handleDrop(index)}
-                        className={`w-full flex items-center py-2 px-1 flex-nowrap hover:border-r ${
+                        className={`w-full flex items-center min-h-[40px] flex-nowrap ${
                           column?.id === "index"
                             ? "justify-center"
                             : "justify-between"
-                        } ${draggingIndex === index ? "drag-and-drop" : ""}`}
+                        } ${draggingIndex === index ? "drag-and-drop" : ""} ${
+                          hoveredIndex === index && hoveredIndex > draggingIndex
+                            ? "drag-hovered right"
+                            : hoveredIndex === index &&
+                              hoveredIndex < draggingIndex
+                            ? "drag-hovered left"
+                            : ""
+                        }`}
                         style={{
                           color:
                             draggingIndex === index ? "var(--primary)" : "",
@@ -533,6 +571,37 @@ const CTable = ({
                 rowsCount={filterParams.perPage}
                 dataLength={bodySource?.length}
               >
+                <TableRow>
+                  {newHeadColumns.map((item: any, colIndex: number) => (
+                    <CTableCell
+                      key={colIndex + item.title}
+                      className="relative"
+                    >
+                      {colIndex !== 0 && (
+                        <div
+                          className={`w-full h-full  ${
+                            hoveredIndex === colIndex &&
+                            hoveredIndex > draggingIndex
+                              ? "drag-hovered right"
+                              : hoveredIndex === colIndex &&
+                                hoveredIndex < draggingIndex
+                              ? "drag-hovered left"
+                              : ""
+                          }`}
+                        >
+                          <input
+                            type="text"
+                            placeholder=""
+                            onChange={(e: any) =>
+                              searchDebounce(e.target.value, item.id)
+                            }
+                            className="w-full input-design h-full text-center"
+                          />
+                        </div>
+                      )}
+                    </CTableCell>
+                  ))}
+                </TableRow>
                 {bodySource?.length
                   ? bodySource?.map((item: any, rowIndex: any) => (
                       <TableRow
@@ -573,6 +642,15 @@ const CTable = ({
                               style={{
                                 textAlign: column?.textAlign || "center",
                               }}
+                              className={`w-full h-full  ${
+                                hoveredIndex === colIndex &&
+                                hoveredIndex > draggingIndex
+                                  ? "drag-hovered right"
+                                  : hoveredIndex === colIndex &&
+                                    hoveredIndex < draggingIndex
+                                  ? "drag-hovered left"
+                                  : ""
+                              }`}
                             >
                               {column.id !== "actions" && !item.empty ? (
                                 <div
@@ -621,7 +699,6 @@ const CTable = ({
                               ) : (
                                 ""
                               )}
-
                               {column.id === "actions" && !item.empty ? (
                                 <div className="relative">
                                   {column?.actions?.length <= 2 ? (

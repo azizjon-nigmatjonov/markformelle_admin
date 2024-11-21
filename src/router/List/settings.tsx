@@ -14,6 +14,15 @@ export const settingList = [
   },
   {
     parent: "settings",
+    link: "language",
+    sidebar: true,
+    title: "Языковые настройки",
+    icon: "globus",
+    element: <WebsiteSettings />,
+    auth: true,
+  },
+  {
+    parent: "settings",
     link: "profile",
     sidebar: false,
     title: "Profile page",

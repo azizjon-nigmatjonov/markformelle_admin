@@ -34,6 +34,11 @@ const KnittingMachines = () => {
   const { getHeight } = useDeviceHeight();
   const [widthWindow, setWidthWindow] = useState(0);
   const [heightWindow, setHeightWindow] = useState(0);
+  const [filterParams, setFilterParams] = useState({
+    page: 1,
+    perPage: 10,
+    title: "Вязальные машины",
+  });
 
   useEffect(() => {
     setHeightWindow(window?.screen?.height);
@@ -45,10 +50,14 @@ const KnittingMachines = () => {
       refetch();
     }, 20000);
 
+    if (filterParams) {
+      clearInterval(refetching);
+    }
+
     return () => {
       clearInterval(refetching);
     };
-  }, []);
+  }, [filterParams]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -311,7 +320,13 @@ const KnittingMachines = () => {
           )}
         </div>
       ) : (
-        !loading && <MachinesList list={list} />
+        !loading && (
+          <MachinesList
+            list={list}
+            filterParams={filterParams}
+            setFilterParams={setFilterParams}
+          />
+        )
       )}
     </>
   );

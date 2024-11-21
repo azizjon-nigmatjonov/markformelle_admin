@@ -12,6 +12,7 @@ import {
   ListIconSidebar,
   CouriersIcon,
 } from "./Svg/Sidebar";
+import LanguageIcon from "@mui/icons-material/Language";
 
 export const iconsList = [
   {
@@ -25,6 +26,10 @@ export const iconsList = [
   {
     name: "machines",
     component: knittingIcon,
+  },
+  {
+    name: "globus",
+    component: LanguageIcon,
   },
   {
     name: "knitting",

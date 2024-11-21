@@ -21,7 +21,7 @@ const ExcelDownload = ({
   const [open, setOpen] = useState(false);
 
   const downloadExcel = (type: string) => {
-    let arr = data;
+    let arr = [...data];
     if (type === "all") {
       arr = allColumns;
     }
@@ -60,13 +60,16 @@ const ExcelDownload = ({
         <div className="absolute right-4 top-[33px] bg-white border border-[var(--gray20)] card-shadow rounded-[12px] z-[92] min-w-[150px] whitespace-nowrap px-2 py-2">
           <ul>
             <li>
-              <Button onClick={() => downloadExcel("selected")}>
-                <p className="text-[var(--black)]">Скачать выбранное</p>
+              <Button
+                onClick={() => downloadExcel("selected")}
+                className="w-full"
+              >
+                <p className="text-[var(--black)]">Скачать таблицу</p>
               </Button>
             </li>
             <li>
-              <Button onClick={() => downloadExcel("all")}>
-                <p className="text-[var(--black)]">Скачать все</p>
+              <Button onClick={() => downloadExcel("all")} className="w-full">
+                <p className="text-[var(--black)]">Скачать все данные</p>
               </Button>
             </li>
           </ul>

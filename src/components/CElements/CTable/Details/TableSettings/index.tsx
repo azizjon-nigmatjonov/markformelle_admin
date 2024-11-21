@@ -113,7 +113,12 @@ export const HeaderSettings = ({
   }, [headColumns, pageColumns]);
 
   const ExcelData = useMemo(() => {
-    const keyOrder: any = headColumns?.map((item: any) => item.id) ?? [];
+    const keyOrder: any = [];
+    headColumns?.forEach((item: any) => {
+      if (pageColumns.includes(item.id)) {
+        keyOrder.push(item.id);
+      }
+    });
     const arrayOfObjects: any = bodyColumns ?? [];
 
     const reorderObjects = (objects: any, order: any) => {

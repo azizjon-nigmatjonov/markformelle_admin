@@ -89,7 +89,7 @@
   height: auto;
 
   th {
-    padding: 0 4px !important;
+    // padding: 0 4px !important;
     border-right: 1px solid var(--gray20);
     border-bottom: 1px solid var(--gray20);
     border-radius: 0 !important;
@@ -150,15 +150,11 @@ thead {
     position: relative;
     padding: 0 !important;
     .cell {
-      height: 40px;
-      // padding: 6px !important;
       color: var(--black);
       font-weight: 600;
       text-transform: uppercase;
       width: 100%;
       @include center;
-      // border-right: 1px solid var(--gray20);
-      // border-bottom: 1px solid var(--gray20);
       position: relative;
     }
 
@@ -180,7 +176,7 @@ thead {
   width: 28px;
   cursor: col-resize;
   user-select: none;
-  height: 80px !important;
+  height: 30px !important;
   z-index: 2;
 }
 .resizer:hover,
@@ -202,7 +198,6 @@ thead {
   gap: 12px;
   .delete,
   .edit {
-    // border: 1px solid #777;
     width: 28px;
     height: 28px;
     @include center-center;
@@ -221,7 +216,6 @@ thead {
     color: red;
   }
   .popover {
-    // background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     position: absolute;
     left: 0;
@@ -237,13 +231,25 @@ thead {
 .drag-and-drop {
   background-color: var(--border);
   position: relative;
-  &::after {
+}
+
+.drag-hovered {
+  &.left::after {
     content: "";
     position: absolute;
-    height: 100vh;
-    width: 100%;
+    height: 100%;
+    width: 1px;
     left: 0;
-    top: 35px;
-    background-color: var(--border);
+    top: 0;
+    background-color: var(--primary);
+  }
+  &.right::after {
+    content: "";
+    position: absolute;
+    height: 100%;
+    width: 1px;
+    right: 0;
+    top: 0;
+    background-color: var(--primary);
   }
 }

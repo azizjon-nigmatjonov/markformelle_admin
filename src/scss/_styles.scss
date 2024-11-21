@@ -587,3 +587,10 @@ input {
   border-radius: 12px !important;
   padding: 0 !important;
 }
+
+.input-design {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0px 12px;
+  height: 35px;
+}
