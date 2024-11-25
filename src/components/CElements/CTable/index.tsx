@@ -462,18 +462,18 @@ const CTable = ({
                 <CTableRow className="">
                   {newHeadColumns?.map((column: any, index: number) => (
                     <CTableHeadCell
-                      id={column.id}
+                      id={column?.id}
                       key={
-                        column?.innerId ? column.innerId : index || column.id
+                        column?.innerId ? column.innerId : index || column?.id
                       }
                       style={{
-                        minWidth: tableSize?.[pageName]?.[column.id]
-                          ? tableSize?.[pageName]?.[column.id]
+                        minWidth: tableSize?.[pageName]?.[column?.id]
+                          ? tableSize?.[pageName]?.[column?.id]
                           : column?.width
                           ? column.width
                           : "auto",
-                        width: tableSize?.[pageName]?.[column.id]
-                          ? tableSize?.[pageName]?.[column.id]
+                        width: tableSize?.[pageName]?.[column?.id]
+                          ? tableSize?.[pageName]?.[column?.id]
                           : column?.width
                           ? column.width
                           : "auto",
@@ -548,7 +548,7 @@ const CTable = ({
                               : column.renderHead()
                             : column?.id === "index"
                             ? "№"
-                            : t(column.title)}
+                            : t(column?.title)}
                         </div>
                         {column?.id !== "index" && !column?.remove_sort ? (
                           <div className="w-[20px]">
@@ -556,7 +556,7 @@ const CTable = ({
                               <TableSort
                                 type={column.filter}
                                 handleSortLogic={handleSortLogic}
-                                colId={column.id}
+                                colId={column?.id}
                                 sortId={sortData?.id}
                               />
                             ) : (
@@ -589,7 +589,7 @@ const CTable = ({
                 <TableRow>
                   {newHeadColumns.map((item: any, colIndex: number) => (
                     <CTableCell
-                      key={colIndex + item.title}
+                      key={colIndex + item.title + ""}
                       className="relative"
                     >
                       {item.id !== "index" && !item?.remove_sort ? (
@@ -622,7 +622,7 @@ const CTable = ({
                 {bodySource?.length
                   ? bodySource?.map((item: any, rowIndex: any) => (
                       <TableRow
-                        key={rowIndex}
+                        key={rowIndex + ""}
                         ref={(e) => handleBodycolRef(item, e)}
                         className={`${
                           clickable && !item.empty && checkPermission("view")
@@ -632,7 +632,7 @@ const CTable = ({
                       >
                         {newHeadColumns.map((column: any, colIndex: number) => (
                           <CTableCell
-                            key={colIndex}
+                            key={colIndex + ""}
                             className={`overflow-ellipsis`}
                             style={{
                               minWidth: "max-content",
@@ -669,7 +669,7 @@ const CTable = ({
                                   : ""
                               }`}
                             >
-                              {column.id !== "actions" && !item.empty ? (
+                              {column?.id !== "actions" && !item.empty ? (
                                 <div
                                   onClick={() => {
                                     if (
@@ -685,38 +685,41 @@ const CTable = ({
                                       {checkPermission(column.permission) && (
                                         <>
                                           {column.render
-                                            ? Array.isArray(column.id)
+                                            ? Array.isArray(column?.id)
                                               ? column.render(
-                                                  column.id.map(
+                                                  column?.id.map(
                                                     (data: any) => item[data]
                                                   )
                                                 )
                                               : column.render(
-                                                  item[column.id],
+                                                  item[column?.id],
                                                   item
                                                 )
-                                            : item[column.id]}
+                                            : item[column?.id]}
                                         </>
                                       )}
                                     </>
                                   ) : (
                                     <>
                                       {column.render
-                                        ? Array.isArray(column.id)
+                                        ? Array.isArray(column?.id)
                                           ? column.render(
-                                              column.id.map(
+                                              column?.id.map(
                                                 (data: any) => item[data]
                                               )
                                             )
-                                          : column.render(item[column.id], item)
-                                        : item[column.id]}
+                                          : column.render(
+                                              item[column?.id],
+                                              item
+                                            )
+                                        : item[column?.id]}
                                     </>
                                   )}
                                 </div>
                               ) : (
                                 ""
                               )}
-                              {column.id === "actions" && !item.empty ? (
+                              {column?.id === "actions" && !item.empty ? (
                                 <div className="relative">
                                   {column?.actions?.length <= 2 ? (
                                     <div>

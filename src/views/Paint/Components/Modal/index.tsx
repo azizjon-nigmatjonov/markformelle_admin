@@ -34,6 +34,7 @@ export const PaintCardModal = ({ element, open = false }: Props) => {
         return <PaintCardList element={element} />;
     }
   };
+
   return (
     <ModalDialog
       sx={{

@@ -8,6 +8,7 @@ import CCard from "../../../../components/CElements/CCard";
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
 import { WarehouseSkeleton } from "./Skeleton";
 import { useSelector } from "react-redux";
+import { DocTable } from "./DocTable";
 
 export const ProcessTable = () => {
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
@@ -53,16 +54,57 @@ export const ProcessTable = () => {
   return (
     <div className="flex p-3 space-x-1 small_desktop:space-x-2">
       <div className="grid grid-cols-2 gap-x-1 small_desktop:gap-x-2 w-full">
-        <div className="grid grid-cols-3 gap-x-1 small_desktop:gap-x-2">
-          <div>
-            <FirstColumn data={newData?.dashboard_data?.ready_cells} />
-          </div>
-          <div>
-            <SecondColumn data={newData?.dashboard_data?.empty_cells} />
-          </div>
-          <div>
-            <ThirdColumn data={newData?.dashboard_data?.cells_without_zon} />
-          </div>
+        <div className="grid grid-rows-2 gap-y-2">
+          <CCard
+            half={true}
+            childClasses="small_desktop:p-2 small_desktop:pt-1"
+          >
+            <div className="grid grid-cols-3 gap-x-1 small_desktop:gap-x-2 h-full">
+              <div>
+                <FirstColumn data={newData?.dashboard_data?.ready_cells} />
+              </div>
+              <div>
+                <SecondColumn data={newData?.dashboard_data?.empty_cells} />
+              </div>
+              <div>
+                <ThirdColumn
+                  data={newData?.dashboard_data?.cells_without_zon}
+                />
+              </div>
+            </div>
+          </CCard>
+
+          <CCard
+            half={true}
+            childClasses="small_desktop:p-2 small_desktop:pt-1"
+          >
+            <div className="flex items-center justify-center w-full sticky-header">
+              <h2
+                className="uppercase text-[var(--black)] font-bold"
+                style={{
+                  fontSize: getFontSize({
+                    type: "card",
+                    count: 14,
+                    percent: 37,
+                  }),
+                }}
+              >
+                Документ
+              </h2>
+            </div>
+
+            <DocTable
+              data={[
+                {
+                  doc_id: "24-1243",
+                  worker: "Исломбек",
+                  weight: "2323 kg",
+                  percent: "50%",
+                  start_time: "22:35",
+                },
+              ]}
+            />
+          </CCard>
         </div>
         <div className="space-y-2">
           <CCard

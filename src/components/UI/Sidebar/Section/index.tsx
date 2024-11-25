@@ -42,7 +42,7 @@ const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
             const isLastItem = index === Object.entries(list).length - 1;
 
             return visibleSidebarItems?.length > 0 ? (
-              <div>
+              <div key={index}>
                 <button
                   className={`accordion group ${
                     activeIndex === key ? "active" : ""
@@ -115,7 +115,11 @@ const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
                 {!isLastItem && <div className="accordion-line"></div>}
               </div>
             ) : (
-              <div className="menus group" onClick={() => clearFilter()}>
+              <div
+                className="menus group"
+                key={index}
+                onClick={() => clearFilter()}
+              >
                 {collapsed ? (
                   <OneDropdown
                     title={t(key)}

@@ -1,29 +1,25 @@
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
 import CircularProgress from "../../../../components/CElements/CCircularProgress";
 import { GetCurrentDate } from "../../../../utils/getDate";
-import { useCalculateTime } from "../../../../hooks/useCalucaleTime";
 import { PantoneColors } from "../../../../constants/pantone";
 import { useEffect, useState } from "react";
 import { PaintCardModal } from "../Modal";
 import { Modal } from "@mui/joy";
-import axios from "axios";
 
 interface Props {
   element: any;
+  GetTime: any;
+  currTime: string;
 }
-export const PaintPotCard = ({ element }: Props) => {
+export const PaintPotCard = ({
+  element = {},
+  GetTime,
+  currTime = "",
+}: Props) => {
   const { getFontSize } = useDeviceHeight();
-  const { GetTime } = useCalculateTime();
   const [open, setOpen]: any = useState(false);
   const [height, setHeight]: any = useState(0);
-  const [currTime, setCurrentTime]: any = useState("");
-  useEffect(() => {
-    axios
-      .get("https://timeapi.io/api/time/current/zone?timeZone=Asia%2FTashkent")
-      .then((res) => {
-        setCurrentTime(res?.data?.dateTime);
-      });
-  }, []);
+
   useEffect(() => {
     if (window) {
       setHeight(window?.screen?.height);
@@ -32,7 +28,7 @@ export const PaintPotCard = ({ element }: Props) => {
   return (
     <div
       className={`w-full h-full rounded-[12px] px-2 desktop:px-4 py-2 desktop:py-4 pb-1 desktop:pb-3 overflow-hidden relative ${
-        element.status === "stopped" ? "red" : "green"
+        element.status === "stopped" ? "blue" : "green"
       }`}
       onClick={(e: any) => {
         e.stopPropagation();
@@ -47,7 +43,7 @@ export const PaintPotCard = ({ element }: Props) => {
               percent: height > 1200 ? 10 : 5.5,
               type: "machine",
             })}
-            value={70}
+            value={0}
             maxValue={100}
             size={getFontSize({
               count: 6,
@@ -66,7 +62,7 @@ export const PaintPotCard = ({ element }: Props) => {
                 }),
               }}
             >
-              {GetTime(element.end_time, currTime)}
+              {GetTime(element?.DateStart, currTime)}
             </p>
           </CircularProgress>
           <div>
@@ -80,8 +76,9 @@ export const PaintPotCard = ({ element }: Props) => {
                 }),
               }}
             >
-              {GetCurrentDate({ type: "time", date: element.time })} -{" "}
-              {GetCurrentDate({ type: "time", date: element.end_time })}
+              {GetCurrentDate({ type: "time", date: element?.DateStart })}{" "}
+              {`${element?.DateStart ? " - " : ""}`}
+              {GetCurrentDate({ type: "time", date: "" })}
             </p>
           </div>
         </div>
@@ -113,19 +110,21 @@ export const PaintPotCard = ({ element }: Props) => {
                   }),
                 }}
               >
-                {element.name}
+                {element.code_device}
               </p>
             </li>
             <li className={`${height > 1200 ? "pt-4" : "pt-3"}`}>
-              <p className="font-semibold">24-511</p>
-            </li>
-            <li>
-              <p className="font-semibold">{element.partia_weiht} kg</p>
+              <p className="font-semibold">{element?.nplan}</p>
             </li>
             <li>
               <p className="font-semibold">
-                {element.partia_number.substring(
-                  element.partia_number.indexOf("-") + 1
+                {element?.pkol_knit ? element.pkol_knit + "kg" : ""}{" "}
+              </p>
+            </li>
+            <li>
+              <p className="font-semibold">
+                {element?.ReceteId?.substring(
+                  element?.ReceteId?.indexOf("-") + 1
                 )}
               </p>
             </li>
@@ -149,28 +148,32 @@ export const PaintPotCard = ({ element }: Props) => {
         }}
       ></div>
 
-      <div
-        className="absolute rounded-[12px] top-1/2 -translate-y-1/2"
-        style={{
-          width: getFontSize({
-            count: 6,
-            percent: height > 1200 ? 30 : 15,
-            type: "machine",
-          }),
-          height: getFontSize({
-            count: 6,
-            percent: height > 1200 ? 90 : 60,
-            type: "machine",
-          }),
-          right: getFontSize({
-            count: 6,
-            percent: height > 1200 ? -15 : -5,
-            type: "machine",
-          }),
+      {element?.pantone && (
+        <div
+          className="absolute rounded-[12px] top-1/2 -translate-y-1/2"
+          style={{
+            width: getFontSize({
+              count: 6,
+              percent: height > 1200 ? 30 : 15,
+              type: "machine",
+            }),
+            height: getFontSize({
+              count: 6,
+              percent: height > 1200 ? 90 : 60,
+              type: "machine",
+            }),
+            right: getFontSize({
+              count: 6,
+              percent: height > 1200 ? -15 : -5,
+              type: "machine",
+            }),
 
-          backgroundColor: `#${PantoneColors?.[element.color_id]?.hex}`,
-        }}
-      ></div>
+            backgroundColor: `#${
+              PantoneColors?.[element?.pantone?.substring(4)]?.hex
+            }`,
+          }}
+        ></div>
+      )}
 
       {open && (
         <Modal

@@ -1,5 +1,8 @@
 // import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useCalculateTime } from "../../../hooks/useCalucaleTime";
 import { PaintPotCard } from "./Card";
+import axios from "axios";
 // import useDeviceHeight from "../../../hooks/useDeviceHeight";
 
 interface Props {
@@ -7,8 +10,16 @@ interface Props {
 }
 
 export const PaintList = ({ data = [] }: Props) => {
-  // const openHeader = useSelector((state: any) => state.sidebar.openHeader);
-  // const { getHeight } = useDeviceHeight();
+  const { GetTime } = useCalculateTime();
+  const [currTime, setCurrentTime]: any = useState("");
+  useEffect(() => {
+    axios
+      .get("https://timeapi.io/api/time/current/zone?timeZone=Asia%2FTashkent")
+      .then((res) => {
+        setCurrentTime(res?.data?.dateTime);
+      });
+  }, []);
+
   return (
     <div className="p-2">
       <div
@@ -33,7 +44,12 @@ export const PaintList = ({ data = [] }: Props) => {
         }}
       >
         {data?.map((item: any, index: number) => (
-          <PaintPotCard key={index} element={item ?? {}} />
+          <PaintPotCard
+            key={index}
+            element={item ?? {}}
+            GetTime={GetTime}
+            currTime={currTime}
+          />
         ))}
       </div>
     </div>

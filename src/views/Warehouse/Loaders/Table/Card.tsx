@@ -1,4 +1,3 @@
-import CCard from "../../../../components/CElements/CCard";
 import { useRef } from "react";
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
 interface Props {
@@ -10,7 +9,7 @@ export const CellCardWrapper = ({ data = [], title }: Props) => {
   const wrapperRef: any = useRef(null);
   const { getHeight, getFontSize } = useDeviceHeight();
   return (
-    <CCard classes="p-[0]" childClasses="p-2">
+    <div className="p-2 border border-[var(--border)] rounded-[12px] h-full">
       <div
         className="border-b pb-2 sticky-header"
         style={{ width: wrapperRef?.current?.offsetWidth }}
@@ -183,6 +182,6 @@ export const CellCardWrapper = ({ data = [], title }: Props) => {
           ""
         )} */}
       </div>
-    </CCard>
+    </div>
   );
 };

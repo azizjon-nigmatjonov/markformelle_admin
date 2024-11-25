@@ -15,7 +15,10 @@ export const OrderList = () => {
         }),
       }}
     >
-      {Array.from(new Array(20)).map((item: number) => (
+      <div className="flex justify-center items-center h-full">
+        <img src="/images/no-data.png" width={200} alt="no data" />
+      </div>
+      {Array.from(new Array(0)).map((item: number) => (
         <ul
           key={item}
           className="border border-[var(--border)] py-2 px-3 rounded-[12px] space-y-1 text-[var(--black10)]"

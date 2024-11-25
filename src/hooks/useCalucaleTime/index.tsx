@@ -1,5 +1,6 @@
 export const useCalculateTime = () => {
   const GetTime = (old_time: any, currTime: string) => {
+    if (!old_time) return "";
     const start_time: any = new Date(old_time);
     const currentTime: any = currTime ? new Date(currTime) : new Date();
 

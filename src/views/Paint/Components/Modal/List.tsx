@@ -4,10 +4,12 @@ import { GetCurrentDate } from "../../../../utils/getDate";
 import { ZigzagCard } from "./Card";
 import "./style.scss";
 import { ListDivider } from "@mui/joy";
-export const PaintCardList = ({ element }: { element: any }) => {
-  const bgColor = `#${PantoneColors[element.color_id]?.hex}`;
+export const PaintCardList = ({ element = {} }: { element: any }) => {
+  const machineData: any = element?.nres?.[0] ?? {};
+  const bgColor = `#${PantoneColors[element?.pantone?.substring(4)]?.hex}`;
   const { getFontSize } = useDeviceHeight();
   const height = window?.screen?.height ?? 0;
+
   return (
     <div className="grid grid-cols-2">
       <ul
@@ -22,78 +24,79 @@ export const PaintCardList = ({ element }: { element: any }) => {
         }}
       >
         <li className="flex items-center justify-between ">
-          <p>Номер машины</p> <p>{element.name}</p>
+          <p>Номер машины</p> <p>{element.code_device}</p>
         </li>
         <ListDivider />
         <li className="flex items-center justify-between ">
-          <p>Название машины</p> <p>Dilmenler</p>
+          <p>Название машины</p> <p>{element.name_device}</p>
         </li>
         <ListDivider />
         <li className="flex items-center justify-between ">
-          <p>Мощность машины</p> <p>{element.capacity}</p>
+          <p>Мощность машины</p> <p>-</p>
         </li>
         <ListDivider />
         <li className="flex items-center justify-between ">
-          <p>Статус машины</p> <p>Работает</p>
+          <p>Статус машины</p>{" "}
+          <p>{element.status !== "stopped" ? "Работает" : "Не работает"}</p>
         </li>
 
         <ListDivider />
         <li className="flex items-center justify-between ">
-          <p>IP адрес </p> <p>10.40.140.102</p>
+          <p>IP адрес </p> <p>{element.ip}</p>
         </li>
         <ListDivider />
         <li className="flex items-center justify-between ">
-          <p>Версия программы </p> <p>V3.8.4one</p>
+          <p>Версия программы </p> <p>-</p>
         </li>
 
         <ListDivider sx={{ background: "var(--gray)" }} />
 
         <li className="flex items-center justify-between ">
-          <p>Номер заказа </p> <p>{element.order}</p>
+          <p>Номер заказа </p> <p>{element.BoyaSiparisIDStr}</p>
         </li>
         <ListDivider />
 
         <li className="flex items-center justify-between ">
-          <p>Номер партия</p> <p>6236</p>
+          <p>Номер партия</p> <p>{element.PartiIDStr}</p>
         </li>
         <ListDivider />
 
         <li className="flex items-center justify-between ">
-          <p>Вес партия </p> <p>1756 кг</p>
+          <p>Вес партия </p> <p>{element.pkol_knit} кг</p>
         </li>
         <ListDivider />
         <li className="flex items-center justify-between ">
-          <p>Артикул </p> <p>SJ-001.01.140</p>
+          <p>Артикул </p> <p className="w-3/4 text-right">{element.name}</p>
         </li>
         <ListDivider />
 
         <li className="flex items-center justify-between ">
-          <p>Лот пряжи </p> <p>L-2</p>
+          <p>Лот пряжи </p> <p>-</p>
         </li>
         <ListDivider />
 
         <li className="flex items-center justify-between ">
           <p>Рецепт </p>{" "}
           <div className="flex space-x-3 items-center">
-            <p>{element.recipt}</p>
-            <div className="w-[1.5px] h-[20px] bg-[var(--gray)]"></div>
-            <p>M0581-C34132.A</p>
+            {/* <p>{element.recipt}</p> */}
+            {/* <div className="w-[1.5px] h-[20px] bg-[var(--gray)]"></div> */}
+            <p>{element.ReceteId}</p>
           </div>
         </li>
         <ListDivider />
 
         <li className="flex items-center justify-between ">
-          <p>ФИО сотрудника </p> <p>Сардор</p>
+          <p>ФИО сотрудника </p> <p>{element.GirisPersonelAdi}</p>
         </li>
         <ListDivider />
 
         <li className="flex items-center justify-between ">
           <p>Время начала</p>{" "}
-          <p>{GetCurrentDate({ type: "usually", date: element.start_time })}</p>
+          <p>{GetCurrentDate({ type: "usually", date: element.DateStart })}</p>
         </li>
         <ListDivider />
 
-        <li className="flex items-center justify-between ">
+        {/* <li className="flex items-center justify-between ">
           <p>ФИО сотрудника </p> <p>Азиз</p>
         </li>
 
@@ -101,26 +104,30 @@ export const PaintCardList = ({ element }: { element: any }) => {
         <li className="flex items-center justify-between ">
           <p>Время начала</p> <p>2024.11.08 14:14</p>
         </li>
+           <ListDivider />
+        */}
 
-        <ListDivider />
         <li className="flex items-center justify-between ">
-          <p>Время окончания</p> <p> 2024.11.08 21:00</p>
+          <p>Время окончания</p> <p> -</p>
         </li>
       </ul>
 
       <div className="border-l py-3 pr-6 pl-6 w-full">
-        <div className="w-[100%] h-full flex justify-center bg-white rounded-[12px] relative shadow-2xl overflow-hidden">
-          <div className="h-full w-full flex flex-col items-center">
-            <div className="text-2xl h-[100px] bg-white shadow-lg w-full mb-[-10px] relative z-[3] text-center  desktop:py-3">
-              <p className="text-2xl font-medium">{element.recipt}</p>
-              <p className="text-2xl font-medium">{element.color_id}</p>
-              <p className="text-2xl font-medium">
-                {PantoneColors[element.color_id]?.name}
-              </p>
+        {element?.pantone && (
+          <div className="w-[100%] h-full flex justify-center bg-white rounded-[12px] relative shadow-2xl overflow-hidden">
+            <div className="h-full w-full flex flex-col items-center">
+              <div className="text-2xl h-[100px] bg-white shadow-lg w-full mb-[-10px] relative z-[3] text-center  desktop:py-3">
+                <p className="text-2xl font-medium">{element.ReceteId}</p>
+                <p className="text-2xl font-medium">{element?.pantone}</p>
+                <p className="text-2xl font-medium">
+                  {PantoneColors[machineData?.pantone?.substring(4)]?.name ||
+                    "-"}
+                </p>
+              </div>
+              <ZigzagCard bgColor={bgColor} />
             </div>
-            <ZigzagCard bgColor={bgColor} />
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

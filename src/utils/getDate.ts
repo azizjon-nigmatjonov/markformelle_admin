@@ -5,7 +5,14 @@ const addZero = (num: number) => {
 };
 
 const GetTime = (timestamp: string) => {
-  const formattedTime = dayjs(timestamp).format("HH:mm");
+  const date = new Date(timestamp);
+
+  // Extract hours and minutes
+  const hours = String(date.getHours()).padStart(2, "0"); // Ensure two digits
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+
+  // Format as hh:mm
+  const formattedTime = `${hours}:${minutes}`;
 
   return formattedTime;
 };
@@ -35,6 +42,7 @@ export const GetCurrentDate = ({
   type?: string;
   symbol?: any;
 }) => {
+  if (!date) return "";
   const currentDate = date ? dayjs(date) : dayjs();
   const currentYear = currentDate.year();
   const currentMonth = currentDate.month() + 1;

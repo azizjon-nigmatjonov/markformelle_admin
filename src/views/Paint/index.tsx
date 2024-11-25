@@ -1,52 +1,69 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Header } from "../../components/UI/Header";
 import { ToggleBtn } from "../../components/UI/ToggleBtn";
 import { PaintList } from "./Components/List";
-import { MockData } from "./Components/Logic";
 import { PaintTable } from "./Components/Table";
-// import useCQuery from "../../hooks/useCQuery";
-// import { PaintListSkeleton, PaintSkeletons } from "./Components/Skeleton";
-// import { useSelector } from "react-redux";
-
+import useCQuery from "../../hooks/useCQuery";
+import { PaintListSkeleton, PaintSkeletons } from "./Components/Skeleton";
+import { useSelector } from "react-redux";
+import CBreadcrumbs from "../../components/CElements/CBreadcrumbs";
+const breadCrumbs = [{ label: "Дашборд покраска", link: "/paint/dashboard" }];
 const PaintSection = () => {
   const [type, setType] = useState("grid");
-  // const openHeader = useSelector((state: any) => state.sidebar.openHeader);
-  // const { data, isLoading, refetch } = useCQuery({
-  //   key: `GET_PAINT_LIST`,
-  //   endpoint: `http://srv-nav.praktik.loc:1991/WEB_ALL`,
-  //   params: {
-  //     // page: 1,
-  //   },
-  // });
+  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
+  const { data, isLoading, refetch } = useCQuery({
+    key: `GET_PAINT_LIST`,
+    endpoint: `http://srv-nav.praktik.loc:1991/WEB_ALL`,
+    params: {
+      // page: 1,
+    },
+  });
 
-  // useEffect(() => {
-  //   const refetching = setInterval(() => {
-  //     refetch();
-  //   }, 30000);
+  useEffect(() => {
+    const refetching = setInterval(() => {
+      refetch();
+    }, 20000);
 
-  //   return () => {
-  //     clearInterval(refetching);
-  //   };
-  // }, []);
+    return () => {
+      clearInterval(refetching);
+    };
+  }, []);
 
-  // if (isLoading) {
-  //   switch (type) {
-  //     case "grid":
-  //       return <PaintSkeletons openHeader={openHeader} />;
-  //     default:
-  //       return <PaintListSkeleton openHeader={openHeader} />;
-  //   }
-  // }
+  const newData = useMemo(() => {
+    const arr: any = [];
+    data?.forEach((element: any) => {
+      if (element.device_group.includes("HT BOYA")) {
+        const obj = element.nres?.[0] ?? { status: "stopped" };
+        arr.push({ ...element, ...obj });
+      }
+    });
+    return arr;
+  }, [data]);
 
   return (
     <>
-      <Header extra={<h1 className="title-header">Дашборд покраска</h1>}>
+      <Header
+        extra={
+          <CBreadcrumbs items={breadCrumbs} progmatic={true} type="link" />
+        }
+      >
         <ToggleBtn type={type} setType={setType} />
       </Header>
-      {type === "grid" ? (
-        <PaintList data={MockData} />
+      {isLoading ? (
+        <>
+          {type === "grid" ? (
+            <PaintSkeletons openHeader={openHeader} />
+          ) : (
+            <PaintListSkeleton openHeader={openHeader} />
+          )}
+        </>
       ) : (
-        <PaintTable list={MockData} />
+        ""
+      )}
+      {type === "grid" ? (
+        <PaintList data={newData ?? []} />
+      ) : (
+        <PaintTable list={newData ?? []} />
       )}
     </>
   );

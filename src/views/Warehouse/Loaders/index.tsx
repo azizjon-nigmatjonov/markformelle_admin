@@ -1,10 +1,15 @@
+import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { Header } from "../../../components/UI/Header";
 import { ProcessTable } from "./Table";
-
+const breadCrumbs = [{ label: "Дашборд грузчиков 612", link: "/row/loaders" }];
 const KnittingProcess = () => {
   return (
     <>
-      <Header extra={<h1 className="title-header">Дашборд грузчиков 612</h1>} />
+      <Header
+        extra={
+          <CBreadcrumbs items={breadCrumbs} progmatic={true} type="link" />
+        }
+      />
       <ProcessTable />
     </>
   );

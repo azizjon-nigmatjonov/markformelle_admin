@@ -17,8 +17,8 @@ interface Props {
 }
 
 const CSelect = ({
-  placeholder,
-  value,
+  placeholder = "",
+  value = "",
   options = [],
   label = "",
   handlerValue,
@@ -26,7 +26,7 @@ const CSelect = ({
   classes = "bg-white",
 }: Props) => {
   const [open, setOpen] = useState(false);
-  const [currentValue, setCurrentValue]: any = useState(null);
+  const [currentValue, setCurrentValue]: any = useState("");
 
   const handleChange = (event: SelectChangeEvent) => {
     setCurrentValue(event.target.value);
@@ -52,7 +52,7 @@ const CSelect = ({
               open={open}
               value={currentValue}
               disabled={disabled}
-              defaultValue={options?.[0]?.value}
+              defaultValue={options?.[0]?.value ?? ""}
               inputProps={{
                 "aria-label": "Without label",
               }}
@@ -80,7 +80,10 @@ const CSelect = ({
             <ArrowDownOutline width={15} />
           </div>
         </div>
-        {placeholder && !currentValue && currentValue !== 0 && currentValue !== false ? (
+        {placeholder &&
+        !currentValue &&
+        currentValue !== 0 &&
+        currentValue !== false ? (
           <p className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--gray60)]">
             {placeholder}
           </p>

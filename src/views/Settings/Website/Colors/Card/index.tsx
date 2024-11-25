@@ -1,5 +1,4 @@
 import { useState } from "react";
-import CCard from "../../../../../components/CElements/CCard";
 import AddButton from "../../../../../components/UI/Buttons/AddButton";
 
 const Card = ({ title, value }: { title: string; value: string }) => {

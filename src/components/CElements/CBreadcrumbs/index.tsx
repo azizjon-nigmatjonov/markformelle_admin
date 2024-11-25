@@ -51,7 +51,11 @@ const CBreadcrumbs = ({
   return (
     <div className="flex items-center justify-between w-full z-[99] relative">
       <div className="CBreadcrumbs-wrapper mr-5">
-        {navigateLink || navigateLink === -1 ? <BackButton link={navigateLink} /> : ""}
+        {navigateLink || navigateLink === -1 ? (
+          <BackButton link={navigateLink} />
+        ) : (
+          ""
+        )}
         <Breadcrumbs
           className={`CBreadcrumbs ${size} ${className}`}
           separator={<NavigateNextIcon fontSize="small" color="disabled" />}
@@ -65,7 +69,9 @@ const CBreadcrumbs = ({
                 } ${type}`}
               >
                 {icon}
-                {withDefautlIcon && <FolderIcon />}
+                {withDefautlIcon && (
+                  <FolderIcon style={{ color: "var(--main)" }} />
+                )}
                 {type === "link" && item?.link ? (
                   <div
                     onClick={() => navigateHandler(item.link, index)}
