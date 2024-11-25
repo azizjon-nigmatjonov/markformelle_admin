@@ -25,9 +25,6 @@ import { TableSort } from "./Details/Sort";
 import { tableStoreActions } from "../../../store/table";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import useDebounce from "../../../hooks/useDebounce";
-// import { TableData } from "./Logic";
-// import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-// import CustomScrollbar from "./ScrollComponent";
 
 interface Props {
   meta?: {
@@ -103,9 +100,8 @@ const CTable = ({
     if (idForTable) result = result + "/" + idForTable;
     return result;
   }, [location, idForTable]);
-
   const pageColumns = storedColumns[pageName];
-  const pageOrder = order[pageName];
+  const pageOrder = order[pageName] ?? [];
 
   useEffect(() => {
     const arr = [...bodyColumns];
@@ -322,9 +318,18 @@ const CTable = ({
   useEffect(() => {
     if (pageOrder?.length) {
       const arr: any = [];
+      const getId = (id: any) => {
+        if (typeof id === "object") {
+          return id.join("");
+        } else {
+          return id;
+        }
+      };
       pageOrder.forEach((element: any) => {
         arr.push(
-          headColumns?.find((item: { id: string }) => item.id === element) ?? {}
+          headColumns?.find(
+            (item: { id: string }) => getId(item.id) === element
+          ) ?? {}
         );
       });
       setItems(arr);
@@ -380,11 +385,17 @@ const CTable = ({
         dispatch(
           tableStoreActions.setOrder({
             pageName,
-            payload: items.map((item: any) => item.id),
+            payload: items.map((item: { id: any }) => {
+              if (typeof item.id === "object") {
+                return item.id.join("");
+              } else {
+                return item.id;
+              }
+            }),
           })
         );
       }
-
+      handleFilterParams({ ...filterParams, edit: !reOrder });
       setReorder((prev) => !prev);
       return;
     }
@@ -510,11 +521,13 @@ const CTable = ({
                             draggingIndex === index ? "var(--primary)" : "",
                         }}
                       >
-                        {column?.id !== "index" && (
+                        {column?.id !== "index" && !column?.remove_sort ? (
                           <div className="w-[20px]"></div>
+                        ) : (
+                          ""
                         )}
                         <div
-                          className={`uppercase`}
+                          className={`uppercase w-full`}
                           style={{
                             textAlign:
                               column?.textAlign ||
@@ -537,7 +550,7 @@ const CTable = ({
                             ? "№"
                             : t(column.title)}
                         </div>
-                        {column?.id !== "index" && (
+                        {column?.id !== "index" && !column?.remove_sort ? (
                           <div className="w-[20px]">
                             {!reOrder ? (
                               <TableSort
@@ -558,6 +571,8 @@ const CTable = ({
                               />
                             )}
                           </div>
+                        ) : (
+                          ""
                         )}
                       </div>
                     </CTableHeadCell>
@@ -577,7 +592,7 @@ const CTable = ({
                       key={colIndex + item.title}
                       className="relative"
                     >
-                      {colIndex !== 0 && (
+                      {item.id !== "index" && !item?.remove_sort ? (
                         <div
                           className={`w-full h-full  ${
                             hoveredIndex === colIndex &&
@@ -598,6 +613,8 @@ const CTable = ({
                             className="w-full input-design h-full text-center"
                           />
                         </div>
+                      ) : (
+                        ""
                       )}
                     </CTableCell>
                   ))}

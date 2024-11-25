@@ -6,6 +6,7 @@ import { Header } from "../../../components/UI/Header";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { DeleteFunction, FetchFunction, TableData, breadCrumbs } from "./Logic";
 import { FilterFunctions } from "../../../components/UI/Filter/Logic";
+import CCard from "../../../components/CElements/CCard";
 
 const Rolls = () => {
   const { navigateTo } = usePageRouter();
@@ -53,15 +54,17 @@ const Rolls = () => {
         </div>
       </Header>
       <div className="p-2">
-        <CTable
-          headColumns={headColumns}
-          bodyColumns={bodyColumns}
-          isResizeble={true}
-          handleActions={handleActions}
-          isLoading={isLoading}
-          filterParams={filterParams}
-          handleFilterParams={handleFilterParams}
-        />
+        <CCard>
+          <CTable
+            headColumns={headColumns}
+            bodyColumns={bodyColumns}
+            isResizeble={true}
+            handleActions={handleActions}
+            isLoading={isLoading}
+            filterParams={filterParams}
+            handleFilterParams={handleFilterParams}
+          />
+        </CCard>
       </div>
     </>
   );

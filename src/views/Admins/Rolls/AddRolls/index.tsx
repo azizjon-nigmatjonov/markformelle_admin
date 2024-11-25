@@ -99,7 +99,7 @@ const NewRolls = () => {
         />
       </div> */}
       <div className="container divide-y-[1px] divide-[var(--gray20)] w-[80%] my-5">
-        <Rolls text="Yangi rol nomi">
+        <Rolls text="Новый рол">
           <RollForm
             id={id}
             handleSubmit={handleSubmit}

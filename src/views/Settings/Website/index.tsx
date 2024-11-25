@@ -5,6 +5,7 @@ import { useState } from "react";
 import CTabs from "../../../components/CElements/CTab";
 import { WebsiteColors } from "./Colors";
 import { WebsiteImages } from "./Images";
+import CCard from "../../../components/CElements/CCard";
 
 const tabList = [
   {
@@ -40,16 +41,18 @@ const WebsiteSettings = () => {
       />
 
       <div className="p-2">
-        <div className="inline-block">
-          <CTabs
-            tabList={tabList}
-            currentTab={tab}
-            setCurrentTab={setTab}
-            passRouter={false}
-          />
-        </div>
+        <CCard>
+          <div className="inline-block">
+            <CTabs
+              tabList={tabList}
+              currentTab={tab}
+              setCurrentTab={setTab}
+              passRouter={false}
+            />
+          </div>
 
-        {currentTabComponent(tab.id)}
+          {currentTabComponent(tab.id)}
+        </CCard>
       </div>
     </>
   );

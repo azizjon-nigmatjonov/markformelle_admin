@@ -34,10 +34,13 @@ export const CardWrapper = ({
   list: any;
 }) => {
   return (
-    <CCard
-      title={title}
-      extra={<AddButton text="Saqlash" permission="edit" iconLeft={false} />}
-    >
+    <div>
+      <div className="flex justify-between py-2 items-center">
+        <p className="title">{title}</p>
+        <div>
+          <AddButton text="Saqlash" permission="edit" iconLeft={false} />
+        </div>
+      </div>
       <div className="grid grid-cols-5 gap-5">
         {Object.entries(list).map(([key, value]: any) => (
           <div key={key}>
@@ -45,6 +48,6 @@ export const CardWrapper = ({
           </div>
         ))}
       </div>
-    </CCard>
+    </div>
   );
 };

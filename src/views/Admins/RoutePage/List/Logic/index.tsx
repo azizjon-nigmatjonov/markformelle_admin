@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { routeService } from "../../../../../services/route";
 import permissionService from "../../../../../services/permissions";
 import { EyeIcon } from "../../../../../components/UI/IconGenerator/Svg";
@@ -8,6 +8,7 @@ import usePageRouter from "../../../../../hooks/useObjectRouter";
 import { useGetQueries } from "../../../../../hooks/useGetQueries";
 import { useTranslation } from "react-i18next";
 import { StaticPermissions } from "../../../../../constants/permissions";
+import { tableStoreActions } from "../../../../../store/table";
 
 export const CreateFunction = ({
   handleClose,
@@ -16,6 +17,8 @@ export const CreateFunction = ({
   handleClose?: any;
   reset?: any;
 }) => {
+  const dispatch = useDispatch();
+  const test_routes = useSelector((state: any) => state.table.test_routes);
   const { mutate: routeCreate, isLoading: createLoading } = useMutation({
     mutationFn: (data: any) => {
       return routeService.createElement(data).then(() => {
@@ -36,9 +39,13 @@ export const CreateFunction = ({
 
   const createRoute = (data: any) => {
     const params: any = {};
-    params.path = data.name;
-    params.name = data.title;
+    // params.path = data.name;
+    // params.name = data.title;
+    const arr: any = [...test_routes];
+
+    dispatch(tableStoreActions.setTestRoutes([...arr, data]));
     routeCreate(params);
+    // routeCreate(params);
   };
 
   // const checkEquality = (permissions: any, data: any) => {
@@ -183,6 +190,7 @@ export const FetchFunction = () => {
   } = useQuery(["GET_ROUTE_LIST"], () => {
     return routeService.getList();
   });
+
   const newRouteList: any = useMemo(() => {
     const list = routes?.data?.map((route: any) => {
       const permissions = route.permissions?.map((permission: any) => {

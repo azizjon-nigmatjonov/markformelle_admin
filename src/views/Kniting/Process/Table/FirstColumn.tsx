@@ -1,9 +1,10 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CCard from "../../../../components/CElements/CCard";
 import "./style.scss";
 import { Skeleton } from "@mui/material";
 import { useCalculateTime } from "../../../../hooks/useCalucaleTime";
 import EmptyDataComponent from "../../../../components/UI/EmptyDataComponent";
+import axios from "axios";
 
 interface Props {
   data: any;
@@ -13,6 +14,14 @@ interface Props {
 export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
   const [effect, setEffect] = useState<string[]>([]);
   const ROTATION_DELAY = 120;
+  const [currTime, setCurrentTime]: any = useState("");
+  useEffect(() => {
+    axios
+      .get("https://timeapi.io/api/time/current/zone?timeZone=Asia%2FTashkent")
+      .then((res) => {
+        setCurrentTime(res?.data?.dateTime);
+      });
+  }, []);
   const { GetTime } = useCalculateTime();
 
   if (isLoading) {
@@ -26,13 +35,26 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
   }
 
   const newData = useMemo(() => {
-    if (!data?.length) return [];
-    const arr =
-      data?.sort(
-        (a: any, b: any) => b.DATE_CONTROL_FOR_TIMER - a.DATE_CONTROL_FOR_TIMER
-      ) ?? [];
+    if (!data?.length && currTime) return [];
+    const arr = data.map((item: any) => {
+      return {
+        ...item,
+        DATE_CONTROL_FOR_TIMER: GetTime(item?.DATE_CONTROL_FOR_TIMER, currTime),
+      };
+    });
 
-    return arr.map((item: any, index: number) => {
+    const sortedData = arr.sort((a: any, b: any) => {
+      const timeToMinutes = (time: any) => {
+        const [hours, minutes] = time.split(":").map(Number);
+        return hours * 60 + minutes;
+      };
+
+      const timeA = timeToMinutes(a.DATE_CONTROL_FOR_TIMER);
+      const timeB = timeToMinutes(b.DATE_CONTROL_FOR_TIMER);
+
+      return timeB - timeA;
+    });
+    return sortedData.map((item: any, index: number) => {
       setTimeout(() => {
         setEffect((prevEffect) => [...prevEffect, item.OBORUD_NUMBER]);
       }, index * ROTATION_DELAY);
@@ -42,7 +64,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
         time: item?.HOURS_MINUTES_SECONDS_SINCE_30ST_ROLL?.substring(0, 4),
       };
     });
-  }, [data]);
+  }, [data, currTime]);
 
   if (!newData?.length) {
     return (
@@ -74,7 +96,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
 
                   <p className="main-sub-text text-red-700">
                     {" "}
-                    {GetTime(item?.DATE_CONTROL_FOR_TIMER)}
+                    {item?.DATE_CONTROL_FOR_TIMER}
                   </p>
                 </div>
               </div>
@@ -87,7 +109,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                   <p className="main-sub-text">{item.COUNT_RECORDS} рулон</p>
 
                   <p className="main-sub-text text-red-700">
-                    {GetTime(item?.DATE_CONTROL_FOR_TIMER)}
+                    {item?.DATE_CONTROL_FOR_TIMER}
                   </p>
                 </div>
               </div>
@@ -114,7 +136,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                     </p>
 
                     <p className="sub-text text-red-700">
-                      {GetTime(item?.DATE_CONTROL_FOR_TIMER)}
+                      {item?.DATE_CONTROL_FOR_TIMER}
                     </p>
                   </div>
                 </div>
@@ -128,7 +150,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                       {item.COUNT_RECORDS} рулон
                     </p>
                     <p className="sub-text text-red-700">
-                      {GetTime(item?.DATE_CONTROL_FOR_TIMER)}
+                      {item?.DATE_CONTROL_FOR_TIMER}
                     </p>
                   </div>
                 </div>
@@ -157,7 +179,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                   </p>
 
                   <p className="sub-text text-red-700">
-                    {GetTime(item?.DATE_CONTROL_FOR_TIMER)}
+                    {item?.DATE_CONTROL_FOR_TIMER}
                   </p>
                 </div>
               </div>
@@ -172,7 +194,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                   </p>
 
                   <p className="sub-text text-red-700">
-                    {GetTime(item?.DATE_CONTROL_FOR_TIMER)}
+                    {item?.DATE_CONTROL_FOR_TIMER}
                   </p>
                 </div>
               </div>

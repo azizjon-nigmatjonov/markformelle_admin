@@ -9,6 +9,7 @@ import { Header } from "../../../components/UI/Header";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { FetchFunction, TableData, breadCrumbs } from "./Logic";
 import { FilterFunctions } from "../../../components/UI/Filter/Logic";
+import CCard from "../../../components/CElements/CCard";
 
 const Users = () => {
   const { navigateQuery } = usePageRouter();
@@ -66,18 +67,20 @@ const Users = () => {
         </div>
       </Header>
       <div className="p-2">
-        <CTable
-          headColumns={headColumns}
-          bodyColumns={bodyColumns.list}
-          meta={bodyColumns?.meta}
-          isResizeble={true}
-          isLoading={isLoading}
-          handleActions={handleActions}
-          filterParams={filterParams}
-          handleFilterParams={handleFilterParams}
-        />
+        <CCard>
+          <CTable
+            headColumns={headColumns}
+            bodyColumns={bodyColumns.list}
+            meta={bodyColumns?.meta}
+            isResizeble={true}
+            isLoading={isLoading}
+            handleActions={handleActions}
+            filterParams={filterParams}
+            handleFilterParams={handleFilterParams}
+          />
 
-        {query?.id && <Form refetch={refetch} id={query.id} />}
+          {query?.id && <Form refetch={refetch} id={query.id} />}
+        </CCard>
       </div>
     </>
   );

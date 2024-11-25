@@ -1,5 +1,6 @@
 import WebsiteSettings from "../../views/Settings/Website";
 import Profile from "../../views/Settings/Profile";
+import LanguagesPage from "../../views/Settings/Languages";
 
 export const settingList = [
   {
@@ -18,7 +19,7 @@ export const settingList = [
     sidebar: true,
     title: "Языковые настройки",
     icon: "globus",
-    element: <WebsiteSettings />,
+    element: <LanguagesPage />,
     auth: true,
   },
   {

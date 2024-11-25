@@ -8,8 +8,8 @@ import usePageRouter from "../../../hooks/useObjectRouter";
 import { useGetQueries } from "../../../hooks/useGetQueries";
 
 export const breadCrumbs = [
-  { label: "Routes", link: "/admins/routes" },
-  { label: "Страница ROUTES" },
+  { label: "Доступ", link: "/access/routes" },
+  { label: "Страница разрешение" },
 ];
 
 const RoutePage = () => {
@@ -24,15 +24,9 @@ const RoutePage = () => {
 
   return (
     <>
-      <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />}>
-        <div className="ml-5">
-          <AddButton
-            onClick={() => navigateQuery({ modal: "open" })}
-            iconLeft={true}
-            text="Route qo'shish"
-          />
-        </div>
-      </Header>
+      <Header
+        extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />}
+      ></Header>
 
       <div className="p-2">
         <div className="flex items-start justify-between">
@@ -45,12 +39,19 @@ const RoutePage = () => {
               место
             </p>
           </div>
+          <div>
+            <AddButton
+              onClick={() => navigateQuery({ modal: "open" })}
+              iconLeft={true}
+              text="Route qo'shish"
+            />
+          </div>
         </div>
 
         <RouteList
           isLoading={isLoading}
           handleClose={handleClose}
-          newRouteList={newRouteList}
+          newRouteList={[]}
         />
       </div>
 

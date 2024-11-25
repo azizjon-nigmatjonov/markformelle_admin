@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 export const ProcessTable = () => {
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const [loading, setLoading] = useState(true);
+
   const { getFontSize } = useDeviceHeight();
   const { data, isLoading, refetch } = useCQuery({
     key: `GET_GRUZ`,

@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   columns: {},
   order: {},
+  test_routes: [],
 };
 
 export const { actions: tableStoreActions, reducer: tableReducer } =
@@ -15,6 +16,9 @@ export const { actions: tableStoreActions, reducer: tableReducer } =
       },
       setOrder: (state: any, { payload: { pageName, payload } }) => {
         state.order[pageName] = payload;
+      },
+      setTestRoutes: (state: any, { payload }) => {
+        state.test_routes = payload;
       },
     },
   });

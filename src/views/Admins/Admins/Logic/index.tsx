@@ -29,8 +29,8 @@ export const FetchFunction = () => {
 };
 
 export const breadCrumbs = [
-  { label: "admin", link: "/admins/admin" },
-  { label: "admins" },
+  { label: "Доступ", link: "/access/admin" },
+  { label: "Админы" },
 ];
 
 export const TableData = () => {
@@ -42,7 +42,7 @@ export const TableData = () => {
   const headColumns = useMemo(() => {
     return [
       {
-        title: "Ism familiya",
+        title: "Имя ",
         id: "name",
       },
       {

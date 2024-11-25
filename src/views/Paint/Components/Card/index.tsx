@@ -6,6 +6,7 @@ import { PantoneColors } from "../../../../constants/pantone";
 import { useEffect, useState } from "react";
 import { PaintCardModal } from "../Modal";
 import { Modal } from "@mui/joy";
+import axios from "axios";
 
 interface Props {
   element: any;
@@ -15,7 +16,14 @@ export const PaintPotCard = ({ element }: Props) => {
   const { GetTime } = useCalculateTime();
   const [open, setOpen]: any = useState(false);
   const [height, setHeight]: any = useState(0);
-
+  const [currTime, setCurrentTime]: any = useState("");
+  useEffect(() => {
+    axios
+      .get("https://timeapi.io/api/time/current/zone?timeZone=Asia%2FTashkent")
+      .then((res) => {
+        setCurrentTime(res?.data?.dateTime);
+      });
+  }, []);
   useEffect(() => {
     if (window) {
       setHeight(window?.screen?.height);
@@ -58,7 +66,7 @@ export const PaintPotCard = ({ element }: Props) => {
                 }),
               }}
             >
-              {GetTime(element.end_time)}
+              {GetTime(element.end_time, currTime)}
             </p>
           </CircularProgress>
           <div>

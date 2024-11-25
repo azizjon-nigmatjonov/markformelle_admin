@@ -3,8 +3,8 @@ import roleService from "../../../../services/rolls";
 import usePageRouter from "../../../../hooks/useObjectRouter";
 
 export const breadCrumbs = [
-  { label: "Admin", link: "/admins/admin" },
-  { label: "Rollar" },
+  { label: "Доступ", link: "/access/rolls" },
+  { label: "Ролы" },
 ];
 
 export const FetchFunction = () => {
@@ -41,15 +41,15 @@ export const TableData = ({ deleteRoll }: { deleteRoll: any }) => {
   const { navigateTo } = usePageRouter();
   const headColumns = [
     {
-      title: "Rol nomi",
+      title: "Название рол",
       id: "name",
     },
     {
-      title: "Funksiyalar soni",
+      title: "Количество функций",
       id: "permissions_count",
     },
     {
-      title: "Aktiv adminlar",
+      title: "Активные администраторы",
       id: "active_admins",
     },
     {
@@ -64,7 +64,7 @@ export const TableData = ({ deleteRoll }: { deleteRoll: any }) => {
     if (status === "edit") {
       navigateTo(`/admins/rolls/${el.id}`);
     }
-    if (status === "delete" && el.name !== 'super') {
+    if (status === "delete" && el.name !== "super") {
       deleteRoll(el.id);
     }
   };

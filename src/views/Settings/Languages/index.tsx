@@ -1,0 +1,196 @@
+import { useEffect, useState } from "react";
+import CCard from "../../../components/CElements/CCard";
+import { Header } from "../../../components/UI/Header";
+import useDebounce from "../../../hooks/useDebounce";
+import { GetTranslations, HandleTable } from "./Logic";
+import CTable from "../../../components/CElements/CTable";
+import CFooter from "../../../components/CElements/CFooter";
+
+const LanguagesPage = () => {
+  const { isLoading } = GetTranslations();
+  const { AddNewColumn, GetTitle, WriteValue } = HandleTable();
+  // const { createTranslation } = CreateTranslasion();
+  // const [edit, setEdit] = useState(false);
+  const [listTable, setListTable]: any = useState([{ id: "aaa", value: "1" }]);
+  const [filterParams, setFilterParams] = useState({
+    edit: false,
+    page: 1,
+    perPage: 10,
+  });
+  const handleValue = useDebounce((value: any, key: string, id: string) => {
+    WriteValue({ listTable, setListTable, value, key, id });
+  }, 500);
+
+  useEffect(() => {
+    setListTable([
+      {
+        id: 1,
+        name: "settings",
+        key: "settings",
+        ru: "nastroyki",
+        en: "settings",
+        uz: "sozlamalar",
+      },
+    ]);
+  }, []);
+
+  const headColumns = [
+    {
+      renderHead: () => <GetTitle val="key" />,
+      id: ["key", "key"],
+      width: 260,
+      render: (val: any) => {
+        const obj = val?.[0] ?? {};
+
+        return (
+          <div className="h-[56px] flex items-center w-full justify-center">
+            {filterParams.edit ? (
+              <input
+                className="input-design"
+                onChange={(e) => {
+                  handleValue(e.target.value, "key", obj?.id);
+                }}
+                defaultValue={obj?.key ? obj.key : val?.[0]}
+              />
+            ) : obj?.key ? (
+              obj.key
+            ) : (
+              val?.[0]
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      renderHead: () => <GetTitle val="uz" />,
+      id: ["key", "uz"],
+      width: 260,
+      render: (val: any) => {
+        const obj = val?.[1];
+        return (
+          <div className="h-[56px] flex items-center w-full justify-center">
+            {filterParams.edit ? (
+              <input
+                className="input-design"
+                onChange={(e) => {
+                  handleValue(e.target.value, "key", obj?.id);
+                }}
+                defaultValue={obj?.key ? obj.key : val?.[0]}
+              />
+            ) : obj?.key ? (
+              obj.key
+            ) : (
+              val?.[0]
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      renderHead: () => <GetTitle val="ru" />,
+      id: ["key", "ru"],
+      width: 260,
+      render: (val: any) => {
+        const obj = val?.[1];
+        return (
+          <div className="h-[56px] flex items-center w-full justify-center">
+            {filterParams.edit ? (
+              <input
+                className="input-design"
+                onChange={(e) => {
+                  handleValue(e.target.value, "key", obj?.id);
+                }}
+                defaultValue={obj?.key ? obj.key : val?.[0]}
+              />
+            ) : obj?.key ? (
+              obj.key
+            ) : (
+              val?.[0]
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      renderHead: () => <GetTitle val="en" />,
+      id: ["key", "en"],
+      width: 260,
+      render: (val: any) => {
+        const obj = val?.[1];
+
+        return (
+          <div className="h-[56px] flex items-center w-full justify-center">
+            {filterParams.edit ? (
+              <input
+                className="input-design"
+                onChange={(e) => {
+                  handleValue(e.target.value, "key", obj?.id);
+                }}
+                defaultValue={obj?.key ? obj.key : val?.[0]}
+              />
+            ) : obj?.key ? (
+              obj.key
+            ) : (
+              val?.[0]
+            )}
+          </div>
+        );
+      },
+    },
+    {
+      title: "",
+      id: "actions",
+      width: 30,
+      remove_sort: true,
+      actions: ["delete"],
+    },
+  ];
+
+  return (
+    <>
+      <Header extra={<h1 className="title-header">Языковые настройки</h1>} />
+      <div className="p-2">
+        <CCard>
+          <div>
+            <CTable
+              isLoading={isLoading}
+              headColumns={headColumns}
+              bodyColumns={listTable}
+              filterParams={filterParams}
+              isResizeble={false}
+              handleFilterParams={setFilterParams}
+            />
+          </div>
+        </CCard>
+      </div>
+      <CFooter>
+        <div className="flex justify-end w-full pr-10">
+          <div>
+            {filterParams.edit ? (
+              <button
+                onClick={() => {
+                  setFilterParams({ ...filterParams, edit: false });
+                }}
+                className="new-btn"
+              >
+                Cохранить
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  AddNewColumn({ listTable, setListTable });
+                  setFilterParams({ ...filterParams, edit: true });
+                }}
+                className="new-btn"
+              >
+                Добавить
+              </button>
+            )}
+          </div>
+        </div>
+      </CFooter>
+    </>
+  );
+};
+
+export default LanguagesPage;
