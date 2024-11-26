@@ -5,8 +5,9 @@ import { ZigzagCard } from "./Card";
 import "./style.scss";
 import { ListDivider } from "@mui/joy";
 export const PaintCardList = ({ element = {} }: { element: any }) => {
-  const machineData: any = element?.nres?.[0] ?? {};
-  const bgColor = `#${PantoneColors[element?.pantone?.substring(4)]?.hex}`;
+  const bgColor = `#${
+    PantoneColors[element.machine?.pantone?.substring(4)]?.hex
+  }`;
   const { getFontSize } = useDeviceHeight();
   const height = window?.screen?.height ?? 0;
 
@@ -52,21 +53,22 @@ export const PaintCardList = ({ element = {} }: { element: any }) => {
         <ListDivider sx={{ background: "var(--gray)" }} />
 
         <li className="flex items-center justify-between ">
-          <p>Номер заказа </p> <p>{element.BoyaSiparisIDStr}</p>
+          <p>Номер заказа </p> <p>{element.machine?.BoyaSiparisIDStr}</p>
         </li>
         <ListDivider />
 
         <li className="flex items-center justify-between ">
-          <p>Номер партия</p> <p>{element.PartiIDStr}</p>
+          <p>Номер партия</p> <p>{element.machine?.PartiIDStr}</p>
         </li>
         <ListDivider />
 
         <li className="flex items-center justify-between ">
-          <p>Вес партия </p> <p>{element.pkol_knit} кг</p>
+          <p>Вес партия </p> <p>{element.machine?.pkol_knit} кг</p>
         </li>
         <ListDivider />
         <li className="flex items-center justify-between ">
-          <p>Артикул </p> <p className="w-3/4 text-right">{element.name}</p>
+          <p>Артикул </p>{" "}
+          <p className="w-3/4 text-right">{element.machine?.name}</p>
         </li>
         <ListDivider />
 
@@ -80,19 +82,24 @@ export const PaintCardList = ({ element = {} }: { element: any }) => {
           <div className="flex space-x-3 items-center">
             {/* <p>{element.recipt}</p> */}
             {/* <div className="w-[1.5px] h-[20px] bg-[var(--gray)]"></div> */}
-            <p>{element.ReceteId}</p>
+            <p>{element.machine?.ReceteId}</p>
           </div>
         </li>
         <ListDivider />
 
         <li className="flex items-center justify-between ">
-          <p>ФИО сотрудника </p> <p>{element.GirisPersonelAdi}</p>
+          <p>ФИО сотрудника </p> <p>{element.machine?.GirisPersonelAdi}</p>
         </li>
         <ListDivider />
 
         <li className="flex items-center justify-between ">
           <p>Время начала</p>{" "}
-          <p>{GetCurrentDate({ type: "usually", date: element.DateStart })}</p>
+          <p>
+            {GetCurrentDate({
+              type: "usually",
+              date: element.machine?.DateStart,
+            })}
+          </p>
         </li>
         <ListDivider />
 
@@ -113,15 +120,19 @@ export const PaintCardList = ({ element = {} }: { element: any }) => {
       </ul>
 
       <div className="border-l py-3 pr-6 pl-6 w-full">
-        {element?.pantone && (
+        {element.machine?.pantone && (
           <div className="w-[100%] h-full flex justify-center bg-white rounded-[12px] relative shadow-2xl overflow-hidden">
             <div className="h-full w-full flex flex-col items-center">
               <div className="text-2xl h-[100px] bg-white shadow-lg w-full mb-[-10px] relative z-[3] text-center  desktop:py-3">
-                <p className="text-2xl font-medium">{element.ReceteId}</p>
-                <p className="text-2xl font-medium">{element?.pantone}</p>
                 <p className="text-2xl font-medium">
-                  {PantoneColors[machineData?.pantone?.substring(4)]?.name ||
-                    "-"}
+                  {element.machine?.ReceteId}
+                </p>
+                <p className="text-2xl font-medium">
+                  {element.machine?.pantone}
+                </p>
+                <p className="text-2xl font-medium">
+                  {PantoneColors[element.machine?.pantone?.substring(4)]
+                    ?.name || "-"}
                 </p>
               </div>
               <ZigzagCard bgColor={bgColor} />

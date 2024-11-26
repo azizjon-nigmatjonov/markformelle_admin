@@ -9,6 +9,8 @@ import { ResizeIcon } from "../../components/UI/IconGenerator/Svg/Sidebar";
 import { sidebarActions } from "../../store/sidebar";
 import { useEffect, useRef } from "react";
 import { authActions } from "../../store/auth/auth.slice";
+import axios from "axios";
+import { globalToolActions } from "../../store/globalTools";
 
 const MainLayout = () => {
   const wrapperRef: any = useRef(null);
@@ -22,6 +24,26 @@ const MainLayout = () => {
     dispatch(sidebarActions.setOpenHeader(resize ? false : true));
     dispatch(sidebarActions.setResize(!resize));
   };
+
+  const GetTimeGlobal = () => {
+    axios
+      .get("https://timeapi.io/api/time/current/zone?timeZone=Asia%2FTashkent")
+      .then((res) => {
+        dispatch(globalToolActions.setCurrTime(res?.data?.dateTime));
+      });
+  };
+
+  useEffect(() => {
+    GetTimeGlobal();
+
+    const refetching = setInterval(() => {
+      GetTimeGlobal();
+    }, 60000);
+
+    return () => {
+      clearInterval(refetching);
+    };
+  }, []);
 
   useEffect(() => {
     const now = new Date();

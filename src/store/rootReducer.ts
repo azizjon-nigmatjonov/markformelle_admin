@@ -4,12 +4,12 @@ import { authReducer } from "./auth/auth.slice";
 import storage from "redux-persist/lib/storage";
 import { websiteReducer } from "./website";
 import { tableSizeReducer } from "./tableSize/tableSizeSlice";
-import { mqttReducer } from "./mqtt";
 import { notificationReducer } from "./notification";
 import { sidebarReducer } from "./sidebar";
 import { filterReducer } from "./filterParams";
 import { tableReducer } from "./table";
 import { machineReducer } from "./machine/machine.slice";
+import { globalToolReducer } from "./globalTools";
 
 const authPersistConfig = {
   key: "auth",
@@ -46,6 +46,11 @@ const machinePersistConfig = {
   storage,
 };
 
+const globalToolPersistConfig = {
+  key: "globalTool",
+  storage,
+};
+
 const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
   tableSize: persistReducer(tableSizePersistConfig, tableSizeReducer),
@@ -54,8 +59,8 @@ const rootReducer = combineReducers({
   filter: persistReducer(filterPersistConfig, filterReducer),
   table: persistReducer(tablePersistConfig, tableReducer),
   machine: persistReducer(machinePersistConfig, machineReducer),
+  globalTool: persistReducer(globalToolPersistConfig, globalToolReducer),
   website: websiteReducer,
-  mqtt: mqttReducer,
 });
 
 export default rootReducer;

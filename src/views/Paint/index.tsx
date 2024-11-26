@@ -7,6 +7,7 @@ import useCQuery from "../../hooks/useCQuery";
 import { PaintListSkeleton, PaintSkeletons } from "./Components/Skeleton";
 import { useSelector } from "react-redux";
 import CBreadcrumbs from "../../components/CElements/CBreadcrumbs";
+import GlobalSearch from "../../components/UI/GlobalSearch";
 const breadCrumbs = [{ label: "Дашборд покраски", link: "/paint/dashboard" }];
 const PaintSection = () => {
   const [type, setType] = useState("grid");
@@ -18,11 +19,12 @@ const PaintSection = () => {
       // page: 1,
     },
   });
+  const [list, setList] = useState([]);
 
   useEffect(() => {
     const refetching = setInterval(() => {
       refetch();
-    }, 20000);
+    }, 60000);
 
     return () => {
       clearInterval(refetching);
@@ -30,17 +32,20 @@ const PaintSection = () => {
   }, []);
 
   const newData = useMemo(() => {
+    const result = list?.length ? list : data ?? [];
     const arr: any = [];
-    data?.forEach((element: any) => {
-      if (element.device_group.includes("HT BOYA")) {
+    result?.forEach((element: any) => {
+      if (element.boya_kazan.toLowerCase().includes("yes")) {
         const order = element.code_device.replace("-", "");
-        const obj = element.nres?.[0] ?? { status: "stopped" };
+        const obj = element.nres?.[0]
+          ? { machine: element.nres?.[0] }
+          : { status: "stopped", machine: { status: "stopped" } };
         arr.push({ ...element, ...obj, order });
       }
     });
 
     return arr.sort((a: any, b: any) => a.order - b.order);
-  }, [data]);
+  }, [list?.length, data]);
 
   return (
     <>
@@ -49,6 +54,26 @@ const PaintSection = () => {
           <CBreadcrumbs items={breadCrumbs} progmatic={true} type="link" />
         }
       >
+        <div className=" mr-3">
+          <GlobalSearch
+            list={
+              data?.map((item: any, index: number) => {
+                if (item.id) {
+                  return item;
+                } else {
+                  return {
+                    ...item,
+                    id: index,
+                  };
+                }
+              }) ?? []
+            }
+            setList={setList}
+            defaultValue={""}
+            handleChange={() => {}}
+            handleSubmit={() => {}}
+          />
+        </div>
         <ToggleBtn type={type} setType={setType} />
       </Header>
       {isLoading ? (

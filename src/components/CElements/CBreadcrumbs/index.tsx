@@ -76,6 +76,7 @@ const CBreadcrumbs = ({
                   <div
                     onClick={() => navigateHandler(item.link, index)}
                     className="breadcrumb-label"
+                    style={{ color: "var(--black)" }}
                   >
                     {t(item.label)}
                   </div>

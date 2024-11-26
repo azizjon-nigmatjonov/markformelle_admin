@@ -611,6 +611,7 @@ const CTable = ({
                               searchDebounce(e.target.value, item.id)
                             }
                             className="w-full input-design h-full text-center"
+                            style={{ padding: 0 }}
                           />
                         </div>
                       ) : (

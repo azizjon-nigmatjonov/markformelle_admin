@@ -5,7 +5,11 @@ import useDebounce from "../../../hooks/useDebounce";
 import { GetTranslations, HandleTable } from "./Logic";
 import CTable from "../../../components/CElements/CTable";
 import CFooter from "../../../components/CElements/CFooter";
-
+import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
+const breadCrumbs = [
+  { label: "Настройки", link: "/settings/language" },
+  { label: "Языковые настройки" },
+];
 const LanguagesPage = () => {
   const { isLoading } = GetTranslations();
   const { AddNewColumn, GetTitle, WriteValue } = HandleTable();
@@ -148,7 +152,11 @@ const LanguagesPage = () => {
 
   return (
     <>
-      <Header extra={<h1 className="title-header">Языковые настройки</h1>} />
+      <Header
+        extra={
+          <CBreadcrumbs items={breadCrumbs} progmatic={true} type="link" />
+        }
+      />
       <div className="p-2">
         <CCard>
           <div>

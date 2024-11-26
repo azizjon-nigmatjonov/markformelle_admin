@@ -14,14 +14,7 @@ interface Props {
 export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
   const [effect, setEffect] = useState<string[]>([]);
   const ROTATION_DELAY = 120;
-  const [currTime, setCurrentTime]: any = useState("");
-  useEffect(() => {
-    axios
-      .get("https://timeapi.io/api/time/current/zone?timeZone=Asia%2FTashkent")
-      .then((res) => {
-        setCurrentTime(res?.data?.dateTime);
-      });
-  }, []);
+
   const { GetTime } = useCalculateTime();
 
   if (isLoading) {
@@ -35,11 +28,11 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
   }
 
   const newData = useMemo(() => {
-    if (!data?.length && currTime) return [];
+    if (!data?.length) return [];
     const arr = data.map((item: any) => {
       return {
         ...item,
-        DATE_CONTROL_FOR_TIMER: GetTime(item?.DATE_CONTROL_FOR_TIMER, currTime),
+        DATE_CONTROL_FOR_TIMER: GetTime(item?.DATE_CONTROL_FOR_TIMER),
       };
     });
 
@@ -64,7 +57,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
         time: item?.HOURS_MINUTES_SECONDS_SINCE_30ST_ROLL?.substring(0, 4),
       };
     });
-  }, [data, currTime]);
+  }, [data]);
 
   if (!newData?.length) {
     return (

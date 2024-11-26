@@ -9,13 +9,8 @@ import { Modal } from "@mui/joy";
 interface Props {
   element: any;
   GetTime: any;
-  currTime: string;
 }
-export const PaintPotCard = ({
-  element = {},
-  GetTime,
-  currTime = "",
-}: Props) => {
+export const PaintPotCard = ({ element = {}, GetTime }: Props) => {
   const { getFontSize } = useDeviceHeight();
   const [open, setOpen]: any = useState(false);
   const [height, setHeight]: any = useState(0);
@@ -62,7 +57,9 @@ export const PaintPotCard = ({
                 }),
               }}
             >
-              {GetTime(element?.DateStart, currTime)}
+              {element.machine?.DateStart
+                ? GetTime(element.machine.DateStart)
+                : "00:00"}
             </p>
           </CircularProgress>
           <div>
@@ -76,8 +73,11 @@ export const PaintPotCard = ({
                 }),
               }}
             >
-              {GetCurrentDate({ type: "time", date: element?.DateStart })}{" "}
-              {`${element?.DateStart ? " - " : ""}`}
+              {GetCurrentDate({
+                type: "time",
+                date: element.machine?.DateStart,
+              })}{" "}
+              {`${element.machine?.DateStart ? " - " : ""}`}
               {GetCurrentDate({ type: "time", date: "" })}
             </p>
           </div>
@@ -114,18 +114,28 @@ export const PaintPotCard = ({
               </p>
             </li>
             <li className={`${height > 1200 ? "pt-4" : "pt-3"}`}>
-              <p className="font-semibold">{element?.nplan}</p>
-            </li>
-            <li>
               <p className="font-semibold">
-                {element?.pkol_knit ? element.pkol_knit + "kg" : ""}{" "}
+                {element.machine?.pkol_knit
+                  ? element.machine.pkol_knit + " кг"
+                  : "Нет"}{" "}
               </p>
             </li>
             <li>
               <p className="font-semibold">
-                {element?.ReceteId?.substring(
-                  element?.ReceteId?.indexOf("-") + 1
-                )}
+                {element.machine?.nplan
+                  ? element.machine.nplan.substring(3)
+                  : ""}
+              </p>
+            </li>
+
+            <li>
+              <p className="font-semibold">
+                {element.machine?.ReceteId
+                  ? element.machine.ReceteId?.substring(
+                      element.machine.ReceteId?.indexOf("-") + 1,
+                      element.machine.ReceteId.indexOf(".")
+                    )
+                  : "Задании"}
               </p>
             </li>
           </ul>
@@ -148,7 +158,7 @@ export const PaintPotCard = ({
         }}
       ></div>
 
-      {element?.pantone && (
+      {element.machine?.pantone && (
         <div
           className="absolute rounded-[12px] top-1/2 -translate-y-1/2"
           style={{
@@ -169,7 +179,7 @@ export const PaintPotCard = ({
             }),
 
             backgroundColor: `#${
-              PantoneColors?.[element?.pantone?.substring(4)]?.hex
+              PantoneColors?.[element.machine?.pantone?.substring(4)]?.hex
             }`,
           }}
         ></div>

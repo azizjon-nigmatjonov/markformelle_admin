@@ -9,7 +9,9 @@ import { ListDotIcon } from "../../../../UI/IconGenerator/Svg/Machines";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import ExcelDownload from "../../../../../hooks/useExcelDownload";
-const SettingDropdown = ({
+import ExcelReader from "../../../../../hooks/useExcelImport";
+
+export const SettingDropdown = ({
   menuList = [],
   handleFilterSave,
 }: {
@@ -18,7 +20,7 @@ const SettingDropdown = ({
   handleFilterSave: (val: any) => void;
 }) => {
   return (
-    <div className="absolute right-4 top-[33px] bg-white border border-[var(--gray20)] card-shadow rounded-[12px] z-[92] min-w-[150px] whitespace-nowrap px-2 py-2">
+    <div className="absolute right-0 top-[33px] bg-white border border-[var(--gray20)] card-shadow rounded-[12px] z-[92] min-w-[150px] whitespace-nowrap px-2 py-2">
       <ul className="grid gap-y-5 max-h-[400px] overflow-y-scroll designed-scroll">
         {menuList.map((item: {}, index: number) => (
           <MenuItem
@@ -150,7 +152,6 @@ export const HeaderSettings = ({
       return arr;
     };
 
-    // Reordered Array
     const reorderedArray = reorderObjects(arrayOfObjects, keyOrder);
     return reorderedArray;
   }, [headColumns, bodyColumns]);
@@ -165,6 +166,7 @@ export const HeaderSettings = ({
           </h2>
         </div>
         <div className="flex items-center space-x-2 h-full pr-2">
+          <ExcelReader />
           <ExcelDownload
             title={filterParams?.title}
             data={ExcelData}

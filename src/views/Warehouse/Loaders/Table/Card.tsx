@@ -48,7 +48,7 @@ export const CellCardWrapper = ({ data = [], title }: Props) => {
       </div>
 
       <div
-        className={`space-y-1 desktop:space-y-2 overflow-y-scroll pb-[50px] remove-scroll mt-3`}
+        className={`space-y-1 desktop:space-y-2 overflow-y-scroll pb-[50px] remove-scroll mt-2`}
         ref={wrapperRef}
       >
         {data?.map((item: any, index: number) => (
@@ -56,7 +56,7 @@ export const CellCardWrapper = ({ data = [], title }: Props) => {
             className={`card grid relative gap-x-2 card-shadow px-1 small_desktop:px-3 ${
               item.COUNT_PACK ? "grid-cols-2" : ""
             }`}
-            style={{ height: getHeight({ type: "card", count: 18 }) }}
+            style={{ height: getHeight({ type: "card", count: 19.5 }) }}
             key={index}
           >
             {/* <div className="bg-[var(--black)] w-[6px] h-[6px] rounded-full absolute left-2 top-3"></div> */}

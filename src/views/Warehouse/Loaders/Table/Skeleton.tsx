@@ -9,47 +9,33 @@ export const WarehouseSkeleton = ({ openHeader }: Props) => {
   const { getHeight } = useDeviceHeight();
   return (
     <div className="grid grid-cols-2 gap-x-2 p-3">
-      <div className="grid grid-cols-3 gap-x-2">
+      <div className="grid grid-cols-1 gap-y-2">
         <OneSkeleton
           height={getHeight({
-            count: 1,
+            count: 2,
             type: "machine",
             minus:
               window?.screen?.width < 1000
                 ? openHeader
-                  ? 55
-                  : 15
+                  ? 30
+                  : 14
                 : openHeader
-                ? 190
-                : 145,
+                ? 101
+                : 80,
           })}
         />
         <OneSkeleton
           height={getHeight({
-            count: 1,
+            count: 2,
             type: "machine",
             minus:
-              window?.screen?.width < 980
+              window?.screen?.width < 1000
                 ? openHeader
-                  ? 75
-                  : 25
+                  ? 30
+                  : 14
                 : openHeader
-                ? 200
-                : 145,
-          })}
-        />
-        <OneSkeleton
-          height={getHeight({
-            count: 1,
-            type: "machine",
-            minus:
-              window?.screen?.width < 980
-                ? openHeader
-                  ? 75
-                  : 25
-                : openHeader
-                ? 200
-                : 145,
+                ? 101
+                : 80,
           })}
         />
       </div>

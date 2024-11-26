@@ -1,8 +1,11 @@
+import { useSelector } from "react-redux";
+
 export const useCalculateTime = () => {
-  const GetTime = (old_time: any, currTime: string) => {
+  const currTime = useSelector((state: any) => state.globalTool.currTime);
+  const GetTime = (old_time: any) => {
     if (!old_time) return "";
     const start_time: any = new Date(old_time);
-    const currentTime: any = currTime ? new Date(currTime) : new Date();
+    const currentTime: any = currTime ? new Date(currTime) : old_time;
 
     const differenceInMillis = currentTime - start_time;
 

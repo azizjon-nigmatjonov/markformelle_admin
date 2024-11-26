@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import "./style.scss";
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
 
@@ -57,104 +57,17 @@ export const FourthColumn = ({ data = [] }: Props) => {
     }, 0);
   }, [data]);
 
-  const headColumns = useMemo(() => {
-    return [
-      {
-        title: "Список грузчиков",
-        width: "40%",
-        id: "FIO",
-        render: (val: any) => (
-          <div className="flex items-center space-x-2 py-1">
-            {val?.[1] ? (
-              <div className="w-[40px]">
-                {val[1] === 1 ? (
-                  <img
-                    className="w-[40px]"
-                    src="/images/medal_1.png"
-                    alt="first"
-                  />
-                ) : val[1] === 2 ? (
-                  <img
-                    className="w-[40px]"
-                    src="/images/medal_2.png"
-                    alt="second"
-                  />
-                ) : val[1] === 3 ? (
-                  <img
-                    className="w-[40px]"
-                    src="/images/medal_3.png"
-                    alt="third"
-                  />
-                ) : (
-                  <img
-                    className="w-[35px]"
-                    src="/images/danger.png"
-                    alt={`last ${val[1]}`}
-                  />
-                )}
-              </div>
-            ) : (
-              <div className="flex items-center justify-between w-full">
-                <p className="footer_text whitespace-nowrap">{val?.[0]}</p>
-                <p className="footer_text whitespace-nowrap pr-5 desktop:pr-10">
-                  {bodyData.length}
-                </p>
-              </div>
-            )}
-            {val?.[1] ? <p className="whitespace-nowrap">{val?.[0]}</p> : ""}
-          </div>
-        ),
-      },
-      {
-        title: "C начала месяца",
-        width: "30%",
-        renderHead: () => (
-          <h3 className="font-50-40 font-semibold text-[var(--gray)] text-center whitespace-nowrap uppercase">
-            C начала месяца
-          </h3>
-        ),
-        // width: 140,
-        id: "KOL_IN_MONTH",
-        render: (val: string) => <p className={`text`}>{val[0]}</p>,
-      },
-      {
-        title: "В этой смене",
-        width: "30%",
-        id: "KOL_TODAY",
-        renderHead: () => (
-          <h3 className="font-50-40 font-semibold text-[var(--gray)] py-4 text-center">
-            В этой смене
-          </h3>
-        ),
-        // width: 140,
-        render: (val: string) => <p className={`text`}>{val[0]}</p>,
-      },
-      {
-        title: "приём",
-        width: "30%",
-        id: "",
-        renderHead: () => (
-          <h3 className="font-50-40 font-semibold text-[var(--gray)] py-4 text-center">
-            приём
-          </h3>
-        ),
-        // width: 140,
-        render: () => <p className={`text`}>{}</p>,
-      },
-      {
-        title: "prixod",
-        width: "30%",
-        id: "",
-        renderHead: () => (
-          <h3 className="font-50-40 font-semibold text-[var(--gray)] py-4 text-center">
-            отборка
-          </h3>
-        ),
-        // width: 140,
-        render: () => <p className={`text`}>{}</p>,
-      },
-    ];
-  }, [bodyData]);
+  const headColumns = [
+    {
+      id: "FIO",
+    },
+    {
+      id: "KOL_IN_MONTH",
+    },
+    {
+      id: "KOL_TODAY",
+    },
+  ];
 
   return (
     <div className="px-2 flex w-full" style={{ height: "calc(100% - 35px)" }}>
