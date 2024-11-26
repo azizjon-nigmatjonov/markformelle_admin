@@ -118,11 +118,11 @@
 .MuiTableRow-root {
   height: 50px !important;
 
-  &:last-child {
-    .CTableCell {
-      border-bottom: 0;
-    }
-  }
+  // &:last-child {
+  //   .CTableCell {
+  //     border-bottom: 0;
+  //   }
+  // }
 
   &.clickable {
     cursor: pointer;

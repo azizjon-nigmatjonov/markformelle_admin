@@ -89,7 +89,7 @@ export const ProcessTable = () => {
                   }),
                 }}
               >
-                Документ
+                Тест Документ
               </h2>
             </div>
 
