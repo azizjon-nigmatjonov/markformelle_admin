@@ -23,9 +23,13 @@ export const ZigzagCard = ({ bgColor }: Props) => {
       }}
     >
       <div
-        className="absolute left-0 top-0 bg-red-500 w-full h-full z-[2]"
+        className="absolute left-0 top-0 w-full h-full z-[2] flex items-center justify-center"
         style={{ backgroundColor: bgColor }}
-      ></div>
+      >
+        <p className="text-2xl">
+          {bgColor === "#not_fond" ? "не найдено" : ""}
+        </p>
+      </div>
       <div className="flex justify-between">
         <div>
           {height &&

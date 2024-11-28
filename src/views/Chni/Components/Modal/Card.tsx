@@ -23,7 +23,7 @@ export const ZigzagCard = ({ bgColor }: Props) => {
       }}
     >
       <div
-        className="absolute left-0 top-0 bg-red-500 w-full h-full z-[2]"
+        className="absolute left-0 top-0 w-full h-full z-[2]"
         style={{ backgroundColor: bgColor }}
       ></div>
       <div className="flex justify-between">

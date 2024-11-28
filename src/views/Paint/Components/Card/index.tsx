@@ -10,6 +10,7 @@ interface Props {
   element: any;
   GetTime: any;
 }
+
 export const PaintPotCard = ({ element = {}, GetTime }: Props) => {
   const { getFontSize } = useDeviceHeight();
   const [open, setOpen]: any = useState(false);
@@ -27,9 +28,7 @@ export const PaintPotCard = ({ element = {}, GetTime }: Props) => {
   }, []);
   return (
     <div
-      className={`w-full h-full rounded-[12px] px-2 desktop:px-4 py-2 desktop:py-4 pb-1 desktop:pb-3 overflow-hidden relative ${
-        element.status === "stopped" ? "blue" : "green"
-      }`}
+      className={`w-full h-full rounded-[12px] px-2 desktop:px-4 py-2 desktop:py-4 pb-1 desktop:pb-3 overflow-hidden relative ${element.status?.color}`}
       onClick={(e: any) => {
         e.stopPropagation();
         setOpen(true);
@@ -119,10 +118,10 @@ export const PaintPotCard = ({ element = {}, GetTime }: Props) => {
               </p>
             </li>
             <li className={`${height > 1200 ? "pt-4" : "pt-3"}`}>
-              <p className="font-semibold">
+              <p className="font-semibold whitespace-pre-line">
                 {element.machine?.pkol_knit
                   ? element.machine.pkol_knit + " кг"
-                  : "Нет"}{" "}
+                  : element.status.text}{" "}
               </p>
             </li>
             <li>
@@ -140,28 +139,30 @@ export const PaintPotCard = ({ element = {}, GetTime }: Props) => {
                       element.machine.ReceteId?.indexOf("-") + 1,
                       element.machine.ReceteId.indexOf(".")
                     )
-                  : "Задании"}
+                  : ""}
               </p>
             </li>
           </ul>
         </div>
       </div>
 
-      <div
-        className="w-[1px] h-[100px] absolute z-[2] right-[-1px] top-0 right-shadow"
-        style={{
-          height: getFontSize({
-            count: 6,
-            percent: 63,
-            type: "machine",
-          }),
-          top: getFontSize({
-            count: 6,
-            percent: 10,
-            type: "machine",
-          }),
-        }}
-      ></div>
+      {element.machine?.pantone && (
+        <div
+          className="w-[1px] h-[100px] absolute z-[2] right-[-1px] top-0 right-shadow"
+          style={{
+            height: getFontSize({
+              count: 6,
+              percent: 63,
+              type: "machine",
+            }),
+            top: getFontSize({
+              count: 6,
+              percent: 10,
+              type: "machine",
+            }),
+          }}
+        ></div>
+      )}
 
       {element.machine?.pantone && (
         <div

@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
-import { Header } from "../../components/UI/Header";
-import { ToggleBtn } from "../../components/UI/ToggleBtn";
-import { PaintList } from "./Components/List";
-import { PaintTable } from "./Components/Table";
-import useCQuery from "../../hooks/useCQuery";
-import { PaintListSkeleton, PaintSkeletons } from "./Components/Skeleton";
+import { Header } from "../../../components/UI/Header";
+import { ToggleBtn } from "../../../components/UI/ToggleBtn";
+import { PaintList } from "../Components/List";
+import { PaintTable } from "../Components/Table";
+import useCQuery from "../../../hooks/useCQuery";
+import { PaintListSkeleton, PaintSkeletons } from "../Components/Skeleton";
 import { useSelector } from "react-redux";
-import CBreadcrumbs from "../../components/CElements/CBreadcrumbs";
-import GlobalSearch from "../../components/UI/GlobalSearch";
+import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
+import GlobalSearch from "../../../components/UI/GlobalSearch";
 const breadCrumbs = [{ label: "Дашборд покраски", link: "/paint/dashboard" }];
-const PaintSection = () => {
+const PaintSectionYarn = () => {
   const [type, setType] = useState("grid");
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const { data, isLoading, refetch } = useCQuery({
@@ -35,11 +35,24 @@ const PaintSection = () => {
     const result = list?.length ? list : data ?? [];
     const arr: any = [];
     result?.forEach((element: any) => {
-      if (element.boya_kazan.toLowerCase().includes("yes")) {
+      if (
+        element.boya_kazan.toLowerCase().includes("yes") &&
+        element.device_group?.includes("IPLIK BOYA")
+      ) {
         const order = element.code_device.replace("-", "");
-        const obj = element.nres?.[0]
-          ? { machine: element.nres?.[0] }
-          : { status: "stopped", machine: { status: "stopped" } };
+        let obj: any = {};
+        if (element.nres?.[0]) {
+          obj.machine = element.nres?.[0];
+          obj.status = {
+            color: "green",
+            status: "working",
+          };
+        } else {
+          obj.status = {
+            color: element.ip === "EMPTY" ? "grey" : "blue",
+            status: element.ip === "EMPTY" ? "no_connection" : "stopped",
+          };
+        }
         arr.push({ ...element, ...obj, order });
       }
     });
@@ -79,4 +92,4 @@ const PaintSection = () => {
   );
 };
 
-export default PaintSection;
+export default PaintSectionYarn;

@@ -6,8 +6,9 @@ import "./style.scss";
 import { ListDivider } from "@mui/joy";
 export const PaintCardList = ({ element = {} }: { element: any }) => {
   const bgColor = `#${
-    PantoneColors[element.machine?.pantone?.substring(4)]?.hex
+    PantoneColors[element.machine?.pantone?.substring(4, 11)]?.hex ?? "not_fond"
   }`;
+
   const { getFontSize } = useDeviceHeight();
   const height = window?.screen?.height ?? 0;
 
@@ -37,13 +38,13 @@ export const PaintCardList = ({ element = {} }: { element: any }) => {
         </li>
         <ListDivider />
         <li className="flex items-center justify-between ">
-          <p>Статус машины</p>{" "}
-          <p>{element.status !== "stopped" ? "Работает" : "Не работает"}</p>
+          <p>Статус машины</p> <p>{element.status.text}</p>
         </li>
 
         <ListDivider />
         <li className="flex items-center justify-between ">
-          <p>IP адрес </p> <p>{element.ip}</p>
+          <p>IP адрес </p>{" "}
+          <p>{element.ip === "EMPTY" ? element.status.text : element.ip}</p>
         </li>
         <ListDivider />
         <li className="flex items-center justify-between ">
