@@ -1,6 +1,6 @@
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-import { Button, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { ExcelIconOutlined } from "../../components/UI/IconGenerator/Svg/Machines";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -57,20 +57,22 @@ const ExcelDownload = ({
         </div>
       </IconButton>
       {open && (
-        <div className="absolute right-4 top-[33px] bg-white border border-[var(--gray20)] card-shadow rounded-[12px] z-[92] min-w-[150px] whitespace-nowrap px-2 py-2">
+        <div className="absolute right-0 top-[33px] bg-white border border-[var(--gray20)] card-shadow rounded-[12px] z-[92] min-w-[150px] whitespace-nowrap text-left">
           <ul>
-            <li>
-              <Button
+            <li className="p-2 hover:bg-[var(--border)]">
+              <button
                 onClick={() => downloadExcel("selected")}
                 className="w-full"
               >
-                <p className="text-[var(--black)]">Скачать таблицу</p>
-              </Button>
+                <p className="text-[var(--black)] text-left">Скачать таблицу</p>
+              </button>
             </li>
-            <li>
-              <Button onClick={() => downloadExcel("all")} className="w-full">
-                <p className="text-[var(--black)]">Скачать все данные</p>
-              </Button>
+            <li className="p-2 hover:bg-[var(--border)]">
+              <button onClick={() => downloadExcel("all")} className="w-full">
+                <p className="text-[var(--black)] text-left">
+                  Скачать все данные
+                </p>
+              </button>
             </li>
           </ul>
         </div>

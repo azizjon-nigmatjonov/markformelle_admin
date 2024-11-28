@@ -424,7 +424,7 @@ const CTable = ({
   return (
     <div className="relative h-full">
       <div className="border border-[var(--border)] designed-scroll rounded-[12px] h-full overflow-scroll">
-        {tableSetting ? (
+        {tableSetting && bodySource?.length ? (
           <HeaderSettings
             totalCount={meta.totalCount}
             filterParams={filterParams}
@@ -433,7 +433,7 @@ const CTable = ({
             headColumns={items}
             reOrder={reOrder}
             pageColumns={pageColumns}
-            bodyColumns={newBodyColumns}
+            bodyColumns={bodySource}
             allColumns={bodyColumns}
           />
         ) : (

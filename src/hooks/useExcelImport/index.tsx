@@ -1,12 +1,12 @@
 import { CircularProgress, IconButton } from "@mui/material";
-import { useState } from "react";
+import { memo, useState } from "react";
 import * as XLSX from "xlsx";
 import { UploadOutlinedIcon } from "../../components/UI/IconGenerator/Svg/Machines";
 
 const ExcelReader = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log("data", data);
+  console.log("data upload excel", data);
 
   const handleFileUpload = (e: any) => {
     setLoading(true);
@@ -56,4 +56,4 @@ const ExcelReader = () => {
   );
 };
 
-export default ExcelReader;
+export default memo(ExcelReader);

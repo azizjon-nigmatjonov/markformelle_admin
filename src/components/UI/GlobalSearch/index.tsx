@@ -13,25 +13,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { globalToolActions } from "../../../store/globalTools";
 
 interface Props {
-  handleChange: (val: any) => void;
   delay?: number;
   classes?: string;
   list: any;
   defaultValue?: string | number;
   setList: (val: any) => void;
-  handleSubmit?: (val: any) => void;
 }
 
 const GlobalSearch = ({
   list = [],
   setList = () => {},
-  handleChange = () => {},
   delay = 0,
   classes = "",
   defaultValue = "",
-  handleSubmit = () => {},
 }: Props) => {
   const { t } = useTranslation();
+  const searchFields = useSelector(
+    (state: any) => state.globalTool.searchFields
+  );
   const [value, setValue]: any = useState(null);
   const [newData, setNewData] = useState([]);
   const [open, setOpen] = useState(false);
@@ -39,15 +38,16 @@ const GlobalSearch = ({
   const location = useLocation();
   const dispatch: any = useDispatch();
   const [openMenu, setOpenMenu] = useState(false);
+
   const clearValue = () => {
-    setList(list);
+    setList(initialList);
     setValue("");
     setOpen(false);
   };
-  const [values, setValues]: any = useState([]);
-  const searchableFields = useSelector(
-    (state: any) => state.globalTool.searchableFields
-  );
+
+  useEffect(() => {
+    setValue(defaultValue);
+  }, [defaultValue]);
 
   const pageName: any = useMemo(() => {
     const strLen =
@@ -59,33 +59,54 @@ const GlobalSearch = ({
     return result;
   }, [location]);
 
+  const initialList = useMemo(() => {
+    return (
+      list?.map((item: any, index: number) => {
+        if (item.id) {
+          return item;
+        } else {
+          return {
+            ...item,
+            id: index,
+          };
+        }
+      }) ?? []
+    );
+  }, [list]);
+
   const searchedValues = useMemo(() => {
-    return searchableFields[pageName] ?? [];
-  }, [pageName, searchableFields]);
-  console.log("searchableFields 123", searchableFields);
-  console.log("searchedValues", searchedValues);
+    if (!searchFields) return [];
+    return searchFields[pageName] ?? [];
+  }, [pageName, searchFields]);
 
   const debounce = useDebounce((search: any) => {
     setValue(search);
-    handleChange(search);
+    if (search) {
+      setOpen(true);
+      const data = newData.filter((item: any) =>
+        item.value.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+      );
+
+      setSearchedData(data);
+    } else {
+      setSearchedData(newData);
+      clearValue();
+    }
   }, delay);
 
-  useEffect(() => {
-    setValue(defaultValue);
-  }, [defaultValue]);
-
   const handleCheck = (el: any) => {
-    const newList = list.filter((item: any) => item.id === el.id);
+    const newList = initialList.filter((item: any) => item.id === el.id);
     setList(newList);
+    setValue(el.value);
   };
 
   useEffect(() => {
-    if (!list?.length) return;
+    if (!initialList?.length) return;
 
     const arr: any = [];
-
-    list.forEach((obj: any) => {
-      const keys = Object.keys(obj);
+    let keys: any = [];
+    initialList.forEach((obj: any) => {
+      keys = Object.keys(obj);
       for (let key of keys) {
         const value = typeof obj[key] === "object" ? "" : obj[key] + "";
         const data = { label: key, value, id: obj.id };
@@ -93,46 +114,23 @@ const GlobalSearch = ({
       }
     });
 
-    setNewData(arr);
-  }, [list]);
-
-  useEffect(() => {
-    if (value) {
-      setOpen(true);
-      const data = newData.filter((item: any) =>
-        item.value.toLocaleLowerCase().includes(value.toLocaleLowerCase())
+    if (!searchedValues.length) {
+      dispatch(
+        globalToolActions.setSearchFields({
+          pageName,
+          payload: keys,
+        })
       );
-      setSearchedData(data);
+      setNewData(arr);
     } else {
-      setSearchedData(newData);
-      clearValue();
+      setNewData(
+        arr.filter((item: any) => searchedValues.includes(item.label))
+      );
     }
-  }, [value]);
+  }, [initialList, searchedValues]);
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter" && value) {
-      handleSubmit(value);
-      clearValue();
-    }
-  };
-
-  const handleFilterSave = (val: string) => {
-    let arr: any = values?.length ? [...values] : [];
-    if (arr?.includes(val)) {
-      arr = arr.filter((item: string) => item !== val);
-    } else {
-      setValues([...values, val]);
-    }
-
-    dispatch(
-      globalToolActions.setSearchFields({
-        pageName,
-        payload: arr,
-      })
-    );
-  };
   const menuList = useMemo(() => {
-    const obj = list?.[0] ?? {};
+    const obj = initialList?.[0] ?? {};
     const keys = Object.keys(obj);
     return [
       {
@@ -146,7 +144,7 @@ const GlobalSearch = ({
           if (id?.[0] && typeof id === "object") {
             id = "";
           }
-          if (values.includes(id)) {
+          if (searchedValues.includes(id)) {
             obj.checked = true;
           } else {
             obj.checked = false;
@@ -158,7 +156,29 @@ const GlobalSearch = ({
         }),
       },
     ];
-  }, [list, values?.length]);
+  }, [initialList, searchedValues?.length]);
+
+  const handleFilterSave = (val: string) => {
+    let arr: any = searchedValues?.length ? [...searchedValues] : [];
+    if (arr?.includes(val)) {
+      arr = arr.filter((item: string) => item !== val);
+    } else {
+      arr = [...arr, val];
+    }
+
+    dispatch(
+      globalToolActions.setSearchFields({
+        pageName,
+        payload: arr,
+      })
+    );
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter" && value) {
+      clearValue();
+    }
+  };
 
   return (
     <div
@@ -179,7 +199,7 @@ const GlobalSearch = ({
         className={`min-w-[140px] bg-transparent h-full outline-none text-[var(--black)] placeholder-[var(--gray)] rounded-[8px] ${classes}`}
       />
 
-      {open ? (
+      {open && searchedData.length ? (
         <div className="absolute left-0 top-full w-full bg-white border border-[var(--border)] card-shadow rounded-[12px] overflow-scroll max-h-[400px] remove-scroll">
           <ul>
             {searchedData?.map((item: any, index: number) => (
@@ -210,7 +230,6 @@ const GlobalSearch = ({
         <button
           onClick={() => {
             clearValue();
-            handleChange("");
           }}
           className="absolute right-2 top-1/2 -translate-y-1/2"
         >

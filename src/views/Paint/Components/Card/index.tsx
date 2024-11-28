@@ -14,7 +14,12 @@ export const PaintPotCard = ({ element = {}, GetTime }: Props) => {
   const { getFontSize } = useDeviceHeight();
   const [open, setOpen]: any = useState(false);
   const [height, setHeight]: any = useState(0);
-
+  const formatToISO = (dateString: string) => {
+    // Split the old_time string into components
+    const [day, month, year, time] = dateString.split(/[\s.]/);
+    // Construct an ISO-compliant string
+    return `${year}-${month}-${day}T${time}`;
+  };
   useEffect(() => {
     if (window) {
       setHeight(window?.screen?.height);
@@ -57,8 +62,8 @@ export const PaintPotCard = ({ element = {}, GetTime }: Props) => {
                 }),
               }}
             >
-              {element.machine?.DateStart
-                ? GetTime(element.machine.DateStart)
+              {element.machine?.date_start
+                ? GetTime(formatToISO(element.machine.date_start))
                 : "00:00"}
             </p>
           </CircularProgress>
@@ -74,11 +79,11 @@ export const PaintPotCard = ({ element = {}, GetTime }: Props) => {
               }}
             >
               {GetCurrentDate({
-                type: "time",
-                date: element.machine?.DateStart,
+                type: "string",
+                date: element.machine?.date_start,
               })}{" "}
-              {`${element.machine?.DateStart ? " - " : ""}`}
-              {GetCurrentDate({ type: "time", date: "" })}
+              {`${element.machine?.date_start ? " - " : ""}`}
+              {GetCurrentDate({ type: "string", date: "" })}
             </p>
           </div>
         </div>

@@ -54,25 +54,8 @@ const PaintSection = () => {
           <CBreadcrumbs items={breadCrumbs} progmatic={true} type="link" />
         }
       >
-        <div className=" mr-3">
-          <GlobalSearch
-            list={
-              data?.map((item: any, index: number) => {
-                if (item.id) {
-                  return item;
-                } else {
-                  return {
-                    ...item,
-                    id: index,
-                  };
-                }
-              }) ?? []
-            }
-            setList={setList}
-            defaultValue={""}
-            handleChange={() => {}}
-            handleSubmit={() => {}}
-          />
+        <div className="mr-3">
+          <GlobalSearch list={data ?? []} setList={setList} />
         </div>
         <ToggleBtn type={type} setType={setType} />
       </Header>

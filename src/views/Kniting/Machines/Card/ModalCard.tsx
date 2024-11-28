@@ -153,7 +153,9 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
       <ModalClose />
       <p></p>
       <p></p>
-
+      <h2 className="absolute right-3 top-[40px] z-[99] font-medium">
+        {machine.name}
+      </h2>
       <Tabs aria-label="Basic tabs" defaultValue={0} sx={{ width: "100%" }}>
         <TabList>
           <Tab>Информация о машине</Tab>
@@ -325,7 +327,7 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
                       }
                       determinate
                       sx={{
-                        "--CircularProgress-size": "120px",
+                        "--CircularProgress-size": "135px",
                         "--CircularProgress-trackThickness": "10px",
                         "--CircularProgress-progressThickness": "10px",
                       }}
@@ -418,7 +420,7 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
         </TabPanel>
         <TabPanel value={1}>
           <Stack>
-            <OrderList machineName={machine.id} />
+            <OrderList machineName={machine.name} machineId={machine.id} />
           </Stack>
         </TabPanel>
       </Tabs>

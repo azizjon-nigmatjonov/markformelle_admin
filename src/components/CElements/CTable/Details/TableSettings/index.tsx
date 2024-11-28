@@ -131,8 +131,8 @@ export const HeaderSettings = ({
       if (!order || !Array.isArray(order)) {
         return objects;
       }
-
-      const arr = objects.map((obj: any) => {
+      const result: any = [];
+      objects.forEach((obj: any) => {
         const reorderedObj: any = {};
         order.forEach((key: any) => {
           if (Object.prototype.hasOwnProperty.call(obj, key)) {
@@ -146,15 +146,15 @@ export const HeaderSettings = ({
           }
         });
 
-        return reorderedObj;
+        result.push(reorderedObj);
       });
 
-      return arr;
+      return result;
     };
 
     const reorderedArray = reorderObjects(arrayOfObjects, keyOrder);
     return reorderedArray;
-  }, [headColumns, bodyColumns]);
+  }, [headColumns.length, bodyColumns.length, pageColumns.length]);
 
   return (
     <div className="pb-[40px]">

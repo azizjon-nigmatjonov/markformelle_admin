@@ -53,11 +53,13 @@ const MainLayout = () => {
       return;
     }
     if (now.getHours() === 12) {
-      dispatch(authActions.setVersion(day));
+      setTimeout(() => {
+        dispatch(authActions.setVersion(day));
+      }, 1000);
 
       setTimeout(() => {
         window.location.reload();
-      }, 1000);
+      }, 2000);
     }
   }, [ver]);
 

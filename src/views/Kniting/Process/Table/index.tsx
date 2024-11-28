@@ -6,14 +6,18 @@ import { useEffect } from "react";
 import CCard from "../../../../components/CElements/CCard";
 import { ProcessSkeleton } from "./Skeleton";
 
-export const ProcessTable = () => {
-  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
+interface Props {
+  isLoading: boolean;
+  wokers: any;
+  refetch: () => void;
+}
 
-  const { data, isLoading, refetch } = useCQuery({
-    key: `GET_GRUZ`,
-    endpoint: `http://10.10.6.21:8083/get_sotrudn_data`,
-    params: {},
-  });
+export const ProcessTable = ({
+  isLoading = false,
+  wokers = [],
+  refetch = () => {},
+}: Props) => {
+  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
 
   const {
     data: cardsData,
@@ -52,10 +56,7 @@ export const ProcessTable = () => {
           </div>
           <div className="w-[52%] h-full overflow-y-scroll remove-scroll">
             <CCard>
-              <SecondColumn
-                data={data?.dashboard_data ?? []}
-                isLoading={false}
-              />
+              <SecondColumn data={wokers ?? []} isLoading={false} />
             </CCard>
           </div>
         </div>

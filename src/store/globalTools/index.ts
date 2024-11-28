@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   currTime: "",
-  searchableFields: {},
+  searchFields: {},
 };
 
 export const { actions: globalToolActions, reducer: globalToolReducer } =
@@ -14,7 +14,7 @@ export const { actions: globalToolActions, reducer: globalToolReducer } =
         state.currTime = payload;
       },
       setSearchFields: (state: any, { payload: { pageName, payload } }) => {
-        state.searchableFields[pageName] = payload;
+        state.searchFields[pageName] = payload;
       },
     },
   });

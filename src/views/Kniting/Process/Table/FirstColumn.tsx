@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import CCard from "../../../../components/CElements/CCard";
 import "./style.scss";
 import { Skeleton } from "@mui/material";
 import { useCalculateTime } from "../../../../hooks/useCalucaleTime";
 import EmptyDataComponent from "../../../../components/UI/EmptyDataComponent";
-import axios from "axios";
 
 interface Props {
   data: any;

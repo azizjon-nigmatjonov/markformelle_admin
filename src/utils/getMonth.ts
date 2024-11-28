@@ -16,8 +16,8 @@ const days = getDaysInCurrentMonth();
 
 const getFirstDayOfMonth = () => {
   const currentDate = new Date();
-  currentDate.setDate(1); // Set the date to the first day of the month
-  const dayOfWeek = currentDate.getDay(); // Get the day of the week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+  currentDate.setDate(1);
+  const dayOfWeek = currentDate.getDay();
   return dayOfWeek;
 };
 

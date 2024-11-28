@@ -29,8 +29,33 @@ const Usually = (
   )} ${currentTime}`;
 };
 
+const GetDates = (
+  currentYear: number,
+  currentMonth: number,
+  currentDay: number,
+  symbol = "."
+) => {
+  return `${currentYear}${symbol}${addZero(currentMonth)}${symbol}${addZero(
+    currentDay
+  )}`;
+};
+
 const Hourly = (currentTime: string) => {
   return `${currentTime}`;
+};
+
+const GetTimeString = (dateStart: string) => {
+  // Convert to Date object
+  const [day, month, year, time] = dateStart.split(/[\s.]/);
+  const date = new Date(`${year}-${month}-${day}T${time}`);
+
+  // Extract hh:mm
+  const formattedTime = date.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  return formattedTime;
 };
 
 export const GetCurrentDate = ({
@@ -50,6 +75,8 @@ export const GetCurrentDate = ({
   const currentTime = currentDate.format("HH:mm");
 
   switch (type) {
+    case "string":
+      return GetTimeString(date);
     case "usually":
       return Usually(
         currentYear,
@@ -60,6 +87,8 @@ export const GetCurrentDate = ({
       );
     case "time":
       return GetTime(date);
+    case "date":
+      return GetDates(currentYear, currentMonth, currentDay, symbol);
     default:
       return Hourly(currentTime);
   }

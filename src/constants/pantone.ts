@@ -787,6 +787,10 @@ export const PantoneColors: any = {
     name: "iron",
     hex: "736460",
   },
+  "18-1307": {
+    name: "Coffee Quartz",
+    hex: "695650",
+  },
   "19-3803": {
     name: "plum-kitten",
     hex: "625b5c",
