@@ -1,6 +1,5 @@
 import { PantoneColors } from "../../../../constants/pantone";
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
-import { GetCurrentDate } from "../../../../utils/getDate";
 import { ZigzagCard } from "./Card";
 import "./style.scss";
 import { ListDivider } from "@mui/joy";
@@ -94,13 +93,7 @@ export const PaintCardList = ({ element = {} }: { element: any }) => {
         <ListDivider />
 
         <li className="flex items-center justify-between ">
-          <p>Время начала</p>{" "}
-          <p>
-            {GetCurrentDate({
-              type: "usually",
-              date: element.machine?.DateStart,
-            })}
-          </p>
+          <p>Время начала</p> <p>{element.machine?.date_start}</p>
         </li>
         <ListDivider />
 
@@ -116,7 +109,7 @@ export const PaintCardList = ({ element = {} }: { element: any }) => {
         */}
 
         <li className="flex items-center justify-between ">
-          <p>Время окончания</p> <p> -</p>
+          <p>Время окончания</p> <p> {element.machine?.date_end}</p>
         </li>
       </ul>
 
@@ -132,7 +125,7 @@ export const PaintCardList = ({ element = {} }: { element: any }) => {
                   {element.machine?.pantone}
                 </p>
                 <p className="text-2xl font-medium">
-                  {PantoneColors[element.machine?.pantone?.substring(4)]
+                  {PantoneColors[element.machine?.pantone?.substring(4, 11)]
                     ?.name || "-"}
                 </p>
               </div>

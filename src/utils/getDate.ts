@@ -35,8 +35,8 @@ const GetDates = (
   currentDay: number,
   symbol = "."
 ) => {
-  return `${currentYear}${symbol}${addZero(currentMonth)}${symbol}${addZero(
-    currentDay
+  return `${currentDay}${symbol}${addZero(currentMonth)}${symbol}${addZero(
+    currentYear
   )}`;
 };
 

@@ -586,40 +586,44 @@ const CTable = ({
                 rowsCount={filterParams.perPage}
                 dataLength={bodySource?.length}
               >
-                <TableRow>
-                  {newHeadColumns.map((item: any, colIndex: number) => (
-                    <CTableCell
-                      key={colIndex + item.title + ""}
-                      className="relative"
-                    >
-                      {item.id !== "index" && !item?.remove_sort ? (
-                        <div
-                          className={`w-full h-full  ${
-                            hoveredIndex === colIndex &&
-                            hoveredIndex > draggingIndex
-                              ? "drag-hovered right"
-                              : hoveredIndex === colIndex &&
-                                hoveredIndex < draggingIndex
-                              ? "drag-hovered left"
-                              : ""
-                          }`}
-                        >
-                          <input
-                            type="text"
-                            placeholder=""
-                            onChange={(e: any) =>
-                              searchDebounce(e.target.value, item.id)
-                            }
-                            className="w-full input-design h-full text-center"
-                            style={{ padding: 0 }}
-                          />
-                        </div>
-                      ) : (
-                        ""
-                      )}
-                    </CTableCell>
-                  ))}
-                </TableRow>
+                {bodySource?.length ? (
+                  <TableRow>
+                    {newHeadColumns.map((item: any, colIndex: number) => (
+                      <CTableCell
+                        key={colIndex + item.title + ""}
+                        className="relative"
+                      >
+                        {item.id !== "index" && !item?.remove_sort ? (
+                          <div
+                            className={`w-full h-full  ${
+                              hoveredIndex === colIndex &&
+                              hoveredIndex > draggingIndex
+                                ? "drag-hovered right"
+                                : hoveredIndex === colIndex &&
+                                  hoveredIndex < draggingIndex
+                                ? "drag-hovered left"
+                                : ""
+                            }`}
+                          >
+                            <input
+                              type="text"
+                              placeholder=""
+                              onChange={(e: any) =>
+                                searchDebounce(e.target.value, item.id)
+                              }
+                              className="w-full input-design h-full text-center"
+                              style={{ padding: 0 }}
+                            />
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      </CTableCell>
+                    ))}
+                  </TableRow>
+                ) : (
+                  ""
+                )}
                 {bodySource?.length
                   ? bodySource?.map((item: any, rowIndex: any) => (
                       <TableRow

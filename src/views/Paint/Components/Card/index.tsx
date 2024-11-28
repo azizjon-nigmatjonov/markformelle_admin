@@ -8,24 +8,19 @@ import { Modal } from "@mui/joy";
 
 interface Props {
   element: any;
-  GetTime: any;
 }
 
-export const PaintPotCard = ({ element = {}, GetTime }: Props) => {
+export const PaintPotCard = ({ element = {} }: Props) => {
   const { getFontSize } = useDeviceHeight();
   const [open, setOpen]: any = useState(false);
   const [height, setHeight]: any = useState(0);
-  const formatToISO = (dateString: string) => {
-    // Split the old_time string into components
-    const [day, month, year, time] = dateString.split(/[\s.]/);
-    // Construct an ISO-compliant string
-    return `${year}-${month}-${day}T${time}`;
-  };
+
   useEffect(() => {
     if (window) {
       setHeight(window?.screen?.height);
     }
   }, []);
+
   return (
     <div
       className={`w-full h-full rounded-[12px] px-2 desktop:px-4 py-2 desktop:py-4 pb-1 desktop:pb-3 overflow-hidden relative ${element.status?.color}`}
@@ -42,8 +37,8 @@ export const PaintPotCard = ({ element = {}, GetTime }: Props) => {
               percent: height > 1200 ? 10 : 5.5,
               type: "machine",
             })}
-            value={0}
-            maxValue={100}
+            value={element?.machine?.lasted_minutes ?? 0}
+            maxValue={element?.machine?.process_time ?? 100}
             size={getFontSize({
               count: 6,
               percent:
@@ -61,8 +56,8 @@ export const PaintPotCard = ({ element = {}, GetTime }: Props) => {
                 }),
               }}
             >
-              {element.machine?.date_start
-                ? GetTime(formatToISO(element.machine.date_start))
+              {element.machine?.lasted_date
+                ? element.machine.lasted_date
                 : "00:00"}
             </p>
           </CircularProgress>
@@ -82,7 +77,10 @@ export const PaintPotCard = ({ element = {}, GetTime }: Props) => {
                 date: element.machine?.date_start,
               })}{" "}
               {`${element.machine?.date_start ? " - " : ""}`}
-              {GetCurrentDate({ type: "string", date: "" })}
+              {GetCurrentDate({
+                type: "string",
+                date: element.machine?.date_end,
+              })}
             </p>
           </div>
         </div>

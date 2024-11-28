@@ -38,7 +38,7 @@ const KnittingMachines = () => {
   useEffect(() => {
     const refetching = setInterval(() => {
       refetch();
-    }, 20000);
+    }, 30000);
 
     if (filterParams) {
       clearInterval(refetching);

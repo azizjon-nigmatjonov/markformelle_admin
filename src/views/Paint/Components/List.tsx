@@ -1,4 +1,3 @@
-import { useCalculateTime } from "../../../hooks/useCalucaleTime";
 import { PaintPotCard } from "./Card";
 // import useDeviceHeight from "../../../hooks/useDeviceHeight";
 
@@ -7,8 +6,6 @@ interface Props {
 }
 
 export const PaintList = ({ data = [] }: Props) => {
-  const { GetTime } = useCalculateTime();
-
   return (
     <div className="p-2">
       <div
@@ -33,7 +30,7 @@ export const PaintList = ({ data = [] }: Props) => {
         }}
       >
         {data?.map((item: any, index: number) => (
-          <PaintPotCard key={index} element={item ?? {}} GetTime={GetTime} />
+          <PaintPotCard key={index} element={item ?? {}} />
         ))}
       </div>
     </div>

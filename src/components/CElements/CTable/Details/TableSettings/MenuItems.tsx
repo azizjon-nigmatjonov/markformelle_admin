@@ -1,7 +1,5 @@
 import { useState } from "react";
 import CCheckbox from "../../../../CElements/CCheckbox";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Collapse } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 const CheckBox = ({
@@ -14,6 +12,7 @@ const CheckBox = ({
   handleFilterSave: (val: any) => void;
 }) => {
   const [checked, setChecked] = useState(defaultValue);
+
   return (
     <CCheckbox
       element={{ label: element.title || element.id }}
@@ -49,12 +48,13 @@ const CheckBoxList = ({
 
 export const MenuItem = ({
   element,
+  allCheck = false,
   handleFilterSave,
 }: {
   element: any;
+  allCheck: boolean;
   handleFilterSave: (val: any) => void;
 }) => {
-  const [collapse, setCollapse] = useState(true);
   const { t } = useTranslation();
 
   const GetUi = (el: any) => {
@@ -70,18 +70,18 @@ export const MenuItem = ({
 
   return (
     <li className="w-[240px]">
-      <button
-        onClick={() => setCollapse((prev: boolean) => !prev)}
-        className="mb-2 flex justify-between w-full"
-      >
+      <div className="mb-2 flex justify-between w-full items-center pr-1">
         <span>{t(element.label)}</span>
-        <div className={collapse ? "rotate-[180deg]" : ""}>
-          <KeyboardArrowUpIcon />
+        <div>
+          <CCheckbox
+            checked={allCheck}
+            handleCheck={() => {
+              handleFilterSave("all");
+            }}
+          />
         </div>
-      </button>
-      <Collapse in={collapse} timeout="auto" unmountOnExit>
-        {GetUi(element)}
-      </Collapse>
+      </div>
+      <>{GetUi(element)}</>
     </li>
   );
 };

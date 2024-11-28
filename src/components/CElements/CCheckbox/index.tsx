@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { CheckLine } from "../../../components/UI/IconGenerator/Svg";
 
 interface Props {
-  element: any;
+  element?: any;
   checked?: boolean;
   handleCheck?: (val: any) => void;
 }
@@ -12,24 +12,24 @@ const CCheckbox = ({
   handleCheck = () => {},
   checked = false,
 }: Props) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   return (
     <div
       onClick={() => handleCheck(element)}
-      className="flex items-center gap-2 cursor-pointer px-[12px] rounded-lg border border-[var(--gray20)] h-[35px] w-full whitespace-nowrap"
+      className={`flex items-center  cursor-pointer  rounded-lg border-[var(--gray20)]  w-full whitespace-nowrap ${
+        element?.label ? "border gap-2 px-[12px] h-[35px]" : ""
+      }`}
     >
       <div className="w-[18px] h-[18px]">
         <div
           className={`w-[18px] h-[18px] rounded-[4px] border-2 ${
-            checked
-              ? "border-[var(--main)]"
-              : "border-[var(--gray20)]"
+            checked ? "border-[var(--main)]" : "border-[var(--gray20)]"
           }`}
         >
           {checked ? <CheckLine fill="var(--main)" /> : ""}
         </div>
       </div>
-      <p>{t(element.label)}</p>
+      {element?.label && <p>{t(element.label)}</p>}
     </div>
   );
 };

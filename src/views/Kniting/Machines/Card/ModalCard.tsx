@@ -153,7 +153,7 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
       <ModalClose />
       <p></p>
       <p></p>
-      <h2 className="absolute right-3 top-[40px] z-[99] font-medium">
+      <h2 className="absolute text-2xl right-5 top-[35px] flex items-center h-[35px] z-[99] font-semibold border-[1.2px] border-[var(--border)] border-b-0 px-2">
         {machine.name}
       </h2>
       <Tabs aria-label="Basic tabs" defaultValue={0} sx={{ width: "100%" }}>
@@ -419,9 +419,7 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
           </div>
         </TabPanel>
         <TabPanel value={1}>
-          <Stack>
-            <OrderList machineName={machine.name} machineId={machine.id} />
-          </Stack>
+          <OrderList machineName={machine.name} machineId={machine.id} />
         </TabPanel>
       </Tabs>
     </ModalDialog>

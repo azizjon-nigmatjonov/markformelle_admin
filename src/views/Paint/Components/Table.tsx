@@ -27,12 +27,10 @@ export const PaintTable = ({ list = [] }: Props) => {
       {
         title: "status",
         id: "status",
-        render: (status: string) => {
+        render: (status: any) => {
           return (
             <div
-              className={`h-full w-full green rounded-[8px] whitespace-nowrap px-2 ${
-                status !== "stopped" ? "green" : "red"
-              }`}
+              className={`h-full w-full green rounded-[8px] whitespace-nowrap px-2 ${status.color}`}
             >
               <p>{status === "stopped" ? "Не работает" : "Работает"}</p>
             </div>
@@ -41,22 +39,23 @@ export const PaintTable = ({ list = [] }: Props) => {
       },
     ];
     setHeadColumns(arr);
-  }, []);
+  }, [bodyColumns]);
 
   useEffect(() => {
     if (!list?.length) return;
 
     setBodyColumns(list);
-  }, [list]);
+  }, [list?.length]);
 
   useEffect(() => {
     if (!bodyColumns?.length) return;
 
-    const obj: any = bodyColumns?.find((item: any) => item?.nres?.length) ?? {};
+    const obj: any =
+      bodyColumns?.find((item: any) => item?.nres?.length) ?? bodyColumns?.[0];
     delete obj.nres;
     delete obj.machine;
     const keys = Object.keys(obj);
-    const newColumns: any = [...headColumns];
+    const newColumns: any = [];
     keys?.forEach((key: string) => {
       const found = headColumns.find((item: any) => item.id === key);
       if (found?.id) {
@@ -75,6 +74,7 @@ export const PaintTable = ({ list = [] }: Props) => {
 
     setOpen(obj);
   };
+  console.log("headColumns", headColumns);
 
   return (
     <>

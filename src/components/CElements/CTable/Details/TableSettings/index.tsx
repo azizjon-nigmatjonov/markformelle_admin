@@ -12,10 +12,12 @@ import ExcelDownload from "../../../../../hooks/useExcelDownload";
 import ExcelReader from "../../../../../hooks/useExcelImport";
 
 export const SettingDropdown = ({
+  allCheck = false,
   menuList = [],
   handleFilterSave,
 }: {
   menuList: any;
+  allCheck?: boolean;
   setOpen: (val: boolean) => void;
   handleFilterSave: (val: any) => void;
 }) => {
@@ -26,6 +28,7 @@ export const SettingDropdown = ({
           <MenuItem
             key={index}
             element={item}
+            allCheck={allCheck}
             handleFilterSave={handleFilterSave}
           />
         ))}
@@ -56,25 +59,51 @@ export const HeaderSettings = ({
 }) => {
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
-
+  const [allCheck, setAllCheck] = useState(true);
   const handleFilterSave = (id: any) => {
-    let arr: any = pageColumns;
+    let arr: any = pageColumns?.length ? [...pageColumns] : [];
 
-    if (id?.[0] && typeof id === "object") {
-      id = id.join("");
-    }
-
-    if (arr.includes(id)) {
-      arr = arr.filter((item: string) => item !== id);
+    if (id === "all") {
+      if (allCheck) {
+        arr = [];
+        setAllCheck(false);
+      } else {
+        (arr = headColumns.map((item: { id: any }) => {
+          if (typeof item.id === "object") {
+            return item.id.join("");
+          } else {
+            return item.id;
+          }
+        })),
+          setAllCheck(true);
+      }
+      setOpen(false);
+      setTimeout(() => {
+        setOpen(true);
+      }, 100);
     } else {
-      arr = [...arr, id];
-    }
+      if (id?.[0] && typeof id === "object") {
+        id = id.join("");
+      }
 
-    dispatch(tableStoreActions.setColumns({ pageName, payload: arr }));
+      if (arr.includes(id)) {
+        setAllCheck(false);
+        arr = arr.filter((item: string) => item !== id);
+      } else {
+        arr = [...arr, id];
+      }
+    }
+    const obj = allColumns?.[0] ?? {};
+    const keys = Object.keys(obj);
+
+    if (keys.length === arr.length) {
+      setAllCheck(true);
+    }
+    dispatch(tableStoreActions.setColumns({ pageName, payload: [...arr] }));
   };
 
   useEffect(() => {
-    if (!pageColumns?.length && headColumns?.length) {
+    if (!pageColumns?.length && headColumns?.length && allCheck) {
       setTimeout(() => {
         dispatch(
           tableStoreActions.setColumns({
@@ -90,7 +119,7 @@ export const HeaderSettings = ({
         );
       }, 500);
     }
-  }, [pageColumns, headColumns]);
+  }, [pageColumns?.length, headColumns, allCheck]);
 
   const menuList = useMemo(() => {
     return [
@@ -112,7 +141,7 @@ export const HeaderSettings = ({
         }),
       },
     ];
-  }, [headColumns, pageColumns]);
+  }, [headColumns, pageColumns?.length]);
 
   const ExcelData = useMemo(() => {
     const keyOrder: any = [];
@@ -195,20 +224,23 @@ export const HeaderSettings = ({
             tableActions={tableActions}
           /> */}
 
-          <div onClick={() => setOpen(true)} className="relative">
-            <IconButton>
-              <div
-                className={`w-[30px] h-[30px] border rounded-[8px] items-center justify-center flex ${
-                  open ? "border-[var(--primary)]" : "border-[var(--border)]"
-                }`}
-              >
-                <ListDotIcon fill={open ? "var(--primary)" : "var(--gray)"} />
-              </div>
-            </IconButton>
+          <div className="relative">
+            <div onClick={() => setOpen(true)} className="relative">
+              <IconButton>
+                <div
+                  className={`w-[30px] h-[30px] border rounded-[8px] items-center justify-center flex ${
+                    open ? "border-[var(--primary)]" : "border-[var(--border)]"
+                  }`}
+                >
+                  <ListDotIcon fill={open ? "var(--primary)" : "var(--gray)"} />
+                </div>
+              </IconButton>
+            </div>
             {open && (
               <SettingDropdown
                 setOpen={setOpen}
                 menuList={menuList}
+                allCheck={allCheck}
                 handleFilterSave={handleFilterSave}
               />
             )}

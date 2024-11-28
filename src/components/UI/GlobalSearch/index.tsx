@@ -38,6 +38,7 @@ const GlobalSearch = ({
   const location = useLocation();
   const dispatch: any = useDispatch();
   const [openMenu, setOpenMenu] = useState(false);
+  const [allCheck, setAllCheck] = useState(true);
 
   const clearValue = () => {
     setList(initialList);
@@ -113,8 +114,11 @@ const GlobalSearch = ({
         if (value) arr.push(data);
       }
     });
+    if (keys.length === searchedValues.length) {
+      setAllCheck(true);
+    }
 
-    if (!searchedValues.length) {
+    if (!searchedValues.length && allCheck) {
       dispatch(
         globalToolActions.setSearchFields({
           pageName,
@@ -127,11 +131,12 @@ const GlobalSearch = ({
         arr.filter((item: any) => searchedValues.includes(item.label))
       );
     }
-  }, [initialList, searchedValues]);
+  }, [initialList, searchedValues, allCheck]);
 
   const menuList = useMemo(() => {
     const obj = initialList?.[0] ?? {};
     const keys = Object.keys(obj);
+
     return [
       {
         label: "Элемент поиска",
@@ -144,11 +149,13 @@ const GlobalSearch = ({
           if (id?.[0] && typeof id === "object") {
             id = "";
           }
+
           if (searchedValues.includes(id)) {
             obj.checked = true;
           } else {
             obj.checked = false;
           }
+
           return {
             ...obj,
             id,
@@ -160,10 +167,27 @@ const GlobalSearch = ({
 
   const handleFilterSave = (val: string) => {
     let arr: any = searchedValues?.length ? [...searchedValues] : [];
-    if (arr?.includes(val)) {
-      arr = arr.filter((item: string) => item !== val);
+    if (val === "all") {
+      const obj = initialList?.[0] ?? {};
+      const keys = Object.keys(obj);
+      if (allCheck) {
+        arr = [];
+        setAllCheck(false);
+      } else {
+        arr = [...keys];
+        setAllCheck(true);
+      }
+      setOpenMenu(false);
+      setTimeout(() => {
+        setOpenMenu(true);
+      }, 100);
     } else {
-      arr = [...arr, val];
+      if (arr?.includes(val)) {
+        setAllCheck(false);
+        arr = arr.filter((item: string) => item !== val);
+      } else {
+        arr = [...arr, val];
+      }
     }
 
     dispatch(
@@ -182,7 +206,7 @@ const GlobalSearch = ({
 
   return (
     <div
-      className={`w-[240px] relative bg-white rounded-[8px] flex border justify-between items-center h-[25px] desktop:h-[35px] px-9 ${
+      className={`w-[180px] desktop:w-[240px] relative bg-white rounded-[8px] flex border justify-between items-center h-[25px] desktop:h-[35px] px-9 ${
         value ? " border-[var(--primary)]" : "border-[var(--border)]"
       }`}
     >
@@ -248,6 +272,7 @@ const GlobalSearch = ({
         <SettingDropdown
           setOpen={setOpen}
           menuList={menuList}
+          allCheck={allCheck}
           handleFilterSave={handleFilterSave}
         />
       )}
