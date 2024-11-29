@@ -49,9 +49,14 @@ export const PaintTable = ({ list = [] }: Props) => {
 
   useEffect(() => {
     if (!bodyColumns?.length) return;
+    console.log(
+      11,
+      bodyColumns?.find((item: any) => item?.machine)
+    );
 
     const obj: any =
-      bodyColumns?.find((item: any) => item?.nres?.length) ?? bodyColumns?.[0];
+      bodyColumns?.find((item: any) => item?.machine) ?? bodyColumns?.[0];
+
     delete obj.nres;
     delete obj.machine;
     const keys = Object.keys(obj);

@@ -132,6 +132,7 @@ export const HeaderSettings = ({
           if (id?.[0] && typeof id === "object") {
             id = id.join("");
           }
+
           if (pageColumns.includes(id)) {
             item.checked = true;
           } else {

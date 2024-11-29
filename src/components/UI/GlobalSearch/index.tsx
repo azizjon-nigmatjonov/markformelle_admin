@@ -167,9 +167,9 @@ const GlobalSearch = ({
 
   const handleFilterSave = (val: string) => {
     let arr: any = searchedValues?.length ? [...searchedValues] : [];
+    const obj = initialList?.[0] ?? {};
+    const keys = Object.keys(obj);
     if (val === "all") {
-      const obj = initialList?.[0] ?? {};
-      const keys = Object.keys(obj);
       if (allCheck) {
         arr = [];
         setAllCheck(false);
@@ -189,7 +189,9 @@ const GlobalSearch = ({
         arr = [...arr, val];
       }
     }
-
+    if (arr.length === keys?.length) {
+      setAllCheck(true);
+    }
     dispatch(
       globalToolActions.setSearchFields({
         pageName,

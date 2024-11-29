@@ -8,7 +8,7 @@ import { PaintListSkeleton, PaintSkeletons } from "../Components/Skeleton";
 import { useSelector } from "react-redux";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import GlobalSearch from "../../../components/UI/GlobalSearch";
-import { useCalculateTime } from "../../../hooks/useCalucaleTime";
+import { PantoneColors } from "../../../constants/pantone";
 const breadCrumbs = [{ label: "Дашборд покраски", link: "/paint/dashboard" }];
 
 const statusText: any = {
@@ -18,7 +18,6 @@ const statusText: any = {
 };
 
 const PaintSectionYarn = () => {
-  const { GetTime } = useCalculateTime();
   const [type, setType] = useState("grid");
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const { data, isLoading, refetch } = useCQuery({
@@ -64,11 +63,40 @@ const PaintSectionYarn = () => {
     return hours * 60 + minutes;
   };
 
-  const formatToISO = (dateString: string) => {
-    // Split the old_time string into components
-    const [day, month, year, time] = dateString.split(/[\s.]/);
-    // Construct an ISO-compliant string
-    return `${year}-${month}-${day}T${time}`;
+  const GetPantone = (str: string) => {
+    if (str.includes("TCX")) {
+      return PantoneColors[str?.substring(4, 11)];
+    } else {
+      return PantoneColors[str];
+    }
+  };
+
+  const calculateTimeDifference = (startTime: string, endTime: string) => {
+    // Helper function to convert dd.MM.yyyy HH:mm:ss to ISO format
+    const formatToISO = (dateString: string) => {
+      const [day, month, year, time] = dateString.split(/[\s.]/);
+      return `${year}-${month}-${day}T${time}`;
+    };
+
+    // Convert the date-time strings into Date objects
+    const startDate: any = new Date(formatToISO(startTime));
+    const endDate: any = new Date(formatToISO(endTime));
+
+    // Calculate the difference in milliseconds
+    const differenceInMillis = endDate - startDate;
+
+    // Convert milliseconds to total minutes
+    const totalMinutes = Math.floor(differenceInMillis / (1000 * 60));
+
+    // Extract hours and minutes
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = 33;
+
+    // Format as hh:mm
+    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+      2,
+      "0"
+    )}`;
   };
 
   const newData = useMemo(() => {
@@ -84,10 +112,15 @@ const PaintSectionYarn = () => {
         if (element.nres?.[0]) {
           obj.machine = element.nres?.[0];
 
-          obj.machine.date_end = addMinutesToDate(obj.machine.date_start, 175);
-          obj.machine.lasted_date = GetTime(
-            formatToISO(obj.machine.date_start)
+          obj.machine.date_end = addMinutesToDate(
+            obj.machine.date_start,
+            obj.machine.process_time
           );
+          obj.machine.lasted_date = calculateTimeDifference(
+            obj.machine.date_start,
+            obj.machine.date_end
+          );
+
           obj.machine.lasted_minutes = convertToMinutes(
             obj.machine.lasted_date
           );
@@ -97,13 +130,14 @@ const PaintSectionYarn = () => {
             status: "working",
             text: statusText.working,
           };
+
+          obj.machine.pantone_data = GetPantone(obj.machine.pantone);
         } else {
           obj.status = {
             color: element.ip === "EMPTY" ? "grey" : "blue",
             status: element.ip === "EMPTY" ? "no_connection" : "stopped",
           };
         }
-        // console.log("element", element);
 
         obj.status.text = statusText[obj.status.status];
 
@@ -112,7 +146,7 @@ const PaintSectionYarn = () => {
     });
 
     return arr.sort((a: any, b: any) => a.order - b.order);
-  }, [list?.length, data]);
+  }, [list?.length, data, type]);
 
   return (
     <>

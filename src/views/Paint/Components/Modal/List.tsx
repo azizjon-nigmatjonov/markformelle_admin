@@ -1,13 +1,10 @@
-import { PantoneColors } from "../../../../constants/pantone";
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
 import { ZigzagCard } from "./Card";
 import "./style.scss";
 import { ListDivider } from "@mui/joy";
 export const PaintCardList = ({ element = {} }: { element: any }) => {
-  const bgColor = `#${
-    PantoneColors[element.machine?.pantone?.substring(4, 11)]?.hex ?? "not_fond"
-  }`;
-
+  let bgColor = element.machine?.pantone_data?.hex ?? "not_found";
+  bgColor = "#" + bgColor;
   const { getFontSize } = useDeviceHeight();
   const height = window?.screen?.height ?? 0;
 
@@ -111,6 +108,10 @@ export const PaintCardList = ({ element = {} }: { element: any }) => {
         <li className="flex items-center justify-between ">
           <p>Время окончания</p> <p> {element.machine?.date_end}</p>
         </li>
+        <ListDivider />
+        <li className="flex items-center justify-between ">
+          <p>Рабочее время</p> <p> {element.machine?.worked_date}</p>
+        </li>
       </ul>
 
       <div className="border-l py-3 pr-6 pl-6 w-full">
@@ -125,8 +126,7 @@ export const PaintCardList = ({ element = {} }: { element: any }) => {
                   {element.machine?.pantone}
                 </p>
                 <p className="text-2xl font-medium">
-                  {PantoneColors[element.machine?.pantone?.substring(4, 11)]
-                    ?.name || "-"}
+                  {element?.machine?.pantone_data?.name || "-"}
                 </p>
               </div>
               <ZigzagCard bgColor={bgColor} />

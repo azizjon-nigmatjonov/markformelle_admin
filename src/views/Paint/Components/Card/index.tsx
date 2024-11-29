@@ -1,7 +1,6 @@
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
 import CircularProgress from "../../../../components/CElements/CCircularProgress";
 import { GetCurrentDate } from "../../../../utils/getDate";
-import { PantoneColors } from "../../../../constants/pantone";
 import { useEffect, useState } from "react";
 import { PaintCardModal } from "../Modal";
 import { Modal } from "@mui/joy";
@@ -37,7 +36,14 @@ export const PaintPotCard = ({ element = {} }: Props) => {
               percent: height > 1200 ? 10 : 5.5,
               type: "machine",
             })}
-            value={element?.machine?.lasted_minutes ?? 0}
+            strokeColor={
+              element?.machine?.time_bigger === 1
+                ? "#ff9c27"
+                : element?.machine?.time_bigger > 1
+                ? "#ff6060"
+                : undefined
+            }
+            value={element?.machine?.worked_minutes ?? 0}
             maxValue={element?.machine?.process_time ?? 100}
             size={getFontSize({
               count: 6,
@@ -56,7 +62,7 @@ export const PaintPotCard = ({ element = {} }: Props) => {
                 }),
               }}
             >
-              {element.machine?.lasted_date
+              {element?.machine?.lasted_date
                 ? element.machine.lasted_date
                 : "00:00"}
             </p>
@@ -162,7 +168,7 @@ export const PaintPotCard = ({ element = {} }: Props) => {
         ></div>
       )}
 
-      {element.machine?.pantone && (
+      {element.machine?.pantone_data?.name && (
         <div
           className="absolute rounded-[12px] top-1/2 -translate-y-1/2"
           style={{
@@ -182,9 +188,7 @@ export const PaintPotCard = ({ element = {} }: Props) => {
               type: "machine",
             }),
 
-            backgroundColor: `#${
-              PantoneColors?.[element.machine?.pantone?.substring(4)]?.hex
-            }`,
+            backgroundColor: `#${element.machine?.pantone_data?.hex}`,
           }}
         ></div>
       )}

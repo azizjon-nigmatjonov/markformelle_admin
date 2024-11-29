@@ -134,6 +134,7 @@ export const MachinesList = ({
 
     keys.forEach((key: string) => {
       const found = headColumns.find((item: any) => item.id === key);
+
       if (found?.id) {
         newColumns.push(found);
       } else {
@@ -141,7 +142,9 @@ export const MachinesList = ({
       }
     });
 
-    setHeadColumns(newColumns);
+    setTimeout(() => {
+      setHeadColumns(newColumns);
+    }, 0);
   }, [bodyColumns]);
 
   return (

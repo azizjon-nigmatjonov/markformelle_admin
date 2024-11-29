@@ -46,6 +46,8 @@ interface Props {
   handleActions?: (val: any, val2?: any) => void;
   idForTable?: string;
   footer?: any;
+  removeScroll?: boolean;
+  removeSearch?: boolean;
 }
 
 const CTable = ({
@@ -67,6 +69,8 @@ const CTable = ({
   handleFilterParams = () => {},
   handleActions = () => {},
   tableSetting = true,
+  removeScroll = false,
+  removeSearch = false,
   footer,
 }: Props) => {
   const tableSize = useSelector((state: any) => state.tableSize.tableSize);
@@ -423,7 +427,11 @@ const CTable = ({
 
   return (
     <div className="relative h-full">
-      <div className="border border-[var(--border)] designed-scroll rounded-[12px] h-full overflow-scroll">
+      <div
+        className={`border border-[var(--border)] designed-scroll rounded-[12px] h-full ${
+          removeScroll ? "" : "overflow-scroll"
+        }`}
+      >
         {tableSetting && bodySource?.length ? (
           <HeaderSettings
             totalCount={meta.totalCount}
@@ -586,7 +594,7 @@ const CTable = ({
                 rowsCount={filterParams.perPage}
                 dataLength={bodySource?.length}
               >
-                {bodySource?.length ? (
+                {bodySource?.length && removeSearch ? (
                   <TableRow>
                     {newHeadColumns.map((item: any, colIndex: number) => (
                       <CTableCell

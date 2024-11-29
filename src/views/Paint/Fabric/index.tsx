@@ -8,7 +8,8 @@ import { PaintListSkeleton, PaintSkeletons } from "../Components/Skeleton";
 import { useSelector } from "react-redux";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import GlobalSearch from "../../../components/UI/GlobalSearch";
-import { useCalculateTime } from "../../../hooks/useCalucaleTime";
+import { PantoneColors } from "../../../constants/pantone";
+import { useCalculateTimePainting } from "../../../hooks/useCalucaleTime";
 const breadCrumbs = [{ label: "Дашборд покраски", link: "/paint/dashboard" }];
 
 const statusText: any = {
@@ -18,7 +19,7 @@ const statusText: any = {
 };
 
 const PaintSection = () => {
-  const { GetTime } = useCalculateTime();
+  const { GetTimeMinutes } = useCalculateTimePainting();
   const [type, setType] = useState("grid");
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const { data, isLoading, refetch } = useCQuery({
@@ -29,13 +30,6 @@ const PaintSection = () => {
     },
   });
   const [list, setList] = useState([]);
-
-  const formatToISO = (dateString: string) => {
-    // Split the old_time string into components
-    const [day, month, year, time] = dateString.split(/[\s.]/);
-    // Construct an ISO-compliant string
-    return `${year}-${month}-${day}T${time}`;
-  };
 
   useEffect(() => {
     const refetching = setInterval(() => {
@@ -71,6 +65,21 @@ const PaintSection = () => {
     return hours * 60 + minutes;
   };
 
+  const GetPantone = (str: string) => {
+    if (str?.includes("TCX")) {
+      return PantoneColors[str.substring(4, 11)];
+    } else {
+      return PantoneColors[str];
+    }
+  };
+
+  const formatToISO = (dateString: string) => {
+    // Split the old_time string into components
+    const [day, month, year, time] = dateString.split(/[\s.]/);
+    // Construct an ISO-compliant string
+    return `${year}-${month}-${day}T${time}`;
+  };
+
   const newData = useMemo(() => {
     const result = list?.length ? list : data ?? [];
     const arr: any = [];
@@ -84,26 +93,42 @@ const PaintSection = () => {
         if (element.nres?.[0]) {
           obj.machine = element.nres?.[0];
 
-          obj.machine.date_end = addMinutesToDate(obj.machine.date_start, 175);
-          obj.machine.lasted_date = GetTime(
+          obj.machine.date_end = addMinutesToDate(
+            obj.machine.date_start,
+            obj.machine.process_time
+          );
+          obj.machine.lasted_date = GetTimeMinutes(
+            formatToISO(obj.machine.date_end)
+          );
+
+          obj.machine.worked_date = GetTimeMinutes(
             formatToISO(obj.machine.date_start)
           );
-          obj.machine.lasted_minutes = convertToMinutes(
-            obj.machine.lasted_date
+
+          obj.machine.worked_minutes = convertToMinutes(
+            obj.machine.worked_date
           );
+
+          obj.machine.time_bigger = Math.round(
+            obj.machine.worked_minutes / obj.machine.process_time
+          );
+
+          // obj.machine.worked_minutes =
+          //   obj.machine.process_time - obj.machine.worked_minutes;
 
           obj.status = {
             color: "green",
             status: "working",
             text: statusText.working,
           };
+
+          obj.machine.pantone_data = GetPantone(obj.machine.pantone);
         } else {
           obj.status = {
             color: element.ip === "EMPTY" ? "grey" : "blue",
             status: element.ip === "EMPTY" ? "no_connection" : "stopped",
           };
         }
-        // console.log("element", element);
 
         obj.status.text = statusText[obj.status.status];
 
@@ -112,7 +137,7 @@ const PaintSection = () => {
     });
 
     return arr.sort((a: any, b: any) => a.order - b.order);
-  }, [list?.length, data]);
+  }, [list?.length, data, type]);
 
   return (
     <>

@@ -1,7 +1,7 @@
 export const routeParents = {
   knitting: [],
   row: [],
-  paint: [],
+  dying: [],
   chni: [],
   access: [],
   settings: [],

@@ -3,8 +3,8 @@ import PaintSectionYarn from "../../views/Paint/Yarn";
 
 export const paintSection = [
   {
-    parent: "paint",
-    link: "fabrik",
+    parent: "dying",
+    link: "fabric",
     sidebar: true,
     title: "Крашения плотно",
     parent_icon: (
@@ -15,10 +15,10 @@ export const paintSection = [
     auth: false,
   },
   {
-    parent: "paint",
+    parent: "dying",
     link: "yarn",
     sidebar: true,
-    title: "Крашения пряжы",
+    title: "Крашения пряжи",
     icon: <img width={18} src="/images/paint-yarn.png" alt="paint yarn" />,
     element: <PaintSectionYarn />,
     auth: false,

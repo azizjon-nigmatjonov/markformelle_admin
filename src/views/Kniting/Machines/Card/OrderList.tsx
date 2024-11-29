@@ -26,18 +26,25 @@ const OrderList: React.FC<OrderListProps> = ({ machineName }) => {
     {
       title: "Номер заказа",
       id: "PLAN_KNIT_ID",
+      remove_sort: true,
     },
     {
       title: "Артикул",
       id: "ART",
+      remove_sort: true,
     },
     {
       title: "План",
       id: "KOL_KNIT",
+      remove_sort: true,
+      render: (val: any) => {
+        return <p className="font-semibold">{val} кг</p>;
+      },
     },
     {
       title: "Дата начала",
       id: "DATA_START",
+      remove_sort: true,
       render: (val: string) => {
         return GetCurrentDate({
           date: val,
@@ -46,8 +53,9 @@ const OrderList: React.FC<OrderListProps> = ({ machineName }) => {
       },
     },
     {
-      title: "Дата начала",
+      title: "Дата завершения",
       id: "DATA_END",
+      remove_sort: true,
       render: (val: string) => {
         return GetCurrentDate({
           date: val,
@@ -71,7 +79,7 @@ const OrderList: React.FC<OrderListProps> = ({ machineName }) => {
   }, [machineName]);
 
   return (
-    <div className="h-[550px] overflow-y-scroll designed-scroll">
+    <div className="h-[550px] ">
       {/* {data.loading ? (
         <div>
           <OneSkeleton />
@@ -153,6 +161,10 @@ const OrderList: React.FC<OrderListProps> = ({ machineName }) => {
           isResizeble={true}
           isLoading={false}
           filterParams={filterParams}
+          tableSetting={false}
+          disablePagination={true}
+          removeScroll={true}
+          removeSearch={true}
           handleFilterParams={setFilterParams}
         />
       ) : (
