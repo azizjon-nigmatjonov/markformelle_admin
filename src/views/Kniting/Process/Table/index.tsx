@@ -56,7 +56,10 @@ export const ProcessTable = ({
           </div>
           <div className="w-[52%] h-full overflow-y-scroll remove-scroll">
             <CCard>
-              <SecondColumn data={wokers ?? []} isLoading={false} />
+              <SecondColumn
+                data={wokers?.length ? wokers : []}
+                isLoading={false}
+              />
             </CCard>
           </div>
         </div>

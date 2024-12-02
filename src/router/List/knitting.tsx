@@ -1,6 +1,7 @@
 // import { AnalyticsPlan } from "../../views/Kniting/Statistics/Plan";
 import KnittingMachines from "../../views/Kniting/Machines";
 import KnittingProcess from "../../views/Kniting/Process";
+import { RollsKK } from "../../views/Kniting/RollsKK";
 // import TestComponent from "../../views/Kniting/Test";
 // import KnittingdAnalytics from "../../views/Kniting/Statistics/Machines";
 // import KnittingMachine from "../../views/Kniting/Machines/SinglePage";
@@ -14,6 +15,16 @@ export const knittingList = [
     parent_icon: <img width={18} src="/images/kniting.png" alt="knitting" />,
     icon: <img width={18} src="/images/kniting.png" alt="knitting" />,
     element: <KnittingMachines />,
+    auth: false,
+    permissions: ["index", "delete"],
+  },
+  {
+    parent: "knitting",
+    link: "rolls-kk",
+    sidebar: true,
+    title: "Рулоны для КК",
+    icon: <img width={20} src="/images/roll-kk.png" alt="roll kk" />,
+    element: <RollsKK />,
     auth: false,
     permissions: ["index", "delete"],
   },

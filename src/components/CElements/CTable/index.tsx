@@ -48,6 +48,7 @@ interface Props {
   footer?: any;
   removeScroll?: boolean;
   removeSearch?: boolean;
+  defaultSortData?: any;
 }
 
 const CTable = ({
@@ -71,6 +72,7 @@ const CTable = ({
   tableSetting = true,
   removeScroll = false,
   removeSearch = false,
+  defaultSortData = {},
   footer,
 }: Props) => {
   const tableSize = useSelector((state: any) => state.tableSize.tableSize);
@@ -90,7 +92,7 @@ const CTable = ({
   const order = useSelector((state: any) => state.table.order);
   const [active, setActive] = useState(false);
   const [newBodyColumns, setNewBodyColumns] = useState([]);
-  const [sortData, setSortData]: any = useState({});
+  const [sortData, setSortData]: any = useState({ ...defaultSortData });
   const [reOrder, setReorder] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [draggingIndex, setDraggingIndex]: any = useState(null);
@@ -340,7 +342,7 @@ const CTable = ({
     } else {
       setItems(headColumns);
     }
-  }, [headColumns, pageOrder]);
+  }, [headColumns.length, pageOrder]);
 
   const newHeadColumns: any = useMemo(() => {
     if (!tableSetting) return items;
@@ -594,7 +596,7 @@ const CTable = ({
                 rowsCount={filterParams.perPage}
                 dataLength={bodySource?.length}
               >
-                {bodySource?.length && removeSearch ? (
+                {!removeSearch ? (
                   <TableRow>
                     {newHeadColumns.map((item: any, colIndex: number) => (
                       <CTableCell

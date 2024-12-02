@@ -103,7 +103,10 @@ export const HeaderSettings = ({
   };
 
   useEffect(() => {
-    if (!pageColumns?.length && headColumns?.length && allCheck) {
+    if (
+      (!pageColumns?.length && headColumns?.length && allCheck) ||
+      pageColumns?.[0] === null
+    ) {
       setTimeout(() => {
         dispatch(
           tableStoreActions.setColumns({

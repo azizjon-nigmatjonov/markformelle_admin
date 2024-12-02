@@ -8,7 +8,7 @@ const WarehouseLoaders = () => {
   const [list, setList] = useState([]);
   const { data, isLoading, refetch } = useCQuery({
     key: `GET_GRUZ`,
-    endpoint: `http://10.10.6.21:8083/get_sotrudn_data`,
+    endpoint: `http://10.10.6.21:8083/get_avtomat_info_614`,
     params: {},
   });
 

@@ -63,3 +63,35 @@ export const useCalculateTimePainting = () => {
 
   return { GetTimeMinutes };
 };
+
+export const useCalculateTimeAndDate = () => {
+  const current_time = useSelector((state: any) => state.globalTool.currTime);
+  const GetHourAndMinute = (started_time: any) => {
+    const startDate = new Date(started_time);
+    const currentDate = new Date(current_time);
+
+    // Manually calculate differences
+    const dayDifference = currentDate.getDate() - startDate.getDate();
+    const hourDifference = currentDate.getHours() - startDate.getHours();
+    const minuteDifference = currentDate.getMinutes() - startDate.getMinutes();
+
+    // Add 24 hours for each day of difference
+    let totalHours = dayDifference * 24 + hourDifference;
+
+    // Handle negative minutes
+    let totalMinutes = minuteDifference;
+    if (totalMinutes < 0) {
+      totalMinutes += 60; // Borrow an hour
+      totalHours -= 1;
+    }
+
+    // Format the result as hh:mm
+    const formattedDifference = `${totalHours
+      .toString()
+      .padStart(2, "0")}:${totalMinutes.toString().padStart(2, "0")}`;
+
+    return formattedDifference;
+  };
+
+  return { GetHourAndMinute };
+};

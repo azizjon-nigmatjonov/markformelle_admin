@@ -25,7 +25,7 @@ export const SecondColumn = ({ data = [] }: Props) => {
     };
 
     arr?.forEach((item: any, index: number) => {
-      const naming = item.FIO.trim().split(" ").slice(0, 2);
+      const naming = item?.FIO?.trim()?.split(" ")?.slice(0, 2);
 
       totalObj.month += item.KOL_IN_MONTH;
       totalObj.day += item.KOL_TODAY;
