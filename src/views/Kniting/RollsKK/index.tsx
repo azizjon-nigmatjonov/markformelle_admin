@@ -5,10 +5,10 @@ import useCQuery from "../../../hooks/useCQuery";
 import { TableUI } from "./Table";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 const breadCrumbs = [
-  { label: "Рулоны для Контроль качество", link: "/knitting/rolls-kk" },
+  { label: "Рулоны для контроль качество", link: "/knitting/rolls-kk" },
 ];
 export const RollsKK = () => {
-  const [list, setList] = useState([]);
+  const [list, setList]: any = useState([]);
 
   const { data, isLoading, refetch } = useCQuery({
     key: `GET_GRUZ`,
@@ -33,6 +33,7 @@ export const RollsKK = () => {
   return (
     <>
       <Header
+        open={true}
         extra={
           <CBreadcrumbs items={breadCrumbs} progmatic={true} type="link" />
         }

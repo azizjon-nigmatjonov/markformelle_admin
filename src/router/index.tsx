@@ -23,11 +23,6 @@ interface Path {
   children?: any;
 }
 
-// interface routeType {
-//   sidebar: boolean;
-//   value: string;
-// }
-
 const Router = () => {
   const dispatch = useDispatch();
   // const link = useSelector((state: any) => state.auth.token);

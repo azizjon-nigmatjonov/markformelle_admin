@@ -1,5 +1,6 @@
 import { adminList } from "./admins";
 import { chniSection } from "./chni";
+import { dryingList } from "./drying";
 import { knittingList } from "./knitting";
 import { paintSection } from "./paint";
 import { settingList } from "./settings";
@@ -10,6 +11,7 @@ export const routeList = [
   ...knittingList,
   ...wareHouse,
   ...paintSection,
+  ...dryingList,
   ...chniSection,
   ...adminList,
 ];

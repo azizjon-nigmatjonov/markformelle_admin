@@ -539,9 +539,7 @@ const CTable = ({
                         <div
                           className={`uppercase w-full`}
                           style={{
-                            textAlign:
-                              column?.textAlign ||
-                              (!column?.filter && "center"),
+                            textAlign: !column?.filter ? "center" : "left",
                             color:
                               sortData?.id === column?.id && !reOrder
                                 ? "var(--primary)"

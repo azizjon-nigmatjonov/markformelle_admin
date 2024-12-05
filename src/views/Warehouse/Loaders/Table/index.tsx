@@ -13,11 +13,17 @@ import { DocTable } from "./DocTable";
 export const ProcessTable = () => {
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const [loading, setLoading] = useState(true);
-
   const { getFontSize } = useDeviceHeight();
+
   const { data, isLoading, refetch } = useCQuery({
     key: `GET_GRUZ`,
     endpoint: `http://10.10.6.21:8083/get_dashboard_data_612`,
+    params: {},
+  });
+
+  const { data: documents, refetch: refetchDoc } = useCQuery({
+    key: `GET_DOCUMENTS`,
+    endpoint: `http://10.10.6.21:8083/get_sborka_info_612`,
     params: {},
   });
 
@@ -28,18 +34,21 @@ export const ProcessTable = () => {
   }, [isLoading]);
 
   const newData = useMemo(() => {
-    const upper: any = data?.dashboard_data?.sotrudn_data?.filter(
-      (item: any) => item.OPERAC === "Приемка"
-    );
-    const down: any = data?.dashboard_data?.sotrudn_data?.filter(
-      (item: any) => item.OPERAC === "Сборка"
-    );
+    const upper: any =
+      data?.dashboard_data?.sotrudn_data?.filter(
+        (item: any) => item.OPERAC === "Приемка"
+      ) ?? [];
+    const down: any =
+      data?.dashboard_data?.sotrudn_data?.filter(
+        (item: any) => item.OPERAC === "Сборка"
+      ) ?? [];
     return { ...data, upper, down };
   }, [data]);
 
   useEffect(() => {
     const refetching = setInterval(() => {
       refetch();
+      refetchDoc();
     }, 30000);
 
     return () => {
@@ -89,21 +98,11 @@ export const ProcessTable = () => {
                   }),
                 }}
               >
-                Тест Документ
+                Документы отборки в крашение
               </h2>
             </div>
 
-            <DocTable
-              data={[
-                {
-                  doc_id: "24-1243",
-                  worker: "Исломбек",
-                  weight: "2323 kg",
-                  percent: "50%",
-                  start_time: "22:35",
-                },
-              ]}
-            />
+            <DocTable data={documents?.dashboard_data ?? []} />
           </CCard>
         </div>
         <div className="space-y-2">

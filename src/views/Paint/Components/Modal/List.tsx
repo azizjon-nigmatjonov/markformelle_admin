@@ -110,7 +110,20 @@ export const PaintCardList = ({ element = {} }: { element: any }) => {
         </li>
         <ListDivider />
         <li className="flex items-center justify-between ">
-          <p>Рабочее время</p> <p> {element.machine?.worked_date}</p>
+          <p>Рабочее время</p>{" "}
+          <p>
+            {element?.machine?.worked_date?.includes(" ")
+              ? element.machine.worked_date.substring(
+                  0,
+                  element.machine.worked_date.indexOf(" ")
+                ) + " ден "
+              : ""}
+            {element?.machine?.worked_date?.includes(" ")
+              ? element.machine.worked_date.substring(
+                  element.machine.worked_date.indexOf(" ")
+                )
+              : element?.machine?.worked_date || "00:00"}
+          </p>
         </li>
       </ul>
 

@@ -9,8 +9,8 @@ import { useSelector } from "react-redux";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import GlobalSearch from "../../../components/UI/GlobalSearch";
 import { PantoneColors } from "../../../constants/pantone";
-import { useCalculateTimePainting } from "../../../hooks/useCalucaleTime";
-const breadCrumbs = [{ label: "Дашборд покраски", link: "/paint/dashboard" }];
+import { useCalculateTimeAndDate } from "../../../hooks/useCalucaleTime";
+const breadCrumbs = [{ label: "Крашения плотно", link: "/paint/dashboard" }];
 
 const statusText: any = {
   no_connection: "Нет соединения",
@@ -19,15 +19,13 @@ const statusText: any = {
 };
 
 const PaintSection = () => {
-  const { GetTimeMinutes } = useCalculateTimePainting();
+  const { GetHourAndMinute } = useCalculateTimeAndDate();
   const [type, setType] = useState("grid");
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const { data, isLoading, refetch } = useCQuery({
     key: `GET_PAINT_LIST`,
     endpoint: `http://srv-nav.praktik.loc:1991/WEB_ALL`,
-    params: {
-      // page: 1,
-    },
+    params: {},
   });
   const [list, setList] = useState([]);
 
@@ -58,10 +56,8 @@ const PaintSection = () => {
   };
 
   const convertToMinutes = (timeString: string) => {
-    // Split the time into hours and minutes
     const [hours, minutes] = timeString.split(":").map(Number);
 
-    // Calculate total minutes
     return hours * 60 + minutes;
   };
 
@@ -74,9 +70,8 @@ const PaintSection = () => {
   };
 
   const formatToISO = (dateString: string) => {
-    // Split the old_time string into components
     const [day, month, year, time] = dateString.split(/[\s.]/);
-    // Construct an ISO-compliant string
+
     return `${year}-${month}-${day}T${time}`;
   };
 
@@ -90,18 +85,18 @@ const PaintSection = () => {
       ) {
         const order = element.code_device.replace("-", "");
         let obj: any = {};
-        if (element.nres?.[0]) {
-          obj.machine = element.nres?.[0];
+        if (element.nres?.[element.nres?.length - 1]) {
+          obj.machine = element.nres?.[element.nres?.length - 1];
 
           obj.machine.date_end = addMinutesToDate(
             obj.machine.date_start,
             obj.machine.process_time
           );
-          obj.machine.lasted_date = GetTimeMinutes(
+          obj.machine.lasted_date = GetHourAndMinute(
             formatToISO(obj.machine.date_end)
           );
 
-          obj.machine.worked_date = GetTimeMinutes(
+          obj.machine.worked_date = GetHourAndMinute(
             formatToISO(obj.machine.date_start)
           );
 
@@ -109,12 +104,14 @@ const PaintSection = () => {
             obj.machine.worked_date
           );
 
+          obj.machine.worked_date = GetHourAndMinute(
+            formatToISO(obj.machine.date_start),
+            "day"
+          );
+
           obj.machine.time_bigger = Math.round(
             obj.machine.worked_minutes / obj.machine.process_time
           );
-
-          // obj.machine.worked_minutes =
-          //   obj.machine.process_time - obj.machine.worked_minutes;
 
           obj.status = {
             color: "green",

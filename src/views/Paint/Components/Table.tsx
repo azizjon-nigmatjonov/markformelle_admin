@@ -3,6 +3,7 @@ import CTable from "../../../components/CElements/CTable";
 import CCard from "../../../components/CElements/CCard";
 import { Modal } from "@mui/joy";
 import { PaintCardModal } from "./Modal";
+import { GetCurrentDate } from "../../../utils/getDate";
 interface Props {
   list: any;
 }
@@ -35,6 +36,24 @@ export const PaintTable = ({ list = [] }: Props) => {
               <p>{status === "stopped" ? "Не работает" : "Работает"}</p>
             </div>
           );
+        },
+      },
+      {
+        title: "Время",
+        id: "timestamp",
+        render: (val: string) => {
+          return GetCurrentDate({ date: val, type: "usually" });
+        },
+      },
+      {
+        title: "АПИ",
+        id: "ip",
+        render: (val: string) => {
+          if (val.includes("EMPTY")) {
+            return "";
+          } else {
+            return val;
+          }
         },
       },
     ];
@@ -79,8 +98,6 @@ export const PaintTable = ({ list = [] }: Props) => {
 
     setOpen(obj);
   };
-  console.log("headColumns", headColumns);
-
   return (
     <>
       <div className="p-2">

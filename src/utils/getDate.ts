@@ -24,9 +24,9 @@ const Usually = (
   currentTime: string,
   symbol = "."
 ) => {
-  return `${currentDay}${symbol}${addZero(currentMonth)}${symbol}${addZero(
-    currentYear
-  )} ${currentTime}`;
+  return `${addZero(currentDay)}${symbol}${addZero(
+    currentMonth
+  )}${symbol}${addZero(currentYear)} ${currentTime}`;
 };
 
 const GetDates = (
@@ -35,9 +35,9 @@ const GetDates = (
   currentDay: number,
   symbol = "."
 ) => {
-  return `${currentDay}${symbol}${addZero(currentMonth)}${symbol}${addZero(
-    currentYear
-  )}`;
+  return `${addZero(currentDay)}${symbol}${addZero(
+    currentMonth
+  )}${symbol}${addZero(currentYear)}`;
 };
 
 const Hourly = (currentTime: string) => {

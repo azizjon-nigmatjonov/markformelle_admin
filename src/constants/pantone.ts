@@ -5411,9 +5411,17 @@ export const PantoneColors: any = {
     name: "starlight-blue",
     hex: "b5ced4",
   },
+  "12-4401": {
+    name: "Spun Sugar",
+    hex: "d9dbde",
+  },
   "14-4307": {
     name: "winter-sky",
     hex: "a9c0cb",
+  },
+  "14-3205": {
+    name: "Pirouette",
+    hex: "edbedc",
   },
   "14-4508": {
     name: "stratosphere",

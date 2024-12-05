@@ -26,19 +26,16 @@ export const useCalculateTime = () => {
 
 export const useCalculateTimePainting = () => {
   const convertTimeToMinutes = (dateString: string) => {
-    const date = new Date(dateString); // Parse the date string
+    const date = new Date(dateString);
 
-    const hours = date.getHours(); // Extract hours
-    const minutes = date.getMinutes(); // Extract minutes
-    const seconds = date.getSeconds(); // Extract seconds (if needed)
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
 
-    // Convert time to total minutes (round down if seconds are included)
     const totalMinutes = Math.floor(hours * 60 + minutes + seconds / 60);
 
     return totalMinutes;
   };
-
-  // Example usage
 
   const currTime = useSelector((state: any) => state.globalTool.currTime);
   const GetTimeMinutes = (old_time: any) => {
@@ -66,31 +63,37 @@ export const useCalculateTimePainting = () => {
 
 export const useCalculateTimeAndDate = () => {
   const current_time = useSelector((state: any) => state.globalTool.currTime);
-  const GetHourAndMinute = (started_time: any) => {
+  const GetHourAndMinute = (started_time: string, type?: string) => {
+    // Parse the start and current times as Date objects
     const startDate = new Date(started_time);
     const currentDate = new Date(current_time);
 
-    // Manually calculate differences
-    const dayDifference = currentDate.getDate() - startDate.getDate();
-    const hourDifference = currentDate.getHours() - startDate.getHours();
-    const minuteDifference = currentDate.getMinutes() - startDate.getMinutes();
+    // Calculate the total difference in milliseconds
+    const diffInMilliseconds = currentDate.getTime() - startDate.getTime();
 
-    // Add 24 hours for each day of difference
-    let totalHours = dayDifference * 24 + hourDifference;
+    // Convert the difference to days, hours, and minutes
+    const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
+    const diffInHours = Math.floor(
+      (diffInMilliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    let diffInMinutes = Math.floor(
+      (diffInMilliseconds % (1000 * 60 * 60)) / (1000 * 60)
+    );
+    if (diffInMinutes < 0) diffInMinutes = -diffInMinutes;
 
-    // Handle negative minutes
-    let totalMinutes = minuteDifference;
-    if (totalMinutes < 0) {
-      totalMinutes += 60; // Borrow an hour
-      totalHours -= 1;
+    // Adjust for the "type" argument if needed
+    if (type === "day") {
+      return `${diffInDays > 0 ? `${diffInDays} ` : ""}${diffInHours
+        .toString()
+        .padStart(2, "0")}:${diffInMinutes.toString().padStart(2, "0")}`;
     }
 
-    // Format the result as hh:mm
-    const formattedDifference = `${totalHours
+    // Format the difference as hh:mm
+    let totalHours = diffInDays * 24 + diffInHours;
+    if (totalHours < 0) totalHours = -totalHours;
+    return `${totalHours.toString().padStart(2, "0")}:${diffInMinutes
       .toString()
-      .padStart(2, "0")}:${totalMinutes.toString().padStart(2, "0")}`;
-
-    return formattedDifference;
+      .padStart(2, "0")}`;
   };
 
   return { GetHourAndMinute };

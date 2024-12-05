@@ -9,7 +9,8 @@ import { useSelector } from "react-redux";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import GlobalSearch from "../../../components/UI/GlobalSearch";
 import { PantoneColors } from "../../../constants/pantone";
-const breadCrumbs = [{ label: "Дашборд покраски", link: "/paint/dashboard" }];
+import { useCalculateTimeAndDate } from "../../../hooks/useCalucaleTime";
+const breadCrumbs = [{ label: "Крашения пряжи", link: "/paint/dashboard" }];
 
 const statusText: any = {
   no_connection: "Нет соединения",
@@ -18,14 +19,13 @@ const statusText: any = {
 };
 
 const PaintSectionYarn = () => {
+  const { GetHourAndMinute } = useCalculateTimeAndDate();
   const [type, setType] = useState("grid");
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const { data, isLoading, refetch } = useCQuery({
     key: `GET_PAINT_LIST`,
     endpoint: `http://srv-nav.praktik.loc:1991/WEB_ALL`,
-    params: {
-      // page: 1,
-    },
+    params: {},
   });
   const [list, setList] = useState([]);
 
@@ -71,32 +71,10 @@ const PaintSectionYarn = () => {
     }
   };
 
-  const calculateTimeDifference = (startTime: string, endTime: string) => {
-    // Helper function to convert dd.MM.yyyy HH:mm:ss to ISO format
-    const formatToISO = (dateString: string) => {
-      const [day, month, year, time] = dateString.split(/[\s.]/);
-      return `${year}-${month}-${day}T${time}`;
-    };
+  const formatToISO = (dateString: string) => {
+    const [day, month, year, time] = dateString.split(/[\s.]/);
 
-    // Convert the date-time strings into Date objects
-    const startDate: any = new Date(formatToISO(startTime));
-    const endDate: any = new Date(formatToISO(endTime));
-
-    // Calculate the difference in milliseconds
-    const differenceInMillis = endDate - startDate;
-
-    // Convert milliseconds to total minutes
-    const totalMinutes = Math.floor(differenceInMillis / (1000 * 60));
-
-    // Extract hours and minutes
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = 33;
-
-    // Format as hh:mm
-    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
-      2,
-      "0"
-    )}`;
+    return `${year}-${month}-${day}T${time}`;
   };
 
   const newData = useMemo(() => {
@@ -109,20 +87,32 @@ const PaintSectionYarn = () => {
       ) {
         const order = element.code_device.replace("-", "");
         let obj: any = {};
-        if (element.nres?.[0]) {
-          obj.machine = element.nres?.[0];
+        if (element.nres?.[element.nres?.length - 1]) {
+          obj.machine = element.nres?.[element.nres?.length - 1];
 
           obj.machine.date_end = addMinutesToDate(
             obj.machine.date_start,
             obj.machine.process_time
           );
-          obj.machine.lasted_date = calculateTimeDifference(
-            obj.machine.date_start,
-            obj.machine.date_end
+          obj.machine.lasted_date = GetHourAndMinute(
+            formatToISO(obj.machine.date_end)
           );
 
-          obj.machine.lasted_minutes = convertToMinutes(
-            obj.machine.lasted_date
+          obj.machine.worked_date = GetHourAndMinute(
+            formatToISO(obj.machine.date_start)
+          );
+
+          obj.machine.worked_minutes = convertToMinutes(
+            obj.machine.worked_date
+          );
+
+          obj.machine.worked_date = GetHourAndMinute(
+            formatToISO(obj.machine.date_start),
+            "day"
+          );
+
+          obj.machine.time_bigger = Math.round(
+            obj.machine.worked_minutes / obj.machine.process_time
           );
 
           obj.status = {

@@ -32,6 +32,7 @@ export const TableUI = ({ list = [], isLoading = false }: Props) => {
       {
         title: "ФИО",
         id: "FIO",
+        textAlign: "left",
       },
       {
         title: "Дата вязания",

@@ -7,6 +7,7 @@ import { HeaderFoldButton } from "./FoldButton";
 import { sidebarActions } from "../../../store/sidebar";
 
 interface Props {
+  open?: boolean;
   title?: string;
   titleIn?: string;
   children?: any;
@@ -22,22 +23,25 @@ export const Header = ({
   children,
   user = true,
   extra,
+  open = false,
   ...props
 }: Props) => {
   const collapsed = useSelector((state: any) => state.sidebar.collapsed);
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const dispatch = useDispatch();
-
   const setCollapsed = (val: boolean) => {
     dispatch(sidebarActions.setOpenHeader(val));
   };
 
   return (
     <>
-      <HeaderFoldButton collapsed={openHeader} setCollapsed={setCollapsed} />
+      <HeaderFoldButton
+        collapsed={open || openHeader}
+        setCollapsed={setCollapsed}
+      />
       <div
         className={`h-[35px] desktop:h-[45px] relative z-[98] bg-white w-full ${
-          openHeader ? "" : "hidden"
+          openHeader || open ? "" : "hidden"
         }`}
       >
         <div

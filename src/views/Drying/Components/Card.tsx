@@ -1,15 +1,15 @@
-import useDeviceHeight from "../../../../hooks/useDeviceHeight";
-import CircularProgress from "../../../../components/CElements/CCircularProgress";
-import { GetCurrentDate } from "../../../../utils/getDate";
+import useDeviceHeight from "../../../hooks/useDeviceHeight";
+import CircularProgress from "../../../components/CElements/CCircularProgress";
 import { useEffect, useState } from "react";
-import { PaintCardModal } from "../Modal";
+// import { PaintCardModal } from "../Modal";
 import { Modal } from "@mui/joy";
+import { DryModal } from "./Modal";
 
 interface Props {
   element: any;
 }
 
-export const PaintPotCard = ({ element = {} }: Props) => {
+export const DryCard = ({ element = {} }: Props) => {
   const { getFontSize } = useDeviceHeight();
   const [open, setOpen]: any = useState(false);
   const [height, setHeight]: any = useState(0);
@@ -22,7 +22,7 @@ export const PaintPotCard = ({ element = {} }: Props) => {
 
   return (
     <div
-      className={`w-full h-full rounded-[12px] px-2 desktop:px-4 py-2 desktop:py-4 pb-1 desktop:pb-3 overflow-hidden relative ${element.status?.color}`}
+      className={`w-full h-full rounded-[12px] px-2 desktop:px-4 py-2 desktop:py-4 pb-1 desktop:pb-3 overflow-hidden relative ${element?.color}`}
       onClick={(e: any) => {
         e.stopPropagation();
         setOpen(true);
@@ -37,14 +37,14 @@ export const PaintPotCard = ({ element = {} }: Props) => {
               type: "machine",
             })}
             strokeColor={
-              element?.machine?.time_bigger === 1
+              element?.time_bigger === 1
                 ? "#ff9c27"
-                : element?.machine?.time_bigger > 1
+                : element?.time_bigger > 1
                 ? "#ff6060"
                 : undefined
             }
-            value={element?.machine?.worked_minutes ?? 0}
-            maxValue={element?.machine?.process_time ?? 100}
+            value={element?.worked_minutes ?? 0}
+            maxValue={element?.process_time ?? 100}
             size={getFontSize({
               count: 6,
               percent:
@@ -63,9 +63,9 @@ export const PaintPotCard = ({ element = {} }: Props) => {
                   }),
                 }}
               >
-                {element.machine.worked_date.substring(
+                {element.worked_date.substring(
                   0,
-                  element.machine.worked_date.indexOf(" ")
+                  element.worked_date.indexOf(" ")
                 )}
               </p>
             )}
@@ -80,11 +80,11 @@ export const PaintPotCard = ({ element = {} }: Props) => {
                 }),
               }}
             >
-              {element?.machine?.worked_date?.includes(" ")
-                ? element.machine.worked_date.substring(
-                    element.machine.worked_date.indexOf(" ")
+              {element?.worked_date?.includes(" ")
+                ? element.worked_date.substring(
+                    element.worked_date.indexOf(" ")
                   )
-                : element?.machine?.worked_date || "00:00"}
+                : element?.worked_date || "00:00"}
             </p>
           </CircularProgress>
           <div>
@@ -98,15 +98,8 @@ export const PaintPotCard = ({ element = {} }: Props) => {
                 }),
               }}
             >
-              {GetCurrentDate({
-                type: "string",
-                date: element.machine?.date_start,
-              })}{" "}
-              {`${element.machine?.date_start ? " - " : ""}`}
-              {GetCurrentDate({
-                type: "string",
-                date: element.machine?.date_end,
-              })}
+              {element?.date_start} {`${element?.date_start ? " - " : ""}`}
+              {element?.date_end}
             </p>
           </div>
         </div>
@@ -143,25 +136,23 @@ export const PaintPotCard = ({ element = {} }: Props) => {
             </li>
             <li className={`${height > 1200 ? "pt-4" : "pt-3"}`}>
               <p className="font-semibold whitespace-pre-line">
-                {element.machine?.pkol_knit
-                  ? element.machine.pkol_knit + " кг"
+                {element.pkol_knit
+                  ? element.pkol_knit + " кг"
                   : element.status.text}{" "}
               </p>
             </li>
             <li>
               <p className="font-semibold">
-                {element.machine?.nplan
-                  ? element.machine.nplan.substring(3)
-                  : ""}
+                {element?.nplan ? element.nplan : ""}
               </p>
             </li>
 
             <li>
               <p className="font-semibold">
-                {element.machine?.ReceteId
-                  ? element.machine.ReceteId?.substring(
-                      element.machine.ReceteId?.indexOf("-") + 1,
-                      element.machine.ReceteId.indexOf(".")
+                {element?.ReceteId
+                  ? element.ReceteId?.substring(
+                      element.ReceteId?.indexOf("-") + 1,
+                      element.ReceteId.indexOf(".")
                     )
                   : ""}
               </p>
@@ -170,7 +161,7 @@ export const PaintPotCard = ({ element = {} }: Props) => {
         </div>
       </div>
 
-      {element.machine?.pantone && (
+      {element?.pantone && (
         <div
           className="w-[1px] h-[100px] absolute z-[2] right-[-1px] top-0 right-shadow"
           style={{
@@ -188,7 +179,7 @@ export const PaintPotCard = ({ element = {} }: Props) => {
         ></div>
       )}
 
-      {element.machine?.pantone_data?.name && (
+      {element?.pantone_data?.name && (
         <div
           className="absolute rounded-[12px] top-1/2 -translate-y-1/2"
           style={{
@@ -208,7 +199,7 @@ export const PaintPotCard = ({ element = {} }: Props) => {
               type: "machine",
             }),
 
-            backgroundColor: `#${element.machine?.pantone_data?.hex}`,
+            backgroundColor: `#${element?.pantone_data?.hex}`,
           }}
         ></div>
       )}
@@ -228,7 +219,8 @@ export const PaintPotCard = ({ element = {} }: Props) => {
             alignItems: "center",
           }}
         >
-          <PaintCardModal open={open} setOpen={setOpen} element={element} />
+          <DryModal />
+          {/* <PaintCardModal open={open} setOpen={setOpen} element={element} /> */}
         </Modal>
       )}
     </div>

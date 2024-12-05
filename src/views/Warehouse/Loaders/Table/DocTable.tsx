@@ -5,6 +5,7 @@ import { styled } from "@mui/material/styles";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
+import { useCalculateTimePainting } from "../../../../hooks/useCalucaleTime";
 interface Props {
   data: any;
 }
@@ -38,33 +39,45 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 export const DocTable = ({ data = [] }: Props) => {
   const [bodyData, setBodyData] = useState([]);
   const { getHeight, getFontSize } = useDeviceHeight();
-
+  const { GetTimeMinutes } = useCalculateTimePainting();
   useEffect(() => {
     setBodyData(data);
   }, [data]);
 
   const headColumns = [
     {
-      id: "doc_id",
+      id: "NOMER",
     },
     {
-      id: "worker",
+      id: "FIO",
+      render: (val: string) => {
+        return val?.substring(val.indexOf(" "));
+      },
     },
     {
-      id: "weight",
+      id: "KOL",
+      render: (val: number) => {
+        return val + " кг";
+      },
     },
     {
-      id: "percent",
+      id: "FACT_KOL",
+      render: (val: any) => {
+        return Math.round((val * 100) / 430);
+      },
     },
     {
-      id: "start_time",
+      id: "FIRST_ROLL_DATE",
+      render: (val: string) => {
+        return val && GetTimeMinutes(val);
+      },
     },
   ];
 
   return (
     <div className="px-2 flex w-full">
       <div className="w-full flex">
-        <div className="border-r pr-2 border-[var(--border)] w-[70%] relative">
+        <div className="border-r pr-2 border-[var(--border)] relative">
           <div
             style={{ height: getHeight({ type: "card", count: 26 }) }}
             className="flex items-center sticky-sub-header border-b border-[var(--border)]"
@@ -77,9 +90,9 @@ export const DocTable = ({ data = [] }: Props) => {
                   percent: 34,
                 }),
               }}
-              className="font-semibold text-[var(--gray)] text-center whitespace-nowrap"
+              className="font-semibold text-[var(--gray)] text-center whitespace-nowrap w-full"
             >
-              Документ
+              №
             </h2>
           </div>
           <div className={`overflow-y-scroll remove-scroll pt-[2px]`}>
@@ -126,7 +139,7 @@ export const DocTable = ({ data = [] }: Props) => {
                   percent: 34,
                 }),
               }}
-              className="font-semibold text-[var(--gray)] text-center whitespace-nowrap"
+              className="font-semibold text-[var(--gray)] text-center whitespace-nowrap w-full"
             >
               Сотрудник
             </h2>
@@ -150,7 +163,9 @@ export const DocTable = ({ data = [] }: Props) => {
                         }),
                       }}
                     >
-                      {item[headCol.id]}
+                      {headCol?.render
+                        ? headCol.render(item[headCol?.id], item)
+                        : item[headCol.id]}
                     </p>
                   </div>
                 ))}
@@ -172,9 +187,9 @@ export const DocTable = ({ data = [] }: Props) => {
                   percent: 34,
                 }),
               }}
-              className="font-semibold text-[var(--gray)] text-center whitespace-nowrap"
+              className="font-semibold text-[var(--gray)] text-center whitespace-nowrap w-full"
             >
-              Вес партии
+              План
             </h2>
           </div>
           <div className={`overflow-y-scroll remove-scroll pt-[2px]`}>
@@ -196,10 +211,56 @@ export const DocTable = ({ data = [] }: Props) => {
                         }),
                       }}
                     >
-                      {item[headCol.id]}
+                      {headCol?.render
+                        ? headCol.render(item[headCol?.id], item)
+                        : item[headCol.id]}
                     </p>
                   </div>
                 ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="border-r border-[var(--border)] px-2 w-[80%] relative">
+          <div
+            style={{ height: getHeight({ type: "card", count: 26 }) }}
+            className="flex items-center sticky-sub-header border-b border-[var(--border)]"
+          >
+            <h2
+              style={{
+                fontSize: getFontSize({
+                  type: "card",
+                  count: 14,
+                  percent: 34,
+                }),
+              }}
+              className="font-semibold text-[var(--gray)] text-center whitespace-nowrap w-full"
+            >
+              Остатка
+            </h2>
+          </div>
+          <div className={`overflow-y-scroll remove-scroll pt-[2px]`}>
+            {bodyData?.map((item: any, index: number) => (
+              <div
+                className={`row flex items-center border-b border-[var(--border)]`}
+                style={{ height: getHeight({ type: "card", count: 23.5 }) }}
+                key={index}
+              >
+                <div className="cell">
+                  <p
+                    className="whitespace-nowrap font-semibold"
+                    style={{
+                      fontSize: getFontSize({
+                        type: "card",
+                        count: 14,
+                        percent: 37,
+                      }),
+                    }}
+                  >
+                    {Math.round(item.KOL - item.FACT_KOL)} кг
+                  </p>
+                </div>
               </div>
             ))}
           </div>
@@ -218,7 +279,7 @@ export const DocTable = ({ data = [] }: Props) => {
                   percent: 34,
                 }),
               }}
-              className="font-semibold text-[var(--gray)] text-center whitespace-nowrap"
+              className="font-semibold text-[var(--gray)] text-center whitespace-nowrap w-full"
             >
               Собрано
             </h2>
@@ -235,7 +296,11 @@ export const DocTable = ({ data = [] }: Props) => {
                     <div className="mr-2 w-full">
                       <BorderLinearProgress
                         variant="determinate"
-                        value={50}
+                        value={
+                          headCol?.render
+                            ? headCol.render(item[headCol?.id], item)
+                            : item[headCol.id]
+                        }
                         style={{
                           height: getFontSize({
                             type: "card",
@@ -247,7 +312,7 @@ export const DocTable = ({ data = [] }: Props) => {
                       />
                     </div>
                     <p
-                      className="whitespace-nowrap font-semibold text-center space-x-1"
+                      className="whitespace-nowrap font-semibold text-center tracking-tighter"
                       style={{
                         fontSize: getFontSize({
                           type: "card",
@@ -256,7 +321,10 @@ export const DocTable = ({ data = [] }: Props) => {
                         }),
                       }}
                     >
-                      {item[headCol.id]}
+                      {headCol?.render
+                        ? headCol.render(item[headCol?.id], item)
+                        : item[headCol.id]}{" "}
+                      %
                     </p>
                   </div>
                 ))}
@@ -278,7 +346,7 @@ export const DocTable = ({ data = [] }: Props) => {
                   percent: 34,
                 }),
               }}
-              className="font-semibold text-[var(--gray)] text-center whitespace-nowrap"
+              className="font-semibold text-[var(--gray)] text-center whitespace-nowrap w-full"
             >
               Время
             </h2>
@@ -302,7 +370,9 @@ export const DocTable = ({ data = [] }: Props) => {
                         }),
                       }}
                     >
-                      {item[headCol.id]}
+                      {headCol?.render
+                        ? headCol.render(item[headCol?.id], item)
+                        : item[headCol.id]}
                     </p>
                   </div>
                 ))}
