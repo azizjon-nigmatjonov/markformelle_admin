@@ -45,22 +45,26 @@ const MainLayout = () => {
     };
   }, []);
 
-  useEffect(() => {
+  const VersionUpdater = (ver: any) => {
     const now = new Date();
-    const day = now.getDate();
+    const hour = now.getHours();
 
-    if (day == ver) {
-      return;
-    }
-    if (now.getHours() === 12) {
+    if (now.getHours() !== ver) {
       setTimeout(() => {
-        dispatch(authActions.setVersion(day));
+        dispatch(authActions.setVersion(hour));
       }, 1000);
 
       setTimeout(() => {
         window.location.reload();
       }, 2000);
     }
+  };
+
+  useEffect(() => {
+    VersionUpdater(ver);
+    setInterval(() => {
+      VersionUpdater(ver);
+    }, 3600000);
   }, [ver]);
 
   return (

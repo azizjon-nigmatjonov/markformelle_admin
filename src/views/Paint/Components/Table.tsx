@@ -50,7 +50,7 @@ export const PaintTable = ({ list = [] }: Props) => {
         id: "ip",
         render: (val: string) => {
           if (val.includes("EMPTY")) {
-            return "";
+            return "0";
           } else {
             return val;
           }

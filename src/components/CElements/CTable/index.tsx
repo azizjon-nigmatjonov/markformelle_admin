@@ -116,9 +116,10 @@ const CTable = ({
 
     if (value === "search") {
       arr.forEach((obj: any) => {
-        const val = obj[id] + "";
+        let val = obj[id] + "";
+        val = val.toLocaleLowerCase();
 
-        if (val.includes(search)) {
+        if (val.includes(search.toLocaleLowerCase())) {
           result.push(obj);
         } else {
         }

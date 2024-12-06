@@ -3,7 +3,6 @@ import CircularProgress from "../../../components/CElements/CCircularProgress";
 import { useEffect, useState } from "react";
 // import { PaintCardModal } from "../Modal";
 import { Modal } from "@mui/joy";
-import { DryModal } from "./Modal";
 
 interface Props {
   element: any;
@@ -219,7 +218,8 @@ export const DryCard = ({ element = {} }: Props) => {
             alignItems: "center",
           }}
         >
-          <DryModal />
+          <div></div>
+          {/* <DryModal /> */}
           {/* <PaintCardModal open={open} setOpen={setOpen} element={element} /> */}
         </Modal>
       )}

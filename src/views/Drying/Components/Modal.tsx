@@ -1,7 +1,16 @@
 import { ModalDialog, ModalClose } from "@mui/joy";
-import useDeviceHeight from "../../../hooks/useDeviceHeight";
 import CTabs from "../../../components/CElements/CTab";
 import { useState } from "react";
+import useDeviceHeight from "../../../hooks/useDeviceHeight";
+import { PaintCardList } from "../../Paint/Components/Modal/List";
+import { OrderList } from "../../Chni/Components/Modal/Orders";
+
+interface Props {
+  element: any;
+  open: boolean;
+  setOpen: (val: boolean) => void;
+}
+
 const TabList = [
   {
     name: "Информация о машине",
@@ -12,9 +21,20 @@ const TabList = [
     id: "order",
   },
 ];
-export const DryModal = () => {
-  const { getFontSize } = useDeviceHeight();
+
+export const DryModal = ({ element, open = false }: Props) => {
+  if (!open) return;
   const [currentTab, setCurrentTab] = useState({ name: "", id: "info" });
+  const { getFontSize } = useDeviceHeight();
+  const GetUI = (tab: string) => {
+    switch (tab) {
+      case "order":
+        return <OrderList />;
+      default:
+        return <PaintCardList element={element} />;
+    }
+  };
+
   return (
     <ModalDialog
       sx={{
@@ -34,12 +54,13 @@ export const DryModal = () => {
       }}
     >
       <ModalClose />
+
       <CTabs
         tabList={TabList}
         currentTab={currentTab}
         handleTabClick={setCurrentTab}
       />
-      <div></div>
+      <div className="h-full">{GetUI(currentTab.id)}</div>
     </ModalDialog>
   );
 };
