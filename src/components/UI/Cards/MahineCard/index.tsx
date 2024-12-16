@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ChniCardModal } from "../../../../views/Chni/Components/Modal";
 import { MachineCardBody } from "./Body";
-import { MachineCardFooter } from "./Footer";
+// import { MachineCardFooter } from "./Footer";
 import { MachineCardHeader } from "./Header";
 import { Modal } from "@mui/joy";
 interface Props {
@@ -20,22 +20,20 @@ const MachinCardUI = ({ machine = {} }: Props) => {
     >
       <MachineCardHeader
         data={{
-          title: machine.machine_number,
-          defect_num: machine.defect_num,
-          new_rolls: machine.new_rolls,
+          title: machine.DeviceNo,
         }}
         count={6}
       />
       <MachineCardBody
         data={{
-          plan: machine.plan ?? "",
+          plan: machine.Qty ?? "",
           plan_hourly: machine.plan_hourly,
           plan_fact: machine.plan_fact,
         }}
         count={6}
       />
-      <MachineCardFooter data={{ efficiency: machine.efficiency }} count={6} />
-
+      {/* <MachineCardFooter data={{ efficiency: machine.efficiency }} count={6} />
+       */}
       {open && (
         <Modal
           aria-labelledby="modal-title"

@@ -15,18 +15,6 @@ export const ChniList = ({ list = [] }: Props) => {
       style={{
         minWidth:
           window?.screen?.width < 940 ? "1600px" : window?.screen?.width - 200,
-        // height: getHeight({
-        //   count: 1,
-        //   type: "machine",
-        //   minus:
-        //     window?.screen?.width < 1000
-        //       ? openHeader
-        //         ? 50
-        //         : 18
-        //       : openHeader
-        //       ? 170
-        //       : 125,
-        // }),
       }}
     >
       <div className="grid grid-cols-10 grid-rows-6 h-full gap-1.5">

@@ -40,6 +40,21 @@ const GlobalSearch = ({
   const [openMenu, setOpenMenu] = useState(false);
   const [allCheck, setAllCheck] = useState(true);
 
+  const initialList = useMemo(() => {
+    return (
+      list?.map((item: any, index: number) => {
+        if (item.id) {
+          return item;
+        } else {
+          return {
+            ...item,
+            id: index,
+          };
+        }
+      }) ?? []
+    );
+  }, [list]);
+
   const clearValue = () => {
     setList(initialList);
     setValue("");
@@ -59,21 +74,6 @@ const GlobalSearch = ({
 
     return result;
   }, [location]);
-
-  const initialList = useMemo(() => {
-    return (
-      list?.map((item: any, index: number) => {
-        if (item.id) {
-          return item;
-        } else {
-          return {
-            ...item,
-            id: index,
-          };
-        }
-      }) ?? []
-    );
-  }, [list]);
 
   const searchedValues = useMemo(() => {
     if (!searchFields) return [];
@@ -100,6 +100,10 @@ const GlobalSearch = ({
     setList(newList);
     setValue(el.value);
   };
+
+  useEffect(() => {
+    setList(list);
+  }, [list]);
 
   useEffect(() => {
     if (!initialList?.length) return;

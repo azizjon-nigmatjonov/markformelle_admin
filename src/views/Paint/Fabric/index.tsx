@@ -121,9 +121,17 @@ const PaintSection = () => {
 
           obj.machine.pantone_data = GetPantone(obj.machine.pantone);
         } else {
+          const lastResponseTime: any = GetHourAndMinute(
+            element.timestamp
+          )?.substring(3);
+
           obj.status = {
-            color: element.ip === "EMPTY" ? "grey" : "blue",
-            status: element.ip === "EMPTY" ? "no_connection" : "stopped",
+            color:
+              element.ip === "EMPTY" || lastResponseTime > 10 ? "grey" : "blue",
+            status:
+              element.ip === "EMPTY" || lastResponseTime > 10
+                ? "no_connection"
+                : "stopped",
           };
         }
 

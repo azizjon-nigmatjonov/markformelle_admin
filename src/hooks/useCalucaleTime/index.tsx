@@ -1,5 +1,21 @@
 import { useSelector } from "react-redux";
 
+export const useTimeDifference = () => {
+  const GetTimeDifference = (old_time: any, currTime: any) => {
+    if (!old_time) return "";
+    const start_time: any = new Date(old_time);
+    const currentTime: any = currTime ? new Date(currTime) : old_time;
+
+    const differenceInMillis = currentTime - start_time;
+
+    const totalMinutes: number = Math.floor(differenceInMillis / (1000 * 60));
+
+    return totalMinutes;
+  };
+
+  return { GetTimeDifference };
+};
+
 export const useCalculateTime = () => {
   const currTime = useSelector((state: any) => state.globalTool.currTime);
   const GetTime = (old_time: any) => {
