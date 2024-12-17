@@ -38,7 +38,7 @@ export const MachineCardBody = ({ data = {}, count = 6 }: Props) => {
         >
           <p>{data.plan}</p>
           <div className="w-full h-[1px] bg-[var(--black)] mb-[2px]"></div>
-          <p>{data.plan_fact}</p>
+          {/* <p>{data.plan_fact}</p> */}
 
           <div className="flex items-center">
             <div

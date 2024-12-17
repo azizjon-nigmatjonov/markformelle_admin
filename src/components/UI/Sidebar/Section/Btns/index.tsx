@@ -32,7 +32,7 @@ const Btn = ({
         index < 100 ? "steps__item steps__item--active" : "steps__item"
       } menu_link2 flex items-center steps ${active ? "active" : ""}`}
     >
-      <p
+      <div
         onClick={() => clearFilter()}
         className={`${
           isLastItem ? "mb-2" : ""
@@ -40,9 +40,14 @@ const Btn = ({
           active ? "active text-[var(--main)]" : "text-[var(--gray)]"
         }`}
       >
-        <IconGenerator icon={el.icon} fill={active ? 'var(--main)' : 'var(--gray)'} />
+        <div className="w-[24px]">
+          <IconGenerator
+            icon={el.icon}
+            fill={active ? "var(--main)" : "var(--gray)"}
+          />
+        </div>
         <span>{t(el.title)}</span>
-      </p>
+      </div>
     </button>
   );
 };
@@ -75,7 +80,7 @@ export const SectionBtns = ({
               setOpen((prev) => !prev);
             }}
           >
-            <p
+            <div
               onClick={() => clearFilter()}
               className={`flex gap-2 menu_link cursor-pointer text-sm font-medium whitespace-nowrap ${
                 active ? "text-[var(--black)]" : "text-[var(--gray)]"
@@ -86,7 +91,7 @@ export const SectionBtns = ({
                 fill={active ? "var(--main)" : "var(--gray)"}
               />
               <span>{t(el.title)}</span>
-            </p>
+            </div>
 
             <div className={open ? "rotate-[180deg]" : ""}>
               <ArrowDropDownIcon

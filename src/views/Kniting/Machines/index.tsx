@@ -140,11 +140,10 @@ const KnittingMachines = () => {
           bodyData={bodyData}
           setSearch={setSearch}
         />
-        {/* <CDriver direction="vertical" /> */}
         <div className="mx-3">
           <GlobalSearch list={bodyData ?? []} setList={setList} />
         </div>
-        {/* <CDriver direction="vertical" /> */}
+
         <div>
           <ToggleBtn
             type={listType}

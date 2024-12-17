@@ -41,18 +41,20 @@ const GlobalSearch = ({
   const [allCheck, setAllCheck] = useState(true);
 
   const initialList = useMemo(() => {
-    return (
-      list?.map((item: any, index: number) => {
-        if (item.id) {
-          return item;
-        } else {
-          return {
-            ...item,
-            id: index,
-          };
-        }
-      }) ?? []
-    );
+    if (list?.length > 0) {
+      return (
+        list?.map((item: any, index: number) => {
+          if (item.id) {
+            return item;
+          } else {
+            return {
+              ...item,
+              id: index,
+            };
+          }
+        }) ?? []
+      );
+    } else return [];
   }, [list]);
 
   const clearValue = () => {

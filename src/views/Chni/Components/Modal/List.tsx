@@ -6,6 +6,7 @@ import CircularProgress from "../../../../components/CElements/CCircularProgress
 import "./style.scss";
 import { useState } from "react";
 import { ModalBtn } from "../../../Kniting/Machines/Card/Btn";
+
 export const ChniCardList = ({ machine }: { machine: any }) => {
   const { getFontSize } = useDeviceHeight();
   const [checked1, setChecked1] = useState(machine.machine_is_on == "true");

@@ -3,7 +3,6 @@ import { PaintCardList } from "./List";
 import CTabs from "../../../../components/CElements/CTab";
 import { useState } from "react";
 import { OrderList } from "./Orders";
-import useDeviceHeight from "../../../../hooks/useDeviceHeight";
 
 interface Props {
   element: any;
@@ -25,7 +24,6 @@ const TabList = [
 export const PaintCardModal = ({ element, open = false }: Props) => {
   if (!open) return;
   const [currentTab, setCurrentTab] = useState({ name: "", id: "info" });
-  const { getFontSize } = useDeviceHeight();
   const GetUI = (tab: string) => {
     switch (tab) {
       case "order":
@@ -46,11 +44,7 @@ export const PaintCardModal = ({ element, open = false }: Props) => {
             : window?.screen?.height > 1200
             ? (60 / 100) * window?.screen?.width
             : 1200,
-        minHeight: getFontSize({
-          count: 1,
-          percent: window?.screen?.height > 1200 ? 100 : 60,
-          type: "machine",
-        }),
+        height: 750,
       }}
     >
       <ModalClose />

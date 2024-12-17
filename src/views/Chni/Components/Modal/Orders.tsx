@@ -5,16 +5,7 @@ export const OrderList = () => {
   const { getFontSize } = useDeviceHeight();
   const height = window?.screen?.height ?? 0;
   return (
-    <div
-      className="flex flex-col overflow-y-scroll designed-scroll space-y-3"
-      style={{
-        height: getFontSize({
-          count: 1,
-          percent: window?.screen?.height > 1200 ? 88 : 53,
-          type: "machine",
-        }),
-      }}
-    >
+    <div className="flex flex-col overflow-y-scroll designed-scroll space-y-3 h-[650px]">
       {Array.from(new Array(20)).map((item: number) => (
         <ul
           key={item}

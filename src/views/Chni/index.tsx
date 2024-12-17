@@ -39,7 +39,7 @@ const ChniDashboard = () => {
           item.PrevDateTime,
           item.LastDateTime
         );
-        const plan_hourly = Math.ceil(minutes / 60);
+        const plan_hourly = minutes > 0 ? Math.ceil(60 / minutes) : 0;
 
         const obj = {
           new_status: {
