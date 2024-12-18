@@ -3,7 +3,7 @@ import ChniDashboard from "../../views/Chni";
 export const chniSection = [
   {
     parent: "chni",
-    link: "list",
+    link: "dashboard",
     sidebar: true,
     title: "Дашборд ЧНИ",
     parent_icon: <img width={18} src="/images/weaving.png" alt="weaving" />,

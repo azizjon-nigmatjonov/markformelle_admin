@@ -6,6 +6,7 @@ import CircularProgress from "../../../../components/CElements/CCircularProgress
 import "./style.scss";
 import { useState } from "react";
 import { ModalBtn } from "../../../Kniting/Machines/Card/Btn";
+import { GetCurrentDate } from "../../../../utils/getDate";
 
 export const ChniCardList = ({ machine }: { machine: any }) => {
   const { getFontSize } = useDeviceHeight();
@@ -26,6 +27,7 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
 
     return Number(num.toFixed(2));
   };
+  console.log("machine", machine);
 
   return (
     <div className="grid grid-cols-2">
@@ -42,9 +44,7 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
       >
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>Номер машины</p>
-          <p>
-            {machine.name} ({machine.id})
-          </p>
+          <p>{machine.name}</p>
         </li>
         <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
@@ -121,12 +121,18 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
 
         <ListDivider />
         <li className="flex items-center justify-between ">
-          <p>Время начала</p> <p>2024.11.08 14:14</p>
+          <p>Время начала</p>{" "}
+          <p>
+            {GetCurrentDate({ date: machine.PrevDateTime, type: "usually" })}
+          </p>
         </li>
 
         <ListDivider />
         <li className="flex items-center justify-between ">
-          <p>Время окончания</p> <p> 2024.11.08 21:00</p>
+          <p>Время окончания</p>
+          <p>
+            {GetCurrentDate({ date: machine.LastDateTime, type: "usually" })}
+          </p>
         </li>
       </ul>
 
