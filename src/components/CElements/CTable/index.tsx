@@ -560,7 +560,7 @@ const CTable = ({
                             : t(column?.title)}
                         </div>
                         {column?.id !== "index" && !column?.remove_sort ? (
-                          <div className="w-[20px]">
+                          <div className="w-[20px] flex justify-start pr-5">
                             {!reOrder ? (
                               <TableSort
                                 type={column.filter}

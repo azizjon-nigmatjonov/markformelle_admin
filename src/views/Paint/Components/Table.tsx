@@ -33,7 +33,7 @@ export const PaintTable = ({ list = [] }: Props) => {
             <div
               className={`h-full w-full green rounded-[8px] whitespace-nowrap px-2 ${status.color}`}
             >
-              <p>{status === "stopped" ? "Не работает" : "Работает"}</p>
+              <p>{status.text}</p>
             </div>
           );
         },

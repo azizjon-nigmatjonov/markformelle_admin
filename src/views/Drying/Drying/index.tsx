@@ -115,6 +115,9 @@ const DryingPage = () => {
           obj.status = {
             color: element.ip === "EMPTY" ? "grey" : "blue",
             status: element.ip === "EMPTY" ? "no_connection" : "stopped",
+            text: statusText[
+              element.ip === "EMPTY" ? "no_connection" : "stopped"
+            ],
           };
         }
 

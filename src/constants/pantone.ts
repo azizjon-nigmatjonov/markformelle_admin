@@ -671,6 +671,10 @@ export const PantoneColors: any = {
     name: "gunmetal",
     hex: "5c5d5b",
   },
+  "14-4005": {
+    name: "wind-chime",
+    hex: "b7d1ea",
+  },
   "14-4002": {
     name: "wind-chime",
     hex: "cac5c2",

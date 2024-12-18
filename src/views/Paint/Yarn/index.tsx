@@ -126,10 +126,11 @@ const PaintSectionYarn = () => {
           obj.status = {
             color: element.ip === "EMPTY" ? "grey" : "blue",
             status: element.ip === "EMPTY" ? "no_connection" : "stopped",
+            text: statusText[
+              element.ip === "EMPTY" ? "no_connection" : "stopped"
+            ],
           };
         }
-
-        obj.status.text = statusText[obj.status.status];
 
         arr.push({ ...element, ...obj, order });
       }
