@@ -12,7 +12,7 @@ export const knittingList = [
     icon: <img width={18} src="/images/kniting.png" alt="knitting" />,
     element: <KnittingMachines />,
     auth: false,
-    permissions: ["index", "delete"],
+    permissions: ["view", "delete"],
   },
   {
     parent: "knitting",
@@ -22,7 +22,7 @@ export const knittingList = [
     icon: <img width={22} src="/images/rope.png" alt="knitting" />,
     element: <KnittingMachines />,
     auth: false,
-    permissions: ["index", "delete"],
+    permissions: ["view", "delete"],
   },
   {
     parent: "knitting",
@@ -32,7 +32,7 @@ export const knittingList = [
     icon: <img width={20} src="/images/roll-kk.png" alt="roll kk" />,
     element: <RollsKK />,
     auth: false,
-    permissions: ["index", "delete"],
+    permissions: ["view", "delete"],
   },
   {
     parent: "knitting",
@@ -42,6 +42,6 @@ export const knittingList = [
     icon: <img width={24} src="/images/fork-loader.png" alt="loader" />,
     element: <KnittingProcess />,
     auth: false,
-    permissions: ["index", "delete"],
+    permissions: ["view", "delete"],
   },
 ];

@@ -7,20 +7,20 @@ import Users from "../../views/Admins/Users";
 export const adminList = [
   {
     parent: "access",
-    link: "admin",
-    sidebar: true,
-    title: "admins",
-    icon: "admins",
-    element: <Admins />,
-    auth: true,
-  },
-  {
-    parent: "access",
     link: "users",
     sidebar: true,
     title: "users",
     icon: "users",
     element: <Users />,
+    auth: true,
+  },
+  {
+    parent: "access",
+    link: "admin",
+    sidebar: true,
+    title: "admins",
+    icon: "admins",
+    element: <Admins />,
     auth: true,
   },
   {

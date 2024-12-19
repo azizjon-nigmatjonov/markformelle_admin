@@ -127,6 +127,8 @@ export const GetOptions = ({ newRouteList }: { newRouteList: any }) => {
   const [options, setOptions] = useState([]);
   const { navigateTo, navigateQuery } = usePageRouter();
   const { active } = useGetQueries();
+  const test_routes =
+    useSelector((state: any) => state.table.test_routes) ?? [];
   const { t } = useTranslation();
 
   const handViewClick = (element: any, index: number) => {
@@ -141,9 +143,8 @@ export const GetOptions = ({ newRouteList }: { newRouteList: any }) => {
 
     const newArr: any = [];
     arr.forEach((element: any, index: number) => {
-      const found = newRouteList.find(
-        (item: any) => item.path === element.path
-      );
+      // newRouteList // use this instead of test_routes
+      const found = test_routes.find((item: any) => item.path === element.path);
 
       if (!found) {
         const obj = {

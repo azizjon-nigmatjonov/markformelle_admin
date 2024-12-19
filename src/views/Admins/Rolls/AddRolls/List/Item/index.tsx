@@ -4,20 +4,18 @@ import CCheckbox from "../../../../../../components/CElements/CCheckbox";
 interface Props {
   route: any;
   errors: any;
-  permissions: any,
-  handleCheck: (val: any, val2?: string) => void
+  permissions: any;
+  handleCheck: (val: any, val2?: string) => void;
 }
 
 export const PermissionItem = ({
   route,
   errors,
   permissions = [],
-  handleCheck 
+  handleCheck,
 }: Props) => {
- 
-
   return (
-    <Rolls key={route.path} text={route.name}>
+    <Rolls key={route.path} text={route.path}>
       {route.permissions.length ? (
         <>
           {/* {route.permissions.length === permissions.length ? (
@@ -28,12 +26,12 @@ export const PermissionItem = ({
               Отменить
             </button>
           ) : ( */}
-            <button
-              onClick={() => handleCheck(route.permissions, "all")}
-              className="text-[var(--main)] underline mb-5 font-medium"
-            >
-              Barchasini belgilash
-            </button>
+          <button
+            onClick={() => handleCheck(route.permissions, "all")}
+            className="text-[var(--main)] underline mb-5 font-medium"
+          >
+            Barchasini belgilash
+          </button>
           {/* )} */}
         </>
       ) : (
@@ -41,13 +39,13 @@ export const PermissionItem = ({
       )}
       <div className="grid grid-cols-3 gap-5">
         {route.permissions.map((permission: any) => (
-          <div key={permission.id} className="relative">
+          <div key={permission} className="relative">
             <CCheckbox
-              checked={permissions?.includes(permission.value)}
+              checked={permissions?.includes(permission)}
               handleCheck={(obj: any) => handleCheck(obj)}
               element={{
-                label: permission.label,
-                value: permission.id,
+                label: permission,
+                value: permission,
               }}
             />
             {errors?.permissions?.message && !permissions?.length ? (

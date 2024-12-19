@@ -9,11 +9,14 @@ import { useParams } from "react-router-dom";
 import { RollList } from "./List";
 import { RollForm } from "./Form";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 // import { SectionBtnHeader } from "../../../../components/UI/SectionBtnHeader";
 
 const NewRolls = () => {
   const schema = Validation();
   const { id } = useParams();
+  const test_routes =
+    useSelector((state: any) => state.table.test_routes) ?? [];
 
   const {
     newRouteList,
@@ -32,7 +35,7 @@ const NewRolls = () => {
 
   const { createRoll, updateRoll, isLoading } = CreateFunction({});
   const { breadCrumbsItems } = breadCrumbs({ id });
-  const [permissions, setPermissions]: any = useState([]);
+  const [permissions, setPermissions]: any = useState(["delete"]);
 
   const onSubmit = (data: any) => {
     const permissions = data.permissions.map((element: any) =>
@@ -53,8 +56,6 @@ const NewRolls = () => {
       const found = ids.find((el: any) => {
         permissions.includes(el);
       });
-      console.log("111", ids);
-
       if (found) {
         data = permissions.filter((item: string) => {
           if (!ids.includes(item)) return item;
@@ -112,7 +113,7 @@ const NewRolls = () => {
         </Rolls>
 
         <RollList
-          newRouteList={newRouteList}
+          newRouteList={test_routes ?? newRouteList}
           isLoading={listLoading}
           handleCheck={handleCheck}
           permissions={permissions}

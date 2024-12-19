@@ -5,6 +5,7 @@ import { Validation } from "./validate";
 import CModal from "../../../../../components/CElements/CModal";
 import { CircularProgress } from "@mui/material";
 import HFSelect from "../../../../../components/HFElements/HFSelect";
+import { useSelector } from "react-redux";
 
 interface Props {
   handleClose: () => void;
@@ -21,12 +22,16 @@ export const RouteCreate = ({
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
+  const newRoutes = useSelector((state: any) => state.website.new_routes);
   const { createRoute, isLoading } = CreateFunction({ handleClose, reset });
 
   const onSubmit = (data: any) => {
-    const obj = newRouteList.find((item: any) => item.path === data.name);
-    console.log("obj", obj);
-
+    let obj = {};
+    for (let key in newRoutes) {
+      if (newRoutes[key].find((item: any) => item.path === data.name)) {
+        obj = newRoutes[key].find((item: any) => item.path === data.name);
+      }
+    }
     createRoute(obj);
   };
 

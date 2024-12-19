@@ -5,8 +5,8 @@ interface Props {
   isLoading: boolean;
   newRouteList: any;
   errors: any;
-  permissions: any
-  handleCheck: (val: any, val2?: string) => void
+  permissions: any;
+  handleCheck: (val: any, val2?: string) => void;
 }
 
 export const RollList = ({
@@ -14,7 +14,7 @@ export const RollList = ({
   newRouteList,
   errors = {},
   permissions = [],
-  handleCheck
+  handleCheck,
 }: Props) => {
   if (isLoading) {
     return (
@@ -27,11 +27,7 @@ export const RollList = ({
   if (!newRouteList?.length) {
     return (
       <div className="w-full flex justify-center mt-10">
-        <img
-          className="w-[200px]"
-          src="/images/no-data.png"
-          alt="no data"
-        />
+        <img className="w-[200px]" src="/images/no-data.png" alt="no data" />
       </div>
     );
   }
@@ -39,7 +35,12 @@ export const RollList = ({
   return (
     <>
       {newRouteList.map((route: any) => (
-        <PermissionItem handleCheck={handleCheck} permissions={permissions} route={route} errors={errors} />
+        <PermissionItem
+          handleCheck={handleCheck}
+          permissions={permissions}
+          route={route}
+          errors={errors}
+        />
       ))}
     </>
   );
