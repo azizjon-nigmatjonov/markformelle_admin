@@ -71,7 +71,8 @@ const Rolls = () => {
       >
         <div className="ml-5">
           <AddButton
-            text="Yangi rol qo'shish"
+            text="Добавить новую роль"
+            type="ordinary"
             onClick={() => navigateTo("/access/rolls/:create")}
           />
         </div>

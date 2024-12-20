@@ -43,7 +43,7 @@ const RoutePage = () => {
             <AddButton
               onClick={() => navigateQuery({ modal: "open" })}
               iconLeft={true}
-              text="Route qo'shish"
+              text="Добавить страницу"
             />
           </div>
         </div>

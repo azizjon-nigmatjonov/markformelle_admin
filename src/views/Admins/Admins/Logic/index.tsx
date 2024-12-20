@@ -70,7 +70,7 @@ export const TableData = () => {
         },
       },
       {
-        title: "Qo'shilgan sana",
+        title: "Дата создания",
         id: "created_at",
         render: (val: any) => {
           return <>{FormatTime(val)}</>;

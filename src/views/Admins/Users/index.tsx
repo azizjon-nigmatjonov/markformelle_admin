@@ -11,6 +11,17 @@ import { FetchFunction, TableData, breadCrumbs } from "./Logic";
 import { FilterFunctions } from "../../../components/UI/Filter/Logic";
 import CCard from "../../../components/CElements/CCard";
 
+const bodyTestDat = [
+  {
+    name: "Azizjon",
+    email: "aziz.nigmatjonov7@gmail.com",
+    phone: "+998 99 491 2830",
+    roles: [{ name: "user" }],
+    created_at: "",
+    status: "active",
+  },
+];
+
 const Users = () => {
   const { navigateQuery } = usePageRouter();
   const { getQueries } = usePageRouter();
@@ -70,7 +81,7 @@ const Users = () => {
         <CCard>
           <CTable
             headColumns={headColumns}
-            bodyColumns={bodyColumns.list}
+            bodyColumns={bodyTestDat ?? bodyColumns.list}
             meta={bodyColumns?.meta}
             isResizeble={true}
             isLoading={isLoading}
