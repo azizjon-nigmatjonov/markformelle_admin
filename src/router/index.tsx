@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { websiteActions } from "../store/website/index";
 import MainLayout from "../layouts/MainLayout";
 import { routeList } from "./List";
@@ -29,9 +29,10 @@ const Router = () => {
   const [list, setList] = useState<string[]>([]);
   const [listNew, setListNew] = useState<string[]>([]);
   // const storedRoutes = useSelector((state: any) => state.website.routes);
-
+  const userInfo = useSelector((state: any) => state.auth.user);
   const [routes, setRoutes]: any = useState({ ...defaults });
   const [newRoutes, setNewRoutes] = useState({ ...defaults });
+  console.log("userInfo", userInfo);
 
   const getPath = ({
     parent = "",
@@ -62,6 +63,10 @@ const Router = () => {
       children,
     };
 
+    const permissions = userInfo?.permissions ?? [];
+    const found = permissions?.find((i: any) => i.value === path);
+    console.log("found", found, path);
+
     if (!listNew.includes(obj.id)) {
       setNewRoutes((prev: any) => ({
         ...prev,
@@ -69,15 +74,18 @@ const Router = () => {
       }));
       setListNew((prev) => [...prev, obj.id]);
     }
-
-    if (!list.includes(obj.id)) {
-      setRoutes((prev: any) => ({
-        ...prev,
-        [parent]: [...prev[parent], obj],
-      }));
-      setList((prev) => [...prev, obj.id]);
+    if (found?.permissions?.includes("view") || !auth) {
+      if (!list.includes(obj.id)) {
+        setRoutes((prev: any) => ({
+          ...prev,
+          [parent]: [...prev[parent], obj],
+        }));
+        setList((prev) => [...prev, obj.id]);
+      }
+      return path;
     }
-    return path;
+
+    return "";
   };
 
   // const navigator = useMemo(() => {

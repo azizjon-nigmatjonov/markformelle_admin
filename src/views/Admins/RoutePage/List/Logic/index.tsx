@@ -9,6 +9,8 @@ import { useGetQueries } from "../../../../../hooks/useGetQueries";
 import { useTranslation } from "react-i18next";
 import { StaticPermissions } from "../../../../../constants/permissions";
 import { tableStoreActions } from "../../../../../store/table";
+import axios from "axios";
+import useCQuery from "../../../../../hooks/useCQuery";
 
 export const CreateFunction = ({
   handleClose,
@@ -39,11 +41,20 @@ export const CreateFunction = ({
 
   const createRoute = (data: any) => {
     const params: any = {};
-    // params.path = data.name;
-    // params.name = data.title;
-    const arr: any = [...test_routes];
 
-    dispatch(tableStoreActions.setTestRoutes([...arr, data]));
+    axios
+      .post("http://localhost:3000/routes", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.error("Error adding route:", error);
+      });
+
     routeCreate(params);
     // routeCreate(params);
   };
@@ -127,8 +138,6 @@ export const GetOptions = ({ newRouteList }: { newRouteList: any }) => {
   const [options, setOptions] = useState([]);
   const { navigateTo, navigateQuery } = usePageRouter();
   const { active } = useGetQueries();
-  const test_routes =
-    useSelector((state: any) => state.table.test_routes) ?? [];
   const { t } = useTranslation();
 
   const handViewClick = (element: any, index: number) => {
@@ -143,8 +152,9 @@ export const GetOptions = ({ newRouteList }: { newRouteList: any }) => {
 
     const newArr: any = [];
     arr.forEach((element: any, index: number) => {
-      // newRouteList // use this instead of test_routes
-      const found = test_routes.find((item: any) => item.path === element.path);
+      const found = newRouteList.find(
+        (item: any) => item.path === element.path
+      );
 
       if (!found) {
         const obj = {
@@ -188,17 +198,18 @@ export const FetchFunction = () => {
     data: routes,
     isLoading,
     refetch,
-  } = useQuery(["GET_ROUTE_LIST"], () => {
-    return routeService.getList();
+  } = useCQuery({
+    key: `GET_ROUTES_LIST`,
+    endpoint: `http://localhost:3000/routes`,
+    params: {},
   });
 
   const newRouteList: any = useMemo(() => {
-    const list = routes?.data?.map((route: any) => {
+    const list = routes?.map((route: any) => {
       const permissions = route.permissions?.map((permission: any) => {
         return {
-          ...permission,
-          label: permission.name.substring(permission.name.indexOf("#") + 1),
-          value: permission.id,
+          label: permission,
+          value: permission,
         };
       });
       return {

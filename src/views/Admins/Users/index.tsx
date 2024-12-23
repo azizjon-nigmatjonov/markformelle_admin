@@ -1,33 +1,20 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import CTable from "../../../components/CElements/CTable";
 import AddButton from "../../../components/UI/Buttons/AddButton";
-// import SectionHeader from "../../../components/UI/Sections/Header";
 import usePageRouter from "../../../hooks/useObjectRouter";
 import Form from "./Form";
-import adminService from "../../../services/admins";
 import { Header } from "../../../components/UI/Header";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { FetchFunction, TableData, breadCrumbs } from "./Logic";
 import { FilterFunctions } from "../../../components/UI/Filter/Logic";
 import CCard from "../../../components/CElements/CCard";
-
-const bodyTestDat = [
-  {
-    name: "Azizjon",
-    email: "aziz.nigmatjonov7@gmail.com",
-    phone: "+998 99 491 2830",
-    roles: [{ name: "user" }],
-    created_at: "",
-    status: "active",
-  },
-];
+import axios from "axios";
 
 const Users = () => {
   const { navigateQuery } = usePageRouter();
   const { getQueries } = usePageRouter();
   const query = getQueries();
   const { headColumns } = TableData();
-
   const [filterParams, setFilterParams]: any = useState({});
   const { bodyColumns, isLoading, refetch } = FetchFunction();
   const { collectFilter, storeFilters } = FilterFunctions({
@@ -52,11 +39,15 @@ const Users = () => {
 
     if (status === "delete") {
       if (element.email === "superrt@akataxi.uz") return;
-      adminService.deleteAdmin(element.id).then(() => {
+      axios.delete(`http://localhost:3000/users/${element.id}`).then(() => {
         refetch();
       });
     }
   }, []);
+
+  useEffect(() => {
+    refetch();
+  }, [query?.id]);
 
   return (
     <>
@@ -81,7 +72,7 @@ const Users = () => {
         <CCard>
           <CTable
             headColumns={headColumns}
-            bodyColumns={bodyTestDat ?? bodyColumns.list}
+            bodyColumns={bodyColumns.list}
             meta={bodyColumns?.meta}
             isResizeble={true}
             isLoading={isLoading}

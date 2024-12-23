@@ -7,8 +7,9 @@ const Form = ({ refetch, id }: { refetch: () => void; id: string }) => {
   const { navigateQuery } = usePageRouter();
 
   const { rolls, defaultValues } = FetchFunction({
-    adminId: id,
+    userId: id,
   });
+  console.log("defaultValues", defaultValues);
 
   return (
     <CModal

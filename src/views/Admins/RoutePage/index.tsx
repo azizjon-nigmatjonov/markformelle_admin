@@ -51,7 +51,7 @@ const RoutePage = () => {
         <RouteList
           isLoading={isLoading}
           handleClose={handleClose}
-          newRouteList={[]}
+          newRouteList={newRouteList}
         />
       </div>
 

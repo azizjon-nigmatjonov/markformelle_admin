@@ -11,7 +11,7 @@ export const settingList = [
     icon: "settings",
     parent_icon: "settings",
     element: <WebsiteSettings />,
-    auth: true,
+    auth: false,
   },
   {
     parent: "settings",
@@ -20,7 +20,7 @@ export const settingList = [
     title: "Языковые настройки",
     icon: "globus",
     element: <LanguagesPage />,
-    auth: true,
+    auth: false,
   },
   {
     parent: "settings",

@@ -68,15 +68,12 @@ export const RouteList = ({
       </div>
     );
   }
-  console.log("newRouteList", newRouteList);
 
   const { deletePermission, deleteRoute } = DeleteFunction({ handleClose });
-  const test_routes =
-    useSelector((state: any) => state.table.test_routes) ?? [];
 
   return (
     <div className="mt-10">
-      {test_routes?.map((route: any, index: number) => (
+      {newRouteList?.map((route: any, index: number) => (
         <ListIem
           key={index}
           handleClose={handleClose}

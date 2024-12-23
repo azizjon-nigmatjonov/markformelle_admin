@@ -30,7 +30,7 @@ export const adminList = [
     title: "rolls",
     icon: "rolls_icon",
     element: <Rolls />,
-    auth: true,
+    auth: false,
   },
   {
     parent: "access",
@@ -39,7 +39,7 @@ export const adminList = [
     title: "rolls",
     icon: "",
     element: <NewRolls />,
-    single_page: true,
+    single_page: false,
   },
   {
     parent: "access",
@@ -48,7 +48,7 @@ export const adminList = [
     title: "edit_roll",
     icon: "",
     element: <NewRolls />,
-    single_page: true,
+    single_page: false,
   },
   {
     parent: "access",
@@ -58,6 +58,6 @@ export const adminList = [
     icon: "pages",
     element: <RoutePage />,
     permissions: ["add_permission", "delete_permisson"],
-    auth: true,
+    auth: false,
   },
 ];

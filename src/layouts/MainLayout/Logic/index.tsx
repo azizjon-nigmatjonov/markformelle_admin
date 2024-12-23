@@ -26,7 +26,7 @@ export const BackButtonRoute = () => {
         className="custom-btn form text-2xl hover:bg-[var(--primary)] duration-200"
       >
         <ArrowLeftIcon style={{ fontSize: "40px" }} />
-        Ortga qaytish
+        Возвращаться
       </button>
     </div>
   );

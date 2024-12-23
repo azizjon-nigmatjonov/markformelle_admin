@@ -60,6 +60,7 @@ const InputUI = ({
             ? "text"
             : type
         }
+        autoComplete="off"
         InputProps={{
           readOnly: readOnly,
         }}
@@ -99,6 +100,7 @@ interface Props {
   activatePassword?: boolean;
   errors?: any;
   readOnly?: boolean;
+  autoComplete?: string;
 }
 
 const HFTextField = ({

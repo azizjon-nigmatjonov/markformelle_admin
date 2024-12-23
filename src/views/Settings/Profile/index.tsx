@@ -9,7 +9,7 @@ import { useState } from "react";
 import CModal from "../../../components/CElements/CModal";
 import CancelButton from "../../../components/UI/Buttons/Cancel";
 import { usePermissions } from "../../../hooks/usePermissions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../../store/auth/auth.slice";
 import { useTranslation } from "react-i18next";
 import usePageRouter from "../../../hooks/useObjectRouter";
@@ -19,6 +19,7 @@ import { breadCrumbItems } from "./Logic";
 
 const Profile = () => {
   const [logout, setLogout] = useState(false);
+  const user = useSelector((state: any) => state.auth.user);
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const {
@@ -36,7 +37,6 @@ const Profile = () => {
     sessionStorage.removeItem("has_route");
     window.location.reload();
   };
-
   return (
     <>
       <Header
@@ -62,7 +62,7 @@ const Profile = () => {
                   label={t("name")}
                   setValue={setValue}
                   required={true}
-                  // defaultValue={user?.name}
+                  defaultValue={user?.name}
                   errors={errors}
                 />
                 <HFInputMask
@@ -73,7 +73,7 @@ const Profile = () => {
                   required={true}
                   mask={"+\\9\\9\\8 99 999 99 99"}
                   setValue={setValue}
-                  // defaultValue={user?.phone}
+                  defaultValue={user?.phone}
                   errors={errors}
                 />
                 <HFTextField
@@ -83,7 +83,7 @@ const Profile = () => {
                   label={t("login")}
                   setValue={setValue}
                   required={true}
-                  // defaultValue={user?.email}
+                  defaultValue={user?.email}
                   type="email"
                   errors={errors}
                 />

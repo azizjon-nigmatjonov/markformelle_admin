@@ -10,6 +10,7 @@ import { authActions } from "../../store/auth/auth.slice";
 import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import usePageRouter from "../../hooks/useObjectRouter";
+import axios from "axios";
 
 const Login = () => {
   const [password, setPassword] = useState(true);
@@ -48,15 +49,35 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
+  const GetUser = (user: any) => {
+    axios
+      .get(`http://localhost:3000/login`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params: {
+          user: user,
+        },
+      })
+      .then((res) => {
+        dispatch(authActions.login({ access_token: res.data.email }));
+        dispatch(authActions.setUser(res.data));
+        if (link) {
+          navigateTo(link);
+        }
+        setTimeout(() => {
+          dispatch(authActions.setLink(""));
+        }, 500);
+      })
+      .catch((err) => {
+        console.error("Error logging in:", err);
+      });
+  };
+
   const onSubmit = (data: any) => {
-    dispatch(authActions.login({ access_token: "111" }));
-    if (link) {
-      navigateTo(link);
-    }
-    setTimeout(() => {
-      dispatch(authActions.setLink(""));
-    }, 500);
-    console.log(data);
+    console.log("data", JSON.stringify(data));
+
+    GetUser(JSON.stringify(data));
 
     // login.mutate(data);
   };

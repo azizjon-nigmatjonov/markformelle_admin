@@ -5,26 +5,24 @@ import { useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { websiteActions } from "../../../../store/website";
 import usePageRouter from "../../../../hooks/useObjectRouter";
+import axios from "axios";
+import useCQuery from "../../../../hooks/useCQuery";
 
-export const FetchFunction = ({ adminId }: { adminId: string }) => {
+export const FetchFunction = ({ userId }: { userId: string }) => {
   const { data: rolls } = useQuery(["GET_ROLLS_LIST"], () => {
     return roleService.getList();
   });
 
-  const { data: adminData } = useQuery(
-    ["GET_ROLL_DATA", adminId],
-    () => {
-      return adminService.getAdmin(adminId);
-    },
-    {
-      enabled: !!(adminId && adminId !== "create"),
-    }
-  );
+  const { data: users } = useCQuery({
+    key: `GET_USERS_LIST`,
+    endpoint: `http://localhost:3000/users`,
+    params: {},
+  });
 
   const SelectOptions = useMemo(() => {
     if (!rolls) return [];
     const arr = rolls?.data ?? [];
-    return (arr ).map((item: any) => {
+    return arr.map((item: any) => {
       return {
         ...item,
         label: item.name,
@@ -34,10 +32,12 @@ export const FetchFunction = ({ adminId }: { adminId: string }) => {
   }, [rolls]);
 
   const defaultValues: any = useMemo(() => {
-    const obj: any = adminData?.data;
-    if (obj?.id) obj.roles = obj.roles?.map((item: any) => item.id);
-    return obj;
-  }, [adminData]);
+    if (users?.length) {
+      return users.find((item: any) => item.id == userId);
+    } else {
+      return {};
+    }
+  }, [users]);
 
   return { rolls: SelectOptions, defaultValues };
 };
@@ -66,18 +66,44 @@ export const SubmitFunction = ({
   };
 
   const { mutate: adminCreate, isLoading: updateCreating } = useMutation({
-    mutationFn: (data: any) => {
-      return adminService.createAdmin(data).then(() => {
-        HandleSuccess("Admin yaratildi!");
-      });
+    mutationFn: (user: any) => {
+      const data: any = [];
+      axios
+        .post("http://localhost:3000/users", user, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          HandleSuccess("Пользователь создан");
+          data.push(res.data);
+        })
+        .catch((error) => {
+          console.error("Error adding user:", error);
+        });
+
+      return data;
     },
   });
 
   const { mutate: adminUpdate, isLoading: updateLoading } = useMutation({
     mutationFn: (data: any) => {
-      return adminService.updateAdmin(data, data.id).then(() => {
-        HandleSuccess("Ma'lumot yangilandi!");
-      });
+      const result: any = [];
+      axios
+        .put(`http://localhost:3000/users/${data.id}`, data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          HandleSuccess("Пользователь создан");
+          result.push(res.data);
+        })
+        .catch((error) => {
+          console.error("Error adding user:", error);
+        });
+
+      return result;
     },
   });
 

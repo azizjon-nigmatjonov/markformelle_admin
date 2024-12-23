@@ -1,17 +1,16 @@
 // import HFInputMask from "../../../../components/FormElements/HFInputMask";
-// import HFTextField from "../../../../components/FormElements/HFTextField";
 import { useForm } from "react-hook-form";
 import { UpdateValidation, Validation } from "./validate";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitFunction } from "./Logic";
-// import { CircularProgress } from "@mui/material";
-// import { HFMultipleSelect } from "../../../../components/FormElements/HFMultipleSelect";
+import HFTextField from "../../../../components/HFElements/HFTextField";
+import HFInputMask from "../../../../components/HFElements/HFInputMask";
+import { CircularProgress } from "@mui/material";
 
 export const AdminFormWrapper = ({
   refetch,
   id,
-  // defaultValues = {},
-  // rolls,
+  defaultValues = {},
 }: {
   refetch: () => void;
   id: string;
@@ -19,8 +18,8 @@ export const AdminFormWrapper = ({
   rolls: any;
 }) => {
   const schema = id === "create" ? Validation() : UpdateValidation();
-
-  const { handleSubmit, reset } = useForm({
+  const isLoading = false;
+  const { control, handleSubmit, reset, setValue } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
@@ -32,6 +31,7 @@ export const AdminFormWrapper = ({
 
   const onSubmit = (data: any) => {
     if (id === "create") {
+      data.roles = [{ name: "user" }];
       submitForm(data);
     } else {
       updateForm(data, id);
@@ -40,12 +40,12 @@ export const AdminFormWrapper = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {/* <div className="grid space-y-3">
+      <div className="grid space-y-3">
         <HFTextField
           name="name"
           control={control}
-          placeholder="Ism familya"
-          label="Ism familya"
+          placeholder="ФИО"
+          label="ФИО"
           setValue={setValue}
           required={true}
           defaultValue={defaultValues?.name}
@@ -53,11 +53,12 @@ export const AdminFormWrapper = ({
         <HFInputMask
           name="phone"
           control={control}
-          label={`Telefon raqam`}
-          placeholder={`Telefon raqam`}
+          label={`Номер телефона`}
+          placeholder={`Номер телефона`}
           mask={"+\\9\\9\\8 99 999 99 99"}
           required={true}
           defaultValue={defaultValues?.phone}
+          setValue={setValue}
         />
         <HFTextField
           name="email"
@@ -66,19 +67,11 @@ export const AdminFormWrapper = ({
           label="Email"
           setValue={setValue}
           type="email"
+          autoComplete="off"
           required={true}
-          defaultValue={defaultValues?.email}
+          defaultValue={defaultValues?.email ?? ""}
         />
-        <HFMultipleSelect
-          name="roles"
-          control={control}
-          options={rolls}
-          label="Rolni tanlang"
-          placeholder="Rolni tanlang"
-          required={true}
-          setValue={setValue}
-          defaultValue={defaultValues?.roles}
-        />
+
         {id !== "create" && (
           <HFTextField
             name="old_password"
@@ -125,7 +118,7 @@ export const AdminFormWrapper = ({
             Tasdiqlash
           </button>
         )}
-      </div> */}
+      </div>
     </form>
   );
 };

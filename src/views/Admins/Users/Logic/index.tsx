@@ -1,29 +1,30 @@
 import { useMemo } from "react";
 import { FormatTime } from "../../../../utils/formatTime";
-import { useQuery } from "react-query";
-import adminService from "../../../../services/admins";
 import usePageRouter from "../../../../hooks/useObjectRouter";
 import { getStoredFilters } from "../../../../components/UI/Filter/Logic";
+import useCQuery from "../../../../hooks/useCQuery";
 
 export const FetchFunction = () => {
   const { filters } = getStoredFilters({});
-  const { q, page } = filters;
+  const { q } = filters;
 
   const {
-    data: admins,
+    data: users,
     isLoading,
     refetch,
-  } = useQuery(["GET_ADMINS", q, page], () => {
-    return adminService.getList({ q: q ?? "", page: page || 1 });
+  } = useCQuery({
+    key: `GET_USERS_LIST`,
+    endpoint: `http://localhost:3000/users`,
+    params: {},
   });
 
   const bodyColumns: any = useMemo(() => {
-    const list = admins?.data ?? [];
+    const list = users ?? [];
     return {
       list,
-      ...admins,
+      ...users,
     };
-  }, [admins]);
+  }, [users]);
 
   return { isLoading, refetch, bodyColumns, q };
 };
@@ -46,15 +47,31 @@ export const TableData = () => {
         id: "name",
       },
       {
-        title: "Login",
+        title: "Логин",
         id: "email",
       },
       {
-        title: "Tel.raqam",
+        title: "Тел.номер",
         id: "phone",
       },
       {
-        title: "Rollar",
+        title: "Отдел кадров",
+        id: "section",
+        render: (section: any) => {
+          return (
+            <div>
+              {section?.map((item: any, index: number, row: any) => (
+                <p key={index}>
+                  {item.name}
+                  {row.length > 1 && index !== row.length - 1 ? "," : ""}
+                </p>
+              ))}
+            </div>
+          );
+        },
+      },
+      {
+        title: "Рол",
         id: "roles",
         render: (roles: any) => {
           return (
@@ -77,26 +94,18 @@ export const TableData = () => {
         },
       },
       {
-        title: "Status",
+        title: "Статус",
         id: "status",
         render: (val: any) => (
-          <div
-            className={
-              val === "inactive"
-                ? "text-[var(--error)]"
-                : val === "active"
-                ? "text-[var(--green)]"
-                : ""
-            }
-          >
-            {val === "inactive" ? "Noaktiv" : val === "active" ? "Aktiv" : ""}
+          <div className={!val ? "text-[var(--error)]" : "text-[var(--green)]"}>
+            {!val ? "Noaktiv" : "Aktiv"}
           </div>
         ),
       },
       {
         title: "",
         id: "actions",
-        actions: ["edit", "delete", "view"],
+        actions: ["edit", "delete"],
       },
     ];
   }, []);
