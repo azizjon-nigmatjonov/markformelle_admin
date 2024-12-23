@@ -1,5 +1,5 @@
-import { Button } from "@mui/material";
 import "./style.scss";
+import { Button } from "@mui/material";
 import { PlusIcon } from "../IconGenerator/Svg";
 import { useTranslation } from "react-i18next";
 import { usePermissions } from "../../../hooks/usePermissions";
@@ -12,7 +12,6 @@ interface Props {
   children?: any;
   classes?: string;
   type?: any;
-
   onClick?: (val?: any) => void;
 }
 
@@ -26,13 +25,13 @@ const DeleteButton = ({
   ...props
 }: Props) => {
   const { t } = useTranslation();
-  const { checkPermission } = usePermissions()
+  const { checkPermission } = usePermissions();
 
-  if (!checkPermission('delete')) return ""
- 
+  if (!checkPermission("delete")) return "";
+
   return (
     <div id={id ? id : "addBtn"} {...props}>
-      <Button type={type} className={classes} >
+      <Button type={type} className={classes}>
         {iconLeft === true ? <PlusIcon /> : iconLeft}
         {children ? (
           children

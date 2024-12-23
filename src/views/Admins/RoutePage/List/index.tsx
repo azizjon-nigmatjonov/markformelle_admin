@@ -68,6 +68,7 @@ export const RouteList = ({
       </div>
     );
   }
+  console.log("newRouteList", newRouteList);
 
   const { deletePermission, deleteRoute } = DeleteFunction({ handleClose });
   const test_routes =

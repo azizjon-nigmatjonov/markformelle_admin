@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import "./style.scss";
 import { PlusIcon } from "../IconGenerator/Svg";
 import { useTranslation } from "react-i18next";
@@ -61,14 +60,14 @@ const AddButton = ({
   }
 
   return (
-    <div id={id ? id : "addBtn"} {...props}>
-      <Button
+    <div id={id ? id : ""} {...props}>
+      <button
         type={type}
         onClick={() => {
           if (!checkPermission(permission)) return;
           onClick();
         }}
-        className={`${classes} ${
+        className={`${classes} bg-[var(--primary)] rounded-[8px] h-[25px] desktop:h-[35px] flex items-center px-2 ${
           checkPermission(permission) ? "" : "disabled"
         }`}
       >
@@ -82,9 +81,9 @@ const AddButton = ({
         {children ? (
           children
         ) : (
-          <span className="font-[600] ml-1">{t(text)}</span>
+          <span className="font-[600] ml-1 text-white">{t(text)}</span>
         )}
-      </Button>
+      </button>
     </div>
   );
 };

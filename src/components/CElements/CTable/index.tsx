@@ -108,6 +108,8 @@ const CTable = ({
   }, [location, idForTable]);
   const pageColumns = storedColumns[pageName];
   const pageOrder = order[pageName] ?? [];
+  const [newHeadColumns, setNewHeadColumns]: any = useState([...headColumns]);
+  const [items, setItems]: any = useState([...headColumns]);
 
   useEffect(() => {
     const arr = [...bodyColumns];
@@ -320,8 +322,6 @@ const CTable = ({
     setSortData({ type, value, id, search });
   };
 
-  const [items, setItems]: any = useState([]);
-
   useEffect(() => {
     if (pageOrder?.length) {
       const arr: any = [];
@@ -342,11 +342,15 @@ const CTable = ({
       setItems(arr);
     } else {
       setItems(headColumns);
+      setNewHeadColumns(headColumns);
     }
-  }, [headColumns.length, pageOrder]);
+  }, [headColumns, pageOrder]);
 
-  const newHeadColumns: any = useMemo(() => {
-    if (!tableSetting) return items;
+  useEffect(() => {
+    if (!tableSetting) {
+      setNewHeadColumns(items);
+      return;
+    }
     const data: any = [];
     const arr = pageColumns ?? [];
 
@@ -358,13 +362,19 @@ const CTable = ({
       if (arr.includes(id)) data.push(el);
     });
 
-    return data;
-  }, [pageColumns, pageName, tableSetting, items, draggingIndex]);
+    setNewHeadColumns(data);
+  }, [pageColumns, pageName, tableSetting, draggingIndex]);
 
   const handleDragStart = (index: any) => {
     setDraggingIndex(index);
+    console.log("ind", index);
+
     handleFilterParams({ ...filterParams, drag: true });
   };
+
+  useEffect(() => {
+    setNewHeadColumns(headColumns);
+  }, [headColumns]);
 
   const handleDrop = (index: any) => {
     const newItems = newHeadColumns;
@@ -375,7 +385,7 @@ const CTable = ({
       setItems(newItems);
       setDraggingIndex(null);
       setHoveredIndex(null);
-    }, 0);
+    }, 100);
   };
 
   const handleDragOver = (index: number) => {
