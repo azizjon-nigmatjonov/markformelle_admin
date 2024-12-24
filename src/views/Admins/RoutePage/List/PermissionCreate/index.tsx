@@ -4,7 +4,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Validation } from "./validate";
 import { PlusIcon } from "../../../../../components/UI/IconGenerator/Svg";
 import { CircularProgress } from "@mui/material";
-// import { HFMultipleSelect } from "../../../../../components/FormElements/HFMultipleSelect";
+import { HFMultipleSelect } from "../../../../../components/HFElements/HFMultipleSelect";
 
 export const PermissionCreate = ({
   id,
@@ -21,7 +21,7 @@ export const PermissionCreate = ({
   const { permissionOptions } = getPermissionList({ list, path });
 
   const schema = Validation();
-  const { handleSubmit, reset } = useForm({
+  const { control, handleSubmit, reset, setValue } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
@@ -45,11 +45,12 @@ export const PermissionCreate = ({
     data.permissions.forEach((el: any) => {
       createPermission(el, id, path);
     });
+    setValue("permissions", []);
   };
 
   return permissionOptions?.length ? (
     <form onSubmit={handleSubmit(onSubmit)} className="flex space-x-5">
-      {/* <div className="w-[140px]">
+      <div className="w-[140px]">
         <HFMultipleSelect
           name="permissions"
           control={control}
@@ -57,7 +58,7 @@ export const PermissionCreate = ({
           placeholder="Permission ni tanlang"
           setValue={setValue}
         />
-      </div> */}
+      </div>
 
       <div className="w-[70px]">
         <button type="submit" className="custom-btn">

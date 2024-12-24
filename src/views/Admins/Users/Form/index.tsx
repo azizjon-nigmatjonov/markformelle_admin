@@ -9,7 +9,6 @@ const Form = ({ refetch, id }: { refetch: () => void; id: string }) => {
   const { rolls, defaultValues } = FetchFunction({
     userId: id,
   });
-  console.log("defaultValues", defaultValues);
 
   return (
     <CModal

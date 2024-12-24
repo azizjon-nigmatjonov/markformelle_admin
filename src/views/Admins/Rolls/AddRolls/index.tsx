@@ -3,26 +3,22 @@ import { Header } from "../../../../components/UI/Header";
 import Rolls from "./Rolls";
 import { useForm } from "react-hook-form";
 import { CreateFunction, FetchFunction, breadCrumbs } from "./Logic";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Validation } from "./validate";
+// import { Validation } from "./validate";
 import { useParams } from "react-router-dom";
 import { RollList } from "./List";
 import { RollForm } from "./Form";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-// import { SectionBtnHeader } from "../../../../components/UI/SectionBtnHeader";
 
 const NewRolls = () => {
-  const schema = Validation();
+  // const schema = Validation();
   const { id } = useParams();
-  const test_routes =
-    useSelector((state: any) => state.table.test_routes) ?? [];
 
   const {
     newRouteList,
     isLoading: listLoading,
     rollData,
   } = FetchFunction({ id });
+
   const {
     control,
     handleSubmit,
@@ -30,18 +26,14 @@ const NewRolls = () => {
     formState: { errors },
   } = useForm({
     mode: "onSubmit",
-    resolver: yupResolver(schema),
   });
 
   const { createRoll, updateRoll, isLoading } = CreateFunction({});
   const { breadCrumbsItems } = breadCrumbs({ id });
-  const [permissions, setPermissions]: any = useState(["delete"]);
+  const [permissions, setPermissions]: any = useState({});
 
   const onSubmit = (data: any) => {
-    const permissions = data.permissions.map((element: any) =>
-      parseInt(element.trim(), 10)
-    );
-    data.permissions = permissions;
+    data.id = data.name.split(" ").join("").toLowerCase();
     if (id !== ":create") {
       updateRoll(data, id);
     } else {
@@ -50,35 +42,43 @@ const NewRolls = () => {
   };
 
   const handleCheck = (permission: any, type?: string) => {
-    let data = permissions;
+    let obj = { ...permissions };
+
     if (type === "all") {
-      const ids = permission?.map((item: any) => item.id);
-      const found = ids.find((el: any) => {
-        permissions.includes(el);
-      });
-      if (found) {
-        data = permissions.filter((item: string) => {
-          if (!ids.includes(item)) return item;
-        });
+      const ids = permission?.map((item: any) => item.label);
+      const key = permission[0]?.id;
+
+      if (key in obj) {
+        if (obj[key].length >= ids.length) {
+          obj[key] = [];
+        } else {
+          obj[key] = ids;
+        }
       } else {
-        data = [...data, ...ids];
+        obj[key] = ids;
       }
     } else {
-      const value = permission.value;
+      const value = permission.label;
+      const key = permission.value.substring(0, permission.value.indexOf("#"));
 
-      if (permissions.find((item: string) => item === value)) {
-        data = permissions.filter((item: string) => item !== value);
+      if (key in obj) {
+        if (obj[key].includes(value)) {
+          obj[key] = obj[key].filter((item: string) => item !== value);
+        } else {
+          obj[key].push(value);
+        }
       } else {
-        data = [...data, value];
+        obj[key] = [];
+        obj[key].push(value);
       }
     }
 
-    setValue("permissions", data);
-    setPermissions(data);
+    setValue("permissions", obj);
+    setPermissions(obj);
   };
 
   useEffect(() => {
-    if (rollData?.permissions?.length) {
+    if (rollData?.permissions) {
       setPermissions(rollData.permissions);
       setValue("permissions", rollData.permissions);
     }
@@ -86,19 +86,13 @@ const NewRolls = () => {
 
   return (
     <>
-      <Header sticky={true}>
-        <CBreadcrumbs items={breadCrumbsItems} progmatic={true} type="link" />
-      </Header>
-      {/* <div className="p-2">
-        <SectionBtnHeader
-          title={id === ":create" ? "Yangi rol yaratish" : "Rolni tahrirlash"}
-          text={
-            id === ":create"
-              ? "Admin panel yangi boshqaruvchi yaratish"
-              : "Admin panel boshqaruvchini tahrirlash"
-          }
-        />
-      </div> */}
+      <Header
+        sticky={true}
+        extra={
+          <CBreadcrumbs items={breadCrumbsItems} progmatic={true} type="link" />
+        }
+      ></Header>
+
       <div className="container divide-y-[1px] divide-[var(--gray20)] w-[80%] my-5">
         <Rolls text="Новый рол">
           <RollForm
@@ -113,7 +107,7 @@ const NewRolls = () => {
         </Rolls>
 
         <RollList
-          newRouteList={test_routes ?? newRouteList}
+          newRouteList={newRouteList}
           isLoading={listLoading}
           handleCheck={handleCheck}
           permissions={permissions}

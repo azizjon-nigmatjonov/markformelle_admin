@@ -1,6 +1,7 @@
-import { useMutation, useQuery } from "react-query";
-import roleService from "../../../../services/rolls";
+import { useMutation } from "react-query";
 import usePageRouter from "../../../../hooks/useObjectRouter";
+import useCQuery from "../../../../hooks/useCQuery";
+import axios from "axios";
 
 export const breadCrumbs = [
   { label: "Доступ", link: "/access/rolls" },
@@ -8,25 +9,32 @@ export const breadCrumbs = [
 ];
 
 export const FetchFunction = () => {
-  const { data, isLoading, refetch } = useQuery(
-    ["GET_ROLLS_TABLE_LIST"],
-    () => {
-      return roleService.getList();
-    },
-    {
-      enabled: true,
-    }
-  );
+  const { data, isLoading, refetch } = useCQuery({
+    key: `GET_USERS_LIST`,
+    endpoint: `http://localhost:3000/rolls`,
+    params: {},
+  });
 
   return { roles: data, isLoading, refetch };
 };
 
 export const DeleteFunction = ({ handleClose }: { handleClose: any }) => {
   const { mutate: rollDelete, isLoading: deleteRolLoading } = useMutation({
-    mutationFn: (id: number) => {
-      return roleService.deleteElement(id).then(() => {
-        handleClose();
-      });
+    mutationFn: (id: any) => {
+      const data: any = { id };
+      axios
+        .delete(`http://localhost:3000/rolls`, {
+          params: data,
+        })
+        .then((res) => {
+          handleClose();
+          console.log(res);
+        })
+        .catch((error) => {
+          console.error("Error adding route:", error);
+        });
+
+      return data;
     },
   });
 
@@ -46,12 +54,17 @@ export const TableData = ({ deleteRoll }: { deleteRoll: any }) => {
     },
     {
       title: "Количество функций",
-      id: "permissions_count",
+      id: "permissions",
+      render: (val: any) => {
+        if (!val) return <></>;
+
+        return <div>{Object.keys(val).length}</div>;
+      },
     },
-    {
-      title: "Активные администраторы",
-      id: "active_admins",
-    },
+    // {
+    //   title: "Активные администраторы",
+    //   id: "active_admins",
+    // },
     {
       title: "",
       id: "actions",
@@ -61,10 +74,12 @@ export const TableData = ({ deleteRoll }: { deleteRoll: any }) => {
   ];
 
   const handleActions = (el: any, status: string) => {
+    console.log("el", el);
+
     if (status === "edit") {
-      navigateTo(`/admins/rolls/${el.id}`);
+      navigateTo(`/access/rolls/${el.id}`);
     }
-    if (status === "delete" && el.name !== "super") {
+    if (status === "delete" && el.id !== "superadmin") {
       deleteRoll(el.id);
     }
   };

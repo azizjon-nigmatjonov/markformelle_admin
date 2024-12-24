@@ -1,6 +1,4 @@
 import { useMutation, useQuery } from "react-query";
-import adminService from "../../../../services/admins";
-import roleService from "../../../../services/rolls";
 import { useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { websiteActions } from "../../../../store/website";
@@ -9,8 +7,10 @@ import axios from "axios";
 import useCQuery from "../../../../hooks/useCQuery";
 
 export const FetchFunction = ({ userId }: { userId: string }) => {
-  const { data: rolls } = useQuery(["GET_ROLLS_LIST"], () => {
-    return roleService.getList();
+  const { data: rolls } = useCQuery({
+    key: `GET_ROLLS_LIST`,
+    endpoint: `http://localhost:3000/rolls`,
+    params: {},
   });
 
   const { data: users } = useCQuery({
@@ -19,17 +19,15 @@ export const FetchFunction = ({ userId }: { userId: string }) => {
     params: {},
   });
 
-  const SelectOptions = useMemo(() => {
+  const rollOptions = useMemo(() => {
     if (!rolls) return [];
-    const arr = rolls?.data ?? [];
-    return arr.map((item: any) => {
+    return rolls?.map((item: any) => {
       return {
-        ...item,
-        label: item.name,
-        value: item.id,
+        label: item?.name ?? "",
+        value: item?.id ?? "",
       };
     });
-  }, [rolls]);
+  }, [rolls?.length]);
 
   const defaultValues: any = useMemo(() => {
     if (users?.length) {
@@ -39,7 +37,7 @@ export const FetchFunction = ({ userId }: { userId: string }) => {
     }
   }, [users]);
 
-  return { rolls: SelectOptions, defaultValues };
+  return { rolls: rollOptions, defaultValues };
 };
 
 export const SubmitFunction = ({

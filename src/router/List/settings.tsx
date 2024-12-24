@@ -37,6 +37,5 @@ export const settingList = [
     title: "additional_functions",
     icon: "",
     element: "",
-    permissions: ["notification_sound", "profile_info", "show_notification"],
   },
 ];

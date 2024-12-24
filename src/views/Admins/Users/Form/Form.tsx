@@ -6,11 +6,20 @@ import { SubmitFunction } from "./Logic";
 import HFTextField from "../../../../components/HFElements/HFTextField";
 import HFInputMask from "../../../../components/HFElements/HFInputMask";
 import { CircularProgress } from "@mui/material";
+import { HFMultipleSelect } from "../../../../components/HFElements/HFMultipleSelect";
+
+const sections = [
+  {
+    label: "Раздел вязания",
+    value: "knitting",
+  },
+];
 
 export const AdminFormWrapper = ({
   refetch,
   id,
   defaultValues = {},
+  rolls = [],
 }: {
   refetch: () => void;
   id: string;
@@ -31,7 +40,6 @@ export const AdminFormWrapper = ({
 
   const onSubmit = (data: any) => {
     if (id === "create") {
-      data.roles = [{ name: "user" }];
       submitForm(data);
     } else {
       updateForm(data, id);
@@ -60,6 +68,29 @@ export const AdminFormWrapper = ({
           defaultValue={defaultValues?.phone}
           setValue={setValue}
         />
+
+        <HFMultipleSelect
+          name="roles"
+          control={control}
+          options={rolls}
+          label="Rolni tanlang"
+          placeholder="Rolni tanlang"
+          required={true}
+          setValue={setValue}
+          defaultValue={defaultValues?.roles}
+        />
+
+        <HFMultipleSelect
+          name="section"
+          control={control}
+          options={sections}
+          label="Выберите рабочий раздел"
+          placeholder="Выберите рабочий раздел"
+          required={true}
+          setValue={setValue}
+          defaultValue={defaultValues?.section}
+        />
+
         <HFTextField
           name="email"
           control={control}

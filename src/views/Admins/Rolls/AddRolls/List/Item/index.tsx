@@ -41,11 +41,11 @@ export const PermissionItem = ({
         {route.permissions.map((permission: any) => (
           <div key={permission} className="relative">
             <CCheckbox
-              checked={permissions?.includes(permission)}
+              checked={permissions[permission.id]?.includes(permission.label)}
               handleCheck={(obj: any) => handleCheck(obj)}
               element={{
-                label: permission,
-                value: permission,
+                label: permission.label,
+                value: permission.value,
               }}
             />
             {errors?.permissions?.message && !permissions?.length ? (

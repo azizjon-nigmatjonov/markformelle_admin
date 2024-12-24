@@ -25,14 +25,11 @@ interface Path {
 
 const Router = () => {
   const dispatch = useDispatch();
-  // const link = useSelector((state: any) => state.auth.token);
   const [list, setList] = useState<string[]>([]);
   const [listNew, setListNew] = useState<string[]>([]);
-  // const storedRoutes = useSelector((state: any) => state.website.routes);
   const userInfo = useSelector((state: any) => state.auth.user);
   const [routes, setRoutes]: any = useState({ ...defaults });
   const [newRoutes, setNewRoutes] = useState({ ...defaults });
-  console.log("userInfo", userInfo);
 
   const getPath = ({
     parent = "",
@@ -65,7 +62,6 @@ const Router = () => {
 
     const permissions = userInfo?.permissions ?? [];
     const found = permissions?.find((i: any) => i.value === path);
-    console.log("found", found, path);
 
     if (!listNew.includes(obj.id)) {
       setNewRoutes((prev: any) => ({

@@ -18,7 +18,7 @@ export const ListIem = ({
   route: any;
   handleClose: () => void;
   deleteRoute: (id: number) => void;
-  deletePermission: (id: number) => void;
+  deletePermission: (id: any) => void;
 }) => {
   const { navigateTo } = usePageRouter();
   const [openPopover, setOpenPopover] = useState(false);
@@ -30,6 +30,7 @@ export const ListIem = ({
     }
     setOpenPopover(false);
   };
+  console.log("route", route);
 
   return (
     <div className="flex space-x-10 py-20px border-t border-[var(--gray20)]">
@@ -68,7 +69,12 @@ export const ListIem = ({
             <div className="border border-[var(--gray20)] h-[40px] px-16px whitespace-nopwrap rounded-[8px] common-shadow min-w-[120px] flex items-center justify-between space-x-5">
               <span>{t(permission.label)}</span>
               <button
-                onClick={() => deletePermission(permission.id)}
+                onClick={() =>
+                  deletePermission({
+                    name: route.path + "#" + permission.value,
+                    id: route.id,
+                  })
+                }
                 className="border border-[var(--gray30)] rounded-full w-[20px] h-[20px] flex items-center justify-center cursor-pointer"
               >
                 <CloseIcon />

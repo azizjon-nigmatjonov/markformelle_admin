@@ -38,7 +38,7 @@ const Users = () => {
     if (status === "edit") navigateQuery({ id: element.id });
 
     if (status === "delete") {
-      if (element.email === "superrt@akataxi.uz") return;
+      if (element.email === "super@example.com") return;
       axios.delete(`http://localhost:3000/users/${element.id}`).then(() => {
         refetch();
       });

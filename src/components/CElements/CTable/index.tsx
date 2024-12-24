@@ -112,6 +112,7 @@ const CTable = ({
   const [items, setItems]: any = useState([...headColumns]);
 
   useEffect(() => {
+    if (!bodyColumns?.length) return;
     const arr = [...bodyColumns];
     let result: any = [];
     const { value, id, search }: any = { ...sortData };

@@ -67,7 +67,7 @@ const AddButton = ({
           if (!checkPermission(permission)) return;
           onClick();
         }}
-        className={`${classes} bg-[var(--primary)] rounded-[8px] h-[25px] desktop:h-[35px] flex items-center px-2 ${
+        className={`${classes} bg-[var(--primary)] rounded-[8px] h-[25px] desktop:h-[35px] flex items-center whitespace-nowrap px-2 ${
           checkPermission(permission) ? "" : "disabled"
         }`}
       >

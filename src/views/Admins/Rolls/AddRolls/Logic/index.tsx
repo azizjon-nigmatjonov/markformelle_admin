@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-import { useMutation, useQuery } from "react-query";
-import { routeService } from "../../../../../services/route";
-import roleService from "../../../../../services/rolls";
+import { useMutation } from "react-query";
 import usePageRouter from "../../../../../hooks/useObjectRouter";
 import { GetUserInfo } from "../../../../../layouts/MainLayout/Logic";
+import useCQuery from "../../../../../hooks/useCQuery";
+import axios from "axios";
 
 export const GetRoutes = () => {
   const allRoutes = (routes: any) => {
@@ -30,7 +30,7 @@ export const breadCrumbs = ({ id }: { id: any }) => {
         link: "/admins/rolls",
       },
       {
-        label: id !== 'create' ? "Rolni tahrirlash" : "Yangi rol yaratish",
+        label: id !== "create" ? "Rolni tahrirlash" : "Yangi rol yaratish",
       },
     ];
   }, [id]);
@@ -39,33 +39,36 @@ export const breadCrumbs = ({ id }: { id: any }) => {
 };
 
 export const FetchFunction = ({ id }: { id: any | undefined }) => {
-  const { data: rollData, isLoading: rollLoading } = useQuery(
-    ["GET_ROLL_FOR_UPDATE", id],
-    () => {
-      return roleService.getElement(id);
+  const fetch = id === ":create" ? false : true;
+
+  const { data: rollData, isLoading: rollLoading } = useCQuery({
+    key: `GET_USERS_LIST`,
+    endpoint: `http://localhost:3000/rolls/${id}`,
+    params: {},
+    options: {
+      enabled: fetch,
     },
-    {
-      enabled: !!id,
-    }
-  );
+  });
 
   const {
     data: routes,
     isLoading,
     refetch,
-  } = useQuery(["GET_ROUTE_LIST_FOR_ROLLS"], () => {
-    return routeService.getList();
+  } = useCQuery({
+    key: `GET_ROUTES_LIST_FOR_ROLL`,
+    endpoint: `http://localhost:3000/routes`,
+    params: {},
   });
 
   const newRouteList: any = useMemo(() => {
-    const list = routes?.data?.map((route: any) => {
+    const list = routes?.map((route: any) => {
       return {
         ...route,
         permissions: route.permissions?.map((permission: any) => {
           return {
             ...permission,
             label: permission.name.substring(permission.name.indexOf("#") + 1),
-            value: permission.id,
+            value: permission.name,
           };
         }),
       };
@@ -78,32 +81,58 @@ export const FetchFunction = ({ id }: { id: any | undefined }) => {
     isLoading,
     refetch,
     newRouteList,
-    rollData: rollData?.data || {},
+    rollData: rollData || {},
     rollLoading,
   };
 };
 
 export const CreateFunction = ({ reset = () => {} }: { reset?: any }) => {
   const { navigateTo } = usePageRouter();
-  const { refetchUserInfo } = GetUserInfo()
+  const { refetchUserInfo } = GetUserInfo();
 
   const { mutate: rollCreate, isLoading: rollLoading } = useMutation({
     mutationFn: (data: any) => {
-      return roleService.createElement(data).then(() => {
-        reset();
-        refetchUserInfo()
-        navigateTo("/admins/rolls");
-      });
+      const result: any = [];
+      axios
+        .post("http://localhost:3000/rolls", data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          result.push(res);
+          reset();
+          refetchUserInfo();
+          navigateTo("/access/rolls");
+        })
+        .catch((error) => {
+          console.error("Error adding route:", error);
+        });
+
+      return result;
     },
   });
 
   const { mutate: rollUpdate, isLoading: updateRollLoading } = useMutation({
     mutationFn: (data: any) => {
-      return roleService.updateElement(data, data.id).then(() => {
-        reset();
-        refetchUserInfo()
-        navigateTo("/admins/rolls");
-      });
+      const result: any = [];
+      axios
+        .put(`http://localhost:3000/rolls/${data.id}`, data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          result.push(res.data);
+          reset();
+          refetchUserInfo();
+          navigateTo("/access/rolls");
+        })
+        .catch((error) => {
+          console.error("Error adding user:", error);
+        });
+
+      return result;
     },
   });
 
@@ -112,7 +141,7 @@ export const CreateFunction = ({ reset = () => {} }: { reset?: any }) => {
   };
 
   const updateRoll = (data: any, id: any) => {
-    data.id = id
+    data.id = id;
     rollUpdate(data);
   };
 

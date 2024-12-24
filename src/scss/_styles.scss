@@ -29,6 +29,14 @@ input {
   }
 }
 
+#HFMultipleSelect {
+  .MuiInputBase-root {
+    border: 1px solid var(--border) !important;
+    @include common-shadow;
+    height: 40px !important;
+  }
+}
+
 #cselect,
 #HFMultipleSelect {
   width: 100%;

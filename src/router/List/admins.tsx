@@ -57,7 +57,6 @@ export const adminList = [
     title: "pages",
     icon: "pages",
     element: <RoutePage />,
-    permissions: ["add_permission", "delete_permisson"],
     auth: false,
   },
 ];

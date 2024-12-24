@@ -8,29 +8,6 @@ import { DeleteFunction, FetchFunction, TableData, breadCrumbs } from "./Logic";
 import { FilterFunctions } from "../../../components/UI/Filter/Logic";
 import CCard from "../../../components/CElements/CCard";
 
-const test_rolls = [
-  {
-    name: "Супер администратор",
-    permissions_count: 5,
-    active_admins: 4,
-  },
-  {
-    name: "Админ",
-    permissions_count: 5,
-    active_admins: 4,
-  },
-  {
-    name: "Бухгалтер",
-    permissions_count: 5,
-    active_admins: 4,
-  },
-  {
-    name: "Продавец",
-    permissions_count: 5,
-    active_admins: 4,
-  },
-];
-
 const Rolls = () => {
   const { navigateTo } = usePageRouter();
   const { roles, isLoading, refetch } = FetchFunction();
@@ -53,7 +30,7 @@ const Rolls = () => {
   };
 
   const bodyColumns = useMemo(() => {
-    return roles?.data ?? test_rolls;
+    return roles ?? [];
   }, [roles]);
 
   return (

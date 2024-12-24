@@ -58,11 +58,12 @@ export const TableData = () => {
         title: "Отдел кадров",
         id: "section",
         render: (section: any) => {
+          if (!section?.length) return;
           return (
             <div>
               {section?.map((item: any, index: number, row: any) => (
                 <p key={index}>
-                  {item.name}
+                  {item}
                   {row.length > 1 && index !== row.length - 1 ? "," : ""}
                 </p>
               ))}
@@ -74,11 +75,12 @@ export const TableData = () => {
         title: "Рол",
         id: "roles",
         render: (roles: any) => {
+          if (!roles?.length) return;
           return (
             <div>
               {roles?.map((item: any, index: number, row: any) => (
                 <p key={index}>
-                  {item.name}
+                  {item}
                   {row.length > 1 && index !== row.length - 1 ? "," : ""}
                 </p>
               ))}

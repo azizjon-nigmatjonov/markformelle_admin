@@ -1,26 +1,22 @@
 export const StaticPermissions = [
   {
-    label: "Sahifani ko'rsatish",
-    value: "index",
+    label: "Показать страницу",
+    value: "view_page",
   },
   {
-    label: "Ichki sahifani ko'rsatish",
-    value: "view",
+    label: "Показать внутреннюю страницу",
+    value: "view_single_page",
   },
   {
-    label: "Qo'shish",
+    label: "Добавлять",
     value: "add",
   },
   {
-    label: "Tahrirlash",
+    label: "Редактироватъ",
     value: "edit",
   },
-  // {
-  //   label: "Muzlatish",
-  //   value: "freez",
-  // },
   {
-    label: "O'chirish",
+    label: "Удалить",
     value: "delete",
   },
 ];

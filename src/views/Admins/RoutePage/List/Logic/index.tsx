@@ -1,14 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
-import { useMutation, useQuery } from "react-query";
-import { useDispatch, useSelector } from "react-redux";
-import { routeService } from "../../../../../services/route";
-import permissionService from "../../../../../services/permissions";
+import { useMutation } from "react-query";
+import { useSelector } from "react-redux";
 import { EyeIcon } from "../../../../../components/UI/IconGenerator/Svg";
 import usePageRouter from "../../../../../hooks/useObjectRouter";
 import { useGetQueries } from "../../../../../hooks/useGetQueries";
 import { useTranslation } from "react-i18next";
 import { StaticPermissions } from "../../../../../constants/permissions";
-import { tableStoreActions } from "../../../../../store/table";
 import axios from "axios";
 import useCQuery from "../../../../../hooks/useCQuery";
 
@@ -19,61 +16,58 @@ export const CreateFunction = ({
   handleClose?: any;
   reset?: any;
 }) => {
-  const dispatch = useDispatch();
-  const test_routes = useSelector((state: any) => state.table.test_routes);
   const { mutate: routeCreate, isLoading: createLoading } = useMutation({
     mutationFn: (data: any) => {
-      return routeService.createElement(data).then(() => {
-        handleClose();
-        reset();
-      });
+      const result: any = [];
+      axios
+        .post("http://localhost:3000/routes", data, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          result.push(res);
+          handleClose();
+          reset();
+        })
+        .catch((error) => {
+          console.error("Error adding route:", error);
+        });
+
+      return result;
     },
   });
   const { mutate: permissionCreate, isLoading: permissionLoading } =
     useMutation({
       mutationFn: (data: any) => {
-        return permissionService.createElement(data).then(() => {
-          handleClose();
-          reset();
-        });
+        const result: any = [];
+        axios
+          .put(`http://localhost:3000/permissions`, data, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then((res) => {
+            handleClose();
+            reset();
+            result.push(res.data);
+          })
+          .catch((error) => {
+            console.error("Error adding user:", error);
+          });
+
+        return result;
       },
     });
 
   const createRoute = (data: any) => {
-    const params: any = {};
-
-    axios
-      .post("http://localhost:3000/routes", data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((error) => {
-        console.error("Error adding route:", error);
-      });
-
-    routeCreate(params);
-    // routeCreate(params);
+    routeCreate(data);
   };
-
-  // const checkEquality = (permissions: any, data: any) => {
-  //   let res = false;
-  //   if (permissions?.length) {
-  //     permissions.forEach((element: any) => {
-  //       if (element.name.trim() === data.name.trim()) res = true;
-  //     });
-  //   }
-
-  //   return res;
-  // };
 
   const createPermission = (name: any, id: number, path: string) => {
     const params: any = {};
     params.name = path + "#" + name;
-    params.permission_route_id = id;
+    params.id = id;
 
     // const isEqual = checkEquality(list, data);
 
@@ -90,33 +84,47 @@ export const CreateFunction = ({
 export const DeleteFunction = ({ handleClose }: { handleClose: any }) => {
   const { mutate: permissionDelete, isLoading: permissionLoading } =
     useMutation({
-      mutationFn: (id: number) => {
-        return permissionService.deleteElement(id).then(() => {
-          handleClose();
-        });
+      mutationFn: (data: any) => {
+        const result: any = [];
+        axios
+          .delete(`http://localhost:3000/permissions`, {
+            params: data,
+          })
+          .then((res) => {
+            handleClose();
+            result.push(res.data);
+          })
+          .catch((error) => {
+            console.error("Error adding user:", error);
+          });
+
+        return result;
       },
     });
 
-  const { mutate: routeDelete, isLoading: routeLoading } = useMutation({
-    mutationFn: (id: number) => {
-      return routeService.deleteElement(id).then(() => {
+  const deleteRoute = (id: any) => {
+    const data: any = { id };
+    axios
+      .delete(`http://localhost:3000/routes`, {
+        params: data,
+      })
+      .then((res) => {
         handleClose();
+        console.log(res);
+      })
+      .catch((error) => {
+        console.error("Error adding route:", error);
       });
-    },
-  });
-
-  const deleteRoute = (id: number) => {
-    routeDelete(id);
   };
 
-  const deletePermission = (id: number) => {
-    permissionDelete(id);
+  const deletePermission = (data: any) => {
+    permissionDelete(data);
   };
 
   return {
     deletePermission,
     deleteRoute,
-    isLoading: permissionLoading || routeLoading,
+    isLoading: permissionLoading,
   };
 };
 
@@ -208,8 +216,8 @@ export const FetchFunction = () => {
     const list = routes?.map((route: any) => {
       const permissions = route.permissions?.map((permission: any) => {
         return {
-          label: permission,
-          value: permission,
+          label: permission.name.substring(permission.name.indexOf("#") + 1),
+          value: permission.name.substring(permission.name.indexOf("#") + 1),
         };
       });
       return {
@@ -248,8 +256,9 @@ export const getPermissionList = ({
         }) ?? [];
 
     const permissions = [...routePermissions, ...StaticPermissions];
+
     permissions.forEach((element: any) => {
-      const found = list.find((item: any) => item.label === element.value);
+      const found = list.find((item: any) => item.value === element.value);
 
       if (!found) arr.push(element);
     });
