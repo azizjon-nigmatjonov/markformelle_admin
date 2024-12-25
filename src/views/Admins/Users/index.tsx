@@ -39,9 +39,11 @@ const Users = () => {
 
     if (status === "delete") {
       if (element.email === "super@example.com") return;
-      axios.delete(`http://localhost:3000/users/${element.id}`).then(() => {
-        refetch();
-      });
+      axios
+        .delete(`http://192.168.181.29:3000/users/${element.id}`)
+        .then(() => {
+          refetch();
+        });
     }
   }, []);
 
@@ -72,7 +74,7 @@ const Users = () => {
         <CCard>
           <CTable
             headColumns={headColumns}
-            bodyColumns={bodyColumns.list}
+            bodyColumns={bodyColumns?.list ?? []}
             meta={bodyColumns?.meta}
             isResizeble={true}
             isLoading={isLoading}

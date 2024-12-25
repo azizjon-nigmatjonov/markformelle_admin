@@ -30,13 +30,12 @@ export const ListIem = ({
     }
     setOpenPopover(false);
   };
-  console.log("route", route);
 
   return (
     <div className="flex space-x-10 py-20px border-t border-[var(--gray20)]">
       <div className="w-[360px] relative">
         <div className="w-[360px] flex items-center justify-between">
-          <p className="">{t(route.name || route.title)}</p>
+          <p className="font-medium">{t(route.name || route.title)}</p>
           <div className="flex items-center space-x-5">
             <button
               onClick={() =>

@@ -6,9 +6,9 @@ export const chniSection = [
     link: "dashboard",
     sidebar: true,
     title: "Дашборд ЧНИ",
-    parent_icon: <img width={18} src="/images/weaving.png" alt="weaving" />,
+    parent_icon: <img width={19} src="/images/weaving.png" alt="weaving" />,
     icon: <img width={18} src="/images/weaving.png" alt="weaving" />,
     element: <ChniDashboard />,
-    auth: false,
+    auth: true,
   },
 ];

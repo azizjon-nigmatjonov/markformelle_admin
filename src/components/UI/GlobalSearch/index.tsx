@@ -11,6 +11,7 @@ import { Closer } from "../Closer";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { globalToolActions } from "../../../store/globalTools";
+import { usePermissions } from "../../../hooks/usePermissions";
 
 interface Props {
   delay?: number;
@@ -39,6 +40,9 @@ const GlobalSearch = ({
   const dispatch: any = useDispatch();
   const [openMenu, setOpenMenu] = useState(false);
   const [allCheck, setAllCheck] = useState(true);
+  const { checkPermission } = usePermissions();
+
+  if (!checkPermission("global_search")) return <></>;
 
   const initialList = useMemo(() => {
     if (list?.length > 0) {

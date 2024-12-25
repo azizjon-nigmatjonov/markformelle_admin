@@ -30,7 +30,6 @@ const AddButton = ({
 }: Props) => {
   const { t } = useTranslation();
   const { checkPermission } = usePermissions();
-
   // if (!checkPermission(permission)) return "";
 
   if (btnType === "ordinary") {
@@ -72,9 +71,7 @@ const AddButton = ({
         }`}
       >
         {iconLeft === true ? (
-          <PlusIcon
-            fill={checkPermission(permission) ? "white" : "var(--gray90)"}
-          />
+          <PlusIcon fill={checkPermission(permission) ? "white" : "white"} />
         ) : (
           iconLeft
         )}

@@ -51,7 +51,7 @@ const Login = () => {
 
   const GetUser = (user: any) => {
     axios
-      .get(`http://localhost:3000/login`, {
+      .get(`http://192.168.181.29:3000/login`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -64,6 +64,9 @@ const Login = () => {
         dispatch(authActions.setUser(res.data));
         if (link) {
           navigateTo(link);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         }
         setTimeout(() => {
           dispatch(authActions.setLink(""));

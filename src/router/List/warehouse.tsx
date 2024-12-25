@@ -11,6 +11,6 @@ export const wareHouse = [
     ),
     icon: <img width={22} src="/images/fork-loader.png" alt="loader" />,
     element: <WarehouseLoaders />,
-    auth: false,
+    auth: true,
   },
 ];

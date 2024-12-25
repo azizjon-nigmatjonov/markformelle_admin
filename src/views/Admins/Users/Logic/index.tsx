@@ -3,6 +3,7 @@ import { FormatTime } from "../../../../utils/formatTime";
 import usePageRouter from "../../../../hooks/useObjectRouter";
 import { getStoredFilters } from "../../../../components/UI/Filter/Logic";
 import useCQuery from "../../../../hooks/useCQuery";
+import { useTranslation } from "react-i18next";
 
 export const FetchFunction = () => {
   const { filters } = getStoredFilters({});
@@ -14,7 +15,7 @@ export const FetchFunction = () => {
     refetch,
   } = useCQuery({
     key: `GET_USERS_LIST`,
-    endpoint: `http://localhost:3000/users`,
+    endpoint: `http://192.168.181.29:3000/users`,
     params: {},
   });
 
@@ -35,6 +36,7 @@ export const breadCrumbs = [
 ];
 
 export const TableData = () => {
+  const { t } = useTranslation();
   const { navigateQuery } = usePageRouter();
   const handleSearch = (val: string) => {
     navigateQuery({ q: val });
@@ -63,7 +65,7 @@ export const TableData = () => {
             <div>
               {section?.map((item: any, index: number, row: any) => (
                 <p key={index}>
-                  {item}
+                  {t(item)}
                   {row.length > 1 && index !== row.length - 1 ? "," : ""}
                 </p>
               ))}
@@ -80,7 +82,7 @@ export const TableData = () => {
             <div>
               {roles?.map((item: any, index: number, row: any) => (
                 <p key={index}>
-                  {item}
+                  {t(item)}
                   {row.length > 1 && index !== row.length - 1 ? "," : ""}
                 </p>
               ))}
@@ -100,7 +102,7 @@ export const TableData = () => {
         id: "status",
         render: (val: any) => (
           <div className={!val ? "text-[var(--error)]" : "text-[var(--green)]"}>
-            {!val ? "Noaktiv" : "Aktiv"}
+            {!val ? "Неактивные" : "Активный"}
           </div>
         ),
       },

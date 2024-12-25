@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { websiteActions } from "../../../../store/website";
@@ -9,13 +9,13 @@ import useCQuery from "../../../../hooks/useCQuery";
 export const FetchFunction = ({ userId }: { userId: string }) => {
   const { data: rolls } = useCQuery({
     key: `GET_ROLLS_LIST`,
-    endpoint: `http://localhost:3000/rolls`,
+    endpoint: `http://192.168.181.29:3000/rolls`,
     params: {},
   });
 
   const { data: users } = useCQuery({
-    key: `GET_USERS_LIST`,
-    endpoint: `http://localhost:3000/users`,
+    key: `GET_USERS_LIST_ALL`,
+    endpoint: `http://192.168.181.29:3000/users`,
     params: {},
   });
 
@@ -67,7 +67,7 @@ export const SubmitFunction = ({
     mutationFn: (user: any) => {
       const data: any = [];
       axios
-        .post("http://localhost:3000/users", user, {
+        .post("http://192.168.181.29:3000/users", user, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -88,7 +88,7 @@ export const SubmitFunction = ({
     mutationFn: (data: any) => {
       const result: any = [];
       axios
-        .put(`http://localhost:3000/users/${data.id}`, data, {
+        .put(`http://192.168.181.29:3000/users/${data.id}`, data, {
           headers: {
             "Content-Type": "application/json",
           },

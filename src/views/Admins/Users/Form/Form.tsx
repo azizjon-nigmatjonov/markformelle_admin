@@ -13,6 +13,10 @@ const sections = [
     label: "Раздел вязания",
     value: "knitting",
   },
+  {
+    label: "Инженер программист",
+    value: "programmer",
+  },
 ];
 
 export const AdminFormWrapper = ({
@@ -73,8 +77,8 @@ export const AdminFormWrapper = ({
           name="roles"
           control={control}
           options={rolls}
-          label="Rolni tanlang"
-          placeholder="Rolni tanlang"
+          label="Выберите роль"
+          placeholder="Выберите роль"
           required={true}
           setValue={setValue}
           defaultValue={defaultValues?.roles}

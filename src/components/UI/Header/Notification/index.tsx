@@ -12,7 +12,6 @@ const Notification = () => {
   const [open, setOpen] = useState(false);
   const { notificationList, clearCount, notifCount } = NotificationData();
   const { checkAdditionals } = usePermissions();
-
   return (
     <div className="relative z-[4]">
       <IconButton

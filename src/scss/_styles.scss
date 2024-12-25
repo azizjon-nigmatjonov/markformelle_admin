@@ -29,14 +29,6 @@ input {
   }
 }
 
-#HFMultipleSelect {
-  .MuiInputBase-root {
-    border: 1px solid var(--border) !important;
-    @include common-shadow;
-    height: 40px !important;
-  }
-}
-
 #cselect,
 #HFMultipleSelect {
   width: 100%;
@@ -47,10 +39,12 @@ input {
     outline: none;
     width: 100%;
     border-radius: 8px;
+    border: 1px solid var(--border) !important;
+    @include common-shadow;
+    height: 40px !important;
 
     @media (max-width: 1400px) {
-      height: 25px !important;
-      font-size: 12px;
+      height: 40px !important;
     }
 
     svg {

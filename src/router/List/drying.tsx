@@ -10,13 +10,14 @@ export const dryingList = [
     parent_icon: <img width={18} src="/images/drying.png" alt="drying" />,
     icon: <img width={18} src="/images/weaving.png" alt="drying icon" />,
     element: <DryingPage />,
-    auth: false,
+    auth: true,
   },
   {
     parent: "drying",
     link: "pos-processing",
     sidebar: true,
     title: "Пост обработка",
+    parent_icon: <img width={18} src="/images/drying.png" alt="drying" />,
     icon: (
       <img
         width={18}
@@ -25,6 +26,6 @@ export const dryingList = [
       />
     ),
     element: <PosPage />,
-    auth: false,
+    auth: true,
   },
 ];

@@ -15,25 +15,14 @@ export const PermissionItem = ({
   handleCheck,
 }: Props) => {
   return (
-    <Rolls key={route.path} text={route.path}>
+    <Rolls key={route.path} text={route.title}>
       {route.permissions.length ? (
-        <>
-          {/* {route.permissions.length === permissions.length ? (
-            <button
-              onClick={() => handleCheck([], "all")}
-              className="text-[var(--gray40)] underline mb-5 font-medium"
-            >
-              Отменить
-            </button>
-          ) : ( */}
-          <button
-            onClick={() => handleCheck(route.permissions, "all")}
-            className="text-[var(--main)] underline mb-5 font-medium"
-          >
-            Barchasini belgilash
-          </button>
-          {/* )} */}
-        </>
+        <button
+          onClick={() => handleCheck(route.permissions, "all")}
+          className="text-[var(--main)] underline mb-5 font-medium"
+        >
+          Barchasini belgilash
+        </button>
       ) : (
         ""
       )}

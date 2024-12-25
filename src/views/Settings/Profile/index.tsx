@@ -16,6 +16,7 @@ import usePageRouter from "../../../hooks/useObjectRouter";
 import { Header } from "../../../components/UI/Header";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { breadCrumbItems } from "./Logic";
+import { HFMultipleSelect } from "../../../components/HFElements/HFMultipleSelect";
 
 const Profile = () => {
   const [logout, setLogout] = useState(false);
@@ -33,10 +34,13 @@ const Profile = () => {
   const { navigateTo } = usePageRouter();
   const Logout = () => {
     dispatch(authActions.logout());
-    navigateTo("/");
-    sessionStorage.removeItem("has_route");
-    window.location.reload();
+    setTimeout(() => {
+      navigateTo("/");
+      sessionStorage.removeItem("has_route");
+      window.location.reload();
+    }, 500);
   };
+
   return (
     <>
       <Header
@@ -86,6 +90,21 @@ const Profile = () => {
                   defaultValue={user?.email}
                   type="email"
                   errors={errors}
+                />
+                <HFMultipleSelect
+                  name="roles"
+                  control={control}
+                  options={user?.roles?.map((item: any) => {
+                    return {
+                      value: item,
+                      label: item,
+                    };
+                  })}
+                  label="Роль пользователя"
+                  placeholder="Роль пользователя"
+                  required={true}
+                  setValue={setValue}
+                  defaultValue={user?.roles}
                 />
               </div>
             </div>

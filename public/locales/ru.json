@@ -60,8 +60,13 @@
   "drying": "Сушилка",
   "chni": "Отдел ЧНИ",
   "delete": "Удалить",
+  "profile": "Профиль",
   "PlanNo": "Номер плана",
   "view": "Посмотреть",
+  "super_admin": "Супер администратор",
   "view_page": "Посмотреть страницу",
-  "view_single_page": "Посмотреть внутреннюю страницу"
+  "edit_roll": "Редокировать роль",
+  "global_search": "Глобальный поиск",
+  "view_single_page": "Посмотреть внутреннюю страницу",
+  "additional_functions": "Qo'shimcha funktsiyalar"
 }

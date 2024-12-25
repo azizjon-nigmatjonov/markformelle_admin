@@ -20,7 +20,7 @@ export const knittingList = [
     title: "Вязания аксессуаров",
     icon: <img width={22} src="/images/rope.png" alt="knitting" />,
     element: <KnittingMachines />,
-    auth: false,
+    auth: true,
   },
   {
     parent: "knitting",
@@ -29,7 +29,7 @@ export const knittingList = [
     title: "Рулоны для КК",
     icon: <img width={20} src="/images/roll-kk.png" alt="roll kk" />,
     element: <RollsKK />,
-    auth: false,
+    auth: true,
   },
   {
     parent: "knitting",
@@ -38,6 +38,6 @@ export const knittingList = [
     title: "Дашборд грузчиков 614",
     icon: <img width={24} src="/images/fork-loader.png" alt="loader" />,
     element: <KnittingProcess />,
-    auth: false,
+    auth: true,
   },
 ];

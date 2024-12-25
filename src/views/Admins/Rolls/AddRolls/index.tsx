@@ -3,14 +3,12 @@ import { Header } from "../../../../components/UI/Header";
 import Rolls from "./Rolls";
 import { useForm } from "react-hook-form";
 import { CreateFunction, FetchFunction, breadCrumbs } from "./Logic";
-// import { Validation } from "./validate";
 import { useParams } from "react-router-dom";
 import { RollList } from "./List";
 import { RollForm } from "./Form";
 import { useEffect, useState } from "react";
 
 const NewRolls = () => {
-  // const schema = Validation();
   const { id } = useParams();
 
   const {
@@ -39,6 +37,7 @@ const NewRolls = () => {
     } else {
       createRoll(data);
     }
+    setValue("name", "");
   };
 
   const handleCheck = (permission: any, type?: string) => {

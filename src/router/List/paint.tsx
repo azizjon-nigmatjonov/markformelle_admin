@@ -12,7 +12,7 @@ export const paintSection = [
     ),
     icon: <img width={18} src="/images/paint-fabrik.png" alt="paint" />,
     element: <PaintSection />,
-    auth: false,
+    auth: true,
   },
   {
     parent: "dying",
@@ -21,6 +21,6 @@ export const paintSection = [
     title: "Крашения пряжи",
     icon: <img width={18} src="/images/paint-yarn.png" alt="paint yarn" />,
     element: <PaintSectionYarn />,
-    auth: false,
+    auth: true,
   },
 ];

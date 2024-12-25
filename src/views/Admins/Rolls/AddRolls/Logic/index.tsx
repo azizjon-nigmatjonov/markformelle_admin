@@ -42,8 +42,8 @@ export const FetchFunction = ({ id }: { id: any | undefined }) => {
   const fetch = id === ":create" ? false : true;
 
   const { data: rollData, isLoading: rollLoading } = useCQuery({
-    key: `GET_USERS_LIST`,
-    endpoint: `http://localhost:3000/rolls/${id}`,
+    key: `GET_ROLL_DATA`,
+    endpoint: `http://192.168.181.29:3000/rolls/${id}`,
     params: {},
     options: {
       enabled: fetch,
@@ -56,7 +56,7 @@ export const FetchFunction = ({ id }: { id: any | undefined }) => {
     refetch,
   } = useCQuery({
     key: `GET_ROUTES_LIST_FOR_ROLL`,
-    endpoint: `http://localhost:3000/routes`,
+    endpoint: `http://192.168.181.29:3000/routes`,
     params: {},
   });
 
@@ -67,8 +67,10 @@ export const FetchFunction = ({ id }: { id: any | undefined }) => {
         permissions: route.permissions?.map((permission: any) => {
           return {
             ...permission,
-            label: permission.name.substring(permission.name.indexOf("#") + 1),
-            value: permission.name,
+            label: permission?.name?.substring(
+              permission.name.indexOf("#") + 1
+            ),
+            value: permission?.name,
           };
         }),
       };
@@ -81,7 +83,7 @@ export const FetchFunction = ({ id }: { id: any | undefined }) => {
     isLoading,
     refetch,
     newRouteList,
-    rollData: rollData || {},
+    rollData: fetch ? rollData : {},
     rollLoading,
   };
 };
@@ -94,7 +96,7 @@ export const CreateFunction = ({ reset = () => {} }: { reset?: any }) => {
     mutationFn: (data: any) => {
       const result: any = [];
       axios
-        .post("http://localhost:3000/rolls", data, {
+        .post("http://192.168.181.29:3000/rolls", data, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -117,7 +119,7 @@ export const CreateFunction = ({ reset = () => {} }: { reset?: any }) => {
     mutationFn: (data: any) => {
       const result: any = [];
       axios
-        .put(`http://localhost:3000/rolls/${data.id}`, data, {
+        .put(`http://192.168.181.29:3000/rolls/${data.id}`, data, {
           headers: {
             "Content-Type": "application/json",
           },

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: {},
+  rolls: [],
   token: "",
   link: "",
   lang: "ru",
@@ -14,6 +15,9 @@ export const { actions: authActions, reducer: authReducer } = createSlice({
   reducers: {
     setUser: (state, { payload }) => {
       state.user = payload;
+    },
+    setRolls: (state, { payload }) => {
+      state.rolls = payload;
     },
     login: (state, { payload }) => {
       state.token = payload?.access_token ?? "";

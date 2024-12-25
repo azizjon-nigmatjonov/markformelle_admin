@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { websiteActions } from "../store/website/index";
@@ -28,8 +28,31 @@ const Router = () => {
   const [list, setList] = useState<string[]>([]);
   const [listNew, setListNew] = useState<string[]>([]);
   const userInfo = useSelector((state: any) => state.auth.user);
+  const userRolls = useSelector((state: any) => state.auth.rolls);
   const [routes, setRoutes]: any = useState({ ...defaults });
   const [newRoutes, setNewRoutes] = useState({ ...defaults });
+
+  const Permissions = useMemo(() => {
+    if (!userRolls?.length) return {};
+    let permissions: any = {};
+    userRolls?.forEach((el: any) => {
+      const permissionObj = el.permissions;
+
+      for (let pKey in permissionObj) {
+        if (pKey in permissions) {
+          for (let pWord of permissionObj[pKey]) {
+            if (!permissions[pKey].includes(pWord)) {
+              permissions[pKey].push(pWord);
+            }
+          }
+        } else {
+          permissions[pKey] = permissionObj[pKey];
+        }
+      }
+    });
+
+    return permissions;
+  }, [userRolls]);
 
   const getPath = ({
     parent = "",
@@ -60,8 +83,7 @@ const Router = () => {
       children,
     };
 
-    const permissions = userInfo?.permissions ?? [];
-    const found = permissions?.find((i: any) => i.value === path);
+    const found = Permissions[path];
 
     if (!listNew.includes(obj.id)) {
       setNewRoutes((prev: any) => ({
@@ -70,7 +92,11 @@ const Router = () => {
       }));
       setListNew((prev) => [...prev, obj.id]);
     }
-    if (found?.permissions?.includes("view") || !auth) {
+    if (
+      found?.includes("view_page") ||
+      !auth ||
+      userInfo?.roles?.includes("super_admin")
+    ) {
       if (!list.includes(obj.id)) {
         setRoutes((prev: any) => ({
           ...prev,
@@ -84,37 +110,10 @@ const Router = () => {
     return "";
   };
 
-  // const navigator = useMemo(() => {
-  //   for (const key in storedRoutes) {
-  //     if (storedRoutes[key]?.length) {
-  //       if (storedRoutes[key].find((item: routeType) => item.sidebar)) {
-  //         return storedRoutes[key].find((item: routeType) => item.sidebar)
-  //           ?.path;
-  //       }
-  //     }
-  //   }
-  // }, [storedRoutes]);
-
   useEffect(() => {
     dispatch(websiteActions.setRoutes({ ...routes }));
     dispatch(websiteActions.setNewRoutes({ ...newRoutes }));
   }, []);
-
-  // if (!!link) {
-  //   return (
-  //     <Suspense fallback={"Loading..."}>
-  //       <Routes>
-  //         <Route path="/" element={<AuthLayout />}>
-  //           <Route index element={<Navigate to="/login" />} />
-  //           <Route path="/login" element={<Login />} />
-  //           <Route path="registration" element={<Registration />} />
-  //           <Route path="*" element={<Navigate to="/login" />} />
-  //         </Route>
-  //         <Route path="*" element={<Navigate to="/login" />} />
-  //       </Routes>
-  //     </Suspense>
-  //   );
-  // }
 
   return (
     <Routes>

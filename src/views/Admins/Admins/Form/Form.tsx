@@ -10,9 +10,9 @@ import { SubmitFunction } from "./Logic";
 export const AdminFormWrapper = ({
   refetch,
   id,
-  // defaultValues = {},
-  // rolls,
-}: {
+}: // defaultValues = {},
+// rolls,
+{
   refetch: () => void;
   id: string;
   defaultValues: any;
@@ -73,8 +73,8 @@ export const AdminFormWrapper = ({
           name="roles"
           control={control}
           options={rolls}
-          label="Rolni tanlang"
-          placeholder="Rolni tanlang"
+          label="Выберите роль"
+          placeholder="Выберите роль"
           required={true}
           setValue={setValue}
           defaultValue={defaultValues?.roles}

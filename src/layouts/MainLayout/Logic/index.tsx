@@ -48,8 +48,8 @@ export const GetUserInfo = () => {
       role.permissions.forEach((permission: any) => {
         list.push({
           ...permission,
-          value: permission.name.substring(0, permission.name.indexOf("#")),
-          permission: permission.name.substring(
+          value: permission?.name?.substring(0, permission.name.indexOf("#")),
+          permission: permission?.name?.substring(
             permission.name.indexOf("#") + 1
           ),
           permissions: [],

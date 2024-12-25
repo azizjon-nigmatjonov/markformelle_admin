@@ -11,6 +11,7 @@ import { useEffect, useRef } from "react";
 import { authActions } from "../../store/auth/auth.slice";
 import axios from "axios";
 import { globalToolActions } from "../../store/globalTools";
+import { RollLogic } from "./Logic/Roll";
 
 const MainLayout = () => {
   const wrapperRef: any = useRef(null);
@@ -88,6 +89,8 @@ const MainLayout = () => {
       >
         <ResizeIcon fill={resize ? "black" : "var(--gray)"} />
       </button>
+
+      <RollLogic />
     </div>
   );
 };

@@ -10,8 +10,8 @@ export const breadCrumbs = [
 
 export const FetchFunction = () => {
   const { data, isLoading, refetch } = useCQuery({
-    key: `GET_USERS_LIST`,
-    endpoint: `http://localhost:3000/rolls`,
+    key: `GET_ROLLS_LIST`,
+    endpoint: `http://192.168.181.29:3000/rolls`,
     params: {},
   });
 
@@ -23,7 +23,7 @@ export const DeleteFunction = ({ handleClose }: { handleClose: any }) => {
     mutationFn: (id: any) => {
       const data: any = { id };
       axios
-        .delete(`http://localhost:3000/rolls`, {
+        .delete(`http://192.168.181.29:3000/rolls`, {
           params: data,
         })
         .then((res) => {
@@ -74,8 +74,6 @@ export const TableData = ({ deleteRoll }: { deleteRoll: any }) => {
   ];
 
   const handleActions = (el: any, status: string) => {
-    console.log("el", el);
-
     if (status === "edit") {
       navigateTo(`/access/rolls/${el.id}`);
     }
