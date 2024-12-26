@@ -28,7 +28,7 @@ export const RollForm = ({
         setValue={setValue}
         defaultValue={rollData?.name}
       />
-      <div className="fixed top-[90px] right-20px">
+      <div className="fixed top-[70px] right-20px">
         {isLoading ? (
           <div className="custom-btn">
             <CircularProgress size={24} />

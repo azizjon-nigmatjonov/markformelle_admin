@@ -31,6 +31,7 @@ const Router = () => {
   const userRolls = useSelector((state: any) => state.auth.rolls);
   const [routes, setRoutes]: any = useState({ ...defaults });
   const [newRoutes, setNewRoutes] = useState({ ...defaults });
+  // console.log("userRolls", userRolls);
 
   const Permissions = useMemo(() => {
     if (!userRolls?.length) return {};

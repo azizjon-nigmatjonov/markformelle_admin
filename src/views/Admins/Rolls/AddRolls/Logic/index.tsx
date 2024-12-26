@@ -1,21 +1,41 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
 import usePageRouter from "../../../../../hooks/useObjectRouter";
 import { GetUserInfo } from "../../../../../layouts/MainLayout/Logic";
 import useCQuery from "../../../../../hooks/useCQuery";
 import axios from "axios";
+import { useSelector } from "react-redux";
+import { StaticPermissions } from "../../../../../constants/permissions";
 
 export const GetRoutes = () => {
-  const allRoutes = (routes: any) => {
-    const arr = [];
-    for (const key in routes) {
-      arr.push(...routes[key]);
+  const newRoutes = useSelector((state: any) => state.website.new_routes);
+  const [allRoutes, setAllRoutes]: any = useState([]);
+
+  useEffect(() => {
+    const arr: any = [];
+    for (const key in newRoutes) {
+      newRoutes[key].forEach((item: any) => {
+        const obj = { ...item };
+        obj.permissions.forEach((el: any) => {
+          const permission: any =
+            StaticPermissions.find((item: any) => item.value === el) ?? {};
+          permission.checked = false;
+          permission.id = obj.id;
+          obj[el] = permission ?? {};
+        });
+
+        arr.push(obj);
+      });
     }
 
-    return arr;
+    setAllRoutes(arr);
+  }, [newRoutes]);
+
+  const handleCheckBox = (obj: any) => {
+    console.log("1111", obj);
   };
 
-  return { allRoutes };
+  return { allRoutes, handleCheckBox };
 };
 
 export const breadCrumbs = ({ id }: { id: any }) => {

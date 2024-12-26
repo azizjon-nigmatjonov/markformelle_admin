@@ -11,6 +11,7 @@ export const knittingList = [
     parent_icon: <img width={18} src="/images/kniting.png" alt="knitting" />,
     icon: <img width={18} src="/images/kniting.png" alt="knitting" />,
     element: <KnittingMachines />,
+    permissions: ["view_page"],
     auth: false,
   },
   {
