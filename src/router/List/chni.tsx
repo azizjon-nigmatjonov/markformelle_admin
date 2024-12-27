@@ -10,5 +10,6 @@ export const chniSection = [
     icon: <img width={18} src="/images/weaving.png" alt="weaving" />,
     element: <ChniDashboard />,
     auth: true,
+    permissions: ["view_page"],
   },
 ];

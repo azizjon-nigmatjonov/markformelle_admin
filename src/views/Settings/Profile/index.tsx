@@ -117,26 +117,6 @@ const Profile = () => {
               />
             </div>
           </div>
-
-          <h2 className="mt-10 font-medium mb-2 text-2xl">
-            {t("set_new_password")}
-          </h2>
-          <div className="w-1/2 grid grid-cols-2 gap-4">
-            <HFTextField
-              name="old_password"
-              control={control}
-              placeholder={t("password")}
-              label={t("password")}
-              setValue={setValue}
-            />
-            <HFTextField
-              name="new_password"
-              control={control}
-              placeholder={t("new_password")}
-              label={t("new_password")}
-              setValue={setValue}
-            />
-          </div>
         </CCard>
 
         <div className="flex justify-end">

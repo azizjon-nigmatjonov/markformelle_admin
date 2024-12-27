@@ -45,15 +45,7 @@ const Rolls = () => {
             defaultValue={filterParams?.q}
           />
         }
-      >
-        <div className="ml-5">
-          <AddButton
-            text="Добавить новую роль"
-            type="ordinary"
-            onClick={() => navigateTo("/access/rolls/:create")}
-          />
-        </div>
-      </Header>
+      ></Header>
       <div className="p-2">
         <CCard>
           <CTable
@@ -64,6 +56,14 @@ const Rolls = () => {
             isLoading={isLoading}
             filterParams={filterParams}
             handleFilterParams={handleFilterParams}
+            extra={
+              <AddButton
+                text="Добавить новую роль"
+                type="ordinary"
+                onClick={() => navigateTo("/access/rolls/:create")}
+                classes="desktop:h-[30px]"
+              />
+            }
           />
         </CCard>
       </div>

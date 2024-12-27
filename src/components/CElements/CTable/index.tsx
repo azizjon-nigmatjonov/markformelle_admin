@@ -49,6 +49,7 @@ interface Props {
   removeScroll?: boolean;
   removeSearch?: boolean;
   defaultSortData?: any;
+  extra?: any;
 }
 
 const CTable = ({
@@ -56,6 +57,7 @@ const CTable = ({
     totalCount: 1,
     pageCount: 1,
   },
+  extra,
   headColumns = [],
   bodyColumns = [],
   clickable = false,
@@ -446,7 +448,7 @@ const CTable = ({
           removeScroll ? "" : "overflow-scroll"
         }`}
       >
-        {tableSetting && bodySource?.length ? (
+        {tableSetting ? (
           <HeaderSettings
             totalCount={meta.totalCount}
             filterParams={filterParams}
@@ -457,6 +459,7 @@ const CTable = ({
             pageColumns={pageColumns}
             bodyColumns={bodySource}
             allColumns={bodyColumns}
+            extra={extra}
           />
         ) : (
           ""

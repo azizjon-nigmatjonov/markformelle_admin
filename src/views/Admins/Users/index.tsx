@@ -62,14 +62,7 @@ const Users = () => {
             defaultValue={filterParams?.q}
           />
         }
-      >
-        <div className="ml-5">
-          <AddButton
-            text="add"
-            onClick={() => navigateQuery({ id: "create" })}
-          />
-        </div>
-      </Header>
+      ></Header>
       <div className="p-2">
         <CCard>
           <CTable
@@ -81,6 +74,13 @@ const Users = () => {
             handleActions={handleActions}
             filterParams={filterParams}
             handleFilterParams={handleFilterParams}
+            extra={
+              <AddButton
+                text="add"
+                onClick={() => navigateQuery({ id: "create" })}
+                classes="h-[25px] desktop:h-[30px]"
+              />
+            }
           />
 
           {query?.id && <Form refetch={refetch} id={query.id} />}

@@ -11,6 +11,7 @@ export const dryingList = [
     icon: <img width={18} src="/images/weaving.png" alt="drying icon" />,
     element: <DryingPage />,
     auth: true,
+    permissions: ["view_page"],
   },
   {
     parent: "drying",
@@ -27,5 +28,6 @@ export const dryingList = [
     ),
     element: <PosPage />,
     auth: true,
+    permissions: ["view_page"],
   },
 ];

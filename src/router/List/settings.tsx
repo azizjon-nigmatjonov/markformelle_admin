@@ -12,17 +12,18 @@ export const settingList = [
     parent_icon: <img width={20} src="/images/settings.png" alt="settings" />,
     element: <WebsiteSettings />,
     auth: true,
+    permissions: ["view_page"],
   },
   {
     parent: "settings",
     link: "language",
     sidebar: true,
     title: "Языковые настройки",
-    permissions: ["search", "test"],
     icon: "globus",
     parent_icon: <img width={20} src="/images/settings.png" alt="settings" />,
     element: <LanguagesPage />,
     auth: true,
+    permissions: ["view_page"],
   },
   {
     parent: "settings",
@@ -32,6 +33,7 @@ export const settingList = [
     icon: "profile",
     element: <Profile />,
     auth: false,
+    permissions: ["view_page"],
   },
   {
     parent: "settings",
@@ -41,5 +43,6 @@ export const settingList = [
     icon: "",
     element: "",
     auth: true,
+    permissions: ["view_page"],
   },
 ];

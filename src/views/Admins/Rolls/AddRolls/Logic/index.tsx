@@ -6,6 +6,7 @@ import useCQuery from "../../../../../hooks/useCQuery";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { StaticPermissions } from "../../../../../constants/permissions";
+import _ from "lodash";
 
 export const GetRoutes = () => {
   const newRoutes = useSelector((state: any) => state.website.new_routes);
@@ -20,7 +21,7 @@ export const GetRoutes = () => {
           const permission: any =
             StaticPermissions.find((item: any) => item.value === el) ?? {};
           permission.checked = false;
-          permission.id = obj.id;
+          permission.id = item.id;
           obj[el] = permission ?? {};
         });
 
@@ -32,7 +33,15 @@ export const GetRoutes = () => {
   }, [newRoutes]);
 
   const handleCheckBox = (obj: any) => {
-    console.log("1111", obj);
+    const newArr = allRoutes.map((item: any) => {
+      const newObj = _.cloneDeep(item);
+      if (newObj.path === obj.id) {
+        newObj[obj.value].checked = !item[obj.value].checked;
+      }
+
+      return newObj;
+    });
+    setAllRoutes(newArr);
   };
 
   return { allRoutes, handleCheckBox };
@@ -50,7 +59,7 @@ export const breadCrumbs = ({ id }: { id: any }) => {
         link: "/admins/rolls",
       },
       {
-        label: id !== "create" ? "Rolni tahrirlash" : "Yangi rol yaratish",
+        label: id !== ":create" ? "Изменить роль" : "Создать новую роль",
       },
     ];
   }, [id]);
@@ -70,39 +79,7 @@ export const FetchFunction = ({ id }: { id: any | undefined }) => {
     },
   });
 
-  const {
-    data: routes,
-    isLoading,
-    refetch,
-  } = useCQuery({
-    key: `GET_ROUTES_LIST_FOR_ROLL`,
-    endpoint: `http://192.168.181.29:3000/routes`,
-    params: {},
-  });
-
-  const newRouteList: any = useMemo(() => {
-    const list = routes?.map((route: any) => {
-      return {
-        ...route,
-        permissions: route.permissions?.map((permission: any) => {
-          return {
-            ...permission,
-            label: permission?.name?.substring(
-              permission.name.indexOf("#") + 1
-            ),
-            value: permission?.name,
-          };
-        }),
-      };
-    });
-
-    return list ?? [];
-  }, [routes]);
-
   return {
-    isLoading,
-    refetch,
-    newRouteList,
     rollData: fetch ? rollData : {},
     rollLoading,
   };

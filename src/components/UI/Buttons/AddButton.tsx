@@ -66,9 +66,9 @@ const AddButton = ({
           if (!checkPermission(permission)) return;
           onClick();
         }}
-        className={`${classes} bg-[var(--primary)] rounded-[8px] h-[25px] desktop:h-[35px] flex items-center whitespace-nowrap px-2 ${
+        className={` bg-[var(--main)] rounded-[8px]  flex items-center whitespace-nowrap px-2 h-[25px] desktop:h-[35px] ${
           checkPermission(permission) ? "" : "disabled"
-        }`}
+        } ${classes}`}
       >
         {iconLeft === true ? (
           <PlusIcon fill={checkPermission(permission) ? "white" : "white"} />
@@ -78,7 +78,7 @@ const AddButton = ({
         {children ? (
           children
         ) : (
-          <span className="font-[600] ml-1 text-white">{t(text)}</span>
+          <span className="font-[600] mx-1 text-white">{t(text)}</span>
         )}
       </button>
     </div>

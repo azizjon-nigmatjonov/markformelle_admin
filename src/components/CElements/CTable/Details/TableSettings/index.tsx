@@ -46,6 +46,7 @@ export const HeaderSettings = ({
   pageColumns = [],
   headColumns = [],
   allColumns = [],
+  extra,
 }: {
   filterParams: any;
   totalCount: number | undefined;
@@ -55,6 +56,7 @@ export const HeaderSettings = ({
   reOrder: boolean;
   bodyColumns: any;
   allColumns: any;
+  extra?: any;
   tableActions: (el: any, status: string) => void;
 }) => {
   const [open, setOpen] = useState(false);
@@ -191,7 +193,7 @@ export const HeaderSettings = ({
 
   return (
     <div className="pb-[40px]">
-      <div className="h-[40px] absolute w-full left-0 top-0 flex items-center px-1 desktop:px-3 justify-between">
+      <div className="h-[40px] absolute w-full left-0 top-0 flex items-center desktop:px-1 justify-between">
         <div>
           <h2 className="font-bold">
             Общий
@@ -249,6 +251,7 @@ export const HeaderSettings = ({
               />
             )}
           </div>
+          {extra}
         </div>
         {open && <Closer handleClose={() => setOpen(false)} classes="z-[91]" />}
       </div>

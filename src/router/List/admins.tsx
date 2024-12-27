@@ -1,7 +1,7 @@
 // import Admins from "../../views/Admins/Admins";
 import Rolls from "../../views/Admins/Rolls";
 import NewRolls from "../../views/Admins/Rolls/AddRolls";
-import RoutePage from "../../views/Admins/RoutePage";
+// import RoutePage from "../../views/Admins/RoutePage";
 import Users from "../../views/Admins/Users";
 
 export const adminList = [
@@ -14,6 +14,7 @@ export const adminList = [
     parent_icon: <img width={18} src="/images/access.png" alt="access" />,
     element: <Users />,
     auth: true,
+    permissions: ["view_page", "add", "delete", "edit"],
   },
   {
     parent: "access",
@@ -24,6 +25,7 @@ export const adminList = [
     parent_icon: <img width={18} src="/images/access.png" alt="access" />,
     element: <Rolls />,
     auth: true,
+    permissions: ["view_page", "add", "delete", "edit"],
   },
   {
     parent: "access",
@@ -33,6 +35,7 @@ export const adminList = [
     icon: "",
     element: <NewRolls />,
     auth: true,
+    permissions: ["view_page", "add", "delete", "edit"],
   },
   {
     parent: "access",
@@ -42,15 +45,16 @@ export const adminList = [
     icon: "",
     element: <NewRolls />,
     auth: true,
+    permissions: ["view_page", "add", "delete", "edit"],
   },
-  {
-    parent: "access",
-    link: "routes",
-    sidebar: true,
-    parent_icon: <img width={18} src="/images/access.png" alt="access" />,
-    title: "pages",
-    icon: "pages",
-    element: <RoutePage />,
-    auth: true,
-  },
+  // {
+  //   parent: "access",
+  //   link: "routes",
+  //   sidebar: true,
+  //   parent_icon: <img width={18} src="/images/access.png" alt="access" />,
+  //   title: "pages",
+  //   icon: "pages",
+  //   element: <RoutePage />,
+  //   auth: true,
+  // },
 ];

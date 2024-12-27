@@ -20,7 +20,10 @@ export const RollForm = ({
   onSubmit: (val: any) => void;
 }) => {
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex items-center space-x-5"
+    >
       <HFTextField
         name="name"
         control={control}
@@ -28,14 +31,14 @@ export const RollForm = ({
         setValue={setValue}
         defaultValue={rollData?.name}
       />
-      <div className="fixed top-[70px] right-20px">
+      <div className="">
         {isLoading ? (
           <div className="custom-btn">
             <CircularProgress size={24} />
           </div>
         ) : (
           <button type="submit" className="custom-btn">
-            {id !== ":create" ? "Редактировать" : "Добавить роль"}
+            {id !== ":create" ? "Редактировать" : "Сохранить"}
           </button>
         )}
       </div>
