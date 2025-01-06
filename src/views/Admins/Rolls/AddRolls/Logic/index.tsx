@@ -8,21 +8,23 @@ import { useSelector } from "react-redux";
 import { StaticPermissions } from "../../../../../constants/permissions";
 import _ from "lodash";
 
-export const GetRoutes = () => {
+export const GetRoutes = ({ rollData = {} }: { rollData: any }) => {
   const newRoutes = useSelector((state: any) => state.website.new_routes);
   const [allRoutes, setAllRoutes]: any = useState([]);
 
   useEffect(() => {
     const arr: any = [];
+
     for (const key in newRoutes) {
       newRoutes[key].forEach((item: any) => {
         const obj = { ...item };
+
         obj.permissions.forEach((el: any) => {
           const permission: any =
             StaticPermissions.find((item: any) => item.value === el) ?? {};
           permission.checked = false;
           permission.id = item.id;
-          obj[el] = permission ?? {};
+          obj[el] = permission;
         });
 
         arr.push(obj);
@@ -32,15 +34,54 @@ export const GetRoutes = () => {
     setAllRoutes(arr);
   }, [newRoutes]);
 
+  useEffect(() => {
+    if (rollData?.id) {
+      const newData: any = allRoutes?.map((item: any) => {
+        const obj = { ...item };
+        const foundRoute = rollData.routes?.find(
+          (route: any) => route.id === item.id
+        );
+        obj.permissions.forEach((el: any) => {
+          const permission: any = foundRoute?.permissions?.[el];
+          obj[el] = permission
+            ? permission
+            : {
+                checked: false,
+                id: item.id,
+                value: el,
+              };
+        });
+        return obj;
+      });
+
+      setAllRoutes(newData);
+    }
+  }, [rollData]);
+
   const handleCheckBox = (obj: any) => {
     const newArr = allRoutes.map((item: any) => {
       const newObj = _.cloneDeep(item);
+
       if (newObj.path === obj.id) {
+        if ("newPermissions" in newObj) {
+          newObj.newPermissions[obj.value] = {
+            ...obj,
+            checked: !obj.checked,
+          };
+        } else {
+          newObj.newPermissions = {
+            [obj.value]: {
+              ...obj,
+              checked: !obj.checked,
+            },
+          };
+        }
         newObj[obj.value].checked = !item[obj.value].checked;
       }
 
       return newObj;
     });
+
     setAllRoutes(newArr);
   };
 
@@ -51,12 +92,8 @@ export const breadCrumbs = ({ id }: { id: any }) => {
   const breadCrumbsItems = useMemo(() => {
     return [
       {
-        label: "Admin",
-        link: "/admins/admin",
-      },
-      {
-        label: "Rollar",
-        link: "/admins/rolls",
+        label: "Ролы",
+        link: "/access/rolls",
       },
       {
         label: id !== ":create" ? "Изменить роль" : "Создать новую роль",

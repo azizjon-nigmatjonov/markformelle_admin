@@ -96,7 +96,7 @@ const Router = () => {
     if (
       found?.includes("view_page") ||
       !auth ||
-      userInfo?.roles?.includes("super_admin")
+      userInfo?.roles?.includes("superadmin")
     ) {
       if (!list.includes(obj.id)) {
         setRoutes((prev: any) => ({

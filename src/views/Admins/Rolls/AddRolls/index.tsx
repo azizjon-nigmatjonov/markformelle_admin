@@ -22,19 +22,26 @@ const NewRolls = () => {
     resolver: yupResolver(schema),
   });
   const [filterParams, setFilterParams] = useState({});
-  const { allRoutes, handleCheckBox } = GetRoutes();
   const { rollData } = FetchFunction({ id });
+  const { allRoutes, handleCheckBox } = GetRoutes({ rollData });
   const { createRoll, updateRoll, isLoading } = CreateFunction({});
   const { breadCrumbsItems } = breadCrumbs({ id });
 
   const onSubmit = (data: any) => {
-    data.id = data.name.split(" ").join("").toLowerCase();
-    console.log("vvvv", allRoutes);
+    const params = { ...data };
+    params.id = data.name.split(" ").join("").toLowerCase();
 
+    const routeAndPermissions = allRoutes.map((item: any) => {
+      return {
+        permissions: item.newPermissions,
+        id: item.id,
+      };
+    });
+    params.routes = routeAndPermissions;
     if (id !== ":create") {
-      updateRoll(data, id);
+      updateRoll(params, id);
     } else {
-      createRoll(data);
+      createRoll(params);
     }
     setValue("name", "");
   };
@@ -44,7 +51,7 @@ const NewRolls = () => {
       {
         title: "Stranitsa",
         id: "title",
-
+        width: 300,
         render: (val: string) => {
           return t(val);
         },
@@ -153,6 +160,7 @@ const NewRolls = () => {
   }, [allRoutes]);
 
   const handleActions = () => {};
+  console.log(allRoutes);
 
   return (
     <>
@@ -186,7 +194,7 @@ const NewRolls = () => {
               handleActions={handleActions}
               isLoading={isLoading}
               filterParams={filterParams}
-              handleFilterParams={() => {}}
+              handleFilterParams={setFilterParams}
               disablePagination={true}
               tableSetting={false}
               removeSearch={true}

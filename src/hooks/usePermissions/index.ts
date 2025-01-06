@@ -43,13 +43,13 @@ export const usePermissions = () => {
   }, [location, Permissions]);
 
   const checkAdditionals = (permission: string) => {
-    if (userInfo?.roles?.includes("super_admin")) return true;
+    if (userInfo?.roles?.includes("superadmin")) return true;
     const current = Permissions["settings/additional_functions"];
     return current?.includes(permission);
   };
 
   const checkPermission = (permission: string) => {
-    if (userInfo?.roles?.includes("super_admin")) return true;
+    if (userInfo?.roles?.includes("superadmin")) return true;
     if (!userRolls?.length) return true;
     return CurrentList?.includes(permission);
   };

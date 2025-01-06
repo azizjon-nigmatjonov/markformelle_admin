@@ -54,7 +54,7 @@ export const TableData = ({ deleteRoll }: { deleteRoll: any }) => {
     },
     {
       title: "Количество функций",
-      id: "permissions",
+      id: "routes",
       render: (val: any) => {
         if (!val) return <></>;
 
