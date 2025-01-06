@@ -54,11 +54,9 @@ export const TableData = ({ deleteRoll }: { deleteRoll: any }) => {
     },
     {
       title: "Количество функций",
-      id: "routes",
+      id: "countFeatures",
       render: (val: any) => {
-        if (!val) return <></>;
-
-        return <div>{Object.keys(val).length}</div>;
+        return <div>{val ?? 0}</div>;
       },
     },
     // {

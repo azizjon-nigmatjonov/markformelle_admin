@@ -9,28 +9,20 @@ export const usePermissions = () => {
 
   const Permissions = useMemo(() => {
     if (!userRolls?.length) return {};
-    let permissions: any = {};
+    let permissions: any = [];
     userRolls?.forEach((el: any) => {
-      const permissionObj = el.permissions;
+      const arr = el.routes;
 
-      for (let pKey in permissionObj) {
-        if (pKey in permissions) {
-          for (let pWord of permissionObj[pKey]) {
-            if (!permissions[pKey].includes(pWord)) {
-              permissions[pKey].push(pWord);
-            }
-          }
-        } else {
-          permissions[pKey] = permissionObj[pKey];
-        }
+      for (let obj of arr) {
+        permissions.push(obj);
       }
     });
 
     return permissions;
   }, [userRolls]);
 
-  const CurrentList = useMemo(() => {
-    if (!Object.values(Permissions)?.length) return [];
+  const CurrentList: any = useMemo(() => {
+    if (!Permissions?.length) return [];
     let locationName = location.pathname.substring(1);
     const arr = locationName.split("/");
     if (arr.length > 2) {
@@ -39,19 +31,21 @@ export const usePermissions = () => {
       }
     }
 
-    return Permissions[locationName] ?? [];
+    return (
+      Permissions.find((item: { id: string }) => item.id === locationName) ?? []
+    );
   }, [location, Permissions]);
-
   const checkAdditionals = (permission: string) => {
     if (userInfo?.roles?.includes("superadmin")) return true;
-    const current = Permissions["settings/additional_functions"];
+    const current =
+      Permissions?.permissions?.["settings/additional_functions"]?.checked;
     return current?.includes(permission);
   };
 
   const checkPermission = (permission: string) => {
     if (userInfo?.roles?.includes("superadmin")) return true;
     if (!userRolls?.length) return true;
-    return CurrentList?.includes(permission);
+    return CurrentList?.permissions?.[permission]?.checked;
   };
   return {
     routePermissions: CurrentList ?? [],

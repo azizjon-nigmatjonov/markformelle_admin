@@ -28,6 +28,9 @@
   min-height: 50px;
   @include center;
   padding: 0 24px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
   background-color: white;
 
   .MuiPagination-ul {

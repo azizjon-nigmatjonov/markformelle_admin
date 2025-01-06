@@ -8,7 +8,7 @@ export const dryingList = [
     sidebar: true,
     title: "Сушилка",
     parent_icon: <img width={18} src="/images/drying.png" alt="drying" />,
-    icon: <img width={18} src="/images/weaving.png" alt="drying icon" />,
+    icon: <img width={18} src="/images/drying.png" alt="drying icon" />,
     element: <DryingPage />,
     auth: true,
     permissions: ["view_page"],
@@ -18,7 +18,7 @@ export const dryingList = [
     link: "pos-processing",
     sidebar: true,
     title: "Пост обработка",
-    parent_icon: <img width={18} src="/images/drying.png" alt="drying" />,
+    parent_icon: <img width={18} src="/images/drying.png" alt="processing" />,
     icon: (
       <img
         width={18}

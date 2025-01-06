@@ -31,24 +31,15 @@ const Router = () => {
   const userRolls = useSelector((state: any) => state.auth.rolls);
   const [routes, setRoutes]: any = useState({ ...defaults });
   const [newRoutes, setNewRoutes] = useState({ ...defaults });
-  // console.log("userRolls", userRolls);
 
   const Permissions = useMemo(() => {
     if (!userRolls?.length) return {};
-    let permissions: any = {};
+    let permissions: any = [];
     userRolls?.forEach((el: any) => {
-      const permissionObj = el.permissions;
+      const arr = el.routes;
 
-      for (let pKey in permissionObj) {
-        if (pKey in permissions) {
-          for (let pWord of permissionObj[pKey]) {
-            if (!permissions[pKey].includes(pWord)) {
-              permissions[pKey].push(pWord);
-            }
-          }
-        } else {
-          permissions[pKey] = permissionObj[pKey];
-        }
+      for (let obj of arr) {
+        permissions.push(obj);
       }
     });
 
@@ -84,7 +75,7 @@ const Router = () => {
       children,
     };
 
-    const found = Permissions[path];
+    const found = Permissions.find((item: any) => item.id === path);
 
     if (!listNew.includes(obj.id)) {
       setNewRoutes((prev: any) => ({
@@ -93,8 +84,9 @@ const Router = () => {
       }));
       setListNew((prev) => [...prev, obj.id]);
     }
+
     if (
-      found?.includes("view_page") ||
+      found?.permissions?.view_page?.checked ||
       !auth ||
       userInfo?.roles?.includes("superadmin")
     ) {

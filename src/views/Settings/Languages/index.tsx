@@ -167,36 +167,36 @@ const LanguagesPage = () => {
               filterParams={filterParams}
               isResizeble={false}
               handleFilterParams={setFilterParams}
+              extra={
+                <div>
+                  {filterParams.edit ? (
+                    <button
+                      onClick={() => {
+                        setFilterParams({ ...filterParams, edit: false });
+                      }}
+                      className="custom-btn"
+                      style={{ height: "32px" }}
+                    >
+                      Cохранить
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        AddNewColumn({ listTable, setListTable });
+                        setFilterParams({ ...filterParams, edit: true });
+                      }}
+                      className="custom-btn"
+                      style={{ height: "32px" }}
+                    >
+                      Добавить
+                    </button>
+                  )}
+                </div>
+              }
             />
           </div>
         </CCard>
       </div>
-      <CFooter>
-        <div className="flex justify-end w-full pr-10">
-          <div>
-            {filterParams.edit ? (
-              <button
-                onClick={() => {
-                  setFilterParams({ ...filterParams, edit: false });
-                }}
-                className="new-btn"
-              >
-                Cохранить
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  AddNewColumn({ listTable, setListTable });
-                  setFilterParams({ ...filterParams, edit: true });
-                }}
-                className="new-btn"
-              >
-                Добавить
-              </button>
-            )}
-          </div>
-        </div>
-      </CFooter>
     </>
   );
 };
