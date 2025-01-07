@@ -7,6 +7,7 @@ import "./style.scss";
 import { useState } from "react";
 import { ModalBtn } from "../../../Kniting/Machines/Card/Btn";
 import { GetCurrentDate } from "../../../../utils/getDate";
+import { usePermissions } from "../../../../hooks/usePermissions";
 
 export const ChniCardList = ({ machine }: { machine: any }) => {
   const { getFontSize } = useDeviceHeight();
@@ -18,6 +19,7 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
     type: "error",
     title: "",
   });
+  const { checkPermission } = usePermissions();
   const [descriptionText, setDescriptionText] = useState("");
   const createStatus = () => {
     setAlertInfo({ type: "error", title: "No API" });
@@ -27,7 +29,6 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
 
     return Number(num.toFixed(2));
   };
-  console.log("machine", machine);
 
   return (
     <div className="grid grid-cols-2">
@@ -292,6 +293,7 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
                   createStatus();
                 }}
                 fullWidth
+                disabled={!checkPermission("edit")}
               >
                 Отправить
               </Button>

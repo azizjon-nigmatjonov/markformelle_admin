@@ -18,7 +18,7 @@ const ChniDashboard = () => {
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const { data, isLoading, refetch } = useCQuery({
     key: `GET_CHNI_LIST`,
-    endpoint: `http://srv-nav.praktik.loc:1880/socsdata`,
+    endpoint: `http://srv-nav.praktik.loc:1880/socsdata?mac`,
     params: {},
   });
 

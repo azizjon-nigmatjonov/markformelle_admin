@@ -4,7 +4,7 @@ export const Validation = () => {
     permissions: yup
       .array()
       .of(yup.string())
-      .required("Majbiriy maydon")
+      .required("Обязательное поле!")
       .test(
         "is-permissions-empty",
         "Permission kiritilmagan",

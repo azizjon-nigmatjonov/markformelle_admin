@@ -7,6 +7,7 @@ import {
 import { SettingIcon } from "../../../components/UI/IconGenerator/Svg/Sidebar";
 import { useCMutation } from "../../../hooks/useCMutation";
 import useCQuery from "../../../hooks/useCQuery";
+import axios from "axios";
 
 export const CreateTranslasion = () => {
   const { mutate: create } = useCMutation({
@@ -57,15 +58,13 @@ export const CreateTranslasion = () => {
   return { createTranslation };
 };
 
-export const HandleTable = () => {
+export const HandleTable = ({ refetch }: { refetch: () => void }) => {
   const obj: any = {
     key: "",
     id: 0,
-    value: {
-      uz: "",
-      ru: "",
-      en: "",
-    },
+    uz: "",
+    ru: "",
+    en: "",
   };
 
   const AddNewColumn = ({
@@ -77,7 +76,7 @@ export const HandleTable = () => {
   }) => {
     const id = listTable?.length
       ? listTable.length + "-" + listTable[listTable?.length - 1].id
-      : "-";
+      : listTable?.length + 1;
     obj.id = id;
     setListTable([obj, ...listTable]);
   };
@@ -122,21 +121,20 @@ export const HandleTable = () => {
     value,
     key,
     id,
+    initKey,
   }: {
     listTable: any;
     setListTable: (val: any) => void;
     id: any;
     value: any;
     key: string;
+    initKey?: string;
   }) => {
     if (value) {
       const obj = listTable?.find((el: any) => el.id === id);
 
-      if (key === "key") {
-        obj.key = value;
-      } else {
-        obj.value[key] = value;
-      }
+      obj[key] = value;
+      obj.name = initKey;
 
       const arr = listTable?.map((item: any) => {
         delete item.value["error_" + key];
@@ -150,21 +148,64 @@ export const HandleTable = () => {
     }
   };
 
-  return { AddNewColumn, GetTitle, WriteValue, DeleteColumn };
+  const onSubmit = (data: any) => {
+    axios
+      .post("http://192.168.181.29:3000/translations", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then(() => {
+        refetch();
+      })
+      .catch((error) => {
+        console.error("Error adding route:", error);
+      });
+  };
+
+  const deleteTranslation = (key: string) => {
+    axios.delete(`http://192.168.181.29:3000/translations/${key}`).then(() => {
+      refetch();
+    });
+  };
+
+  return {
+    AddNewColumn,
+    GetTitle,
+    WriteValue,
+    DeleteColumn,
+    onSubmit,
+    deleteTranslation,
+  };
 };
 
-export const GetTranslations = () => {
-  const [data, setData] = useState([]);
+export const GetTranslations = ({
+  setListTable,
+}: {
+  setListTable: (val: any) => void;
+}) => {
   const { isLoading, refetch } = useCQuery({
     key: "resources_translations",
-    endpoint: "/resources/translations",
+    endpoint: "http://192.168.181.29:3000/translations",
     params: { type: "" },
     options: {
       onSuccess: (data: any) => {
-        setData(data);
+        const arr: any = [];
+        for (let key in data.ru) {
+          const obj = {
+            id: arr.length + 1,
+            name: key,
+            key,
+            ru: data.ru[key] || "",
+            uz: data.uz[key] || "",
+            en: data.en[key] || "",
+          };
+          arr.push(obj);
+        }
+        setListTable(arr);
       },
     },
   });
 
-  return { translations: data ?? [], isLoading, refetch };
+  return { isLoading, refetch };
 };

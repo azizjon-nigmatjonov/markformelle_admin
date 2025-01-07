@@ -23,7 +23,7 @@ export const settingList = [
     parent_icon: <img width={20} src="/images/settings.png" alt="settings" />,
     element: <LanguagesPage />,
     auth: true,
-    permissions: ["view_page"],
+    permissions: ["view_page", "add", "edit"],
   },
   {
     parent: "settings",

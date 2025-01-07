@@ -72,11 +72,11 @@ export const Header = ({
               <Notification />
             </div>
 
-            <img
+            {/* <img
               className="absolute right-[-15px] top-0 z-[1]"
               src="/svg/headerLine.svg"
               alt="line"
-            />
+            /> */}
           </div>
         </div>
       </div>

@@ -23,6 +23,7 @@ import { statusReasonsRu } from "../../../../constants/status";
 import { Alert } from "@mui/material";
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
 import CTabs from "../../../../components/CElements/CTab";
+import { usePermissions } from "../../../../hooks/usePermissions";
 
 interface MachineCardProps {
   machine: any;
@@ -52,6 +53,7 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
   const { getFontSize } = useDeviceHeight();
   const height = window?.screen?.height ?? 0;
   const [checked2, setChecked2] = useState(machine.not_broken == "true");
+  const { checkPermission } = usePermissions();
 
   const getWeight = (item: any) => {
     const num: any = Number(item.pkol_knit) - Number(item.fkol_knit) || 0;
@@ -117,40 +119,10 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
       reasoncode: +checkedReason,
     };
 
-    // const obj = {
-    //   code_req: "003",
-    //   code_device: machine.id,
-    //   sign_device: machine.name,
-    //   id_req: `${year}${month}${day}${hours}${minutes}${seconds}`,
-    //   time_req: `${year}-${month}-${day}.${hours}:${minutes}:${seconds}`,
-    //   desc: descriptionText || statusReasonsRu[checkedReason],
-    //   reason: statusReasonsRu[checkedReason],
-    //   reasoncode: checkedReason,
-    // };
-
     axios
       .post("http://10.40.140.6:8051/CUT_CONTR", trash)
       .then((res: any) => {
-        // const value = res?.data ?? {};
         console.log("res", res);
-
-        // const newObj = {
-        //   ...machine,
-        //   ...value,
-        //   code_req: "003",
-        //   time_req: `${year}-${month}-${day}.${hours}:${minutes}:${seconds}`,
-        //   reason: statusReasonsRu[checkedReason],
-        //   reasoncode: checkedReason,
-        // };
-        // axios
-        //   .post("http://10.40.140.6:8051/CUT_CONTR", newObj)
-        //   .then(() => {
-        //     toast.success(`${machine.name} статус машины обновлен!`);
-        //     setOpen(false);
-        //   })
-        //   .catch(() => {
-        //     toast.success("Ошибка сервера!");
-        //   });
       })
       .catch(() => {
         toast.success("Ошибка сервера!");
@@ -158,7 +130,7 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
   };
 
   return (
-    <ModalDialog sx={{ width: "900px", height: "600px" }}>
+    <ModalDialog sx={{ width: "900px", height: "650px" }}>
       <ModalClose />
       <p></p>
       <p></p>
@@ -407,10 +379,10 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
                 >
                   <Button
                     onClick={() => {
-                      // setOpen(false);
                       createStatus();
                     }}
                     fullWidth
+                    disabled={!checkPermission("edit")}
                   >
                     Отправить
                   </Button>

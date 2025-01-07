@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import HFInput from "../../components/HFElements/HFInput";
 import { PasswordIcon, UserIcon } from "../../components/UI/IconGenerator/Svg";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAuth from "../../services/auth/useAuth";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -11,11 +11,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { CircularProgress } from "@mui/material";
 import usePageRouter from "../../hooks/useObjectRouter";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [password, setPassword] = useState(true);
   const { navigateTo } = usePageRouter();
   const dispatch = useDispatch();
+  const [error, setError]: any = useState({});
   const link = useSelector((state: any) => state.auth.link);
   const schema = yup.object().shape({
     email: yup
@@ -73,16 +75,14 @@ const Login = () => {
         }, 500);
       })
       .catch((err) => {
+        toast.error("Этот пользователь не существует!");
         console.error("Error logging in:", err);
+        setError({ title: "Этот пользователь не существует!" });
       });
   };
 
   const onSubmit = (data: any) => {
-    console.log("data", JSON.stringify(data));
-
     GetUser(JSON.stringify(data));
-
-    // login.mutate(data);
   };
 
   return (
@@ -104,7 +104,7 @@ const Login = () => {
             placeholder="Электронная почта"
             classesInput="bg-[#FAFAFB] border border-[#F1F1F5]"
             errors={errors}
-            icon={<UserIcon />}
+            icon={<UserIcon fill="var(--main)" />}
           />
           <div className="relative">
             <HFInput
@@ -124,7 +124,11 @@ const Login = () => {
             </span>
           </div>
         </div>
-
+        {error?.title && (
+          <p className="text-[var(--error)] mt-2 text-lg font-medium">
+            {error.title}
+          </p>
+        )}
         <button
           type="submit"
           disabled={login.isLoading}
@@ -133,7 +137,7 @@ const Login = () => {
           }`}
         >
           {login.isLoading && <CircularProgress size={30} />}
-          <span>Tasdiqlash</span>
+          <span>Отправить</span>
         </button>
       </form>
     </div>

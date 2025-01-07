@@ -33,7 +33,7 @@ const Router = () => {
   const [newRoutes, setNewRoutes] = useState({ ...defaults });
 
   const Permissions = useMemo(() => {
-    if (!userRolls?.length) return {};
+    if (!userRolls?.length) return [];
     let permissions: any = [];
     userRolls?.forEach((el: any) => {
       const arr = el.routes;
@@ -75,7 +75,7 @@ const Router = () => {
       children,
     };
 
-    const found = Permissions.find((item: any) => item.id === path);
+    const found = Permissions?.find((item: any) => item.id === path);
 
     if (!listNew.includes(obj.id)) {
       setNewRoutes((prev: any) => ({

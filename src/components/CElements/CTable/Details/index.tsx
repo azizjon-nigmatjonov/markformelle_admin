@@ -1,7 +1,6 @@
 import { Paper } from "@mui/material";
 // import EmptyDataComponent from "../../../UI/EmptyDataComponent";
 import "./style.scss";
-import { ReactNode } from "react";
 import TableLoader from "./TableLoader";
 
 interface Props {
@@ -14,7 +13,7 @@ interface Props {
   filterParams: any;
   tableStyle?: object;
   wrapperStyle?: object;
-  children: ReactNode;
+  children: any;
   disablePagination?: any;
   dataLength: number;
 }
@@ -42,11 +41,11 @@ export const CTableWrapper = ({
   );
 };
 
-export const CTableHead = ({ children }: { children: ReactNode }) => {
+export const CTableHead = ({ children }: { children: any }) => {
   return <thead className="CTableHead">{children}</thead>;
 };
 
-export const CTableHeadRow = ({ children }: { children: ReactNode }) => {
+export const CTableHeadRow = ({ children }: { children: any }) => {
   return <tr className="CTableHeadRow">{children}</tr>;
 };
 
@@ -56,7 +55,7 @@ export const CTableHeadCell = ({
   buttonsCell = false,
   ...props
 }: {
-  children: ReactNode;
+  children: any;
   className?: string;
   buttonsCell?: any;
   id: any;
@@ -77,7 +76,7 @@ export const CTableBody = ({
   dataLength,
   ...props
 }: {
-  children: ReactNode;
+  children: any;
   rowsCount: number;
   loader: boolean;
   ref?: any;
@@ -100,7 +99,7 @@ export const CTableRow = ({
   className,
   ...props
 }: {
-  children: ReactNode;
+  children: any;
   className: string;
 }) => {
   return (
@@ -116,7 +115,7 @@ export const CTableCell = ({
   buttonsCell = false,
   ...props
 }: {
-  children: ReactNode;
+  children: any;
   className: string;
   buttonsCell?: boolean;
   onClick?: (val: any) => void;

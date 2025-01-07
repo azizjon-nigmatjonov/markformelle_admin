@@ -4,7 +4,7 @@ import { Closer } from "../Closer";
 import { FilterData } from "./Logic";
 import { FilterHeader } from "./Header";
 // import { CloseIcon } from "../IconGenerator/Svg";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 
 interface Props {
   children?: React.ReactNode;
@@ -81,7 +81,7 @@ const Filters = ({
                       className="custom-btn"
                       onClick={() => handleSubmit()}
                     >
-                      Tasdiqlash
+                      Подтверждать
                     </button>
                     <button
                       className="cancel-btn"

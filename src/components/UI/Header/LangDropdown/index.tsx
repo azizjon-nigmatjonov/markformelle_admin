@@ -3,7 +3,6 @@ import { useLangs } from "../../../../hooks/useLangs";
 import CSelect from "../../../CElements/CSelect";
 import { authActions } from "../../../../store/auth/auth.slice";
 import i18next from "i18next";
-import { useEffect } from "react";
 
 export const LangDropdown = () => {
   const lang = useSelector((state: any) => state.auth.lang);
@@ -12,11 +11,12 @@ export const LangDropdown = () => {
 
   const handleLanguage = (val: string) => {
     dispatch(authActions.setLang(val));
-  };
+    i18next.changeLanguage(val);
 
-  useEffect(() => {
-    if (lang) i18next.changeLanguage(lang);
-  }, [lang]);
+    setTimeout(() => {
+      window.location.reload();
+    }, 100);
+  };
 
   return (
     <CSelect

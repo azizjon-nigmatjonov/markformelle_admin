@@ -150,7 +150,7 @@ export const AdminFormWrapper = ({
           </div>
         ) : (
           <button type="submit" className="custom-btn form">
-            Tasdiqlash
+            Подтверждать
           </button>
         )}
       </div>

@@ -12,7 +12,7 @@ import { HeaderSettings } from "./Details/TableSettings";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import TabbleActions from "./Details/Actions";
-import { DotsIcon } from "../../UI/IconGenerator/Svg";
+import { DotsIcon, SearchIcon } from "../../UI/IconGenerator/Svg";
 import { t } from "i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { tableSizeAction } from "../../../store/tableSize/tableSizeSlice";
@@ -121,7 +121,15 @@ const CTable = ({
 
     if (value === "search") {
       arr.forEach((obj: any) => {
-        let val = obj[id] + "";
+        let val = "";
+        if (typeof id === "object") {
+          for (let key of id) {
+            val += obj[key];
+          }
+        } else {
+          val = obj[id] + "";
+        }
+
         val = val.toLocaleLowerCase();
 
         if (val.includes(search.toLocaleLowerCase())) {
@@ -161,6 +169,7 @@ const CTable = ({
         );
       });
     }
+
     setNewBodyColumns(result.length ? result : arr);
   }, [bodyColumns, sortData?.value, sortData?.search]);
 
@@ -370,7 +379,6 @@ const CTable = ({
 
   const handleDragStart = (index: any) => {
     setDraggingIndex(index);
-    console.log("ind", index);
 
     handleFilterParams({ ...filterParams, drag: true });
   };
@@ -488,9 +496,7 @@ const CTable = ({
                   {newHeadColumns?.map((column: any, index: number) => (
                     <CTableHeadCell
                       id={column?.id}
-                      key={
-                        column?.innerId ? column.innerId : index || column?.id
-                      }
+                      key={column?.innerId || column?.id || index}
                       style={{
                         minWidth: tableSize?.[pageName]?.[column?.id]
                           ? tableSize?.[pageName]?.[column?.id]
@@ -613,12 +619,12 @@ const CTable = ({
                   <TableRow>
                     {newHeadColumns.map((item: any, colIndex: number) => (
                       <CTableCell
-                        key={colIndex + item.title + ""}
+                        key={colIndex * Math.random()}
                         className="relative"
                       >
                         {item.id !== "index" && !item?.remove_sort ? (
                           <div
-                            className={`w-full h-full  ${
+                            className={`w-full h-full relative  ${
                               hoveredIndex === colIndex &&
                               hoveredIndex > draggingIndex
                                 ? "drag-hovered right"
@@ -628,12 +634,15 @@ const CTable = ({
                                 : ""
                             }`}
                           >
+                            <div className="absolute top-1/2 left-2 -translate-y-1/2">
+                              <SearchIcon />
+                            </div>
                             <input
                               type="text"
                               placeholder=""
-                              onChange={(e: any) =>
-                                searchDebounce(e.target.value, item.id)
-                              }
+                              onChange={(e: any) => {
+                                searchDebounce(e.target.value, item.id);
+                              }}
                               className="w-full input-design h-full text-center"
                               style={{ padding: 0 }}
                             />
@@ -650,7 +659,7 @@ const CTable = ({
                 {bodySource?.length
                   ? bodySource?.map((item: any, rowIndex: any) => (
                       <TableRow
-                        key={rowIndex + ""}
+                        key={rowIndex + 1 + item?.id}
                         ref={(e) => handleBodycolRef(item, e)}
                         className={`${
                           clickable && !item.empty && checkPermission("view")
@@ -660,7 +669,7 @@ const CTable = ({
                       >
                         {newHeadColumns.map((column: any, colIndex: number) => (
                           <CTableCell
-                            key={colIndex + ""}
+                            key={colIndex + rowIndex + 2}
                             className={`overflow-ellipsis`}
                             style={{
                               minWidth: "max-content",

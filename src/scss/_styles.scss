@@ -594,4 +594,7 @@ input {
   border-radius: 8px;
   padding: 0px 12px;
   height: 35px;
+  &:focus {
+    border-color: var(--primary);
+  }
 }

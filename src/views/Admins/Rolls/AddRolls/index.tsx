@@ -280,7 +280,7 @@ const NewRolls = () => {
       <div className="p-2">
         <CCard classes="p-0">
           <div>
-            <div className="sticky top-0 z-[99] bg-white">
+            <div className="sticky top-0 z-[70] bg-white">
               <Rolls text="Новый рол">
                 <RollForm
                   id={id}
