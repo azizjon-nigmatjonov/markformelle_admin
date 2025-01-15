@@ -82,6 +82,13 @@ const Login = () => {
   };
 
   const onSubmit = (data: any) => {
+    dispatch(authActions.login({ access_token: "111" }));
+    if (link) {
+      navigateTo(link);
+    }
+    setTimeout(() => {
+      dispatch(authActions.setLink(""));
+    }, 500);
     GetUser(JSON.stringify(data));
   };
 
