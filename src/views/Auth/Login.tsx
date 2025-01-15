@@ -91,10 +91,6 @@ const Login = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="w-[500px] border border-[#E2E2EA] bg-white rounded-[14px] p-6 relative"
       >
-        {/* <div className="border border-[#E2E2EA] bg-white rounded-[14px] rounded-bl-[0] rounded-br-[0] absolute top-[-60px] left-[-1px] p-4">
-          <img src="/logo-full.svg" alt="logo" />
-        </div> */}
-
         <h2 className="text-2xl font-[600]">Вход в систему</h2>
 
         <div className="mt-[18px] space-y-5">
