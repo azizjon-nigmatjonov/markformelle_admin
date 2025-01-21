@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   EnglishFlag,
   RussionFlag,
@@ -150,21 +149,18 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
 
   const onSubmit = (data: any) => {
     axios
-      .post("http://192.168.181.29:3000/translations", data, {
+      .post("http://127.0.0.1:8000/add-translations", data, {
         headers: {
           "Content-Type": "application/json",
         },
       })
       .then(() => {
         refetch();
-      })
-      .catch((error) => {
-        console.error("Error adding route:", error);
       });
   };
 
   const deleteTranslation = (key: string) => {
-    axios.delete(`http://192.168.181.29:3000/translations/${key}`).then(() => {
+    axios.delete(`http://127.0.0.1:8000/translations/${key}`).then(() => {
       refetch();
     });
   };
@@ -186,7 +182,7 @@ export const GetTranslations = ({
 }) => {
   const { isLoading, refetch } = useCQuery({
     key: "resources_translations",
-    endpoint: "http://192.168.181.29:3000/translations",
+    endpoint: "http://127.0.0.1:8000/translations",
     params: { type: "" },
     options: {
       onSuccess: (data: any) => {

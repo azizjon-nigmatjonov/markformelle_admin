@@ -15,24 +15,24 @@ i18next
       order: ["localStorage"],
       caches: ["localStorage"],
     },
-    backend: {
-      loadPath: `${
-        import.meta.env.VITE_BASE_URL_NEW_BACKEND
-      }/translations?type=key_value`,
-      request: async (options, url, payload, callback) => {
-        axios
-          .get(url)
-          .then((res) => {
-            const currentLang = localStorage.getItem("i18nextLng") || "ru";
+    // backend: {
+    //   loadPath: `${
+    //     import.meta.env.VITE_BASE_URL_NEW_BACKEND
+    //   }/translations?type=key_value`,
+    //   request: async (options, url, payload, callback) => {
+    //     axios
+    //       .get(url)
+    //       .then((res) => {
+    //         const currentLang = localStorage.getItem("i18nextLng") || "ru";
 
-            callback(null, {
-              data: res.data[currentLang],
-              status: 200,
-            });
-          })
-          .catch((err) => console.log("err", err));
-      },
-    },
+    //         callback(null, {
+    //           data: res.data[currentLang],
+    //           status: 200,
+    //         });
+    //       })
+    //       .catch((err) => console.log("err", err));
+    //   },
+    // },
   });
 
 export default i18next;

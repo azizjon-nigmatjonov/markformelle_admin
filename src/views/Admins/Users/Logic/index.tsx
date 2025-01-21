@@ -15,7 +15,7 @@ export const FetchFunction = () => {
     refetch,
   } = useCQuery({
     key: `GET_USERS_LIST`,
-    endpoint: `http://192.168.181.29:3000/users`,
+    endpoint: `http://127.0.0.1:8000/users/`,
     params: {},
   });
 

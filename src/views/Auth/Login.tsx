@@ -53,7 +53,7 @@ const Login = () => {
 
   const GetUser = (user: any) => {
     axios
-      .get(`http://192.168.181.29:3000/login`, {
+      .get(`http://127.0.0.1:8000/login`, {
         headers: {
           "Content-Type": "application/json",
         },

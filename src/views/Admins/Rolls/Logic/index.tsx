@@ -11,7 +11,7 @@ export const breadCrumbs = [
 export const FetchFunction = () => {
   const { data, isLoading, refetch } = useCQuery({
     key: `GET_ROLLS_LIST`,
-    endpoint: `http://192.168.181.29:3000/rolls`,
+    endpoint: `http://127.0.0.1:8000/rolls`,
     params: {},
   });
 
@@ -23,7 +23,7 @@ export const DeleteFunction = ({ handleClose }: { handleClose: any }) => {
     mutationFn: (id: any) => {
       const data: any = { id };
       axios
-        .delete(`http://192.168.181.29:3000/rolls`, {
+        .delete(`http://127.0.0.1:8000/rolls`, {
           params: data,
         })
         .then((res) => {

@@ -39,11 +39,9 @@ const Users = () => {
 
     if (status === "delete") {
       if (element.email === "super@example.com") return;
-      axios
-        .delete(`http://192.168.181.29:3000/users/${element.id}`)
-        .then(() => {
-          refetch();
-        });
+      axios.delete(`http://127.0.0.1:8000/users/${element.id}`).then(() => {
+        refetch();
+      });
     }
   }, []);
 
@@ -83,7 +81,13 @@ const Users = () => {
             }
           />
 
-          {query?.id && <Form refetch={refetch} id={query.id} />}
+          {query?.id && (
+            <Form
+              refetch={refetch}
+              id={query.id}
+              len={bodyColumns?.list?.length ?? 1}
+            />
+          )}
         </CCard>
       </div>
     </>
