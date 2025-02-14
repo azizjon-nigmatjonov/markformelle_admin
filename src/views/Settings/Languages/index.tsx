@@ -161,6 +161,7 @@ const LanguagesPage = () => {
             isResizeble={false}
             handleFilterParams={setFilterParams}
             handleActions={handleActions}
+            disablePagination={true}
             extra={
               <div>
                 {filterParams.edit ? (

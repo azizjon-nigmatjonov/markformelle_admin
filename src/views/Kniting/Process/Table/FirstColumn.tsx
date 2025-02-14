@@ -80,13 +80,14 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
             >
               <div className="frontofcard card bg-[#6cce65] rounded-xl h-full px-2">
                 <div className="flex w-full flex-col items-center font-medium h-full justify-center">
-                  <h2 className="main-title font-bold title-big mb-2">
+                  <h2 className="main-title font-bold title-big">
                     {item.OBORUD_NUMBER}
                   </h2>
+                  <p className="main-sub-text-614">{item?.ART}</p>
+                  <p className="main-sub-text-614">{item?.LOT}</p>
+                  <p className="main-sub-text-614">{item.COUNT_RECORDS} рулон</p>
 
-                  <p className="main-sub-text">{item.COUNT_RECORDS} рулон</p>
-
-                  <p className="main-sub-text text-red-700">
+                  <p className="main-sub-text-614 text-red-700">
                     {" "}
                     {item?.DATE_CONTROL_FOR_TIMER}
                   </p>
@@ -94,13 +95,14 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
               </div>
               <div className="backofcard card bg-[#6cce65] rounded-xl h-full px-2">
                 <div className="flex w-full flex-col items-center font-medium h-full justify-center">
-                  <h2 className="main-title font-bold title-big mb-2">
+                  <h2 className="main-title font-bold title-big">
                     {item.OBORUD_NUMBER}
                   </h2>
+                  <p className="main-sub-text-614">{item?.ART}</p>
+                  <p className="main-sub-text-614">{item?.LOT}</p>
+                  <p className="main-sub-text-614">{item.COUNT_RECORDS} рулон</p>
 
-                  <p className="main-sub-text">{item.COUNT_RECORDS} рулон</p>
-
-                  <p className="main-sub-text text-red-700">
+                  <p className="main-sub-text-614 text-red-700">
                     {item?.DATE_CONTROL_FOR_TIMER}
                   </p>
                 </div>
@@ -122,12 +124,13 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                     <h2 className="font-bold title mb-2">
                       {item.OBORUD_NUMBER}
                     </h2>
-
-                    <p className="sub-text font-semibold">
+                    <p className="sub-text-614">{item?.ART}</p>
+                    <p className="sub-text-614">{item?.LOT}</p>
+                    <p className="sub-text-614">
                       {item.COUNT_RECORDS} рулон
                     </p>
 
-                    <p className="sub-text text-red-700">
+                    <p className="sub-text-614 text-red-700">
                       {item?.DATE_CONTROL_FOR_TIMER}
                     </p>
                   </div>
@@ -137,11 +140,12 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                     <h2 className="font-bold small_desktop:text-5xl mb-2">
                       {item.OBORUD_NUMBER}
                     </h2>
-
-                    <p className="sub-text font-semibold">
+                    <p className="sub-text-614">{item?.ART}</p>
+                    <p className="sub-text-614">{item?.LOT}</p>
+                    <p className="sub-text-614 font-semibold">
                       {item.COUNT_RECORDS} рулон
                     </p>
-                    <p className="sub-text text-red-700">
+                    <p className="sub-text-614 text-red-700">
                       {item?.DATE_CONTROL_FOR_TIMER}
                     </p>
                   </div>
@@ -165,12 +169,13 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                   <h2 className="sub-title font-bold small_desktop:text-5xl mb-2">
                     {item.OBORUD_NUMBER}
                   </h2>
-
-                  <p className="sub-text font-semibold">
+                  <p className="sub-text-614">{item?.ART}</p>
+                  <p className="sub-text-614">{item?.LOT}</p>
+                  <p className="sub-text-614 font-semibold">
                     {item.COUNT_RECORDS} рулон
                   </p>
 
-                  <p className="sub-text text-red-700">
+                  <p className="sub-text-614 text-red-700">
                     {item?.DATE_CONTROL_FOR_TIMER}
                   </p>
                 </div>
@@ -180,12 +185,13 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                   <h2 className="font-bold small_desktop:text-5xl mb-2">
                     {item.OBORUD_NUMBER}
                   </h2>
-
-                  <p className="sub-text font-semibold">
+                  <p className="sub-text-614">{item?.ART}</p>
+                  <p className="sub-text-614">{item?.LOT}</p>
+                  <p className="sub-text-614 font-semibold">
                     {item.COUNT_RECORDS} рулон
                   </p>
 
-                  <p className="sub-text text-red-700">
+                  <p className="sub-text-614 text-red-700">
                     {item?.DATE_CONTROL_FOR_TIMER}
                   </p>
                 </div>

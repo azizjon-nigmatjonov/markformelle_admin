@@ -18,7 +18,7 @@ export const ChniList = ({ list = [] }: Props) => {
       }}
     >
       <div className="grid grid-cols-10 grid-rows-6 h-full gap-1.5">
-        {list.map((item: any, index: number) => (
+        {list.sort((a: any, b: any) => a.DeviceNo - b.DeviceNo).map((item: any, index: number) => (
           <MachinCardUI key={index} machine={item} />
         ))}
       </div>
