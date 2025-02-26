@@ -47,14 +47,14 @@ export const ProcessTable = ({
       {isLoading || cardLoading ? (
         <ProcessSkeleton openHeader={openHeader} />
       ) : (
-        <div className="flex space-x-1 small_desktop:space-x-2">
-          <div className="w-[48%]">
+        <div className="flex gap-1 flex-col mobile:flex-row small_desktop:space-x-2">
+          <div className="mobile:w-[48%]">
             <FirstColumn
               data={cardsData?.dashboard_data ?? []}
               isLoading={false}
             />
           </div>
-          <div className="w-[52%] h-full overflow-y-scroll remove-scroll">
+          <div className="mobile:w-[52%] h-full overflow-y-scroll remove-scroll">
             <CCard>
               <SecondColumn
                 data={wokers?.length ? wokers : []}

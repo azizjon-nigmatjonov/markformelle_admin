@@ -3,15 +3,7 @@ import CModal from "../../../../components/CElements/CModal";
 
 import { FetchFunction } from "./Logic";
 import { AdminFormWrapper } from "./Form";
-const Form = ({
-  refetch,
-  id,
-  len,
-}: {
-  refetch: () => void;
-  id: string;
-  len: number;
-}) => {
+const Form = ({ refetch, id }: { refetch: () => void; id: string }) => {
   const { navigateQuery } = usePageRouter();
 
   const { rolls, defaultValues } = FetchFunction({
@@ -30,7 +22,6 @@ const Form = ({
         defaultValues={defaultValues}
         refetch={refetch}
         id={id}
-        len={len}
       />
     </CModal>
   );

@@ -441,14 +441,14 @@ const CTable = ({
     handleActions(el, status);
   };
 
-  const searchDebounce = useDebounce((search: string, id: string) => {
+  const searchDebounce = useDebounce((search: string, id: any) => {
     handleSortLogic({
       value: "search",
       id: id,
       search,
     });
   }, 500);
-
+  
   return (
     <div className="relative h-full">
       <div
@@ -619,7 +619,7 @@ const CTable = ({
                   <TableRow>
                     {newHeadColumns.map((item: any, colIndex: number) => (
                       <CTableCell
-                        key={colIndex * Math.random()}
+                        key={colIndex}
                         className="relative"
                       >
                         {item.id !== "index" && !item?.remove_sort ? (
@@ -643,6 +643,7 @@ const CTable = ({
                               onChange={(e: any) => {
                                 searchDebounce(e.target.value, item.id);
                               }}
+                              value={sortData?.id === item.id ? sortData?.search : ''}
                               className="w-full input-design h-full text-center"
                               style={{ padding: 0 }}
                             />
@@ -659,7 +660,7 @@ const CTable = ({
                 {bodySource?.length
                   ? bodySource?.map((item: any, rowIndex: any) => (
                       <TableRow
-                        key={rowIndex + 1 + item?.id}
+                        key={bodySource.length + rowIndex}
                         ref={(e) => handleBodycolRef(item, e)}
                         className={`${
                           clickable && !item.empty && checkPermission("view")
@@ -669,7 +670,7 @@ const CTable = ({
                       >
                         {newHeadColumns.map((column: any, colIndex: number) => (
                           <CTableCell
-                            key={colIndex + rowIndex + 2}
+                            key={colIndex + column?.id || 12}
                             className={`overflow-ellipsis`}
                             style={{
                               minWidth: "max-content",

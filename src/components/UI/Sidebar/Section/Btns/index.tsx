@@ -15,7 +15,7 @@ interface Props {
 }
 
 const Btn = ({
-  el,
+  el = {},
   index,
   isLastItem,
   handleNavigate,
@@ -36,7 +36,7 @@ const Btn = ({
         onClick={() => clearFilter()}
         className={`${
           isLastItem ? "mb-2" : ""
-        } flex gap-2 menu_link menu_inner_link cursor-pointer text-sm font-medium ${
+        } flex gap-x-2 menu_link menu_inner_link cursor-pointer text-sm font-medium ${
           active ? "active text-[var(--main)]" : "text-[var(--gray)]"
         }`}
       >

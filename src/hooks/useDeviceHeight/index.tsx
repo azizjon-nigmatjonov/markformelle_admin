@@ -7,6 +7,7 @@ interface Props {
 
 const useDeviceHeight = () => {
   const height = window?.screen?.height;
+  const width = window?.screen?.width;
 
   const getHeight: any = ({ type = "", count = 0, minus = 0 }: Props) => {
     switch (type) {
@@ -30,6 +31,7 @@ const useDeviceHeight = () => {
           ? (percent / 100) * (height / (count - count / 3.3))
           : height < 740
           ? (percent / 100) * (height / count - 15)
+          : width < 600 ? (percent / 100) * (height / count - 30)
           : (percent / 100) * (height / count);
       case "card":
         return height < 600

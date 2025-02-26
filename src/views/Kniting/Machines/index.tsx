@@ -7,8 +7,8 @@ import useDeviceHeight from "../../../hooks/useDeviceHeight";
 import { MachineListSkeleton, MachinSkeletons } from "./Skeleton";
 import { ToggleBtn } from "../../../components/UI/ToggleBtn";
 import { sidebarActions } from "../../../store/sidebar";
-import { MachinesList } from "./Components/List";
 import GlobalSearch from "../../../components/UI/GlobalSearch";
+import { MachinesList } from "./Components/List";
 
 const KnittingMachines = () => {
   const dispatch = useDispatch();
@@ -40,14 +40,13 @@ const KnittingMachines = () => {
       refetch();
     }, 30000);
 
-    if (filterParams) {
+    if (search?.length || checked?.length !== 1 || !checked.includes("all")) {
       clearInterval(refetching);
     }
-
     return () => {
       clearInterval(refetching);
     };
-  }, [filterParams]);
+  }, [checked.length, search]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -131,19 +130,35 @@ const KnittingMachines = () => {
     }
   }, [list, dimensions]);
 
-  return (
-    <>
-      <Header>
-        <CountBtns
-          checked={checked}
-          setChecked={setChecked}
-          bodyData={bodyData}
-          setSearch={setSearch}
+  const HeaderElements = () => (
+    <div className="w-[400px] ipod:w-auto overflow-x-scroll ipod:overflow-x-visible hide-scrollbar flex pr-3">
+      <CountBtns
+        checked={checked}
+        setChecked={setChecked}
+        bodyData={bodyData}
+        setSearch={setSearch}
+      />
+      <div className="mx-3">
+        <GlobalSearch list={bodyData ?? []} setList={setList} />
+      </div>
+
+      <div>
+        <ToggleBtn
+          type={listType}
+          setType={(type) => {
+            dispatch(sidebarActions.setListType(type));
+          }}
         />
-        <div className="mx-3">
+      </div>
+    </div>
+  );
+
+  const MobileHeaderElements = () => (
+    <div className="flex flex-col space-y-5">
+      <div className="flex items-center justify-between space-x-3">
+        <div className="w-full">
           <GlobalSearch list={bodyData ?? []} setList={setList} />
         </div>
-
         <div>
           <ToggleBtn
             type={listType}
@@ -152,7 +167,19 @@ const KnittingMachines = () => {
             }}
           />
         </div>
-      </Header>
+      </div>
+      <CountBtns
+        checked={checked}
+        setChecked={setChecked}
+        bodyData={bodyData}
+        setSearch={setSearch}
+      />
+    </div>
+  );
+
+  return (
+    <>
+      <Header filters={MobileHeaderElements()}>{HeaderElements()}</Header>
 
       {loading && listType === "grid" ? (
         <MachinSkeletons openHeader={openHeader} />
@@ -182,7 +209,7 @@ const KnittingMachines = () => {
                     : heightWindow - (openHeader ? 250 : 150),
               }}
             >
-              {list.map((machine: any, index: number) =>
+              {list?.map((machine: any, index: number) =>
                 machine?.idlocation ? (
                   <div
                     key={index}

@@ -8,7 +8,6 @@ import BackButton from "../../UI/Buttons/BackButton";
 import CSearchInput from "../CSearchInput";
 import { useTranslation } from "react-i18next";
 import { useScreenSize } from "../../../hooks/useScreenSize";
-// import { NotificationIcon } from "../../UI/IconGenerator/Svg";
 
 interface Props {
   icon?: any;
@@ -38,6 +37,8 @@ const CBreadcrumbs = ({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const smallDesktop = useScreenSize("smallDesktop");
+  const ipodScreen = useScreenSize("ipod");
+
   const navigateLink = useMemo(() => {
     if (items[0]?.link) return items[0]?.link;
     if (progmatic) return -1;
@@ -47,6 +48,10 @@ const CBreadcrumbs = ({
     if (index === items?.length - 1) return null;
     navigate(link);
   };
+
+  if (ipodScreen) {
+    return <h3 className="breadcrumb-label">{items[items.length - 1].label}</h3>
+  }
 
   return (
     <div className="flex items-center justify-between w-full z-[99] relative">

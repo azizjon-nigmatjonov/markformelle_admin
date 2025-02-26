@@ -62,8 +62,9 @@ export const DocTable = ({ data = [] }: Props) => {
     },
     {
       id: "FACT_KOL",
-      render: (val: any) => {
-        return Math.round((val * 100) / 430);
+      render: (val: any, el: any) => {
+        
+        return Math.round((val * 100) / el?.KOL);
       },
     },
     {

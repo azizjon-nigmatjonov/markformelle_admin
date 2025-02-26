@@ -29,9 +29,9 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
 
     return Number(num.toFixed(2));
   };
-
+  
   return (
-    <div className="grid grid-cols-2">
+    <div className="grid mobile:grid-cols-2">
       <ul
         className="grid grid-cols-1 paintlist text-[var(--black10)] mr-6 space-y-1 desktop:space-y-2"
         style={{
@@ -45,46 +45,46 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
       >
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>Номер машины</p>
-          <p>{machine.name}</p>
+          <p>{machine.DeviceNo ?? '-'}</p>
         </li>
         <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>Название машины</p>
-          <p>{machine.model}</p>
+          <p>{machine?.Description ?? '-'}</p>
         </li>
         <ListDivider />
-        <li className="flex items-center justify-between ">
-          <p>Мощность машины</p> <p>{machine.capacity}</p>
+        <li className="flex items-center justify-between">
+          <p>Мощность машины</p> <p>{machine.plan_hourly} носков / час</p>
         </li>
         <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>Статус машины</p>
-          <p>{machine.status}</p>
+          <p>{machine.status ?? '-'}</p>
         </li>
         <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>IP адрес </p>
-          <p>{machine.ip_address}</p>
+          <p>{machine.ip_address ?? '-'}</p>
         </li>
         <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>Версия программы </p>
-          <p>{machine.soft_version}</p>
+          <p>{machine.soft_version ?? '-'}</p>
         </li>
         <ListDivider sx={{ background: "var(--gray)" }} />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>Номер заказа </p>
-          <p>{machine.zakaz}</p>
+          <p>{machine.zakaz ?? '-'}</p>
         </li>
         <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>Артикул </p>
-          <p>{machine.art}</p>
+          <p>{machine.art ?? '-'}</p>
         </li>
         <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>Лот пряжи </p>
-          <p>{machine.lotno}</p>
+          <p>{machine.lotno ?? '-'}</p>
         </li>
 
         <ListDivider />
@@ -111,18 +111,18 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
         <li className="flex items-center justify-between ">
           <p>Рецепт </p>{" "}
           <div>
-            <p>M0581-C34132.A</p>
+            <p>-</p>
           </div>
         </li>
 
         <ListDivider />
         <li className="flex items-center justify-between ">
-          <p>ФИО сотрудника </p> <p>Сардор</p>
+          <p>ФИО сотрудника </p> <p>-</p>
         </li>
 
         <ListDivider />
         <li className="flex items-center justify-between ">
-          <p>Время начала</p>{" "}
+          <p>Время предыдущего выпуска</p>{" "}
           <p>
             {GetCurrentDate({ date: machine.PrevDateTime, type: "usually" })}
           </p>
@@ -130,7 +130,7 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
 
         <ListDivider />
         <li className="flex items-center justify-between ">
-          <p>Время окончания</p>
+          <p>Время последнего выпуска</p>
           <p>
             {GetCurrentDate({ date: machine.LastDateTime, type: "usually" })}
           </p>

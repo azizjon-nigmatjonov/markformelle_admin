@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useMutation } from "react-query";
 import usePageRouter from "../../../../../hooks/useObjectRouter";
 import { GetUserInfo } from "../../../../../layouts/MainLayout/Logic";
+// import useCQuery from "../../../../../hooks/useCQuery";
 import axios from "axios";
 
 export const breadCrumbs = ({ id }: { id: any }) => {
@@ -26,7 +27,7 @@ export const FetchFunction = ({ id }: { id: any | undefined }) => {
   useEffect(() => {
     if (id !== ":create") {
       axios
-        .get(`http://127.0.0.1:8000/rolls/${id}`)
+        .get(`http://192.168.181.29:3000/rolls/${id}`)
         .then((res) => {
           setRollData(res?.data);
         })
@@ -48,7 +49,7 @@ export const CreateFunction = ({ reset = () => {} }: { reset?: any }) => {
     mutationFn: (data: any) => {
       const result: any = [];
       axios
-        .post("http://127.0.0.1:8000/add-roll/", data, {
+        .post("http://192.168.181.29:3000/rolls", data, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -71,7 +72,7 @@ export const CreateFunction = ({ reset = () => {} }: { reset?: any }) => {
     mutationFn: (data: any) => {
       const result: any = [];
       axios
-        .put(`http://127.0.0.1:8000/rolls/${data.id}`, data, {
+        .put(`http://192.168.181.29:3000/rolls/${data.id}`, data, {
           headers: {
             "Content-Type": "application/json",
           },

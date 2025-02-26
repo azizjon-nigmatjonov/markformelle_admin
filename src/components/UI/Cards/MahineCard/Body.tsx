@@ -1,3 +1,4 @@
+import { Tooltip } from "@mui/material";
 import CircularProgress from "../../../../components/CElements/CCircularProgress";
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
 import { WatchIcon } from "../../IconGenerator/Svg/Machines";
@@ -38,9 +39,10 @@ export const MachineCardBody = ({ data = {}, count = 6 }: Props) => {
         >
           <p>{data.plan}</p>
           <div className="w-full h-[1px] bg-[var(--black)] mb-[2px]"></div>
-          {/* <p>{data.plan_fact}</p> */}
-
+        <Tooltip title={`Производительность машины
+${data.plan_hourly} носков в час.`} placement="right" arrow followCursor>
           <div className="flex items-center">
+            
             <div
               className="rotate-[90deg]"
               style={{
@@ -58,8 +60,12 @@ export const MachineCardBody = ({ data = {}, count = 6 }: Props) => {
             >
               <WatchIcon />
             </div>
+          
             <p>{data.plan_hourly}</p>
+          
+           
           </div>
+          </Tooltip>
         </div>
       </CircularProgress>
     </div>

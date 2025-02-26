@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import CCard from "../../../../components/CElements/CCard";
 import CTable from "../../../../components/CElements/CTable";
 import { SkeletonUI } from "../Skeleton/Skeleton";
-import { GetCurrentDate } from "../../../../utils/getDate";
-import { useCalculateTimeAndDate } from "../../../../hooks/useCalucaleTime";
+
 interface Props {
   list: any;
   isLoading: boolean;
@@ -12,7 +11,6 @@ interface Props {
 export const TableUI = ({ list = [], isLoading = false }: Props) => {
   const [filterParams, setFilterParams]: any = useState({});
   const [headColumns, setHeadColumns]: any = useState([]);
-  const { GetHourAndMinute } = useCalculateTimeAndDate();
 
   useEffect(() => {
     const headColumns = [
@@ -38,17 +36,14 @@ export const TableUI = ({ list = [], isLoading = false }: Props) => {
         title: "Дата вязания",
         id: "DATE_KNIT",
         render: (val: string) => {
-          return GetCurrentDate({
-            date: val,
-            type: "usually",
-          });
+          return val;
         },
       },
       {
         title: "Разница во времени",
         id: "time",
         render: (val: string) => {
-          return GetHourAndMinute(val);
+          return val.substring(10);
         },
       },
     ];

@@ -9,7 +9,7 @@ export const PaintCardList = ({ element = {} }: { element: any }) => {
   const height = window?.screen?.height ?? 0;
 
   return (
-    <div className="grid grid-cols-2">
+    <div className="grid mobile:grid-cols-2">
       <ul
         className={`grid grid-cols-1 paintlist text-[var(--black10)] mr-6 space-y-1 desktop:space-y-2`}
         style={{

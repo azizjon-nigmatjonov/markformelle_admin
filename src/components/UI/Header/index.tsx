@@ -5,6 +5,8 @@ import { ReactNode } from "react";
 import { LangDropdown } from "./LangDropdown";
 import { HeaderFoldButton } from "./FoldButton";
 import { sidebarActions } from "../../../store/sidebar";
+import { useScreenSize } from "../../../hooks/useScreenSize";
+import { MobileHeader } from "./MobileHeader";
 
 interface Props {
   open?: boolean;
@@ -14,6 +16,7 @@ interface Props {
   sticky?: boolean;
   user?: boolean;
   extra?: ReactNode;
+  filters?: any;
 }
 
 export const Header = ({
@@ -24,8 +27,10 @@ export const Header = ({
   user = true,
   extra,
   open = false,
+  filters,
   ...props
 }: Props) => {
+  const ipodScreen = useScreenSize("ipod");
   const collapsed = useSelector((state: any) => state.sidebar.collapsed);
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const dispatch = useDispatch();
@@ -33,53 +38,59 @@ export const Header = ({
     dispatch(sidebarActions.setOpenHeader(val));
   };
 
+  if (ipodScreen) {
+    return <MobileHeader extra={extra} filters={filters} />;
+  }
+
   return (
-    <>
-      <HeaderFoldButton
-        collapsed={open || openHeader}
-        setCollapsed={setCollapsed}
-      />
-      <div
-        className={`h-[35px] desktop:h-[45px] relative z-[98] bg-white w-full ${
-          openHeader || open ? "" : "hidden"
-        }`}
-      >
+    <div className={`${openHeader ? 'mb-[35px] desktop:mb-[45px]' : ''}`}>
+      <div className="fixed z-[96]">
+        <HeaderFoldButton
+          collapsed={open || openHeader}
+          setCollapsed={setCollapsed}
+        />
         <div
-          className={cls.header}
-          {...props}
-          style={{
-            width: collapsed ? "calc(100vw - 50px)" : "",
-            left: collapsed ? "45px" : "",
-          }}
+          className={`h-[35px] desktop:h-[45px] relative z-[98] bg-white w-full ${
+            openHeader || open ? "" : "hidden"
+          }`}
         >
-          <div className="w-full">{extra}</div>
-          <div className="flex items-center">
-            {children ? (
-              children
-            ) : (
-              <h3 className="text-2xl font-[600] text-[var(--black)]">
-                <span className={`${titleIn && "text-[var(--gray)]"}`}>
-                  {title}
-                </span>
-                {titleIn ? "/" + titleIn : ""}
-              </h3>
-            )}
-            <div className="h-[20px] w-[2px] bg-[var(--gray20)] mx-3"></div>
+          <div
+            className={cls.header}
+            {...props}
+            style={{
+              width: collapsed ? "calc(100vw - 50px)" : "",
+              left: collapsed ? "45px" : "",
+            }}
+          >
+            <div className="w-full">{extra}</div>
+            <div className="flex items-center">
+              {children ? (
+                children
+              ) : (
+                <h3 className="text-2xl font-[600] text-[var(--black)]">
+                  <span className={`${titleIn && "text-[var(--gray)]"}`}>
+                    {title}
+                  </span>
+                  {titleIn ? "/" + titleIn : ""}
+                </h3>
+              )}
+              <div className="h-[20px] w-[2px] bg-[var(--gray20)] mx-3 hidden ipod:visible"></div>
 
-            <div className="flex items-center space-x-3">
-              <LangDropdown />
-              {/* <OrderDriver /> */}
-              <Notification />
-            </div>
+              <div className="flex items-center space-x-3">
+                <LangDropdown />
+                {/* <OrderDriver /> */}
+                <Notification />
+              </div>
 
-            {/* <img
+              {/* <img
               className="absolute right-[-15px] top-0 z-[1]"
               src="/svg/headerLine.svg"
               alt="line"
             /> */}
+            </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };

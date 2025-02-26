@@ -24,6 +24,7 @@ import { Alert } from "@mui/material";
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
 import CTabs from "../../../../components/CElements/CTab";
 import { usePermissions } from "../../../../hooks/usePermissions";
+import { useScreenSize } from "../../../../hooks/useScreenSize";
 
 interface MachineCardProps {
   machine: any;
@@ -54,6 +55,7 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
   const height = window?.screen?.height ?? 0;
   const [checked2, setChecked2] = useState(machine.not_broken == "true");
   const { checkPermission } = usePermissions();
+  const ipodScreen = useScreenSize("ipod");
 
   const getWeight = (item: any) => {
     const num: any = Number(item.pkol_knit) - Number(item.fkol_knit) || 0;
@@ -134,7 +136,7 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
       <ModalClose />
       <p></p>
       <p></p>
-      <h2 className="absolute text-2xl right-5 top-[42px] flex items-center h-[35px] z-[99] font-semibold border-[1.5px] border-[var(--border)] border-b-0 px-2">
+      <h2 className="hidden ipod:flex absolute text-2xl right-5 top-[42px] items-center h-[35px] z-[99] font-semibold border-[1.5px] border-[var(--border)] border-b-0 px-2">
         {machine.name}
       </h2>
 
@@ -145,9 +147,9 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
       />
 
       {currentTab.id === "info" ? (
-        <div className="flex">
+        <div className="flex flex-col ipod:flex-row overflow-y-scroll ipod:overflow-y-visible">
           <ul
-            className="grid grid-cols-1 paintlist text-[var(--black10)] mr-6 space-y-1 desktop:space-y-2 w-[50%]"
+            className="grid grid-cols-1 paintlist text-[var(--black10)] mr-6 space-y-1 desktop:space-y-2 ipod:w-[50%]"
             style={{
               fontSize: getFontSize({
                 type: "machine",
@@ -227,7 +229,7 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
           <CDriver direction="vertical" classes="h-[100%]" />
           <Stack
             spacing={2}
-            sx={{ width: "50%" }}
+            sx={{ width: ipodScreen ? "100%" : "50%" }}
             justifyContent={checked2 ? "" : "space-between"}
             alignItems="center"
           >

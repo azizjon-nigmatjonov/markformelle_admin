@@ -12,6 +12,7 @@ import { authActions } from "../../store/auth/auth.slice";
 import axios from "axios";
 import { globalToolActions } from "../../store/globalTools";
 import { RollLogic } from "./Logic/Roll";
+import { useScreenSize } from "../../hooks/useScreenSize";
 
 const MainLayout = () => {
   const wrapperRef: any = useRef(null);
@@ -19,6 +20,7 @@ const MainLayout = () => {
   const resize = useSelector((state: any) => state.sidebar.resize);
   const ver = useSelector((state: any) => state.auth.version);
   const dispatch = useDispatch();
+  const ipodScreen = useScreenSize("ipod");
 
   const handleResize = () => {
     dispatch(sidebarActions.setCollapsed(resize ? false : true));
@@ -26,24 +28,24 @@ const MainLayout = () => {
     dispatch(sidebarActions.setResize(!resize));
   };
 
+  const setTimeStore = (data: any) => {
+    dispatch(globalToolActions.setCurrTime(data));
+  };
+
   const GetTimeGlobal = () => {
     axios
       .get("https://timeapi.io/api/time/current/zone?timeZone=Asia%2FTashkent")
       .then((res) => {
-        dispatch(globalToolActions.setCurrTime(res?.data?.dateTime));
+        setTimeStore(res?.data?.dateTime);
       });
   };
 
   useEffect(() => {
     GetTimeGlobal();
 
-    const refetching = setInterval(() => {
+    setInterval(() => {
       GetTimeGlobal();
     }, 60000);
-
-    return () => {
-      clearInterval(refetching);
-    };
   }, []);
 
   const VersionUpdater = (ver: any) => {
@@ -70,9 +72,11 @@ const MainLayout = () => {
 
   return (
     <div className={cls.layout} ref={wrapperRef}>
-      <div className="border-r border-[var(--border)]">
-        <Sidebar />
-      </div>
+      {!ipodScreen && (
+        <div className="border-r border-[var(--border)]">
+          <Sidebar />
+        </div>
+      )}
       <div className={`${cls.content} remove-scroll`}>
         <Outlet />
       </div>

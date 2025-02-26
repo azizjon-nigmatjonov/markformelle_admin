@@ -130,17 +130,23 @@ const DryingPage = () => {
     return arr.sort((a: any, b: any) => a.order - b.order);
   }, [list?.length, data, type]);
 
+  const FilterUI = () => (
+    <div className="flex justify-between space-x-3">
+      <GlobalSearch list={data ?? []} setList={setList} />
+
+      <ToggleBtn type={type} setType={setType} />
+    </div>
+  );
+
   return (
     <>
       <Header
+        filters={FilterUI()}
         extra={
           <CBreadcrumbs items={breadCrumbs} progmatic={true} type="link" />
         }
       >
-        <div className="mr-3">
-          <GlobalSearch list={data ?? []} setList={setList} />
-        </div>
-        <ToggleBtn type={type} setType={setType} />
+        {FilterUI()}
       </Header>
       {isLoading ? (
         <>

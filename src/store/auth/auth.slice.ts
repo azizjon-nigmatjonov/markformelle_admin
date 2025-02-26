@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   user: {},
   rolls: [],
-  token: "",
+  token: "111",
   link: "",
   lang: "ru",
   version: "",

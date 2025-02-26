@@ -56,15 +56,13 @@ const PaintSectionYarn = () => {
   };
 
   const convertToMinutes = (timeString: string) => {
-    // Split the time into hours and minutes
     const [hours, minutes] = timeString.split(":").map(Number);
 
-    // Calculate total minutes
     return hours * 60 + minutes;
   };
 
   const GetPantone = (str: string) => {
-    if (str.includes("TCX")) {
+    if (str?.includes("TCX")) {
       return PantoneColors[str?.substring(4, 11)];
     } else {
       return PantoneColors[str];
@@ -82,7 +80,7 @@ const PaintSectionYarn = () => {
     const arr: any = [];
     result?.forEach((element: any) => {
       if (
-        element.boya_kazan.toLowerCase().includes("yes") &&
+        element.boya_kazan.toLowerCase()?.includes("yes") &&
         element.device_group?.includes("IPLIK BOYA")
       ) {
         const order = element.code_device.replace("-", "");
@@ -139,17 +137,23 @@ const PaintSectionYarn = () => {
     return arr.sort((a: any, b: any) => a.order - b.order);
   }, [list?.length, data, type]);
 
+  const FilterUI = () => (
+    <div className="flex justify-between space-x-3">
+      <GlobalSearch list={data ?? []} setList={setList} />
+
+      <ToggleBtn type={type} setType={setType} />
+    </div>
+  );
+
   return (
     <>
       <Header
+        filters={FilterUI()}
         extra={
           <CBreadcrumbs items={breadCrumbs} progmatic={true} type="link" />
         }
       >
-        <div className="mr-3">
-          <GlobalSearch list={data ?? []} setList={setList} />
-        </div>
-        <ToggleBtn type={type} setType={setType} />
+        {FilterUI()}
       </Header>
       {isLoading ? (
         <>

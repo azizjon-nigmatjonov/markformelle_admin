@@ -9,6 +9,7 @@ export default {
         mediumScreen: "1380px",
         small_desktop: "1280px",
         ipod: "940px",
+        mobile: "768px",
       },
       spacing: {
         "0px": "0px",

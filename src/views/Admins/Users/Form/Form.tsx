@@ -1,3 +1,4 @@
+// import HFInputMask from "../../../../components/FormElements/HFInputMask";
 import { useForm } from "react-hook-form";
 import { UpdateValidation, Validation } from "./validate";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -23,13 +24,11 @@ export const AdminFormWrapper = ({
   id,
   defaultValues = {},
   rolls = [],
-  len,
 }: {
   refetch: () => void;
-  id: any;
+  id: string;
   defaultValues: any;
   rolls: any;
-  len: number;
 }) => {
   const schema = id === "create" ? Validation() : UpdateValidation();
   const isLoading = false;
@@ -45,11 +44,9 @@ export const AdminFormWrapper = ({
 
   const onSubmit = (data: any) => {
     if (id === "create") {
-      data.id = len > 0 ? len + 1 : len;
       submitForm(data);
     } else {
-      let newId: any = parseInt(id);
-      updateForm(data, newId);
+      updateForm(data, id);
     }
   };
 

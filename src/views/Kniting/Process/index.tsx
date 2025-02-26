@@ -3,7 +3,10 @@ import GlobalSearch from "../../../components/UI/GlobalSearch";
 import { Header } from "../../../components/UI/Header";
 import { ProcessTable } from "./Table";
 import useCQuery from "../../../hooks/useCQuery";
-
+import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
+const breadCrumbs = [
+  { label: "Дашборд грузчиков 614", link: "/knitting/loaders" },
+];
 const WarehouseLoaders = () => {
   const [list, setList] = useState([]);
   const { data, isLoading, refetch } = useCQuery({
@@ -18,7 +21,14 @@ const WarehouseLoaders = () => {
 
   return (
     <>
-      <Header>
+      <Header
+        filters={
+          <GlobalSearch list={data?.dashboard_data ?? []} setList={setList} />
+        }
+        extra={
+          <CBreadcrumbs items={breadCrumbs} progmatic={true} type="link" />
+        }
+      >
         <div className="mx-3">
           <GlobalSearch list={data?.dashboard_data ?? []} setList={setList} />
         </div>

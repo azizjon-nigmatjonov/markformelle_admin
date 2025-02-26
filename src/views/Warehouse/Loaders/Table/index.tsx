@@ -62,7 +62,7 @@ export const ProcessTable = () => {
 
   return (
     <div className="flex p-3 space-x-1 small_desktop:space-x-2">
-      <div className="grid grid-cols-2 gap-x-1 small_desktop:gap-x-2 w-full">
+      <div className="grid mobile:grid-cols-2 gap-x-1 small_desktop:gap-x-2 w-full">
         <div className="grid grid-rows-2 gap-y-2">
           <CCard
             half={true}

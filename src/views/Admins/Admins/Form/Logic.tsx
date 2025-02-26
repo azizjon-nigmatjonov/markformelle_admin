@@ -1,15 +1,13 @@
 import { useMutation, useQuery } from "react-query";
 import adminService from "../../../../services/admins";
-import roleService from "../../../../services/rolls";
+// import roleService from "../../../../services/rolls";
 import { useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { websiteActions } from "../../../../store/website";
 import usePageRouter from "../../../../hooks/useObjectRouter";
 
 export const FetchFunction = ({ adminId }: { adminId: string }) => {
-  const { data: rolls } = useQuery(["GET_ROLLS_LIST"], () => {
-    return roleService.getList();
-  });
+  const rolls: any = [];
 
   const { data: adminData } = useQuery(
     ["GET_ROLL_DATA", adminId],
@@ -24,7 +22,7 @@ export const FetchFunction = ({ adminId }: { adminId: string }) => {
   const SelectOptions = useMemo(() => {
     if (!rolls) return [];
     const arr = rolls?.data ?? [];
-    return (arr ).map((item: any) => {
+    return arr.map((item: any) => {
       return {
         ...item,
         label: item.name,

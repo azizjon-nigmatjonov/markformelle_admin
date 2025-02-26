@@ -1,8 +1,7 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import IconGenerator from "../../IconGenerator";
 import { useTranslation } from "react-i18next";
 import cls from "./style.module.scss";
-import { SectionData } from "../Logic";
 import { DropDown, OneDropdown } from "./DropDown";
 import { useDispatch } from "react-redux";
 import { filterActions } from "../../../../store/filterParams";
@@ -15,20 +14,35 @@ interface Props {
 }
 
 const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
-  const { getParentName } = SectionData();
+  const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const [activeIndex, setActiveIndex] = useState(getParentName());
+  const [activeIndex, setActiveIndex] = useState("");
+  let locationName = location.pathname.substring(1);
+  const arr = locationName.split("/");
+  if (arr.length > 2) {
+    if (arr[2] !== "add") {
+      locationName = arr[0] + "/" + arr[1] + "/:id";
+    }
+  }
 
   const toggleAccordion = (key: string) => {
-    setActiveIndex(activeIndex === key ? "" : key);
+    setActiveIndex(key);
   };
+
+  useEffect(() => {
+    Object.values(list).forEach((el: any) => {
+      const currentEl = el.find((item: any) => item.id === locationName);
+      if (currentEl?.id) {
+        setActiveIndex(currentEl?.parent);
+      }
+    });
+  }, [locationName, list]);
 
   const clearFilter = () => {
     dispatch(filterActions.clearFilterData());
   };
 
-  const dispatch = useDispatch();
   return (
     <div className={`${cls.section} ${collapsed ? "py-[10px]" : "p-[10px]"}`}>
       <div className="flex flex-col justify-between w-full">
@@ -52,7 +66,7 @@ const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
                   <div
                     className={`flex items-center ${
                       collapsed ? "justify-center w-full" : "space-x-3"
-                    }`}
+                    } ${activeIndex === key ? "bg-[#ffc3a24d] h-[40px]" : ""}`}
                   >
                     <IconGenerator
                       icon={value?.[0]?.parent_icon || value[0].icon}

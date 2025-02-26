@@ -58,17 +58,23 @@ const ChniDashboard = () => {
     );
   }, [data]);
 
+  const FilterUI = () => (
+    <div className="flex justify-between space-x-3">
+      <GlobalSearch list={newList ?? []} setList={setList} />
+
+      <ToggleBtn type={type} setType={setType} />
+    </div>
+  );
+    
   return (
     <>
       <Header
+        filters={FilterUI()}
         extra={
           <CBreadcrumbs items={breadCrumbs} progmatic={true} type="link" />
         }
       >
-        <div className="mr-3">
-          <GlobalSearch list={newList ?? []} setList={setList} />
-        </div>
-        <ToggleBtn type={type} setType={setType} />
+        {FilterUI()}
       </Header>
       {isLoading ? (
         <>

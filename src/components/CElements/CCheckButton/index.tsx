@@ -1,20 +1,21 @@
 interface Props {
-  element: any;
+  element?: any;
   checked?: boolean;
   color?: string;
   handleCheck?: (val: any) => void;
 }
 
 const CCheckButton = ({
-  element,
+  element = {},
   handleCheck = () => {},
   checked = false,
   color = "white",
 }: Props) => {
+  if (!element?.label) return 
   return (
     <div
       onClick={() => handleCheck(element)}
-      className={`flex items-center gap-2 cursor-pointer px-1 desktop:px-12px rounded-[8px] border-2 h-[25px] desktop:h-[35px] w-full whitespace-nowrap`}
+      className={`flex items-center gap-2 cursor-pointer px-2 ipod:px-1 desktop:px-12px rounded-[8px] border-2 h-[35px] bigDesktop:h-[45px] whitespace-nowrap`}
       style={{
         backgroundColor: checked ? color : "",
         color: checked ? "white" : "var(--gray)",

@@ -9,13 +9,13 @@ import useCQuery from "../../../../hooks/useCQuery";
 export const FetchFunction = ({ userId }: { userId: string }) => {
   const { data: rolls } = useCQuery({
     key: `GET_ROLLS_LIST`,
-    endpoint: `http://127.0.0.1:8000/rolls`,
+    endpoint: `http://192.168.181.29:3000/rolls`,
     params: {},
   });
 
   const { data: users } = useCQuery({
     key: `GET_USERS_LIST_ALL`,
-    endpoint: `http://127.0.0.1:8000/users/`,
+    endpoint: `http://192.168.181.29:3000/users`,
     params: {},
   });
 
@@ -67,7 +67,7 @@ export const SubmitFunction = ({
     mutationFn: (user: any) => {
       const data: any = [];
       axios
-        .post("http://127.0.0.1:8000/add-user", user, {
+        .post("http://192.168.181.29:3000/users", user, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -88,7 +88,7 @@ export const SubmitFunction = ({
     mutationFn: (data: any) => {
       const result: any = [];
       axios
-        .put(`http://127.0.0.1:8000/update-user/${data.id}`, data, {
+        .put(`http://192.168.181.29:3000/users/${data.id}`, data, {
           headers: {
             "Content-Type": "application/json",
           },

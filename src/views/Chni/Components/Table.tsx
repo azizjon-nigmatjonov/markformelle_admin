@@ -1,15 +1,12 @@
-// import { useTranslation } from "react-i18next";
 import { useEffect, useMemo, useState } from "react";
 import CTable from "../../../components/CElements/CTable";
 import CCard from "../../../components/CElements/CCard";
-// import { FormatTime, GetGoursFromMinutes } from "../../../utils/formatTime";
-
+import { GetCurrentDate } from "../../../utils/getDate";
 interface Props {
   list: any;
 }
 
 export const ChniTable = ({ list }: Props) => {
-  // const { t } = useTranslation();
   const [headColumns, setHeadColumns]: any = useState([]);
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 10 });
   const bodyColumns = useMemo(() => {
@@ -24,14 +21,27 @@ export const ChniTable = ({ list }: Props) => {
   }, [list?.length]);
 
   useEffect(() => {
-    const headColumns: any = [];
+    const headCol: any = [{
+      title: 'LastDateTime',
+      id: 'LastDateTime',
+      render: (val: string) => {
+        return GetCurrentDate({date: val, type: 'usually'})
+      }
+    },
+    {
+      title: 'PrevDateTime',
+      id: 'PrevDateTime',
+      render: (val: string) => {
+        return GetCurrentDate({date: val, type: 'usually'})
+      }
+    }];
 
     const obj = { ...bodyColumns?.[0] };
     const keys = Object.keys(obj);
     const newColumns: any = [];
 
     keys.forEach((key: string) => {
-      const found = headColumns.find((item: any) => item.id === key);
+      const found = headCol.find((item: any) => item.id === key);
       if (found?.id) {
         newColumns.push(found);
       } else {

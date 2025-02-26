@@ -1,4 +1,3 @@
-import { useTranslation } from "react-i18next";
 import IconGenerator from "../../../../../components/UI/IconGenerator";
 import { SectionBtns } from "../Btns";
 import { useLocation } from "react-router-dom";
@@ -9,27 +8,15 @@ interface Props {
   handleNavigate: (link: any) => void;
 }
 
-export const DropDown = ({
-  value,
-  title,
-  handleNavigate = () => {},
-}: Props) => {
-  const { t } = useTranslation();
+export const DropDown = ({ value, handleNavigate = () => {} }: Props) => {
   const location = useLocation();
 
   return (
     <div className="mt-[-40px]">
-      <div className="absolute left-[40px] group-hover:block hidden min-w-[250px] z-[99]">
+      <div className="absolute left-[45px] group-hover:block hidden min-w-[250px] z-[99]">
         <div className="relative">
           <div className="absolute left-[-4px] top-[15px] w-[15px] h-[15px] rotate-[45deg] bg-white border border-[var(--gray20)] z-[33]"></div>
           <div className="relative z-[99] bg-white card-shadow min-w-[200px] rounded-[12px] border border-[var(--gray20)] pt-2">
-            <div
-              className={`flex items-center space-x-3 pb-2 border-b border-[var(--border)] pl-3`}
-            >
-              <span className="text-[var(--black)] font-[600] text-lg">
-                {t(title)}
-              </span>
-            </div>
             <div className="show">
               {Object.values(value as keyof typeof value)?.map(
                 (el: any, i, arr) => {
@@ -40,7 +27,9 @@ export const DropDown = ({
                       el.sidebar && (
                         <div
                           key={i}
-                          className={el?.children?.length ? "pb-2 pr-3" : ""}
+                          className={`${
+                            el?.children?.length ? "pb-2 pr-3" : ""
+                          } relative overflow-hidden`}
                         >
                           <SectionBtns
                             index={i}

@@ -120,38 +120,26 @@ body {
   height: 1px;
 }
 
-.menu_link {
-  display: flex;
-}
 
 .menu_link {
   min-height: 36px;
   position: relative;
   display: flex;
   align-items: center;
-  /* padding-left: 11px; */
   width: 100%;
-  /* margin-left: 3px; */
+  /* border-radius: 4px; */
 }
 
 .menu_link {
   padding-left: 10px;
+  /* margin-left: 28px; */
 }
 
 .menu_link.active {
   position: relative;
-  &::before {
-    content: '';
-    width: 2px;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    background-color: var(--main);
-  }
   background: linear-gradient(
     90deg,
-    rgba(255, 195, 162, 0.3) 0%,
+    hsla(21, 100%, 82%, 0.302) 0%,
     rgba(30, 26, 23, 0) 100%
   );
   span {

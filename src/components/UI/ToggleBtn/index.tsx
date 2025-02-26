@@ -8,26 +8,10 @@ interface Props {
 }
 
 export const ToggleBtn = ({ type = "", setType = () => {} }: Props) => {
-  // const location = useLocation();
-  // const dispatch = useDispatch();
-  // const listType = useSelector((state: any) => state.sidebar.listType);
-
-  // const pageName: any = useMemo(() => {
-  //   const strLen =
-  //     location.pathname.split("/")[2].length +
-  //     location.pathname.split("/")[1].length;
-
-  //   let result = location.pathname.substring(0, strLen + 2);
-
-  //   return result;
-  // }, [location]);
 
   const handleToggle = (type: any) => {
     setType(type);
-    // dispatch(sidebarActions.setListType({ pageName, payload: 123 }));
   };
-
-  // const type = listType?.[pageName];
 
   return (
     <div
@@ -35,8 +19,8 @@ export const ToggleBtn = ({ type = "", setType = () => {} }: Props) => {
       className="flex justify-between items-center"
     >
       <IconButton>
-        <div className="relative flex items-center justify-between border border-[var(--border)] overflow-hidden h-[25px] desktop:h-[35px] rounded-[12px]">
-          <div className="w-[30px] desktop:w-[40px] h-full flex items-center justify-center">
+        <div className="relative flex items-center justify-between border border-[var(--border)] overflow-hidden h-[35px] bigDesktop:h-[45px] ipod:rounded-[12px] rounded-[8px]">
+          <div className="w-[30px] desktop:w-[40px] h-full flex items-center justify-center z-[2] relative">
             <AppsIcon
               style={{
                 color: type === "list" ? "var(--gray)" : "white",
@@ -44,7 +28,7 @@ export const ToggleBtn = ({ type = "", setType = () => {} }: Props) => {
               }}
             />
           </div>
-          <div className="w-[30px] desktop:w-[40px] h-full flex items-center justify-center">
+          <div className="w-[30px] desktop:w-[40px] h-full flex items-center justify-center z-[2] relative">
             <ReorderIcon
               style={{
                 color: type === "list" ? "white" : "var(--gray)",
@@ -54,7 +38,7 @@ export const ToggleBtn = ({ type = "", setType = () => {} }: Props) => {
           </div>
 
           <div
-            className={`absolute left-0 top-0 w-1/2 h-full bg-[var(--primary)] z-[-1] rounded-[12px] ${
+            className={`absolute left-0 top-0 w-1/2 h-full bg-[#2E90FA] z-[1] rounded-[8px] ipod:rounded-[12px] ${
               type === "list" ? "right-0 left-auto" : ""
             }`}
           ></div>

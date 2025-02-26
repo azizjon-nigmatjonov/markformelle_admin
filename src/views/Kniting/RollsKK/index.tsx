@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import GlobalSearch from "../../../components/UI/GlobalSearch";
 import { Header } from "../../../components/UI/Header";
 import useCQuery from "../../../hooks/useCQuery";
 import { TableUI } from "./Table";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
+import { GetCurrentDate } from "../../../utils/getDate";
 const breadCrumbs = [
   { label: "Рулоны для контроль качество", link: "/knitting/rolls-kk" },
 ];
@@ -16,9 +17,19 @@ export const RollsKK = () => {
     params: {},
   });
 
+  const newData = useMemo(() => {
+    return data?.dashboard_data?.map((item: any) => {
+
+      return {
+        ...item,
+        DATE_KNIT: GetCurrentDate({ date: item.DATE_KNIT, type: 'usually' })
+      }
+    }) ?? []
+  }, [data])
+  
   useEffect(() => {
-    setList(data?.dashboard_data ?? []);
-  }, [data]);
+    setList(newData ?? []);
+  }, [newData]);
 
   useEffect(() => {
     const refetching = setInterval(() => {
@@ -30,16 +41,23 @@ export const RollsKK = () => {
     };
   }, []);
 
+  const HeaderFilter = () => (
+    <div>
+      <GlobalSearch list={newData} setList={setList} />
+    </div>
+  );
+
   return (
     <>
       <Header
+        filters={HeaderFilter()}
         open={true}
         extra={
           <CBreadcrumbs items={breadCrumbs} progmatic={true} type="link" />
         }
       >
         <div className="mx-3">
-          <GlobalSearch list={data?.dashboard_data ?? []} setList={setList} />
+          <GlobalSearch list={newData ?? []} setList={setList} />
         </div>
       </Header>
 

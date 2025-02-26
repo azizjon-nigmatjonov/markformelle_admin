@@ -7,13 +7,14 @@ import { Modal } from "@mui/joy";
 import ModalCard from "../Card/ModalCard";
 import SpeedIcon from "@mui/icons-material/Speed";
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
+
 interface Props {
   machine: any;
   zoomPoint: number;
   refetch: any;
 }
 
-export const MyCard = ({ machine, refetch }: Props) => {
+export const MyCard = ({ machine = {}, refetch }: Props) => {
   const { getFontSize } = useDeviceHeight();
   const cardRef: any = useRef(null);
   const [cardColor, setCardColor] = useState<string>("");
@@ -92,7 +93,7 @@ export const MyCard = ({ machine, refetch }: Props) => {
                 style={{
                   fontSize: getFontSize({
                     count: 7,
-                    percent: 16,
+                    percent: 15,
                     type: "machine",
                   }),
                 }}
@@ -137,7 +138,7 @@ export const MyCard = ({ machine, refetch }: Props) => {
                 style={{
                   fontSize: getFontSize({
                     count: 7,
-                    percent: 19,
+                    percent: window.screen.width < 600 ? 15 : 18,
                     type: "machine",
                   }),
                 }}

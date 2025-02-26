@@ -83,8 +83,8 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                   <h2 className="main-title font-bold title-big">
                     {item.OBORUD_NUMBER}
                   </h2>
-                  <p className="main-sub-text-614">{item?.ART}</p>
-                  <p className="main-sub-text-614">{item?.LOT}</p>
+                  <p className="main-sub-text-614">{item?.ART}</p>                                                                                                                                                                                                                                                                                                                                                         
+                  <p className="main-sub-text-614">{item?.LOT?.substring(0, item?.LOT?.indexOf('(') - 1)}</p>
                   <p className="main-sub-text-614">{item.COUNT_RECORDS} рулон</p>
 
                   <p className="main-sub-text-614 text-red-700">
@@ -99,7 +99,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                     {item.OBORUD_NUMBER}
                   </h2>
                   <p className="main-sub-text-614">{item?.ART}</p>
-                  <p className="main-sub-text-614">{item?.LOT}</p>
+                  <p className="main-sub-text-614">{item?.LOT?.substring(0, item?.LOT?.indexOf('(') - 1)}</p>
                   <p className="main-sub-text-614">{item.COUNT_RECORDS} рулон</p>
 
                   <p className="main-sub-text-614 text-red-700">
@@ -125,7 +125,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                       {item.OBORUD_NUMBER}
                     </h2>
                     <p className="sub-text-614">{item?.ART}</p>
-                    <p className="sub-text-614">{item?.LOT}</p>
+                    <p className="sub-text-614">{item?.LOT?.substring(0, item?.LOT?.indexOf('(') - 1)}</p>
                     <p className="sub-text-614">
                       {item.COUNT_RECORDS} рулон
                     </p>
@@ -141,7 +141,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                       {item.OBORUD_NUMBER}
                     </h2>
                     <p className="sub-text-614">{item?.ART}</p>
-                    <p className="sub-text-614">{item?.LOT}</p>
+                    <p className="sub-text-614">{item?.LOT?.substring(0, item?.LOT?.indexOf('(') - 1)}</p>
                     <p className="sub-text-614 font-semibold">
                       {item.COUNT_RECORDS} рулон
                     </p>
@@ -156,7 +156,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
         </div>
 
         {/* Last Row */}
-        <div className="grid grid-cols-3 gap-2 row-span-2">
+        <div className="grid grid-cols-3 grid-rows-2 gap-2 row-span-2">
           {newData.slice(4, 12).map((item: any) => (
             <div
               key={item.OBORUD_NUMBER}
@@ -170,7 +170,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                     {item.OBORUD_NUMBER}
                   </h2>
                   <p className="sub-text-614">{item?.ART}</p>
-                  <p className="sub-text-614">{item?.LOT}</p>
+                  <p className="sub-text-614">{item?.LOT?.substring(0, item?.LOT?.indexOf('(') - 1)}</p>
                   <p className="sub-text-614 font-semibold">
                     {item.COUNT_RECORDS} рулон
                   </p>
@@ -186,7 +186,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                     {item.OBORUD_NUMBER}
                   </h2>
                   <p className="sub-text-614">{item?.ART}</p>
-                  <p className="sub-text-614">{item?.LOT}</p>
+                  <p className="sub-text-614">{item?.LOT?.substring(0, item?.LOT?.indexOf('(') - 1)}</p>
                   <p className="sub-text-614 font-semibold">
                     {item.COUNT_RECORDS} рулон
                   </p>

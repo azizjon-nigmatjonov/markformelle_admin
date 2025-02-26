@@ -32,7 +32,7 @@ const GlobalSearch = ({
   const searchFields = useSelector(
     (state: any) => state.globalTool.searchFields
   );
-  const [value, setValue]: any = useState(null);
+  const [value, setValue]: any = useState("");
   const [newData, setNewData] = useState([]);
   const [open, setOpen] = useState(false);
   const [searchedData, setSearchedData] = useState([]);
@@ -101,7 +101,7 @@ const GlobalSearch = ({
     }
   }, delay);
 
-  const handleCheck = (el: any) => {
+  const handleCheck = (el: any) => {    
     const newList = initialList.filter((item: any) => item.id === el.id);
     setList(newList);
     setValue(el.value);
@@ -218,7 +218,7 @@ const GlobalSearch = ({
 
   return (
     <div
-      className={`w-[180px] desktop:w-[240px] relative bg-white rounded-[8px] flex border justify-between items-center h-[25px] desktop:h-[35px] px-9 ${
+      className={`w-full ipod:w-[180px] desktop:w-[240px] relative bg-white rounded-[8px] flex border justify-between items-center h-[35px] bigDesktop:h-[45px] px-9 ${
         value ? " border-[var(--primary)]" : "border-[var(--border)]"
       }`}
     >
@@ -228,11 +228,10 @@ const GlobalSearch = ({
       <input
         value={value}
         onChange={(e) => debounce(e.target.value)}
-        defaultValue={defaultValue}
         type="text"
         onKeyUp={handleKeyPress}
         placeholder={t("search")}
-        className={`min-w-[140px] bg-transparent h-full outline-none text-[var(--black)] placeholder-[var(--gray)] rounded-[8px] ${classes}`}
+        className={`w-full min-w-[140px] bg-transparent h-full outline-none text-[var(--black)] placeholder-[var(--gray)] rounded-[8px] ${classes}`}
       />
 
       {open && searchedData.length ? (
@@ -248,12 +247,6 @@ const GlobalSearch = ({
                 className="hover:bg-[var(--border)] py-2 px-3 border-b barder-[var(--border)] cursor-pointer"
               >
                 <p>{item.value}</p>
-                {/* <div className="w-full flex justify-between whitespace-nowrap space-x-3">
-                  <span>{item.label}:</span>
-                  <span className="text-[var(--black)] font-medium">
-                    {item.value}
-                  </span>
-                </div> */}
               </li>
             ))}
           </ul>

@@ -1,6 +1,7 @@
 import WebsiteSettings from "../../views/Settings/Website";
 import Profile from "../../views/Settings/Profile";
 import LanguagesPage from "../../views/Settings/Languages";
+import { TestExampleView } from "../../views/Test";
 
 export const settingList = [
   {
@@ -43,6 +44,16 @@ export const settingList = [
     icon: "",
     element: "",
     auth: true,
+    permissions: ["view_page"],
+  },
+  {
+    parent: "settings",
+    link: "test",
+    sidebar: true,
+    title: "Tesr",
+    icon: "",
+    element: <TestExampleView />,
+    auth: false,
     permissions: ["view_page"],
   },
 ];

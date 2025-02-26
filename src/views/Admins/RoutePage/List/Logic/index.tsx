@@ -20,7 +20,7 @@ export const CreateFunction = ({
     mutationFn: (data: any) => {
       const result: any = [];
       axios
-        .post("http://127.0.0.1:8000/routes", data, {
+        .post("http://192.168.181.29:3000/routes", data, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -42,7 +42,7 @@ export const CreateFunction = ({
       mutationFn: (data: any) => {
         const result: any = [];
         axios
-          .put(`http://127.0.0.1:8000/permissions`, data, {
+          .put(`http://192.168.181.29:3000/permissions`, data, {
             headers: {
               "Content-Type": "application/json",
             },
@@ -87,7 +87,7 @@ export const DeleteFunction = ({ handleClose }: { handleClose: any }) => {
       mutationFn: (data: any) => {
         const result: any = [];
         axios
-          .delete(`http://127.0.0.1:8000/permissions`, {
+          .delete(`http://192.168.181.29:3000/permissions`, {
             params: data,
           })
           .then((res) => {
@@ -105,7 +105,7 @@ export const DeleteFunction = ({ handleClose }: { handleClose: any }) => {
   const deleteRoute = (id: any) => {
     const data: any = { id };
     axios
-      .delete(`http://127.0.0.1:8000/routes`, {
+      .delete(`http://192.168.181.29:3000/routes`, {
         params: data,
       })
       .then((res) => {
@@ -208,7 +208,7 @@ export const FetchFunction = () => {
     refetch,
   } = useCQuery({
     key: `GET_ROUTES_LIST`,
-    endpoint: `http://127.0.0.1:8000/routes`,
+    endpoint: `http://192.168.181.29:3000/routes`,
     params: {},
   });
 

@@ -6,11 +6,14 @@
   width: 100%;
   height: 45px;
   border-bottom: 1px solid var(--border);
-  border-left: 1px solid var(--border);
   position: fixed;
   top: 0;
   z-index: 99;
   background-color: white;
+
+  @media (min-width: 940px) {
+    border-left: 1px solid var(--border);
+  }
 
   .title {
     font-size: 24px;

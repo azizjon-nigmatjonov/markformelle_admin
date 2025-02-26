@@ -22,10 +22,25 @@ input {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+.MuiTooltip-popper > * {
+  font-size: 14px !important;
+}
 
 .MuiMenu-paper {
   ul {
     @include remove-scroll;
+  }
+}
+
+.MuiPaper-root.MuiDrawer-paper {
+  border-radius: 0 !important;
+}
+
+.global-height {
+  height: 35px;
+
+  @media (max-width: 940px) {
+    height: 45px;
   }
 }
 

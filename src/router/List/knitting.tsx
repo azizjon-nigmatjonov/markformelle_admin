@@ -1,3 +1,4 @@
+import CellsAfterKK from "../../views/Kniting/CellsAfterKK";
 import KnittingMachines from "../../views/Kniting/Machines";
 import KnittingProcess from "../../views/Kniting/Process";
 import { RollsKK } from "../../views/Kniting/RollsKK";
@@ -16,6 +17,16 @@ export const knittingList = [
   },
   {
     parent: "knitting",
+    link: "accessories",
+    sidebar: true,
+    title: "Вязания аксессуаров",
+    icon: <img width={22} src="/images/rope.png" alt="knitting" />,
+    element: <KnittingMachines />,
+    permissions: ["view_page"],
+    auth: true,
+  },
+  {
+    parent: "knitting",
     link: "rolls-kk",
     sidebar: true,
     title: "Рулоны для КК",
@@ -26,20 +37,20 @@ export const knittingList = [
   },
   {
     parent: "knitting",
-    link: "loaders",
+    link: "cells-after-kk",
     sidebar: true,
-    title: "Дашборд грузчиков 614",
-    icon: <img width={24} src="/images/fork-loader.png" alt="loader" />,
-    element: <KnittingProcess />,
+    title: "Клетки после КК",
+    icon: <img width={24} src="/images/box.png" alt="box cell" />,
+    element: <CellsAfterKK />,
     permissions: ["view_page"],
     auth: true,
   },
   {
     parent: "knitting",
-    link: "accessories",
+    link: "loaders",
     sidebar: true,
-    title: "Вязания аксессуаров",
-    icon: <img width={24} src="/images/rope.png" alt="rope" />,
+    title: "Дашборд грузчиков 614",
+    icon: <img width={24} src="/images/fork-loader.png" alt="loader" />,
     element: <KnittingProcess />,
     permissions: ["view_page"],
     auth: true,

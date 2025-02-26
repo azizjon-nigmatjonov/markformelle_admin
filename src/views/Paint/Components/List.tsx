@@ -8,7 +8,7 @@ export const PaintList = ({ data = [] }: Props) => {
   return (
     <div className="p-2">
       <div
-        className="grid grid-cols-6 grid-rows-6 gap-2"
+        className="grid mobile:grid-cols-6 mobile:grid-rows-6 gap-2"
         style={{
           minWidth:
             window?.screen?.width < 940

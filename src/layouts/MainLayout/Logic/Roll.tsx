@@ -17,19 +17,6 @@ export const RollLogic = () => {
       window.location.reload();
     }, 500);
   };
-
-  useEffect(() => {
-    axios
-      .get(`http://127.0.0.1:8000/users/`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((data) => {
-        console.log("dat a", data?.data);
-      });
-  }, []);
-
   useEffect(() => {
     if (!user?.password) return;
     const userData = JSON.stringify({
@@ -37,7 +24,7 @@ export const RollLogic = () => {
       email: user?.email,
     });
     axios
-      .get(`http://127.0.0.1:8000/login`, {
+      .get(`http://192.168.181.29:3000/login`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -60,7 +47,7 @@ export const RollLogic = () => {
   useEffect(() => {
     if (userInfo?.roles?.length) {
       axios
-        .get("http://127.0.0.1:8000/user-rolls", {
+        .get("http://192.168.181.29:3000/user-rolls", {
           params: {
             rolls: JSON.stringify(userInfo.roles),
           },

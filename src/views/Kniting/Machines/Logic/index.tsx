@@ -312,7 +312,7 @@ export const FetchFunction = () => {
 
 interface Props {
   setChecked: (val: any) => void;
-  checked: any;
+  checked?: any;
   bodyData: any;
   setSearch: (val: string) => void;
 }
@@ -328,6 +328,7 @@ export const CountBtns = ({
   setSearch = () => {},
 }: Props) => {
   const filterCheckbox = (val: string) => {
+    setChecked([]);
     let list: any = checked.filter((i: string) => i !== "all") ?? [];
 
     if (list.includes(val)) {
@@ -337,7 +338,9 @@ export const CountBtns = ({
     }
 
     setSearch("");
-    setChecked(list);
+    setTimeout(() => {
+      setChecked(list);
+    }, 100);
   };
 
   const [counts, setCounts] = useState<Counts>({});
@@ -354,15 +357,22 @@ export const CountBtns = ({
   }, [bodyData]);
 
   return (
-    <div className="flex space-x-1 desktop:space-x-2">
+    <div className="flex-wrap ipod:flex-nowrap flex gap-2 ipod:gap-1 desktop:gap-2">
       <CCheckButton
         color="var(--main60)"
         element={{
           label: (
-            <p className="text-[10px] desktop:text-sm font-[600]">
+            <p className="text-sm mobile:text-[10px] desktop:text-sm font-[600]">
               Все{" "}
               <span className="font-bold">
-                {Object.values(counts).reduce((acc, item) => acc + item, 0)}
+                {counts?.working +
+                  counts?.no_plan +
+                  counts?.no_yarn +
+                  counts?.fixing +
+                  counts?.reload_yarn +
+                  counts?.reload +
+                  counts?.cleaning +
+                  counts?.no_status + counts?.no_connnection}
               </span>
             </p>
           ),
@@ -374,7 +384,7 @@ export const CountBtns = ({
         color="#6cce65"
         element={{
           label: (
-            <p className="text-[10px] desktop:text-sm font-[600]">
+            <p className="text-sm mobile:text-[10px] desktop:text-sm font-[600]">
               Работает <span className="font-bold">{counts?.working}</span>
             </p>
           ),
@@ -386,7 +396,7 @@ export const CountBtns = ({
         color="#8099f1"
         element={{
           label: (
-            <p className="text-[10px] desktop:text-sm font-[600]">
+            <p className="text-sm mobile:text-[10px] desktop:text-sm font-[600]">
               Нет плана <span className="font-bold">{counts?.no_plan}</span>
             </p>
           ),
@@ -398,7 +408,7 @@ export const CountBtns = ({
         color="#8099f1"
         element={{
           label: (
-            <p className="text-[10px] desktop:text-sm font-[600]">
+            <p className="text-sm mobile:text-[10px] desktop:text-sm font-[600]">
               Нет пряжи <span className="font-bold">{counts?.no_yarn}</span>
             </p>
           ),
@@ -410,7 +420,7 @@ export const CountBtns = ({
         color="var(--gray30)"
         element={{
           label: (
-            <p className="text-[10px] desktop:text-sm font-[600]">
+            <p className="text-sm mobile:text-[10px] desktop:text-sm font-[600]">
               Ремонт <span className="font-bold">{counts?.fixing}</span>
             </p>
           ),
@@ -418,11 +428,23 @@ export const CountBtns = ({
         checked={checked.includes("fixing")}
         handleCheck={() => filterCheckbox("fixing")}
       />
+        <CCheckButton
+        color="var(--gray30)"
+        element={{
+          label: (
+            <p className="text-sm mobile:text-[10px] desktop:text-sm font-[600]">
+              Нет подключения <span className="font-bold">{counts?.no_connnection}</span>
+            </p>
+          ),
+        }}
+        checked={checked.includes("no_connnection")}
+        handleCheck={() => filterCheckbox("no_connnection")}
+      />
       <CCheckButton
         color="#fb6060"
         element={{
           label: (
-            <p className="text-[10px] desktop:text-sm font-[600]">
+            <p className="text-sm mobile:text-[10px] desktop:text-sm font-[600]">
               Замена игл{" "}
               <span className="font-bold">{counts?.reload_yarn}</span>
             </p>
@@ -436,7 +458,7 @@ export const CountBtns = ({
         color="#fb6060"
         element={{
           label: (
-            <p className="text-[10px] desktop:text-sm font-[600]">
+            <p className="text-sm mobile:text-[10px] desktop:text-sm font-[600]">
               Перезаправка <span className="font-bold">{counts?.reload}</span>
             </p>
           ),
@@ -449,7 +471,7 @@ export const CountBtns = ({
         color="#fb6060"
         element={{
           label: (
-            <p className="text-[10px] desktop:text-sm font-[600]">
+            <p className="text-sm mobile:text-[10px] desktop:text-sm font-[600]">
               Очистка <span className="font-bold">{counts?.cleaning}</span>
             </p>
           ),
@@ -458,24 +480,11 @@ export const CountBtns = ({
         handleCheck={() => filterCheckbox("cleaning")}
       />
 
-      {/* <CCheckButton
-        color="#fb6060"
-        element={{
-          label: (
-            <p className="text-[10px] desktop:text-sm font-[600]">
-              Остановлено <span className="font-bold">{counts?.stopped}</span>
-            </p>
-          ),
-        }}
-        checked={checked.includes("stopped")}
-        handleCheck={() => filterCheckbox("stopped")}
-      /> */}
-
       <CCheckButton
         color="#fb6060"
         element={{
           label: (
-            <p className="text-[10px] desktop:text-sm font-[600]">
+            <p className="text-sm mobile:text-[10px] desktop:text-sm font-[600]">
               Без статуса <span className="font-bold">{counts?.no_status}</span>
             </p>
           ),

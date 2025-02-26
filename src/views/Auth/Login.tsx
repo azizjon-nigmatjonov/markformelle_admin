@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import HFInput from "../../components/HFElements/HFInput";
 import { PasswordIcon, UserIcon } from "../../components/UI/IconGenerator/Svg";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useAuth from "../../services/auth/useAuth";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -53,7 +53,7 @@ const Login = () => {
 
   const GetUser = (user: any) => {
     axios
-      .get(`http://127.0.0.1:8000/login`, {
+      .get(`http://192.168.181.29:3000/login`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -82,7 +82,16 @@ const Login = () => {
   };
 
   const onSubmit = (data: any) => {
-    GetUser(JSON.stringify(data));
+    dispatch(authActions.login({ access_token: "111" }));
+    if (link) {
+      navigateTo(link);
+    }
+    setTimeout(() => {
+      dispatch(authActions.setLink(""));
+    }, 500);
+    if (data?.lastname) {
+      GetUser(JSON.stringify(data));
+    }
   };
 
   return (
@@ -91,10 +100,6 @@ const Login = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="w-[500px] border border-[#E2E2EA] bg-white rounded-[14px] p-6 relative"
       >
-        {/* <div className="border border-[#E2E2EA] bg-white rounded-[14px] rounded-bl-[0] rounded-br-[0] absolute top-[-60px] left-[-1px] p-4">
-          <img src="/logo-full.svg" alt="logo" />
-        </div> */}
-
         <h2 className="text-2xl font-[600]">Вход в систему</h2>
 
         <div className="mt-[18px] space-y-5">
