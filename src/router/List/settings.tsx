@@ -1,13 +1,12 @@
 import WebsiteSettings from "../../views/Settings/Website";
 import Profile from "../../views/Settings/Profile";
 import LanguagesPage from "../../views/Settings/Languages";
-import { TestExampleView } from "../../views/Test";
 
 export const settingList = [
   {
     parent: "settings",
     link: "website",
-    sidebar: true,
+    sidebar: false,
     title: "Системные настройки",
     icon: "settings",
     parent_icon: <img width={20} src="/images/settings.png" alt="settings" />,
@@ -18,7 +17,7 @@ export const settingList = [
   {
     parent: "settings",
     link: "language",
-    sidebar: true,
+    sidebar: false,
     title: "Языковые настройки",
     icon: "globus",
     parent_icon: <img width={20} src="/images/settings.png" alt="settings" />,
@@ -44,16 +43,6 @@ export const settingList = [
     icon: "",
     element: "",
     auth: true,
-    permissions: ["view_page"],
-  },
-  {
-    parent: "settings",
-    link: "test",
-    sidebar: true,
-    title: "Tesr",
-    icon: "",
-    element: <TestExampleView />,
-    auth: false,
     permissions: ["view_page"],
   },
 ];

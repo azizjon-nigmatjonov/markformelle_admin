@@ -152,45 +152,43 @@ const LanguagesPage = () => {
         }
       />
       <div className="p-2">
-        <CCard>
-          <CTable
-            isLoading={isLoading}
-            headColumns={headColumns}
-            bodyColumns={listTable}
-            filterParams={filterParams}
-            isResizeble={false}
-            handleFilterParams={setFilterParams}
-            handleActions={handleActions}
-            extra={
-              <div>
-                {filterParams.edit ? (
-                  <button
-                    onClick={() => {
-                      handleSubmit();
-                    }}
-                    className="custom-btn"
-                    style={{ height: "32px" }}
-                    disabled={!checkPermission("edit")}
-                  >
-                    Cохранить
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => {
-                      AddNewColumn({ listTable, setListTable });
-                      setFilterParams({ ...filterParams, edit: true });
-                    }}
-                    className="custom-btn"
-                    style={{ height: "32px" }}
-                    disabled={!checkPermission("add")}
-                  >
-                    Добавить
-                  </button>
-                )}
-              </div>
-            }
-          />
-        </CCard>
+        <CTable
+          isLoading={isLoading}
+          headColumns={headColumns}
+          bodyColumns={listTable}
+          filterParams={filterParams}
+          isResizeble={false}
+          handleFilterParams={setFilterParams}
+          handleActions={handleActions}
+          extra={
+            <div>
+              {filterParams.edit ? (
+                <button
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                  className="custom-btn"
+                  style={{ height: "32px" }}
+                  disabled={!checkPermission("edit")}
+                >
+                  Cохранить
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    AddNewColumn({ listTable, setListTable });
+                    setFilterParams({ ...filterParams, edit: true });
+                  }}
+                  className="custom-btn"
+                  style={{ height: "32px" }}
+                  disabled={!checkPermission("add")}
+                >
+                  Добавить
+                </button>
+              )}
+            </div>
+          }
+        />
       </div>
     </>
   );

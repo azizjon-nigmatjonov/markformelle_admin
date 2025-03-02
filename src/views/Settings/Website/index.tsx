@@ -41,18 +41,16 @@ const WebsiteSettings = () => {
       />
 
       <div className="p-2">
-        <CCard>
-          <div className="inline-block">
-            <CTabs
-              tabList={tabList}
-              currentTab={tab}
-              setCurrentTab={setTab}
-              passRouter={false}
-            />
-          </div>
+        <div className="inline-block">
+          <CTabs
+            tabList={tabList}
+            currentTab={tab}
+            setCurrentTab={setTab}
+            passRouter={false}
+          />
+        </div>
 
-          {currentTabComponent(tab.id)}
-        </CCard>
+        {currentTabComponent(tab.id)}
       </div>
     </>
   );

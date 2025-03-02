@@ -20,7 +20,7 @@ const ImageFrame = ({
             />
           </div>
         ) : (
-          <UserIcon />
+          <img className="w-[24px]" src="/images/settings.png" alt="settings" />
         )}
         {gender && (
           <div className="absolute right-[-5px] bottom-[-5px] w-[20px] h-[20px] p-[2px] rounded-full bg-white border border-border flex items-center justify-center">

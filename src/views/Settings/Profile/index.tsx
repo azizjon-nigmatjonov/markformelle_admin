@@ -17,11 +17,30 @@ import { Header } from "../../../components/UI/Header";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { breadCrumbItems } from "./Logic";
 import { HFMultipleSelect } from "../../../components/HFElements/HFMultipleSelect";
+import CTabs from "../../../components/CElements/CTab";
+import WebsiteSettings from "../Website";
+import LanguagesPage from "../Languages";
+
+const TabList = [
+  {
+    name: "Профиль",
+    id: "profile",
+  },
+  {
+    name: "Системные настройки",
+    id: "system",
+  },
+  {
+    name: "Языковые настройки",
+    id: "language",
+  },
+];
 
 const Profile = () => {
   const [logout, setLogout] = useState(false);
   const user = useSelector((state: any) => state.auth.user);
   const { t } = useTranslation();
+  const [currentTab, setCurrentTab] = useState({ name: "", id: "profile" });
   const dispatch = useDispatch();
   const {
     control,
@@ -46,77 +65,89 @@ const Profile = () => {
       <Header
         extra={<CBreadcrumbs items={breadCrumbItems} progmatic={true} />}
       ></Header>
+
       <form className="p-2">
         <CCard style={{ minHeight: "auto" }}>
-          <div className="flex justify-between">
-            <div className="flex items-center space-x-8">
-              <div className="w-[150px]">
-                <CImageUpload
-                  name="image_id"
-                  // setValue={setValue}
-                  // defaultValue={user?.image}
-                />
-              </div>
+          <CTabs
+            tabList={TabList}
+            currentTab={currentTab}
+            handleTabClick={setCurrentTab}
+          />
+          {currentTab.id === "profile" ? (
+            <div className="flex justify-between mt-5">
+              <div className="flex items-center space-x-8">
+                <div className="w-[150px]">
+                  <CImageUpload
+                    name="image_id"
+                    // setValue={setValue}
+                    // defaultValue={user?.image}
+                  />
+                </div>
 
-              <div className="grid grid-cols-2 gap-4 w-[600px]">
-                <HFTextField
-                  name="name"
-                  control={control}
-                  placeholder={t("name")}
-                  label={t("name")}
-                  setValue={setValue}
-                  required={true}
-                  defaultValue={user?.name}
-                  errors={errors}
-                />
-                <HFInputMask
-                  name="phone"
-                  control={control}
-                  label={t("phone_number")}
-                  placeholder={t("phone_number")}
-                  required={true}
-                  mask={"+\\9\\9\\8 99 999 99 99"}
-                  setValue={setValue}
-                  defaultValue={user?.phone}
-                  errors={errors}
-                />
-                <HFTextField
-                  name="email"
-                  control={control}
-                  placeholder={t("login")}
-                  label={t("login")}
-                  setValue={setValue}
-                  required={true}
-                  defaultValue={user?.email}
-                  type="email"
-                  errors={errors}
-                />
-                <HFMultipleSelect
-                  name="roles"
-                  control={control}
-                  options={user?.roles?.map((item: any) => {
-                    return {
-                      value: item,
-                      label: item,
-                    };
-                  })}
-                  label="Роль пользователя"
-                  placeholder="Роль пользователя"
-                  required={true}
-                  setValue={setValue}
-                  defaultValue={user?.roles}
+                <div className="grid grid-cols-2 gap-4 w-[600px]">
+                  <HFTextField
+                    name="name"
+                    control={control}
+                    placeholder={t("name")}
+                    label={t("name")}
+                    setValue={setValue}
+                    required={true}
+                    defaultValue={user?.name}
+                    errors={errors}
+                  />
+                  <HFInputMask
+                    name="phone"
+                    control={control}
+                    label={t("phone_number")}
+                    placeholder={t("phone_number")}
+                    required={true}
+                    mask={"+\\9\\9\\8 99 999 99 99"}
+                    setValue={setValue}
+                    defaultValue={user?.phone}
+                    errors={errors}
+                  />
+                  <HFTextField
+                    name="email"
+                    control={control}
+                    placeholder={t("login")}
+                    label={t("login")}
+                    setValue={setValue}
+                    required={true}
+                    defaultValue={user?.email}
+                    type="email"
+                    errors={errors}
+                  />
+                  <HFMultipleSelect
+                    name="roles"
+                    control={control}
+                    options={user?.roles?.map((item: any) => {
+                      return {
+                        value: item,
+                        label: item,
+                      };
+                    })}
+                    label="Роль пользователя"
+                    placeholder="Роль пользователя"
+                    required={true}
+                    setValue={setValue}
+                    defaultValue={user?.roles}
+                  />
+                </div>
+              </div>
+              <div>
+                <CustomBtn
+                  text={t("logout_profile")}
+                  icon={<LogoutIcon />}
+                  handleClick={() => setLogout(true)}
+                  type="button"
                 />
               </div>
             </div>
-            <div>
-              <CustomBtn
-                text={t("logout_profile")}
-                icon={<LogoutIcon />}
-                handleClick={() => setLogout(true)}
-                type="button"
-              />
-            </div>
-          </div>
+          ) : currentTab.id === "system" ? (
+            <WebsiteSettings />
+          ) : (
+            <LanguagesPage />
+          )}
         </CCard>
 
         <div className="flex justify-end">
