@@ -58,7 +58,7 @@ const CCard = ({
 
   return (
     <div
-      className={`bg-white rounded-[18px] min-h-[200px] border border-[var(--gray20)] common-shadow relative overflow-y-scroll remove-scroll ${classes}`}
+      className={`bg-white rounded-[8px] min-h-[200px] border border-[var(--gray20)] common-shadow relative overflow-y-scroll remove-scroll ${classes}`}
       style={{
         ...style,
         height: NewSize(half),

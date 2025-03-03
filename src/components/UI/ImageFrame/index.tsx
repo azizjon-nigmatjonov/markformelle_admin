@@ -1,4 +1,4 @@
-import { ManIcon, UserIcon, WomenIcon } from "../IconGenerator/Svg";
+import { ManIcon, WomenIcon } from "../IconGenerator/Svg";
 
 const ImageFrame = ({
   image = "",

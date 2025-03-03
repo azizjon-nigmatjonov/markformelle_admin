@@ -1,16 +1,14 @@
-import WarehouseLoaders from "../../views/Warehouse/Loaders";
+import { EritmaPage } from "../../views/Stores/Eritma";
 
 export const stores = [
   {
-    parent: "row",
-    link: "loaders",
+    parent: "stores",
+    link: "eritma",
     sidebar: true,
-    title: "Дашборд грузчиков 612",
-    parent_icon: (
-      <img width={18} src="/images/wherehouse.png" alt="warehouse" />
-    ),
-    icon: <img width={22} src="/images/fork-loader.png" alt="loader" />,
-    element: <WarehouseLoaders />,
+    title: "Eritma",
+    parent_icon: <img width={20} src="/images/store.png" alt="store" />,
+    icon: <img width={20} src="/images/store.png" alt="store" />,
+    element: <EritmaPage />,
     auth: true,
     permissions: ["view_page"],
   },

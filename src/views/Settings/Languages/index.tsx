@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import CCard from "../../../components/CElements/CCard";
 import { Header } from "../../../components/UI/Header";
 import useDebounce from "../../../hooks/useDebounce";
 import { GetTranslations, HandleTable } from "./Logic";

@@ -5,7 +5,6 @@ import { useState } from "react";
 import CTabs from "../../../components/CElements/CTab";
 import { WebsiteColors } from "./Colors";
 import { WebsiteImages } from "./Images";
-import CCard from "../../../components/CElements/CCard";
 
 const tabList = [
   {

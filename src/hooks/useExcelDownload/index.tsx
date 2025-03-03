@@ -52,12 +52,12 @@ const ExcelDownload = ({
   return (
     <div className="relative">
       <IconButton onClick={() => setOpen(true)}>
-        <div className="border border-[var(--border)] h-[30px] w-[30px] rounded-[8px] flex items-center justify-center">
+        <div className="h-[30px] w-[30px] rounded-[8px] flex items-center justify-center">
           <ExcelIconOutlined />
         </div>
       </IconButton>
       {open && (
-        <div className="absolute right-0 top-[33px] bg-white border border-[var(--gray20)] card-shadow rounded-[12px] z-[92] min-w-[150px] whitespace-nowrap text-left">
+        <div className="absolute right-0 top-[33px] bg-white card-shadow rounded-[12px] z-[92] min-w-[150px] whitespace-nowrap text-left">
           <ul>
             <li className="p-2 hover:bg-[var(--border)]">
               <button

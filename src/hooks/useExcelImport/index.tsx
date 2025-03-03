@@ -38,7 +38,7 @@ const ExcelReader = () => {
     <div className="relative">
       <IconButton>
         <div
-          className="border border-[var(--border)] h-[30px] w-[30px] rounded-[8px] flex items-center justify-center relative z-[1]"
+          className="h-[30px] w-[30px] rounded-[8px] flex items-center justify-center relative z-[1]"
           onClick={() => document?.getElementById("fileInput")?.click()}
         >
           {loading ? <CircularProgress size={14} /> : <UploadOutlinedIcon />}
