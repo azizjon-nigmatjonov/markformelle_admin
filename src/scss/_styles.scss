@@ -88,7 +88,8 @@ input {
 }
 
 .MuiPaper-root {
-  border-radius: 12px !important;
+  border-radius: 4px !important;
+  padding: 0 !important;
 
   ul {
     background-color: white;
@@ -331,6 +332,12 @@ input {
   border-radius: 8px;
   @include common-shadow;
   @include center-center;
+}
+
+.link-btn {
+  color: var(--primary);
+  font-weight: 500;
+  text-decoration: underline;
 }
 
 .accordion {
@@ -606,7 +613,7 @@ input {
 
 .input-design {
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 0px 12px;
   height: 35px;
   &:focus {

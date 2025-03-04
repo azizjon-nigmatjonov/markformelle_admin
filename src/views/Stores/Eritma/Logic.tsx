@@ -1,4 +1,4 @@
-export const breadCrumbs = [{ label: "Stok", link: "/stores/eritma" }];
+export const breadCrumbs = [{ label: "Eritma", link: "/stores/eritma" }];
 
 export const TableData = () => {
   const headColumns = [
@@ -26,6 +26,10 @@ export const TableData = () => {
     {
       name: "Azizjon",
       count: 12,
+    },
+    {
+      name: "Sardorbek",
+      count: 10,
     },
   ];
 

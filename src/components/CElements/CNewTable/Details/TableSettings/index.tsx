@@ -6,11 +6,12 @@ import { tableStoreActions } from "../../../../../store/table";
 import { useDispatch } from "react-redux";
 import { IconButton } from "@mui/material";
 import { ListDotIcon } from "../../../../UI/IconGenerator/Svg/Machines";
-import EditIcon from "@mui/icons-material/Edit";
-import SaveIcon from "@mui/icons-material/Save";
 import ExcelDownload from "../../../../../hooks/useExcelDownload";
-import ExcelReader from "../../../../../hooks/useExcelImport";
-import { FilterIcon, SearchIcon } from "../../../../UI/IconGenerator/Svg";
+import {
+  DeleteIcon,
+  FilterIcon,
+  PlusIcon,
+} from "../../../../UI/IconGenerator/Svg";
 
 export const SettingDropdown = ({
   allCheck = false,
@@ -40,11 +41,9 @@ export const SettingDropdown = ({
 
 export const HeaderSettings = ({
   sideFilter,
-  searchLoop = false,
   filterParams,
   tableActions,
   pageName,
-  reOrder,
   bodyColumns = [],
   pageColumns = [],
   headColumns = [],
@@ -56,11 +55,9 @@ export const HeaderSettings = ({
   pageName: string;
   headColumns: any;
   pageColumns: any;
-  reOrder: boolean;
   bodyColumns: any;
   allColumns: any;
   extra?: any;
-  searchLoop: boolean;
   sideFilter: boolean;
   tableActions: (el: any, status: string) => void;
 }) => {
@@ -199,12 +196,29 @@ export const HeaderSettings = ({
   return (
     <div className="pb-[45px]">
       <div className="h-[45px] absolute w-full left-0 top-0 flex items-center desktop:px-3 justify-between">
-        <h2 className="font-bold">
-          <span>Общий</span>
-          <span> {bodyColumns?.length}</span>
-        </h2>
+        <div className="flex items-center space-x-4 h-full">
+          <h2 className="font-medium">
+            <span>Общий</span>
+            <span> {bodyColumns?.length}</span>
+          </h2>
+          <div className="w-[1px] h-[60%] bg-[var(--border)]"></div>
+          <div className="space-x-4">
+            <IconButton onClick={() => tableActions({}, "modal")}>
+              <div className="w-[30px] h-[30px] items-center justify-center flex">
+                <PlusIcon fill="black" width={20} />
+              </div>
+              <p className="text-sm pr-2 text-black">Добавить</p>
+            </IconButton>
+            <IconButton onClick={() => tableActions({}, "sidefilter")}>
+              <div className="w-[30px] h-[30px] items-center justify-center flex">
+                <DeleteIcon fill="black" width={18} />
+              </div>
+              <p className="text-sm pr-2 text-black">Удалить</p>
+            </IconButton>
+          </div>
+        </div>
 
-        <div className="flex items-center space-x-2 h-full pr-2">
+        <div className="flex items-center space-x-2 h-full">
           <IconButton onClick={() => tableActions({}, "sidefilter")}>
             <div
               className={`h-[30px] w-[30px] flex items-center justify-center`}
@@ -214,42 +228,12 @@ export const HeaderSettings = ({
               />
             </div>
           </IconButton>
-          <IconButton onClick={() => tableActions({}, "search")}>
-            <div
-              className={`h-[30px] w-[30px] rounded-[8px] flex items-center justify-center`}
-            >
-              <SearchIcon
-                fill={searchLoop ? "var(--primary)" : "var(--gray)"}
-              />
-            </div>
-          </IconButton>
-          <ExcelReader />
+
           <ExcelDownload
             title={filterParams?.title}
             data={ExcelData}
             allColumns={allColumns}
           />
-          <IconButton onClick={() => tableActions({}, "reorder")}>
-            <div
-              className={`h-[30px] w-[30px] rounded-[8px] flex items-center justify-center`}
-            >
-              {reOrder ? (
-                <SaveIcon style={{ color: "var(--primary)", fontSize: 24 }} />
-              ) : (
-                <EditIcon
-                  style={{
-                    color: "var(--gray)",
-                    fontSize: 24,
-                  }}
-                />
-              )}
-            </div>
-          </IconButton>
-
-          {/* <DeleteElements
-            filterParams={filterParams}
-            tableActions={tableActions}
-          /> */}
 
           <div className="relative">
             <div onClick={() => setOpen(true)} className="relative">

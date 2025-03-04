@@ -179,9 +179,9 @@ export const DownloadIcon = () => (
   </svg>
 );
 
-export const SearchIcon = ({ fill = "#9092A3" }) => (
+export const SearchIcon = ({ fill = "#9092A3", width = 23 }) => (
   <svg
-    width={23}
+    width={width}
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
     fill={fill}
@@ -278,10 +278,10 @@ export const ArrowDownFilled = ({ fill = "#858592" }: { fill?: string }) => (
   </svg>
 );
 
-export const PlusIcon = ({ fill = "white" }: { fill?: string }) => (
+export const PlusIcon = ({ fill = "white", width = 18 }) => (
   <svg
-    width="18"
-    height="18"
+    width={width}
+    height={width}
     viewBox="0 0 18 18"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -344,10 +344,10 @@ export const EditIcon = ({
   </svg>
 );
 
-export const DeleteIcon = ({ fill = "#E82F0F" }: { fill?: string }) => (
+export const DeleteIcon = ({ fill = "#E82F0F", width = 18 }) => (
   <svg
-    width="18"
-    height="18"
+    width={width}
+    height={width}
     viewBox="0 0 18 18"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

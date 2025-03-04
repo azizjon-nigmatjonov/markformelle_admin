@@ -39,7 +39,7 @@ export default function PaginationLimits({
   return (
     <>
       <div className={cls.limitBtn} onClick={handleClickPopup}>
-        <span className={cls.text}>{limit} ta dan</span>
+        <span className={cls.text}>{limit} </span>
         {open ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
       </div>
       <Popover

@@ -22,6 +22,9 @@ import { TableSettingsData } from "./Logic";
 import { tableStoreActions } from "../../../store/table";
 import useDebounce from "../../../hooks/useDebounce";
 import { SideFilter, TableFilter } from "./Details/Filter";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
+import { ModalUI } from "./Details/Modal";
+import CModal from "../CModal";
 
 interface Props {
   meta?: {
@@ -45,7 +48,6 @@ interface Props {
   footer?: any;
   removeScroll?: boolean;
   removeSearch?: boolean;
-  defaultSortData?: any;
   extra?: any;
 }
 
@@ -70,8 +72,6 @@ const CNewTable = ({
   handleActions = () => {},
   tableSetting = true,
   removeScroll = false,
-  removeSearch = false,
-  defaultSortData = {},
   footer,
 }: Props) => {
   const tableSize = useSelector((state: any) => state.tableSize.tableSize);
@@ -79,8 +79,10 @@ const CNewTable = ({
   const tableSettings: Record<string, any> = {};
   const [colProperties, setColProperties]: any = useState({});
   const [currentIndex, setCurrentIndex] = useState(null);
-  const [currDelete, setCurrDelete] = useState<any>({});
-  console.log(currDelete);
+  const [activeSort, setActiveSort] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  // const [currDelete, setCurrDelete] = useState<any>({});
+  // console.log(currDelete);
 
   const dispatch = useDispatch();
   const { checkPermission } = usePermissions();
@@ -93,7 +95,7 @@ const CNewTable = ({
   const order = useSelector((state: any) => state.table.order);
   const [active, setActive] = useState(false);
   const [newBodyColumns, setNewBodyColumns] = useState([]);
-  const [sortData, setSortData]: any = useState({ ...defaultSortData });
+  const [sortData, setSortData]: any = useState([]);
   const [reOrder, setReorder] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [draggingIndex, setDraggingIndex]: any = useState(null);
@@ -119,61 +121,66 @@ const CNewTable = ({
     if (!bodyColumns?.length) return;
     const arr = [...bodyColumns];
     let result: any = [];
-    const { value, id, search }: any = { ...sortData };
 
-    if (value === "search") {
-      arr.forEach((obj: any) => {
-        let val = "";
-        if (typeof id === "object") {
-          for (let key of id) {
-            val += obj[key];
+    sortData?.forEach((sortObj: any) => {
+      const { value, id, search }: any = { ...sortObj };
+      if (value === "search") {
+        arr.forEach((obj: any) => {
+          let val = "";
+          if (typeof id === "object") {
+            for (let key of id) {
+              val += obj[key];
+            }
+          } else {
+            val = obj[id] + "";
           }
-        } else {
-          val = obj[id] + "";
+
+          val = val.toLocaleLowerCase();
+
+          if (val.includes(search.toLocaleLowerCase())) {
+            result.push(obj);
+          }
+        });
+      }
+
+      if (value === "sort") {
+        if (search === "up") {
+          result = arr?.sort((a: any, b: any) => {
+            const aVal = a[id] + "";
+            const bVal = b[id] + "";
+
+            if (isNaN(parseFloat(a[id]))) {
+              return bVal.localeCompare(aVal);
+            }
+
+            return (
+              parseInt(bVal.replace(/\D/g, "")) -
+              parseInt(aVal.replace(/\D/g, ""))
+            );
+          });
         }
 
-        val = val.toLocaleLowerCase();
+        if (search === "down") {
+          result = arr?.sort((a: any, b: any) => {
+            const aVal = a[id] + "";
+            const bVal = b[id] + "";
 
-        if (val.includes(search.toLocaleLowerCase())) {
-          result.push(obj);
-        } else {
+            if (isNaN(parseFloat(a[id]))) {
+              return aVal.localeCompare(bVal);
+            }
+
+            return (
+              parseInt(aVal.replace(/\D/g, "")) -
+              parseInt(bVal.replace(/\D/g, ""))
+            );
+          });
         }
-      });
-      setNewBodyColumns(result);
-
-      return;
-    }
-
-    if (value === "up") {
-      result = arr?.sort((a: any, b: any) => {
-        const aVal = a[id] + "";
-        const bVal = b[id] + "";
-
-        if (isNaN(parseFloat(a[id]))) {
-          return bVal.localeCompare(aVal);
-        }
-
-        return (
-          parseInt(bVal.replace(/\D/g, "")) - parseInt(aVal.replace(/\D/g, ""))
-        );
-      });
-    } else if (value === "down") {
-      result = arr?.sort((a: any, b: any) => {
-        const aVal = a[id] + "";
-        const bVal = b[id] + "";
-
-        if (isNaN(parseFloat(a[id]))) {
-          return aVal.localeCompare(bVal);
-        }
-
-        return (
-          parseInt(aVal.replace(/\D/g, "")) - parseInt(bVal.replace(/\D/g, ""))
-        );
-      });
-    }
+      }
+    });
 
     setNewBodyColumns(result.length ? result : arr);
-  }, [bodyColumns, sortData?.value, sortData?.search]);
+    result = [];
+  }, [bodyColumns, activeSort, sortData]);
 
   const bodySource = useMemo(() => {
     if (!newBodyColumns?.length) return [];
@@ -332,8 +339,55 @@ const CNewTable = ({
     }
   };
 
-  const handleSortLogic = ({ type, value, id, search }: any) => {
-    setSortData({ type, value, id, search });
+  const handleSortLogic = ({ value, id, search }: any) => {
+    setTimeout(() => {
+      setActiveSort((prev) => !prev);
+    }, 0);
+
+    if (!value) {
+      setSortData([]);
+      return;
+    }
+
+    if (value === "reorder") {
+      if (sortData.find((item: any) => item.value === "reorder")) {
+        setSortData(sortData?.filter((item: any) => item.value !== "reorder"));
+      } else {
+        setSortData([...sortData, { value, id }]);
+      }
+    } else if (value === "search") {
+      if (sortData.find((item: any) => item.value === "search")) {
+        if (search) {
+          const newSortData = sortData?.map((item: any) => {
+            if (item.value === "search" && value === "search") {
+              item.search = search;
+            }
+            return { ...item, id };
+          });
+
+          setSortData(newSortData);
+        } else {
+          setSortData(sortData?.filter((item: any) => item.value !== "search"));
+        }
+      } else {
+        if (search) {
+          setSortData([...sortData, { search, value, id }]);
+        }
+      }
+    } else if (value === "sort") {
+      if (sortData.find((item: any) => item.value === "sort")) {
+        const newSortData = sortData?.map((item: any) => {
+          if (item.value === "sort") {
+            item.search = search;
+          }
+
+          return { ...item, id };
+        });
+        setSortData(newSortData);
+      } else {
+        setSortData([...sortData, { search, value, id }]);
+      }
+    }
   };
 
   useEffect(() => {
@@ -377,7 +431,7 @@ const CNewTable = ({
     });
 
     setNewHeadColumns(data);
-  }, [pageColumns, pageName, tableSetting, draggingIndex]);
+  }, [pageColumns, tableSetting, items]);
 
   const handleDragStart = (index: any) => {
     setDraggingIndex(index);
@@ -395,6 +449,12 @@ const CNewTable = ({
     newItems.splice(index, 0, movedItem);
 
     setTimeout(() => {
+      dispatch(
+        tableStoreActions.setOrder({
+          pageName,
+          payload: newItems.map((item: { id: any }) => item.id),
+        })
+      );
       setItems(newItems);
       setDraggingIndex(null);
       setHoveredIndex(null);
@@ -410,33 +470,23 @@ const CNewTable = ({
   };
 
   const tableActions = (el: any, status: string) => {
+    if (status === "modal") {
+      setOpenModal(true);
+    }
+
     if (status === "sidefilter") {
-      setSideFilter(true);
+      setSideFilter(!sideFilter);
     }
     if (status === "search") {
       setSearchLoop(!searchLoop);
     }
     if (status === "reorder") {
-      if (reOrder) {
-        dispatch(
-          tableStoreActions.setOrder({
-            pageName,
-            payload: items.map((item: { id: any }) => {
-              if (typeof item.id === "object") {
-                return item.id.join("");
-              } else {
-                return item.id;
-              }
-            }),
-          })
-        );
-      }
       handleFilterParams({ ...filterParams, edit: !reOrder });
       setReorder((prev) => !prev);
+      handleSortLogic({ value: "reorder" });
       return;
     }
     if (status === "delete_by") {
-      setCurrDelete(el);
       return;
     }
 
@@ -455,324 +505,247 @@ const CNewTable = ({
       id: id,
       search,
     });
-  }, 200);
+  }, 0);
 
   return (
-    <div className="flex space-x-2">
-      <SideFilter
-        sideFilter={sideFilter}
-        handleClick={() => setSideFilter(false)}
-      />
-      <div className="relative cnewtable w-full">
+    <div className="relative cnewtable w-full">
+      <div
+        className={`designed-scroll rounded-[4px] min-h-[50vh] ${
+          removeScroll ? "" : "overflow-scroll"
+        }`}
+      >
+        {tableSetting ? (
+          <HeaderSettings
+            totalCount={meta.totalCount}
+            filterParams={filterParams}
+            tableActions={tableActions}
+            pageName={pageName}
+            headColumns={items}
+            pageColumns={pageColumns}
+            bodyColumns={bodySource}
+            allColumns={bodyColumns}
+            extra={extra}
+            sideFilter={sideFilter}
+          />
+        ) : (
+          ""
+        )}
         <div
-          className={`designed-scroll rounded-[4px] min-h-[50vh] ${
-            removeScroll ? "" : "overflow-scroll"
+          id="table"
+          className={` ${
+            tableSetting
+              ? "border-t border-[var(--border)] pt-10 flex space-x-8"
+              : ""
           }`}
+          ref={tableRef}
         >
-          {tableSetting ? (
-            <HeaderSettings
-              totalCount={meta.totalCount}
-              filterParams={filterParams}
-              tableActions={tableActions}
-              pageName={pageName}
-              headColumns={items}
-              reOrder={reOrder}
-              pageColumns={pageColumns}
-              bodyColumns={bodySource}
-              allColumns={bodyColumns}
-              extra={extra}
-              searchLoop={searchLoop}
-              sideFilter={sideFilter}
-            />
-          ) : (
-            ""
-          )}
+          <SideFilter
+            sideFilter={sideFilter}
+            handleClick={() => setSideFilter(false)}
+            sortData={sortData}
+            handleSortLogic={handleSortLogic}
+            searchDebounce={searchDebounce}
+            tableActions={tableActions}
+          />
           <div
-            id="table"
-            className={` ${
-              tableSetting ? "border-t border-[var(--border)] pt-10" : ""
-            }`}
-            ref={tableRef}
+            className={`w-full ${footer ? "pb-[50px] overflow-hidden" : ""}`}
           >
-            <div className={`${footer ? "pb-[50px] overflow-hidden" : ""}`}>
-              <CTableWrapper
-                count={meta.pageCount}
-                totalCount={meta.totalCount}
-                currentLimit={filterParams.perPage}
-                loader={isLoading}
-                height={0}
-                passRouter={passRouter}
-                filterParams={filterParams}
-                disablePagination={disablePagination}
-                dataLength={newBodyColumns?.length}
-              >
-                <CTableHead>
-                  <CTableRow className="">
-                    {newHeadColumns?.map((column: any, index: number) => (
-                      <CTableHeadCell
-                        id={column?.id}
-                        key={column?.innerId || column?.id || index}
+            <CTableWrapper
+              count={meta.pageCount}
+              totalCount={meta.totalCount}
+              currentLimit={filterParams.perPage}
+              loader={isLoading}
+              height={0}
+              passRouter={passRouter}
+              filterParams={filterParams}
+              disablePagination={disablePagination}
+              dataLength={newBodyColumns?.length}
+            >
+              <CTableHead>
+                <CTableRow className="">
+                  {newHeadColumns?.map((column: any, index: number) => (
+                    <CTableHeadCell
+                      id={column?.id}
+                      key={column?.innerId || column?.id || index}
+                      style={{
+                        minWidth: tableSize?.[pageName]?.[column?.id]
+                          ? tableSize?.[pageName]?.[column?.id]
+                          : column?.width
+                          ? column.width
+                          : "auto",
+                        width: tableSize?.[pageName]?.[column?.id]
+                          ? tableSize?.[pageName]?.[column?.id]
+                          : column?.width
+                          ? column.width
+                          : "auto",
+                        position: tableSettings?.[pageName]?.find(
+                          (item: any) => item?.id === column?.id
+                        )?.isStiky
+                          ? "sticky"
+                          : "relative",
+                        left: tableSettings?.[pageName]?.find(
+                          (item: any) => item?.id === column?.id
+                        )?.isStiky
+                          ? calculateWidth(column?.id, index)
+                          : "0",
+                        backgroundColor: "#fff",
+                        zIndex: tableSettings?.[pageName]?.find(
+                          (item: any) => item?.id === column?.id
+                        )?.isStiky
+                          ? "1"
+                          : "",
+                      }}
+                    >
+                      <div
+                        draggable={reOrder}
+                        onDragStart={() => handleDragStart(index)}
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                          handleDragOver(index);
+                        }}
+                        onDragLeave={handleDragLeave}
+                        onDrop={() => handleDrop(index)}
+                        className={`w-full group flex items-center min-h-[40px] flex-nowrap cursor-pointer ${
+                          column?.id === "index"
+                            ? "justify-center"
+                            : "justify-between"
+                        } ${draggingIndex === index ? "drag-and-drop" : ""} ${
+                          hoveredIndex === index && hoveredIndex > draggingIndex
+                            ? "drag-hovered right"
+                            : hoveredIndex === index &&
+                              hoveredIndex < draggingIndex
+                            ? "drag-hovered left"
+                            : ""
+                        }`}
                         style={{
-                          minWidth: tableSize?.[pageName]?.[column?.id]
-                            ? tableSize?.[pageName]?.[column?.id]
-                            : column?.width
-                            ? column.width
-                            : "auto",
-                          width: tableSize?.[pageName]?.[column?.id]
-                            ? tableSize?.[pageName]?.[column?.id]
-                            : column?.width
-                            ? column.width
-                            : "auto",
-                          position: tableSettings?.[pageName]?.find(
-                            (item: any) => item?.id === column?.id
-                          )?.isStiky
-                            ? "sticky"
-                            : "relative",
-                          left: tableSettings?.[pageName]?.find(
-                            (item: any) => item?.id === column?.id
-                          )?.isStiky
-                            ? calculateWidth(column?.id, index)
-                            : "0",
-                          backgroundColor: "#fff",
-                          zIndex: tableSettings?.[pageName]?.find(
-                            (item: any) => item?.id === column?.id
-                          )?.isStiky
-                            ? "1"
-                            : "",
+                          color:
+                            draggingIndex === index ? "var(--primary)" : "",
                         }}
                       >
                         <div
-                          draggable={reOrder}
-                          onDragStart={() => handleDragStart(index)}
-                          onDragOver={(e) => {
-                            e.preventDefault();
-                            handleDragOver(index);
-                          }}
-                          onDragLeave={handleDragLeave}
-                          onDrop={() => handleDrop(index)}
-                          className={`w-full group flex items-center min-h-[40px] flex-nowrap cursor-pointer ${
-                            column?.id === "index"
-                              ? "justify-center"
-                              : "justify-between"
-                          } ${draggingIndex === index ? "drag-and-drop" : ""} ${
-                            hoveredIndex === index &&
-                            hoveredIndex > draggingIndex
-                              ? "drag-hovered right"
-                              : hoveredIndex === index &&
-                                hoveredIndex < draggingIndex
-                              ? "drag-hovered left"
-                              : ""
-                          }`}
+                          className={`w-full min-h-[40px] flex items-center pl-6 hover:bg-[var(--primary50)]`}
                           style={{
-                            color:
-                              draggingIndex === index ? "var(--primary)" : "",
+                            textAlign: !column?.filter ? "left" : "left",
+                            backgroundColor:
+                              currentFilter === index ? "var(--primary50)" : "",
                           }}
+                          onClick={() => setCurrentFilter(index)}
                         >
-                          <div
-                            className={`w-full min-h-[40px] flex items-center`}
-                            style={{
-                              textAlign: !column?.filter ? "left" : "left",
-                              color:
-                                sortData?.id === column?.id && !reOrder
-                                  ? "var(--primary)"
-                                  : "",
-                            }}
-                            onClick={() => setCurrentFilter(index)}
-                          >
-                            {column.renderHead
-                              ? Array.isArray(column.renderHead)
-                                ? column.renderHead(
-                                    column.renderHead.map(
-                                      (data: any) => column[data]
-                                    )
+                          {column.renderHead
+                            ? Array.isArray(column.renderHead)
+                              ? column.renderHead(
+                                  column.renderHead.map(
+                                    (data: any) => column[data]
                                   )
-                                : column.renderHead()
-                              : column?.id === "index"
-                              ? "№"
-                              : t(column?.title)}
-                          </div>
-
-                          <TableFilter
-                            colId={column?.id}
-                            sortId={sortData?.id}
-                            handleSortLogic={handleSortLogic}
-                            filter={currentFilter === index}
-                            closeFilter={() => setCurrentFilter(null)}
-                          />
-
-                          {/* {column?.id !== "index" && !column?.remove_sort ? (
-                        <div className="w-[20px] flex justify-start">
-                          {!reOrder ? (
-                            <TableSort
-                              type={column.filter}
-                              handleSortLogic={handleSortLogic}
-                              colId={column?.id}
-                              sortId={sortData?.id}
-                            />
-                          ) : (
-                            <DragIndicatorIcon
-                              style={{
-                                color:
-                                  draggingIndex === index
-                                    ? "var(--primary)"
-                                    : "var(--gray)",
-                                marginRight: 5,
-                              }}
-                            />
-                          )}
-                        </div>
-                      ) : (
-                        ""
-                      )} */}
-                        </div>
-                      </CTableHeadCell>
-                    ))}
-                  </CTableRow>
-                </CTableHead>
-
-                <CTableBody
-                  loader={isLoading}
-                  columnscount={newHeadColumns?.length}
-                  rowsCount={filterParams.perPage}
-                  dataLength={bodySource?.length}
-                >
-                  {!removeSearch ? (
-                    searchLoop ? (
-                      <TableRow>
-                        {newHeadColumns.map((item: any, colIndex: number) => (
-                          <CTableCell key={colIndex} className="relative">
-                            {item.id !== "index" && !item?.remove_sort ? (
-                              <div
-                                className={`w-full h-full relative  ${
-                                  hoveredIndex === colIndex &&
-                                  hoveredIndex > draggingIndex
-                                    ? "drag-hovered right"
-                                    : hoveredIndex === colIndex &&
-                                      hoveredIndex < draggingIndex
-                                    ? "drag-hovered left"
-                                    : ""
-                                }`}
-                              >
-                                <div className="absolute top-1/2 left-2 -translate-y-1/2">
-                                  <SearchIcon />
-                                </div>
-                                <input
-                                  type="text"
-                                  placeholder=""
-                                  onChange={(e: any) => {
-                                    searchDebounce(e.target.value, item.id);
-                                  }}
-                                  value={
-                                    sortData?.id === item.id
-                                      ? sortData?.search
-                                      : ""
-                                  }
-                                  className="w-full input-design h-full text-center"
-                                  style={{ padding: 0 }}
-                                />
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </CTableCell>
-                        ))}
-                      </TableRow>
-                    ) : (
-                      ""
-                    )
-                  ) : (
-                    ""
-                  )}
-
-                  {bodySource?.length
-                    ? bodySource?.map((item: any, rowIndex: any) => (
-                        <TableRow
-                          key={bodySource.length + rowIndex}
-                          ref={(e) => handleBodycolRef(item, e)}
-                          className={`group ${
-                            clickable && !item.empty && checkPermission("view")
-                              ? "clickable"
-                              : ""
-                          } ${
-                            currentIndex === rowIndex
-                              ? "bg-[var(--primary50)]"
-                              : ""
-                          }`}
-                        >
-                          {newHeadColumns.map(
-                            (column: any, colIndex: number) => (
-                              <CTableCell
-                                key={colIndex + column?.id || 12}
-                                className={`overflow-ellipsis`}
+                                )
+                              : column.renderHead()
+                            : column?.id === "index"
+                            ? "№"
+                            : t(column?.title)}
+                          <div className="ml-2">
+                            {reOrder && (
+                              <DragIndicatorIcon
                                 style={{
-                                  minWidth: "max-content",
-                                  padding: "0px",
-                                  position: tableSettings?.[pageName]?.find(
-                                    (item: any) => item?.id === column?.id
-                                  )?.isStiky
-                                    ? "sticky"
-                                    : "relative",
-                                  left: tableSettings?.[pageName]?.find(
-                                    (item: any) => item?.id === column?.id
-                                  )?.isStiky
-                                    ? calculateWidth(column?.id, colIndex)
-                                    : "0",
-                                  backgroundColor: "#fff",
-                                  zIndex: tableSettings?.[pageName]?.find(
-                                    (item: any) => item?.id === column?.id
-                                  )?.isStiky
-                                    ? "1"
-                                    : "",
+                                  color:
+                                    draggingIndex === index
+                                      ? "var(--primary)"
+                                      : "var(--gray)",
+                                  marginRight: 5,
                                 }}
-                              >
+                              />
+                            )}
+                          </div>
+                        </div>
+
+                        <TableFilter
+                          colId={column?.id ?? currentFilter}
+                          sortData={sortData}
+                          handleSortLogic={handleSortLogic}
+                          filter={currentFilter === index}
+                          searchDebounce={searchDebounce}
+                          tableActions={tableActions}
+                          closeFilter={() => setCurrentFilter(null)}
+                        />
+                      </div>
+                    </CTableHeadCell>
+                  ))}
+                </CTableRow>
+              </CTableHead>
+
+              <CTableBody
+                loader={isLoading}
+                columnscount={newHeadColumns?.length}
+                rowsCount={filterParams.perPage}
+                dataLength={bodySource?.length}
+              >
+                {bodySource?.length
+                  ? bodySource?.map((item: any, rowIndex: any) => (
+                      <TableRow
+                        key={bodySource.length + rowIndex}
+                        ref={(e) => handleBodycolRef(item, e)}
+                        className={`group ${
+                          clickable && !item.empty && checkPermission("view")
+                            ? "clickable"
+                            : ""
+                        } ${
+                          currentIndex === rowIndex
+                            ? "bg-[var(--primary50)]"
+                            : ""
+                        }`}
+                      >
+                        {newHeadColumns.map((column: any, colIndex: number) => (
+                          <CTableCell
+                            key={colIndex + column?.id || 12}
+                            className={`overflow-ellipsis`}
+                            style={{
+                              minWidth: "max-content",
+                              padding: "0px",
+                              position: tableSettings?.[pageName]?.find(
+                                (item: any) => item?.id === column?.id
+                              )?.isStiky
+                                ? "sticky"
+                                : "relative",
+                              left: tableSettings?.[pageName]?.find(
+                                (item: any) => item?.id === column?.id
+                              )?.isStiky
+                                ? calculateWidth(column?.id, colIndex)
+                                : "0",
+                              backgroundColor: "#fff",
+                              zIndex: tableSettings?.[pageName]?.find(
+                                (item: any) => item?.id === column?.id
+                              )?.isStiky
+                                ? "1"
+                                : "",
+                            }}
+                          >
+                            <div
+                              style={{
+                                textAlign: column?.textAlign || "left",
+                              }}
+                              className={`relative h-full flex items-center ${
+                                hoveredIndex === colIndex &&
+                                hoveredIndex > draggingIndex
+                                  ? "drag-hovered right"
+                                  : hoveredIndex === colIndex &&
+                                    hoveredIndex < draggingIndex
+                                  ? "drag-hovered left"
+                                  : ""
+                              }`}
+                            >
+                              {column?.id !== "actions" && !item.empty ? (
                                 <div
-                                  style={{
-                                    textAlign: column?.textAlign || "left",
+                                  onClick={() => {
+                                    if (
+                                      clickable &&
+                                      column?.click !== "custom" &&
+                                      column?.id !== "actions"
+                                    )
+                                      tableActions(item, "view");
                                   }}
-                                  className={`relative h-full flex items-center ${
-                                    hoveredIndex === colIndex &&
-                                    hoveredIndex > draggingIndex
-                                      ? "drag-hovered right"
-                                      : hoveredIndex === colIndex &&
-                                        hoveredIndex < draggingIndex
-                                      ? "drag-hovered left"
-                                      : ""
-                                  }`}
                                 >
-                                  {column?.id !== "actions" && !item.empty ? (
-                                    <div
-                                      onClick={() => {
-                                        if (
-                                          clickable &&
-                                          column?.click !== "custom" &&
-                                          column?.id !== "actions"
-                                        )
-                                          tableActions(item, "view");
-                                      }}
-                                    >
-                                      {column?.permission ? (
-                                        <>
-                                          {checkPermission(
-                                            column.permission
-                                          ) && (
-                                            <>
-                                              {column.render
-                                                ? Array.isArray(column?.id)
-                                                  ? column.render(
-                                                      column?.id.map(
-                                                        (data: any) =>
-                                                          item[data]
-                                                      )
-                                                    )
-                                                  : column.render(
-                                                      item[column?.id],
-                                                      item
-                                                    )
-                                                : item[column?.id]}
-                                            </>
-                                          )}
-                                        </>
-                                      ) : (
+                                  {column?.permission ? (
+                                    <>
+                                      {checkPermission(column.permission) && (
                                         <>
                                           {column.render
                                             ? Array.isArray(column?.id)
@@ -788,94 +761,116 @@ const CNewTable = ({
                                             : item[column?.id]}
                                         </>
                                       )}
-                                    </div>
-                                  ) : (
-                                    ""
-                                  )}
-                                  {colIndex === 0 ? (
-                                    <>
-                                      <button
-                                        className={`p-2 absolute right-5 w-[50px] h-[35px] items-center justify-center group-hover:flex ${
-                                          rowIndex === currentIndex
-                                            ? "bg-[var(--gray20)] flex"
-                                            : "hidden"
-                                        }`}
-                                        onClick={() =>
-                                          setCurrentIndex(rowIndex)
-                                        }
-                                      >
-                                        <DotsVerticalIcon fill="black" />
-                                      </button>
-                                      <TabbleActions
-                                        element={item}
-                                        rowIndex={rowIndex}
-                                        currentIndex={currentIndex}
-                                        setCurrentIndex={setCurrentIndex}
-                                        handleActions={tableActions}
-                                        actions={["view", "edit", "delete"]}
-                                        checkPermission={checkPermission}
-                                      />
                                     </>
                                   ) : (
-                                    ""
+                                    <>
+                                      {column.render
+                                        ? Array.isArray(column?.id)
+                                          ? column.render(
+                                              column?.id.map(
+                                                (data: any) => item[data]
+                                              )
+                                            )
+                                          : column.render(
+                                              item[column?.id],
+                                              item
+                                            )
+                                        : item[column?.id]}
+                                    </>
                                   )}
                                 </div>
-                              </CTableCell>
-                            )
-                          )}
-                        </TableRow>
-                      ))
-                    : ""}
-                </CTableBody>
-              </CTableWrapper>
-              {footer && active ? (
+                              ) : (
+                                ""
+                              )}
+                              {colIndex === 0 ? (
+                                <>
+                                  <button
+                                    className={`p-2 absolute right-5 w-[50px] h-[35px] items-center justify-center group-hover:flex ${
+                                      rowIndex === currentIndex
+                                        ? "bg-[var(--gray20)] flex"
+                                        : "hidden"
+                                    }`}
+                                    onClick={() => setCurrentIndex(rowIndex)}
+                                  >
+                                    <DotsVerticalIcon fill="black" />
+                                  </button>
+                                  <TabbleActions
+                                    element={item}
+                                    rowIndex={rowIndex}
+                                    currentIndex={currentIndex}
+                                    setCurrentIndex={setCurrentIndex}
+                                    handleActions={tableActions}
+                                    actions={["view", "edit", "delete"]}
+                                    checkPermission={checkPermission}
+                                  />
+                                </>
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                          </CTableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                  : ""}
+              </CTableBody>
+            </CTableWrapper>
+            {footer && active ? (
+              <div
+                className="border-t border-[var(--border)] bg-white px-3 fixed bottom-3 rounded-b-lg right-4 w-full flex overflow-hidden whitespace-nowrap"
+                style={{ width: colProperties?.all - 5 }}
+              >
                 <div
-                  className="border-t border-[var(--border)] bg-white px-3 fixed bottom-3 rounded-b-lg right-4 w-full flex overflow-hidden whitespace-nowrap"
-                  style={{ width: colProperties?.all - 5 }}
+                  style={{ width: colProperties?.[0] }}
+                  className="px-3 py-1 border-r border-[var(--border)]"
                 >
-                  <div
-                    style={{ width: colProperties?.[0] }}
-                    className="px-3 py-1 border-r border-[var(--border)]"
-                  >
-                    <p className="footer_text flex justify-between pr-8">
-                      {footer.title} <span>{newBodyColumns.length}</span>
-                    </p>
-                  </div>
-                  <div
-                    style={{ width: colProperties?.[1] }}
-                    className="px-3 py-1 border-r border-[var(--border)]"
-                  >
-                    <p className="footer_text">{footer.month}</p>
-                  </div>
-                  <div
-                    style={{ width: colProperties?.[2] }}
-                    className="px-3 py-1"
-                  >
-                    <p className="footer_text">{footer.day}</p>
-                  </div>
+                  <p className="footer_text flex justify-between pr-8">
+                    {footer.title} <span>{newBodyColumns.length}</span>
+                  </p>
                 </div>
-              ) : (
-                ""
-              )}
-            </div>
+                <div
+                  style={{ width: colProperties?.[1] }}
+                  className="px-3 py-1 border-r border-[var(--border)]"
+                >
+                  <p className="footer_text">{footer.month}</p>
+                </div>
+                <div
+                  style={{ width: colProperties?.[2] }}
+                  className="px-3 py-1"
+                >
+                  <p className="footer_text">{footer.day}</p>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
-
-          {newBodyColumns?.length && !isLoading && !disablePagination ? (
-            <CPagination
-              filterParams={filterParams}
-              count={meta.pageCount}
-              totalCount={meta.totalCount}
-              limit={filterParams.perPage}
-              limitList={limitList}
-              passRouter={passRouter}
-              handleFilterParams={handleFilterParams}
-              dataLength={newBodyColumns?.length}
-            />
-          ) : (
-            ""
-          )}
         </div>
+
+        {newBodyColumns?.length && !isLoading && !disablePagination ? (
+          <CPagination
+            filterParams={filterParams}
+            count={meta.pageCount}
+            totalCount={meta.totalCount}
+            limit={filterParams.perPage}
+            limitList={limitList}
+            passRouter={passRouter}
+            handleFilterParams={handleFilterParams}
+            dataLength={newBodyColumns?.length}
+          />
+        ) : (
+          ""
+        )}
       </div>
+      {openModal && <ModalUI />}
+      <CModal
+        title={"Urin tanitimi"}
+        open={openModal}
+        handleClose={() => setOpenModal(false)}
+        footerActive={false}
+      >
+        <ModalUI />
+      </CModal>
     </div>
   );
 };

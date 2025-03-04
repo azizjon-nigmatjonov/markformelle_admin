@@ -5,12 +5,14 @@ import { useState } from "react";
 interface Props {
   colId?: any;
   sortId?: any;
+  type?: string;
   handleSortLogic: (val: any) => void;
 }
 export const TableSortFilter = ({
   handleSortLogic = () => {},
   colId,
   sortId,
+  type,
 }: Props) => {
   const [value, setValue] = useState("up");
   const handleClick = (val: string) => {
@@ -19,9 +21,11 @@ export const TableSortFilter = ({
 
   return (
     <button
-      className="w-full h-[40px] flex items-center space-x-4 px-2 hover:bg-[var(--primary50)]"
+      className={`w-full h-[40px] flex items-center space-x-4 px-2 text-[12px] rounded-[4px] hover:bg-[var(--primary50)] ${
+        type === "sort" && sortId ? "bg-[var(--primary50)]" : ""
+      }`}
       onClick={() => {
-        handleSortLogic({ type: "sort", id: colId, value });
+        handleSortLogic({ value: "sort", id: colId, search: value });
         handleClick(value === "up" ? "down" : "up");
       }}
     >
@@ -29,14 +33,14 @@ export const TableSortFilter = ({
         <ArrowDownwardIcon
           style={{
             fontSize: 16,
-            color: sortId === colId ? "var(--primary)" : "var(--gray)",
+            color: sortId === colId ? "var(--primary)" : "var(--black)",
           }}
         />
       ) : (
         <ArrowUpwardIcon
           style={{
             fontSize: 16,
-            color: sortId === colId ? "var(--primary)" : "var(--gray)",
+            color: sortId === colId ? "var(--primary)" : "var(--black)",
           }}
         />
       )}
