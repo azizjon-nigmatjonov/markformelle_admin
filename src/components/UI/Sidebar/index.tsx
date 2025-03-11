@@ -43,11 +43,15 @@ export const Sidebar = () => {
           }`}
           style={{ height: "100vh" }}
         >
-          <div className="h-[35px] desktop:h-[45px] text-xl flex justify-center w-full items-center border-b border-[var(--border)] px-1">
+          <div
+            className={`h-[35px] desktop:h-[45px] text-xl flex ${
+              wideSidebar ? "" : "justify-center"
+            } w-full items-center border-b border-[var(--border)] px-1`}
+          >
             {!wideSidebar ? (
               <img width={120} src="/images/logo_mini.png" alt="logo" />
             ) : (
-              ""
+              <img width={70} src="/images/logo.png" alt="logo" />
             )}
           </div>
           <button
@@ -56,7 +60,7 @@ export const Sidebar = () => {
             }
             className={`${
               wideSidebar ? "right-2 top-0 absolute" : ""
-            } w-[30px] h-[30px] flex justify-center items-center rounded-full bg-[var(--main80)] mx-auto my-2`}
+            } w-[25px] h-[25px] desktop:w-[30px] desktop:h-[30px] flex justify-center items-center rounded-full bg-[var(--main80)] mx-auto my-2`}
           >
             <div className={wideSidebar ? "" : "ml-1"}>
               {wideSidebar ? (

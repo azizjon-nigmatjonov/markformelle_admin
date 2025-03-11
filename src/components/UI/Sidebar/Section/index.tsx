@@ -6,7 +6,11 @@ import { DropDown, OneDropdown } from "./DropDown";
 import { useDispatch } from "react-redux";
 import { filterActions } from "../../../../store/filterParams";
 import { SectionBtns } from "./Btns";
-
+import Accordion from "@mui/material/Accordion";
+import { AccordionDetails, AccordionSummary } from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import usePageRouter from "../../../../hooks/useObjectRouter";
+import "./style.scss";
 interface Props {
   list: any;
   collapsed: boolean;
@@ -22,6 +26,8 @@ const SidebarSection = ({
 }: Props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const { navigateTo } = usePageRouter();
+  const [expanded, setExpanded] = useState<string | false>(false);
 
   const [activeIndex, setActiveIndex] = useState("");
   let locationName = location.pathname.substring(1);
@@ -49,6 +55,96 @@ const SidebarSection = ({
     dispatch(filterActions.clearFilterData());
   };
 
+  useEffect(() => {
+    Object.values(list).forEach((el: any) => {
+      const currentEl = el.find((item: any) => item.id === locationName);
+      if (currentEl?.id) {
+        setExpanded(currentEl?.parent);
+      }
+    });
+  }, [locationName, list]);
+
+  const handleChange =
+    (panel: string) => (_: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
+
+  if (wideSidebar) {
+    return (
+      <div id="sidebarCollapse">
+        {" "}
+        {Object.entries(list).map(([key, value]: [string, any]) => {
+          const visibleSidebarItems: any = value.filter(
+            (el: any) => el.sidebar
+          );
+          if (!visibleSidebarItems?.length) return "";
+
+          return (
+            <div key={key}>
+              <Accordion
+                expanded={expanded === key}
+                onChange={handleChange(key)}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1bh-content"
+                  id="panel1bh-header"
+                >
+                  <div className="w-[40px]">
+                    <IconGenerator
+                      icon={visibleSidebarItems[0]?.parent_icon}
+                      fill="var(--black)"
+                    />
+                  </div>
+                  <h2 className="font-semibold text-black text-[12px]">
+                    {t(key)}
+                  </h2>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <ul>
+                    {visibleSidebarItems?.map((item: any) => (
+                      <li
+                        key={item.id}
+                        className={`flex items-center justify-between rounded-[8px] h-[40px] relative overflow-hidden cursor-pointer text-[12px]`}
+                        onClick={() => navigateTo("/" + item.path)}
+                      >
+                        <div
+                          className={` ${
+                            item.id === locationName ? "active" : ""
+                          }`}
+                        ></div>
+                        <div className="w-[12px] h-[40px] border-b-2 border-l-2 border-[var(--border)] rounded-l-[8px] absolute left-[8px] top-[-18px]"></div>
+                        <div className="w-[60px] flex justify-center ml-[23px]">
+                          <IconGenerator
+                            icon={item?.icon}
+                            fill={
+                              item.id === locationName
+                                ? "var(--main)"
+                                : "var(--gray)"
+                            }
+                          />
+                        </div>
+                        <p
+                          className={`w-full ${
+                            item.id === locationName
+                              ? "text-[var(--main)] font-medium"
+                              : ""
+                          }`}
+                        >
+                          {t(item.title)}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                </AccordionDetails>
+              </Accordion>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
   return (
     <div className={`${cls.section}`}>
       <div className="flex flex-col justify-between w-full">
@@ -60,10 +156,6 @@ const SidebarSection = ({
             if (!visibleSidebarItems?.length) return "";
 
             const isLastItem = index === Object.entries(list).length - 1;
-
-            if (wideSidebar) {
-              return <></>;
-            }
 
             return visibleSidebarItems?.length > 0 ? (
               <div key={index}>

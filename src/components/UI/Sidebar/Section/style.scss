@@ -1,0 +1,35 @@
+#sidebarCollapse {
+    padding: 0 12px;
+    .MuiPaper-root {
+        background-color: transparent;
+        border: none;
+        box-shadow: none;
+        height: auto;
+
+        .MuiButtonBase-root {
+            padding: 0;
+        }
+    }
+    .MuiAccordionDetails-root  {
+        padding: 0;
+    }
+
+    .MuiAccordionDetails-root ul {
+        overflow: hidden;
+        height: 100%;
+    }
+
+    .sidebarItem.active {
+        position: absolute;
+        left: 25px;
+        border-radius: 4px;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        background: linear-gradient(
+          90deg,
+          rgba(202, 196, 192, 0.3) 0%,
+          rgba(30, 26, 23, 0) 100%
+        );
+    }
+}
