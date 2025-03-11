@@ -30,7 +30,7 @@ export const Sidebar = () => {
 
   return (
     <div
-      className={cls.sidebar}
+      className={`${cls.sidebar} duration-300`}
       style={{
         width: wideSidebar ? "240px" : collapsed ? "45px" : "0",
         overflow: wideSidebar ? "" : collapsed ? "" : "hidden",
@@ -38,7 +38,7 @@ export const Sidebar = () => {
     >
       <div className="overflow-y-scroll remove-scroll">
         <div
-          className={`overflow-y-scroll remove-scroll overflow-x-hidden ${
+          className={`overflow-y-scroll remove-scroll overflow-x-hidden duration-300 ${
             collapsed ? "" : "pr-[14px]"
           }`}
           style={{ height: "100vh" }}
@@ -58,11 +58,13 @@ export const Sidebar = () => {
               wideSidebar ? "right-2 top-0 absolute" : ""
             } w-[30px] h-[30px] flex justify-center items-center rounded-full bg-[var(--main80)] mx-auto my-2`}
           >
-            {wideSidebar ? (
-              <KeyboardArrowLeftIcon />
-            ) : (
-              <KeyboardArrowRightIcon />
-            )}
+            <div className={wideSidebar ? "" : "ml-1"}>
+              {wideSidebar ? (
+                <KeyboardArrowLeftIcon style={{ color: "var(--main)" }} />
+              ) : (
+                <KeyboardArrowRightIcon style={{ color: "var(--main)" }} />
+              )}
+            </div>
           </button>
           <SidebarSection
             list={routes}

@@ -44,19 +44,23 @@ export const Header = ({
   }
 
   return (
-    <div className={`${openHeader ? "mb-[35px] desktop:mb-[45px]" : ""}`}>
+    <div
+      className={`duration-300 ${
+        openHeader ? "mb-[35px] desktop:mb-[45px]" : ""
+      }`}
+    >
       <div className="fixed z-[96]">
         <HeaderFoldButton
           collapsed={open || openHeader}
           setCollapsed={setCollapsed}
         />
         <div
-          className={`h-[35px] desktop:h-[45px] relative z-[98] bg-white w-full ${
+          className={`h-[35px] desktop:h-[45px] relative z-[98] bg-white w-full duration-300 ${
             openHeader || open ? "" : "hidden"
           }`}
         >
           <div
-            className={cls.header}
+            className={`${cls.header} duration-200`}
             {...props}
             style={{
               width: wideSidebar
