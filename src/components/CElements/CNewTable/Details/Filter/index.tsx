@@ -26,12 +26,14 @@ export const TableFilter = ({
 }: Props) => {
   return (
     <>
-      <div className="group-hover:flex hidden absolute right-5">
-        <ExpandMoreIcon style={{ color: "var(--gray)" }} />
+      <div className="w-[20px] h-full items-center justify-center">
+        <div className="group-hover:flex hidden">
+          <ExpandMoreIcon style={{ color: "var(--gray)" }} />
+        </div>
       </div>
 
       {filter && (
-        <div className="absolute w-[300px] top-[90%] right-5 bg-white rounded-[4px] border border-[var(--border)] z-[99] shadow-xl overflow-hidden">
+        <div className="absolute w-[200px] top-[90%] left-0 bg-white rounded-[4px] border border-[var(--border)] z-[99] shadow-xl overflow-hidden">
           <TableSortFilter
             colId={colId}
             sortId={sortData?.find((item: any) => item.value === "sort")?.id}
@@ -57,10 +59,10 @@ export const TableFilter = ({
               });
               closeFilter();
             }}
-            className={`w-full flex h-[40px] items-center space-x-4 p-2 hover:bg-[var(--primary50)]`}
+            className={`w-full flex h-[35px] items-center space-x-4 p-2 hover:bg-[var(--primary50)]`}
           >
-            <FilterAltOffIcon style={{ fontSize: 16, color: "var(--error)" }} />
-            <span className="text-[var(--error)]">Очистить фильтр</span>
+            <FilterAltOffIcon style={{ fontSize: 16, color: "var(--main)" }} />
+            <span className="text-[var(--black)]">Очистить фильтр</span>
           </button>
         </div>
       )}
@@ -89,20 +91,26 @@ export const SideFilter = ({
   handleSortLogic: (val: any) => void;
   tableActions: (val: any, val2: string) => void;
 }) => {
+  // const [addFilter, setAddFilter] = useState(false);
   return (
     <div
-      className={`bg-white relative duration-200 ${
-        sideFilter ? "w-[260px]" : "w-0 -ml-5"
+      className={`bg-white relative duration-200 pt ${
+        sideFilter ? "w-[260px] pt-5" : "w-0 -ml-5"
       }`}
     >
-      <button className="absolute right-2 top-2" onClick={() => handleClick()}>
-        <CloseIcon width={24} />
-      </button>
+      {sideFilter && (
+        <button
+          className="absolute right-2 top-4"
+          onClick={() => handleClick()}
+        >
+          <CloseIcon width={24} />
+        </button>
+      )}
       {sideFilter ? (
-        <div className="p-2">
-          <h3 className="font-medium h-[40px]">Представления</h3>
+        <div className="p-2 w-[260px] pr-5 border-r border-[var(--border)] h-full">
+          <h3 className="font-medium h-[35px]">Представления</h3>
           <button
-            className="link-btn h-[40px]"
+            className="link-btn h-[35px]"
             onClick={() =>
               handleSortLogic({
                 value: "",
@@ -142,6 +150,16 @@ export const SideFilter = ({
               tableActions={tableActions}
             />
           )}
+
+          {/* <button
+            onClick={() => setAddFilter(true)}
+            className="w-full h-[35px] flex items-center justify-center text-[var(--main)] font-medium mt-2"
+          >
+            <PlusIcon fill="var(--main)" />
+            <span>Фильтр</span>
+          </button>
+
+          <CSelect options={[{ label: "Фильтр", value: "filter" }]} /> */}
         </div>
       ) : (
         ""

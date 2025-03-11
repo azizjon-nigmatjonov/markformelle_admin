@@ -33,19 +33,21 @@ export const TableSortFilter = ({
         <ArrowDownwardIcon
           style={{
             fontSize: 16,
-            color: sortId === colId ? "var(--primary)" : "var(--black)",
+            color: sortId === colId ? "var(--primary)" : "var(--main)",
           }}
         />
       ) : (
         <ArrowUpwardIcon
           style={{
             fontSize: 16,
-            color: sortId === colId ? "var(--primary)" : "var(--black)",
+            color: sortId === colId ? "var(--primary)" : "var(--main)",
           }}
         />
       )}
       <span
-        className={`text-sm ${sortId === colId ? "text-[var(--primary)]" : ""}`}
+        className={`text-sm ${
+          sortId === colId ? "text-[var(--primary)]" : "text-[var(--black)]"
+        }`}
       >
         {value === "down" ? "По возрастанию" : "По убыванию"}
       </span>

@@ -12,7 +12,7 @@ import { HeaderSettings } from "./Details/TableSettings";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import TabbleActions from "./Details/Actions";
-import { DotsVerticalIcon, SearchIcon } from "../../UI/IconGenerator/Svg";
+import { DotsVerticalIcon } from "../../UI/IconGenerator/Svg";
 import { t } from "i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { tableSizeAction } from "../../../store/tableSize/tableSizeSlice";
@@ -23,39 +23,37 @@ import { tableStoreActions } from "../../../store/table";
 import useDebounce from "../../../hooks/useDebounce";
 import { SideFilter, TableFilter } from "./Details/Filter";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
-import { ModalUI } from "./Details/Modal";
-import CModal from "../CModal";
 
 interface Props {
   meta?: {
     totalCount: number;
     pageCount: number;
   };
+  title?: string;
   headColumns: any[];
   bodyColumns?: object[] | any;
   clickable?: boolean;
   isLoading?: boolean;
   passRouter?: boolean;
   isResizeble?: boolean;
-  tableSetting?: boolean;
   disablePagination?: boolean;
-  autoHeight?: boolean;
   limitList?: number[];
   handleFilterParams: (val: any) => void;
   filterParams: any;
   handleActions?: (val: any, val2?: any) => void;
   idForTable?: string;
   footer?: any;
-  removeScroll?: boolean;
   removeSearch?: boolean;
   extra?: any;
+  autoHeight?: boolean;
 }
 
 const CNewTable = ({
   meta = {
-    totalCount: 1,
-    pageCount: 1,
+    totalCount: 0,
+    pageCount: 0,
   },
+  title = "",
   extra,
   headColumns = [],
   bodyColumns = [],
@@ -65,25 +63,17 @@ const CNewTable = ({
   isResizeble = true,
   idForTable,
   disablePagination = false,
+  limitList = [10, 20, 30],
   autoHeight = false,
-  limitList = [10, 50, 100, 500],
   filterParams = { page: 1, perPage: 10 },
   handleFilterParams = () => {},
   handleActions = () => {},
-  tableSetting = true,
-  removeScroll = false,
-  footer,
 }: Props) => {
   const tableSize = useSelector((state: any) => state.tableSize.tableSize);
   const location = useLocation();
   const tableSettings: Record<string, any> = {};
-  const [colProperties, setColProperties]: any = useState({});
   const [currentIndex, setCurrentIndex] = useState(null);
   const [activeSort, setActiveSort] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-  // const [currDelete, setCurrDelete] = useState<any>({});
-  // console.log(currDelete);
-
   const dispatch = useDispatch();
   const { checkPermission } = usePermissions();
   const tableRef: any = useRef(null);
@@ -93,7 +83,6 @@ const CNewTable = ({
   });
   const storedColumns = useSelector((state: any) => state.table.columns);
   const order = useSelector((state: any) => state.table.order);
-  const [active, setActive] = useState(false);
   const [newBodyColumns, setNewBodyColumns] = useState([]);
   const [sortData, setSortData]: any = useState([]);
   const [reOrder, setReorder] = useState(false);
@@ -199,6 +188,7 @@ const CNewTable = ({
         is_delete: checks(item?.delete),
         is_edit: checks(item?.edit),
         is_view: checks(item?.view),
+        is_sellect_more: checks(item?.sellect_more),
         index:
           filterParams?.page > 1
             ? filterParams?.page * filterParams.perPage -
@@ -208,25 +198,6 @@ const CNewTable = ({
       })) ?? []
     );
   }, [newBodyColumns, filterParams.perPage, filterParams.page, headColumns]);
-
-  useEffect(() => {
-    const table = document.getElementById("table");
-    if (!table) return;
-    const newObj: any = { all: 0 };
-    const cols = table.querySelectorAll("th");
-
-    [].forEach.call(cols, function (col: any, idx: number) {
-      newObj[idx] = col.offsetWidth;
-    });
-
-    newObj.all = table.offsetWidth;
-
-    setColProperties(newObj);
-
-    setTimeout(() => {
-      setActive(true);
-    }, 900);
-  }, [active]);
 
   useEffect(() => {
     if (!isResizeble) return;
@@ -320,25 +291,6 @@ const CNewTable = ({
     }
   };
 
-  const handleGetHeightFn = () => {
-    if (autoHeight) {
-      return;
-    }
-    let res = 0;
-    bodySource?.forEach((item: any) => {
-      if (item?.ref) res = res + item.ref.offsetHeight;
-    });
-  };
-
-  const handleBodycolRef = (item: any, e: any) => {
-    if (!e) return;
-    item.ref = e;
-
-    if (item?.index === bodySource?.length) {
-      handleGetHeightFn();
-    }
-  };
-
   const handleSortLogic = ({ value, id, search }: any) => {
     setTimeout(() => {
       setActiveSort((prev) => !prev);
@@ -409,19 +361,16 @@ const CNewTable = ({
       });
       setItems(arr);
     } else {
+      // const newItems = headColumns.filter((item: any) => item?.id !== "index");
+      // newItems.unshift({ id: "index", title: "№" });
       setItems(headColumns);
       setNewHeadColumns(headColumns);
     }
   }, [headColumns, pageOrder]);
 
   useEffect(() => {
-    if (!tableSetting) {
-      setNewHeadColumns(items);
-      return;
-    }
     const data: any = [];
     const arr = pageColumns ?? [];
-
     items?.forEach((el: { id: string }) => {
       let id: any = el.id;
       if (id?.[0] && typeof id === "object") {
@@ -429,9 +378,8 @@ const CNewTable = ({
       }
       if (arr.includes(id)) data.push(el);
     });
-
-    setNewHeadColumns(data);
-  }, [pageColumns, tableSetting, items]);
+    if (title) setNewHeadColumns(data);
+  }, [pageColumns, items, title]);
 
   const handleDragStart = (index: any) => {
     setDraggingIndex(index);
@@ -439,9 +387,9 @@ const CNewTable = ({
     handleFilterParams({ ...filterParams, drag: true });
   };
 
-  useEffect(() => {
-    setNewHeadColumns(headColumns);
-  }, [headColumns]);
+  // useEffect(() => {
+  //   setNewHeadColumns(headColumns);
+  // }, [headColumns]);
 
   const handleDrop = (index: any) => {
     const newItems = newHeadColumns;
@@ -470,10 +418,6 @@ const CNewTable = ({
   };
 
   const tableActions = (el: any, status: string) => {
-    if (status === "modal") {
-      setOpenModal(true);
-    }
-
     if (status === "sidefilter") {
       setSideFilter(!sideFilter);
     }
@@ -508,15 +452,11 @@ const CNewTable = ({
   }, 0);
 
   return (
-    <div className="relative cnewtable w-full">
-      <div
-        className={`designed-scroll rounded-[4px] min-h-[50vh] ${
-          removeScroll ? "" : "overflow-scroll"
-        }`}
-      >
-        {tableSetting ? (
+    <div className="relative cnewtable w-full h-full">
+      <div className={`rounded-[4px] h-full`}>
+        {title && (
           <HeaderSettings
-            totalCount={meta.totalCount}
+            title={title}
             filterParams={filterParams}
             tableActions={tableActions}
             pageName={pageName}
@@ -526,17 +466,15 @@ const CNewTable = ({
             allColumns={bodyColumns}
             extra={extra}
             sideFilter={sideFilter}
+            sortData={sortData}
           />
-        ) : (
-          ""
         )}
         <div
           id="table"
-          className={` ${
-            tableSetting
-              ? "border-t border-[var(--border)] pt-10 flex space-x-8"
-              : ""
+          className={`border-t border-[var(--border)] flex space-x-8 h-full ${
+            title ? "pl-[10px]" : ""
           }`}
+          style={{ minHeight: autoHeight ? "300px" : "500px" }}
           ref={tableRef}
         >
           <SideFilter
@@ -548,7 +486,9 @@ const CNewTable = ({
             tableActions={tableActions}
           />
           <div
-            className={`w-full ${footer ? "pb-[50px] overflow-hidden" : ""}`}
+            className={`w-full overflow-x-scroll designed-scroll ${
+              title ? "pt-5" : ""
+            }`}
           >
             <CTableWrapper
               count={meta.pageCount}
@@ -597,7 +537,7 @@ const CNewTable = ({
                       }}
                     >
                       <div
-                        draggable={reOrder}
+                        draggable={true}
                         onDragStart={() => handleDragStart(index)}
                         onDragOver={(e) => {
                           e.preventDefault();
@@ -605,7 +545,7 @@ const CNewTable = ({
                         }}
                         onDragLeave={handleDragLeave}
                         onDrop={() => handleDrop(index)}
-                        className={`w-full group flex items-center min-h-[40px] flex-nowrap cursor-pointer ${
+                        className={`w-full group flex items-center min-h-[40px] px-2 flex-nowrap cursor-pointer hover:bg-[var(--primary50)] ${
                           column?.id === "index"
                             ? "justify-center"
                             : "justify-between"
@@ -620,16 +560,15 @@ const CNewTable = ({
                         style={{
                           color:
                             draggingIndex === index ? "var(--primary)" : "",
+                          textAlign: !column?.filter ? "left" : "left",
+                          backgroundColor:
+                            currentFilter === index ? "var(--primary50)" : "",
                         }}
                       >
                         <div
-                          className={`w-full min-h-[40px] flex items-center pl-6 hover:bg-[var(--primary50)]`}
-                          style={{
-                            textAlign: !column?.filter ? "left" : "left",
-                            backgroundColor:
-                              currentFilter === index ? "var(--primary50)" : "",
-                          }}
+                          className={`w-full min-h-[40px] flex items-center whitespace-nowrap`}
                           onClick={() => setCurrentFilter(index)}
+                          style={{ textTransform: "lowercase" }}
                         >
                           {column.renderHead
                             ? Array.isArray(column.renderHead)
@@ -682,7 +621,6 @@ const CNewTable = ({
                   ? bodySource?.map((item: any, rowIndex: any) => (
                       <TableRow
                         key={bodySource.length + rowIndex}
-                        ref={(e) => handleBodycolRef(item, e)}
                         className={`group ${
                           clickable && !item.empty && checkPermission("view")
                             ? "clickable"
@@ -722,7 +660,7 @@ const CNewTable = ({
                               style={{
                                 textAlign: column?.textAlign || "left",
                               }}
-                              className={`relative h-full flex items-center ${
+                              className={`relative h-full flex items-center text-[13px] ${
                                 hoveredIndex === colIndex &&
                                 hoveredIndex > draggingIndex
                                   ? "drag-hovered right"
@@ -739,9 +677,11 @@ const CNewTable = ({
                                       clickable &&
                                       column?.click !== "custom" &&
                                       column?.id !== "actions"
-                                    )
+                                    ) {
                                       tableActions(item, "view");
+                                    }
                                   }}
+                                  className="w-full"
                                 >
                                   {column?.permission ? (
                                     <>
@@ -785,14 +725,18 @@ const CNewTable = ({
                               {colIndex === 0 ? (
                                 <>
                                   <button
-                                    className={`p-2 absolute right-5 w-[50px] h-[35px] items-center justify-center group-hover:flex ${
-                                      rowIndex === currentIndex
-                                        ? "bg-[var(--gray20)] flex"
-                                        : "hidden"
-                                    }`}
+                                    className={`w-[20px] h-full items-center justify-center ml-2`}
                                     onClick={() => setCurrentIndex(rowIndex)}
                                   >
-                                    <DotsVerticalIcon fill="black" />
+                                    <div
+                                      className={`group-hover:flex ${
+                                        rowIndex === currentIndex
+                                          ? "bg-[var(--gray20)] flex"
+                                          : "hidden"
+                                      }`}
+                                    >
+                                      <DotsVerticalIcon fill="black" />
+                                    </div>
                                   </button>
                                   <TabbleActions
                                     element={item}
@@ -800,7 +744,12 @@ const CNewTable = ({
                                     currentIndex={currentIndex}
                                     setCurrentIndex={setCurrentIndex}
                                     handleActions={tableActions}
-                                    actions={["view", "edit", "delete"]}
+                                    actions={[
+                                      "view",
+                                      "edit",
+                                      "delete",
+                                      "is_sellect_more",
+                                    ]}
                                     checkPermission={checkPermission}
                                   />
                                 </>
@@ -815,38 +764,17 @@ const CNewTable = ({
                   : ""}
               </CTableBody>
             </CTableWrapper>
-            {footer && active ? (
-              <div
-                className="border-t border-[var(--border)] bg-white px-3 fixed bottom-3 rounded-b-lg right-4 w-full flex overflow-hidden whitespace-nowrap"
-                style={{ width: colProperties?.all - 5 }}
-              >
-                <div
-                  style={{ width: colProperties?.[0] }}
-                  className="px-3 py-1 border-r border-[var(--border)]"
-                >
-                  <p className="footer_text flex justify-between pr-8">
-                    {footer.title} <span>{newBodyColumns.length}</span>
-                  </p>
-                </div>
-                <div
-                  style={{ width: colProperties?.[1] }}
-                  className="px-3 py-1 border-r border-[var(--border)]"
-                >
-                  <p className="footer_text">{footer.month}</p>
-                </div>
-                <div
-                  style={{ width: colProperties?.[2] }}
-                  className="px-3 py-1"
-                >
-                  <p className="footer_text">{footer.day}</p>
-                </div>
-              </div>
-            ) : (
-              ""
-            )}
           </div>
         </div>
-
+        {!bodyColumns?.length ? (
+          <img
+            className="w-[120px] mx-auto"
+            src="/images/no-data.png"
+            alt="empty"
+          />
+        ) : (
+          ""
+        )}
         {newBodyColumns?.length && !isLoading && !disablePagination ? (
           <CPagination
             filterParams={filterParams}
@@ -862,15 +790,6 @@ const CNewTable = ({
           ""
         )}
       </div>
-      {openModal && <ModalUI />}
-      <CModal
-        title={"Urin tanitimi"}
-        open={openModal}
-        handleClose={() => setOpenModal(false)}
-        footerActive={false}
-      >
-        <ModalUI />
-      </CModal>
     </div>
   );
 };

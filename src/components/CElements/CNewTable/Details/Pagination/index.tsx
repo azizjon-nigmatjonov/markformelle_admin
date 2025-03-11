@@ -18,7 +18,7 @@ interface Props {
   count: number;
   totalCount?: number;
   dataLength: number;
-  handleFilterParams: (newPage: number) => void;
+  handleFilterParams: any;
 }
 
 const CPagination = ({

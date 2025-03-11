@@ -20,7 +20,7 @@ export const SearchField = ({
       }`}
     >
       <div className="absolute top-1/2 left-2 -translate-y-1/2">
-        <SearchIcon fill="black" width={16} />
+        <SearchIcon fill="var(--main)" width={16} />
       </div>
       <input
         type="text"
@@ -29,7 +29,7 @@ export const SearchField = ({
           searchDebounce(e.target.value, colId);
         }}
         value={sortObj?.search ?? ""}
-        className="ml-8 h-full w-full border border-[var(--border)] rounded-[4px]"
+        className="ml-8 h-full w-full border border-[var(--border)] rounded-[4px] text-[var(--black)]"
         style={{ padding: "0" }}
       />
     </div>

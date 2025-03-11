@@ -23,19 +23,19 @@ const Element = ({
   if (!show) return;
   return (
     <div
-      className={`flex items-center space-x-[8px] px-4 group hover:bg-[var(--border)] ${
+      className={`flex items-center space-x-[8px] px-4 group hover:bg-[var(--primary50)] ${
         active ? "cursor-pointer" : "cursor-not-allowed"
       }`}
       {...props}
     >
-      {icon}
+      <div className="w-[15px] flex items-center justify-center">{icon}</div>
       <p
         className={`${
           border
             ? "border-b border-[var(--border)] group-hover:border-transparent"
             : ""
-        } border-grayDark py-3 w-full select-none whitespace-nowrap ${
-          active ? "text-black" : "text-[var(--gray30)]"
+        } border-grayDark py-3 w-full select-none whitespace-nowrap text-[12px] ${
+          active ? "text-black" : "text-[var(--gray)]"
         }`}
       >
         {t(text)}

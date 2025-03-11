@@ -52,9 +52,8 @@ input {
     width: 100%;
     outline: none;
     width: 100%;
-    border-radius: 8px;
+    border-radius: 4px;
     border: 1px solid var(--border) !important;
-    @include common-shadow;
     height: 35px !important;
 
     @media (max-width: 1400px) {
@@ -152,7 +151,7 @@ input {
     }
     .MuiInputBase-input {
       fieldset {
-        border-radius: 8px;
+        border-radius: 4px;
       }
     }
   }
@@ -263,9 +262,11 @@ input {
   @include center-center;
   @include common-shadow;
   position: relative;
+  font-size: 12px;
 
   &.form {
     height: 52px;
+    font-size: 14px;
   }
 
   .MuiCircularProgress-root {
@@ -327,11 +328,12 @@ input {
 
 .default-btn {
   height: 40px;
-  padding: 0 20px;
+  padding: 0 8px;
   border: 1px solid var(--gray20);
   border-radius: 8px;
   @include common-shadow;
   @include center-center;
+  font-size: 12px;
 }
 
 .link-btn {

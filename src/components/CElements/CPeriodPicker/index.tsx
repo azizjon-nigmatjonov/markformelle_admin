@@ -18,17 +18,17 @@ export const CPeriodPicker = ({
   handleValue = () => {},
 }: Props) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue]: any = useState()
+  const [value, setValue]: any = useState();
 
   useEffect(() => {
     if (defaultValue?.length) {
-      setValue(defaultValue[0] + " - " + defaultValue[1])
+      setValue(defaultValue[0] + " - " + defaultValue[1]);
     }
-  }, [defaultValue])
+  }, [defaultValue]);
 
   const handleDropdown = useCallback((val?: any) => {
     handleValue(val);
-    setValue(val)
+    setValue(val);
     setOpen((prev) => !prev);
   }, []);
 
@@ -43,7 +43,11 @@ export const CPeriodPicker = ({
         handleDropdown={handleDropdown}
         defaultValue={defaultValue}
       />
-      <PeriodDateDropDown open={open} handleDropdown={handleDropdown} label={label} />
+      <PeriodDateDropDown
+        open={open}
+        handleDropdown={handleDropdown}
+        label={label}
+      />
       {open && <Closer handleClose={() => setOpen(false)} />}
     </div>
   );
