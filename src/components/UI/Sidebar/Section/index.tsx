@@ -11,9 +11,15 @@ interface Props {
   list: any;
   collapsed: boolean;
   handleNavigate: (val: any) => void;
+  wideSidebar: boolean;
 }
 
-const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
+const SidebarSection = ({
+  list,
+  collapsed = false,
+  handleNavigate,
+  wideSidebar,
+}: Props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -44,7 +50,7 @@ const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
   };
 
   return (
-    <div className={`${cls.section} ${collapsed ? "py-[10px]" : "p-[10px]"}`}>
+    <div className={`${cls.section}`}>
       <div className="flex flex-col justify-between w-full">
         <div>
           {Object.entries(list)?.map(([key, value]: [string, any], index) => {
@@ -54,6 +60,10 @@ const SidebarSection = ({ list, collapsed = false, handleNavigate }: Props) => {
             if (!visibleSidebarItems?.length) return "";
 
             const isLastItem = index === Object.entries(list).length - 1;
+
+            if (wideSidebar) {
+              return <></>;
+            }
 
             return visibleSidebarItems?.length > 0 ? (
               <div key={index}>

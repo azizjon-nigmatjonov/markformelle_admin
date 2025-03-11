@@ -34,6 +34,7 @@ export const Header = ({
   const collapsed = useSelector((state: any) => state.sidebar.collapsed);
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const dispatch = useDispatch();
+  const wideSidebar = useSelector((state: any) => state.sidebar.wideSidebar);
   const setCollapsed = (val: boolean) => {
     dispatch(sidebarActions.setOpenHeader(val));
   };
@@ -43,7 +44,7 @@ export const Header = ({
   }
 
   return (
-    <div className={`${openHeader ? 'mb-[35px] desktop:mb-[45px]' : ''}`}>
+    <div className={`${openHeader ? "mb-[35px] desktop:mb-[45px]" : ""}`}>
       <div className="fixed z-[96]">
         <HeaderFoldButton
           collapsed={open || openHeader}
@@ -58,8 +59,12 @@ export const Header = ({
             className={cls.header}
             {...props}
             style={{
-              width: collapsed ? "calc(100vw - 50px)" : "",
-              left: collapsed ? "45px" : "",
+              width: wideSidebar
+                ? "calc(100vw - 245px)"
+                : collapsed
+                ? "calc(100vw - 50px)"
+                : "",
+              left: wideSidebar ? "240px" : collapsed ? "45px" : "",
             }}
           >
             <div className="w-full">{extra}</div>

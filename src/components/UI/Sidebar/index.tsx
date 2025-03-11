@@ -7,10 +7,13 @@ import { FoldButton } from "./FoldButton";
 import { useDispatch, useSelector } from "react-redux";
 import { sidebarActions } from "../../../store/sidebar";
 import usePageRouter from "../../../hooks/useObjectRouter";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 
 export const Sidebar = () => {
   const { userInfo, routes } = getWebsiteData();
   const collapsed = useSelector((state: any) => state.sidebar.collapsed);
+  const wideSidebar = useSelector((state: any) => state.sidebar.wideSidebar);
   const dispatch = useDispatch();
   const { navigateTo } = usePageRouter();
 
@@ -29,8 +32,8 @@ export const Sidebar = () => {
     <div
       className={cls.sidebar}
       style={{
-        width: collapsed ? "45px" : "0",
-        overflow: collapsed ? "" : "hidden",
+        width: wideSidebar ? "240px" : collapsed ? "45px" : "0",
+        overflow: wideSidebar ? "" : collapsed ? "" : "hidden",
       }}
     >
       <div className="overflow-y-scroll remove-scroll">
@@ -41,11 +44,30 @@ export const Sidebar = () => {
           style={{ height: "100vh" }}
         >
           <div className="h-[35px] desktop:h-[45px] text-xl flex justify-center w-full items-center border-b border-[var(--border)] px-1">
-            <img src="/images/logo_mini.png" alt="logo" />
+            {!wideSidebar ? (
+              <img width={120} src="/images/logo_mini.png" alt="logo" />
+            ) : (
+              ""
+            )}
           </div>
+          <button
+            onClick={() =>
+              dispatch(sidebarActions.setWideSidebar(!wideSidebar))
+            }
+            className={`${
+              wideSidebar ? "right-2 top-0 absolute" : ""
+            } w-[30px] h-[30px] flex justify-center items-center rounded-full bg-[var(--main80)] mx-auto my-2`}
+          >
+            {wideSidebar ? (
+              <KeyboardArrowLeftIcon />
+            ) : (
+              <KeyboardArrowRightIcon />
+            )}
+          </button>
           <SidebarSection
             list={routes}
             collapsed={collapsed}
+            wideSidebar={wideSidebar}
             handleNavigate={handleNavigate}
           />
         </div>
@@ -57,6 +79,7 @@ export const Sidebar = () => {
         >
           <UserInfo
             userInfo={userInfo}
+            wideSidebar={wideSidebar}
             collapsed={collapsed}
             handleNavigate={handleNavigate}
           />
@@ -65,6 +88,7 @@ export const Sidebar = () => {
 
       <FoldButton
         collapsed={collapsed}
+        wideSidebar={wideSidebar}
         setCollapsed={() => dispatch(sidebarActions.setCollapsed(!collapsed))}
       />
     </div>

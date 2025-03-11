@@ -5,6 +5,7 @@ const initialState = {
   openHeader: false,
   resize: false,
   listType: "grid",
+  wideSidebar: false,
 };
 
 export const { actions: sidebarActions, reducer: sidebarReducer } = createSlice(
@@ -23,6 +24,9 @@ export const { actions: sidebarActions, reducer: sidebarReducer } = createSlice(
       },
       setListType: (state: any, { payload }) => {
         state.listType = payload;
+      },
+      setWideSidebar: (state: any, { payload }) => {
+        state.wideSidebar = payload;
       },
     },
   }

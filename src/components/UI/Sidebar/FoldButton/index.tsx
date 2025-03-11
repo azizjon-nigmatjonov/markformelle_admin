@@ -1,15 +1,20 @@
 interface Props {
   collapsed: boolean;
+  wideSidebar: boolean;
   setCollapsed: (val: boolean) => void;
 }
 
-export const FoldButton = ({ collapsed, setCollapsed = () => {} }: Props) => {
+export const FoldButton = ({
+  collapsed,
+  wideSidebar,
+  setCollapsed = () => {},
+}: Props) => {
   return (
     <div
       className="fixed z-[97]"
       style={{
         top: "calc(100vh - 70px - 50vh)",
-        left: `${collapsed ? "45px" : "10px"}`,
+        left: `${wideSidebar ? "240px" : collapsed ? "45px" : "10px"}`,
       }}
     >
       <button

@@ -4,12 +4,14 @@ import ImageFrame from "../../ImageFrame";
 interface Props {
   userInfo: any;
   collapsed: boolean;
+  wideSidebar: boolean;
   handleNavigate: (val: any) => void;
 }
 
 const UserInfo = ({
   userInfo = [],
   collapsed = false,
+  wideSidebar = false,
   handleNavigate,
 }: Props) => {
   // const { checkAdditionals } = usePermissions();
@@ -23,18 +25,19 @@ const UserInfo = ({
     >
       <div
         className={`flex items-center ${
-          collapsed ? "justify-center w-full" : "space-x-[10px]"
+          wideSidebar
+            ? "px-3 space-x-3"
+            : collapsed
+            ? "justify-center w-full"
+            : "space-x-[10px]"
         }`}
       >
         <div className={cls.image}>
           <ImageFrame image={userInfo?.image} />
         </div>
-        {!collapsed && (
+        {wideSidebar && (
           <div className={cls.content}>
-            <h2 className="font-[600] text-[14px] text-[var(--gray70)] capitalize">
-              {userInfo.name || "Admin"}
-            </h2>
-            <p className="text-[14px] text-[var(--gray60)]">{userInfo.phone}</p>
+            <p className="text-[12px]">Настройки</p>
           </div>
         )}
       </div>
