@@ -22,7 +22,7 @@ interface Props {
   rules?: any;
   id?: string;
   disabled?: boolean;
-  clear?: boolean
+  clear?: boolean;
   setValue?: (val1?: any, val2?: any) => void;
 }
 
@@ -54,14 +54,8 @@ const SelectUI = ({
     <Select
       value={value || defaultValue || ""}
       size="small"
-      // error={error}
       inputProps={{ placeholder }}
       fullWidth
-      // just
-      // following
-      // attributes
-      // into
-      // select
       displayEmpty
       disabled={disabled}
       id="1"
@@ -78,7 +72,7 @@ const SelectUI = ({
     >
       {optionType === "GROUP"
         ? options?.map((group?: any) => [
-            <MenuItem style={{ fontWeight: 600, color: "#000", fontSize: 15 }}>
+            <MenuItem style={{ fontWeight: 600, color: "#000", fontSize: 12 }}>
               {group.label}
             </MenuItem>,
             group.options?.map((option?: any) => (

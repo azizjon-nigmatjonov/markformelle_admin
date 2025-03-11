@@ -4,7 +4,7 @@ import { MenuItem } from "./MenuItems";
 // import { DeleteElements } from "./Delete";
 import { tableStoreActions } from "../../../../../store/table";
 import { useDispatch } from "react-redux";
-import { IconButton } from "@mui/material";
+import { Badge, IconButton } from "@mui/material";
 import { ListDotIcon } from "../../../../UI/IconGenerator/Svg/Machines";
 import ExcelDownload from "../../../../../hooks/useExcelDownload";
 import {
@@ -49,9 +49,11 @@ export const HeaderSettings = ({
   headColumns = [],
   allColumns = [],
   extra,
+  title,
+  sortData,
 }: {
   filterParams: any;
-  totalCount: number | undefined;
+  title: string;
   pageName: string;
   headColumns: any;
   pageColumns: any;
@@ -59,6 +61,7 @@ export const HeaderSettings = ({
   allColumns: any;
   extra?: any;
   sideFilter: boolean;
+  sortData: any;
   tableActions: (el: any, status: string) => void;
 }) => {
   const [open, setOpen] = useState(false);
@@ -197,21 +200,18 @@ export const HeaderSettings = ({
     <div className="pb-[45px]">
       <div className="h-[45px] absolute w-full left-0 top-0 flex items-center desktop:px-3 justify-between">
         <div className="flex items-center space-x-4 h-full">
-          <h2 className="font-medium">
-            <span>Общий</span>
-            <span> {bodyColumns?.length}</span>
-          </h2>
+          <h2 className="font-medium">{title}</h2>
           <div className="w-[1px] h-[60%] bg-[var(--border)]"></div>
           <div className="space-x-4">
             <IconButton onClick={() => tableActions({}, "modal")}>
               <div className="w-[30px] h-[30px] items-center justify-center flex">
-                <PlusIcon fill="black" width={20} />
+                <PlusIcon fill="var(--main)" width={20} />
               </div>
               <p className="text-sm pr-2 text-black">Добавить</p>
             </IconButton>
             <IconButton onClick={() => tableActions({}, "sidefilter")}>
               <div className="w-[30px] h-[30px] items-center justify-center flex">
-                <DeleteIcon fill="black" width={18} />
+                <DeleteIcon fill="var(--main)" width={18} />
               </div>
               <p className="text-sm pr-2 text-black">Удалить</p>
             </IconButton>
@@ -223,9 +223,11 @@ export const HeaderSettings = ({
             <div
               className={`h-[30px] w-[30px] flex items-center justify-center`}
             >
-              <FilterIcon
-                fill={sideFilter ? "var(--primary)" : "var(--gray)"}
-              />
+              <Badge badgeContent={sortData?.length} color="secondary">
+                <FilterIcon
+                  fill={sideFilter ? "var(--primary)" : "var(--main)"}
+                />
+              </Badge>
             </div>
           </IconButton>
 
@@ -241,7 +243,7 @@ export const HeaderSettings = ({
                 <div
                   className={`w-[30px] h-[30px] rounded-[8px] items-center justify-center flex`}
                 >
-                  <ListDotIcon fill={open ? "var(--primary)" : "var(--gray)"} />
+                  <ListDotIcon fill={open ? "var(--primary)" : "var(--main)"} />
                 </div>
               </IconButton>
             </div>

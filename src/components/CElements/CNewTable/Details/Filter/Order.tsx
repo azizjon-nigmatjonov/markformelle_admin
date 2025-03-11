@@ -15,7 +15,7 @@ export const OrderUI = ({
       }`}
     >
       <DragIndicatorIcon style={{ marginLeft: "-2px", marginRight: "2px" }} />
-      <p>Изменить порядок</p>
+      <p className="text-[var(--black)]">Изменить порядок</p>
     </button>
   );
 };

@@ -448,7 +448,7 @@ const CTable = ({
       search,
     });
   }, 500);
-  
+
   return (
     <div className="relative h-full">
       <div
@@ -618,10 +618,7 @@ const CTable = ({
                 {!removeSearch ? (
                   <TableRow>
                     {newHeadColumns.map((item: any, colIndex: number) => (
-                      <CTableCell
-                        key={colIndex}
-                        className="relative"
-                      >
+                      <CTableCell key={colIndex} className="relative">
                         {item.id !== "index" && !item?.remove_sort ? (
                           <div
                             className={`w-full h-full relative  ${
@@ -643,8 +640,10 @@ const CTable = ({
                               onChange={(e: any) => {
                                 searchDebounce(e.target.value, item.id);
                               }}
-                              value={sortData?.id === item.id ? sortData?.search : ''}
-                              className="w-full input-design h-full text-center"
+                              value={
+                                sortData?.id === item.id ? sortData?.search : ""
+                              }
+                              className="w-full min-w-[100px] input-design h-full text-center"
                               style={{ padding: 0 }}
                             />
                           </div>

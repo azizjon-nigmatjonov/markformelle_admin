@@ -11,6 +11,7 @@ import Element from "./Element";
 import { ColorConstants } from "../../../../../constants/website";
 import { useState } from "react";
 import { PopoverDelete } from "./EditDelete/PopOver";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 interface Props {
   element: any;
@@ -51,7 +52,9 @@ const TabbleActions = ({
     <div>
       {currentIndex === rowIndex ? (
         <div
-          className={`absolute top-8 right-5 bg-white z-[99] rounded-[4px] border border-[var(--border)] shadow-xl ${cls.card}`}
+          className={`absolute left-11 bg-white z-[99] rounded-[4px] border border-[var(--border)] shadow-xl ${
+            rowIndex < 4 ? "top-2" : "top-[-140px]"
+          } ${cls.card}`}
         >
           <Element
             text="view"
@@ -59,7 +62,7 @@ const TabbleActions = ({
             onClick={() => handleClick(element, "view", element?.is_delete)}
             icon={
               <EyeIcon
-                fill={element?.is_view ? "black" : ColorConstants.gray}
+                fill={element?.is_view ? "var(--main)" : ColorConstants.gray}
               />
             }
             show={actions.includes("view")}
@@ -70,7 +73,7 @@ const TabbleActions = ({
             onClick={() => handleClick(element, "freez", element?.is_freez)}
             icon={
               <LockIcon
-                fill={element?.is_freez ? "black" : ColorConstants.gray}
+                fill={element?.is_freez ? "var(--main)" : ColorConstants.gray}
               />
             }
             show={actions.includes("freez")}
@@ -81,10 +84,29 @@ const TabbleActions = ({
             onClick={() => handleClick(element, "edit", element.is_edit)}
             icon={
               <EditIcon
-                fill={element?.is_edit ? "black" : ColorConstants.gray}
+                fill={element?.is_edit ? "var(--main)" : ColorConstants.gray}
               />
             }
             show={actions.includes("edit")}
+          />
+          <Element
+            text="sellect_more"
+            active={element?.is_sellect_more && checkPermission("sellect_more")}
+            onClick={() =>
+              handleClick(element, "sellect_more", element.is_sellect_more)
+            }
+            icon={
+              <CheckCircleOutlineIcon
+                style={{
+                  color: element?.is_sellect_more
+                    ? "var(--main)"
+                    : ColorConstants.gray,
+                  width: 18,
+                }}
+              />
+            }
+            border={true}
+            show={actions.includes("delete")}
           />
           <Element
             text="delete"
@@ -92,11 +114,7 @@ const TabbleActions = ({
             onClick={() => handleClick(element, "delete", element.is_delete)}
             icon={
               <DeleteIcon
-                fill={
-                  element?.is_delete
-                    ? ColorConstants.error
-                    : ColorConstants.gray
-                }
+                fill={element?.is_delete ? "var(--main)" : ColorConstants.gray}
               />
             }
             border={false}

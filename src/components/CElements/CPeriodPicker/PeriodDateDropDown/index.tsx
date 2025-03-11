@@ -5,7 +5,7 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers-pro/AdapterDayjs";
 import "../style.scss";
 import dayjs from "dayjs";
-dayjs.locale('uz-latn');
+dayjs.locale("uz-latn");
 import { DateData, DateLabel } from "../Logic";
 
 interface Props {
@@ -21,11 +21,13 @@ export const PeriodDateDropDown = ({
   handleDropdown = () => {},
 }: Props) => {
   if (!open) return <></>;
-  const { value, actionHandler, handleSubmit, getFormatedDate } = DateData({ handleDropdown });
+  const { value, actionHandler, handleSubmit, getFormatedDate } = DateData({
+    handleDropdown,
+  });
   const { shortcutsItems } = DateLabel();
 
   return (
-    <div className={`periodPicker flex ${label ? 'top-[67px]' : 'top-[50px]'}`}>
+    <div className={`periodPicker flex ${label ? "top-[67px]" : "top-[45px]"}`}>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="uz-latn">
         <StaticDateRangePicker
           onChange={(e: any) => actionHandler(e)}
@@ -45,7 +47,7 @@ export const PeriodDateDropDown = ({
           <div className="px-2">-</div>
           <div className="default-btn">{getFormatedDate[1]}</div>
         </div>
-        <div className="btns">
+        <div className="flex space-x-2">
           <button className="cancel-btn" onClick={() => handleDropdown()}>
             Отменить
           </button>

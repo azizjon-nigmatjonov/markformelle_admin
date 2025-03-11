@@ -53,7 +53,7 @@ const ExcelDownload = ({
     <div className="relative">
       <IconButton onClick={() => setOpen(true)}>
         <div className="h-[30px] w-[30px] rounded-[8px] flex items-center justify-center">
-          <ExcelIconOutlined />
+          <ExcelIconOutlined fill="var(--main)" />
         </div>
       </IconButton>
       {open && (

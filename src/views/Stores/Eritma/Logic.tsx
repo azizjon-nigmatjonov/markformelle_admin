@@ -1,37 +1,97 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 export const breadCrumbs = [{ label: "Eritma", link: "/stores/eritma" }];
 
-export const TableData = () => {
-  const headColumns = [
-    {
-      title: "Название рол",
-      id: "name",
-    },
-    {
-      title: "Количество функций",
-      id: "count",
-      render: (val: any) => {
-        return <div>{val ?? 0}</div>;
-      },
-    },
-  ];
+export const TableData = ({
+  filterParams,
+  handleActionsModal = () => {},
+  setOpen = () => {},
+}: {
+  filterParams: any;
+  handleActionsModal?: (val: any, element?: any) => void;
+  setOpen?: (val: boolean) => void;
+}) => {
+  const [headColumns, setHeadColumns] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [bodyData, setBodyData]: any = useState({});
 
   const handleActions = (el: any, status: string) => {
+    if (status === "modal") {
+      handleActionsModal("add");
+    }
+    if (status === "view") {
+      handleActionsModal("view");
+    }
     if (status === "edit") {
+      handleActionsModal("edit", el);
     }
     if (status === "delete" && el.id !== "superadmin") {
     }
   };
 
-  const bodyColumns = [
-    {
-      name: "Azizjon",
-      count: 12,
-    },
-    {
-      name: "Sardorbek",
-      count: 10,
-    },
-  ];
+  useEffect(() => {
+    setIsLoading(true);
+    if (filterParams?.search?.length) {
+      if (filterParams?.search?.length >= 5) {
+        axios
+          .get(
+            `http://10.40.14.193:8000/urun/${filterParams.search.toUpperCase()}`
+          )
+          .then((res) => {
+            setBodyData({ data: [res.data] });
+            setOpen(true);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      }
+    } else {
+      axios
+        .get(
+          `http://10.40.14.193:8000/urun/?skip=${filterParams.page - 1}&limit=${
+            filterParams.perPage
+          }`
+        )
+        .then((res) => {
+          setBodyData(res.data);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [filterParams]);
 
-  return { headColumns, handleActions, bodyColumns };
+  useEffect(() => {
+    const headColumns: any = [];
+    const arr: any = bodyData?.data ?? [];
+
+    const obj = { ...arr?.[0] };
+    const keys = Object.keys(obj);
+    const newColumns: any = [];
+
+    keys.forEach((key: string) => {
+      const found = headColumns.find((item: any) => item.id === key);
+
+      if (found?.id) {
+        newColumns.push(found);
+      } else {
+        newColumns.push({ title: key, id: key });
+      }
+    });
+
+    setTimeout(() => {
+      setHeadColumns(newColumns);
+    }, 0);
+  }, [bodyData]);
+
+  return {
+    headColumns,
+    handleActions,
+    bodyColumns: bodyData?.data ?? [],
+    isLoading,
+    defaultData: {},
+    bodyData,
+    setBodyData,
+  };
 };

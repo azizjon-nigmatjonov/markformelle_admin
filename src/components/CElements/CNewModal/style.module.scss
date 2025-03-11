@@ -1,0 +1,21 @@
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  // overflow: auto;
+
+  .card {
+    border: none;
+    background-color: white !important;
+    .footer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+
+      .button {
+        flex: 1;
+      }
+    }
+  }
+}

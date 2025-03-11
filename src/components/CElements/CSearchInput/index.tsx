@@ -8,10 +8,12 @@ interface Props {
   delay?: number;
   classes?: string;
   defaultValue?: string | number;
+  title?: string;
   handleSubmit?: (val: any) => void;
 }
 
 const CSearchInput = ({
+  title,
   handleChange = () => {},
   delay = 0,
   classes = "",
@@ -37,12 +39,12 @@ const CSearchInput = ({
 
   return (
     <div
-      className={`relative bg-white rounded-[8px] flex border justify-between items-center h-[25px] desktop:h-[35px] px-5 ${
-        value ? " border-[var(--primary)]" : "border-[var(--border)]"
+      className={`relative bg-white rounded-[4px] flex border justify-between items-center h-[25px] desktop:h-[35px] px-3 ${
+        value ? " border-[var(--main)]" : "border-[var(--border)]"
       }`}
     >
-      <div className="absolute top-1/2 -translate-y-1/2 left-3">
-        <SearchIcon fill={value ? "var(--primary)" : "var(--gray30)"} />
+      <div className="absolute top-1/2 -translate-y-1/2 left-2">
+        <SearchIcon width={20} fill={value ? "var(--main)" : "var(--gray30)"} />
       </div>
       <input
         value={value}
@@ -50,8 +52,8 @@ const CSearchInput = ({
         defaultValue={defaultValue}
         type="text"
         onKeyUp={handleKeyPress}
-        placeholder={t("search")}
-        className={`w-[140px] mx-5 bg-transparent h-full outline-none pr-5 text-[var(--black)] placeholder-[var(--gray)] rounded-[8px] ${classes}`}
+        placeholder={title ? title : t("search")}
+        className={`w-full min-w-[140px] pl-7 pr-1 bg-transparent h-full outline-none  text-[var(--black)] placeholder-[var(--gray)] rounded-[8px] ${classes}`}
       />
       {value?.length ? (
         <button

@@ -40,7 +40,11 @@ export default function PaginationLimits({
     <>
       <div className={cls.limitBtn} onClick={handleClickPopup}>
         <span className={cls.text}>{limit} </span>
-        {open ? <KeyboardArrowDownIcon /> : <KeyboardArrowUpIcon />}
+        {open ? (
+          <KeyboardArrowDownIcon style={{ color: "var(--main)" }} />
+        ) : (
+          <KeyboardArrowUpIcon style={{ color: "var(--main)" }} />
+        )}
       </div>
       <Popover
         id={id}

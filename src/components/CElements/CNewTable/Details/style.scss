@@ -15,7 +15,7 @@
     .table {
       width: 100%;
       position: relative;
-      color: var(--black);
+      color: var(--main);
       background-color: white;
   
       table {
@@ -32,7 +32,7 @@
     @include center;
     padding: 0 16px;
     position: absolute;
-    bottom: 0;
+    bottom: -50px;
     width: 100%;
     background-color: white;
   
@@ -42,7 +42,7 @@
       @include remove-scroll;
       .MuiPaginationItem-page {
         background-color: transparent;
-        font-size: 14px;
+        font-size: 12px;
         font-weight: 500;
       }
       .MuiButtonBase-root {
@@ -65,8 +65,8 @@
         }
   
         .Mui-selected {
-          color: var(--black);
-          font-weight: 400;
+          color: var(--main);
+          font-weight: 500;
         }
       }
       li:first-child {
@@ -75,6 +75,7 @@
           background-image: url("/svg/arrow-left.svg");
           background-repeat: no-repeat;
           background-position: center;
+          border-radius: 0 !important;
         }
       }
       li:last-child {
@@ -83,6 +84,7 @@
           background-image: url("/svg/arrow-right.svg");
           background-repeat: no-repeat;
           background-position: center;
+          border-radius: 0 !important;
         }
       }
     }
@@ -101,7 +103,7 @@
       font-size: 12px;
       font-weight: 400 !important;
       border-radius: 0 !important;
-      color: #123;
+      color: var(--main);
       &:last-child {
         border-right: none;
       }
@@ -109,7 +111,7 @@
   }
   
   .CTableCell {
-    padding: 0 20px !important;
+    padding: 0 8px !important;
     background-color: transparent !important;
     color: var(--black);
     border-right: 0 !important;
@@ -125,7 +127,7 @@
   }
   
   .MuiTableRow-root {
-    height: 50px !important;
+    height: 35px !important;
   
     // &:last-child {
     //   .CTableCell {
@@ -159,9 +161,8 @@
       position: relative;
       padding: 0 !important;
       .cell {
-        color: var(--gray);
+        color: var(--main);
         font-weight: 400;
-        text-transform: uppercase;
         width: 100%;
         @include center;
         position: relative;
@@ -181,7 +182,7 @@
   .resizer {
     position: absolute;
     top: -10px;
-    right: -15px;
+    right: -10px;
     width: 28px;
     cursor: col-resize;
     user-select: none;

@@ -101,7 +101,7 @@ const GlobalSearch = ({
     }
   }, delay);
 
-  const handleCheck = (el: any) => {    
+  const handleCheck = (el: any) => {
     const newList = initialList.filter((item: any) => item.id === el.id);
     setList(newList);
     setValue(el.value);
@@ -219,11 +219,11 @@ const GlobalSearch = ({
   return (
     <div
       className={`w-full ipod:w-[180px] desktop:w-[240px] relative bg-white rounded-[8px] flex border justify-between items-center h-[35px] bigDesktop:h-[45px] px-9 ${
-        value ? " border-[var(--primary)]" : "border-[var(--border)]"
+        value ? " border-[var(--main)]" : "border-[var(--border)]"
       }`}
     >
       <div className="absolute top-1/2 -translate-y-1/2 left-2">
-        <SearchIcon fill={value ? "var(--primary)" : "var(--gray30)"} />
+        <SearchIcon width={18} fill={value ? "var(--main)" : "var(--gray30)"} />
       </div>
       <input
         value={value}

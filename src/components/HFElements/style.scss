@@ -5,13 +5,10 @@
     position: relative;
     width: 100%;
     .MuiInputBase-root {
-      border-radius: 8px;
-      height: 40px;
-      border-radius: 8px;
+      height: 35px;
+      border-radius: 4px;
       border: 1px solid var(--gray20);
-      box-shadow: 0px 1px 3px 0px rgba(16, 24, 40, 0.1),
-        0px 1px 2px 0px rgba(16, 24, 40, 0.06);
-
+    
       fieldset {
         border: none;
       }
@@ -21,7 +18,7 @@
           border: none;
           outline: none;
         }
-        outline: 1.5px solid var(--main);
+        border-color: var(--main);
       }
 
       .Mui-disabled {

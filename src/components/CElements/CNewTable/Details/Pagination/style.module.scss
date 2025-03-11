@@ -8,6 +8,7 @@
   .text {
     font-weight: 500;
     font-size: 12px;
+    color: var(--main);
   }
 }
 .limitsList {
@@ -24,6 +25,7 @@
     width: 100%;
     text-align: center;
     cursor: pointer;
+    color: var(--black);
     &:first-child {
       padding-top: 10px;
     }
