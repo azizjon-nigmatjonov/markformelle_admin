@@ -1,11 +1,11 @@
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import { useState } from "react";
 
 interface Props {
   colId?: any;
   sortId?: any;
   type?: string;
+  defaultValue?: string;
   handleSortLogic: (val: any) => void;
 }
 export const TableSortFilter = ({
@@ -13,23 +13,22 @@ export const TableSortFilter = ({
   colId,
   sortId,
   type,
+  defaultValue,
 }: Props) => {
-  const [value, setValue] = useState("up");
-  const handleClick = (val: string) => {
-    setValue(val);
-  };
-
   return (
     <button
       className={`w-full h-[40px] flex items-center space-x-4 px-2 text-[12px] rounded-[4px] hover:bg-[var(--primary50)] ${
         type === "sort" && sortId ? "bg-[var(--primary50)]" : ""
       }`}
       onClick={() => {
-        handleSortLogic({ value: "sort", id: colId, search: value });
-        handleClick(value === "up" ? "down" : "up");
+        handleSortLogic({
+          value: "sort",
+          id: colId,
+          search: defaultValue === "up" ? "down" : "up",
+        });
       }}
     >
-      {value !== "down" ? (
+      {defaultValue !== "down" ? (
         <ArrowDownwardIcon
           style={{
             fontSize: 16,
@@ -49,7 +48,7 @@ export const TableSortFilter = ({
           sortId === colId ? "text-[var(--primary)]" : "text-[var(--black)]"
         }`}
       >
-        {value === "down" ? "По возрастанию" : "По убыванию"}
+        {defaultValue === "down" ? "По возрастанию" : "По убыванию"}
       </span>
     </button>
   );

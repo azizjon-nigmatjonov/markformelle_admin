@@ -291,55 +291,92 @@ const CNewTable = ({
     }
   };
 
-  const handleSortLogic = ({ value, id, search }: any) => {
-    setTimeout(() => {
-      setActiveSort((prev) => !prev);
-    }, 0);
+  const handleSortLogic = ({ value, id, search, title }: any) => {
+    // console.log(value, id, search, title);
+    // console.log(sortData);
 
-    if (!value) {
-      setSortData([]);
-      return;
+    const DeleteFunction = (type: string) => {
+      const arr: any = [];
+      sortData.forEach((item: any) => {
+        if (item.value === type) {
+          if (item.id !== id) {
+            arr.push(item);
+          }
+        }
+      });
+      setSortData(arr);
+    };
+
+    if (value === "sidebar_all") {
+      if (
+        sortData.find(
+          (item: any) => item.value === "sidebar_all" && item.id === id
+        )
+      ) {
+        DeleteFunction("sidebar_all");
+      } else {
+        setSortData([...sortData, { search: "", value, id, title }]);
+      }
     }
 
-    if (value === "reorder") {
-      if (sortData.find((item: any) => item.value === "reorder")) {
-        setSortData(sortData?.filter((item: any) => item.value !== "reorder"));
-      } else {
-        setSortData([...sortData, { value, id }]);
-      }
-    } else if (value === "search") {
-      if (sortData.find((item: any) => item.value === "search")) {
-        if (search) {
+    if (value === "search") {
+      if (search) {
+        if (
+          sortData.find(
+            (item: any) => item.value === "search" && item.id === id
+          )
+        ) {
           const newSortData = sortData?.map((item: any) => {
-            if (item.value === "search" && value === "search") {
+            if (
+              item.value === "search" &&
+              value === "search" &&
+              item.id === id
+            ) {
               item.search = search;
             }
-            return { ...item, id };
+            return { ...item };
           });
 
           setSortData(newSortData);
         } else {
-          setSortData(sortData?.filter((item: any) => item.value !== "search"));
+          setSortData([...sortData, { search, value, id, title }]);
         }
       } else {
-        if (search) {
-          setSortData([...sortData, { search, value, id }]);
+        if (
+          sortData.find(
+            (item: any) => item.value === "search" && item.id === id
+          )
+        ) {
+          DeleteFunction("search");
         }
-      }
-    } else if (value === "sort") {
-      if (sortData.find((item: any) => item.value === "sort")) {
-        const newSortData = sortData?.map((item: any) => {
-          if (item.value === "sort") {
-            item.search = search;
-          }
-
-          return { ...item, id };
-        });
-        setSortData(newSortData);
-      } else {
-        setSortData([...sortData, { search, value, id }]);
       }
     }
+
+    if (value === "sort") {
+      if (search) {
+        if (
+          sortData.find((item: any) => item.value === "sort" && item.id === id)
+        ) {
+          const newSortData = sortData?.map((item: any) => {
+            if (item.value === "sort" && item.id === id) {
+              item.search = search;
+            }
+
+            return { ...item };
+          });
+          setSortData(newSortData);
+        } else {
+          setSortData([...sortData, { search, value, id, title }]);
+        }
+      } else {
+        if (
+          sortData.find((item: any) => item.value === "sort" && item.id === id)
+        ) {
+          DeleteFunction("sort");
+        }
+      }
+    }
+    setActiveSort((prev) => !prev);
   };
 
   useEffect(() => {
@@ -361,8 +398,6 @@ const CNewTable = ({
       });
       setItems(arr);
     } else {
-      // const newItems = headColumns.filter((item: any) => item?.id !== "index");
-      // newItems.unshift({ id: "index", title: "№" });
       setItems(headColumns);
       setNewHeadColumns(headColumns);
     }
@@ -386,10 +421,6 @@ const CNewTable = ({
 
     handleFilterParams({ ...filterParams, drag: true });
   };
-
-  // useEffect(() => {
-  //   setNewHeadColumns(headColumns);
-  // }, [headColumns]);
 
   const handleDrop = (index: any) => {
     const newItems = newHeadColumns;
@@ -427,7 +458,6 @@ const CNewTable = ({
     if (status === "reorder") {
       handleFilterParams({ ...filterParams, edit: !reOrder });
       setReorder((prev) => !prev);
-      handleSortLogic({ value: "reorder" });
       return;
     }
     if (status === "delete_by") {
@@ -443,11 +473,12 @@ const CNewTable = ({
     handleActions(el, status);
   };
 
-  const searchDebounce = useDebounce((search: string, id: any) => {
+  const searchDebounce = useDebounce((search: string, id: any, title: any) => {
     handleSortLogic({
       value: "search",
       id: id,
       search,
+      title,
     });
   }, 0);
 
@@ -483,7 +514,7 @@ const CNewTable = ({
             sortData={sortData}
             handleSortLogic={handleSortLogic}
             searchDebounce={searchDebounce}
-            tableActions={tableActions}
+            headColumns={newHeadColumns}
           />
           <div
             className={`w-full overflow-x-scroll designed-scroll ${
@@ -558,8 +589,13 @@ const CNewTable = ({
                             : ""
                         }`}
                         style={{
-                          color:
-                            draggingIndex === index ? "var(--primary)" : "",
+                          color: sortData?.find(
+                            (item: any) => item.id === column.id
+                          )
+                            ? "var(--primary)"
+                            : draggingIndex === index
+                            ? "var(--primary)"
+                            : "",
                           textAlign: !column?.filter ? "left" : "left",
                           backgroundColor:
                             currentFilter === index ? "var(--primary50)" : "",
@@ -568,7 +604,6 @@ const CNewTable = ({
                         <div
                           className={`w-full min-h-[40px] flex items-center whitespace-nowrap`}
                           onClick={() => setCurrentFilter(index)}
-                          style={{ textTransform: "lowercase" }}
                         >
                           {column.renderHead
                             ? Array.isArray(column.renderHead)
@@ -599,10 +634,13 @@ const CNewTable = ({
                         <TableFilter
                           colId={column?.id ?? currentFilter}
                           sortData={sortData}
-                          handleSortLogic={handleSortLogic}
+                          handleSortLogic={(val: any) =>
+                            handleSortLogic({ ...val, title: column?.title })
+                          }
                           filter={currentFilter === index}
-                          searchDebounce={searchDebounce}
-                          tableActions={tableActions}
+                          searchDebounce={(val: any, val2: any) =>
+                            searchDebounce(val, val2, column?.title)
+                          }
                           closeFilter={() => setCurrentFilter(null)}
                         />
                       </div>

@@ -4,7 +4,8 @@ import { CloseIcon } from "../../../../UI/IconGenerator/Svg";
 import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import { Field } from "./Field";
 import { SearchField } from "./Search";
-import { OrderUI } from "./Order";
+import { useEffect, useState } from "react";
+import { SelectFilter } from "./Select";
 interface Props {
   colId?: any;
   filter: any;
@@ -12,7 +13,6 @@ interface Props {
   closeFilter: () => void;
   handleSortLogic: (val: any) => void;
   searchDebounce: (val: any, val2: any) => void;
-  tableActions: (val: any, val2: any) => void;
 }
 
 export const TableFilter = ({
@@ -22,7 +22,6 @@ export const TableFilter = ({
   closeFilter = () => {},
   searchDebounce = () => {},
   sortData,
-  tableActions,
 }: Props) => {
   return (
     <>
@@ -36,7 +35,16 @@ export const TableFilter = ({
         <div className="absolute w-[200px] top-[90%] left-0 bg-white rounded-[4px] border border-[var(--border)] z-[99] shadow-xl overflow-hidden">
           <TableSortFilter
             colId={colId}
-            sortId={sortData?.find((item: any) => item.value === "sort")?.id}
+            sortId={
+              sortData?.find(
+                (item: any) => item.value === "sort" && item.id === colId
+              )?.id
+            }
+            defaultValue={
+              sortData?.find(
+                (item: any) => item.value === "sort" && item.id === colId
+              )?.search
+            }
             type={"sort"}
             handleSortLogic={handleSortLogic}
           />
@@ -44,12 +52,10 @@ export const TableFilter = ({
           <SearchField
             searchDebounce={searchDebounce}
             colId={colId}
-            sortObj={sortData?.find((item: any) => item.value === "search")}
-          />
-
-          <OrderUI
-            tableActions={tableActions}
-            sortObj={sortData?.find((item: any) => item.value === "reorder")}
+            sortObj={sortData?.find(
+              (item: any) =>
+                item.value === "search" && item.id === colId && item.search
+            )}
           />
 
           <button
@@ -82,19 +88,46 @@ export const SideFilter = ({
   sortData = [],
   handleSortLogic,
   searchDebounce = () => {},
-  tableActions,
+  headColumns = [],
 }: {
   sortData: any;
   handleClick: () => void;
   sideFilter: boolean;
   searchDebounce: (val: any, val2: any) => void;
   handleSortLogic: (val: any) => void;
-  tableActions: (val: any, val2: string) => void;
+  headColumns: any;
 }) => {
-  // const [addFilter, setAddFilter] = useState(false);
+  const [activeElements, setActiveElements] = useState<any>([]);
+  const [newHeadColumns, setNewHeadColumns] = useState<any>([]);
+
+  useEffect(() => {
+    const obj: any = {};
+    sortData.forEach((item: any) => {
+      if (item.title in obj) {
+        obj[item.title].push(item);
+      } else {
+        obj[item.title] = [item];
+      }
+    });
+    setActiveElements(obj);
+  }, [sortData]);
+
+  useEffect(() => {
+    const arr: any = [];
+    headColumns.forEach((item: any) => {
+      if (!sortData.find((item2: any) => item2.id === item.id)) {
+        arr.push({
+          label: item.title,
+          value: item.id,
+        });
+      }
+    });
+    setNewHeadColumns(arr);
+  }, [headColumns, sortData]);
+
   return (
     <div
-      className={`bg-white relative duration-200 pt ${
+      className={`bg-white relative duration-200  ${
         sideFilter ? "w-[260px] pt-5" : "w-0 -ml-5"
       }`}
     >
@@ -107,7 +140,7 @@ export const SideFilter = ({
         </button>
       )}
       {sideFilter ? (
-        <div className="p-2 w-[260px] pr-5 border-r border-[var(--border)] h-full">
+        <div className="p-2 w-[260px] pr-5 border-r border-[var(--border)] h-full max-h-[500px] overflow-y-scroll remove-scroll">
           <h3 className="font-medium h-[35px]">Представления</h3>
           <button
             className="link-btn h-[35px]"
@@ -121,45 +154,38 @@ export const SideFilter = ({
           </button>
           <div className="bg-[var(--border)] w-full h-[1px] my-1"></div>
 
-          {sortData.find((item: any) => item.value === "search") && (
-            <Field
-              handleSortLogic={handleSortLogic}
-              title="Поиск"
-              sortData={sortData}
-              type="search"
-              searchDebounce={searchDebounce}
-            />
-          )}
+          {Object.entries(activeElements).map(([key, arr]: any) => (
+            <div key={key} className="border-b border-[var(--border)] pb-2">
+              <h2 className="pt-2 text-[12px] font-semibold">{key}</h2>
 
-          {sortData.find((item: any) => item.value === "sort") && (
-            <Field
-              handleSortLogic={handleSortLogic}
-              title="Сортировка элементов"
-              sortData={sortData}
-              type="sort"
-            />
-          )}
+              {arr.map((item: any) => (
+                <Field
+                  handleSortLogic={handleSortLogic}
+                  obj={{
+                    ...item,
+                    label:
+                      item.value === "search"
+                        ? "Поиск"
+                        : item.value === "sort"
+                        ? "Сортировка элементов"
+                        : "Изменить порядок",
+                  }}
+                  searchDebounce={searchDebounce}
+                />
+              ))}
+            </div>
+          ))}
 
-          {sortData.find((item: any) => item.value === "reorder") && (
-            <Field
-              handleSortLogic={handleSortLogic}
-              title="Изменить порядок"
-              sortData={sortData}
-              searchDebounce={searchDebounce}
-              type="reorder"
-              tableActions={tableActions}
-            />
-          )}
-
-          {/* <button
-            onClick={() => setAddFilter(true)}
-            className="w-full h-[35px] flex items-center justify-center text-[var(--main)] font-medium mt-2"
-          >
-            <PlusIcon fill="var(--main)" />
-            <span>Фильтр</span>
-          </button>
-
-          <CSelect options={[{ label: "Фильтр", value: "filter" }]} /> */}
+          <SelectFilter
+            handleClick={(val: any) =>
+              handleSortLogic({
+                value: "sidebar_all",
+                id: val.value,
+                title: val.label,
+              })
+            }
+            options={newHeadColumns}
+          />
         </div>
       ) : (
         ""

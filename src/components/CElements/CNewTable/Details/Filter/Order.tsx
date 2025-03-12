@@ -9,7 +9,7 @@ export const OrderUI = ({
 }) => {
   return (
     <button
-      onClick={() => tableActions({}, "reorder")}
+      onClick={() => tableActions(sortObj, "reorder")}
       className={`flex w-full h-[40px] text-[12px] items-center space-x-2 p-2 hover:bg-[var(--primary50)] ${
         sortObj?.value === "reorder" ? "bg-[var(--primary50)]" : ""
       }`}
