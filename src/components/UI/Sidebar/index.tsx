@@ -28,6 +28,12 @@ export const Sidebar = () => {
     navigateTo(obj.path);
   };
 
+  useEffect(() => {
+    if (!collapsed) {
+      dispatch(sidebarActions.setWideSidebar(false));
+    }
+  }, [collapsed]);
+
   return (
     <div
       className={`${cls.sidebar} duration-300`}
@@ -95,7 +101,9 @@ export const Sidebar = () => {
       <FoldButton
         collapsed={collapsed}
         wideSidebar={wideSidebar}
-        setCollapsed={() => dispatch(sidebarActions.setCollapsed(!collapsed))}
+        setCollapsed={() => {
+          dispatch(sidebarActions.setCollapsed(!collapsed));
+        }}
       />
     </div>
   );

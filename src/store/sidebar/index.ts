@@ -5,7 +5,7 @@ const initialState = {
   openHeader: false,
   resize: false,
   listType: "grid",
-  wideSidebar: false,
+  wideSidebar: true,
 };
 
 export const { actions: sidebarActions, reducer: sidebarReducer } = createSlice(

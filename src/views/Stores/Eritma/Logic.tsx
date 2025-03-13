@@ -21,7 +21,7 @@ export const TableData = ({
       handleActionsModal("add");
     }
     if (status === "view") {
-      handleActionsModal("view");
+      handleActionsModal("view", el);
     }
     if (status === "edit") {
       handleActionsModal("edit", el);

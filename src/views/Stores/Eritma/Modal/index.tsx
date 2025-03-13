@@ -1,25 +1,33 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import CSelect from "../../../../components/CElements/CSelect";
 import { useForm } from "react-hook-form";
 import HFTextField from "../../../../components/HFElements/HFTextField";
 import { FetchFunction } from "./Logic";
 import { CSelectList } from "../../../../components/CElements/CSelect/List";
 import { SearchModal } from "./SearchModal";
+import CCheckbox from "../../../../components/CElements/CCheckbox";
+import { TableUI } from "./Table";
 
 const CollapseUI = ({
   children,
   title,
+  border = true,
+  defaultOpen = true,
 }: {
   children: ReactNode;
   title: string;
+  defaultOpen?: boolean;
+  border?: boolean;
 }) => {
   const [open, setOpen] = useState(true);
+  useEffect(() => {
+    setOpen(defaultOpen);
+  }, [defaultOpen]);
   return (
     <div className="pb-5">
-      <div className="flex items-center justify-between mt-2 mb-3 pb-1 border-b border-[var(--gray)]">
-        <h3 className="text-base font-medium">{title}</h3>
+      <div className={`flex items-center justify-between mt-2 pb-1`}>
+        <h3 className="text-sm font-semibold">{title}</h3>
         <button
           onClick={() => setOpen((prev) => !prev)}
           className="cursor-pointer w-[140px] flex justify-end"
@@ -27,6 +35,11 @@ const CollapseUI = ({
           {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
         </button>
       </div>
+      {border ? (
+        <div className="bg-[var(--border)] h-[1px] w-full mb-3"></div>
+      ) : (
+        ""
+      )}
       {open && children}
     </div>
   );
@@ -54,7 +67,7 @@ export const ModalUI = ({
   defaultData: any;
   setData: (val: any) => void;
 }) => {
-  const { urunType } = FetchFunction();
+  const { urunType, depo } = FetchFunction();
 
   const { control, handleSubmit, setValue } = useForm({
     mode: "onSubmit",
@@ -73,9 +86,10 @@ export const ModalUI = ({
         <p className="text-sm">Urun kodi</p>
         <SearchModal setData={setData} />
       </div>
-      <CollapseUI title="Bo'lim 1">
-        <div className="grid grid-cols-2 gap-x-10">
-          <div className="grid gap-y-2">
+
+      <CollapseUI title="Urun bilgileri">
+        <div className="flex gap-x-10">
+          <div className="space-y-3 w-full">
             <FieldUI title="Uru adi">
               <HFTextField
                 name="name"
@@ -87,47 +101,52 @@ export const ModalUI = ({
             </FieldUI>
             <FieldUI title="Urun tipi">
               <CSelectList
-                options={urunType?.data?.map((item: any) => {
-                  return {
-                    label: item.ADI,
-                    value: item?.URUNTIPIID,
-                  };
-                })}
+                options={urunType?.data}
                 handleSelect={handleSelect}
                 customId="URUNTIPIID"
-                customLabel="ADI"
+                headColumns={[
+                  { title: "Adi", id: "ADI" },
+                  { title: "URUNTIPIID", id: "URUNTIPIID" },
+                ]}
+                customLabel={"ADI"}
                 defaultValue={defaultData?.URUNTIPIID}
               />
             </FieldUI>
             <FieldUI title="Boya tipi">
               <CSelectList
-                options={urunType?.data?.map((item: any) => {
-                  return {
-                    label: item.ADI,
-                    value: item?.URUNTIPIID,
-                  };
-                })}
+                headColumns={[]}
+                options={[]}
                 handleSelect={handleSelect}
                 customId="boyaid"
-                customLabel="ADI"
-                defaultValue={defaultData?.URUNTIPIID}
               />
             </FieldUI>
             <FieldUI title="Mutfak depo">
-              <CSelect options={[{ label: "Boya", value: "urun tipi" }]} />
+              <CSelectList
+                headColumns={[{ title: "Название", id: "ADI" }]}
+                options={depo?.data}
+                handleSelect={handleSelect}
+                customId="DEPOID"
+                customLabel={"ADI"}
+                defaultValue={defaultData?.MUTFAKDEPOID}
+              />
             </FieldUI>
-            <FieldUI title="Boyahane">
-              <CSelect options={[{ label: "Boya", value: "urun tipi" }]} />
+            <FieldUI title="Unite">
+              <CSelectList
+                headColumns={[]}
+                options={[]}
+                handleSelect={handleSelect}
+                customId="UNITEID"
+              />
             </FieldUI>
           </div>
-          <div className="grid gap-y-2">
-            <FieldUI title="Kdv Orani">
+          <div className="space-y-3 w-full">
+            <FieldUI title="Barkod kodu">
               <HFTextField
-                name="name"
+                name="barkod"
                 control={control}
                 setValue={setValue}
                 required={true}
-                defaultValue={defaultData?.URUNID}
+                defaultValue={defaultData?.BARKOD}
               />
             </FieldUI>
             <FieldUI title="Pesin iskontosu">
@@ -148,8 +167,16 @@ export const ModalUI = ({
                 defaultValue={defaultData?.URUNID}
               />
             </FieldUI>
+            <div className="grid grid-cols-3 gap-x-2">
+              <CCheckbox element={{ label: "Kdv Orani" }} checked={true} />
+              <CCheckbox element={{ label: "Kdv Orani" }} checked={true} />
+              <CCheckbox element={{ label: "Kdv Orani" }} checked={true} />
+            </div>
           </div>
         </div>
+      </CollapseUI>
+      <CollapseUI title="Birimler" defaultOpen={false}>
+        <TableUI />
       </CollapseUI>
     </form>
   );

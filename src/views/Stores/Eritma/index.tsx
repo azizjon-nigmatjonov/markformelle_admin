@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { breadCrumbs, TableData } from "./Logic";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { Header } from "../../../components/UI/Header";
@@ -9,7 +9,7 @@ export const EritmaPage = () => {
   const [modalList, setModalList]: any = useState([]);
   const [filterParams, setFilterParams] = useState({
     page: 1,
-    perPage: 10,
+    perPage: 50,
   });
 
   const handleActionsModal = (val: string, element?: any) => {
@@ -24,6 +24,17 @@ export const EritmaPage = () => {
           };
         })
       );
+    }
+    if (val === "view") {
+      setModalList([
+        ...modalList,
+        {
+          order: modalList.length + 1,
+          initial_order: modalList.length + 1,
+          type: "view",
+          id: element?.URUNID,
+        },
+      ]);
     }
     if (val === "edit") {
       setModalList([
@@ -64,11 +75,10 @@ export const EritmaPage = () => {
     }
   };
 
-  const { headColumns, bodyColumns, handleActions, isLoading, bodyData } =
-    TableData({
-      handleActionsModal,
-      filterParams,
-    });
+  const { bodyColumns, handleActions, isLoading, bodyData } = TableData({
+    handleActionsModal,
+    filterParams,
+  });
 
   const reorderItems = (array: any[], fromIndex: number, toIndex: number) => {
     if (fromIndex === toIndex) return array;
@@ -85,21 +95,33 @@ export const EritmaPage = () => {
     });
   };
 
+  const newHeadColumns = useMemo(() => {
+    const obj = { ...bodyColumns?.[0] };
+    const keys = Object.keys(obj);
+    const newColumns: any = [];
+
+    keys.forEach((key: string) => {
+      newColumns.push({ title: key, id: key });
+    });
+
+    return newColumns;
+  }, [bodyColumns]);
+
   return (
     <>
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />
       <div className="p-2">
         <CNewTable
           title="Eritma tablitsasi"
-          headColumns={headColumns}
+          headColumns={newHeadColumns}
           bodyColumns={bodyColumns}
           handleActions={handleActions}
           isLoading={isLoading}
           filterParams={filterParams}
           handleFilterParams={setFilterParams}
           meta={{
-            totalCount: bodyColumns?.count,
-            pageCount: bodyData?.length,
+            totalCount: bodyData?.count,
+            pageCount: filterParams?.perPage,
           }}
         />
       </div>

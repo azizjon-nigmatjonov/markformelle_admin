@@ -49,11 +49,11 @@ const TabbleActions = ({
   };
 
   return (
-    <div>
+    <>
       {currentIndex === rowIndex ? (
         <div
-          className={`absolute left-11 bg-white z-[99] rounded-[4px] border border-[var(--border)] shadow-xl ${
-            rowIndex < 4 ? "top-2" : "top-[-140px]"
+          className={`absolute right-0 bg-white z-[99] rounded-[4px] border border-[var(--border)] shadow-xl ${
+            rowIndex < 4 ? "top-full" : "top-[-170px]"
           } ${cls.card}`}
         >
           <Element
@@ -142,7 +142,7 @@ const TabbleActions = ({
           }}
         />
       )}
-    </div>
+    </>
   );
 };
 

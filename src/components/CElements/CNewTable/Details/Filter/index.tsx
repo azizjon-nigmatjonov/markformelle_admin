@@ -32,7 +32,7 @@ export const TableFilter = ({
       </div>
 
       {filter && (
-        <div className="absolute w-[200px] top-[90%] left-0 bg-white rounded-[4px] border border-[var(--border)] z-[99] shadow-xl overflow-hidden">
+        <div className="absolute top-[90%] left-0 bg-white rounded-[4px] border border-[var(--border)] z-[99] shadow-xl overflow-hidden whitespace-nowrap">
           <TableSortFilter
             colId={colId}
             sortId={
@@ -103,10 +103,12 @@ export const SideFilter = ({
   useEffect(() => {
     const obj: any = {};
     sortData.forEach((item: any) => {
-      if (item.title in obj) {
-        obj[item.title].push(item);
-      } else {
-        obj[item.title] = [item];
+      if (item.value === "search") {
+        if (item.title in obj) {
+          obj[item.title].push(item);
+        } else {
+          obj[item.title] = [item];
+        }
       }
     });
     setActiveElements(obj);
@@ -156,8 +158,6 @@ export const SideFilter = ({
 
           {Object.entries(activeElements).map(([key, arr]: any) => (
             <div key={key} className="border-b border-[var(--border)] pb-2">
-              <h2 className="pt-2 text-[12px] font-semibold">{key}</h2>
-
               {arr.map((item: any) => (
                 <Field
                   handleSortLogic={handleSortLogic}
@@ -179,7 +179,7 @@ export const SideFilter = ({
           <SelectFilter
             handleClick={(val: any) =>
               handleSortLogic({
-                value: "sidebar_all",
+                value: "add",
                 id: val.value,
                 title: val.label,
               })

@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import CNewTable from "../CNewTable";
 
 export const CSelectList = ({
+  headColumns = [],
   options = [],
   handleSelect = () => {},
   customId = "",
   customLabel = "",
   defaultValue = "",
 }: {
+  headColumns: any;
   options: any;
   handleSelect: any;
   customId?: string;
@@ -17,7 +19,6 @@ export const CSelectList = ({
   defaultValue?: any;
 }) => {
   const [value, setValue]: any = useState({});
-  const [headColumns, setHeadColumns] = useState([]);
   const [open, setOpen] = useState(false);
 
   const [filterParams, setFilterParams] = useState({
@@ -29,37 +30,15 @@ export const CSelectList = ({
     if (status === "view") {
       handleSelect(element);
       setValue({ id: element[customId], label: element[customLabel] });
+      setOpen(false);
     }
   };
 
   useEffect(() => {
     if (defaultValue || defaultValue == 0) {
-      setValue(options?.find((item: any) => item.value == defaultValue));
+      setValue(options?.find((item: any) => item[customId] == defaultValue));
     }
   }, [defaultValue]);
-
-  useEffect(() => {
-    const headColumns: any = [];
-    const arr: any = options ?? [];
-
-    const obj = { ...arr?.[0] };
-    const keys = Object.keys(obj);
-    const newColumns: any = [];
-
-    keys.forEach((key: string) => {
-      const found = headColumns.find((item: any) => item.id === key);
-
-      if (found?.id) {
-        newColumns.push(found);
-      } else {
-        newColumns.push({ title: key, id: key });
-      }
-    });
-
-    setTimeout(() => {
-      setHeadColumns(newColumns);
-    }, 0);
-  }, [options]);
 
   return (
     <div className="relative">
@@ -75,7 +54,7 @@ export const CSelectList = ({
       </div>
 
       {open && (
-        <div className="absolute top-full left-0 w-[200%] bg-white rounded-[4px] shadow-md z-[99] border border-[var(--border)] min-h-[300px]">
+        <div className="absolute top-full left-0 min-w-[100%] bg-white rounded-[4px] shadow-md z-[99] border border-[var(--border)] min-h-[300px] max-h-[300px] overflow-y-auto remove-scroll pr-3">
           <CNewTable
             headColumns={headColumns}
             bodyColumns={options}

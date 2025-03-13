@@ -13,11 +13,7 @@ export const SearchField = ({
 }: Props) => {
   return (
     <div
-      className={`relative w-full h-[40px] flex items-center p-2 text-[12px] rounded-[4px] hover:bg-[var(--primary50)] ${
-        sortObj?.value === "search" && sortObj?.search
-          ? "bg-[var(--primary50)]"
-          : ""
-      }`}
+      className={`relative w-full h-[40px] flex items-center p-2 text-[12px] rounded-[4px]`}
     >
       <div className="absolute top-1/2 left-2 -translate-y-1/2">
         <SearchIcon fill="var(--main)" width={16} />

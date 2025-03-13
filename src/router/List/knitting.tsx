@@ -9,7 +9,9 @@ export const knittingList = [
     link: "machines",
     sidebar: true,
     title: "knittingavto",
-    parent_icon: <img width={18} src="/images/kniting.png" alt="knitting" />,
+    parent_icon: (
+      <img width={18} src="/images/kniting.png" alt="knitting parent" />
+    ),
     icon: <img width={18} src="/images/kniting.png" alt="knitting" />,
     element: <KnittingMachines />,
     permissions: ["view_page", "edit"],
@@ -20,7 +22,7 @@ export const knittingList = [
     link: "accessories",
     sidebar: true,
     title: "Вязания аксессуаров",
-    icon: <img width={22} src="/images/rope.png" alt="knitting" />,
+    icon: <img width={22} src="/images/rope.png" alt="rope" />,
     element: <KnittingMachines />,
     permissions: ["view_page"],
     auth: true,

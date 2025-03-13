@@ -6,7 +6,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
-import { DeleteIcon, EditIcon, PlusIcon } from "../../UI/IconGenerator/Svg";
+import { DeleteIcon, EditIcon } from "../../UI/IconGenerator/Svg";
 
 interface Props {
   element?: any;
@@ -104,7 +104,7 @@ const CNewModal: FC<Props> = ({
     <>
       <div
         ref={modalRef}
-        className={`fixed rounded-[4px] z-[101] bg-white shadow-lg ${
+        className={`fixed rounded-[4px] z-[99] bg-white shadow-lg ${
           isDragging ? "cursor-grabbing" : ""
         }`}
         style={{
@@ -124,20 +124,22 @@ const CNewModal: FC<Props> = ({
       >
         <Card className={`${cls.card}`} style={{ padding }}>
           <div
-            className={`duration-300 relative ${
+            className={`duration-300 relative overflow-y-scroll designed-scroll ${
               title
                 ? screen
                   ? "w-[60vw] h-[100vh]"
                   : "w-[90vw] h-[80vh]"
-                : "w-auto h-[800px] overflow-y-scroll designed-scroll"
+                : "w-auto h-[800px]"
             }`}
           >
             {title && (
-              <div className="flex items-center justify-between p-3">
+              <div className="flex items-center justify-between p-3 sticky top-0 bg-white z-[99] border-b border-[var(--border)]">
                 <div className="flex items-center space-x-3">
                   <IconButton onClick={() => handleActions("close", element)}>
                     <div className="w-[30px] h-[30px] items-center justify-center flex bg-[var(--main80)] rounded-full">
-                      <ArrowBackIcon style={{ color: "var(--main)" }} />
+                      <ArrowBackIcon
+                        style={{ color: "var(--main)", width: 18 }}
+                      />
                     </div>
                   </IconButton>
 
@@ -158,7 +160,7 @@ const CNewModal: FC<Props> = ({
                       <EditIcon fill="var(--main)" />
                     </div>
                   </IconButton>
-                  <IconButton onClick={() => handleActions("add")}>
+                  {/* <IconButton onClick={() => handleActions("add")}>
                     <div
                       className={`flex items-center justify-center rounded-full w-[30px] h-[30px] ${
                         action === "add" ? "border border-[var(--main)]" : ""
@@ -166,7 +168,7 @@ const CNewModal: FC<Props> = ({
                     >
                       <PlusIcon fill="var(--main)" />
                     </div>
-                  </IconButton>
+                  </IconButton> */}
                   <IconButton onClick={() => {}}>
                     <div
                       className={`flex items-center justify-center rounded-full w-[30px] h-[30px] ${
@@ -195,7 +197,9 @@ const CNewModal: FC<Props> = ({
                 <IconButton onClick={() => handleScreen()}>
                   <div className="w-[30px] h-[30px] items-center justify-center flex">
                     {screen ? (
-                      <OpenInFullIcon style={{ color: "var(--main)" }} />
+                      <OpenInFullIcon
+                        style={{ color: "var(--main)", width: 18 }}
+                      />
                     ) : (
                       <CloseFullscreenIcon style={{ color: "var(--main)" }} />
                     )}

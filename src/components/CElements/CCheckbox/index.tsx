@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { CheckLine } from "../../../components/UI/IconGenerator/Svg";
+import { useEffect, useState } from "react";
 
 interface Props {
   element?: any;
@@ -15,22 +16,31 @@ const CCheckbox = ({
   disabled = false,
 }: Props) => {
   const { t } = useTranslation();
+  const [value, setValue] = useState(false);
+
+  useEffect(() => {
+    setValue(checked);
+  }, [checked]);
+
   return (
     <div
       onClick={() => {
-        if (!disabled) handleCheck(element);
+        if (!disabled) {
+          setValue(!value);
+          handleCheck(element);
+        }
       }}
-      className={`flex items-center rounded-lg border-[var(--gray20)]  w-full whitespace-nowrap ${
+      className={`flex items-center rounded-[4px] border-[var(--border)] w-full whitespace-nowrap ${
         element?.label ? "border gap-2 px-[12px] h-[35px]" : ""
       } ${disabled ? "cursor-not-allowed " : "cursor-pointer "}`}
     >
       <div className="w-[18px] h-[18px]">
         <div
-          className={`w-[18px] h-[18px] rounded-[4px] border-2 ${
-            checked ? "border-[var(--main)]" : "border-[var(--gray20)]"
-          } ${disabled ? "bg-[var(--gray20)]" : ""}`}
+          className={`w-[18px] h-[18px] rounded-[4px] border ${
+            value ? "border-[var(--main)]" : "border-[var(--border)]"
+          } ${disabled ? "bg-[var(--border)]" : ""}`}
         >
-          {checked ? <CheckLine fill="var(--main)" /> : ""}
+          {value ? <CheckLine fill="var(--main)" /> : ""}
         </div>
       </div>
       {element?.label && <p>{t(element.label)}</p>}

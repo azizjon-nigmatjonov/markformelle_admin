@@ -63,9 +63,9 @@ const CNewTable = ({
   isResizeble = true,
   idForTable,
   disablePagination = false,
-  limitList = [10, 20, 30],
+  limitList = [50, 100, 200],
   autoHeight = false,
-  filterParams = { page: 1, perPage: 10 },
+  filterParams = { page: 1, perPage: 50 },
   handleFilterParams = () => {},
   handleActions = () => {},
 }: Props) => {
@@ -108,8 +108,13 @@ const CNewTable = ({
 
   useEffect(() => {
     if (!bodyColumns?.length) return;
-    const arr = [...bodyColumns];
-    let result: any = [];
+    const arr = newBodyColumns?.length ? newBodyColumns : bodyColumns;
+    let result: any = newBodyColumns?.length ? newBodyColumns : [];
+
+    // if (!sortData.length) {
+    //   setNewBodyColumns(bodyColumns);
+    //   return;
+    // }
 
     sortData?.forEach((sortObj: any) => {
       const { value, id, search }: any = { ...sortObj };
@@ -126,7 +131,10 @@ const CNewTable = ({
 
           val = val.toLocaleLowerCase();
 
-          if (val.includes(search.toLocaleLowerCase())) {
+          if (
+            val.includes(search.toLocaleLowerCase()) &&
+            !result.find((item: any) => item.id === id)
+          ) {
             result.push(obj);
           }
         });
@@ -169,7 +177,7 @@ const CNewTable = ({
 
     setNewBodyColumns(result.length ? result : arr);
     result = [];
-  }, [bodyColumns, activeSort, sortData]);
+  }, [bodyColumns, activeSort, sortData.length]);
 
   const bodySource = useMemo(() => {
     if (!newBodyColumns?.length) return [];
@@ -290,9 +298,10 @@ const CNewTable = ({
         ?.reduce((acc: any, item: any) => acc + item?.colWidth, 0);
     }
   };
+  console.log("sortData", sortData);
 
   const handleSortLogic = ({ value, id, search, title }: any) => {
-    // console.log(value, id, search, title);
+    console.log(value, id, search, title);
     // console.log(sortData);
 
     const DeleteFunction = (type: string) => {
@@ -307,48 +316,28 @@ const CNewTable = ({
       setSortData(arr);
     };
 
-    if (value === "sidebar_all") {
-      if (
-        sortData.find(
-          (item: any) => item.value === "sidebar_all" && item.id === id
-        )
-      ) {
-        DeleteFunction("sidebar_all");
-      } else {
-        setSortData([...sortData, { search: "", value, id, title }]);
-      }
+    if (value === "add") {
+      setSortData([...sortData, { search: "", value: "search", id, title }]);
+    }
+
+    if (value === "search_close") {
+      DeleteFunction("search");
     }
 
     if (value === "search") {
-      if (search) {
-        if (
-          sortData.find(
-            (item: any) => item.value === "search" && item.id === id
-          )
-        ) {
-          const newSortData = sortData?.map((item: any) => {
-            if (
-              item.value === "search" &&
-              value === "search" &&
-              item.id === id
-            ) {
-              item.search = search;
-            }
-            return { ...item };
-          });
+      if (
+        sortData.find((item: any) => item.value === "search" && item.id === id)
+      ) {
+        const newSortData = sortData?.map((item: any) => {
+          if (item.value === "search" && value === "search" && item.id === id) {
+            item.search = search;
+          }
+          return { ...item };
+        });
 
-          setSortData(newSortData);
-        } else {
-          setSortData([...sortData, { search, value, id, title }]);
-        }
+        setSortData(newSortData);
       } else {
-        if (
-          sortData.find(
-            (item: any) => item.value === "search" && item.id === id
-          )
-        ) {
-          DeleteFunction("search");
-        }
+        setSortData([...sortData, { search, value, id, title }]);
       }
     }
 
@@ -502,9 +491,7 @@ const CNewTable = ({
         )}
         <div
           id="table"
-          className={`border-t border-[var(--border)] flex space-x-8 h-full ${
-            title ? "pl-[10px]" : ""
-          }`}
+          className={`flex space-x-8 h-full ${title ? "pl-[10px]" : ""}`}
           style={{ minHeight: autoHeight ? "300px" : "500px" }}
           ref={tableRef}
         >
@@ -697,6 +684,8 @@ const CNewTable = ({
                             <div
                               style={{
                                 textAlign: column?.textAlign || "left",
+                                minWidth:
+                                  colIndex === 0 && title ? "160px" : "auto",
                               }}
                               className={`relative h-full flex items-center text-[13px] ${
                                 hoveredIndex === colIndex &&
@@ -719,7 +708,7 @@ const CNewTable = ({
                                       tableActions(item, "view");
                                     }
                                   }}
-                                  className="w-full"
+                                  className="w-full whitespace-nowrap"
                                 >
                                   {column?.permission ? (
                                     <>
@@ -760,8 +749,8 @@ const CNewTable = ({
                               ) : (
                                 ""
                               )}
-                              {colIndex === 0 ? (
-                                <>
+                              {colIndex === 0 && title ? (
+                                <div className="relative flex items-center">
                                   <button
                                     className={`w-[20px] h-full items-center justify-center ml-2`}
                                     onClick={() => setCurrentIndex(rowIndex)}
@@ -790,7 +779,7 @@ const CNewTable = ({
                                     ]}
                                     checkPermission={checkPermission}
                                   />
-                                </>
+                                </div>
                               ) : (
                                 ""
                               )}
@@ -806,7 +795,7 @@ const CNewTable = ({
         </div>
         {!bodyColumns?.length ? (
           <img
-            className="w-[120px] mx-auto"
+            className="w-[120px] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
             src="/images/no-data.png"
             alt="empty"
           />
