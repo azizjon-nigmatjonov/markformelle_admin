@@ -1,4 +1,4 @@
-import { SearchIcon } from "../../../../UI/IconGenerator/Svg";
+import { CloseIcon, SearchIcon } from "../../../../UI/IconGenerator/Svg";
 
 interface Props {
   sortObj: any;
@@ -25,9 +25,15 @@ export const SearchField = ({
           searchDebounce(e.target.value, colId);
         }}
         value={sortObj?.search ?? ""}
-        className="ml-8 h-full w-full border border-[var(--border)] rounded-[4px] text-[var(--black)]"
+        className="ml-6 h-full w-full border border-[var(--border)] rounded-[4px] text-[var(--black)] pl-1 pr-3"
         style={{ padding: "0" }}
       />
+      <div
+        onClick={() => searchDebounce("", colId)}
+        className="absolute top-1/2 right-2 -translate-y-1/2"
+      >
+        <CloseIcon />
+      </div>
     </div>
   );
 };

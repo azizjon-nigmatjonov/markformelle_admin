@@ -1,7 +1,6 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { TableSortFilter } from "../Sort";
 import { CloseIcon } from "../../../../UI/IconGenerator/Svg";
-import FilterAltOffIcon from "@mui/icons-material/FilterAltOff";
 import { Field } from "./Field";
 import { SearchField } from "./Search";
 import { useEffect, useState } from "react";
@@ -11,6 +10,7 @@ interface Props {
   filter: any;
   sortData: any;
   closeFilter: () => void;
+  handleClick: () => void;
   handleSortLogic: (val: any) => void;
   searchDebounce: (val: any, val2: any) => void;
 }
@@ -21,18 +21,22 @@ export const TableFilter = ({
   colId,
   closeFilter = () => {},
   searchDebounce = () => {},
+  handleClick = () => {},
   sortData,
 }: Props) => {
   return (
     <>
-      <div className="w-[20px] h-full items-center justify-center">
-        <div className="group-hover:flex hidden">
-          <ExpandMoreIcon style={{ color: "var(--gray)" }} />
+      <div
+        className="w-[20px] h-full items-center justify-center"
+        onClick={handleClick}
+      >
+        <div>
+          <ExpandMoreIcon style={{ color: "var(--main)" }} />
         </div>
       </div>
 
       {filter && (
-        <div className="absolute top-[90%] left-0 bg-white rounded-[4px] border border-[var(--border)] z-[99] shadow-xl overflow-hidden whitespace-nowrap">
+        <div className="absolute top-[90%] left-0 bg-white rounded-[4px] border border-[var(--border)] z-[99] card-shadow overflow-hidden whitespace-nowrap">
           <TableSortFilter
             colId={colId}
             sortId={
@@ -57,19 +61,6 @@ export const TableFilter = ({
                 item.value === "search" && item.id === colId && item.search
             )}
           />
-
-          <button
-            onClick={() => {
-              handleSortLogic({
-                value: "",
-              });
-              closeFilter();
-            }}
-            className={`w-full flex h-[35px] items-center space-x-4 p-2 hover:bg-[var(--primary50)]`}
-          >
-            <FilterAltOffIcon style={{ fontSize: 16, color: "var(--main)" }} />
-            <span className="text-[var(--black)]">Очистить фильтр</span>
-          </button>
         </div>
       )}
       {filter && (
@@ -142,7 +133,7 @@ export const SideFilter = ({
         </button>
       )}
       {sideFilter ? (
-        <div className="p-2 w-[260px] pr-5 border-r border-[var(--border)] h-full max-h-[500px] overflow-y-scroll remove-scroll">
+        <div className="p-2 w-[260px] pr-5 border-r border-[var(--border)] h-full overflow-y-scroll remove-scroll">
           <h3 className="font-medium h-[35px]">Представления</h3>
           <button
             className="link-btn h-[35px]"
@@ -176,16 +167,18 @@ export const SideFilter = ({
             </div>
           ))}
 
-          <SelectFilter
-            handleClick={(val: any) =>
-              handleSortLogic({
-                value: "add",
-                id: val.value,
-                title: val.label,
-              })
-            }
-            options={newHeadColumns}
-          />
+          <div className="absolute bottom-0 h-[50px] bg-white left-0 w-full border-t border-r border-[var(--border)]">
+            <SelectFilter
+              handleClick={(val: any) =>
+                handleSortLogic({
+                  value: "add",
+                  id: val.value,
+                  title: val.label,
+                })
+              }
+              options={newHeadColumns}
+            />
+          </div>
         </div>
       ) : (
         ""

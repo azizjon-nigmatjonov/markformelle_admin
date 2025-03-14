@@ -1,5 +1,5 @@
 import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import CLabel from "../CLabel";
 import { ArrowDownOutline } from "../../../components/UI/IconGenerator/Svg";
 import { useEffect, useState } from "react";
@@ -28,16 +28,13 @@ const CSelect = ({
   const [open, setOpen] = useState(false);
   const [currentValue, setCurrentValue]: any = useState("");
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setCurrentValue(event.target.value);
-  };
-
   const handleClick = (val: any) => {
+    setCurrentValue(val?.value);
     handlerValue!(val);
   };
 
   useEffect(() => {
-    if (value) {
+    if (value || value == 0) {
       setCurrentValue(value);
     }
   }, [value]);
@@ -56,8 +53,7 @@ const CSelect = ({
               inputProps={{
                 "aria-label": "Without label",
               }}
-              onChange={handleChange}
-              onClick={() => setOpen((prev) => !prev)}
+              onClick={() => !disabled && setOpen((prev) => !prev)}
             >
               {options.map(
                 ({ value, label }: { value: any; label: string }) => (

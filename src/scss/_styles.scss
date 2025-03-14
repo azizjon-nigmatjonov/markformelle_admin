@@ -48,6 +48,7 @@ input {
 #HFMultipleSelect {
   width: 100%;
 
+
   .MuiInputBase-root {
     width: 100%;
     outline: none;
@@ -67,6 +68,8 @@ input {
       display: none;
     }
 
+
+
     &.Mui-focused {
       .MuiOutlinedInput-notchedOutline {
         border-color: var(--main);
@@ -75,13 +78,13 @@ input {
 
     fieldset {
       border: none;
-      border-radius: 8px;
+      border-radius: 4px;
       background-color: transparent;
     }
 
     input {
       width: 100%;
-      border-radius: 8px;
+      border-radius: 4px;
     }
   }
 }
@@ -143,9 +146,9 @@ input {
 #basicDatePicker {
   .MuiInputBase-root {
     background-color: white;
-    border-radius: 8px;
+    border-radius: 4px;
     .MuiOutlinedInput-notchedOutline {
-      border-color: var(--gray20);
+      border-color: var(--border);
       @include common-shadow;
       height: 44px;
     }
@@ -156,6 +159,7 @@ input {
     }
   }
 }
+
 
 #multiDatePicker {
   width: 100%;
@@ -278,21 +282,21 @@ input {
   }
 
   &.disabled {
-    background-color: var(--gray20);
+    background-color: var(--border);
     color: var(--black);
   }
 }
 
 .Mui-disabled {
-  background-color: var(--gray20);
+  background-color: var(--border);
   color: var(--black);
-  cursor: not-allowed !important;
+
 }
 
 .unpermit {
   cursor: not-allowed;
   position: relative;
-  background-color: var(--gray20);
+  background-color: var(--border);
 
   &:hover {
     &::after {

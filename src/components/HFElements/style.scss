@@ -7,7 +7,7 @@
     .MuiInputBase-root {
       height: 35px;
       border-radius: 4px;
-      border: 1px solid var(--gray20);
+      border: 1px solid var(--border);
     
       fieldset {
         border: none;
@@ -22,7 +22,8 @@
       }
 
       .Mui-disabled {
-        background-color: var(--gray);
+        cursor: default;
+        background-color: var(--border);
       }
     }
 

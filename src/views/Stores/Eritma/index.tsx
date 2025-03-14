@@ -121,20 +121,22 @@ export const EritmaPage = () => {
           handleFilterParams={setFilterParams}
           meta={{
             totalCount: bodyData?.count,
-            pageCount: filterParams?.perPage,
+            pageCount: bodyData?.count
+              ? Math.ceil(bodyData?.count / filterParams?.perPage)
+              : 0,
           }}
         />
       </div>
 
-      {modalList.map((item: any) => (
-        <div key={item.order}>
-          <ModalList
-            handleActionsModal={handleActionsModal}
-            item={item}
-            modalList={modalList}
-          />
-        </div>
-      ))}
+      {modalList?.length ? (
+        <ModalList
+          handleActionsModal={handleActionsModal}
+          item={modalList[0]}
+          modalList={modalList}
+        />
+      ) : (
+        ""
+      )}
     </>
   );
 };

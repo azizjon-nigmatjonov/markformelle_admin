@@ -10,6 +10,7 @@ interface Props {
 
 export const ModalList = ({ handleActionsModal, item, modalList }: Props) => {
   const { data, setData } = ModalListLogic({ id: item?.id });
+  console.log("item", item);
 
   return (
     <CNewModal
@@ -22,7 +23,7 @@ export const ModalList = ({ handleActionsModal, item, modalList }: Props) => {
       }}
       list={modalList}
     >
-      <ModalUI defaultData={data} setData={setData} />
+      <ModalUI defaultData={data} setData={setData} action={item?.type} />
     </CNewModal>
   );
 };

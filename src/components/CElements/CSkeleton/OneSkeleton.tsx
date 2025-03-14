@@ -1,6 +1,6 @@
 import cls from "./style.module.scss";
 export const OneSkeleton = ({
-  rounded = 12,
+  rounded = 4,
   height = 150,
 }: {
   rounded?: number;

@@ -92,7 +92,7 @@
   
   .CTableHead {
     position: sticky;
-    top: -2px;
+    top: 0px;
     z-index: 3;
     height: auto;
   
@@ -181,13 +181,25 @@
   
   .resizer {
     position: absolute;
-    top: -10px;
+    top: -3px;
     right: -10px;
-    width: 28px;
+    width: 20px;
     cursor: col-resize;
     user-select: none;
     height: 30px !important;
     z-index: 2;
+
+    &:hover {
+      &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 1px;
+        height: 100%;
+        background-color: var(--border);
+      }
+    }
   }
   .resizer:hover,
   .resizing {

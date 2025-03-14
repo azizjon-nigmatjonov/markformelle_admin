@@ -22,8 +22,7 @@ import { TableSettingsData } from "./Logic";
 import { tableStoreActions } from "../../../store/table";
 import useDebounce from "../../../hooks/useDebounce";
 import { SideFilter, TableFilter } from "./Details/Filter";
-import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
-
+import CheckIcon from "@mui/icons-material/Check";
 interface Props {
   meta?: {
     totalCount: number;
@@ -45,7 +44,6 @@ interface Props {
   footer?: any;
   removeSearch?: boolean;
   extra?: any;
-  autoHeight?: boolean;
 }
 
 const CNewTable = ({
@@ -64,7 +62,6 @@ const CNewTable = ({
   idForTable,
   disablePagination = false,
   limitList = [50, 100, 200],
-  autoHeight = false,
   filterParams = { page: 1, perPage: 50 },
   handleFilterParams = () => {},
   handleActions = () => {},
@@ -108,13 +105,13 @@ const CNewTable = ({
 
   useEffect(() => {
     if (!bodyColumns?.length) return;
-    const arr = newBodyColumns?.length ? newBodyColumns : bodyColumns;
-    let result: any = newBodyColumns?.length ? newBodyColumns : [];
+    const arr = bodyColumns;
+    let result: any = [];
 
-    // if (!sortData.length) {
-    //   setNewBodyColumns(bodyColumns);
-    //   return;
-    // }
+    if (!sortData.length) {
+      setNewBodyColumns(bodyColumns);
+      return;
+    }
 
     sortData?.forEach((sortObj: any) => {
       const { value, id, search }: any = { ...sortObj };
@@ -198,11 +195,9 @@ const CNewTable = ({
         is_view: checks(item?.view),
         is_sellect_more: checks(item?.sellect_more),
         index:
-          filterParams?.page > 1
-            ? filterParams?.page * filterParams.perPage -
-              filterParams.perPage +
-              (index + 1)
-            : index + 1,
+          filterParams.page < 2
+            ? index + 1
+            : index + filterParams.perPage * (filterParams.page - 1),
       })) ?? []
     );
   }, [newBodyColumns, filterParams.perPage, filterParams.page, headColumns]);
@@ -298,12 +293,8 @@ const CNewTable = ({
         ?.reduce((acc: any, item: any) => acc + item?.colWidth, 0);
     }
   };
-  console.log("sortData", sortData);
 
   const handleSortLogic = ({ value, id, search, title }: any) => {
-    console.log(value, id, search, title);
-    // console.log(sortData);
-
     const DeleteFunction = (type: string) => {
       const arr: any = [];
       sortData.forEach((item: any) => {
@@ -316,14 +307,6 @@ const CNewTable = ({
       setSortData(arr);
     };
 
-    if (value === "add") {
-      setSortData([...sortData, { search: "", value: "search", id, title }]);
-    }
-
-    if (value === "search_close") {
-      DeleteFunction("search");
-    }
-
     if (value === "search") {
       if (
         sortData.find((item: any) => item.value === "search" && item.id === id)
@@ -332,7 +315,7 @@ const CNewTable = ({
           if (item.value === "search" && value === "search" && item.id === id) {
             item.search = search;
           }
-          return { ...item };
+          return item;
         });
 
         setSortData(newSortData);
@@ -365,6 +348,15 @@ const CNewTable = ({
         }
       }
     }
+
+    if (value === "add") {
+      setSortData([...sortData, { search: "", value: "search", id, title }]);
+    }
+
+    if (value === "search_close") {
+      DeleteFunction("search");
+    }
+
     setActiveSort((prev) => !prev);
   };
 
@@ -437,6 +429,8 @@ const CNewTable = ({
     setHoveredIndex(null);
   };
 
+  const [selectedItems, setSelectedItems] = useState<any[]>([]);
+
   const tableActions = (el: any, status: string) => {
     if (status === "sidefilter") {
       setSideFilter(!sideFilter);
@@ -451,6 +445,16 @@ const CNewTable = ({
     }
     if (status === "delete_by") {
       return;
+    }
+
+    if (status === "sellect_more") {
+      if (selectedItems.includes(el.index - 1)) {
+        setSelectedItems(
+          selectedItems.filter((item: any) => item !== el.index - 1)
+        );
+      } else {
+        setSelectedItems([...selectedItems, el.index - 1]);
+      }
     }
 
     if (status === "multiple") {
@@ -471,8 +475,15 @@ const CNewTable = ({
     });
   }, 0);
 
+  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
+  const [height, setHeight] = useState(0);
+  useEffect(() => {
+    const height = window.innerHeight;
+    setHeight(height);
+  }, [openHeader]);
+
   return (
-    <div className="relative cnewtable w-full h-full">
+    <div className="relative cnewtable w-full">
       <div className={`rounded-[4px] h-full`}>
         {title && (
           <HeaderSettings
@@ -492,8 +503,8 @@ const CNewTable = ({
         <div
           id="table"
           className={`flex space-x-8 h-full ${title ? "pl-[10px]" : ""}`}
-          style={{ minHeight: autoHeight ? "300px" : "500px" }}
           ref={tableRef}
+          style={{ height: openHeader ? height - 140 : height - 100 }}
         >
           <SideFilter
             sideFilter={sideFilter}
@@ -503,11 +514,7 @@ const CNewTable = ({
             searchDebounce={searchDebounce}
             headColumns={newHeadColumns}
           />
-          <div
-            className={`w-full overflow-x-scroll designed-scroll ${
-              title ? "pt-5" : ""
-            }`}
-          >
+          <div className={`w-full overflow-x-scroll designed-scroll`}>
             <CTableWrapper
               count={meta.pageCount}
               totalCount={meta.totalCount}
@@ -589,8 +596,7 @@ const CNewTable = ({
                         }}
                       >
                         <div
-                          className={`w-full min-h-[40px] flex items-center whitespace-nowrap`}
-                          onClick={() => setCurrentFilter(index)}
+                          className={`w-full min-h-[40px] flex items-center whitespace-nowrap cursor-move`}
                         >
                           {column.renderHead
                             ? Array.isArray(column.renderHead)
@@ -603,19 +609,6 @@ const CNewTable = ({
                             : column?.id === "index"
                             ? "№"
                             : t(column?.title)}
-                          <div className="ml-2">
-                            {reOrder && (
-                              <DragIndicatorIcon
-                                style={{
-                                  color:
-                                    draggingIndex === index
-                                      ? "var(--primary)"
-                                      : "var(--gray)",
-                                  marginRight: 5,
-                                }}
-                              />
-                            )}
-                          </div>
                         </div>
 
                         <TableFilter
@@ -628,6 +621,7 @@ const CNewTable = ({
                           searchDebounce={(val: any, val2: any) =>
                             searchDebounce(val, val2, column?.title)
                           }
+                          handleClick={() => setCurrentFilter(index)}
                           closeFilter={() => setCurrentFilter(null)}
                         />
                       </div>
@@ -697,6 +691,28 @@ const CNewTable = ({
                                   : ""
                               }`}
                             >
+                              {selectedItems.length && colIndex === 0 ? (
+                                <div
+                                  className="mr-2"
+                                  onClick={() =>
+                                    tableActions(item, "sellect_more")
+                                  }
+                                >
+                                  <div
+                                    className={`w-[20px] h-[20px] rounded-full border border-[var(--primary70)] flex items-center justify-center ${
+                                      selectedItems.includes(item.index - 1)
+                                        ? "bg-[var(--primary70)]"
+                                        : ""
+                                    }`}
+                                  >
+                                    <CheckIcon
+                                      style={{ color: "white", width: 14 }}
+                                    />
+                                  </div>
+                                </div>
+                              ) : (
+                                ""
+                              )}
                               {column?.id !== "actions" && !item.empty ? (
                                 <div
                                   onClick={() => {

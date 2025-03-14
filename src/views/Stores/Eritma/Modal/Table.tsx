@@ -7,12 +7,17 @@ import CSelect from "../../../../components/CElements/CSelect";
 import { CheckBox } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 
-export const TableUI = () => {
+export const TableUI = ({ defaultData = {} }: { defaultData: any }) => {
   const { control, setValue } = useForm({
     mode: "onSubmit",
   });
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 10 });
-  const { birimler, isLoading } = FetchTable({ filterParams });
+  console.log("defaultData", defaultData);
+
+  const { birimler, isLoading } = FetchTable({
+    filterParams,
+    id: defaultData?.URUNID,
+  });
   const [open, setOpen] = useState(false);
   const handleActions = (element: any, status: any) => {
     console.log("element", element, status);
@@ -54,13 +59,9 @@ export const TableUI = () => {
         bodyColumns={birimler?.data ?? []}
         handleActions={handleActions}
         isLoading={isLoading}
-        autoHeight={true}
         filterParams={filterParams}
         handleFilterParams={setFilterParams}
-        meta={{
-          totalCount: birimler?.count,
-          pageCount: filterParams?.perPage,
-        }}
+        disablePagination={true}
       />
       {open && (
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[99] bg-white rounded-[4px] shadow-2xl border border-[var(--border)] p-3">

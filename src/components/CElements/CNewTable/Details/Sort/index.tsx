@@ -17,7 +17,7 @@ export const TableSortFilter = ({
 }: Props) => {
   return (
     <button
-      className={`w-full h-[40px] flex items-center space-x-4 px-2 text-[12px] rounded-[4px] hover:bg-[var(--primary50)] ${
+      className={`w-full h-[40px] flex items-center space-x-2 px-2 text-[12px] rounded-[4px] ${
         type === "sort" && sortId ? "bg-[var(--primary50)]" : ""
       }`}
       onClick={() => {

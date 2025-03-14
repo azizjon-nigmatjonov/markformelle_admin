@@ -4,7 +4,13 @@ import CNewTable from "../../../../components/CElements/CNewTable";
 import { TableData } from "../Logic";
 import { ListIcon } from "../../../../components/UI/IconGenerator/Svg";
 
-export const SearchModal = ({ setData }: { setData: (val: any) => void }) => {
+export const SearchModal = ({
+  setData,
+  defaultData,
+}: {
+  setData: (val: any) => void;
+  defaultData: any;
+}) => {
   const [filterParams, setFilterParams] = useState({
     page: 1,
     perPage: 100,
@@ -41,6 +47,7 @@ export const SearchModal = ({ setData }: { setData: (val: any) => void }) => {
           onChange={(e) =>
             setFilterParams({ ...filterParams, search: e.target.value })
           }
+          value={defaultData?.URUNID}
           style={{ textTransform: "uppercase" }}
           className="border border-[var(--border)] h-[30px] rounded-[4px] px-2 focus:border-[var(--main)] text-sm"
         />

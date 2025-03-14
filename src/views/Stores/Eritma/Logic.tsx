@@ -49,9 +49,11 @@ export const TableData = ({
     } else {
       axios
         .get(
-          `http://10.40.14.193:8000/urun/?skip=${filterParams.page - 1}&limit=${
-            filterParams.perPage
-          }`
+          `http://10.40.14.193:8000/urun/?skip=${
+            filterParams.page < 2
+              ? 0
+              : (filterParams.page - 1) * filterParams.perPage
+          }&limit=${filterParams.perPage}`
         )
         .then((res) => {
           setBodyData(res.data);
@@ -60,7 +62,7 @@ export const TableData = ({
           setIsLoading(false);
         });
     }
-  }, [filterParams]);
+  }, [filterParams.page, filterParams.perPage]);
 
   useEffect(() => {
     const headColumns: any = [];

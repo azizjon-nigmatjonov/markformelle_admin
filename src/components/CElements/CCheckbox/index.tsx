@@ -37,10 +37,10 @@ const CCheckbox = ({
       <div className="w-[18px] h-[18px]">
         <div
           className={`w-[18px] h-[18px] rounded-[4px] border ${
-            value ? "border-[var(--main)]" : "border-[var(--border)]"
+            value ? "border-[var(--primary)]" : "border-[var(--gray30)]"
           } ${disabled ? "bg-[var(--border)]" : ""}`}
         >
-          {value ? <CheckLine fill="var(--main)" /> : ""}
+          {value ? <CheckLine fill="var(--primary)" /> : ""}
         </div>
       </div>
       {element?.label && <p>{t(element.label)}</p>}

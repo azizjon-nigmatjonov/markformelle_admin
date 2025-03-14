@@ -1,5 +1,4 @@
 import { Paper } from "@mui/material";
-// import EmptyDataComponent from "../../../UI/EmptyDataComponent";
 import "./style.scss";
 import TableLoader from "./TableLoader";
 
@@ -86,8 +85,8 @@ export const CTableBody = ({
   return (
     <>
       <TableLoader isVisible={loader} rowsCount={rowsCount} />
-      <tbody className="CTableBody" {...props} ref={ref}>
-        {!loader && children}
+      <tbody className="CTableBody w-full" {...props} ref={ref}>
+        {loader ? <></> : children}
         {/* <EmptyDataComponent isVisible={dataLength < 1 && !loader} /> */}
       </tbody>
     </>

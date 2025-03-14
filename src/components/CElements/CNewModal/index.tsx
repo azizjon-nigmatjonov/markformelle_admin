@@ -143,7 +143,7 @@ const CNewModal: FC<Props> = ({
                     </div>
                   </IconButton>
 
-                  <h2 className="text-sm font-medium">
+                  <h2>
                     {t(title)} {element?.initial_order}
                   </h2>
                 </div>
@@ -194,17 +194,24 @@ const CNewModal: FC<Props> = ({
                   </IconButton>
                 </div>
 
-                <IconButton onClick={() => handleScreen()}>
-                  <div className="w-[30px] h-[30px] items-center justify-center flex">
-                    {screen ? (
-                      <OpenInFullIcon
-                        style={{ color: "var(--main)", width: 18 }}
-                      />
-                    ) : (
-                      <CloseFullscreenIcon style={{ color: "var(--main)" }} />
-                    )}
-                  </div>
-                </IconButton>
+                <div className="flex items-center space-x-4">
+                  {action === "edit" && (
+                    <button className="text-[14px] border border-[var(--border)] px-2 py-1 rounded-[4px]">
+                      Сохранить
+                    </button>
+                  )}
+                  <IconButton onClick={() => handleScreen()}>
+                    <div className="w-[30px] h-[30px] items-center justify-center flex">
+                      {screen ? (
+                        <OpenInFullIcon
+                          style={{ color: "var(--main)", width: 18 }}
+                        />
+                      ) : (
+                        <CloseFullscreenIcon style={{ color: "var(--main)" }} />
+                      )}
+                    </div>
+                  </IconButton>
+                </div>
               </div>
             )}
 

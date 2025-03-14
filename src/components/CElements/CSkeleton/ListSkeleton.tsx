@@ -1,7 +1,7 @@
 import { OneSkeleton } from "./OneSkeleton";
 
 export const ListSkeleton = ({
-  rounded = 12,
+  rounded = 4,
   count = 4,
   height = 150,
   direction = "col",
@@ -13,7 +13,7 @@ export const ListSkeleton = ({
 }) => {
   if (direction === "row") {
     return (
-      <div className={`flex flex-col gap-y-5`}>
+      <div className={`flex flex-col gap-y-3 w-full`}>
         {Array.from(new Array(count)).map((i) => (
           <OneSkeleton key={i} height={height} rounded={rounded} />
         ))}
