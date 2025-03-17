@@ -9,9 +9,15 @@ interface Props {
   disabled?: boolean;
   field?: any;
   defaultValue?: any;
+  format?: string;
 }
 
-const DatePickerDetail = ({ disabled, field, defaultValue }: Props) => {
+const DatePickerDetail = ({
+  disabled,
+  field,
+  defaultValue,
+  format = "DD.MM.YYYY hh:mm",
+}: Props) => {
   const datePickerRef = useRef<any>();
   const [value, setValue] = useState<any>("");
 
@@ -45,7 +51,7 @@ const DatePickerDetail = ({ disabled, field, defaultValue }: Props) => {
         }}
         views={["day", "month", "year"]}
         className="datePicker"
-        format="DD.MM.YYYY"
+        format={format}
       />
     </div>
   );

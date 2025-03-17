@@ -76,6 +76,13 @@ const CPagination = ({
 
   return (
     <div className="table__pagination  flex items-center justify-left space-x-3 border-t border-[var(--border)]">
+      <div>
+        <PaginationLimits
+          limit={limit}
+          handleRouteActions={handleRouteActions}
+          limitList={limitList}
+        />
+      </div>
       <Pagination
         onChange={(_, val) => {
           handleRouteActions({ page: val });
@@ -85,13 +92,6 @@ const CPagination = ({
         page={filterParams?.page || 1}
         defaultPage={filterParams?.page || 1}
       />
-      <div>
-        <PaginationLimits
-          limit={limit}
-          handleRouteActions={handleRouteActions}
-          limitList={limitList}
-        />
-      </div>
     </div>
   );
 };

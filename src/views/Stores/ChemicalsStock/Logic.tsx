@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 export const breadCrumbs = [
-  { label: "Химикаты", link: "/chemical_store/chemicals" },
+  { label: "Остатки химикатов", link: "/chemical_store/chemical_stock" },
 ];
 
 export const TableData = ({

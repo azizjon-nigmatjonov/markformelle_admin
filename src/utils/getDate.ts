@@ -47,7 +47,7 @@ const Hourly = (currentTime: string) => {
 const GetTimeString = (dateStart: string) => {
   // Convert to Date object
   const [day, month, year, time] = dateStart.split(/[\s.]/);
-  const date = new Date(`${year}-${month}-${day}T${time}`);
+  const date = new Date(`${day}-${month}-${year}T${time}`);
 
   // Extract hh:mm
   const formattedTime = date.toLocaleTimeString("en-GB", {

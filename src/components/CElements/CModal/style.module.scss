@@ -25,10 +25,12 @@
 
       .closeButton {
         position: absolute;
+       
         &:hover {
           background-color: transparent;
         }
-        right: 0;
+        top: 5px;
+        right: 4px;
         svg {
           transition: 0.5s;
         }

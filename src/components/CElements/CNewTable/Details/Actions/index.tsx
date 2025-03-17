@@ -3,7 +3,6 @@ import propTypes from "prop-types";
 import {
   DeleteIcon,
   EditIcon,
-  EyeIcon,
   LockIcon,
 } from "../../../../UI/IconGenerator/Svg";
 import cls from "./style.module.scss";
@@ -52,21 +51,10 @@ const TabbleActions = ({
     <>
       {currentIndex === rowIndex ? (
         <div
-          className={`absolute right-0 bg-white z-[99] rounded-[4px] border border-[var(--border)] shadow-xl ${
-            rowIndex < 4 ? "top-full" : "top-[-170px]"
+          className={`absolute right-[-160px] bg-white z-[99] rounded-[4px] border border-[var(--border)] shadow-xl ${
+            rowIndex < 4 ? "top-0" : "top-[-50px]"
           } ${cls.card}`}
         >
-          <Element
-            text="view"
-            active={element?.is_view && checkPermission("view")}
-            onClick={() => handleClick(element, "view", element?.is_delete)}
-            icon={
-              <EyeIcon
-                fill={element?.is_view ? "var(--main)" : ColorConstants.gray}
-              />
-            }
-            show={actions.includes("view")}
-          />
           <Element
             text="freez"
             active={element?.is_freez && checkPermission("freez")}

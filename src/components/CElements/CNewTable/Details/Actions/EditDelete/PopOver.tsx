@@ -14,30 +14,31 @@ export const PopoverDelete = ({
 }) => {
   return (
     <>
-      <div
-        className={`absolute left-[-400px] top-[-40px] bg-white p-16px border border-[var(--gray20)] z-[92] rounded-[8px] common-shadow ${classes}`}
-      >
-        <p className="whitespace-nowrap flex items-start space-x-5">
-          <WarningIcon />{" "}
-          <div>
-            <p className="font-[600] text-lg">{title}</p>
-            <p>{text}</p>
-          </div>
-        </p>
+      <div className={`absolute left-0 top-full z-[92] ${classes}`}>
+        <div className="absolute left-4 top-[-5px] w-[20px] h-[20px] bg-white rotate-45 rounded-[2px] z-[90] border border-[var(--border)]"></div>
+        <div className="relative p-16px z-[99] bg-white rounded-[8px] border border-[var(--border)] common-shadow ">
+          <p className="whitespace-nowrap flex items-start space-x-5">
+            <WarningIcon />{" "}
+            <div>
+              <p className="font-[600] text-lg">{title}</p>
+              <p>{text}</p>
+            </div>
+          </p>
 
-        <div className="flex items-center justify-end space-x-2 mt-4">
-          <button
-            className="bg-[var(--lightestGray)] common-shadow px-4 py-2 rounded-[8px]"
-            onClick={() => closePopover("")}
-          >
-            Нет
-          </button>
-          <button
-            className="bg-[var(--main)] common-shadow px-4 py-2 rounded-[8px] text-white"
-            onClick={() => closePopover("delete")}
-          >
-            Да
-          </button>
+          <div className="flex items-center justify-end space-x-2 mt-4">
+            <button
+              className="bg-[var(--lightestGray)] common-shadow px-4 py-2 rounded-[8px]"
+              onClick={() => closePopover("")}
+            >
+              Нет
+            </button>
+            <button
+              className="bg-[var(--main)] common-shadow px-4 py-2 rounded-[8px] text-white"
+              onClick={() => closePopover("delete")}
+            >
+              Да
+            </button>
+          </div>
         </div>
       </div>
       <Closer handleClose={() => closePopover("")} />

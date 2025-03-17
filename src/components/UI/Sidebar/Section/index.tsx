@@ -58,6 +58,7 @@ const SidebarSection = ({
   useEffect(() => {
     Object.values(list).forEach((el: any) => {
       const currentEl = el.find((item: any) => item.id === locationName);
+
       if (currentEl?.id) {
         setExpanded(currentEl?.parent);
       }
@@ -107,7 +108,6 @@ const SidebarSection = ({
                 </AccordionSummary>
                 <AccordionDetails>
                   <ul>
-                    {console.log("visibleSidebarItems", visibleSidebarItems)}
                     {visibleSidebarItems?.map((item: any) => (
                       <li key={item.id} className="">
                         {item?.children?.length ? (
@@ -121,8 +121,10 @@ const SidebarSection = ({
                                 aria-controls="panel1bh-content"
                                 id="panel1bh-header"
                               >
-                                {item?.icon ? (
-                                  <div className="w-[45px] flex justify-center">
+                                <div className="flex items-center relative overflow-hidden h-full">
+                                  <div className="w-[12px] h-[40px] border-b-2 border-l-2 border-[var(--border)] rounded-l-[8px] absolute left-[8px] top-[-25px]"></div>
+
+                                  <div className="w-[45px] flex justify-center ml-7">
                                     <IconGenerator
                                       icon={item?.icon}
                                       fill={
@@ -132,21 +134,20 @@ const SidebarSection = ({
                                       }
                                     />
                                   </div>
-                                ) : (
-                                  ""
-                                )}
-                                <p
-                                  className={`w-full ${
-                                    item.id === locationName
-                                      ? "text-[var(--main)] font-medium"
-                                      : ""
-                                  }`}
-                                >
-                                  {t(item.title)}
-                                </p>
+
+                                  <p
+                                    className={`w-full ${
+                                      item.id === locationName
+                                        ? "text-[var(--main)] font-medium"
+                                        : ""
+                                    }`}
+                                  >
+                                    {t(item.title)}
+                                  </p>
+                                </div>
                               </AccordionSummary>
                               <AccordionDetails>
-                                <ul>
+                                <ul className="ml-3">
                                   {item.children.map((child: any) => (
                                     <li key={child.id}>
                                       <div
@@ -155,19 +156,11 @@ const SidebarSection = ({
                                         }
                                         className="flex items-center justify-between h-[40px] relative overflow-hidden cursor-pointer text-[12px]"
                                       >
-                                        <div
-                                          className={` ${
-                                            child.id === locationName
-                                              ? "active"
-                                              : ""
-                                          }`}
-                                        ></div>
-                                        <div className="w-[12px] h-[40px] border-b-2 border-l-2 border-[var(--border)] rounded-l-[8px] absolute left-[15px] top-[-18px]"></div>
-                                        <div className="w-[45px] flex justify-center ml-[17px]">
+                                        <div className="w-[45px] flex justify-center ml-[35px]">
                                           <IconGenerator
                                             icon={child?.icon}
                                             fill={
-                                              child.id === locationName
+                                              child.child === locationName
                                                 ? "var(--main)"
                                                 : "var(--gray)"
                                             }
@@ -175,7 +168,7 @@ const SidebarSection = ({
                                         </div>
                                         <p
                                           className={`w-full ${
-                                            child.id === locationName
+                                            child.path === locationName
                                               ? "text-[var(--main)] font-medium"
                                               : ""
                                           }`}

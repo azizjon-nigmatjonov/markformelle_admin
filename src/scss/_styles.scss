@@ -90,7 +90,7 @@ input {
 }
 
 .MuiPaper-root {
-  border-radius: 4px !important;
+  border-radius: 8px !important;
   padding: 0 !important;
 
   ul {
@@ -108,16 +108,15 @@ input {
 #hfInputMask {
   input {
     background-color: transparent;
-    height: 40px;
+    height: 35px;
     width: 100%;
-    border: 1px solid var(--gray20);
+    border: 1px solid var(--border);
     border-radius: 8px;
     padding: 0 14px;
     font-size: 14px;
-    @include common-shadow;
 
     &:focus {
-      outline: 1.5px solid var(--main);
+      outline: 1px solid var(--main);
     }
   }
 }
@@ -256,9 +255,9 @@ input {
   color: white;
   text-transform: none;
   border-radius: 8px;
-  border: 1px solid var(--gray30);
-  height: 40px;
-  padding: 0 20px;
+  border: 1px solid var(--border);
+  height: 35px;
+  padding: 0 16px;
   width: 100%;
   white-space: nowrap;
   text-align: center;
@@ -269,7 +268,7 @@ input {
   font-size: 12px;
 
   &.form {
-    height: 52px;
+    height: 35px;
     font-size: 14px;
   }
 
@@ -310,8 +309,16 @@ input {
   }
 }
 
+.MuiPopper-root {
+  background-color: white;
+}
+
 .custom-btn.success {
   background-color: var(--green);
+}
+
+.custom-btn.save {
+  background-color: var(--main);
 }
 
 .success-btn {
@@ -322,7 +329,7 @@ input {
   background-color: var(--gray20);
   color: var(--black);
   text-transform: none;
-  height: 39px;
+  height: 34px;
 }
 
 .new-btn {
@@ -333,7 +340,7 @@ input {
 .default-btn {
   height: 40px;
   padding: 0 8px;
-  border: 1px solid var(--gray20);
+  border: 1px solid var(--border);
   border-radius: 8px;
   @include common-shadow;
   @include center-center;

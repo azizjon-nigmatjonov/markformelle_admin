@@ -10,7 +10,6 @@ interface Props {
 
 export const ModalList = ({ handleActionsModal, item, modalList }: Props) => {
   const { data, setData } = ModalListLogic({ id: item?.id });
-  console.log("item", item);
 
   return (
     <CNewModal

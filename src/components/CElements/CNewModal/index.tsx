@@ -215,12 +215,12 @@ const CNewModal: FC<Props> = ({
               </div>
             )}
 
-            <div className="p-4">{children}</div>
+            <div className="p-4 relative z-[99]">{children}</div>
 
             {element?.order && !element.last ? (
               <div
                 onClick={() => handleActions("reorder", element)}
-                className="absolute left-0 top-0 z-[99] w-full h-full"
+                className="absolute left-0 top-0 z-[97] w-full h-full"
               ></div>
             ) : (
               <></>

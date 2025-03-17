@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 export const breadCrumbs = [
-  { label: "Химикаты", link: "/chemical_store/chemicals" },
+  { label: "Внутреннее примешенные", link: "/chemical_store/transfers" },
 ];
 
 export const TableData = ({
@@ -51,7 +51,7 @@ export const TableData = ({
     } else {
       axios
         .get(
-          `http://10.40.14.193:8000/urun/?skip=${
+          `http://10.40.14.193:8000/irsaliye?skip=${
             filterParams.page < 2
               ? 0
               : (filterParams.page - 1) * filterParams.perPage
@@ -128,23 +128,13 @@ export const ModalLogic = ({
           return {
             ...item,
             type: "edit",
-            id: element?.URUNID,
+            id: element?.IRSALIYEID,
             initial_order: item.order,
           };
         })
       );
     }
-    if (val === "view") {
-      setModalList([
-        ...modalList,
-        {
-          order: modalList.length + 1,
-          initial_order: modalList.length + 1,
-          type: "view",
-          id: element?.URUNID,
-        },
-      ]);
-    }
+
     if (val === "edit") {
       setModalList([
         ...modalList,
@@ -152,7 +142,7 @@ export const ModalLogic = ({
           order: modalList.length + 1,
           initial_order: modalList.length + 1,
           type: "edit",
-          id: element?.URUNID,
+          id: element?.IRSALIYEID,
         },
       ]);
     }

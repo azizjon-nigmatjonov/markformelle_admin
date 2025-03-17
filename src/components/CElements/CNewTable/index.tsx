@@ -44,6 +44,7 @@ interface Props {
   footer?: any;
   removeSearch?: boolean;
   extra?: any;
+  autoHeight?: string;
 }
 
 const CNewTable = ({
@@ -53,6 +54,7 @@ const CNewTable = ({
   },
   title = "",
   extra,
+  autoHeight = "",
   headColumns = [],
   bodyColumns = [],
   clickable = true,
@@ -484,7 +486,7 @@ const CNewTable = ({
 
   return (
     <div className="relative cnewtable w-full">
-      <div className={`rounded-[4px] h-full`}>
+      <div className="rounded-[4px] h-full">
         {title && (
           <HeaderSettings
             title={title}
@@ -504,7 +506,13 @@ const CNewTable = ({
           id="table"
           className={`flex space-x-8 h-full ${title ? "pl-[10px]" : ""}`}
           ref={tableRef}
-          style={{ height: openHeader ? height - 140 : height - 100 }}
+          style={{
+            height: autoHeight
+              ? autoHeight
+              : openHeader
+              ? height - 140
+              : height - 100,
+          }}
         >
           <SideFilter
             sideFilter={sideFilter}
@@ -781,6 +789,7 @@ const CNewTable = ({
                                       <DotsVerticalIcon fill="black" />
                                     </div>
                                   </button>
+
                                   <TabbleActions
                                     element={item}
                                     rowIndex={rowIndex}

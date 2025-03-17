@@ -3,9 +3,9 @@ import { breadCrumbs, ModalLogic, TableData } from "./Logic";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { Header } from "../../../components/UI/Header";
 import CNewTable from "../../../components/CElements/CNewTable";
-import { ModalList } from "./ModalList";
+import { ModalUI } from "./Modal";
 
-export const EritmaPage = () => {
+export const Transfers = () => {
   const [modalList, setModalList]: any = useState([]);
   const [filterParams, setFilterParams] = useState({
     page: 1,
@@ -34,7 +34,7 @@ export const EritmaPage = () => {
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />
       <div className="p-2">
         <CNewTable
-          title="Таблица химикатов"
+          title="Таблица внутреннее примешенныей"
           headColumns={newHeadColumns}
           bodyColumns={bodyColumns}
           handleActions={handleActions}
@@ -51,9 +51,9 @@ export const EritmaPage = () => {
       </div>
 
       {modalList?.length ? (
-        <ModalList
-          handleActionsModal={handleActionsModal}
-          item={modalList[0]}
+        <ModalUI
+          element={modalList[0]}
+          setModalList={setModalList}
           modalList={modalList}
         />
       ) : (

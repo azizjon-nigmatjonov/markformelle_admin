@@ -11,6 +11,7 @@ interface Props {
   label?: string;
   defaultValue?: any;
   required?: boolean;
+  format?: string;
 }
 
 const CDatepicker = ({
@@ -19,6 +20,7 @@ const CDatepicker = ({
   label,
   defaultValue,
   required,
+  format,
 }: Props) => {
   useEffect(() => {
     if (defaultValue) {
@@ -35,6 +37,7 @@ const CDatepicker = ({
           field={field}
           defaultValue={defaultValue}
           disabled={disabled}
+          format={format}
         />
       </LocalizationProvider>
     </div>
