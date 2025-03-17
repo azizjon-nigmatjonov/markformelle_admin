@@ -4,7 +4,7 @@ import { dryingList } from "./drying";
 import { knittingList } from "./knitting";
 import { paintSection } from "./paint";
 import { settingList } from "./settings";
-import { stores } from "./stores";
+import { chemicalStore } from "./chemicalStore";
 import { wareHouse } from "./warehouse";
 
 export const routeList = [
@@ -15,5 +15,5 @@ export const routeList = [
   ...dryingList,
   ...chniSection,
   ...adminList,
-  ...stores
+  ...chemicalStore,
 ];

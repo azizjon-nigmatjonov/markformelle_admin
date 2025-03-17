@@ -28,7 +28,7 @@ const SidebarSection = ({
   const { t } = useTranslation();
   const { navigateTo } = usePageRouter();
   const [expanded, setExpanded] = useState<string | false>(false);
-
+  const [expandedInner, setExpandedInner] = useState<string | false>(false);
   const [activeIndex, setActiveIndex] = useState("");
   let locationName = location.pathname.substring(1);
   const arr = locationName.split("/");
@@ -69,6 +69,11 @@ const SidebarSection = ({
       setExpanded(isExpanded ? panel : false);
     };
 
+  const handleChangeInner =
+    (panel: string) => (_: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpandedInner(isExpanded ? panel : false);
+    };
+
   if (wideSidebar) {
     return (
       <div id="sidebarCollapse">
@@ -102,37 +107,120 @@ const SidebarSection = ({
                 </AccordionSummary>
                 <AccordionDetails>
                   <ul>
+                    {console.log("visibleSidebarItems", visibleSidebarItems)}
                     {visibleSidebarItems?.map((item: any) => (
-                      <li
-                        key={item.id}
-                        className={`flex items-center justify-between rounded-[8px] h-[40px] relative overflow-hidden cursor-pointer text-[12px]`}
-                        onClick={() => navigateTo("/" + item.path)}
-                      >
-                        <div
-                          className={` ${
-                            item.id === locationName ? "active" : ""
-                          }`}
-                        ></div>
-                        <div className="w-[12px] h-[40px] border-b-2 border-l-2 border-[var(--border)] rounded-l-[8px] absolute left-[8px] top-[-18px]"></div>
-                        <div className="w-[60px] flex justify-center ml-[23px]">
-                          <IconGenerator
-                            icon={item?.icon}
-                            fill={
-                              item.id === locationName
-                                ? "var(--main)"
-                                : "var(--gray)"
-                            }
-                          />
-                        </div>
-                        <p
-                          className={`w-full ${
-                            item.id === locationName
-                              ? "text-[var(--main)] font-medium"
-                              : ""
-                          }`}
-                        >
-                          {t(item.title)}
-                        </p>
+                      <li key={item.id} className="">
+                        {item?.children?.length ? (
+                          <div>
+                            <Accordion
+                              expanded={expandedInner === item.id}
+                              onChange={handleChangeInner(item.id)}
+                            >
+                              <AccordionSummary
+                                expandIcon={<ExpandMoreIcon />}
+                                aria-controls="panel1bh-content"
+                                id="panel1bh-header"
+                              >
+                                {item?.icon ? (
+                                  <div className="w-[45px] flex justify-center">
+                                    <IconGenerator
+                                      icon={item?.icon}
+                                      fill={
+                                        item.id === locationName
+                                          ? "var(--main)"
+                                          : "var(--gray)"
+                                      }
+                                    />
+                                  </div>
+                                ) : (
+                                  ""
+                                )}
+                                <p
+                                  className={`w-full ${
+                                    item.id === locationName
+                                      ? "text-[var(--main)] font-medium"
+                                      : ""
+                                  }`}
+                                >
+                                  {t(item.title)}
+                                </p>
+                              </AccordionSummary>
+                              <AccordionDetails>
+                                <ul>
+                                  {item.children.map((child: any) => (
+                                    <li key={child.id}>
+                                      <div
+                                        onClick={() =>
+                                          navigateTo("/" + child.path)
+                                        }
+                                        className="flex items-center justify-between h-[40px] relative overflow-hidden cursor-pointer text-[12px]"
+                                      >
+                                        <div
+                                          className={` ${
+                                            child.id === locationName
+                                              ? "active"
+                                              : ""
+                                          }`}
+                                        ></div>
+                                        <div className="w-[12px] h-[40px] border-b-2 border-l-2 border-[var(--border)] rounded-l-[8px] absolute left-[15px] top-[-18px]"></div>
+                                        <div className="w-[45px] flex justify-center ml-[17px]">
+                                          <IconGenerator
+                                            icon={child?.icon}
+                                            fill={
+                                              child.id === locationName
+                                                ? "var(--main)"
+                                                : "var(--gray)"
+                                            }
+                                          />
+                                        </div>
+                                        <p
+                                          className={`w-full ${
+                                            child.id === locationName
+                                              ? "text-[var(--main)] font-medium"
+                                              : ""
+                                          }`}
+                                        >
+                                          {t(child.title)}
+                                        </p>
+                                      </div>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </AccordionDetails>
+                            </Accordion>
+                          </div>
+                        ) : (
+                          <div
+                            onClick={() => navigateTo("/" + item.path)}
+                            className="flex items-center justify-between h-[40px] relative overflow-hidden cursor-pointer text-[12px]"
+                          >
+                            <div
+                              className={` ${
+                                item.id === locationName ? "active" : ""
+                              }`}
+                            ></div>
+                            <div className="w-[12px] h-[40px] border-b-2 border-l-2 border-[var(--border)] rounded-l-[8px] absolute left-[8px] top-[-18px]"></div>
+                            <div className="w-[45px] flex justify-center ml-[17px]">
+                              <IconGenerator
+                                icon={item?.icon}
+                                fill={
+                                  item.id === locationName
+                                    ? "var(--main)"
+                                    : "var(--gray)"
+                                }
+                              />
+                            </div>
+                            <p
+                              className={`w-full ${
+                                item.id === locationName
+                                  ? "text-[var(--main)] font-medium"
+                                  : ""
+                              }`}
+                            >
+                              {t(item.title)}
+                            </p>
+                          </div>
+                        )}
                       </li>
                     ))}
                   </ul>
