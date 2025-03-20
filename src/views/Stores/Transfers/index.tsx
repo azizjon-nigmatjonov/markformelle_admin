@@ -18,6 +18,7 @@ export const Transfers = () => {
   });
 
   const newHeadColumns = useMemo(() => {
+    if (!bodyColumns?.length) return [];
     const obj = { ...bodyColumns?.[0] };
     const keys = Object.keys(obj);
     const newColumns: any = [];
@@ -27,7 +28,7 @@ export const Transfers = () => {
     });
 
     return newColumns;
-  }, [bodyColumns]);
+  }, [bodyColumns?.length]);
 
   return (
     <>
@@ -36,11 +37,16 @@ export const Transfers = () => {
         <CNewTable
           title="Таблица внутреннее примешенныей"
           headColumns={newHeadColumns}
-          bodyColumns={bodyColumns}
+          bodyColumns={bodyColumns?.filter(
+            (item: any) => item.DEPOID === "D003" && item.HAREKETTIPI === 5
+          )}
+          defaultFilters={["sidebar_filter"]}
           handleActions={handleActions}
           isLoading={isLoading}
           filterParams={filterParams}
-          handleFilterParams={setFilterParams}
+          handleFilterParams={(val: any) => {
+            setFilterParams(val);
+          }}
           meta={{
             totalCount: bodyData?.count,
             pageCount: bodyData?.count

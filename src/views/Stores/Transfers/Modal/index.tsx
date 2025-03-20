@@ -75,44 +75,54 @@ export const ModalUI = ({
     >
       <form onSubmit={handleSubmit(onSubmit)} className="">
         <div className="w-full">
-          <div className="grid grid-cols-3 gap-x-5 gap-y-2 pb-5">
-            <FieldUI title="irsaliye no">
-              <HFTextField
-                control={control}
-                name="SINIF"
-                defaultValue={defaultData?.SINIF}
-              />
-            </FieldUI>
-            <FieldUI title="irsaliye no">
-              <CDatepicker defaultValue={defaultData?.INSERTTARIHI} />
-            </FieldUI>
-            <FieldUI title="depo no">
-              <HFTextField
-                control={control}
-                name="DEPOID"
-                defaultValue={defaultData?.DEPOID}
-              />
-            </FieldUI>
-            <FieldUI title="transfer depo no">
-              <HFTextField
-                control={control}
-                name="TRANSFERDEPOID"
-                defaultValue={defaultData?.TRANSFERDEPOID}
-              />
-            </FieldUI>
-            <FieldUI title="tarih">
-              <CDatepicker
-                defaultValue={defaultData?.IRSALIYETARIHI}
-                format="DD.MM.YYYY"
-              />
-            </FieldUI>
-            <FieldUI title="doviz cinsi">
-              <HFTextField
-                control={control}
-                name="DOVIZID"
-                defaultValue={defaultData?.DOVIZID}
-              />
-            </FieldUI>
+          <div className="grid grid-cols-4 gap-x-5 gap-y-2 pb-5">
+            <div className="space-y-2">
+              <FieldUI title="depo no">
+                <HFTextField
+                  control={control}
+                  name="DEPOID"
+                  defaultValue={defaultData?.DEPOID}
+                />
+              </FieldUI>
+              <FieldUI title="transfer depo no">
+                <HFTextField
+                  control={control}
+                  name="TRANSFERDEPOID"
+                  defaultValue={defaultData?.TRANSFERDEPOID}
+                />
+              </FieldUI>
+            </div>
+
+            <div className="space-y-2">
+              <FieldUI title="irsaliye no">
+                <HFTextField
+                  control={control}
+                  name="SINIF"
+                  defaultValue={defaultData?.SINIF}
+                />
+              </FieldUI>
+              <FieldUI title="doviz cinsi">
+                <HFTextField
+                  control={control}
+                  name="DOVIZID"
+                  defaultValue={defaultData?.DOVIZID}
+                />
+              </FieldUI>
+            </div>
+
+            <div>
+              <FieldUI title="tarih">
+                <CDatepicker
+                  defaultValue={defaultData?.IRSALIYETARIHI}
+                  format="DD.MM.YYYY"
+                />
+              </FieldUI>
+            </div>
+            <div>
+              <FieldUI title="sevik tarihi">
+                <CDatepicker defaultValue={defaultData?.INSERTTARIHI} />
+              </FieldUI>
+            </div>
           </div>
         </div>
 

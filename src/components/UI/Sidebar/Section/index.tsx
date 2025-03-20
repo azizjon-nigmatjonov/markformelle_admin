@@ -122,9 +122,7 @@ const SidebarSection = ({
                                 id="panel1bh-header"
                               >
                                 <div className="flex items-center relative overflow-hidden h-full">
-                                  <div className="w-[12px] h-[40px] border-b-2 border-l-2 border-[var(--border)] rounded-l-[8px] absolute left-[8px] top-[-25px]"></div>
-
-                                  <div className="w-[45px] flex justify-center ml-7">
+                                  <div className="w-[45px] flex justify-center">
                                     <IconGenerator
                                       icon={item?.icon}
                                       fill={
@@ -156,7 +154,7 @@ const SidebarSection = ({
                                         }
                                         className="flex items-center justify-between h-[40px] relative overflow-hidden cursor-pointer text-[12px]"
                                       >
-                                        <div className="w-[45px] flex justify-center ml-[35px]">
+                                        <div className="w-[45px] flex justify-center">
                                           <IconGenerator
                                             icon={child?.icon}
                                             fill={
@@ -192,8 +190,8 @@ const SidebarSection = ({
                                 item.id === locationName ? "active" : ""
                               }`}
                             ></div>
-                            <div className="w-[12px] h-[40px] border-b-2 border-l-2 border-[var(--border)] rounded-l-[8px] absolute left-[8px] top-[-18px]"></div>
-                            <div className="w-[45px] flex justify-center ml-[17px]">
+
+                            <div className="w-[45px] flex justify-center">
                               <IconGenerator
                                 icon={item?.icon}
                                 fill={

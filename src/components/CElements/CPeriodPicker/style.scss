@@ -1,12 +1,9 @@
 .periodPicker {
-  position: absolute;
+  position: fixed;
   background-color: white;
-  // box-shadow: 5px 5px 15px 5px #ddd;
-  border: 1px solid var(--gray20);
+  border: 1px solid var(--border);
   border-radius: 8px;
   z-index: 91;
-  left: auto;
-  right: 0;
   display: flex;
   flex-direction: column;
 
@@ -86,7 +83,7 @@
     width: 100%;
     background-color: #fff;
     height: 35px;
-    border-radius: 4px;
+    border-radius: 8px;
     border: 1px solid var(--border);
   }
   .MuiInputBase-root {
@@ -106,6 +103,6 @@
     &::placeholder {
       color: var(--gray60) !important;
     }
-    cursor: pointer;
+
   }
 }

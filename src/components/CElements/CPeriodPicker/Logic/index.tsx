@@ -1,5 +1,5 @@
 import { useGetQueries } from "../../../../hooks/useGetQueries";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import usePageRouter from "../../../../hooks/useObjectRouter";
 import { PickersShortcutsItem } from "@mui/x-date-pickers/PickersShortcuts";
 import { Dayjs } from "dayjs";
@@ -28,10 +28,10 @@ export const DateData = ({
   const actionHandler = (e: any) => {
     const arr = e?.map((dateObj: any) => {
       const dayjsDate = dayjs(dateObj.$d);
-      return dayjsDate.format("YYYY-MM-DD");
+      return dayjsDate.format("DD.MM.YYYY");
     });
 
-    setValue(e)
+    setValue(e);
     setFormatedValue(arr);
   };
 
@@ -41,41 +41,18 @@ export const DateData = ({
         start: formatedValue[0] ?? "",
         end: formatedValue[1] ?? "",
       });
-    } else {
-      // const arr = value?.map((dateObj: any) => {
-      //   const dayjsDate = dayjs(dateObj.$d);
-      //   return dayjsDate.format("YYYY-MM-DD");
-      // });
-      // navigateQuery({ start: arr[0], end: arr[1] });
     }
-
     handleDropdown(formatedValue);
   };
 
-  const getFormatedDate = useMemo(() => {
-    const arr = value?.map((dateObj: any) => {
-      const dayjsDate = dayjs(dateObj.$d); // Create a dayjs object from the date
-      return dayjsDate.format("MMM D, YYYY"); // Format the date
-    });
-
-    return arr;
-  }, [value]);
-
-  return { value, actionHandler, handleSubmit, getFormatedDate };
+  return { value, actionHandler, handleSubmit, formatedValue };
 };
 
 export const DateLabel = () => {
   const today = dayjs();
   const shortcutsItems: PickersShortcutsItem<DateRange<Dayjs>>[] = [
-    { label: "удалить", getValue: () => [null, null] },
     {
-      label: "удалить сегодня",
-      getValue: () => {
-        return [today, today];
-      },
-    },
-    {
-      label: "вчера",
+      label: "Вчера",
       getValue: () => {
         return [
           today.startOf("day").subtract(1, "day"),
@@ -90,44 +67,45 @@ export const DateLabel = () => {
       },
     },
     {
-      label: "предыдущая неделя",
+      label: "Предыдущая неделя",
       getValue: () => {
         const prevWeek = today.subtract(7, "day");
         return [prevWeek.startOf("week"), prevWeek.endOf("week")];
       },
     },
     {
-      label: "последние 7 дней",
+      label: "Последние 7 дней",
       getValue: () => {
         return [today.subtract(7, "day"), today];
       },
     },
     {
-      label: "в этом месяце",
+      label: "В этом месяце",
       getValue: () => {
         return [today.startOf("month"), today.endOf("month")];
       },
     },
     {
-      label: "предыдущий месяц",
+      label: "Предыдущий месяц",
       getValue: () => {
         const prevMonth = today.startOf("month").subtract(1, "month");
         return [prevMonth, prevMonth.endOf("month")];
       },
     },
     {
-      label: "в этом году",
+      label: "В этом году",
       getValue: () => {
         return [today.startOf("year"), today.endOf("year")];
       },
     },
     {
-      label: "предыдущий год",
+      label: "Предыдущий год",
       getValue: () => {
         const startOfNextYear = today.startOf("year").subtract(1, "year");
         return [startOfNextYear, startOfNextYear.endOf("year")];
       },
     },
+    { label: "Очистить", getValue: () => [null, null] },
   ];
 
   return { shortcutsItems };

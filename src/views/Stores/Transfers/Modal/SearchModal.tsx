@@ -19,7 +19,6 @@ export const SearchModal = ({
   const [open, setOpen] = useState(false);
   const { bodyColumns, isLoading } = TableData({
     filterParams,
-    setOpen,
   });
 
   const handleActions = (el: any, status: string) => {

@@ -26,7 +26,7 @@ const Usually = (
 ) => {
   return `${addZero(currentDay)}${symbol}${addZero(
     currentMonth
-  )}${symbol}${addZero(currentYear)} ${currentTime}`;
+  )}${symbol}${addZero(currentYear)} ${currentTime === '00:00' ? '' : currentTime}`;
 };
 
 const GetDates = (
@@ -68,6 +68,17 @@ export const GetCurrentDate = ({
   symbol?: any;
 }) => {
   if (!date) return "";
+
+  if (typeof date === 'string') {
+    if (!date.includes('T') || !date.includes('-') || !date?.includes(':')) {
+      return date
+    }
+  } else {
+    return date
+  }
+
+  
+
   const currentDate = date ? dayjs(date) : dayjs();
   const currentYear = currentDate.year();
   const currentMonth = currentDate.month() + 1;
@@ -93,3 +104,12 @@ export const GetCurrentDate = ({
       return Hourly(currentTime);
   }
 };
+
+
+export const  convertToISO = (dateString: string) => {
+  const [day, month, year] = dateString.split(".");
+
+  const isoDate = new Date(`${year}-${month}-${day}T00:00:00Z`);
+
+  return isoDate.toISOString();
+}

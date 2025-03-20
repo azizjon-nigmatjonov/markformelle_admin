@@ -7,27 +7,38 @@ import "../style.scss";
 import dayjs from "dayjs";
 dayjs.locale("uz-latn");
 import { DateData, DateLabel } from "../Logic";
+import { PeriodTextField } from "../PeriodTextField";
 
 interface Props {
   open: boolean;
+  position?: any;
   label?: string;
+  setValue: (val: any) => void;
+  defaultVal: any;
+  setOpen: (val: boolean) => void;
   handlerValue?: (e: any) => void;
   handleDropdown: (val?: any) => void;
 }
 
 export const PeriodDateDropDown = ({
-  label,
   open = false,
   handleDropdown = () => {},
+  position,
+  setOpen,
+  setValue,
+  defaultVal,
 }: Props) => {
   if (!open) return <></>;
-  const { value, actionHandler, handleSubmit, getFormatedDate } = DateData({
+  const { value, actionHandler, handleSubmit, formatedValue } = DateData({
     handleDropdown,
   });
   const { shortcutsItems } = DateLabel();
 
   return (
-    <div className={`periodPicker flex ${label ? "top-[67px]" : "top-[45px]"}`}>
+    <div
+      className={`periodPicker card-shadow flex`}
+      style={{ left: position.left, top: position.bottom }}
+    >
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="uz-latn">
         <StaticDateRangePicker
           onChange={(e: any) => actionHandler(e)}
@@ -42,16 +53,26 @@ export const PeriodDateDropDown = ({
         />
       </LocalizationProvider>
       <div className="periodPickerFooter">
-        <div className="flex items-center">
-          <div className="default-btn">{getFormatedDate[0]}</div>
-          <div className="px-2">-</div>
-          <div className="default-btn">{getFormatedDate[1]}</div>
+        <div className="w-[260px] pr-3">
+          <PeriodTextField
+            setValue={setValue}
+            setOpen={setOpen}
+            open={open}
+            handleDropdown={handleDropdown}
+            value={formatedValue?.length ? formatedValue : defaultVal}
+          />
         </div>
         <div className="flex space-x-2">
-          <button className="cancel-btn" onClick={() => handleDropdown()}>
+          <button className="cancel-btn" onClick={() => setOpen(false)}>
             Отменить
           </button>
-          <button className="custom-btn" onClick={() => handleSubmit()}>
+          <button
+            className="custom-btn"
+            onClick={() => {
+              handleSubmit();
+              setOpen(false);
+            }}
+          >
             Выбирать
           </button>
         </div>

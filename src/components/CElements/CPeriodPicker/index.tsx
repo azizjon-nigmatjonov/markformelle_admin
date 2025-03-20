@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import CLabel from "../CLabel";
 import { PeriodTextField } from "./PeriodTextField";
 import { PeriodDateDropDown } from "./PeriodDateDropDown";
@@ -13,40 +13,35 @@ interface Props {
 
 export const CPeriodPicker = ({
   label = "",
-  placeholder = "",
-  defaultValue,
   handleValue = () => {},
 }: Props) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue]: any = useState();
-
-  useEffect(() => {
-    if (defaultValue?.length) {
-      setValue(defaultValue[0] + " - " + defaultValue[1]);
-    }
-  }, [defaultValue]);
+  const [value, setValue]: any = useState([]);
 
   const handleDropdown = useCallback((val?: any) => {
-    handleValue(val);
-    setValue(val);
-    setOpen((prev) => !prev);
+    setValue(val ?? []);
+    handleValue(val ?? []);
   }, []);
+  const datePickerRef = useRef<any>();
 
   return (
-    <div className="flex flex-col relative w-full">
+    <div className="flex flex-col relative w-full" ref={datePickerRef}>
       {label && <CLabel title={label} />}
       <PeriodTextField
-        name="time"
         value={value}
         open={open}
-        placeholder={placeholder}
         handleDropdown={handleDropdown}
-        defaultValue={defaultValue}
+        setOpen={setOpen}
+        setValue={setValue}
       />
       <PeriodDateDropDown
         open={open}
         handleDropdown={handleDropdown}
         label={label}
+        setOpen={setOpen}
+        defaultVal={value}
+        setValue={setValue}
+        position={datePickerRef?.current?.getBoundingClientRect()}
       />
       {open && <Closer handleClose={() => setOpen(false)} />}
     </div>

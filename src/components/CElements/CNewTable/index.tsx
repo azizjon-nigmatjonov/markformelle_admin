@@ -23,6 +23,7 @@ import { tableStoreActions } from "../../../store/table";
 import useDebounce from "../../../hooks/useDebounce";
 import { SideFilter, TableFilter } from "./Details/Filter";
 import CheckIcon from "@mui/icons-material/Check";
+import { convertToISO, GetCurrentDate } from "../../../utils/getDate";
 interface Props {
   meta?: {
     totalCount: number;
@@ -45,6 +46,7 @@ interface Props {
   removeSearch?: boolean;
   extra?: any;
   autoHeight?: string;
+  defaultFilters?: any;
 }
 
 const CNewTable = ({
@@ -67,6 +69,7 @@ const CNewTable = ({
   filterParams = { page: 1, perPage: 50 },
   handleFilterParams = () => {},
   handleActions = () => {},
+  defaultFilters = [],
 }: Props) => {
   const tableSize = useSelector((state: any) => state.tableSize.tableSize);
   const location = useLocation();
@@ -76,10 +79,12 @@ const CNewTable = ({
   const dispatch = useDispatch();
   const { checkPermission } = usePermissions();
   const tableRef: any = useRef(null);
+  const [searchedElements, setSearchedElements] = useState({});
   const { handleCheckbox } = TableSettingsData({
     filterParams,
     handleFilterParams,
   });
+
   const storedColumns = useSelector((state: any) => state.table.columns);
   const order = useSelector((state: any) => state.table.order);
   const [newBodyColumns, setNewBodyColumns] = useState([]);
@@ -104,6 +109,29 @@ const CNewTable = ({
   const [newHeadColumns, setNewHeadColumns]: any = useState([...headColumns]);
   const [items, setItems]: any = useState([...headColumns]);
   const [currentFilter, setCurrentFilter]: any = useState(null);
+  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
+  const [height, setHeight] = useState(0);
+
+  const SetFiltersFn = (obj: any) => {
+    const newObj: any = obj;
+    let str = "";
+
+    for (let key in newObj) {
+      if (newObj[key]) {
+        str.length
+          ? (str += "&" + key + "=" + newObj[key])
+          : (str += key + "=" + newObj[key]);
+      }
+    }
+
+    handleFilterParams({ ...filterParams, q: str });
+  };
+
+  useEffect(() => {
+    if (defaultFilters.includes("sidebar_filter")) {
+      setSideFilter(true);
+    }
+  }, [defaultFilters]);
 
   useEffect(() => {
     if (!bodyColumns?.length) return;
@@ -117,27 +145,6 @@ const CNewTable = ({
 
     sortData?.forEach((sortObj: any) => {
       const { value, id, search }: any = { ...sortObj };
-      if (value === "search") {
-        arr.forEach((obj: any) => {
-          let val = "";
-          if (typeof id === "object") {
-            for (let key of id) {
-              val += obj[key];
-            }
-          } else {
-            val = obj[id] + "";
-          }
-
-          val = val.toLocaleLowerCase();
-
-          if (
-            val.includes(search.toLocaleLowerCase()) &&
-            !result.find((item: any) => item.id === id)
-          ) {
-            result.push(obj);
-          }
-        });
-      }
 
       if (value === "sort") {
         if (search === "up") {
@@ -309,23 +316,6 @@ const CNewTable = ({
       setSortData(arr);
     };
 
-    if (value === "search") {
-      if (
-        sortData.find((item: any) => item.value === "search" && item.id === id)
-      ) {
-        const newSortData = sortData?.map((item: any) => {
-          if (item.value === "search" && value === "search" && item.id === id) {
-            item.search = search;
-          }
-          return item;
-        });
-
-        setSortData(newSortData);
-      } else {
-        setSortData([...sortData, { search, value, id, title }]);
-      }
-    }
-
     if (value === "sort") {
       if (search) {
         if (
@@ -352,11 +342,23 @@ const CNewTable = ({
     }
 
     if (value === "add") {
-      setSortData([...sortData, { search: "", value: "search", id, title }]);
+      setSearchedElements({ ...searchedElements, [id]: "" });
     }
 
-    if (value === "search_close") {
-      DeleteFunction("search");
+    if (value === "period") {
+      if (search?.length > 1) {
+        handleFilterParams({
+          ...filterParams,
+          DATE_FROM: convertToISO(search[0]),
+          DATE_TO: convertToISO(search[1]),
+        });
+      } else {
+        handleFilterParams({
+          ...filterParams,
+          DATE_FROM: "",
+          DATE_TO: "",
+        });
+      }
     }
 
     setActiveSort((prev) => !prev);
@@ -468,25 +470,47 @@ const CNewTable = ({
     handleActions(el, status);
   };
 
-  const searchDebounce = useDebounce((search: string, id: any, title: any) => {
-    handleSortLogic({
-      value: "search",
-      id: id,
-      search,
-      title,
-    });
+  const searchDebounce = useDebounce((search: string, id: any) => {
+    const obj: any = { ...searchedElements };
+    if (search) {
+      obj[id] = search;
+    } else {
+      delete obj[id];
+    }
+
+    if (search === "close" || !search) {
+      SetFiltersFn(obj);
+    }
+
+    setSearchedElements(obj);
   }, 0);
 
-  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
-  const [height, setHeight] = useState(0);
   useEffect(() => {
     const height = window.innerHeight;
     setHeight(height);
   }, [openHeader]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSelectedItems([]);
+      }
+
+      if (e.key === "Enter") {
+        SetFiltersFn(searchedElements);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [searchedElements]);
+
   return (
-    <div className="relative cnewtable w-full">
-      <div className="rounded-[4px] h-full">
+    <div className="relative cnewtable w-full rounded-t-[8px]">
+      <div className="h-full">
         {title && (
           <HeaderSettings
             title={title}
@@ -504,7 +528,7 @@ const CNewTable = ({
         )}
         <div
           id="table"
-          className={`flex space-x-8 h-full ${title ? "pl-[10px]" : ""}`}
+          className={`flex space-x-4 h-full ${title ? "pl-[10px]" : ""}`}
           ref={tableRef}
           style={{
             height: autoHeight
@@ -517,7 +541,7 @@ const CNewTable = ({
           <SideFilter
             sideFilter={sideFilter}
             handleClick={() => setSideFilter(false)}
-            sortData={sortData}
+            searchedElements={searchedElements}
             handleSortLogic={handleSortLogic}
             searchDebounce={searchDebounce}
             headColumns={newHeadColumns}
@@ -622,6 +646,7 @@ const CNewTable = ({
                         <TableFilter
                           colId={column?.id ?? currentFilter}
                           sortData={sortData}
+                          searchedElements={searchedElements}
                           handleSortLogic={(val: any) =>
                             handleSortLogic({ ...val, title: column?.title })
                           }
@@ -723,7 +748,7 @@ const CNewTable = ({
                               )}
                               {column?.id !== "actions" && !item.empty ? (
                                 <div
-                                  onClick={() => {
+                                  onDoubleClick={() => {
                                     if (
                                       clickable &&
                                       column?.click !== "custom" &&
@@ -734,41 +759,20 @@ const CNewTable = ({
                                   }}
                                   className="w-full whitespace-nowrap"
                                 >
-                                  {column?.permission ? (
-                                    <>
-                                      {checkPermission(column.permission) && (
-                                        <>
-                                          {column.render
-                                            ? Array.isArray(column?.id)
-                                              ? column.render(
-                                                  column?.id.map(
-                                                    (data: any) => item[data]
-                                                  )
-                                                )
-                                              : column.render(
-                                                  item[column?.id],
-                                                  item
-                                                )
-                                            : item[column?.id]}
-                                        </>
-                                      )}
-                                    </>
-                                  ) : (
-                                    <>
-                                      {column.render
-                                        ? Array.isArray(column?.id)
-                                          ? column.render(
-                                              column?.id.map(
-                                                (data: any) => item[data]
-                                              )
+                                  <>
+                                    {column.render
+                                      ? Array.isArray(column?.id)
+                                        ? column.render(
+                                            column?.id.map(
+                                              (data: any) => item[data]
                                             )
-                                          : column.render(
-                                              item[column?.id],
-                                              item
-                                            )
-                                        : item[column?.id]}
-                                    </>
-                                  )}
+                                          )
+                                        : column.render(item[column?.id], item)
+                                      : GetCurrentDate({
+                                          date: item[column?.id],
+                                          type: "usually",
+                                        })}
+                                  </>
                                 </div>
                               ) : (
                                 ""

@@ -8,11 +8,9 @@ export const breadCrumbs = [
 export const TableData = ({
   filterParams,
   handleActionsModal = () => {},
-  setOpen = () => {},
 }: {
   filterParams: any;
   handleActionsModal?: (val: any, element?: any) => void;
-  setOpen?: (val: boolean) => void;
 }) => {
   const [headColumns, setHeadColumns] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,48 +21,39 @@ export const TableData = ({
       handleActionsModal("add");
     }
     if (status === "view") {
-      handleActionsModal("view", el);
+      handleActionsModal("edit", el);
     }
     if (status === "edit") {
       handleActionsModal("edit", el);
     }
+
     if (status === "delete" && el.id !== "superadmin") {
     }
   };
 
   useEffect(() => {
     setIsLoading(true);
-    if (filterParams?.search?.length) {
-      if (filterParams?.search?.length >= 5) {
-        axios
-          .get(
-            `http://10.40.14.193:8000/urun/${filterParams.search.toUpperCase()}`
-          )
-          .then((res) => {
-            setBodyData({ data: [res.data] });
-            setOpen(true);
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
-      }
-    } else {
-      axios
-        .get(
-          `http://10.40.14.193:8000/irsaliye?skip=${
-            filterParams.page < 2
-              ? 0
-              : (filterParams.page - 1) * filterParams.perPage
-          }&limit=${filterParams.perPage}`
-        )
-        .then((res) => {
-          setBodyData(res.data);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
-  }, [filterParams.page, filterParams.perPage]);
+    if (!filterParams?.page) return;
+
+    axios
+      .get(
+        `http://10.40.14.193:8000/irsaliye/?skip=${
+          filterParams.page < 2
+            ? 0
+            : (filterParams.page - 1) * filterParams.perPage
+        }&limit=${filterParams.perPage}${
+          filterParams?.DATE_FROM
+            ? `&DATE_FROM=${filterParams.DATE_FROM}&DATE_TO=${filterParams.DATE_TO}`
+            : ""
+        }${filterParams?.q ? "&" + filterParams?.q : ""}`
+      )
+      .then((res) => {
+        setBodyData(res.data);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [filterParams]);
 
   useEffect(() => {
     const headColumns: any = [];

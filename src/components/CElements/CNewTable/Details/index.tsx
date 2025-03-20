@@ -86,7 +86,7 @@ export const CTableBody = ({
     <>
       <TableLoader isVisible={loader} rowsCount={rowsCount} />
       <tbody className="CTableBody w-full" {...props} ref={ref}>
-        {loader ? <></> : children}
+        {children}
         {/* <EmptyDataComponent isVisible={dataLength < 1 && !loader} /> */}
       </tbody>
     </>
