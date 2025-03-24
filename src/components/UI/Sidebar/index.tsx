@@ -102,7 +102,11 @@ export const Sidebar = () => {
         collapsed={collapsed}
         wideSidebar={wideSidebar}
         setCollapsed={() => {
-          dispatch(sidebarActions.setCollapsed(!collapsed));
+          if (wideSidebar) {
+            dispatch(sidebarActions.setWideSidebar(false));
+          } else {
+            dispatch(sidebarActions.setCollapsed(!collapsed));
+          }
         }}
       />
     </div>

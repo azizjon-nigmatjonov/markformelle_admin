@@ -4,6 +4,8 @@ import {
   ArrowDownOutline,
   CloseIcon,
 } from "../../../../components/UI/IconGenerator/Svg";
+// import { MaskInputUI } from "../../../HFElements/HFInputMask";
+import InputMask from "react-input-mask";
 
 interface Props {
   open: boolean;
@@ -23,37 +25,23 @@ export const PeriodTextField = ({
 }: Props) => {
   const firstInput: any = useRef(null);
   const secondInput: any = useRef(null);
+  console.log("firstInput", firstInput);
+  console.log("secondInput", secondInput);
 
-  const formatDate = (input: string) => {
-    let cleanValue = input.replace(/\D/g, "");
-    let formatted = "";
+  const handleChange = (index: number, e: any) => {
+    console.log("va", value, e);
 
-    if (cleanValue.length <= 2) formatted = cleanValue;
-    else if (cleanValue.length <= 4)
-      formatted = `${cleanValue.slice(0, 2)}.${cleanValue.slice(2)}`;
-    else
-      formatted = `${cleanValue.slice(0, 2)}.${cleanValue.slice(
-        2,
-        4
-      )}.${cleanValue.slice(4, 8)}`;
-
-    return formatted;
-  };
-
-  const handleChange = (
-    index: number,
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
     const newValue = [...value];
-    newValue[index] = formatDate(e.target.value);
+    newValue[index] = e;
 
-    if (newValue?.[0]?.length === 10 && index === 0) {
-      secondInput.current?.focus();
-    }
+    // if (newValue?.[0]?.length === 10 && index === 0) {
+    //   secondInput?.current?.focus();
+    // }
 
-    if (index === 1 && newValue?.[1]?.length === 0) {
-      firstInput.current.focus();
-    }
+    // if (index === 1 && newValue?.[1]?.length === 0) {
+    //   firstInput.current.focus();
+    // }
+    // console.log("newValue", newValue);
 
     setValue(newValue);
   };
@@ -77,57 +65,48 @@ export const PeriodTextField = ({
 
   return (
     <div className="PeriodTextField z-20 relative">
-      <div className="relative h-[35px] rounded-[8px] border border-[var(--border)] flex overflow-hidden items-center">
-        <input
-          type="text"
-          className="w-full px-2"
+      <div className="relative h-[35px] rounded-[8px] px-2 space-x-2 border border-[var(--border)] flex overflow-hidden items-center">
+        <InputMask
+          mask="99.99.9999"
           value={value[0]}
-          onChange={(e) => handleChange(0, e)}
-          placeholder="DD.MM.YYYY"
-          maxLength={10}
-          ref={firstInput}
+          onChange={(e) => handleChange(0, e.target.value)}
+          placeholder="Start Date"
+          className="date-input"
         />
-        <span>-</span>
-        <input
-          type="text"
-          className="w-full px-2"
+        <span> - </span>
+        <InputMask
+          mask="99.99.9999"
           value={value[1]}
-          onChange={(e) => handleChange(1, e)}
-          placeholder="DD.MM.YYYY"
-          maxLength={10}
-          ref={secondInput}
-          onClick={() => {
-            if (firstInput.current.value.length !== 10) {
-              firstInput.current.focus();
-            }
-          }}
+          onChange={(e) => handleChange(1, e.target.value)}
+          placeholder="End Date"
+          className="date-input"
         />
-        <div className="h-full">
-          {value?.[0]?.length === 10 && value?.[1]?.length === 10 ? (
-            <div
-              className={`flex items-center justify-center cursor-pointer w-[30px] h-full ${
-                open ? "rotate-[180deg]" : ""
-              }`}
-              onClick={() => {
-                setValue([]);
-                handleDropdown([]);
-                firstInput.current.value = "";
-                secondInput.current.value = "";
-              }}
-            >
-              <CloseIcon />
-            </div>
-          ) : (
-            <div
-              className={`flex items-center justify-center cursor-pointer w-[30px] h-full ${
-                open ? "rotate-[180deg]" : ""
-              }`}
-              onClick={() => setOpen(true)}
-            >
-              <ArrowDownOutline />
-            </div>
-          )}
-        </div>
+      </div>
+      <div className="h-full">
+        {value?.[0]?.length === 10 && value?.[1]?.length === 10 ? (
+          <div
+            className={`flex items-center justify-center cursor-pointer w-[30px] h-full ${
+              open ? "rotate-[180deg]" : ""
+            }`}
+            onClick={() => {
+              setValue([]);
+              handleDropdown([]);
+              firstInput.current.value = "";
+              secondInput.current.value = "";
+            }}
+          >
+            <CloseIcon />
+          </div>
+        ) : (
+          <div
+            className={`flex items-center justify-center cursor-pointer w-[30px] h-full ${
+              open ? "rotate-[180deg]" : ""
+            }`}
+            onClick={() => setOpen(true)}
+          >
+            <ArrowDownOutline />
+          </div>
+        )}
       </div>
     </div>
   );

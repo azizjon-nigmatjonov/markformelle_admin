@@ -135,6 +135,11 @@
     //     border-bottom: 0;
     //   }
     // }
+    opacity: 0;
+    animation-duration: 200;
+    &.effect {
+      opacity: 100;
+    }
   
     &.clickable {
       cursor: pointer;

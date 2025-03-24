@@ -40,7 +40,8 @@ export const Transfers = () => {
           bodyColumns={bodyColumns?.filter(
             (item: any) => item.DEPOID === "D003" && item.HAREKETTIPI === 5
           )}
-          defaultFilters={["sidebar_filter"]}
+          defaultFilters={["sidebar_filter", "add", "delete"]}
+          defaultSearch={{ IRSALIYENO: "" }}
           handleActions={handleActions}
           isLoading={isLoading}
           filterParams={filterParams}

@@ -67,8 +67,10 @@ export const ModalUI = ({
 
   return (
     <CNewModal
-      title="Urin tanitimi"
-      action="ad"
+      title={`Документ перемещения ${
+        element.IRSALIYENO ? "№" + element.IRSALIYENO : ""
+      }`}
+      action="add"
       handleActions={handleActionsModal}
       element={element}
       list={modalList}
@@ -97,8 +99,8 @@ export const ModalUI = ({
               <FieldUI title="irsaliye no">
                 <HFTextField
                   control={control}
-                  name="SINIF"
-                  defaultValue={defaultData?.SINIF}
+                  name="IRSALIYEID"
+                  defaultValue={defaultData?.IRSALIYEID}
                 />
               </FieldUI>
               <FieldUI title="doviz cinsi">
@@ -136,6 +138,7 @@ export const ModalUI = ({
             filterParams={filterParams}
             autoHeight={"440px"}
             disablePagination={true}
+            idForTable="modal"
             handleFilterParams={setFilterParams}
           />
         </CollapseUI>

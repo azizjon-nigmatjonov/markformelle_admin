@@ -17,6 +17,7 @@ export const ChemicalsStock = () => {
   });
 
   const newHeadColumns = useMemo(() => {
+    if (!bodyColumns.length) return [];
     const obj = { ...bodyColumns?.[0] };
     const keys = Object.keys(obj);
     const newColumns: any = [];
@@ -39,6 +40,7 @@ export const ChemicalsStock = () => {
           handleActions={handleActions}
           isLoading={isLoading}
           filterParams={filterParams}
+          defaultFilters={[]}
           handleFilterParams={setFilterParams}
           meta={{
             totalCount: bodyData?.count,

@@ -41,6 +41,8 @@ export const EritmaPage = () => {
           isLoading={isLoading}
           filterParams={filterParams}
           handleFilterParams={setFilterParams}
+          defaultFilters={["sidebar_filter", "add", "delete"]}
+          defaultSearch={{ URUNID: "" }}
           meta={{
             totalCount: bodyData?.count,
             pageCount: bodyData?.count

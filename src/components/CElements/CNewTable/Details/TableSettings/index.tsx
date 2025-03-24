@@ -50,6 +50,7 @@ export const HeaderSettings = ({
   extra,
   title,
   sortData,
+  defaultFilters = [],
 }: {
   filterParams: any;
   title: string;
@@ -61,6 +62,7 @@ export const HeaderSettings = ({
   extra?: any;
   sideFilter: boolean;
   sortData: any;
+  defaultFilters: any;
   tableActions: (el: any, status: string) => void;
 }) => {
   const [open, setOpen] = useState(false);
@@ -202,20 +204,24 @@ export const HeaderSettings = ({
           <h2 className="font-medium">{title}</h2>
           <div className="w-[1px] h-[60%] bg-[var(--border)]"></div>
           <div className="space-x-4">
-            <IconButton onClick={() => tableActions({}, "modal")}>
-              <div className="w-[30px] h-[30px] items-center justify-center flex">
-                <PlusIcon fill="var(--main)" width={20} />
-              </div>
-              <p className="text-sm pr-2 text-black">Добавить</p>
-            </IconButton>
-            <IconButton
-              onClick={() => tableActions({}, "delete_sellected_items")}
-            >
-              <div className="w-[30px] h-[30px] items-center justify-center flex">
-                <DeleteIcon fill="var(--main)" width={18} />
-              </div>
-              <p className="text-sm pr-2 text-black">Удалить</p>
-            </IconButton>
+            {defaultFilters.includes("add") && (
+              <IconButton onClick={() => tableActions({}, "modal")}>
+                <div className="w-[30px] h-[30px] items-center justify-center flex">
+                  <PlusIcon fill="var(--main)" width={20} />
+                </div>
+                <p className="text-sm pr-2 text-black">Добавить</p>
+              </IconButton>
+            )}
+            {defaultFilters.includes("delete") && (
+              <IconButton
+                onClick={() => tableActions({}, "delete_sellected_items")}
+              >
+                <div className="w-[30px] h-[30px] items-center justify-center flex">
+                  <DeleteIcon fill="var(--main)" width={18} />
+                </div>
+                <p className="text-sm pr-2 text-black">Удалить</p>
+              </IconButton>
+            )}
           </div>
         </div>
 

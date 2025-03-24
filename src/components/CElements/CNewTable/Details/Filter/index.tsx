@@ -5,7 +5,7 @@ import { Field } from "./Field";
 import { SearchField } from "./Search";
 import { useEffect, useState } from "react";
 import { SelectFilter } from "./Select";
-import { CPeriodPicker } from "../../../CPeriodPicker";
+// import { CPeriodPicker } from "../../../CPeriodPicker";
 interface Props {
   colId?: any;
   filter: any;
@@ -80,6 +80,7 @@ export const SideFilter = ({
   searchDebounce = () => {},
   headColumns = [],
   searchedElements = {},
+  defaultSearch = {},
 }: {
   handleClick: () => void;
   sideFilter: boolean;
@@ -87,6 +88,7 @@ export const SideFilter = ({
   handleSortLogic: (val: any) => void;
   headColumns: any;
   searchedElements: any;
+  defaultSearch: any;
 }) => {
   const [newHeadColumns, setNewHeadColumns] = useState<any>([]);
   useEffect(() => {
@@ -134,7 +136,7 @@ export const SideFilter = ({
           ) : (
             ""
           )}
-          <div className="bg-[var(--border)] w-full h-[1px] my-1"></div>
+          {/* <div className="bg-[var(--border)] w-full h-[1px] my-1"></div>
 
           <div className="mt-3 px-2">
             <p className="text-[12px] mb-2">Временной фильтр</p>
@@ -143,7 +145,7 @@ export const SideFilter = ({
                 handleSortLogic({ value: "period", search: val ? val : [] })
               }
             />
-          </div>
+          </div> */}
 
           {Object.keys(searchedElements).length ? (
             <div className="border-t border-[var(--border)] mt-4">
@@ -154,6 +156,7 @@ export const SideFilter = ({
                       title: key,
                       id: key,
                       value: val,
+                      close: !(key in defaultSearch),
                     }}
                     searchDebounce={searchDebounce}
                   />

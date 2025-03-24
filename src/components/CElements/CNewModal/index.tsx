@@ -3,10 +3,10 @@ import cls from "./style.module.scss";
 import { FC, ReactNode, useState, useRef, useEffect } from "react";
 import { t } from "i18next";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { DeleteIcon, EditIcon } from "../../UI/IconGenerator/Svg";
+import CloseIcon from "@mui/icons-material/Close";
+import RemoveIcon from "@mui/icons-material/Remove";
 
 interface Props {
   element?: any;
@@ -143,9 +143,7 @@ const CNewModal: FC<Props> = ({
                     </div>
                   </IconButton>
 
-                  <h2>
-                    {t(title)} {element?.initial_order}
-                  </h2>
+                  <h2>{t(title)}</h2>
                 </div>
 
                 <div className="flex items-center space-x-3">
@@ -160,15 +158,7 @@ const CNewModal: FC<Props> = ({
                       <EditIcon fill="var(--main)" />
                     </div>
                   </IconButton>
-                  {/* <IconButton onClick={() => handleActions("add")}>
-                    <div
-                      className={`flex items-center justify-center rounded-full w-[30px] h-[30px] ${
-                        action === "add" ? "border border-[var(--main)]" : ""
-                      }`}
-                    >
-                      <PlusIcon fill="var(--main)" />
-                    </div>
-                  </IconButton> */}
+
                   <IconButton onClick={() => {}}>
                     <div
                       className={`flex items-center justify-center rounded-full w-[30px] h-[30px] ${
@@ -200,17 +190,30 @@ const CNewModal: FC<Props> = ({
                       Сохранить
                     </button>
                   )}
-                  <IconButton onClick={() => handleScreen()}>
-                    <div className="w-[30px] h-[30px] items-center justify-center flex">
-                      {screen ? (
-                        <OpenInFullIcon
-                          style={{ color: "var(--main)", width: 18 }}
-                        />
-                      ) : (
-                        <CloseFullscreenIcon style={{ color: "var(--main)" }} />
-                      )}
-                    </div>
-                  </IconButton>
+                  <div>
+                    <IconButton>
+                      <div className="w-[30px] h-[30px] items-center justify-center flex hover:bg-[var(--primary50)]">
+                        <RemoveIcon className="text-[var(--main)]" />
+                      </div>
+                    </IconButton>
+                    <IconButton onClick={() => handleScreen()}>
+                      <div className="w-[30px] h-[30px] items-center justify-center flex group hover:bg-[var(--primary50)]">
+                        {!screen ? (
+                          <div className="relative w-[18px] h-[18px]">
+                            <div className="w-[12px] h-[12px] border border-[var(--main)] absolute top-[2px] right-[1px]"></div>
+                            <div className="w-[12px] h-[12px] border border-[var(--main)] absolute left-[2px] bottom-[1px] bg-white group-hover:bg-[var(--primary50)]"></div>
+                          </div>
+                        ) : (
+                          <div className="w-[15px] h-[15px] border border-[var(--main)]"></div>
+                        )}
+                      </div>
+                    </IconButton>
+                    <IconButton onClick={() => handleActions("close", element)}>
+                      <div className="w-[30px] h-[30px] items-center justify-center flex group hover:bg-[var(--primary50)]">
+                        <CloseIcon className="text-[var(--main)]" />
+                      </div>
+                    </IconButton>
+                  </div>
                 </div>
               </div>
             )}

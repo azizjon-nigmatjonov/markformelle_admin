@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export const breadCrumbs = [
   { label: "Внутреннее примешенные", link: "/chemical_store/transfers" },
@@ -16,6 +17,21 @@ export const TableData = ({
   const [isLoading, setIsLoading] = useState(false);
   const [bodyData, setBodyData]: any = useState({});
 
+  // const deleteFn = (id: string | number) => {
+  //   setIsLoading(true);
+  //   axios
+  //     .delete(`http://10.40.14.193:8000/irsaliye/${id}`)
+  //     .then((_: any) => {
+  //       toast.success("Muvaffaqiyatli amalga oshirildi!");
+  //     })
+  //     .catch(() => {
+  //       toast.error("O'chirib bo'lmaydi");
+  //     })
+  //     .finally(() => {
+  //       setIsLoading(false);
+  //     });
+  // };
+
   const handleActions = (el: any, status: string) => {
     if (status === "modal") {
       handleActionsModal("add");
@@ -27,7 +43,10 @@ export const TableData = ({
       handleActionsModal("edit", el);
     }
 
-    if (status === "delete" && el.id !== "superadmin") {
+    if (status === "delete") {
+      console.log("el", el.IRSALIYEID);
+      toast.success("Muvaffaqiyatli amalga oshirildi!");
+      // deleteFn(el.IRSALIYEID)
     }
   };
 
@@ -119,6 +138,7 @@ export const ModalLogic = ({
             type: "edit",
             id: element?.IRSALIYEID,
             initial_order: item.order,
+            ...element,
           };
         })
       );
@@ -132,6 +152,7 @@ export const ModalLogic = ({
           initial_order: modalList.length + 1,
           type: "edit",
           id: element?.IRSALIYEID,
+          ...element,
         },
       ]);
     }

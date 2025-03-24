@@ -17,22 +17,24 @@ interface Props {
   handleChange?: (val?: any) => void;
 }
 
-const InputUI = ({
-  handleChange,
+export const MaskInputUI = ({
   onChange,
   placeholder = "",
   mask = "",
   value = "",
   required = false,
   defaultValue,
+  handleChange = () => {},
+  maskRef,
 }: {
   value: any;
   mask?: string;
   placeholder?: any;
   defaultValue?: any;
   onChange: (val?: any) => void;
-  handleChange: (val?: any) => void;
+  handleChange?: (val?: any) => void;
   required?: boolean;
+  maskRef?: any;
 }) => {
   useEffect(() => {
     if (defaultValue) {
@@ -46,6 +48,7 @@ const InputUI = ({
         onChange(e.target.value);
         handleChange(e.target.value);
       }}
+      ref={maskRef}
       mask={mask}
       maskChar=""
       value={value}
@@ -86,7 +89,7 @@ const HFInputMask = ({
         }}
         render={({ field: { onChange, value }, fieldState: { error } }) => (
           <>
-            <InputUI
+            <MaskInputUI
               onChange={onChange}
               mask={mask}
               value={value}
@@ -95,7 +98,11 @@ const HFInputMask = ({
               defaultValue={defaultValue}
             />
             {error?.message && (
-              <p className={`text-sm text-[var(--error)] absolute ${label ? 'bottom-[-17px]' : 'bottom-0'}`}>
+              <p
+                className={`text-sm text-[var(--error)] absolute ${
+                  label ? "bottom-[-17px]" : "bottom-0"
+                }`}
+              >
                 {t(error.message || "")}
               </p>
             )}

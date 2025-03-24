@@ -47,6 +47,7 @@ interface Props {
   extra?: any;
   autoHeight?: string;
   defaultFilters?: any;
+  defaultSearch?: any;
 }
 
 const CNewTable = ({
@@ -69,7 +70,8 @@ const CNewTable = ({
   filterParams = { page: 1, perPage: 50 },
   handleFilterParams = () => {},
   handleActions = () => {},
-  defaultFilters = [],
+  defaultFilters = ["add", "delete"],
+  defaultSearch = {},
 }: Props) => {
   const tableSize = useSelector((state: any) => state.tableSize.tableSize);
   const location = useLocation();
@@ -79,7 +81,9 @@ const CNewTable = ({
   const dispatch = useDispatch();
   const { checkPermission } = usePermissions();
   const tableRef: any = useRef(null);
-  const [searchedElements, setSearchedElements] = useState({});
+  const [searchedElements, setSearchedElements] = useState({
+    ...defaultSearch,
+  });
   const { handleCheckbox } = TableSettingsData({
     filterParams,
     handleFilterParams,
@@ -104,6 +108,7 @@ const CNewTable = ({
     if (idForTable) result = result + "/" + idForTable;
     return result;
   }, [location, idForTable]);
+
   const pageColumns = storedColumns[pageName];
   const pageOrder = order[pageName] ?? [];
   const [newHeadColumns, setNewHeadColumns]: any = useState([...headColumns]);
@@ -113,7 +118,7 @@ const CNewTable = ({
   const [height, setHeight] = useState(0);
 
   const SetFiltersFn = (obj: any) => {
-    const newObj: any = obj;
+    const newObj: any = JSON.parse(JSON.stringify(obj));
     let str = "";
 
     for (let key in newObj) {
@@ -185,31 +190,50 @@ const CNewTable = ({
     result = [];
   }, [bodyColumns, activeSort, sortData.length]);
 
-  const bodySource = useMemo(() => {
-    if (!newBodyColumns?.length) return [];
+  const [effect, setEffect] = useState<string[]>([]);
 
-    let list = newBodyColumns;
+  const [bodySource, setBodySource]: any = useState([]);
+
+  useEffect(() => {
+    if (!newBodyColumns?.length) {
+      return;
+    }
+    if (isLoading) {
+      setBodySource([]);
+      setEffect([]);
+    }
 
     const checks = (status: any) => {
       if (status === undefined) return true;
       return status;
     };
 
-    return (
-      list.map((item: any, index?: any) => ({
-        ...item,
-        is_freez: checks(item?.freez),
-        is_delete: checks(item?.delete),
-        is_edit: checks(item?.edit),
-        is_view: checks(item?.view),
-        is_sellect_more: checks(item?.sellect_more),
-        index:
-          filterParams.page < 2
-            ? index + 1
-            : index + filterParams.perPage * (filterParams.page - 1),
-      })) ?? []
-    );
-  }, [newBodyColumns, filterParams.perPage, filterParams.page, headColumns]);
+    const list =
+      newBodyColumns.map((item: any, index?: any) => {
+        setTimeout(() => {
+          setEffect((prevEffect) => [...prevEffect, index]);
+        }, index * 50);
+        return {
+          ...item,
+          is_freez: checks(item?.freez),
+          is_delete: checks(item?.delete),
+          is_edit: checks(item?.edit),
+          is_view: checks(item?.view),
+          is_sellect_more: checks(item?.sellect_more),
+          index:
+            filterParams.page < 2
+              ? index + 1
+              : index + filterParams.perPage * (filterParams.page - 1),
+        };
+      }) ?? [];
+    setBodySource(list);
+  }, [
+    newBodyColumns,
+    filterParams.perPage,
+    filterParams.page,
+    headColumns,
+    isLoading,
+  ]);
 
   useEffect(() => {
     if (!isResizeble) return;
@@ -361,6 +385,11 @@ const CNewTable = ({
       }
     }
 
+    if (value === "clear") {
+      setSearchedElements(defaultSearch);
+      SetFiltersFn(defaultSearch);
+    }
+
     setActiveSort((prev) => !prev);
   };
 
@@ -475,7 +504,11 @@ const CNewTable = ({
     if (search) {
       obj[id] = search;
     } else {
-      delete obj[id];
+      if (id in defaultSearch) {
+        obj[id] = "";
+      } else {
+        delete obj[id];
+      }
     }
 
     if (search === "close" || !search) {
@@ -524,6 +557,7 @@ const CNewTable = ({
             extra={extra}
             sideFilter={sideFilter}
             sortData={sortData}
+            defaultFilters={defaultFilters}
           />
         )}
         <div
@@ -545,6 +579,7 @@ const CNewTable = ({
             handleSortLogic={handleSortLogic}
             searchDebounce={searchDebounce}
             headColumns={newHeadColumns}
+            defaultSearch={defaultSearch}
           />
           <div className={`w-full overflow-x-scroll designed-scroll`}>
             <CTableWrapper
@@ -664,16 +699,18 @@ const CNewTable = ({
               </CTableHead>
 
               <CTableBody
-                loader={isLoading}
+                loader={false}
                 columnscount={newHeadColumns?.length}
                 rowsCount={filterParams.perPage}
-                dataLength={bodySource?.length}
+                dataLength={newBodyColumns?.length}
               >
                 {bodySource?.length
                   ? bodySource?.map((item: any, rowIndex: any) => (
                       <TableRow
-                        key={bodySource.length + rowIndex}
+                        key={item.index}
                         className={`group ${
+                          effect.includes(rowIndex) ? "effect" : ""
+                        } ${
                           clickable && !item.empty && checkPermission("view")
                             ? "clickable"
                             : ""
@@ -822,7 +859,7 @@ const CNewTable = ({
             </CTableWrapper>
           </div>
         </div>
-        {!bodyColumns?.length ? (
+        {/* {!bodyColumns?.length ? (
           <img
             className="w-[120px] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
             src="/images/no-data.png"
@@ -830,8 +867,8 @@ const CNewTable = ({
           />
         ) : (
           ""
-        )}
-        {newBodyColumns?.length && !isLoading && !disablePagination ? (
+        )} */}
+        {newBodyColumns?.length && !disablePagination ? (
           <CPagination
             filterParams={filterParams}
             count={meta.pageCount}

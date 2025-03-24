@@ -1,16 +1,13 @@
-import { Skeleton } from "@mui/material";
 import { memo, useMemo } from "react";
 import "./style.scss";
+import { OneSkeleton } from "../../../CSkeleton/OneSkeleton";
 
 interface Props {
-  isVisible: boolean,
-  rowsCount: number,
+  isVisible: boolean;
+  rowsCount: number;
 }
 
-const TableLoader = ({
-  isVisible = false,
-  rowsCount = 12,
-}: Props) => {
+const TableLoader = ({ isVisible = false, rowsCount = 12 }: Props) => {
   const rows = useMemo(() => {
     return new Array(rowsCount - 1).fill(0);
   }, [rowsCount]);
@@ -19,10 +16,17 @@ const TableLoader = ({
 
   return (
     <div className="ctableLoader">
-      <div className="wrapper">
+      <div className="wrapper flex flex-col space-y-[-10px]">
         {rows?.map((i, index) => (
           <div key={i + index} className="row">
-            <Skeleton style={{ height: '100%', borderRadius: '10px', background: "var(--gray20)" }} />
+            <OneSkeleton height={20} />
+            {/* <Skeleton
+              style={{
+                height: "100%",
+                borderRadius: "8px",
+                background: "var(--primary50)",
+              }}
+            /> */}
           </div>
         ))}
       </div>
