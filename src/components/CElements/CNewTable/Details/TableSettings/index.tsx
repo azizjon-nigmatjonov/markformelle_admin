@@ -11,6 +11,7 @@ import {
   FilterIcon,
   PlusIcon,
 } from "../../../../UI/IconGenerator/Svg";
+import { PopoverDelete } from "../Actions/EditDelete/PopOver";
 
 export const SettingDropdown = ({
   allCheck = false,
@@ -51,6 +52,7 @@ export const HeaderSettings = ({
   title,
   sortData,
   defaultFilters = [],
+  selectedItems = [],
 }: {
   filterParams: any;
   title: string;
@@ -63,9 +65,11 @@ export const HeaderSettings = ({
   sideFilter: boolean;
   sortData: any;
   defaultFilters: any;
+  selectedItems: any;
   tableActions: (el: any, status: string) => void;
 }) => {
   const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const dispatch = useDispatch();
   const [allCheck, setAllCheck] = useState(true);
   const handleFilterSave = (id: any) => {
@@ -203,7 +207,7 @@ export const HeaderSettings = ({
         <div className="flex items-center space-x-4 h-full">
           <h2 className="font-medium">{title}</h2>
           <div className="w-[1px] h-[60%] bg-[var(--border)]"></div>
-          <div className="space-x-4">
+          <div className="space-x-4 flex items-center">
             {defaultFilters.includes("add") && (
               <IconButton onClick={() => tableActions({}, "modal")}>
                 <div className="w-[30px] h-[30px] items-center justify-center flex">
@@ -213,14 +217,23 @@ export const HeaderSettings = ({
               </IconButton>
             )}
             {defaultFilters.includes("delete") && (
-              <IconButton
-                onClick={() => tableActions({}, "delete_sellected_items")}
-              >
-                <div className="w-[30px] h-[30px] items-center justify-center flex">
-                  <DeleteIcon fill="var(--main)" width={18} />
-                </div>
-                <p className="text-sm pr-2 text-black">Удалить</p>
-              </IconButton>
+              <div className="relative">
+                <IconButton onClick={() => setOpenDelete(true)}>
+                  <div className="w-[30px] h-[30px] items-center justify-center flex">
+                    <DeleteIcon fill="var(--main)" width={18} />
+                  </div>
+                  <p className="text-sm pr-2 text-black">Удалить</p>
+                </IconButton>
+                {openDelete && (
+                  <PopoverDelete
+                    closePopover={(status) => {
+                      setOpenDelete(false);
+                      if (status)
+                        tableActions(selectedItems, "delete_multiple");
+                    }}
+                  />
+                )}
+              </div>
             )}
           </div>
         </div>

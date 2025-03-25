@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export const breadCrumbs = [
   { label: "Остатки химикатов", link: "/chemical_store/chemical_stock" },
@@ -26,7 +27,10 @@ export const TableData = ({
     if (status === "edit") {
       handleActionsModal("edit", el);
     }
-    if (status === "delete" && el.id !== "superadmin") {
+    if (status === "delete") {
+    }
+    if (status === "delete_multiple") {
+      toast.success("Muvaffaqiyatli amalga oshirildi!");
     }
   };
 

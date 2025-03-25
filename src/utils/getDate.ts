@@ -77,8 +77,6 @@ export const GetCurrentDate = ({
     return date
   }
 
-  
-
   const currentDate = date ? dayjs(date) : dayjs();
   const currentYear = currentDate.year();
   const currentMonth = currentDate.month() + 1;

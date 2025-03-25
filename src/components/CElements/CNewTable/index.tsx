@@ -81,6 +81,7 @@ const CNewTable = ({
   const dispatch = useDispatch();
   const { checkPermission } = usePermissions();
   const tableRef: any = useRef(null);
+  const [selectedItems, setSelectedItems] = useState<any[]>([]);
   const [searchedElements, setSearchedElements] = useState({
     ...defaultSearch,
   });
@@ -462,8 +463,6 @@ const CNewTable = ({
     setHoveredIndex(null);
   };
 
-  const [selectedItems, setSelectedItems] = useState<any[]>([]);
-
   const tableActions = (el: any, status: string) => {
     if (status === "sidefilter") {
       setSideFilter(!sideFilter);
@@ -558,6 +557,7 @@ const CNewTable = ({
             sideFilter={sideFilter}
             sortData={sortData}
             defaultFilters={defaultFilters}
+            selectedItems={selectedItems}
           />
         )}
         <div
@@ -868,7 +868,7 @@ const CNewTable = ({
         ) : (
           ""
         )} */}
-        {newBodyColumns?.length && !disablePagination ? (
+        {!disablePagination ? (
           <CPagination
             filterParams={filterParams}
             count={meta.pageCount}

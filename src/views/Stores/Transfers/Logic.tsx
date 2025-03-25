@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import useCQuery from "../../../hooks/useCQuery";
 
 export const breadCrumbs = [
   { label: "Внутреннее примешенные", link: "/chemical_store/transfers" },
@@ -47,6 +48,11 @@ export const TableData = ({
       console.log("el", el.IRSALIYEID);
       toast.success("Muvaffaqiyatli amalga oshirildi!");
       // deleteFn(el.IRSALIYEID)
+    }
+    if (status === "delete_multiple") {
+      console.log(el);
+
+      toast.success("Muvaffaqiyatli amalga oshirildi!");
     }
   };
 
@@ -183,7 +189,55 @@ export const ModalLogic = ({
       ]);
     }
   };
+
+  const { data: depoData } = useCQuery({
+    key: `GET_DEPO_LIST_FOR_TRANSFERS`,
+    endpoint: `http://10.40.14.193:8000/depo/?skip=0&limit=100`,
+    params: {},
+  });
+
+  const { data: dovizData } = useCQuery({
+    key: `GET_DOVIZ_LIST_FOR_TRANSFERS`,
+    endpoint: `http://10.40.14.193:8000/doviz/?skip=0&limit=100`,
+    params: {},
+  });
+
+  const depoOptions = useMemo(() => {
+    return depoData?.data?.map((item: any) => {
+      return {
+        label: (
+          <div className="flex space-x-2">
+            <span className="text-[var(--primary)]">{item.DEPOID}</span>,{" "}
+            <span>{item.ADI}</span>
+          </div>
+        ),
+        title: item.ADI,
+        value: item.DEPOID,
+      };
+    });
+  }, [depoData]);
+
+  const dovizOptions = useMemo(() => {
+    return dovizData?.data?.map((item: any) => {
+      return {
+        label: item.DOVIZID,
+        value: item.DOVIZID,
+      };
+    });
+  }, [dovizData]);
+
+  const createElement = (params: any) => {
+    axios
+      .post("http://10.40.14.193:8000/irsaliye/", params)
+      .then((res: any) => {
+        console.log("res", res);
+      });
+  };
+
   return {
     handleActionsModal,
+    depoOptions,
+    dovizOptions,
+    createElement,
   };
 };

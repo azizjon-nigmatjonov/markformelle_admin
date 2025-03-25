@@ -127,7 +127,7 @@ const CNewModal: FC<Props> = ({
             className={`duration-300 relative overflow-y-scroll designed-scroll ${
               title
                 ? screen
-                  ? "w-[60vw] h-[100vh]"
+                  ? "w-[60vw] h-[90vh]"
                   : "w-[90vw] h-[80vh]"
                 : "w-auto h-[800px]"
             }`}

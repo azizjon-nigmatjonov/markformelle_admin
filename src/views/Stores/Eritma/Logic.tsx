@@ -30,40 +30,27 @@ export const TableData = ({
     }
     if (status === "delete" && el.id !== "superadmin") {
     }
+    if (status === "delete_multiple") {
+    }
   };
 
   useEffect(() => {
     setIsLoading(true);
-    if (filterParams?.search?.length) {
-      if (filterParams?.search?.length >= 5) {
-        axios
-          .get(
-            `http://10.40.14.193:8000/urun/${filterParams.search.toUpperCase()}`
-          )
-          .then((res) => {
-            setBodyData({ data: [res.data] });
-            setOpen(true);
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
-      }
-    } else {
-      axios
-        .get(
-          `http://10.40.14.193:8000/urun/?skip=${
-            filterParams.page < 2
-              ? 0
-              : (filterParams.page - 1) * filterParams.perPage
-          }&limit=${filterParams.perPage}`
-        )
-        .then((res) => {
-          setBodyData(res.data);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
+
+    axios
+      .get(
+        `http://10.40.14.193:8000/urun/?skip=${
+          filterParams.page < 2
+            ? 0
+            : (filterParams.page - 1) * filterParams.perPage
+        }&limit=${filterParams.perPage}`
+      )
+      .then((res) => {
+        setBodyData(res.data);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [filterParams.page, filterParams.perPage]);
 
   useEffect(() => {

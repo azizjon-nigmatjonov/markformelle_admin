@@ -9,6 +9,12 @@ import CDatepicker from "../../../../components/CElements/CDatePicker/CDatepicke
 import CNewTable from "../../../../components/CElements/CNewTable";
 import CModal from "../../../../components/CElements/CModal";
 import { TableForm } from "./TableForm";
+import HFSelect from "../../../../components/HFElements/HFSelect";
+import { Tooltip } from "@mui/material";
+import { SelectOptions } from "../../../../components/UI/Options";
+import { useIrsaliyeFetch } from "../../../../hooks/useIrsaliyeFetch";
+import { HFDatePicker } from "../../../../components/HFElements/HFDatePicker";
+import { convertToISO } from "../../../../utils/getDate";
 
 const FieldUI = ({
   title,
@@ -41,17 +47,45 @@ export const ModalUI = ({
     page: 1,
     perPage: 50,
   });
-  const { handleActionsModal } = ModalLogic({ setModalList, modalList });
+  const { handleActionsModal, depoOptions, dovizOptions, createElement } =
+    ModalLogic({
+      setModalList,
+      modalList,
+    });
   const { defaultData, tableData, headColumns, urunData } = FetchModal({
     id: element.id,
     urunId: selectedRow?.URUNID,
   });
-  const { control, handleSubmit } = useForm({
+  const [formData, setFormData]: any = useState({});
+  const { irsaliyeData } = useIrsaliyeFetch({
+    filterParams: { page: 1, perPage: 100 },
+  });
+  const { control, handleSubmit, setValue } = useForm({
     mode: "onSubmit",
   });
 
   const onSubmit = (data: any) => {
-    console.log(data);
+    const params = {
+      IRSALIYEID: 5630,
+      HAREKETTIPI: 5,
+      FIRMAID: null,
+      DEPOID: "D003",
+      TRANSFERDEPOID: "D008",
+      SERINO: "1",
+      IRSALIYENO: 253225,
+      IRSALIYETARIHI: "2025-03-25T08:34:47.254Z",
+      EVRAKKAYITID: 2028,
+      FIILISEVKTARIHI: "2025-03-25T08:34:47.254Z",
+      DOVIZID: "USD",
+      NOTU: "string",
+      SINIF: "B",
+      INSERTKULLANICIID: 1,
+      INSERTTARIHI: "2025-03-25T00:00:00",
+      KULLANICIID: 1,
+      DEGISIMTARIHI: "2025-03-25T08:34:47.254Z",
+    };
+    console.log(params);
+    createElement(params);
   };
 
   const handleActions = (el: any, type: string) => {
@@ -63,6 +97,10 @@ export const ModalUI = ({
     if (type === "modal") {
       setOpen(true);
     }
+  };
+
+  const handleValues = (obj: any, status: string) => {
+    setValue(status, obj.value);
   };
 
   return (
@@ -80,50 +118,105 @@ export const ModalUI = ({
           <div className="grid grid-cols-4 gap-x-5 gap-y-2 pb-5">
             <div className="space-y-2">
               <FieldUI title="depo no">
-                <HFTextField
-                  control={control}
-                  name="DEPOID"
-                  defaultValue={defaultData?.DEPOID}
-                />
+                <div className="flex items-center space-x-2">
+                  <Tooltip title={formData?.DEPOID}>
+                    <HFTextField
+                      control={control}
+                      name="DEPOID"
+                      defaultValue={defaultData?.DEPOID}
+                    />
+                  </Tooltip>
+
+                  <SelectOptions
+                    name="DEPOID"
+                    options={depoOptions}
+                    handleSelect={(val: any) => {
+                      handleValues(val, "DEPOID");
+                      setFormData({ ...formData, DEPOID: val.title });
+                    }}
+                    defaultValue={formData.DEPOID}
+                  />
+                </div>
               </FieldUI>
               <FieldUI title="transfer depo no">
-                <HFTextField
-                  control={control}
-                  name="TRANSFERDEPOID"
-                  defaultValue={defaultData?.TRANSFERDEPOID}
-                />
+                <div className="flex items-center space-x-2">
+                  <Tooltip title={formData.TRANSFERDEPOID}>
+                    <HFTextField control={control} name="TRANSFERDEPOID" />
+                  </Tooltip>
+                  <SelectOptions
+                    name="TRANSFERDEPOID"
+                    options={depoOptions}
+                    handleSelect={(val: any) => {
+                      handleValues(val, "TRANSFERDEPOID");
+                      setFormData({ ...formData, TRANSFERDEPOID: val.title });
+                    }}
+                    defaultValue={formData.TRANSFERDEPOID}
+                  />
+                </div>
               </FieldUI>
             </div>
 
             <div className="space-y-2">
               <FieldUI title="irsaliye no">
-                <HFTextField
-                  control={control}
-                  name="IRSALIYEID"
-                  defaultValue={defaultData?.IRSALIYEID}
-                />
+                <div className="flex items-center space-x-2">
+                  <Tooltip title={formData.IRSALIYENO}>
+                    <HFTextField
+                      control={control}
+                      name="IRSALIYENO"
+                      defaultValue={defaultData?.IRSALIYENO}
+                    />
+                  </Tooltip>
+                  <SelectOptions
+                    name="IRSALIYENO"
+                    options={irsaliyeData?.data?.map((item: any) => {
+                      return {
+                        label: item.IRSALIYENO,
+                        title: item.IRSALIYENO,
+                        value: item.IRSALIYENO,
+                      };
+                    })}
+                    handleSelect={(val: any) => {
+                      handleValues(val, "IRSALIYENO");
+                      setFormData({ ...formData, IRSALIYENO: val.title });
+                    }}
+                    defaultValue={formData.IRSALIYENO}
+                  />
+                </div>
               </FieldUI>
               <FieldUI title="doviz cinsi">
-                <HFTextField
-                  control={control}
+                <HFSelect
                   name="DOVIZID"
-                  defaultValue={defaultData?.DOVIZID}
+                  control={control}
+                  options={dovizOptions}
+                  defaultValue="USD"
                 />
               </FieldUI>
             </div>
 
             <div>
               <FieldUI title="tarih">
-                <CDatepicker
+                <HFDatePicker
                   defaultValue={defaultData?.IRSALIYETARIHI}
-                  format="DD.MM.YYYY"
+                  control={control}
+                  name="IRSALIYETARIHI"
+                />
+              </FieldUI>
+              <FieldUI title="sevik tarihi">
+                <HFDatePicker
+                  defaultValue={defaultData?.INSERTTARIHI}
+                  control={control}
+                  name="INSERTTARIHI"
                 />
               </FieldUI>
             </div>
-            <div>
-              <FieldUI title="sevik tarihi">
-                <CDatepicker defaultValue={defaultData?.INSERTTARIHI} />
-              </FieldUI>
+            <div className="space-y-2 flex justify-end">
+              <button
+                className="custom-btn"
+                type="submit"
+                style={{ maxWidth: "100px" }}
+              >
+                Сохранить
+              </button>
             </div>
           </div>
         </div>

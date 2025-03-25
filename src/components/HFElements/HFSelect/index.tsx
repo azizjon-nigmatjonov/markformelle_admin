@@ -7,8 +7,8 @@ import { CloseIcon } from "../../UI/IconGenerator/Svg";
 // import IconGenerator from "../IconPicker/IconGenerator";
 
 interface Props {
-  control?: any;
-  name?: any;
+  control: any;
+  name: any;
   label?: string;
   width?: string;
   options?: object[];

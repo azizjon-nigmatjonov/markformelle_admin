@@ -66,7 +66,7 @@ export const Sidebar = () => {
             }
             className={`duration-300 absolute ${
               wideSidebar ? "right-2 top-0" : "right-2 top-12"
-            } w-[25px] h-[25px] desktop:w-[30px] desktop:h-[30px] flex justify-center items-center rounded-full bg-[var(--main80)] mx-auto my-2`}
+            } w-[25px] h-[25px] desktop:w-[30px] desktop:h-[30px] flex justify-center items-center rounded-[8px] bg-[var(--main80)] mx-auto my-2`}
           >
             <div className={wideSidebar ? "" : "ml-1"}>
               {wideSidebar ? (

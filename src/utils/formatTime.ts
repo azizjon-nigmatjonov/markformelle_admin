@@ -36,9 +36,9 @@ export const FormatTime = (time: any, type?: string) => {
       return time;
   }
 };
-
+``
 export const FormatCalendar = (time: any) => {
-  const dateFormat = "dd-MM-yyyy";
+  const dateFormat = "dd.MM.yyyy";
 
   return format(time, dateFormat);
 };

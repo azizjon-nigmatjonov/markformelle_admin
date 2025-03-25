@@ -58,7 +58,7 @@ export const ModalUI = ({
                 control={control}
                 setValue={setValue}
                 required={true}
-                defaultValue={defaultData?.ADI}
+                defaultValue={"111"}
                 disabled={action === "view"}
               />
             </FieldUI>
