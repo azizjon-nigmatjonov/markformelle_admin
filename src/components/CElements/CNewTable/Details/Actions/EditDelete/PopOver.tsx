@@ -27,13 +27,13 @@ export const PopoverDelete = ({
 
           <div className="flex items-center justify-end space-x-3 mt-2 text-sm">
             <button
-              className="bg-[var(--border)] text-[var(--black)] px-4 py-2 rounded-[4px]"
+              className="bg-[var(--border)] text-[var(--black)] px-4 py-1 rounded-[4px]"
               onClick={() => closePopover("")}
             >
               Нет
             </button>
             <button
-              className="bg-[var(--main)] px-4 py-2 rounded-[4px] text-white"
+              className="bg-[var(--main)] px-4 py-1 rounded-[4px] text-white"
               onClick={() => closePopover("delete")}
             >
               Да

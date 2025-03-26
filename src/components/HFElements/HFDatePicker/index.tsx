@@ -10,6 +10,8 @@ interface Props {
   defaultValue?: any;
   required?: boolean;
   placeholder?: string;
+  format?: string;
+  disabled?: boolean;
 }
 
 export const HFDatePicker = ({
@@ -20,6 +22,8 @@ export const HFDatePicker = ({
   defaultValue,
   required,
   placeholder,
+  format,
+  disabled,
 }: Props) => {
   return (
     <Controller
@@ -36,6 +40,8 @@ export const HFDatePicker = ({
           defaultValue={defaultValue}
           required={required}
           placeholder={placeholder}
+          format={format}
+          disabled={disabled}
         />
       )}
     ></Controller>

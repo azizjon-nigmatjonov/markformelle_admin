@@ -1,7 +1,7 @@
 import { FormControl, FormHelperText, MenuItem, Select } from "@mui/material";
 import { Controller } from "react-hook-form";
 import CLabel from "../../CElements/CLabel";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { CloseIcon } from "../../UI/IconGenerator/Svg";
 // import IconGenerator from "../IconPicker/IconGenerator";
@@ -50,9 +50,10 @@ const SelectUI = ({
   handleClick: (val: any) => void;
 }) => {
   const { t } = useTranslation();
+
   return (
     <Select
-      value={value || defaultValue || ""}
+      value={value || defaultValue}
       size="small"
       inputProps={{ placeholder }}
       fullWidth
@@ -82,11 +83,6 @@ const SelectUI = ({
                 style={{ paddingLeft: 30 }}
               >
                 <div className="flex align-center gap-2">
-                  {/* <IconGenerator
-              icon={option.icon}
-              size={15}
-              style={{ color: "#6E8BB7" }}
-            /> */}
                   {typeof option.label === "string"
                     ? t(option.label)
                     : option.label}
@@ -130,14 +126,10 @@ const HFSelect = ({
   ...props
 }: Props) => {
   useEffect(() => {
-    if (defaultValue) {
+    if (defaultValue || defaultValue == 0) {
       setValue(name, defaultValue);
     }
   }, [defaultValue, name, setValue]);
-
-  const disableSelect = useMemo(() => {
-    return disabled;
-  }, [disabled]);
 
   return (
     <div id="cselect">
@@ -157,7 +149,7 @@ const HFSelect = ({
             {label && <CLabel title={label} required={required} />}
 
             <FormHelperText
-              style={{ color: "var(--error)", margin: "0 5px" }}
+              style={{ color: "var(--error)", margin: "0" }}
               error
             >
               <div className="relative">
@@ -170,16 +162,18 @@ const HFSelect = ({
                   value={value}
                   handleClick={handleClick}
                   defaultValue={defaultValue}
-                  disabled={disableSelect}
+                  disabled={disabled}
                   props={props}
                 />
-                {value && clear && (
+                {value && clear ? (
                   <button
                     onClick={() => onFormChange("")}
                     className="absolute right-4 z-[9] top-1/2 -translate-y-1/2"
                   >
                     <CloseIcon />
                   </button>
+                ) : (
+                  ""
                 )}
               </div>
               {!disabledHelperText && error?.message ? error.message : " "}

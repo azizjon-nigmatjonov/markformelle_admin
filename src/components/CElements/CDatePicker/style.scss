@@ -48,14 +48,14 @@
 
   .Mui-focused {
     .MuiOutlinedInput-notchedOutline {
-      border-color: var(--primary);
+      // border-color: var(--primary);
       border-width: 1px;
     }
   }
 
   .MuiInputAdornment-root {
     z-index: 9;
-    background-color: white;
+    // background-color: white;
     height: 100%;
     width: 40px;
     display: flex;
@@ -67,9 +67,9 @@
     color: var(--black) !important;
   }
 
-  .Mui-focused {
-    .MuiOutlinedInput-notchedOutline {
-      border: 1px solid var(--main) !important;
-    }
-  }
+  // .Mui-focused {
+  //   .MuiOutlinedInput-notchedOutline {
+  //     border: 1px solid var(--main) !important;
+  //   }
+  // }
 }

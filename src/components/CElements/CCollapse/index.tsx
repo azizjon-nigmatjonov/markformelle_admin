@@ -22,7 +22,7 @@ export const CollapseUI = ({
         className="flex items-center space-x-2 mt-2 pb-1 cursor-pointer"
         onClick={() => setOpen((prev) => !prev)}
       >
-        <h3 className="text-[14px] font-medium">{title}</h3>
+        <h3 className="text-[14px] ">{title}</h3>
         <button>
           {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
         </button>

@@ -5,7 +5,6 @@ import { CollapseUI } from "../../../../components/CElements/CCollapse";
 import CNewModal from "../../../../components/CElements/CNewModal";
 import { ModalLogic } from "../Logic";
 import { FetchModal } from "./Logic";
-import CDatepicker from "../../../../components/CElements/CDatePicker/CDatepicker";
 import CNewTable from "../../../../components/CElements/CNewTable";
 import CModal from "../../../../components/CElements/CModal";
 import { TableForm } from "./TableForm";
@@ -15,6 +14,7 @@ import { SelectOptions } from "../../../../components/UI/Options";
 import { useIrsaliyeFetch } from "../../../../hooks/useIrsaliyeFetch";
 import { HFDatePicker } from "../../../../components/HFElements/HFDatePicker";
 import { convertToISO } from "../../../../utils/getDate";
+import dayjs from "dayjs";
 
 const FieldUI = ({
   title,
@@ -36,10 +36,12 @@ export const ModalUI = ({
   element,
   setModalList,
   modalList,
+  createElement,
 }: {
   element: any;
   setModalList: any;
   modalList: any;
+  createElement: (val: any) => void;
 }) => {
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow]: any = useState(null);
@@ -47,11 +49,10 @@ export const ModalUI = ({
     page: 1,
     perPage: 50,
   });
-  const { handleActionsModal, depoOptions, dovizOptions, createElement } =
-    ModalLogic({
-      setModalList,
-      modalList,
-    });
+  const { handleActionsModal, depoOptions, dovizOptions } = ModalLogic({
+    setModalList,
+    modalList,
+  });
   const { defaultData, tableData, headColumns, urunData } = FetchModal({
     id: element.id,
     urunId: selectedRow?.URUNID,
@@ -66,25 +67,27 @@ export const ModalUI = ({
 
   const onSubmit = (data: any) => {
     const params = {
-      IRSALIYEID: 5630,
       HAREKETTIPI: 5,
       FIRMAID: null,
       DEPOID: "D003",
       TRANSFERDEPOID: "D008",
       SERINO: "1",
-      IRSALIYENO: 253225,
-      IRSALIYETARIHI: "2025-03-25T08:34:47.254Z",
+      IRSALIYENO: 26032125,
+      IRSALIYETARIHI: "2025-03-26T11:06:37.447Z",
       EVRAKKAYITID: 2028,
-      FIILISEVKTARIHI: "2025-03-25T08:34:47.254Z",
+      FIILISEVKTARIHI: "2025-03-26T11:06:37.447Z",
       DOVIZID: "USD",
-      NOTU: "string",
+      NOTU: "",
       SINIF: "B",
       INSERTKULLANICIID: 1,
-      INSERTTARIHI: "2025-03-25T00:00:00",
+      INSERTTARIHI: "2025-03-26T11:06:37.447Z",
       KULLANICIID: 1,
-      DEGISIMTARIHI: "2025-03-25T08:34:47.254Z",
+      DEGISIMTARIHI: "2025-03-26T11:06:37.447Z",
+      ...data,
     };
-    console.log(params);
+    params.INSERTTARIHI = convertToISO(params.INSERTTARIHI);
+    params.IRSALIYETARIHI = convertToISO(params.IRSALIYETARIHI);
+
     createElement(params);
   };
 
@@ -117,16 +120,8 @@ export const ModalUI = ({
         <div className="w-full">
           <div className="grid grid-cols-4 gap-x-5 gap-y-2 pb-5">
             <div className="space-y-2">
-              <FieldUI title="depo no">
+              <FieldUI title="Depo no">
                 <div className="flex items-center space-x-2">
-                  <Tooltip title={formData?.DEPOID}>
-                    <HFTextField
-                      control={control}
-                      name="DEPOID"
-                      defaultValue={defaultData?.DEPOID}
-                    />
-                  </Tooltip>
-
                   <SelectOptions
                     name="DEPOID"
                     options={depoOptions}
@@ -136,13 +131,17 @@ export const ModalUI = ({
                     }}
                     defaultValue={formData.DEPOID}
                   />
+                  <Tooltip title={formData?.DEPOID}>
+                    <HFTextField
+                      control={control}
+                      name="DEPOID"
+                      defaultValue={defaultData?.DEPOID}
+                    />
+                  </Tooltip>
                 </div>
               </FieldUI>
-              <FieldUI title="transfer depo no">
+              <FieldUI title="Transfer depo no">
                 <div className="flex items-center space-x-2">
-                  <Tooltip title={formData.TRANSFERDEPOID}>
-                    <HFTextField control={control} name="TRANSFERDEPOID" />
-                  </Tooltip>
                   <SelectOptions
                     name="TRANSFERDEPOID"
                     options={depoOptions}
@@ -152,6 +151,9 @@ export const ModalUI = ({
                     }}
                     defaultValue={formData.TRANSFERDEPOID}
                   />
+                  <Tooltip title={formData.TRANSFERDEPOID}>
+                    <HFTextField control={control} name="TRANSFERDEPOID" />
+                  </Tooltip>
                 </div>
               </FieldUI>
             </div>
@@ -159,13 +161,6 @@ export const ModalUI = ({
             <div className="space-y-2">
               <FieldUI title="irsaliye no">
                 <div className="flex items-center space-x-2">
-                  <Tooltip title={formData.IRSALIYENO}>
-                    <HFTextField
-                      control={control}
-                      name="IRSALIYENO"
-                      defaultValue={defaultData?.IRSALIYENO}
-                    />
-                  </Tooltip>
                   <SelectOptions
                     name="IRSALIYENO"
                     options={irsaliyeData?.data?.map((item: any) => {
@@ -181,31 +176,44 @@ export const ModalUI = ({
                     }}
                     defaultValue={formData.IRSALIYENO}
                   />
+                  <Tooltip title={formData.IRSALIYENO}>
+                    <HFTextField
+                      control={control}
+                      name="IRSALIYENO"
+                      defaultValue={defaultData?.IRSALIYENO}
+                    />
+                  </Tooltip>
                 </div>
               </FieldUI>
               <FieldUI title="doviz cinsi">
-                <HFSelect
-                  name="DOVIZID"
-                  control={control}
-                  options={dovizOptions}
-                  defaultValue="USD"
-                />
+                <div className="flex space-x-2">
+                  <div className="w-[20px]"></div>
+                  <HFSelect
+                    name="DOVIZID"
+                    control={control}
+                    options={dovizOptions}
+                    defaultValue="USD"
+                  />
+                </div>
               </FieldUI>
             </div>
 
             <div>
               <FieldUI title="tarih">
                 <HFDatePicker
-                  defaultValue={defaultData?.IRSALIYETARIHI}
                   control={control}
                   name="IRSALIYETARIHI"
+                  defaultValue={defaultData?.IRSALIYETARIHI || dayjs()}
+                  format="DD.MM.YYYY"
+                  disabled={true}
                 />
               </FieldUI>
               <FieldUI title="sevik tarihi">
                 <HFDatePicker
-                  defaultValue={defaultData?.INSERTTARIHI}
                   control={control}
                   name="INSERTTARIHI"
+                  defaultValue={defaultData?.INSERTTARIHI || dayjs()}
+                  disabled={true}
                 />
               </FieldUI>
             </div>

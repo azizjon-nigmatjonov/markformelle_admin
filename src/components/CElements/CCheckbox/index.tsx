@@ -37,13 +37,13 @@ const CCheckbox = ({
       <div className="w-[18px] h-[18px]">
         <div
           className={`w-[18px] h-[18px] rounded-[4px] border ${
-            value ? "border-[var(--primary)]" : "border-[var(--gray30)]"
+            value ? "border-[var(--main)]" : "border-[var(--gray30)]"
           } ${disabled ? "bg-[var(--border)]" : ""}`}
         >
-          {value ? <CheckLine fill="var(--primary)" /> : ""}
+          {value ? <CheckLine fill="var(--main)" /> : ""}
         </div>
       </div>
-      {element?.label && <p>{t(element.label)}</p>}
+      {element?.label && <p className="text-sm">{t(element.label)}</p>}
     </div>
   );
 };

@@ -5,8 +5,8 @@ import { FetchFunction } from "./Logic";
 import { SearchModal } from "./SearchModal";
 import CCheckbox from "../../../../components/CElements/CCheckbox";
 import { TableUI } from "./Table";
-import CSelect from "../../../../components/CElements/CSelect";
 import { CollapseUI } from "../../../../components/CElements/CCollapse";
+import HFSelect from "../../../../components/HFElements/HFSelect";
 
 const FieldUI = ({
   title,
@@ -27,13 +27,12 @@ const FieldUI = ({
 export const ModalUI = ({
   defaultData,
   setData,
-  action,
 }: {
   defaultData: any;
   action: string;
   setData: (val: any) => void;
 }) => {
-  const { urunType, depo } = FetchFunction();
+  const { urunType, depo, boyaTypes, uniteOptions } = FetchFunction();
 
   const { control, handleSubmit, setValue } = useForm({
     mode: "onSubmit",
@@ -58,43 +57,52 @@ export const ModalUI = ({
                 control={control}
                 setValue={setValue}
                 required={true}
-                defaultValue={"111"}
-                disabled={action === "view"}
+                defaultValue={defaultData?.ADI}
+                // disabled={action === "view"}
               />
             </FieldUI>
             <FieldUI title="Urun tipi">
-              <CSelect
+              <HFSelect
                 options={urunType?.data?.map((item: any) => {
                   return {
                     label: item?.ADI,
                     value: item?.URUNTIPIID,
                   };
                 })}
-                disabled={action === "view"}
-                value={defaultData?.URUNTIPIID}
+                control={control}
+                name="URUNTIPIID"
+                defaultValue={defaultData?.URUNTIPIID}
               />
             </FieldUI>
             <FieldUI title="Boya tipi">
-              <CSelect
-                options={[]}
-                value={defaultData?.URUNTIPIID}
-                disabled={action === "view"}
+              <HFSelect
+                name="BOYATIPIID"
+                control={control}
+                options={boyaTypes}
+                defaultValue={defaultData?.BOYATIPIID}
               />
             </FieldUI>
             <FieldUI title="Mutfak depo">
-              <CSelect
+              <HFSelect
                 options={depo?.data?.map((item: any) => {
                   return {
                     label: item?.ADI,
                     value: item?.DEPOID,
                   };
                 })}
-                value={defaultData?.MUTFAKDEPONO}
-                disabled={action === "view"}
+                control={control}
+                name="DEPOID"
+                defaultValue={defaultData?.MUTFAKDEPONO}
+                // disabled={action === "view"}
               />
             </FieldUI>
             <FieldUI title="Unite">
-              <CSelect options={[]} disabled={action === "view"} />
+              <HFSelect
+                name="UNITEID"
+                control={control}
+                options={uniteOptions}
+                defaultValue={defaultData?.UNITEID}
+              />
             </FieldUI>
           </div>
           <div className="space-y-3 w-full">
@@ -105,7 +113,7 @@ export const ModalUI = ({
                 setValue={setValue}
                 required={true}
                 defaultValue={defaultData?.BARKOD}
-                disabled={action === "view"}
+                // disabled={action === "view"}
               />
             </FieldUI>
             <FieldUI title="Pesin iskontosu">
@@ -115,7 +123,7 @@ export const ModalUI = ({
                 setValue={setValue}
                 required={true}
                 defaultValue={defaultData?.URUNID}
-                disabled={action === "view"}
+                // disabled={action === "view"}
               />
             </FieldUI>
             <FieldUI title="Vadeli iskontosu">
@@ -125,7 +133,7 @@ export const ModalUI = ({
                 setValue={setValue}
                 required={true}
                 defaultValue={defaultData?.URUNID}
-                disabled={action === "view"}
+                // disabled={action === "view"}
               />
             </FieldUI>
             <div className="grid grid-cols-3 gap-x-2">
@@ -133,6 +141,13 @@ export const ModalUI = ({
               <CCheckbox element={{ label: "Kdv Orani" }} checked={true} />
               <CCheckbox element={{ label: "Kdv Orani" }} checked={true} />
             </div>
+          </div>
+        </div>
+        <div className="flex justify-end">
+          <div>
+            <button className="custom-btn" type="submit">
+              Сохранить
+            </button>
           </div>
         </div>
       </CollapseUI>

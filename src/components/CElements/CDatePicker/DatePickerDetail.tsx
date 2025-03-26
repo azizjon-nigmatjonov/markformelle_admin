@@ -38,7 +38,7 @@ const DatePickerDetail = ({
       <DatePicker
         ref={datePickerRef}
         value={value}
-        disabled={disabled}
+        readOnly={disabled}
         defaultValue={defaultValue ? dayjs(defaultValue) : ""}
         onChange={(evt) => handleChange(evt)}
         onClose={() => {

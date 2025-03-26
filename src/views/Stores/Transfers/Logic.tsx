@@ -18,20 +18,20 @@ export const TableData = ({
   const [isLoading, setIsLoading] = useState(false);
   const [bodyData, setBodyData]: any = useState({});
 
-  // const deleteFn = (id: string | number) => {
-  //   setIsLoading(true);
-  //   axios
-  //     .delete(`http://10.40.14.193:8000/irsaliye/${id}`)
-  //     .then((_: any) => {
-  //       toast.success("Muvaffaqiyatli amalga oshirildi!");
-  //     })
-  //     .catch(() => {
-  //       toast.error("O'chirib bo'lmaydi");
-  //     })
-  //     .finally(() => {
-  //       setIsLoading(false);
-  //     });
-  // };
+  const deleteFn = (id: string | number) => {
+    setIsLoading(true);
+    axios
+      .delete(`http://10.40.14.193:8000/irsaliye/${id}`)
+      .then((_: any) => {
+        toast.success("Muvaffaqiyatli amalga oshirildi!");
+      })
+      .catch(() => {
+        toast.error("O'chirib bo'lmaydi");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
 
   const handleActions = (el: any, status: string) => {
     if (status === "modal") {
@@ -45,32 +45,25 @@ export const TableData = ({
     }
 
     if (status === "delete") {
-      console.log("el", el.IRSALIYEID);
-      toast.success("Muvaffaqiyatli amalga oshirildi!");
-      // deleteFn(el.IRSALIYEID)
+      deleteFn(el.IRSALIYEID);
     }
     if (status === "delete_multiple") {
-      console.log(el);
-
       toast.success("Muvaffaqiyatli amalga oshirildi!");
     }
   };
 
-  useEffect(() => {
+  const getList = (filters: any) => {
     setIsLoading(true);
     if (!filterParams?.page) return;
-
     axios
       .get(
         `http://10.40.14.193:8000/irsaliye/?skip=${
-          filterParams.page < 2
-            ? 0
-            : (filterParams.page - 1) * filterParams.perPage
-        }&limit=${filterParams.perPage}${
-          filterParams?.DATE_FROM
-            ? `&DATE_FROM=${filterParams.DATE_FROM}&DATE_TO=${filterParams.DATE_TO}`
+          filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
+        }&limit=${filters.perPage}${
+          filters?.DATE_FROM
+            ? `&DATE_FROM=${filters.DATE_FROM}&DATE_TO=${filters.DATE_TO}`
             : ""
-        }${filterParams?.q ? "&" + filterParams?.q : ""}`
+        }${filters?.q ? "&" + filters?.q : ""}`
       )
       .then((res) => {
         setBodyData(res.data);
@@ -78,6 +71,19 @@ export const TableData = ({
       .finally(() => {
         setIsLoading(false);
       });
+  };
+
+  const createElement = (params: any) => {
+    axios
+      .post("http://10.40.14.193:8000/irsaliye/", params)
+      .then((res: any) => {
+        console.log("res", res);
+        getList(filterParams);
+      });
+  };
+
+  useEffect(() => {
+    getList(filterParams);
   }, [filterParams]);
 
   useEffect(() => {
@@ -111,6 +117,7 @@ export const TableData = ({
     defaultData: {},
     bodyData,
     setBodyData,
+    createElement,
   };
 };
 
@@ -121,6 +128,18 @@ export const ModalLogic = ({
   modalList: any;
   setModalList: any;
 }) => {
+  const { data: depoData } = useCQuery({
+    key: `GET_DEPO_LIST_FOR_TRANSFERS`,
+    endpoint: `http://10.40.14.193:8000/depo/?skip=0&limit=100`,
+    params: {},
+  });
+
+  const { data: dovizData } = useCQuery({
+    key: `GET_DOVIZ_LIST_FOR_TRANSFERS`,
+    endpoint: `http://10.40.14.193:8000/doviz/?skip=0&limit=100`,
+    params: {},
+  });
+
   const reorderItems = (array: any[], fromIndex: number, toIndex: number) => {
     if (fromIndex === toIndex) return array;
 
@@ -135,6 +154,7 @@ export const ModalLogic = ({
       };
     });
   };
+
   const handleActionsModal = (val: string, element?: any) => {
     if (val === "edit_modal") {
       setModalList(
@@ -190,18 +210,6 @@ export const ModalLogic = ({
     }
   };
 
-  const { data: depoData } = useCQuery({
-    key: `GET_DEPO_LIST_FOR_TRANSFERS`,
-    endpoint: `http://10.40.14.193:8000/depo/?skip=0&limit=100`,
-    params: {},
-  });
-
-  const { data: dovizData } = useCQuery({
-    key: `GET_DOVIZ_LIST_FOR_TRANSFERS`,
-    endpoint: `http://10.40.14.193:8000/doviz/?skip=0&limit=100`,
-    params: {},
-  });
-
   const depoOptions = useMemo(() => {
     return depoData?.data?.map((item: any) => {
       return {
@@ -226,18 +234,9 @@ export const ModalLogic = ({
     });
   }, [dovizData]);
 
-  const createElement = (params: any) => {
-    axios
-      .post("http://10.40.14.193:8000/irsaliye/", params)
-      .then((res: any) => {
-        console.log("res", res);
-      });
-  };
-
   return {
     handleActionsModal,
     depoOptions,
     dovizOptions,
-    createElement,
   };
 };

@@ -12,8 +12,6 @@ export const TableUI = ({ defaultData = {} }: { defaultData: any }) => {
     mode: "onSubmit",
   });
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 10 });
-  console.log("defaultData", defaultData);
-
   const { birimler, isLoading } = FetchTable({
     filterParams,
     id: defaultData?.URUNID,

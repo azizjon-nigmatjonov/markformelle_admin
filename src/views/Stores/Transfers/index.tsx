@@ -12,10 +12,11 @@ export const Transfers = () => {
     perPage: 50,
   });
   const { handleActionsModal } = ModalLogic({ setModalList, modalList });
-  const { bodyColumns, handleActions, isLoading, bodyData } = TableData({
-    handleActionsModal,
-    filterParams,
-  });
+  const { bodyColumns, handleActions, isLoading, bodyData, createElement } =
+    TableData({
+      handleActionsModal,
+      filterParams,
+    });
 
   const newHeadColumns = useMemo(() => {
     if (!bodyColumns?.length) return [];
@@ -37,9 +38,7 @@ export const Transfers = () => {
         <CNewTable
           title="Таблица внутреннее примешенныей"
           headColumns={newHeadColumns}
-          bodyColumns={bodyColumns?.filter(
-            (item: any) => item.DEPOID === "D003" && item.HAREKETTIPI === 5
-          )}
+          bodyColumns={bodyColumns}
           defaultFilters={["sidebar_filter", "add", "delete"]}
           defaultSearch={{ IRSALIYENO: "" }}
           handleActions={handleActions}
@@ -62,6 +61,7 @@ export const Transfers = () => {
           element={modalList[0]}
           setModalList={setModalList}
           modalList={modalList}
+          createElement={createElement}
         />
       ) : (
         ""
