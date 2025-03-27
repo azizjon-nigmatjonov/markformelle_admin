@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { GetCurrentDate } from "../../../../utils/getDate";
 
@@ -40,7 +40,7 @@ export const FetchTable = ({
 
 export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
   const { data: modal } = useQuery(
-    ["GET_IRSALIYE", id],
+    ["GET_IRSALIYE_FOR_MODAL", id],
     () => {
       return axios.get(`http://10.40.14.193:8000/irsaliye/${id}`);
     },
@@ -91,5 +91,28 @@ export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
     tableData: modalTable?.data,
     headColumns,
     urunData: urunData?.data ?? {},
+  };
+};
+
+export const InnerModalLogic = ({
+  filterParams = {},
+}: {
+  filterParams?: any;
+}) => {
+  const [urunData, setUrunData]: any = useState({});
+  const getUrun = () => {
+    axios
+      .get(`http://10.40.14.193:8000/urun/?skip=0&limit=100`)
+      .then((res: any) => {
+        setUrunData(res?.data);
+      });
+  };
+
+  useEffect(() => {
+    getUrun();
+  }, [filterParams]);
+
+  return {
+    urunData,
   };
 };

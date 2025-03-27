@@ -559,10 +559,15 @@ input {
   }
 }
 
+.MuiAlert-standardInfo {
+  background-color: #e5f6fd !important;
+}
+
 .MuiAlert-colorInfo {
   display: flex;
   align-items: center;
   padding: 6px !important;
+
 
   .MuiAlert-icon {
     // margin-left: -5px;

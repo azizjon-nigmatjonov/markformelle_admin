@@ -74,12 +74,16 @@ export const TableData = ({
   };
 
   const createElement = (params: any) => {
+    let data = {};
     axios
       .post("http://10.40.14.193:8000/irsaliye/", params)
       .then((res: any) => {
+        data = res;
         console.log("res", res);
         getList(filterParams);
       });
+
+    return data;
   };
 
   useEffect(() => {
@@ -215,7 +219,8 @@ export const ModalLogic = ({
       return {
         label: (
           <div className="flex space-x-2">
-            <span className="text-[var(--primary)]">{item.DEPOID}</span>,{" "}
+            <span className="text-[var(--primary)] w-[20%]">{item.DEPOID}</span>
+            <span>-</span>
             <span>{item.ADI}</span>
           </div>
         ),
