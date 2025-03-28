@@ -97,14 +97,11 @@ export const ModalUI = ({
       setSelectedRow(el);
     }
 
-    if (type === "modal") {
-      setOpen(true);
-    }
+    if (type === "modal") setOpen(true);
   };
 
-  const handleValues = (obj: any, status: string) => {
+  const handleValues = (obj: any, status: string) =>
     setValue(status, obj.value);
-  };
 
   return (
     <CNewModal
@@ -116,7 +113,7 @@ export const ModalUI = ({
       element={element}
       list={modalList}
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="">
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full">
           <div className="grid grid-cols-4 gap-x-5 gap-y-2 pb-5">
             <div className="space-y-2">
