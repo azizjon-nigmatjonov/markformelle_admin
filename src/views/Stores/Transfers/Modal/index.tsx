@@ -19,6 +19,9 @@ import dayjs from "dayjs";
 import CNewModal from "../../../../components/CElements/CNewModal";
 import CNewTable from "../../../../components/CElements/CNewTable";
 import { IFilterParams } from "../../../../interfaces";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Validation } from "./Validate";
+const schema = Validation;
 
 const FieldUI = ({
   title,
@@ -66,8 +69,10 @@ export const ModalUI = ({
   const { irsaliyeData } = useIrsaliyeFetch({
     filterParams: { page: 1, perPage: 100 },
   });
+
   const { control, handleSubmit, setValue } = useForm<IFormData>({
     mode: "onSubmit",
+    resolver: yupResolver(schema),
   });
 
   const onSubmit: SubmitHandler<IFormData> = (data) => {

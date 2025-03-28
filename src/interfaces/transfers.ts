@@ -26,9 +26,9 @@ export interface ITransferCreate {
 
 export interface IFormData {
   IRSALIYENO: string;
-  IRSALIYETARIHI?: string;
-  INSERTTARIHI?: string;
-  DEPOID?: string;
-  TRANSFERDEPOID?: string;
-  DOVIZID?: string;
+  IRSALIYETARIHI: string;
+  DEPOID: string;
+  DOVIZID: string;
+  INSERTTARIHI: string;
+  TRANSFERDEPOID?: string | null; // Ensure it's optional
 }
