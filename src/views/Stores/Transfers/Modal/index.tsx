@@ -5,9 +5,9 @@ import { useIrsaliyeFetch } from "../../../../hooks/useIrsaliyeFetch";
 import { convertToISO } from "../../../../utils/getDate";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
-  IFormData,
   ITransferCreate,
   ITransferElement,
+  ITransferFormData,
 } from "../../../../interfaces/transfers";
 import { CollapseUI } from "../../../../components/CElements/CCollapse";
 import { ModalLogic } from "../Logic";
@@ -61,21 +61,23 @@ export const ModalUI = ({
     setModalList,
     modalList,
   });
-  const { defaultData, tableData, headColumns, urunData } = FetchModal({
-    id: element.id,
-    urunId: selectedRow?.URUNID,
-  });
+  const { defaultData, tableData, headColumns, urunData, refetch } = FetchModal(
+    {
+      id: element.id,
+      urunId: selectedRow?.URUNID,
+    }
+  );
   const [formData, setFormData]: any = useState({});
   const { irsaliyeData } = useIrsaliyeFetch({
     filterParams: { page: 1, perPage: 100 },
   });
 
-  const { control, handleSubmit, setValue } = useForm<IFormData>({
+  const { control, handleSubmit, setValue } = useForm<ITransferFormData>({
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<IFormData> = (data) => {
+  const onSubmit: SubmitHandler<ITransferFormData> = (data) => {
     const params: Partial<ITransferCreate> = {
       HAREKETTIPI: 5,
       FIRMAID: null,
@@ -284,9 +286,9 @@ export const ModalUI = ({
             setOpen={setOpen}
             defaultData={{
               ...selectedRow,
-              urunAdi: urunData?.ADI,
               URUNID: urunData?.URUNID,
             }}
+            refetch={refetch}
           />
 
           <div className="w-[100vw] h-[100vh] bg-[#00000044] fixed z-[91]"></div>

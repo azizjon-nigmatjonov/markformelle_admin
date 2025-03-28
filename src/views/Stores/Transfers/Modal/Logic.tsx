@@ -2,6 +2,8 @@ import axios from "axios";
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "react-query";
 import { GetCurrentDate } from "../../../../utils/getDate";
+import { IFilterParams } from "../../../../interfaces";
+const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const FetchFunction = () => {
   const { data: urunType } = useQuery(["GET_URUN_TIPI"], () => {
@@ -49,7 +51,7 @@ export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
     }
   );
 
-  const { data: modalTable } = useQuery(
+  const { data: modalTable, refetch } = useQuery(
     ["GET_IRSALIYE_TABLE", id],
     () => {
       return axios.get(`http://10.40.14.193:8000/stokdetay/irsaliye/${id}`);
@@ -91,19 +93,26 @@ export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
     tableData: modalTable?.data,
     headColumns,
     urunData: urunData?.data ?? {},
+    refetch,
   };
 };
 
 export const InnerModalLogic = ({
   filterParams = {},
+  refetch = () => {},
 }: {
   filterParams?: any;
+  refetch: () => void;
 }) => {
   const [urunData, setUrunData]: any = useState({});
   const [urunBirim, setUrunBirim]: any = useState({});
-  const getUrun = () => {
+  const getUrun = (filters: IFilterParams) => {
     axios
-      .get(`http://10.40.14.193:8000/urun/?skip=0&limit=100`)
+      .get(
+        `http://10.40.14.193:8000/urun/?skip=${filters.page}&limit=${
+          filters.perPage
+        }${filters?.q ? "&" + filters.q : ""}}`
+      )
       .then((res: any) => {
         setUrunData(res?.data);
       });
@@ -125,8 +134,19 @@ export const InnerModalLogic = ({
       });
   };
 
+  const createElement = async (params: any) => {
+    try {
+      const { data } = await axios.post(`${API_URL}/irsaliye/`, params);
+      await refetch();
+      return data;
+    } catch (error) {
+      console.error("Error creating element:", error);
+      return null;
+    }
+  };
+
   useEffect(() => {
-    getUrun();
+    getUrun(filterParams);
   }, [filterParams]);
 
   useEffect(() => {
@@ -136,5 +156,6 @@ export const InnerModalLogic = ({
   return {
     urunData,
     urunBirim,
+    createElement,
   };
 };

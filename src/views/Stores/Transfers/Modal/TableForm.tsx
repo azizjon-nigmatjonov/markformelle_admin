@@ -5,25 +5,82 @@ import { SelectOptionsTable } from "../../../../components/UI/Options/Table";
 import { useState } from "react";
 import { InnerModalLogic } from "./Logic";
 import { CloseIcon } from "../../../../components/UI/IconGenerator/Svg";
+import { IFilterParams } from "../../../../interfaces";
+import { ITransferElement } from "../../../../interfaces/transfers";
+
+interface DefaultDataProps extends ITransferElement {
+  BARKODKODU?: string;
+  MIKTAR?: number;
+  BIRIMFIYAT?: number;
+}
+
+interface TableFormProps {
+  setOpen: (val: boolean) => void;
+  defaultData?: DefaultDataProps;
+  refetch: () => void;
+}
+interface FormData {
+  BARKODKODU: string;
+  URUNID: string;
+  ADI: string;
+  MIKTAR: number;
+  URUNBIRIMID: number;
+  BIRIMFIYAT: number;
+}
 
 export const TableForm = ({
   setOpen,
   defaultData,
-}: {
-  setOpen: (val: boolean) => void;
-  defaultData: any;
-}) => {
-  const [filterParams, setFilterParams] = useState<IFilterParams>({
+  refetch = () => {},
+}: TableFormProps) => {
+  const [filterParams, setFilterParams] = useState<Partial<IFilterParams>>({
     page: 1,
-    perPage: 50,
+    perPage: 100,
+    q: "",
   });
-  const { control, handleSubmit, setValue } = useForm({
+  const [filterParamsWeight, setFilterParamsWeight] = useState<
+    Partial<IFilterParams>
+  >({
+    page: 1,
+    perPage: 100,
+  });
+  const { control, handleSubmit, setValue } = useForm<FormData>({
     mode: "onSubmit",
   });
-  const { urunData, urunBirim } = InnerModalLogic({ filterParams });
+
+  const { urunData, urunBirim } = InnerModalLogic({ filterParams, refetch });
 
   const onSubmit = (data: any) => {
-    console.log(data);
+    const params = {
+      STOKDETAYID: 0,
+      STOKID: 0,
+      HAREKETTIPI: 0,
+      URUNID: "string",
+      URUNBIRIMID: 0,
+      MIKTAR: 0,
+      BIRIMFIYAT: 0,
+      KDV: 0,
+      KDVHARICFIYAT: 0,
+      BIRIMISKONTOTOPLAMI: 0,
+      NETBIRIMFIYAT: 0,
+      TARIH: "2025-03-28T11:11:36.123Z",
+      DEPOID: "string",
+      TRANSFERDEPOID: "string",
+      IRSALIYEID: 0,
+      FIRMAID: "string",
+      NOTU: "string",
+      CIKISMIKTARI: 0,
+      STOKVAR: false,
+      LINKISLEMI: 0,
+      INSERTKULLANICIID: 1,
+      INSERTTARIHI: "2025-03-28T11:11:36.123Z",
+      KULLANICIID: 1,
+      DEGISIMTARIHI: "2025-03-28T11:11:36.123Z",
+      GIRISSTOKDETAYID: 0,
+      REFERANSSTOKDETAYID: 0,
+      ...data,
+    };
+    console.log(params);
   };
 
   return (
@@ -40,7 +97,7 @@ export const TableForm = ({
       </div>
       <HFTextField
         control={control}
-        name="barkod_kodi"
+        name="BARKODKODU"
         label="Barkod kodi"
         placeholder="Barkod kodu"
         setValue={setValue}
@@ -50,6 +107,7 @@ export const TableForm = ({
       <SelectOptionsTable
         name="URUNID"
         label="Urun kodi"
+        placeholder="Urun kodi"
         options={urunData?.data}
         required={true}
         headColumns={[
@@ -68,6 +126,7 @@ export const TableForm = ({
       <SelectOptionsTable
         name="ADI"
         label="Urun adi"
+        placeholder="Urun adi"
         options={urunData?.data}
         required={true}
         headColumns={[
@@ -83,39 +142,40 @@ export const TableForm = ({
         setFilterParams={setFilterParams}
       />
 
-      <SelectOptionsTable
-        name="URUNBIRIMID"
-        label="Ürün Birimi"
-        placeholder="Выберите тип"
-        options={urunBirim}
-        required={true}
-        headColumns={[
-          { id: "BIRIMID", title: "Birim id" },
-          { id: "BIRIMADI", title: "Adi" },
-          { id: "CARPAN", title: "Carpani" },
-        ]}
-        filterParams={filterParams}
-        handleSelect={(obj: any) => {
-          setValue("URUNBIRIMID", obj.BIRIMID);
-        }}
-        control={control}
-        setFilterParams={setFilterParams}
-      />
-
+      <div className="flex space-x-2 items-end">
+        <HFInputMask
+          control={control}
+          name="MIKTAR"
+          label="Miktar"
+          type="number"
+          required={true}
+          placeholder="Miktar"
+        />
+        <div className="w-[90px]">
+          <SelectOptionsTable
+            name="URUNBIRIMID"
+            placeholder="Kg"
+            options={urunBirim}
+            required={true}
+            headColumns={[
+              { id: "BIRIMID", title: "Birim id" },
+              { id: "BIRIMADI", title: "Adi" },
+              { id: "CARPAN", title: "Carpani" },
+            ]}
+            filterParams={filterParamsWeight}
+            handleSelect={(obj: any) => {
+              setValue("URUNBIRIMID", obj.BIRIMID);
+            }}
+            control={control}
+            setFilterParams={setFilterParamsWeight}
+          />
+        </div>
+      </div>
       <HFInputMask
         control={control}
-        name="miktar"
-        label="Miktar"
-        required={true}
-        placeholder="Miktar"
-        setValue={setValue}
-        defaultValue={defaultData?.MIKTAR}
-      />
-      <HFInputMask
-        control={control}
-        name="birim_fiyat"
+        name="BIRIMFIYAT"
         label="Birim fiyat"
-        required={true}
+        type="number"
         placeholder="Birim fiyat"
       />
       <div className="flex space-x-2 mt-3">

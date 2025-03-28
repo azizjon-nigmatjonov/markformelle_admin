@@ -26,6 +26,25 @@ export const TableData = ({
     count: 0,
   });
 
+  const getList = async (filters: any) => {
+    if (!filters?.page) return;
+    setIsLoading(true);
+    try {
+      const { data } = await axios.get(
+        `${API_URL}/irsaliye/?skip=${
+          filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
+        }&limit=${filters.perPage}${
+          filters?.DATE_FROM
+            ? `&DATE_FROM=${filters.DATE_FROM}&DATE_TO=${filters.DATE_TO}`
+            : ""
+        }${filters?.q ? "&" + filters?.q : ""}`
+      );
+      setBodyData(data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const deleteFn = async (id: string | number) => {
     setIsLoading(true);
     try {
@@ -48,25 +67,6 @@ export const TableData = ({
     }
     if (status === "delete_multiple") {
       toast.success("Muvaffaqiyatli amalga oshirildi!");
-    }
-  };
-
-  const getList = async (filters: any) => {
-    if (!filters?.page) return;
-    setIsLoading(true);
-    try {
-      const { data } = await axios.get(
-        `${API_URL}/irsaliye/?skip=${
-          filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
-        }&limit=${filters.perPage}${
-          filters?.DATE_FROM
-            ? `&DATE_FROM=${filters.DATE_FROM}&DATE_TO=${filters.DATE_TO}`
-            : ""
-        }${filters?.q ? "&" + filters?.q : ""}`
-      );
-      setBodyData(data);
-    } finally {
-      setIsLoading(false);
     }
   };
 

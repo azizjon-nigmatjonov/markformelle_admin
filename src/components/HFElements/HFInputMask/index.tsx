@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import ReactInputMask from "react-input-mask";
 import CLabel from "../../CElements/CLabel";
-import { Controller } from "react-hook-form";
+import { Controller, Control } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 interface Props {
@@ -10,11 +10,24 @@ interface Props {
   required?: boolean;
   placeholder?: string;
   name: string;
-  control?: any;
-  setValue?: (val1?: any, val2?: any) => void;
-  defaultValue?: any;
-  errors?: any;
-  handleChange?: (val?: any) => void;
+  control: Control<any>;
+  setValue?: (name: string, value: any) => void;
+  defaultValue?: string;
+  errors?: Record<string, any>;
+  handleChange?: (val?: string) => void;
+  type?: string;
+}
+
+interface MaskInputUIProps {
+  value: string;
+  mask?: string;
+  placeholder?: string;
+  defaultValue?: string;
+  onChange: (val: string) => void;
+  handleChange?: (val: string) => void;
+  required?: boolean;
+  maskRef?: React.Ref<HTMLInputElement>;
+  type?: string;
 }
 
 export const MaskInputUI = ({
@@ -23,32 +36,26 @@ export const MaskInputUI = ({
   mask = "",
   value = "",
   required = false,
-  defaultValue,
+  defaultValue = "",
   handleChange = () => {},
   maskRef,
-}: {
-  value: any;
-  mask?: string;
-  placeholder?: any;
-  defaultValue?: any;
-  onChange: (val?: any) => void;
-  handleChange?: (val?: any) => void;
-  required?: boolean;
-  maskRef?: any;
-}) => {
+  type = "text",
+}: MaskInputUIProps) => {
   useEffect(() => {
     if (defaultValue) {
       onChange(defaultValue);
     }
-  }, [defaultValue]);
+  }, [defaultValue, onChange]);
 
   return (
     <ReactInputMask
       onChange={(e) => {
-        onChange(e.target.value);
-        handleChange(e.target.value);
+        const val = e.target.value;
+        onChange(val);
+        handleChange(val);
       }}
-      ref={maskRef}
+      type={type}
+      inputRef={maskRef}
       mask={mask}
       maskChar=""
       value={value}
@@ -63,16 +70,17 @@ const HFInputMask = ({
   required = false,
   label = "",
   placeholder = "",
-  name = "",
+  name,
   control,
   setValue = () => {},
   defaultValue = "",
+  type = "text",
   handleChange = () => {},
 }: Props) => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (defaultValue) {
+    if (defaultValue && setValue) {
       setValue(name, defaultValue);
     }
   }, [name, setValue, defaultValue]);
@@ -83,19 +91,20 @@ const HFInputMask = ({
       <Controller
         control={control}
         name={name}
-        defaultValue=""
+        defaultValue={defaultValue}
         rules={{
-          required: required ? "This is required field" : false,
+          required: required ? t("This field is required") : false,
         }}
         render={({ field: { onChange, value }, fieldState: { error } }) => (
           <>
             <MaskInputUI
               onChange={onChange}
               mask={mask}
-              value={value}
+              value={value || ""}
               placeholder={t(placeholder)}
               handleChange={handleChange}
               defaultValue={defaultValue}
+              type={type}
             />
             {error?.message && (
               <p
@@ -103,12 +112,12 @@ const HFInputMask = ({
                   label ? "bottom-[-17px]" : "bottom-0"
                 }`}
               >
-                {t(error.message || "")}
+                {t(error.message)}
               </p>
             )}
           </>
         )}
-      ></Controller>
+      />
     </div>
   );
 };

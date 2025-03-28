@@ -41,7 +41,7 @@ export const SelectOptionsTable = ({
   return (
     <div className="relative">
       {label && <CLabel title={label} required={required} />}
-      <div className="flex items-center w-full border border-[var(--border)] rounded-[4px] h-[35px] p-2">
+      <div className="flex items-center w-full border border-[var(--border)] rounded-[8px] h-[35px] p-2">
         <div className="cursor-pointer" onClick={() => setOpen(true)}>
           <SearchIcon width={16} />
         </div>

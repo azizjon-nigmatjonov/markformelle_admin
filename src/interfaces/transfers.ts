@@ -24,7 +24,7 @@ export interface ITransferCreate {
   DEGISIMTARIHI: string
 }
 
-export interface IFormData {
+export interface ITransferFormData {
   IRSALIYENO: string;
   IRSALIYETARIHI: string;
   DEPOID: string;
