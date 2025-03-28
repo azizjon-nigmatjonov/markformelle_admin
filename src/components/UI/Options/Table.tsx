@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CloseIcon, SearchIcon } from "../IconGenerator/Svg";
 import CLabel from "../../CElements/CLabel";
 import CNewTable from "../../CElements/CNewTable";
-import { Alert } from "@mui/material";
 import { Controller } from "react-hook-form";
 
 interface Props {
@@ -15,6 +14,7 @@ interface Props {
   headColumns: any;
   filterParams: any;
   control: any;
+  placeholder?: string;
   setFilterParams: (val: any) => void;
 }
 
@@ -28,13 +28,13 @@ export const SelectOptionsTable = ({
   headColumns = [],
   filterParams = {},
   control,
+  placeholder = "",
   setFilterParams = () => {},
 }: Props) => {
-  const [selected, setSelected]: any = useState({});
   const [open, setOpen] = useState(false);
 
   const handleActions = (el: any, _: string) => {
-    setSelected(el);
+    setOpen(false);
     handleSelect(el);
   };
 
@@ -49,15 +49,22 @@ export const SelectOptionsTable = ({
         <Controller
           control={control}
           name={name}
-          defaultValue=""
+          defaultValue={defaultValue}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
-            <input
-              value={value}
-              type="text"
-              placeholder="urun kodi"
-              className="h-full w-full px-2"
-              onChange={(e: any) => onChange(e.target.value)}
-            />
+            <div>
+              <input
+                value={value}
+                type="text"
+                className="h-full w-full px-2"
+                placeholder={placeholder}
+                onChange={(e: any) => onChange(e.target.value)}
+              />
+              {error?.message ? (
+                <p className="text-[var(--error)]">{error.message}</p>
+              ) : (
+                ""
+              )}
+            </div>
           )}
         ></Controller>
 
@@ -78,6 +85,7 @@ export const SelectOptionsTable = ({
                 handleActions={handleActions}
                 autoHeight="600px"
                 clickable={true}
+                idForTable={name + "select"}
                 disablePagination={true}
               />
             </div>

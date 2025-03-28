@@ -100,6 +100,7 @@ export const InnerModalLogic = ({
   filterParams?: any;
 }) => {
   const [urunData, setUrunData]: any = useState({});
+  const [urunBirim, setUrunBirim]: any = useState({});
   const getUrun = () => {
     axios
       .get(`http://10.40.14.193:8000/urun/?skip=0&limit=100`)
@@ -108,11 +109,32 @@ export const InnerModalLogic = ({
       });
   };
 
+  const getUrunBirim = () => {
+    axios
+      .get(`http://10.40.14.193:8000/urunbirim/?skip=0&limit=100`)
+      .then((res: any) => {
+        const obj: any = {};
+        const arr = [];
+        for (let value of res?.data?.data) {
+          if (!(value.BIRIMID in obj)) {
+            obj[value.BIRIMID] = "";
+            arr.push(value);
+          }
+        }
+        setUrunBirim(arr);
+      });
+  };
+
   useEffect(() => {
     getUrun();
   }, [filterParams]);
 
+  useEffect(() => {
+    getUrunBirim();
+  }, []);
+
   return {
     urunData,
+    urunBirim,
   };
 };

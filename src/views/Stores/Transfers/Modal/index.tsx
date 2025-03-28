@@ -44,7 +44,7 @@ export const ModalUI = ({
   createElement: (val: any) => void;
 }) => {
   const [open, setOpen] = useState(false);
-  const [tableOpen, setTableOpen] = useState(false);
+  const [tableOpen, setTableOpen] = useState(!!element.id);
   const [selectedRow, setSelectedRow]: any = useState(null);
   const [filterParams, setFilterParams] = useState({
     page: 1,

@@ -17,14 +17,10 @@ export const TableForm = ({
   const { control, handleSubmit, setValue } = useForm({
     mode: "onSubmit",
   });
-  const { urunData } = InnerModalLogic({ filterParams });
+  const { urunData, urunBirim } = InnerModalLogic({ filterParams });
 
   const onSubmit = (data: any) => {
     console.log(data);
-  };
-
-  const handleValues = (obj: any, status: string) => {
-    setValue(status, obj.value);
   };
 
   return (
@@ -49,7 +45,7 @@ export const TableForm = ({
       />
 
       <SelectOptionsTable
-        name="TRANSFERDEPOID"
+        name="URUNID"
         label="Urun kodi"
         options={urunData?.data}
         required={true}
@@ -59,17 +55,15 @@ export const TableForm = ({
         ]}
         filterParams={filterParams}
         handleSelect={(obj: any) => {
-          console.log("111", obj);
-
-          setValue(obj.URUNID, "URUNID");
-          setValue(obj.ADI, "ADI");
+          setValue("URUNID", obj.URUNID);
+          setValue("ADI", obj.ADI);
         }}
         control={control}
         setFilterParams={setFilterParams}
       />
 
       <SelectOptionsTable
-        name="URUNADI"
+        name="ADI"
         label="Urun adi"
         options={urunData?.data}
         required={true}
@@ -79,22 +73,32 @@ export const TableForm = ({
         ]}
         filterParams={filterParams}
         handleSelect={(obj: any) => {
-          setValue(obj.URUNID, "URUNID");
-          setValue(obj.ADI, "ADI");
+          setValue("URUNID", obj.URUNID);
+          setValue("ADI", obj.ADI);
         }}
         control={control}
         setFilterParams={setFilterParams}
       />
 
-      <HFTextField
-        control={control}
-        name="urunbirim"
+      <SelectOptionsTable
+        name="URUNBIRIMID"
         label="Ürün Birimi"
-        required={true}
         placeholder="Выберите тип"
-        setValue={setValue}
-        defaultValue={defaultData?.urunAdi}
+        options={urunBirim}
+        required={true}
+        headColumns={[
+          { id: "BIRIMID", title: "Birim id" },
+          { id: "BIRIMADI", title: "Adi" },
+          { id: "CARPAN", title: "Carpani" },
+        ]}
+        filterParams={filterParams}
+        handleSelect={(obj: any) => {
+          setValue("URUNBIRIMID", obj.BIRIMID);
+        }}
+        control={control}
+        setFilterParams={setFilterParams}
       />
+
       <HFInputMask
         control={control}
         name="miktar"
