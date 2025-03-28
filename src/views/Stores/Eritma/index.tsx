@@ -7,7 +7,7 @@ import { ModalList } from "./ModalList";
 
 export const EritmaPage = () => {
   const [modalList, setModalList]: any = useState([]);
-  const [filterParams, setFilterParams] = useState({
+  const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
   });

@@ -12,7 +12,7 @@ const breadCrumbs = [
 const LanguagesPage = () => {
   const { checkPermission } = usePermissions();
   const [listTable, setListTable]: any = useState([{ id: "aaa", value: "1" }]);
-  const [filterParams, setFilterParams] = useState({
+  const [filterParams, setFilterParams] = useState<IFilterParams>({
     edit: false,
     page: 1,
     perPage: 10,

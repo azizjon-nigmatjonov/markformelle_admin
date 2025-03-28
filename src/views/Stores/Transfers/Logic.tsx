@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import useCQuery from "../../../hooks/useCQuery";
+import { ITransferCreate } from "../../../interfaces/transfers";
 
 const API_URL = import.meta.env.VITE_TEST_URL;
 
@@ -69,7 +70,7 @@ export const TableData = ({
     }
   };
 
-  const createElement = async (params: any) => {
+  const createElement = async (params: Partial<ITransferCreate>) => {
     try {
       const { data } = await axios.post(`${API_URL}/irsaliye/`, params);
       await getList(filterParams);

@@ -8,7 +8,10 @@ import usePageRouter from "../../../../../../hooks/useObjectRouter";
 export const MachineList = () => {
   const { t } = useTranslation();
   const { navigateTo } = usePageRouter();
-  const [filterParams, setFilterParams] = useState({ page: 1, perPage: 10 });
+  const [filterParams, setFilterParams] = useState<IFilterParams>({
+    page: 1,
+    perPage: 10,
+  });
   const [open, setOpen]: any = useState(false);
 
   const bodyColumns = useMemo(() => {

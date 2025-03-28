@@ -11,7 +11,7 @@ interface Props {
 export const PaintTable = ({ list = [] }: Props) => {
   const [open, setOpen]: any = useState({});
   const [headColumns, setHeadColumns]: any = useState([]);
-  const [filterParams, setFilterParams] = useState({
+  const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 10,
     title: "Дашборд покраски",

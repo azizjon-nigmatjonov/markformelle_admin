@@ -24,7 +24,7 @@ const KnittingMachines = () => {
   const { getHeight } = useDeviceHeight();
   const [widthWindow, setWidthWindow] = useState(0);
   const [heightWindow, setHeightWindow] = useState(0);
-  const [filterParams, setFilterParams] = useState({
+  const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 10,
     title: "Вязальные машины",

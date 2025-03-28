@@ -3,8 +3,12 @@ import { Tooltip } from "@mui/material";
 import { SelectOptions } from "../../../../components/UI/Options";
 import { useIrsaliyeFetch } from "../../../../hooks/useIrsaliyeFetch";
 import { convertToISO } from "../../../../utils/getDate";
-import { useForm } from "react-hook-form";
-import { TransferElement } from "../../../../interfaces/transfers";
+import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  IFormData,
+  ITransferCreate,
+  ITransferElement,
+} from "../../../../interfaces/transfers";
 import { CollapseUI } from "../../../../components/CElements/CCollapse";
 import { ModalLogic } from "../Logic";
 import { FetchModal } from "./Logic";
@@ -14,6 +18,7 @@ import HFTextField from "../../../../components/HFElements/HFTextField";
 import dayjs from "dayjs";
 import CNewModal from "../../../../components/CElements/CNewModal";
 import CNewTable from "../../../../components/CElements/CNewTable";
+import { IFilterParams } from "../../../../interfaces";
 
 const FieldUI = ({
   title,
@@ -32,20 +37,20 @@ const FieldUI = ({
 };
 
 export const ModalUI = ({
-  element,
-  setModalList,
-  modalList,
-  createElement,
+  element = {} as Partial<ITransferElement>,
+  modalList = [],
+  setModalList = () => {},
+  createElement = () => {},
 }: {
-  element: TransferElement;
-  setModalList: (list: Element[]) => void;
-  modalList: Element[];
-  createElement: (val: Element) => void;
+  element: Partial<ITransferElement>;
+  setModalList: (list: ITransferElement[]) => void;
+  modalList: ITransferElement[];
+  createElement: (val: ITransferElement) => void;
 }) => {
   const [open, setOpen] = useState(false);
   const [tableOpen, setTableOpen] = useState(!!element.id);
-  const [selectedRow, setSelectedRow]: any = useState(null);
-  const [filterParams, setFilterParams] = useState({
+  const [selectedRow, setSelectedRow] = useState<ITransferElement | null>(null);
+  const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
   });
@@ -61,38 +66,41 @@ export const ModalUI = ({
   const { irsaliyeData } = useIrsaliyeFetch({
     filterParams: { page: 1, perPage: 100 },
   });
-  const { control, handleSubmit, setValue } = useForm({
+  const { control, handleSubmit, setValue } = useForm<IFormData>({
     mode: "onSubmit",
   });
 
-  const onSubmit = (data: any) => {
-    const params = {
+  const onSubmit: SubmitHandler<IFormData> = (data) => {
+    const params: Partial<ITransferCreate> = {
       HAREKETTIPI: 5,
       FIRMAID: null,
-      DEPOID: "D003",
-      TRANSFERDEPOID: "D008",
-      SERINO: "1",
-      IRSALIYENO: 26032125,
-      IRSALIYETARIHI: "2025-03-26T11:06:37.447Z",
-      EVRAKKAYITID: 2028,
-      FIILISEVKTARIHI: "2025-03-26T11:06:37.447Z",
-      DOVIZID: "USD",
       NOTU: "",
       SINIF: "B",
       INSERTKULLANICIID: 1,
-      INSERTTARIHI: "2025-03-26T11:06:37.447Z",
       KULLANICIID: 1,
       DEGISIMTARIHI: "2025-03-26T11:06:37.447Z",
-      ...data,
+      IRSALIYENO: data.IRSALIYENO ? String(data.IRSALIYENO) : "",
+      IRSALIYETARIHI: data.IRSALIYETARIHI,
+      INSERTTARIHI: String(data.INSERTTARIHI),
+      DEPOID: data.DEPOID ? String(data.DEPOID) : undefined, //
+      TRANSFERDEPOID: data.TRANSFERDEPOID
+        ? String(data.TRANSFERDEPOID)
+        : undefined,
+      DOVIZID: data.DOVIZID ? String(data.DOVIZID) : undefined,
     };
-    params.INSERTTARIHI = convertToISO(params.INSERTTARIHI);
-    params.IRSALIYETARIHI = convertToISO(params.IRSALIYETARIHI);
+
+    if (params.INSERTTARIHI) {
+      params.INSERTTARIHI = convertToISO(params.INSERTTARIHI);
+    }
+    if (params.IRSALIYETARIHI) {
+      params.IRSALIYETARIHI = convertToISO(params.IRSALIYETARIHI);
+    }
 
     const response: any = createElement(params);
     if (response?.id) setTableOpen(true);
   };
 
-  const handleActions = (el: any, type: string) => {
+  const handleActions = (el: ITransferElement, type: string) => {
     if (type === "edit") {
       setOpen(true);
       setSelectedRow(el);
@@ -100,9 +108,6 @@ export const ModalUI = ({
 
     if (type === "modal") setOpen(true);
   };
-
-  const handleValues = (obj: any, status: string) =>
-    setValue(status, obj.value);
 
   useEffect(() => {
     if (defaultData?.IRSALIYETARIHI) {
@@ -150,7 +155,7 @@ export const ModalUI = ({
                       };
                     })}
                     handleSelect={(val: any) => {
-                      handleValues(val, "IRSALIYENO");
+                      setValue("IRSALIYENO", val);
                       setFormData({ ...formData, IRSALIYENO: val.title });
                     }}
                     defaultValue={formData.IRSALIYENO}
@@ -184,7 +189,7 @@ export const ModalUI = ({
                     name="DEPOID"
                     options={depoOptions}
                     handleSelect={(val: any) => {
-                      handleValues(val, "DEPOID");
+                      setValue("DEPOID", val);
                       setFormData({ ...formData, DEPOID: val.title });
                     }}
                     defaultValue={formData.DEPOID}
@@ -218,7 +223,7 @@ export const ModalUI = ({
                     name="TRANSFERDEPOID"
                     options={depoOptions}
                     handleSelect={(val: any) => {
-                      handleValues(val, "TRANSFERDEPOID");
+                      setValue("TRANSFERDEPOID", val);
                       setFormData({ ...formData, TRANSFERDEPOID: val.title });
                     }}
                     defaultValue={formData.TRANSFERDEPOID}

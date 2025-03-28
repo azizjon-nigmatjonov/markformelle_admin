@@ -11,7 +11,10 @@ export const TableUI = ({ defaultData = {} }: { defaultData: any }) => {
   const { control, setValue } = useForm({
     mode: "onSubmit",
   });
-  const [filterParams, setFilterParams] = useState({ page: 1, perPage: 10 });
+  const [filterParams, setFilterParams] = useState<IFilterParams>({
+    page: 1,
+    perPage: 10,
+  });
   const { birimler, isLoading } = FetchTable({
     filterParams,
     id: defaultData?.URUNID,

@@ -4,10 +4,11 @@ import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { Header } from "../../../components/UI/Header";
 import CNewTable from "../../../components/CElements/CNewTable";
 import { ModalUI } from "./Modal";
+import { IFilterParams } from "../../../interfaces";
 
 export const Transfers = () => {
   const [modalList, setModalList]: any = useState([]);
-  const [filterParams, setFilterParams] = useState({
+  const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
   });

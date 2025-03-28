@@ -11,7 +11,7 @@ export const SearchModal = ({
   setData: (val: any) => void;
   defaultData: any;
 }) => {
-  const [filterParams, setFilterParams] = useState({
+  const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 100,
     search: "",

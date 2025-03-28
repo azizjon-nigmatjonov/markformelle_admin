@@ -24,7 +24,7 @@ const NewRolls = () => {
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
-  const [filterParams, setFilterParams] = useState({});
+  const [filterParams, setFilterParams] = useState<IFilterParams>({});
   const { rollData } = FetchFunction({ id });
   const { createRoll, updateRoll, isLoading } = CreateFunction({});
   const { breadCrumbsItems } = breadCrumbs({ id });

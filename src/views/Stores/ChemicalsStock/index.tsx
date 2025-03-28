@@ -6,7 +6,7 @@ import CNewTable from "../../../components/CElements/CNewTable";
 
 export const ChemicalsStock = () => {
   const [modalList, setModalList]: any = useState([]);
-  const [filterParams, setFilterParams] = useState({
+  const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
   });

@@ -13,7 +13,10 @@ export const TableForm = ({
   setOpen: (val: boolean) => void;
   defaultData: any;
 }) => {
-  const [filterParams, setFilterParams] = useState({ page: 1, perPage: 50 });
+  const [filterParams, setFilterParams] = useState<IFilterParams>({
+    page: 1,
+    perPage: 50,
+  });
   const { control, handleSubmit, setValue } = useForm({
     mode: "onSubmit",
   });

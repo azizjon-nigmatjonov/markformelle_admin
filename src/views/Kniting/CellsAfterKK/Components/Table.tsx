@@ -8,7 +8,10 @@ interface Props {
 
 export const CellsAfterKKTable = ({ list }: Props) => {
   const [headColumns, setHeadColumns]: any = useState([]);
-  const [filterParams, setFilterParams] = useState({ page: 1, perPage: 10 });
+  const [filterParams, setFilterParams] = useState<IFilterParams>({
+    page: 1,
+    perPage: 10,
+  });
   const bodyColumns = useMemo(() => {
     if (!list?.length) return [];
     const arr: any = [];
@@ -21,20 +24,22 @@ export const CellsAfterKKTable = ({ list }: Props) => {
   }, [list?.length]);
 
   useEffect(() => {
-    const headCol: any = [{
-      title: 'LastDateTime',
-      id: 'LastDateTime',
-      render: (val: string) => {
-        return GetCurrentDate({date: val, type: 'usually'})
-      }
-    },
-    {
-      title: 'PrevDateTime',
-      id: 'PrevDateTime',
-      render: (val: string) => {
-        return GetCurrentDate({date: val, type: 'usually'})
-      }
-    }];
+    const headCol: any = [
+      {
+        title: "LastDateTime",
+        id: "LastDateTime",
+        render: (val: string) => {
+          return GetCurrentDate({ date: val, type: "usually" });
+        },
+      },
+      {
+        title: "PrevDateTime",
+        id: "PrevDateTime",
+        render: (val: string) => {
+          return GetCurrentDate({ date: val, type: "usually" });
+        },
+      },
+    ];
 
     const obj = { ...bodyColumns?.[0] };
     const keys = Object.keys(obj);
