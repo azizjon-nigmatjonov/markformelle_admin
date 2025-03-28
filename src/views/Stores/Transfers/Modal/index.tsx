@@ -1,20 +1,19 @@
-import { ReactNode, useState } from "react";
-import { useForm } from "react-hook-form";
-import HFTextField from "../../../../components/HFElements/HFTextField";
-import { CollapseUI } from "../../../../components/CElements/CCollapse";
-import CNewModal from "../../../../components/CElements/CNewModal";
-import { ModalLogic } from "../Logic";
-import { FetchModal } from "./Logic";
-import CNewTable from "../../../../components/CElements/CNewTable";
-import CModal from "../../../../components/CElements/CModal";
-import { TableForm } from "./TableForm";
-import HFSelect from "../../../../components/HFElements/HFSelect";
+import { ReactNode, useEffect, useState } from "react";
 import { Tooltip } from "@mui/material";
 import { SelectOptions } from "../../../../components/UI/Options";
 import { useIrsaliyeFetch } from "../../../../hooks/useIrsaliyeFetch";
-import { HFDatePicker } from "../../../../components/HFElements/HFDatePicker";
 import { convertToISO } from "../../../../utils/getDate";
+import { useForm } from "react-hook-form";
+import { TransferElement } from "../../../../interfaces/transfers";
+import { CollapseUI } from "../../../../components/CElements/CCollapse";
+import { ModalLogic } from "../Logic";
+import { FetchModal } from "./Logic";
+import { TableForm } from "./TableForm";
+import HFSelect from "../../../../components/HFElements/HFSelect";
+import HFTextField from "../../../../components/HFElements/HFTextField";
 import dayjs from "dayjs";
+import CNewModal from "../../../../components/CElements/CNewModal";
+import CNewTable from "../../../../components/CElements/CNewTable";
 
 const FieldUI = ({
   title,
@@ -38,12 +37,13 @@ export const ModalUI = ({
   modalList,
   createElement,
 }: {
-  element: any;
-  setModalList: any;
-  modalList: any;
-  createElement: (val: any) => void;
+  element: TransferElement;
+  setModalList: (list: Element[]) => void;
+  modalList: Element[];
+  createElement: (val: Element) => void;
 }) => {
   const [open, setOpen] = useState(false);
+  const [tableOpen, setTableOpen] = useState(!!element.id);
   const [selectedRow, setSelectedRow]: any = useState(null);
   const [filterParams, setFilterParams] = useState({
     page: 1,
@@ -88,7 +88,8 @@ export const ModalUI = ({
     params.INSERTTARIHI = convertToISO(params.INSERTTARIHI);
     params.IRSALIYETARIHI = convertToISO(params.IRSALIYETARIHI);
 
-    createElement(params);
+    const response: any = createElement(params);
+    if (response?.id) setTableOpen(true);
   };
 
   const handleActions = (el: any, type: string) => {
@@ -103,6 +104,26 @@ export const ModalUI = ({
   const handleValues = (obj: any, status: string) =>
     setValue(status, obj.value);
 
+  useEffect(() => {
+    if (defaultData?.IRSALIYETARIHI) {
+      setValue(
+        "IRSALIYETARIHI",
+        dayjs(defaultData?.IRSALIYETARIHI).format("DD.MM.YYYY")
+      );
+    } else {
+      setValue("IRSALIYETARIHI", dayjs().format("DD.MM.YYYY"));
+    }
+
+    if (defaultData?.INSERTTARIHI) {
+      setValue(
+        "INSERTTARIHI",
+        dayjs(defaultData?.INSERTTARIHI).format("DD.MM.YYYY HH:MM")
+      );
+    } else {
+      setValue("INSERTTARIHI", dayjs().format("DD.MM.YYYY HH:MM"));
+    }
+  }, [defaultData]);
+
   return (
     <CNewModal
       title={`Документ перемещения ${
@@ -116,45 +137,6 @@ export const ModalUI = ({
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full">
           <div className="grid grid-cols-4 gap-x-5 gap-y-2 pb-5">
-            <div className="space-y-2">
-              <FieldUI title="Depo no">
-                <div className="flex items-center space-x-2">
-                  <SelectOptions
-                    name="DEPOID"
-                    options={depoOptions}
-                    handleSelect={(val: any) => {
-                      handleValues(val, "DEPOID");
-                      setFormData({ ...formData, DEPOID: val.title });
-                    }}
-                    defaultValue={formData.DEPOID}
-                  />
-                  <Tooltip title={formData?.DEPOID}>
-                    <HFTextField
-                      control={control}
-                      name="DEPOID"
-                      defaultValue={defaultData?.DEPOID}
-                    />
-                  </Tooltip>
-                </div>
-              </FieldUI>
-              <FieldUI title="Transfer depo no">
-                <div className="flex items-center space-x-2">
-                  <SelectOptions
-                    name="TRANSFERDEPOID"
-                    options={depoOptions}
-                    handleSelect={(val: any) => {
-                      handleValues(val, "TRANSFERDEPOID");
-                      setFormData({ ...formData, TRANSFERDEPOID: val.title });
-                    }}
-                    defaultValue={formData.TRANSFERDEPOID}
-                  />
-                  <Tooltip title={formData.TRANSFERDEPOID}>
-                    <HFTextField control={control} name="TRANSFERDEPOID" />
-                  </Tooltip>
-                </div>
-              </FieldUI>
-            </div>
-
             <div className="space-y-2">
               <FieldUI title="irsaliye no">
                 <div className="flex items-center space-x-2">
@@ -182,6 +164,40 @@ export const ModalUI = ({
                   </Tooltip>
                 </div>
               </FieldUI>
+              <FieldUI title="tarih">
+                <div className="flex space-x-2">
+                  <div className="w-[20px]"></div>
+
+                  <HFTextField
+                    control={control}
+                    name="IRSALIYETARIHI"
+                    readOnly={true}
+                  />
+                </div>
+              </FieldUI>
+            </div>
+
+            <div className="space-y-2">
+              <FieldUI title="Depo no">
+                <div className="flex items-center space-x-2">
+                  <SelectOptions
+                    name="DEPOID"
+                    options={depoOptions}
+                    handleSelect={(val: any) => {
+                      handleValues(val, "DEPOID");
+                      setFormData({ ...formData, DEPOID: val.title });
+                    }}
+                    defaultValue={formData.DEPOID}
+                  />
+                  <Tooltip title={formData?.DEPOID}>
+                    <HFTextField
+                      control={control}
+                      name="DEPOID"
+                      defaultValue={defaultData?.DEPOID}
+                    />
+                  </Tooltip>
+                </div>
+              </FieldUI>
               <FieldUI title="doviz cinsi">
                 <div className="flex space-x-2">
                   <div className="w-[20px]"></div>
@@ -195,23 +211,33 @@ export const ModalUI = ({
               </FieldUI>
             </div>
 
-            <div>
-              <FieldUI title="tarih">
-                <HFDatePicker
-                  control={control}
-                  name="IRSALIYETARIHI"
-                  defaultValue={defaultData?.IRSALIYETARIHI || dayjs()}
-                  format="DD.MM.YYYY"
-                  disabled={true}
-                />
+            <div className="space-y-2">
+              <FieldUI title="Transfer depo no">
+                <div className="flex items-center space-x-2">
+                  <SelectOptions
+                    name="TRANSFERDEPOID"
+                    options={depoOptions}
+                    handleSelect={(val: any) => {
+                      handleValues(val, "TRANSFERDEPOID");
+                      setFormData({ ...formData, TRANSFERDEPOID: val.title });
+                    }}
+                    defaultValue={formData.TRANSFERDEPOID}
+                  />
+                  <Tooltip title={formData.TRANSFERDEPOID}>
+                    <HFTextField control={control} name="TRANSFERDEPOID" />
+                  </Tooltip>
+                </div>
               </FieldUI>
               <FieldUI title="sevik tarihi">
-                <HFDatePicker
-                  control={control}
-                  name="INSERTTARIHI"
-                  defaultValue={defaultData?.INSERTTARIHI || dayjs()}
-                  disabled={true}
-                />
+                <div className="flex space-x-2">
+                  <div className="w-[20px]"></div>
+
+                  <HFTextField
+                    control={control}
+                    name="INSERTTARIHI"
+                    readOnly={true}
+                  />
+                </div>
               </FieldUI>
             </div>
             <div className="space-y-2 flex justify-end">
@@ -226,7 +252,7 @@ export const ModalUI = ({
           </div>
         </div>
 
-        <CollapseUI title="Таблица" defaultOpen={true}>
+        <CollapseUI title="Таблица" defaultOpen={tableOpen}>
           <CNewTable
             title="Примешенныей"
             headColumns={headColumns}
@@ -242,13 +268,8 @@ export const ModalUI = ({
         </CollapseUI>
       </form>
 
-      <CModal
-        open={open}
-        title="Примешенные"
-        footerActive={false}
-        handleClose={() => setOpen(false)}
-      >
-        <div className="p-3">
+      {open && (
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-[99]">
           <TableForm
             setOpen={setOpen}
             defaultData={{
@@ -257,8 +278,10 @@ export const ModalUI = ({
               URUNID: urunData?.URUNID,
             }}
           />
+
+          <div className="w-[100vw] h-[100vh] bg-[#00000044] fixed z-[91]"></div>
         </div>
-      </CModal>
+      )}
     </CNewModal>
   );
 };

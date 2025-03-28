@@ -32,7 +32,7 @@ const CNewModal: FC<Props> = ({
   action = "add",
   handleActions = () => {},
 }) => {
-  const [screen, setScreen] = useState(false);
+  const [screen, setScreen] = useState(true);
   const [position, setPosition] = useState<{ x: number; y: number } | null>(
     null
   );
@@ -127,13 +127,13 @@ const CNewModal: FC<Props> = ({
             className={`duration-300 relative overflow-y-scroll designed-scroll ${
               title
                 ? screen
-                  ? "w-[60vw] h-[90vh]"
+                  ? "w-[1200px] h-[700px]"
                   : "w-[90vw] h-[80vh]"
                 : "w-auto h-[800px]"
             }`}
           >
             {title && (
-              <div className="flex items-center justify-between p-3 sticky top-0 bg-white z-[99] border-b border-[var(--border)]">
+              <div className="flex items-center justify-between p-3 sticky top-0 bg-white z-[90] border-b border-[var(--border)]">
                 <div className="flex items-center space-x-3">
                   <IconButton onClick={() => handleActions("close", element)}>
                     <div className="w-[30px] h-[30px] items-center justify-center flex bg-[var(--main80)] rounded-full">

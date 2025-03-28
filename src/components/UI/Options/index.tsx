@@ -32,10 +32,11 @@ export const SelectOptions = ({
         </div>
 
         {open ? (
-          <div className="absolute left-1/2 -translate-x-1/2 z-[99] top-full">
+          <div className="absolute left-[-20px] z-[99] top-full border border-[var(--border)] shadow-2xl ">
             <div className="relative">
-              <div className="w-[20px] h-[20px] rounded-[4px] rotate-45 absolute left-1/2 -translate-x-1/2 top-[-5px] z-[98] bg-white border border-[var(--border)]"></div>
-              <ul className="border border-[var(--border)] card-shadow max-h-[200px] overflow-y-scroll designed-scroll bg-white relative z-[99]">
+              <div className="w-[20px] h-[20px] rounded-[4px] rotate-45 absolute left-[20px] top-[-5px] z-[98] bg-white border border-[var(--border)]"></div>
+
+              <ul className="max-h-[200px] overflow-y-scroll designed-scroll bg-white relative z-[99]">
                 {options.map((item: any, ind: number, arr: any) => {
                   return (
                     <li
@@ -45,7 +46,7 @@ export const SelectOptions = ({
                         setSelected(item);
                         setOpen(false);
                       }}
-                      className={`px-3 py-1 min-w-[120px] ${
+                      className={`px-3 py-1 min-w-[120px]  ${
                         selected?.value === item?.value
                           ? "bg-[var(--primary50)] "
                           : "bg-white hover:bg-[var(--primary50)]"

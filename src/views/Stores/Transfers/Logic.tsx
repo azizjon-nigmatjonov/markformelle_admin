@@ -3,6 +3,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import useCQuery from "../../../hooks/useCQuery";
 
+const API_URL = import.meta.env.VITE_TEST_URL;
+
 export const breadCrumbs = [
   { label: "Внутреннее примешенные", link: "/chemical_store/transfers" },
 ];
@@ -14,36 +16,32 @@ export const TableData = ({
   filterParams: any;
   handleActionsModal?: (val: any, element?: any) => void;
 }) => {
-  const [headColumns, setHeadColumns] = useState([]);
+  const [headColumns, setHeadColumns] = useState<
+    { title: string; id: string }[]
+  >([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [bodyData, setBodyData]: any = useState({});
+  const [bodyData, setBodyData] = useState<{ data: any[]; count: number }>({
+    data: [],
+    count: 0,
+  });
 
-  const deleteFn = (id: string | number) => {
+  const deleteFn = async (id: string | number) => {
     setIsLoading(true);
-    axios
-      .delete(`http://10.40.14.193:8000/irsaliye/${id}`)
-      .then((_: any) => {
-        toast.success("Muvaffaqiyatli amalga oshirildi!");
-      })
-      .catch(() => {
-        toast.error("O'chirib bo'lmaydi");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      await axios.delete(`${API_URL}/irsaliye/${id}`);
+      toast.success("Muvaffaqiyatli amalga oshirildi!");
+      getList(filterParams);
+    } catch (error) {
+      toast.error("O'chirib bo'lmaydi");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleActions = (el: any, status: string) => {
-    if (status === "modal") {
-      handleActionsModal("add");
-    }
-    if (status === "view") {
+    if (["modal", "edit", "view"].includes(status)) {
       handleActionsModal("edit", el);
     }
-    if (status === "edit") {
-      handleActionsModal("edit", el);
-    }
-
     if (status === "delete") {
       deleteFn(el.IRSALIYEID);
     }
@@ -52,34 +50,34 @@ export const TableData = ({
     }
   };
 
-  const getList = (filters: any) => {
+  const getList = async (filters: any) => {
+    if (!filters?.page) return;
     setIsLoading(true);
-    if (!filterParams?.page) return;
-    axios
-      .get(
-        `http://10.40.14.193:8000/irsaliye/?skip=${
+    try {
+      const { data } = await axios.get(
+        `${API_URL}/irsaliye/?skip=${
           filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
         }&limit=${filters.perPage}${
           filters?.DATE_FROM
             ? `&DATE_FROM=${filters.DATE_FROM}&DATE_TO=${filters.DATE_TO}`
             : ""
         }${filters?.q ? "&" + filters?.q : ""}`
-      )
-      .then((res) => {
-        setBodyData(res.data);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+      );
+      setBodyData(data);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const createElement = (params: any) => {
-    axios
-      .post("http://10.40.14.193:8000/irsaliye/", params)
-      .then((res: any) => {
-        console.log("res", res);
-        getList(filterParams);
-      });
+  const createElement = async (params: any) => {
+    try {
+      const { data } = await axios.post(`${API_URL}/irsaliye/`, params);
+      await getList(filterParams);
+      return data;
+    } catch (error) {
+      console.error("Error creating element:", error);
+      return null;
+    }
   };
 
   useEffect(() => {
@@ -87,26 +85,9 @@ export const TableData = ({
   }, [filterParams]);
 
   useEffect(() => {
-    const headColumns: any = [];
-    const arr: any = bodyData?.data ?? [];
-
-    const obj = { ...arr?.[0] };
-    const keys = Object.keys(obj);
-    const newColumns: any = [];
-
-    keys.forEach((key: string) => {
-      const found = headColumns.find((item: any) => item.id === key);
-
-      if (found?.id) {
-        newColumns.push(found);
-      } else {
-        newColumns.push({ title: key, id: key });
-      }
-    });
-
-    setTimeout(() => {
-      setHeadColumns(newColumns);
-    }, 0);
+    if (!bodyData?.data?.length) return;
+    const firstRowKeys = Object.keys(bodyData.data[0] ?? {});
+    setHeadColumns(firstRowKeys.map((key) => ({ title: key, id: key })));
   }, [bodyData]);
 
   return {
@@ -125,51 +106,41 @@ export const ModalLogic = ({
   modalList,
   setModalList,
 }: {
-  modalList: any;
-  setModalList: any;
+  modalList: any[];
+  setModalList: (value: any[]) => void;
 }) => {
   const { data: depoData } = useCQuery({
-    key: `GET_DEPO_LIST_FOR_TRANSFERS`,
-    endpoint: `http://10.40.14.193:8000/depo/?skip=0&limit=100`,
+    key: "GET_DEPO_LIST_FOR_TRANSFERS",
+    endpoint: `${API_URL}/depo/?skip=0&limit=100`,
     params: {},
   });
 
   const { data: dovizData } = useCQuery({
-    key: `GET_DOVIZ_LIST_FOR_TRANSFERS`,
-    endpoint: `http://10.40.14.193:8000/doviz/?skip=0&limit=100`,
+    key: "GET_DOVIZ_LIST_FOR_TRANSFERS",
+    endpoint: `${API_URL}/doviz/?skip=0&limit=100`,
     params: {},
   });
 
   const reorderItems = (array: any[], fromIndex: number, toIndex: number) => {
     if (fromIndex === toIndex) return array;
-
     const newArray = [...array];
     const [movedItem] = newArray.splice(fromIndex, 1);
     newArray.splice(toIndex, 0, movedItem);
-
-    return newArray?.map((item, index) => {
-      return {
-        ...item,
-        order: index + 1,
-      };
-    });
+    return newArray.map((item, index) => ({ ...item, order: index + 1 }));
   };
 
   const handleActionsModal = (val: string, element?: any) => {
     if (val === "edit_modal") {
       setModalList(
-        modalList?.map((item: any) => {
-          return {
-            ...item,
-            type: "edit",
-            id: element?.IRSALIYEID,
-            initial_order: item.order,
-            ...element,
-          };
-        })
+        modalList.map((item) => ({
+          ...item,
+          type: "edit",
+          id: element?.IRSALIYEID,
+          initial_order: item.order,
+          ...element,
+        }))
       );
     }
-
     if (val === "edit") {
       setModalList([
         ...modalList,
@@ -182,21 +153,13 @@ export const ModalLogic = ({
         },
       ]);
     }
-
     if (val === "close") {
-      setModalList(
-        modalList.filter((item: any) => item.order !== element.order)
-      );
+      setModalList(modalList.filter((item) => item.order !== element.order));
     }
-
     if (val === "reorder") {
-      const newModalList = reorderItems(
-        modalList,
-        element.order - 1,
-        modalList.length
+      setModalList(
+        reorderItems(modalList, element.order - 1, modalList.length)
       );
-
-      setModalList(newModalList);
     }
     if (val === "add") {
       setModalList([
@@ -210,33 +173,30 @@ export const ModalLogic = ({
     }
   };
 
-  const depoOptions = useMemo(() => {
-    return depoData?.data?.map((item: any) => {
-      return {
+  const depoOptions = useMemo(
+    () =>
+      depoData?.data?.map((item: any) => ({
         label: (
           <div className="flex space-x-2">
-            <span className="text-[var(--primary)]">{item.DEPOID}</span>,{" "}
+            <span className="text-[var(--primary)] w-[20%]">{item.DEPOID}</span>
+            <span>-</span>
             <span>{item.ADI}</span>
           </div>
         ),
         title: item.ADI,
         value: item.DEPOID,
-      };
-    });
-  }, [depoData]);
+      })) ?? [],
+    [depoData]
+  );
 
-  const dovizOptions = useMemo(() => {
-    return dovizData?.data?.map((item: any) => {
-      return {
+  const dovizOptions = useMemo(
+    () =>
+      dovizData?.data?.map((item: any) => ({
         label: item.DOVIZID,
         value: item.DOVIZID,
-      };
-    });
-  }, [dovizData]);
+      })) ?? [],
+    [dovizData]
+  );
 
-  return {
-    handleActionsModal,
-    depoOptions,
-    dovizOptions,
-  };
+  return { handleActionsModal, depoOptions, dovizOptions };
 };

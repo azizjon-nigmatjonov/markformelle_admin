@@ -60,7 +60,7 @@ const CNewTable = ({
   autoHeight = "",
   headColumns = [],
   bodyColumns = [],
-  clickable = true,
+  clickable = false,
   isLoading = false,
   passRouter = false,
   isResizeble = true,
@@ -598,7 +598,7 @@ const CNewTable = ({
                   {newHeadColumns?.map((column: any, index: number) => (
                     <CTableHeadCell
                       id={column?.id}
-                      key={column?.innerId || column?.id || index}
+                      key={column?.innerId || column?.id + index}
                       style={{
                         minWidth: tableSize?.[pageName]?.[column?.id]
                           ? tableSize?.[pageName]?.[column?.id]
@@ -722,7 +722,7 @@ const CNewTable = ({
                       >
                         {newHeadColumns.map((column: any, colIndex: number) => (
                           <CTableCell
-                            key={colIndex + column?.id || 12}
+                            key={colIndex + column?.id || colIndex}
                             className={`overflow-ellipsis`}
                             style={{
                               minWidth: "max-content",
@@ -787,10 +787,14 @@ const CNewTable = ({
                                 <div
                                   onDoubleClick={() => {
                                     if (
-                                      clickable &&
                                       column?.click !== "custom" &&
                                       column?.id !== "actions"
                                     ) {
+                                      tableActions(item, "view");
+                                    }
+                                  }}
+                                  onClick={() => {
+                                    if (clickable) {
                                       tableActions(item, "view");
                                     }
                                   }}
