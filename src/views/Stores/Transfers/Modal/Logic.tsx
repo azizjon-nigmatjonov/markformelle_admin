@@ -7,11 +7,11 @@ const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const FetchFunction = () => {
   const { data: urunType } = useQuery(["GET_URUN_TIPI"], () => {
-    return axios.get(`http://10.40.14.193:8000/uruntipi/?skip=0&limit=100`);
+    return axios.get(`${API_URL}/uruntipi/?skip=0&limit=100`);
   });
 
   const { data: depo } = useQuery(["DET_DEPO"], () => {
-    return axios.get(`http://10.40.14.193:8000/depo/?skip=0&limit=100`);
+    return axios.get(`${API_URL}/depo/?skip=0&limit=100`);
   });
 
   return {
@@ -30,7 +30,7 @@ export const FetchTable = ({
   const { data: birimler, isLoading } = useQuery(
     ["GET_BIRIMLER", filterParams],
     () => {
-      return axios.get(`http://10.40.14.193:8000/urunbirim/${id}`);
+      return axios.get(`${API_URL}/urunbirim/${id}`);
     },
     {
       enabled: !!id,
@@ -44,7 +44,7 @@ export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
   const { data: modal } = useQuery(
     ["GET_IRSALIYE_FOR_MODAL", id],
     () => {
-      return axios.get(`http://10.40.14.193:8000/irsaliye/${id}`);
+      return axios.get(`${API_URL}/irsaliye/${id}`);
     },
     {
       enabled: !!id,
@@ -54,7 +54,7 @@ export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
   const { data: modalTable, refetch } = useQuery(
     ["GET_IRSALIYE_TABLE", id],
     () => {
-      return axios.get(`http://10.40.14.193:8000/stokdetay/irsaliye/${id}`);
+      return axios.get(`${API_URL}/stokdetay/irsaliye/${id}`);
     },
     {
       enabled: !!id,
@@ -64,7 +64,7 @@ export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
   const { data: urunData } = useQuery(
     ["GET_URUN_FOR_IRSALIYE", urunId],
     () => {
-      return axios.get(`http://10.40.14.193:8000/urun/${urunId}`);
+      return axios.get(`${API_URL}/urun/${urunId}`);
     },
     {
       enabled: !!urunId,
@@ -105,13 +105,13 @@ export const InnerModalLogic = ({
   refetch: () => void;
 }) => {
   const [urunData, setUrunData]: any = useState({});
-  const [urunBirim, setUrunBirim]: any = useState({});
+  const [urunBirim, setUrunBirim]: any = useState([]);
   const getUrun = (filters: IFilterParams) => {
     axios
       .get(
-        `http://10.40.14.193:8000/urun/?skip=${filters.page}&limit=${
-          filters.perPage
-        }${filters?.q ? "&" + filters.q : ""}}`
+        `${API_URL}/urun/?skip=${filters.page}&limit=${filters.perPage}${
+          filters?.q ? "&" + filters.q : ""
+        }`
       )
       .then((res: any) => {
         setUrunData(res?.data);
@@ -119,24 +119,33 @@ export const InnerModalLogic = ({
   };
 
   const getUrunBirim = () => {
-    axios
-      .get(`http://10.40.14.193:8000/urunbirim/?skip=0&limit=100`)
-      .then((res: any) => {
-        const obj: any = {};
-        const arr = [];
-        for (let value of res?.data?.data) {
-          if (!(value.BIRIMID in obj)) {
-            obj[value.BIRIMID] = "";
-            arr.push(value);
-          }
+    axios.get(`${API_URL}/urunbirim/?skip=0&limit=100`).then((res: any) => {
+      const obj: any = {};
+      const arr = [];
+      for (let value of res?.data?.data) {
+        if (!(value.BIRIMID in obj)) {
+          obj[value.BIRIMID] = "";
+          arr.push(value);
         }
-        setUrunBirim(arr);
-      });
+      }
+      setUrunBirim(arr);
+    });
   };
 
   const createElement = async (params: any) => {
     try {
       const { data } = await axios.post(`${API_URL}/irsaliye/`, params);
+      await refetch();
+      return data;
+    } catch (error) {
+      console.error("Error creating element:", error);
+      return null;
+    }
+  };
+
+  const createStokElement = async (params: any) => {
+    try {
+      const { data } = await axios.post(`${API_URL}/stokdetay/`, params);
       await refetch();
       return data;
     } catch (error) {
@@ -157,5 +166,6 @@ export const InnerModalLogic = ({
     urunData,
     urunBirim,
     createElement,
+    createStokElement,
   };
 };

@@ -20,3 +20,8 @@ export const Validation = yup.object().shape({
   TRANSFERDEPOID: yup.string().nullable(),
   DOVIZID: yup.string().required("DOVIZID is required"),
 });
+
+export const ValidationInnerModal = yup.object().shape({
+  BIRIMID: yup.string().required("BIRIMID is required"),
+  
+});

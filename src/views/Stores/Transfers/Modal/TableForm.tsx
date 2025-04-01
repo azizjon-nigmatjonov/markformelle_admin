@@ -2,21 +2,15 @@ import { useForm } from "react-hook-form";
 import HFTextField from "../../../../components/HFElements/HFTextField";
 import HFInputMask from "../../../../components/HFElements/HFInputMask";
 import { SelectOptionsTable } from "../../../../components/UI/Options/Table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { InnerModalLogic } from "./Logic";
 import { CloseIcon } from "../../../../components/UI/IconGenerator/Svg";
 import { IFilterParams } from "../../../../interfaces";
-import { ITransferElement } from "../../../../interfaces/transfers";
-
-interface DefaultDataProps extends ITransferElement {
-  BARKODKODU?: string;
-  MIKTAR?: number;
-  BIRIMFIYAT?: number;
-}
+import dayjs from "dayjs";
 
 interface TableFormProps {
   setOpen: (val: boolean) => void;
-  defaultData?: DefaultDataProps;
+  defaultData?: Partial<any>;
   refetch: () => void;
 }
 interface FormData {
@@ -26,11 +20,12 @@ interface FormData {
   MIKTAR: number;
   URUNBIRIMID: number;
   BIRIMFIYAT: number;
+  BIRIMID: string;
 }
 
 export const TableForm = ({
   setOpen,
-  defaultData,
+  defaultData = {},
   refetch = () => {},
 }: TableFormProps) => {
   const [filterParams, setFilterParams] = useState<Partial<IFilterParams>>({
@@ -48,22 +43,25 @@ export const TableForm = ({
     mode: "onSubmit",
   });
 
-  const { urunData, urunBirim } = InnerModalLogic({ filterParams, refetch });
+  const { urunData, urunBirim, createStokElement } = InnerModalLogic({
+    filterParams,
+    refetch,
+  });
 
   const onSubmit = (data: any) => {
-    const params = {
+    let params: any = {
       STOKDETAYID: 0,
       STOKID: 0,
       HAREKETTIPI: 0,
       URUNID: "string",
       URUNBIRIMID: 0,
-      MIKTAR: 0,
+      MIKTAR: 100,
       BIRIMFIYAT: 0,
       KDV: 0,
       KDVHARICFIYAT: 0,
       BIRIMISKONTOTOPLAMI: 0,
       NETBIRIMFIYAT: 0,
-      TARIH: "2025-03-28T11:11:36.123Z",
+      TARIH: dayjs(),
       DEPOID: "string",
       TRANSFERDEPOID: "string",
       IRSALIYEID: 0,
@@ -73,15 +71,30 @@ export const TableForm = ({
       STOKVAR: false,
       LINKISLEMI: 0,
       INSERTKULLANICIID: 1,
-      INSERTTARIHI: "2025-03-28T11:11:36.123Z",
+      INSERTTARIHI: dayjs(),
       KULLANICIID: 1,
-      DEGISIMTARIHI: "2025-03-28T11:11:36.123Z",
+      DEGISIMTARIHI: dayjs(),
       GIRISSTOKDETAYID: 0,
       REFERANSSTOKDETAYID: 0,
-      ...data,
     };
-    console.log(params);
+    for (let key in defaultData) {
+      if (key in params) {
+        params[key] = defaultData[key];
+      }
+    }
+    params = { ...params, ...data };
+    params.URUNBIRIMID =
+      urunBirim.find((obj: any) => obj.BIRIMID === params.BIRIMID)
+        ?.URUNBIRIMID ?? 0;
+    params.MIKTAR = +params.MIKTAR;
+    params.BIRIMFIYAT = +params.BIRIMFIYAT;
+    createStokElement(params);
+    console.log("11", params);
   };
+
+  useEffect(() => {
+    console.log("defaultData", defaultData);
+  }, [defaultData]);
 
   return (
     <form
@@ -107,11 +120,12 @@ export const TableForm = ({
       <SelectOptionsTable
         name="URUNID"
         label="Urun kodi"
+        focused={true}
         placeholder="Urun kodi"
-        options={urunData?.data}
+        options={urunData?.data ?? []}
         required={true}
         headColumns={[
-          { id: "BARKOD", title: "BARKODI" },
+          { id: "BARKOD", width: 200, title: "BARKODI" },
           { id: "ADI", title: "ADIS", innerId: "URUNID" },
         ]}
         filterParams={filterParams}
@@ -120,6 +134,9 @@ export const TableForm = ({
           setValue("ADI", obj.ADI);
         }}
         control={control}
+        handleSearch={(val: string) => {
+          setFilterParams({ ...filterParams, q: val });
+        }}
         setFilterParams={setFilterParams}
       />
 
@@ -130,7 +147,7 @@ export const TableForm = ({
         options={urunData?.data}
         required={true}
         headColumns={[
-          { id: "BARKOD", title: "BARKODI" },
+          { id: "BARKOD", width: 200, title: "BARKODI" },
           { id: "ADI", title: "ADIS", innerId: "URUNID" },
         ]}
         filterParams={filterParams}
@@ -153,7 +170,7 @@ export const TableForm = ({
         />
         <div className="w-[90px]">
           <SelectOptionsTable
-            name="URUNBIRIMID"
+            name="BIRIMID"
             placeholder="Kg"
             options={urunBirim}
             required={true}
@@ -164,8 +181,10 @@ export const TableForm = ({
             ]}
             filterParams={filterParamsWeight}
             handleSelect={(obj: any) => {
-              setValue("URUNBIRIMID", obj.BIRIMID);
+              setValue("BIRIMID", obj.BIRIMID);
             }}
+            defaultValue={0}
+            readOnly={true}
             control={control}
             setFilterParams={setFilterParamsWeight}
           />

@@ -70,7 +70,6 @@ export const AdminFormWrapper = ({
           mask={"+\\9\\9\\8 99 999 99 99"}
           required={true}
           defaultValue={defaultValues?.phone}
-          setValue={setValue}
         />
 
         <HFMultipleSelect

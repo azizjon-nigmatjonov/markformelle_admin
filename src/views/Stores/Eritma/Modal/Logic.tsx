@@ -1,21 +1,22 @@
 import axios from "axios";
 import { useQuery } from "react-query";
+const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const FetchFunction = () => {
   const { data: urunType } = useQuery(["GET_URUN_TIPI"], () => {
-    return axios.get(`http://10.40.14.193:8000/uruntipi/?skip=0&limit=100`);
+    return axios.get(`${API_URL}/uruntipi/?skip=0&limit=100`);
   });
 
   const { data: depo } = useQuery(["DET_DEPO"], () => {
-    return axios.get(`http://10.40.14.193:8000/depo/?skip=0&limit=100`);
+    return axios.get(`${API_URL}/depo/?skip=0&limit=100`);
   });
 
   const { data: boyaTipi } = useQuery(["GET_BOYA_TIPI_FOR_URUN"], () => {
-    return axios.get(`http://10.40.14.193:8000/boyatipi/?skip=0&limit=100`);
+    return axios.get(`${API_URL}/boyatipi/?skip=0&limit=100`);
   });
 
   const { data: unite } = useQuery(["GET_INITE_FOR_URUN"], () => {
-    return axios.get(`http://10.40.14.193:8000/unite/?skip=0&limit=100`);
+    return axios.get(`${API_URL}/unite/?skip=0&limit=100`);
   });
 
   return {
@@ -48,7 +49,7 @@ export const FetchTable = ({
   const { data: birimler, isLoading } = useQuery(
     ["GET_BIRIMLER", filterParams],
     () => {
-      return axios.get(`http://10.40.14.193:8000/urunbirim/${id}`);
+      return axios.get(`${API_URL}/urunbirim/${id}`);
     },
     {
       enabled: !!id,

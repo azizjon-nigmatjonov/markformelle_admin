@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const breadCrumbs = [
   { label: "Остатки химикатов", link: "/chemical_store/chemical_stock" },
@@ -40,7 +41,7 @@ export const TableData = ({
 
     axios
       .get(
-        `http://10.40.14.193:8000/reports/stok-envanter-raporu/?ADepoId=D008&skip=${
+        `${API_URL}/reports/stok-envanter-raporu/?ADepoId=D008&skip=${
           filterParams.page < 2
             ? 0
             : (filterParams.page - 1) * filterParams.perPage

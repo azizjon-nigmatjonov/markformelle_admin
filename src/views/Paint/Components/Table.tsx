@@ -4,6 +4,7 @@ import CCard from "../../../components/CElements/CCard";
 import { Modal } from "@mui/joy";
 import { PaintCardModal } from "./Modal";
 import { GetCurrentDate } from "../../../utils/getDate";
+import { IFilterParams } from "../../../interfaces";
 interface Props {
   list: any;
 }

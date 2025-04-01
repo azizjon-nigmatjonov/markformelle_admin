@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const breadCrumbs = [
   { label: "Химикаты", link: "/chemical_store/chemicals" },
@@ -21,7 +22,7 @@ export const TableData = ({
   const deleteFn = (id: string | number) => {
     setIsLoading(true);
     axios
-      .delete(`http://10.40.14.193:8000/urun/${id}`)
+      .delete(`${API_URL}/urun/${id}`)
       .then((_: any) => {
         toast.success("Muvaffaqiyatli amalga oshirildi!");
       })
@@ -57,7 +58,7 @@ export const TableData = ({
 
     axios
       .get(
-        `http://10.40.14.193:8000/urun/?skip=${
+        `${API_URL}/urun/?skip=${
           filterParams.page < 2
             ? 0
             : (filterParams.page - 1) * filterParams.perPage

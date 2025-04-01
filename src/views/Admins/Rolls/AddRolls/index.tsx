@@ -15,6 +15,7 @@ import { Validation } from "./validate";
 import { useSelector } from "react-redux";
 import { StaticPermissions } from "../../../../constants/permissions";
 import _ from "lodash";
+import { IFilterParams } from "../../../../interfaces";
 
 const NewRolls = () => {
   const schema = Validation();
@@ -24,7 +25,10 @@ const NewRolls = () => {
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
-  const [filterParams, setFilterParams] = useState<IFilterParams>({});
+  const [filterParams, setFilterParams] = useState<IFilterParams>({
+    page: 1,
+    perPage: 100,
+  });
   const { rollData } = FetchFunction({ id });
   const { createRoll, updateRoll, isLoading } = CreateFunction({});
   const { breadCrumbsItems } = breadCrumbs({ id });

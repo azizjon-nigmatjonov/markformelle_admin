@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import CSelect from "../../../../components/CElements/CSelect";
 import { CheckBox } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
+import { IFilterParams } from "../../../../interfaces";
 
 export const TableUI = ({ defaultData = {} }: { defaultData: any }) => {
   const { control, setValue } = useForm({

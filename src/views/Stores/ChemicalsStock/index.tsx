@@ -3,6 +3,7 @@ import { breadCrumbs, ModalLogic, TableData } from "./Logic";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { Header } from "../../../components/UI/Header";
 import CNewTable from "../../../components/CElements/CNewTable";
+import { IFilterParams } from "../../../interfaces";
 
 export const ChemicalsStock = () => {
   const [modalList, setModalList]: any = useState([]);

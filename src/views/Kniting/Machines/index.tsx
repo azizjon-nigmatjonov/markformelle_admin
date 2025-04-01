@@ -9,6 +9,7 @@ import { ToggleBtn } from "../../../components/UI/ToggleBtn";
 import { sidebarActions } from "../../../store/sidebar";
 import GlobalSearch from "../../../components/UI/GlobalSearch";
 import { MachinesList } from "./Components/List";
+import { IFilterParams } from "../../../interfaces";
 
 const KnittingMachines = () => {
   const dispatch = useDispatch();

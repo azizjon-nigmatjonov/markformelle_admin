@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import CCard from "../../../components/CElements/CCard";
 import CTable from "../../../components/CElements/CTable";
+import { IFilterParams } from "../../../interfaces";
 
 interface Props {
   data: any;

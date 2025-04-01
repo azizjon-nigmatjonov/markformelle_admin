@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+const API_URL = import.meta.env.VITE_TEST_URL;
 
 interface Props {
   filterParams: any;
@@ -16,7 +17,7 @@ export const useIrsaliyeFetch = ({
 
     axios
       .get(
-        `http://10.40.14.193:8000/irsaliye/?skip=${
+        `${API_URL}irsaliye/?skip=${
           filterParams.page < 2
             ? 0
             : (filterParams.page - 1) * filterParams.perPage

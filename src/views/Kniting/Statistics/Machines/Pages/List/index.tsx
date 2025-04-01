@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { MachineConstantList } from "../../../../../../constants/machines";
 import { CList } from "../../../../../../components/CElements/CList";
 import usePageRouter from "../../../../../../hooks/useObjectRouter";
+import { IFilterParams } from "../../../../../../interfaces";
 
 export const MachineList = () => {
   const { t } = useTranslation();

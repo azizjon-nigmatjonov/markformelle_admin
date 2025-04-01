@@ -5,6 +5,7 @@ import { GetTranslations, HandleTable } from "./Logic";
 import CTable from "../../../components/CElements/CTable";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { usePermissions } from "../../../hooks/usePermissions";
+import { IFilterParams } from "../../../interfaces";
 const breadCrumbs = [
   { label: "Настройки", link: "/settings/language" },
   { label: "Языка" },

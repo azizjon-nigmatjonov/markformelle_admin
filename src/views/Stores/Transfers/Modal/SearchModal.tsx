@@ -3,6 +3,7 @@ import CNewModal from "../../../../components/CElements/CNewModal";
 import CNewTable from "../../../../components/CElements/CNewTable";
 import { TableData } from "../Logic";
 import { ListIcon } from "../../../../components/UI/IconGenerator/Svg";
+import { IFilterParams } from "../../../../interfaces";
 
 export const SearchModal = ({
   setData,

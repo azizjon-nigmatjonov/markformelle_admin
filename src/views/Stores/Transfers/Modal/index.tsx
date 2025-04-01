@@ -1,7 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Tooltip } from "@mui/material";
 import { SelectOptions } from "../../../../components/UI/Options";
-import { useIrsaliyeFetch } from "../../../../hooks/useIrsaliyeFetch";
 import { convertToISO } from "../../../../utils/getDate";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
@@ -61,16 +60,11 @@ export const ModalUI = ({
     setModalList,
     modalList,
   });
-  const { defaultData, tableData, headColumns, urunData, refetch } = FetchModal(
-    {
-      id: element.id,
-      urunId: selectedRow?.URUNID,
-    }
-  );
-  const [formData, setFormData]: any = useState({});
-  const { irsaliyeData } = useIrsaliyeFetch({
-    filterParams: { page: 1, perPage: 100 },
+  const { defaultData, tableData, headColumns, refetch } = FetchModal({
+    id: element.id,
+    urunId: selectedRow?.URUNID,
   });
+  const [formData, setFormData]: any = useState({});
 
   const { control, handleSubmit, setValue } = useForm<ITransferFormData>({
     mode: "onSubmit",
@@ -147,45 +141,24 @@ export const ModalUI = ({
       list={modalList}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="w-full">
-          <div className="grid grid-cols-4 gap-x-5 gap-y-2 pb-5">
+        <div className="w-full flex space-x-4">
+          <div className="grid grid-cols-3 gap-x-5 gap-y-2 pb-5 w-full">
             <div className="space-y-2">
               <FieldUI title="irsaliye no">
                 <div className="flex items-center space-x-2">
-                  <SelectOptions
+                  <HFTextField
+                    control={control}
                     name="IRSALIYENO"
-                    options={irsaliyeData?.data?.map((item: any) => {
-                      return {
-                        label: item.IRSALIYENO,
-                        title: item.IRSALIYENO,
-                        value: item.IRSALIYENO,
-                      };
-                    })}
-                    handleSelect={(val: any) => {
-                      setValue("IRSALIYENO", val);
-                      setFormData({ ...formData, IRSALIYENO: val.title });
-                    }}
-                    defaultValue={formData.IRSALIYENO}
+                    defaultValue={defaultData?.IRSALIYENO}
                   />
-                  <Tooltip title={formData.IRSALIYENO}>
-                    <HFTextField
-                      control={control}
-                      name="IRSALIYENO"
-                      defaultValue={defaultData?.IRSALIYENO}
-                    />
-                  </Tooltip>
                 </div>
               </FieldUI>
               <FieldUI title="tarih">
-                <div className="flex space-x-2">
-                  <div className="w-[20px]"></div>
-
-                  <HFTextField
-                    control={control}
-                    name="IRSALIYETARIHI"
-                    readOnly={true}
-                  />
-                </div>
+                <HFTextField
+                  control={control}
+                  name="IRSALIYETARIHI"
+                  readOnly={true}
+                />
               </FieldUI>
             </div>
 
@@ -252,15 +225,15 @@ export const ModalUI = ({
                 </div>
               </FieldUI>
             </div>
-            <div className="space-y-2 flex justify-end">
-              <button
-                className="custom-btn"
-                type="submit"
-                style={{ maxWidth: "100px" }}
-              >
-                Сохранить
-              </button>
-            </div>
+          </div>
+          <div className="space-y-2 flex justify-end">
+            <button
+              className="custom-btn"
+              type="submit"
+              style={{ maxWidth: "100px" }}
+            >
+              Сохранить
+            </button>
           </div>
         </div>
 
@@ -286,7 +259,7 @@ export const ModalUI = ({
             setOpen={setOpen}
             defaultData={{
               ...selectedRow,
-              URUNID: urunData?.URUNID,
+              ...defaultData,
             }}
             refetch={refetch}
           />

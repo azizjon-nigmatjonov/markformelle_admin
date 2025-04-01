@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import CTable from "../../../components/CElements/CTable";
 import CCard from "../../../components/CElements/CCard";
 import { GetCurrentDate } from "../../../utils/getDate";
+import { IFilterParams } from "../../../interfaces";
 interface Props {
   list: any;
 }
