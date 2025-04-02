@@ -191,7 +191,7 @@ const CNewModal: FC<Props> = ({
                     </button>
                   )}
                   <div>
-                    <IconButton>
+                    <IconButton onClick={() => handleActions("close", element)}>
                       <div className="w-[30px] h-[30px] items-center justify-center flex hover:bg-[var(--primary50)]">
                         <RemoveIcon className="text-[var(--main)]" />
                       </div>

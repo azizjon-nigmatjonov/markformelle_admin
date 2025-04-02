@@ -28,6 +28,7 @@ interface MaskInputUIProps {
   required?: boolean;
   maskRef?: React.Ref<HTMLInputElement>;
   type?: string;
+  error?: boolean;
 }
 
 export const MaskInputUI = ({
@@ -40,6 +41,7 @@ export const MaskInputUI = ({
   handleChange = () => {},
   maskRef,
   type = "text",
+  error = false,
 }: MaskInputUIProps) => {
   useEffect(() => {
     if (defaultValue) {
@@ -61,6 +63,7 @@ export const MaskInputUI = ({
       value={value}
       placeholder={placeholder}
       required={required}
+      style={{ borderColor: error ? "red" : "" }}
     />
   );
 };
@@ -105,8 +108,9 @@ const HFInputMask = ({
               handleChange={handleChange}
               defaultValue={defaultValue}
               type={type}
+              error={!!error?.message}
             />
-            {error?.message && (
+            {/* {error?.message && (
               <p
                 className={`text-sm text-[var(--error)] absolute ${
                   label ? "bottom-[-17px]" : "bottom-0"
@@ -114,7 +118,7 @@ const HFInputMask = ({
               >
                 {t(error.message)}
               </p>
-            )}
+            )} */}
           </>
         )}
       />

@@ -7,6 +7,9 @@ import { InnerModalLogic } from "./Logic";
 import { CloseIcon } from "../../../../components/UI/IconGenerator/Svg";
 import { IFilterParams } from "../../../../interfaces";
 import dayjs from "dayjs";
+import { Alert } from "@mui/material";
+import axios from "axios";
+const API_URL = import.meta.env.VITE_TEST_URL;
 
 interface TableFormProps {
   setOpen: (val: boolean) => void;
@@ -28,6 +31,11 @@ export const TableForm = ({
   defaultData = {},
   refetch = () => {},
 }: TableFormProps) => {
+  const [alettInfo, setAlertInfo]: any = useState({
+    title: "Осататка в складе",
+    type: "info",
+    amount: 0,
+  });
   const [filterParams, setFilterParams] = useState<Partial<IFilterParams>>({
     page: 1,
     perPage: 100,
@@ -39,61 +47,110 @@ export const TableForm = ({
     page: 1,
     perPage: 100,
   });
-  const { control, handleSubmit, setValue } = useForm<FormData>({
-    mode: "onSubmit",
-  });
-
-  const { urunData, urunBirim, createStokElement } = InnerModalLogic({
-    filterParams,
-    refetch,
-  });
+  const { control, handleSubmit, setValue, getValues, setError, clearErrors } =
+    useForm<FormData>({
+      mode: "onSubmit",
+    });
+  const { urunData, urunBirim, createStokElement, updateElement } =
+    InnerModalLogic({
+      filterParams,
+      filterParamsWeight,
+      refetch,
+      setOpen,
+    });
 
   const onSubmit = (data: any) => {
     let params: any = {
-      STOKDETAYID: 0,
-      STOKID: 0,
-      HAREKETTIPI: 0,
-      URUNID: "string",
-      URUNBIRIMID: 0,
-      MIKTAR: 100,
+      HAREKETTIPI: 5,
+      URUNID: "BY263",
+      URUNBIRIMID: 1288,
+      MIKTAR: 17,
       BIRIMFIYAT: 0,
-      KDV: 0,
-      KDVHARICFIYAT: 0,
-      BIRIMISKONTOTOPLAMI: 0,
-      NETBIRIMFIYAT: 0,
-      TARIH: dayjs(),
-      DEPOID: "string",
-      TRANSFERDEPOID: "string",
-      IRSALIYEID: 0,
-      FIRMAID: "string",
-      NOTU: "string",
-      CIKISMIKTARI: 0,
-      STOKVAR: false,
-      LINKISLEMI: 0,
+      DEPOID: "D003",
+      TRANSFERDEPOID: "D008",
+      IRSALIYEID: 5626,
+      FIRMAID: null,
+      NOTU: "",
+      STOKVAR: true,
       INSERTKULLANICIID: 1,
-      INSERTTARIHI: dayjs(),
       KULLANICIID: 1,
       DEGISIMTARIHI: dayjs(),
-      GIRISSTOKDETAYID: 0,
-      REFERANSSTOKDETAYID: 0,
     };
-    for (let key in defaultData) {
-      if (key in params) {
-        params[key] = defaultData[key];
-      }
-    }
+
+    params.IRSALIYEID = defaultData.IRSALIYEID;
+    params.DEPOID = defaultData.DEPOID;
+    params.TRANSFERDEPOID = defaultData.TRANSFERDEPOID;
+    params.INSERTTARIHI = defaultData.INSERTTARIHI;
+    params.TARIH = defaultData.IRSALIYETARIHI;
     params = { ...params, ...data };
     params.URUNBIRIMID =
       urunBirim.find((obj: any) => obj.BIRIMID === params.BIRIMID)
         ?.URUNBIRIMID ?? 0;
     params.MIKTAR = +params.MIKTAR;
     params.BIRIMFIYAT = +params.BIRIMFIYAT;
-    createStokElement(params);
-    console.log("11", params);
+    delete params.BIRIMID;
+    delete params.ADI;
+    delete params.IRSALIYETARIHI;
+
+    if (defaultData?.URUNID) {
+      updateElement(params, defaultData.STOKDETAYID);
+    } else {
+      createStokElement(params);
+    }
+  };
+
+  const checkAmount = (search: any) => {
+    const amount = +search;
+    const values = getValues();
+
+    const currentVal = amount / (values.BIRIMID === "Kg" ? 1 : 1000);
+
+    if (currentVal > alettInfo.amount) {
+      setError("MIKTAR", {
+        type: "manual",
+        message: "Incorrect username",
+      });
+    } else {
+      clearErrors(["MIKTAR"]);
+    }
+  };
+
+  const getDepoStock = (depoId: string, urunId: string) => {
+    if (!urunId) return;
+    axios.get(`${API_URL}/depostok/${depoId}/${urunId}`).then((res: any) => {
+      const stock = res?.data ?? {};
+      const weight = stock.ALIS - stock.DEPOYACIKAN;
+      const values = getValues();
+      if (weight) {
+        setAlertInfo({
+          title: `В осататка есть ${weight} ${values.BIRIMID}` + "",
+          type: "success",
+          amount: weight,
+        });
+      } else {
+        setAlertInfo({
+          title: `В осататка ${weight} ${values.BIRIMID}` + "",
+          type: "error",
+          amount: 0,
+        });
+      }
+    });
   };
 
   useEffect(() => {
-    console.log("defaultData", defaultData);
+    setValue("BIRIMID", urunBirim?.[0]?.BIRIMID ?? "Kg");
+    const values = getValues();
+
+    getDepoStock(defaultData.DEPOID, values.URUNID);
+  }, [urunBirim]);
+
+  useEffect(() => {
+    if (defaultData?.URUNID) {
+      setFilterParams({
+        ...filterParams,
+        q: `URUNID=${defaultData.URUNID.substring(3, -1)}`,
+      });
+    }
   }, [defaultData]);
 
   return (
@@ -114,7 +171,7 @@ export const TableForm = ({
         label="Barkod kodi"
         placeholder="Barkod kodu"
         setValue={setValue}
-        defaultValue={defaultData?.BARKODKODU}
+        defaultValue={defaultData?.BARKODKODI}
       />
 
       <SelectOptionsTable
@@ -132,12 +189,19 @@ export const TableForm = ({
         handleSelect={(obj: any) => {
           setValue("URUNID", obj.URUNID);
           setValue("ADI", obj.ADI);
+          setFilterParamsWeight({
+            ...filterParamsWeight,
+            q: filterParamsWeight?.q
+              ? filterParamsWeight.q + `&URUNID=${obj.URUNID}`
+              : `&URUNID=${obj.URUNID}`,
+          });
         }}
         control={control}
         handleSearch={(val: string) => {
           setFilterParams({ ...filterParams, q: val });
         }}
         setFilterParams={setFilterParams}
+        defaultValue={defaultData?.URUNID}
       />
 
       <SelectOptionsTable
@@ -154,6 +218,15 @@ export const TableForm = ({
         handleSelect={(obj: any) => {
           setValue("URUNID", obj.URUNID);
           setValue("ADI", obj.ADI);
+          setFilterParamsWeight({
+            ...filterParamsWeight,
+            q: filterParamsWeight?.q
+              ? filterParamsWeight.q + `&URUNID=${obj.URUNID}`
+              : `&URUNID=${obj.URUNID}`,
+          });
+        }}
+        handleSearch={(val: string) => {
+          setFilterParams({ ...filterParams, q: val });
         }}
         control={control}
         setFilterParams={setFilterParams}
@@ -167,11 +240,12 @@ export const TableForm = ({
           type="number"
           required={true}
           placeholder="Miktar"
+          handleChange={(val?: string) => checkAmount(val)}
+          defaultValue={defaultData?.MIKTAR}
         />
         <div className="w-[90px]">
           <SelectOptionsTable
             name="BIRIMID"
-            placeholder="Kg"
             options={urunBirim}
             required={true}
             headColumns={[
@@ -190,6 +264,7 @@ export const TableForm = ({
           />
         </div>
       </div>
+      <Alert severity={alettInfo.type}>{alettInfo.title}</Alert>
       <HFInputMask
         control={control}
         name="BIRIMFIYAT"
@@ -203,10 +278,10 @@ export const TableForm = ({
           type="button"
           onClick={() => setOpen(false)}
         >
-          cancel
+          Отменить
         </button>
         <button className="custom-btn save" type="submit">
-          Save
+          Сохранить
         </button>
       </div>
     </form>

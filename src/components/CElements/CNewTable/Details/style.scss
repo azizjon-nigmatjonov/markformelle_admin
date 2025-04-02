@@ -140,6 +140,9 @@
     &.effect {
       opacity: 100;
     }
+    &.without_animation {
+      opacity: 100;
+    }
   
     &.clickable {
       cursor: pointer;

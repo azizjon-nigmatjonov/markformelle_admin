@@ -79,6 +79,20 @@ export const SelectOptionsTable = ({
     }
   }, [focused]);
 
+  // useEffect(() => {
+  //   const handleKeyDown = (event: any) => {
+  //     if (event.key === "Escape") {
+  //       setOpen(false);
+  //     }
+  //     if (event.key === "F8") {
+  //       setOpen(!open);
+  //     }
+  //   };
+
+  //   window.addEventListener("keydown", handleKeyDown);
+  //   return () => window.removeEventListener("keydown", handleKeyDown);
+  // }, []);
+
   return (
     <div className="relative">
       {label && <CLabel title={label} required={required} />}
@@ -105,12 +119,13 @@ export const SelectOptionsTable = ({
                 ref={inputRef}
                 readOnly={readOnly}
                 onClick={() => setOpen(true)}
+                style={{ borderColor: error?.message ? "var(--error)" : "" }}
               />
-              {error?.message ? (
+              {/* {error?.message ? (
                 <p className="text-[var(--error)]">{error.message}</p>
               ) : (
                 ""
-              )}
+              )} */}
             </div>
           )}
         ></Controller>

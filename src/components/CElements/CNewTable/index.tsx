@@ -48,6 +48,7 @@ interface Props {
   autoHeight?: string;
   defaultFilters?: any;
   defaultSearch?: any;
+  animation?: boolean;
 }
 
 const CNewTable = ({
@@ -55,6 +56,7 @@ const CNewTable = ({
     totalCount: 0,
     pageCount: 0,
   },
+  animation = true,
   title = "",
   extra,
   autoHeight = "",
@@ -79,6 +81,7 @@ const CNewTable = ({
   const [currentIndex, setCurrentIndex] = useState(null);
   const [activeSort, setActiveSort] = useState(false);
   const dispatch = useDispatch();
+  const [effect, setEffect] = useState<string[]>([]);
   const { checkPermission } = usePermissions();
   const tableRef: any = useRef(null);
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
@@ -190,8 +193,6 @@ const CNewTable = ({
     setNewBodyColumns(result.length ? result : arr);
     result = [];
   }, [bodyColumns, activeSort, sortData.length]);
-
-  const [effect, setEffect] = useState<string[]>([]);
 
   const [bodySource, setBodySource]: any = useState([]);
 
@@ -709,7 +710,9 @@ const CNewTable = ({
                       <TableRow
                         key={item.index}
                         className={`group ${
-                          effect.includes(rowIndex) ? "effect" : ""
+                          effect.includes(rowIndex) && animation
+                            ? "effect"
+                            : "without_animation"
                         } ${
                           clickable && !item.empty && checkPermission("view")
                             ? "clickable"

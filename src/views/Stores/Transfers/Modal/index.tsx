@@ -60,10 +60,11 @@ export const ModalUI = ({
     setModalList,
     modalList,
   });
-  const { defaultData, tableData, headColumns, refetch } = FetchModal({
-    id: element.id,
-    urunId: selectedRow?.URUNID,
-  });
+  const { defaultData, tableData, headColumns, refetch, deleteElement } =
+    FetchModal({
+      id: element.id,
+      urunId: selectedRow?.URUNID,
+    });
   const [formData, setFormData]: any = useState({});
 
   const { control, handleSubmit, setValue } = useForm<ITransferFormData>({
@@ -102,12 +103,19 @@ export const ModalUI = ({
   };
 
   const handleActions = (el: ITransferElement, type: string) => {
-    if (type === "edit") {
+    if (type === "edit" || type === "view") {
       setOpen(true);
       setSelectedRow(el);
     }
 
-    if (type === "modal") setOpen(true);
+    if (type === "delete") {
+      deleteElement([el.STOKDETAYID]);
+    }
+
+    if (type === "modal") {
+      setOpen(true);
+      setSelectedRow(null);
+    }
   };
 
   useEffect(() => {
@@ -248,6 +256,7 @@ export const ModalUI = ({
             autoHeight={"440px"}
             disablePagination={true}
             idForTable="modal"
+            animation={false}
             handleFilterParams={setFilterParams}
           />
         </CollapseUI>
@@ -264,7 +273,10 @@ export const ModalUI = ({
             refetch={refetch}
           />
 
-          <div className="w-[100vw] h-[100vh] bg-[#00000044] fixed z-[91]"></div>
+          <div
+            className="w-[100vw] h-[100vh] bg-[#00000044] fixed z-[91]"
+            onClick={() => setOpen(false)}
+          ></div>
         </div>
       )}
     </CNewModal>

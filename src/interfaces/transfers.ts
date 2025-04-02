@@ -6,6 +6,7 @@ export interface ITransferElement {
   TRANSFERDEPOID?: string;
   DOVIZID?: string;
   URUNID?: string
+  STOKDETAYID?: string
 }
 
 export interface ITransferCreate {

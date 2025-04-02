@@ -71,6 +71,24 @@ export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
     }
   );
 
+  const deleteElement = async (id: any) => {
+    try {
+      const response = await axios.request({
+        method: "DELETE",
+        url: "http://10.40.14.193:8000/stokdetay/",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        data: id, // Array of IDs
+      });
+      refetch();
+      console.log("Deleted successfully:", response.data);
+    } catch (error) {
+      console.error("Error deleting items:", error);
+    }
+  };
+
   const headColumns = useMemo(() => {
     return [
       { id: "STOKDETAYID", title: "STOKDETAYID" },
@@ -94,15 +112,20 @@ export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
     headColumns,
     urunData: urunData?.data ?? {},
     refetch,
+    deleteElement,
   };
 };
 
 export const InnerModalLogic = ({
   filterParams = {},
+  filterParamsWeight = {},
   refetch = () => {},
+  setOpen = () => {},
 }: {
   filterParams?: any;
+  filterParamsWeight: any;
   refetch: () => void;
+  setOpen: (val: boolean) => void;
 }) => {
   const [urunData, setUrunData]: any = useState({});
   const [urunBirim, setUrunBirim]: any = useState([]);
@@ -118,24 +141,31 @@ export const InnerModalLogic = ({
       });
   };
 
-  const getUrunBirim = () => {
-    axios.get(`${API_URL}/urunbirim/?skip=0&limit=100`).then((res: any) => {
-      const obj: any = {};
-      const arr = [];
-      for (let value of res?.data?.data) {
-        if (!(value.BIRIMID in obj)) {
-          obj[value.BIRIMID] = "";
-          arr.push(value);
+  const getUrunBirim = (filters: any) => {
+    axios
+      .get(
+        `${API_URL}/urunbirim/?skip=0&limit=100${
+          filters?.q ? "&" + filters.q : ""
+        }`
+      )
+      .then((res: any) => {
+        const obj: any = {};
+        const arr = [];
+        for (let value of res?.data?.data) {
+          if (!(value.BIRIMID in obj)) {
+            obj[value.BIRIMID] = "";
+            arr.push(value);
+          }
         }
-      }
-      setUrunBirim(arr);
-    });
+        setUrunBirim(arr);
+      });
   };
 
   const createElement = async (params: any) => {
     try {
       const { data } = await axios.post(`${API_URL}/irsaliye/`, params);
       await refetch();
+
       return data;
     } catch (error) {
       console.error("Error creating element:", error);
@@ -147,6 +177,7 @@ export const InnerModalLogic = ({
     try {
       const { data } = await axios.post(`${API_URL}/stokdetay/`, params);
       await refetch();
+      setOpen(false);
       return data;
     } catch (error) {
       console.error("Error creating element:", error);
@@ -154,18 +185,25 @@ export const InnerModalLogic = ({
     }
   };
 
+  const updateElement = (params: any, id: string) => {
+    axios.put(`${API_URL}/stokdetay/${id}`, params).then(() => {
+      setOpen(false);
+    });
+  };
+
   useEffect(() => {
     getUrun(filterParams);
   }, [filterParams]);
 
   useEffect(() => {
-    getUrunBirim();
-  }, []);
+    getUrunBirim(filterParamsWeight);
+  }, [filterParamsWeight]);
 
   return {
     urunData,
     urunBirim,
     createElement,
     createStokElement,
+    updateElement,
   };
 };
