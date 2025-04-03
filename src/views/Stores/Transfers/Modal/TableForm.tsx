@@ -165,6 +165,7 @@ export const TableForm = ({
           <CloseIcon />
         </div>
       </div>
+
       <HFTextField
         control={control}
         name="BARKODKODU"
@@ -281,7 +282,7 @@ export const TableForm = ({
           Отменить
         </button>
         <button className="custom-btn save" type="submit">
-          Сохранить
+          {defaultData?.URUNID ? "Редикировать" : "Сохранить"}
         </button>
       </div>
     </form>

@@ -5,6 +5,7 @@ import { Header } from "../../../components/UI/Header";
 import CNewTable from "../../../components/CElements/CNewTable";
 import { ModalUI } from "./Modal";
 import { IFilterParams } from "../../../interfaces";
+import { GetCurrentDate } from "../../../utils/getDate";
 
 export const Transfers = () => {
   const [modalList, setModalList]: any = useState([]);
@@ -23,7 +24,15 @@ export const Transfers = () => {
     if (!bodyColumns?.length) return [];
     const obj = { ...bodyColumns?.[0] };
     const keys = Object.keys(obj);
-    const newColumns: any = [];
+    const newColumns: any = [
+      {
+        id: "INSERTTARIHI",
+        title: "INSERTTARIHI",
+        render: (val: string) => {
+          return GetCurrentDate({ date: val, type: "string" });
+        },
+      },
+    ];
 
     keys.forEach((key: string) => {
       newColumns.push({ title: key, id: key });
@@ -63,6 +72,7 @@ export const Transfers = () => {
           setModalList={setModalList}
           modalList={modalList}
           createElement={createElement}
+          irsaliyaNo={bodyColumns?.[0]?.IRSALIYEID || 9000}
         />
       ) : (
         ""

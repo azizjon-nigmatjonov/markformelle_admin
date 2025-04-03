@@ -33,7 +33,7 @@ export const TableData = ({
       const { data } = await axios.get(
         `${API_URL}/irsaliye/?skip=${
           filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
-        }&limit=${filters.perPage}${
+        }&limit=${filters.perPage}&HAREKETTIPI=5${
           filters?.DATE_FROM
             ? `&DATE_FROM=${filters.DATE_FROM}&DATE_TO=${filters.DATE_TO}`
             : ""
@@ -106,15 +106,29 @@ export const TableData = ({
 export const ModalLogic = ({
   modalList,
   setModalList,
+  filterParamsDepo = {},
 }: {
+  filterParamsDepo?: any;
   modalList: any[];
   setModalList: (value: any[]) => void;
 }) => {
-  const { data: depoData } = useCQuery({
-    key: "GET_DEPO_LIST_FOR_TRANSFERS",
-    endpoint: `${API_URL}/depo/?skip=0&limit=100`,
-    params: {},
-  });
+  const [depoData, setDepoData]: any = useState({});
+  const getDepoData = (filters: any) => {
+    if (!filters?.page) return;
+    axios
+      .get(
+        `${API_URL}/depo/?skip=${filters.page}&limit=${filters.perPage}${
+          filters?.q ? "&" + filters.q : ""
+        }`
+      )
+      .then((res: any) => {
+        setDepoData(res?.data);
+      });
+  };
+
+  useEffect(() => {
+    getDepoData(filterParamsDepo);
+  }, [filterParamsDepo?.page, filterParamsDepo]);
 
   const { data: dovizData } = useCQuery({
     key: "GET_DOVIZ_LIST_FOR_TRANSFERS",
@@ -174,22 +188,6 @@ export const ModalLogic = ({
     }
   };
 
-  const depoOptions = useMemo(
-    () =>
-      depoData?.data?.map((item: any) => ({
-        label: (
-          <div className="flex space-x-2">
-            <span className="text-[var(--primary)] w-[20%]">{item.DEPOID}</span>
-            <span>-</span>
-            <span>{item.ADI}</span>
-          </div>
-        ),
-        title: item.ADI,
-        value: item.DEPOID,
-      })) ?? [],
-    [depoData]
-  );
-
   const dovizOptions = useMemo(
     () =>
       dovizData?.data?.map((item: any) => ({
@@ -199,5 +197,9 @@ export const ModalLogic = ({
     [dovizData]
   );
 
-  return { handleActionsModal, depoOptions, dovizOptions };
+  return {
+    handleActionsModal,
+    depoOptions: depoData?.data,
+    dovizOptions,
+  };
 };

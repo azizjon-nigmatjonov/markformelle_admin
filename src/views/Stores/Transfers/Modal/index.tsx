@@ -1,10 +1,6 @@
 import { ReactNode, useEffect, useState } from "react";
-import { Tooltip } from "@mui/material";
-import { SelectOptions } from "../../../../components/UI/Options";
-import { convertToISO } from "../../../../utils/getDate";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
-  ITransferCreate,
   ITransferElement,
   ITransferFormData,
 } from "../../../../interfaces/transfers";
@@ -20,6 +16,7 @@ import CNewTable from "../../../../components/CElements/CNewTable";
 import { IFilterParams } from "../../../../interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Validation } from "./Validate";
+import { SelectOptionsTable } from "../../../../components/UI/Options/Table";
 const schema = Validation;
 
 const FieldUI = ({
@@ -43,29 +40,39 @@ export const ModalUI = ({
   modalList = [],
   setModalList = () => {},
   createElement = () => {},
+  irsaliyaNo,
 }: {
   element: Partial<ITransferElement>;
   setModalList: (list: ITransferElement[]) => void;
   modalList: ITransferElement[];
+  irsaliyaNo: number;
   createElement: (val: ITransferElement) => void;
 }) => {
   const [open, setOpen] = useState(false);
+
   const [tableOpen, setTableOpen] = useState(!!element.id);
   const [selectedRow, setSelectedRow] = useState<ITransferElement | null>(null);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
   });
+  const [filterParamsDepo, setFilterParamsDepo] = useState<
+    Partial<IFilterParams>
+  >({
+    page: 1,
+    perPage: 100,
+    q: "",
+  });
   const { handleActionsModal, depoOptions, dovizOptions } = ModalLogic({
     setModalList,
     modalList,
+    filterParamsDepo,
   });
   const { defaultData, tableData, headColumns, refetch, deleteElement } =
     FetchModal({
       id: element.id,
       urunId: selectedRow?.URUNID,
     });
-  const [formData, setFormData]: any = useState({});
 
   const { control, handleSubmit, setValue } = useForm<ITransferFormData>({
     mode: "onSubmit",
@@ -73,7 +80,7 @@ export const ModalUI = ({
   });
 
   const onSubmit: SubmitHandler<ITransferFormData> = (data) => {
-    const params: Partial<ITransferCreate> = {
+    const params: Partial<any> = {
       HAREKETTIPI: 5,
       FIRMAID: null,
       NOTU: "",
@@ -90,16 +97,15 @@ export const ModalUI = ({
         : undefined,
       DOVIZID: data.DOVIZID ? String(data.DOVIZID) : undefined,
     };
+    console.log("INSERTTARIHI", dayjs(params.INSERTTARIHI));
 
-    if (params.INSERTTARIHI) {
-      params.INSERTTARIHI = convertToISO(params.INSERTTARIHI);
-    }
-    if (params.IRSALIYETARIHI) {
-      params.IRSALIYETARIHI = convertToISO(params.IRSALIYETARIHI);
-    }
+    params.INSERTTARIHI = dayjs();
+    params.FIILISEVKTARIHI = dayjs();
+
+    params.IRSALIYETARIHI = dayjs();
 
     const response: any = createElement(params);
-    if (response?.id) setTableOpen(true);
+    if (response) setTableOpen(true);
   };
 
   const handleActions = (el: ITransferElement, type: string) => {
@@ -138,6 +144,16 @@ export const ModalUI = ({
     }
   }, [defaultData]);
 
+  useEffect(() => {
+    if (defaultData?.DEPOID) {
+      setValue("DEPOID", defaultData.DEPOID);
+      setValue("TRANSFERDEPOID", defaultData.TRANSFERDEPOID);
+      setValue("IRSALIYENO", defaultData.IRSALIYEID);
+    } else {
+      setValue("IRSALIYENO", irsaliyaNo + 1 + "");
+    }
+  }, [defaultData, irsaliyaNo]);
+
   return (
     <CNewModal
       title={`Документ перемещения ${
@@ -157,7 +173,7 @@ export const ModalUI = ({
                   <HFTextField
                     control={control}
                     name="IRSALIYENO"
-                    defaultValue={defaultData?.IRSALIYENO}
+                    defaultValue={defaultData?.IRSALIYEID}
                   />
                 </div>
               </FieldUI>
@@ -172,65 +188,64 @@ export const ModalUI = ({
 
             <div className="space-y-2">
               <FieldUI title="Depo no">
-                <div className="flex items-center space-x-2">
-                  <SelectOptions
-                    name="DEPOID"
-                    options={depoOptions}
-                    handleSelect={(val: any) => {
-                      setValue("DEPOID", val);
-                      setFormData({ ...formData, DEPOID: val.title });
-                    }}
-                    defaultValue={formData.DEPOID}
-                  />
-                  <Tooltip title={formData?.DEPOID}>
-                    <HFTextField
-                      control={control}
-                      name="DEPOID"
-                      defaultValue={defaultData?.DEPOID}
-                    />
-                  </Tooltip>
-                </div>
+                <SelectOptionsTable
+                  name="DEPOID"
+                  placeholder="Depo no"
+                  options={depoOptions}
+                  required={true}
+                  headColumns={[
+                    { id: "DEPOID", width: 200, title: "DEPOID" },
+                    { id: "ADI", title: "ADI" },
+                  ]}
+                  filterParams={filterParams}
+                  handleSelect={(obj: any) => {
+                    setValue("DEPOID", obj.DEPOID);
+                  }}
+                  handleSearch={(val: string) => {
+                    setFilterParamsDepo({ ...filterParamsDepo, q: val });
+                  }}
+                  control={control}
+                  setFilterParams={setFilterParams}
+                />
               </FieldUI>
               <FieldUI title="doviz cinsi">
-                <div className="flex space-x-2">
-                  <div className="w-[20px]"></div>
-                  <HFSelect
-                    name="DOVIZID"
-                    control={control}
-                    options={dovizOptions}
-                    defaultValue="USD"
-                  />
-                </div>
+                <HFSelect
+                  name="DOVIZID"
+                  control={control}
+                  options={dovizOptions}
+                  defaultValue="USD"
+                />
               </FieldUI>
             </div>
 
             <div className="space-y-2">
               <FieldUI title="Transfer depo no">
-                <div className="flex items-center space-x-2">
-                  <SelectOptions
-                    name="TRANSFERDEPOID"
-                    options={depoOptions}
-                    handleSelect={(val: any) => {
-                      setValue("TRANSFERDEPOID", val);
-                      setFormData({ ...formData, TRANSFERDEPOID: val.title });
-                    }}
-                    defaultValue={formData.TRANSFERDEPOID}
-                  />
-                  <Tooltip title={formData.TRANSFERDEPOID}>
-                    <HFTextField control={control} name="TRANSFERDEPOID" />
-                  </Tooltip>
-                </div>
+                <SelectOptionsTable
+                  name="TRANSFERDEPOID"
+                  placeholder="Transfer depo no"
+                  options={depoOptions}
+                  required={true}
+                  headColumns={[
+                    { id: "DEPOID", width: 200, title: "DEPOID" },
+                    { id: "ADI", title: "ADI" },
+                  ]}
+                  filterParams={filterParams}
+                  handleSelect={(obj: any) => {
+                    setValue("TRANSFERDEPOID", obj.DEPOID);
+                  }}
+                  handleSearch={(val: string) => {
+                    setFilterParamsDepo({ ...filterParamsDepo, q: val });
+                  }}
+                  control={control}
+                  setFilterParams={setFilterParams}
+                />
               </FieldUI>
               <FieldUI title="sevik tarihi">
-                <div className="flex space-x-2">
-                  <div className="w-[20px]"></div>
-
-                  <HFTextField
-                    control={control}
-                    name="INSERTTARIHI"
-                    readOnly={true}
-                  />
-                </div>
+                <HFTextField
+                  control={control}
+                  name="INSERTTARIHI"
+                  readOnly={true}
+                />
               </FieldUI>
             </div>
           </div>
@@ -245,21 +260,25 @@ export const ModalUI = ({
           </div>
         </div>
 
-        <CollapseUI title="Таблица" defaultOpen={tableOpen}>
-          <CNewTable
-            title="Примешенныей"
-            headColumns={headColumns}
-            bodyColumns={tableData?.data ?? []}
-            handleActions={handleActions}
-            isLoading={false}
-            filterParams={filterParams}
-            autoHeight={"440px"}
-            disablePagination={true}
-            idForTable="modal"
-            animation={false}
-            handleFilterParams={setFilterParams}
-          />
-        </CollapseUI>
+        {tableOpen ? (
+          <CollapseUI title="Таблица" defaultOpen={tableOpen}>
+            <CNewTable
+              title="Примешенныей"
+              headColumns={headColumns}
+              bodyColumns={tableData?.data ?? []}
+              handleActions={handleActions}
+              isLoading={false}
+              filterParams={filterParams}
+              autoHeight={"440px"}
+              disablePagination={true}
+              idForTable="modal"
+              animation={false}
+              handleFilterParams={setFilterParams}
+            />
+          </CollapseUI>
+        ) : (
+          ""
+        )}
       </form>
 
       {open && (
