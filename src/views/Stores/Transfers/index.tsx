@@ -26,16 +26,18 @@ export const Transfers = () => {
     const keys = Object.keys(obj);
     const newColumns: any = [
       {
-        id: "INSERTTARIHI",
-        title: "INSERTTARIHI",
+        id: "IRSALIYETARIHI",
+        title: "IRSALIYETARIHI",
         render: (val: string) => {
-          return GetCurrentDate({ date: val, type: "string" });
+          return GetCurrentDate({ date: val, type: "date" });
         },
       },
     ];
 
     keys.forEach((key: string) => {
-      newColumns.push({ title: key, id: key });
+      if (!newColumns.find((item: { id: string }) => item.id === key)) {
+        newColumns.push({ title: key, id: key });
+      }
     });
 
     return newColumns;

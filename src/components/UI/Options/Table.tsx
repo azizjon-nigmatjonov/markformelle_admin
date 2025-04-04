@@ -18,6 +18,7 @@ interface Props {
   readOnly?: boolean;
   secondName?: string;
   focused?: boolean;
+  disabled?: boolean;
   handleSearch?: (val: string) => void;
   setFilterParams: (val: any) => void;
 }
@@ -36,6 +37,7 @@ export const SelectOptionsTable = ({
   readOnly = false,
   secondName = "",
   focused = false,
+  disabled,
   handleSearch = () => {},
   setFilterParams = () => {},
 }: Props) => {
@@ -96,8 +98,17 @@ export const SelectOptionsTable = ({
   return (
     <div className="relative">
       {label && <CLabel title={label} required={required} />}
-      <div className="flex items-center w-full border border-[var(--border)] relative rounded-[8px] h-[35px] p-2">
-        <div className="cursor-pointer" onClick={() => setOpen(true)}>
+      <div
+        className={`flex items-center w-full border border-[var(--border)] relative rounded-[8px] h-[35px] p-2 ${
+          disabled ? "bg-[var(--border)]" : ""
+        }`}
+      >
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            if (!disabled) setOpen(true);
+          }}
+        >
           <SearchIcon width={16} />
         </div>
 
@@ -116,9 +127,10 @@ export const SelectOptionsTable = ({
                   onChange(e.target.value);
                   setSearch(e.target.value);
                 }}
+                disabled={disabled}
                 ref={inputRef}
                 readOnly={readOnly}
-                onClick={() => setOpen(true)}
+                // onClick={() => setOpen(true)}
                 style={{ borderColor: error?.message ? "var(--error)" : "" }}
               />
               {/* {error?.message ? (

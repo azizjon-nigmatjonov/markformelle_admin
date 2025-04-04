@@ -109,7 +109,15 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
 
     return (
       <div className="flex items-center space-x-2 uppercase w-full justify-center">
-        <span>{val}</span>
+        <span className="font-medium">
+          {val === "ru"
+            ? "Русский"
+            : val === "uz"
+            ? "O'zbekcha"
+            : val === "key"
+            ? "Key"
+            : "English"}
+        </span>
         <span className="text-2xl">{icon}</span>
       </div>
     );
@@ -181,28 +189,19 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
 
 export const GetTranslations = ({
   setListTable,
+  setCount,
 }: {
   setListTable: (val: any) => void;
+  setCount: (val: number) => void;
 }) => {
   const { isLoading, refetch } = useCQuery({
     key: "resources_translations",
-    endpoint: "http://192.168.181.29:3000/translations",
+    endpoint: "http://10.40.14.193:8000/translation/",
     params: { type: "" },
     options: {
-      onSuccess: (data: any) => {
-        const arr: any = [];
-        for (let key in data.ru) {
-          const obj = {
-            id: arr.length + 1,
-            name: key,
-            key,
-            ru: data.ru[key] || "",
-            uz: data.uz[key] || "",
-            en: data.en[key] || "",
-          };
-          arr.push(obj);
-        }
-        setListTable(arr);
+      onSuccess: (res: any) => {
+        setListTable(res?.data);
+        setCount(res?.count);
       },
     },
   });

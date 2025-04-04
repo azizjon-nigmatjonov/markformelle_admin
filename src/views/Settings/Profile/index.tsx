@@ -4,11 +4,11 @@ import CImageUpload from "../../../components/CElements/CImageUpload";
 import HFTextField from "../../../components/HFElements/HFTextField";
 import HFInputMask from "../../../components/HFElements/HFInputMask";
 import CustomBtn from "../../../components/CElements/CustomBtn";
-import { EditIcon, LogoutIcon } from "../../../components/UI/IconGenerator/Svg";
+import { LogoutIcon } from "../../../components/UI/IconGenerator/Svg";
 import { useState } from "react";
 import CModal from "../../../components/CElements/CModal";
 import CancelButton from "../../../components/UI/Buttons/Cancel";
-import { usePermissions } from "../../../hooks/usePermissions";
+// import { usePermissions } from "../../../hooks/usePermissions";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../../store/auth/auth.slice";
 import { useTranslation } from "react-i18next";
@@ -49,7 +49,7 @@ const Profile = () => {
   } = useForm({
     mode: "onSubmit",
   });
-  const { checkPermission } = usePermissions();
+  // const { checkPermission } = usePermissions();
   const { navigateTo } = usePageRouter();
   const Logout = () => {
     dispatch(authActions.logout());
@@ -150,7 +150,7 @@ const Profile = () => {
           )}
         </CCard>
 
-        <div className="flex justify-end">
+        {/* <div className="flex justify-end">
           <div className="mt-5 inline-block">
             <button
               type="submit"
@@ -162,7 +162,7 @@ const Profile = () => {
               <span className="ml-2">{t("edit")}</span>
             </button>
           </div>
-        </div>
+        </div> */}
 
         <CModal
           open={logout}

@@ -1,7 +1,6 @@
 import axios from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
-import { GetCurrentDate } from "../../../../utils/getDate";
 import { IFilterParams } from "../../../../interfaces";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
@@ -89,27 +88,10 @@ export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
     }
   };
 
-  const headColumns = useMemo(() => {
-    return [
-      { id: "STOKDETAYID", title: "STOKDETAYID" },
-      { id: "URUNID", title: "URUNID" },
-      { id: "URUNBIRIMID", title: "URUNBIRIMID" },
-      { id: "KULLANICIID", title: "KULLANICIID" },
-      { id: "MIKTAR", title: "MIKTAR" },
-      {
-        id: "DEGISIMTARIHI",
-        title: "DEGISIMTARIHI",
-        render: (val: string) => {
-          return GetCurrentDate({ type: "usually", date: val });
-        },
-      },
-    ];
-  }, []);
-
   return {
     defaultData: modal?.data,
     tableData: modalTable?.data,
-    headColumns,
+
     urunData: urunData?.data ?? {},
     refetch,
     deleteElement,

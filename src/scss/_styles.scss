@@ -262,11 +262,10 @@ input {
   width: 100%;
   white-space: nowrap;
   text-align: center;
-  font-weight: 500;
+  font-weight: 400;
   @include center-center;
-  @include common-shadow;
   position: relative;
-  font-size: 12px;
+  font-size: 13px;
 
   &.form {
     height: 35px;
@@ -283,7 +282,8 @@ input {
 
   &.disabled {
     background-color: var(--border);
-    color: var(--black);
+    color: var(--gray);
+
   }
 }
 
@@ -314,11 +314,16 @@ input {
 }
 
 .custom-btn.success {
-  background-color: var(--green);
+  background-color: var(--success);
+
 }
 
 .custom-btn.save {
   background-color: var(--main);
+}
+
+.custom-btn.create {
+  background-color: var(--primary);
 }
 
 .success-btn {
@@ -651,7 +656,7 @@ input {
 
 .input-design {
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: 8px;
   padding: 0px 12px;
   height: 35px;
   &:focus {

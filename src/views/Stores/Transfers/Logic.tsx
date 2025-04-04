@@ -45,10 +45,18 @@ export const TableData = ({
     }
   };
 
-  const deleteFn = async (id: string | number) => {
+  const deleteFn = async (id: [string]) => {
     setIsLoading(true);
     try {
-      await axios.delete(`${API_URL}/irsaliye/${id}`);
+      await axios.delete(`${API_URL}/irsaliye/`, {
+        method: "DELETE",
+        url: "http://10.40.14.193:8000/stokdetay/",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        data: id,
+      });
       toast.success("Muvaffaqiyatli amalga oshirildi!");
       getList(filterParams);
     } catch (error) {
@@ -63,10 +71,14 @@ export const TableData = ({
       handleActionsModal("edit", el);
     }
     if (status === "delete") {
-      deleteFn(el.IRSALIYEID);
+      deleteFn([el.IRSALIYEID]);
     }
     if (status === "delete_multiple") {
-      toast.success("Muvaffaqiyatli amalga oshirildi!");
+      deleteFn(
+        el.map((item: { IRSALIYEID: string }) => {
+          return item.IRSALIYEID;
+        })
+      );
     }
   };
 

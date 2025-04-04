@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
   ITransferElement,
@@ -17,6 +17,7 @@ import { IFilterParams } from "../../../../interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Validation } from "./Validate";
 import { SelectOptionsTable } from "../../../../components/UI/Options/Table";
+import { convertToISO, GetCurrentDate } from "../../../../utils/getDate";
 const schema = Validation;
 
 const FieldUI = ({
@@ -68,11 +69,10 @@ export const ModalUI = ({
     modalList,
     filterParamsDepo,
   });
-  const { defaultData, tableData, headColumns, refetch, deleteElement } =
-    FetchModal({
-      id: element.id,
-      urunId: selectedRow?.URUNID,
-    });
+  const { defaultData, tableData, refetch, deleteElement } = FetchModal({
+    id: element.id,
+    urunId: selectedRow?.URUNID,
+  });
 
   const { control, handleSubmit, setValue } = useForm<ITransferFormData>({
     mode: "onSubmit",
@@ -97,12 +97,12 @@ export const ModalUI = ({
         : undefined,
       DOVIZID: data.DOVIZID ? String(data.DOVIZID) : undefined,
     };
-    console.log("INSERTTARIHI", dayjs(params.INSERTTARIHI));
 
     params.INSERTTARIHI = dayjs();
     params.FIILISEVKTARIHI = dayjs();
+    console.log("11", dayjs().format("DD.MM.YYYY"));
 
-    params.IRSALIYETARIHI = dayjs();
+    params.IRSALIYETARIHI = convertToISO(dayjs().format("DD.MM.YYYY"));
 
     const response: any = createElement(params);
     if (response) setTableOpen(true);
@@ -143,6 +143,7 @@ export const ModalUI = ({
       setValue("INSERTTARIHI", dayjs().format("DD.MM.YYYY HH:MM"));
     }
   }, [defaultData]);
+  console.log("defaultData 1", defaultData);
 
   useEffect(() => {
     if (defaultData?.DEPOID) {
@@ -153,6 +154,25 @@ export const ModalUI = ({
       setValue("IRSALIYENO", irsaliyaNo + 1 + "");
     }
   }, [defaultData, irsaliyaNo]);
+  const headColumns = useMemo(() => {
+    return [
+      { id: "STOKDETAYID", title: "STOKDETAYID", width: 80 },
+      { id: "URUNID", title: "URUNID" },
+      { id: "URUNADI", title: "URUN +ADI" },
+      { id: "MIKTAR", title: "MIKTAR" },
+      { id: "URUNBIRIMADI", title: "URUNBIRIM ADI" },
+      { id: "URUNTIPIADI", title: "URUNTIPI ADI" },
+      { id: "KULLANICIADI", title: "KULLANICI ADI" },
+
+      {
+        id: "DEGISIMTARIHI",
+        title: "DEGISIMTARIHI",
+        render: (val: string) => {
+          return GetCurrentDate({ type: "usually", date: val });
+        },
+      },
+    ];
+  }, []);
 
   return (
     <CNewModal
@@ -206,6 +226,7 @@ export const ModalUI = ({
                   }}
                   control={control}
                   setFilterParams={setFilterParams}
+                  disabled={tableOpen}
                 />
               </FieldUI>
               <FieldUI title="doviz cinsi">
@@ -238,6 +259,7 @@ export const ModalUI = ({
                   }}
                   control={control}
                   setFilterParams={setFilterParams}
+                  disabled={tableOpen}
                 />
               </FieldUI>
               <FieldUI title="sevik tarihi">
@@ -251,17 +273,21 @@ export const ModalUI = ({
           </div>
           <div className="space-y-2 flex justify-end">
             <button
-              className="custom-btn"
-              type="submit"
+              className={`custom-btn ${tableOpen ? "disabled" : ""}`}
+              type={tableOpen ? "button" : "submit"}
               style={{ maxWidth: "100px" }}
             >
-              Сохранить
+              Создавать
             </button>
           </div>
         </div>
 
         {tableOpen ? (
-          <CollapseUI title="Таблица" defaultOpen={tableOpen}>
+          <CollapseUI
+            title="Содержание документа"
+            defaultOpen={tableOpen}
+            disabled={true}
+          >
             <CNewTable
               title="Примешенныей"
               headColumns={headColumns}

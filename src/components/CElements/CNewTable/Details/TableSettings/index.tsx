@@ -218,18 +218,27 @@ export const HeaderSettings = ({
             )}
             {defaultFilters.includes("delete") && (
               <div className="relative">
-                <IconButton onClick={() => setOpenDelete(true)}>
-                  <div className="w-[30px] h-[30px] items-center justify-center flex">
-                    <DeleteIcon fill="var(--main)" width={18} />
-                  </div>
-                  <p className="text-sm pr-2 text-black">Удалить</p>
-                </IconButton>
+                {selectedItems?.length ? (
+                  <IconButton onClick={() => setOpenDelete(true)}>
+                    <div className="w-[30px] h-[30px] items-center justify-center flex">
+                      <DeleteIcon fill="var(--main)" width={18} />
+                    </div>
+                    <p className="text-sm pr-2 text-black">Удалить</p>
+                  </IconButton>
+                ) : (
+                  ""
+                )}
                 {openDelete && (
                   <PopoverDelete
                     closePopover={(status) => {
                       setOpenDelete(false);
                       if (status)
-                        tableActions(selectedItems, "delete_multiple");
+                        tableActions(
+                          bodyColumns.filter((item: any) =>
+                            selectedItems.includes(item.index - 1)
+                          ),
+                          "delete_multiple"
+                        );
                     }}
                   />
                 )}

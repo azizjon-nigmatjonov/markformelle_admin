@@ -6,11 +6,13 @@ export const CollapseUI = ({
   title,
   border = true,
   defaultOpen = true,
+  disabled = false,
 }: {
   children: ReactNode;
   title: string;
   defaultOpen?: boolean;
   border?: boolean;
+  disabled?: boolean;
 }) => {
   const [open, setOpen] = useState(true);
   useEffect(() => {
@@ -19,13 +21,19 @@ export const CollapseUI = ({
   return (
     <div className="pb-5">
       <div
-        className="flex items-center space-x-2 mt-2 pb-1 cursor-pointer"
-        onClick={() => setOpen((prev) => !prev)}
+        className="flex items-center space-x-2 mt-2 pb-1"
+        onClick={() => {
+          !disabled ? setOpen((prev) => !prev) : "";
+        }}
       >
         <h3 className="text-[14px] ">{title}</h3>
-        <button>
-          {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-        </button>
+        {disabled ? (
+          ""
+        ) : (
+          <button>
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </button>
+        )}
       </div>
       {border ? (
         <div className="bg-[var(--border)] h-[1px] w-full mb-3"></div>

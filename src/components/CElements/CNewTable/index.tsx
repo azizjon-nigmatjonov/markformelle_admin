@@ -415,12 +415,15 @@ const CNewTable = ({
       setItems(arr);
     } else {
       setItems(headColumns);
-      setNewHeadColumns(headColumns);
+      // setNewHeadColumns(headColumns);
     }
   }, [headColumns, pageOrder]);
 
   useEffect(() => {
     const data: any = [];
+    if (selectedItems.length) {
+      data.unshift({ id: "multiple", width: 50 });
+    }
     const arr = pageColumns ?? [];
     items?.forEach((el: { id: string }) => {
       let id: any = el.id;
@@ -430,7 +433,7 @@ const CNewTable = ({
       if (arr.includes(id)) data.push(el);
     });
     if (title) setNewHeadColumns(data);
-  }, [pageColumns, items, title]);
+  }, [pageColumns, items, title, selectedItems]);
 
   const handleDragStart = (index: any) => {
     setDraggingIndex(index);
@@ -477,7 +480,7 @@ const CNewTable = ({
       return;
     }
     if (status === "delete_by") {
-      return;
+      // return;
     }
 
     if (status === "sellect_more") {
@@ -540,6 +543,20 @@ const CNewTable = ({
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [searchedElements]);
+
+  // useEffect(() => {
+  //   if (selectedItems.length) {
+  //     setNewHeadColumns([{ id: "multiple" }, ...newHeadColumns]);
+  //     setBodySource(
+  //       bodySource.map((item: any) => {
+  //         return {
+  //           multiple: "1",
+  //           ...item,
+  //         };
+  //       })
+  //     );
+  //   }
+  // }, [selectedItems.length]);
 
   return (
     <div className="relative cnewtable w-full rounded-t-[8px]">
@@ -666,33 +683,43 @@ const CNewTable = ({
                         <div
                           className={`w-full min-h-[40px] flex items-center whitespace-nowrap cursor-move`}
                         >
-                          {column.renderHead
-                            ? Array.isArray(column.renderHead)
-                              ? column.renderHead(
-                                  column.renderHead.map(
-                                    (data: any) => column[data]
-                                  )
+                          {column.renderHead ? (
+                            Array.isArray(column.renderHead) ? (
+                              column.renderHead(
+                                column.renderHead.map(
+                                  (data: any) => column[data]
                                 )
-                              : column.renderHead()
-                            : column?.id === "index"
-                            ? "№"
-                            : t(column?.title)}
+                              )
+                            ) : (
+                              column.renderHead()
+                            )
+                          ) : column.id === "index" ? (
+                            "№"
+                          ) : column.id === "multiple" ? (
+                            <div>a</div>
+                          ) : (
+                            t(column?.title)
+                          )}
                         </div>
 
-                        <TableFilter
-                          colId={column?.id ?? currentFilter}
-                          sortData={sortData}
-                          searchedElements={searchedElements}
-                          handleSortLogic={(val: any) =>
-                            handleSortLogic({ ...val, title: column?.title })
-                          }
-                          filter={currentFilter === index}
-                          searchDebounce={(val: any, val2: any) =>
-                            searchDebounce(val, val2, column?.title)
-                          }
-                          handleClick={() => setCurrentFilter(index)}
-                          closeFilter={() => setCurrentFilter(null)}
-                        />
+                        {column.id !== "multiple" ? (
+                          <TableFilter
+                            colId={column?.id ?? currentFilter}
+                            sortData={sortData}
+                            searchedElements={searchedElements}
+                            handleSortLogic={(val: any) =>
+                              handleSortLogic({ ...val, title: column?.title })
+                            }
+                            filter={currentFilter === index}
+                            searchDebounce={(val: any, val2: any) =>
+                              searchDebounce(val, val2, column?.title)
+                            }
+                            handleClick={() => setCurrentFilter(index)}
+                            closeFilter={() => setCurrentFilter(null)}
+                          />
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </CTableHeadCell>
                   ))}

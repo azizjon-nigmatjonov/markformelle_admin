@@ -62,7 +62,7 @@ export const TableForm = ({
   const onSubmit = (data: any) => {
     let params: any = {
       HAREKETTIPI: 5,
-      URUNID: "BY263",
+      URUNID: defaultData?.URUNID,
       URUNBIRIMID: 1288,
       MIKTAR: 17,
       BIRIMFIYAT: 0,
@@ -76,7 +76,6 @@ export const TableForm = ({
       KULLANICIID: 1,
       DEGISIMTARIHI: dayjs(),
     };
-
     params.IRSALIYEID = defaultData.IRSALIYEID;
     params.DEPOID = defaultData.DEPOID;
     params.TRANSFERDEPOID = defaultData.TRANSFERDEPOID;
@@ -114,9 +113,10 @@ export const TableForm = ({
       clearErrors(["MIKTAR"]);
     }
   };
+  console.log("defaultData", defaultData);
 
   const getDepoStock = (depoId: string, urunId: string) => {
-    if (!urunId) return;
+    // if (!urunId || !depoId) return;
     axios.get(`${API_URL}/depostok/${depoId}/${urunId}`).then((res: any) => {
       const stock = res?.data ?? {};
       const weight = stock.ALIS - stock.DEPOYACIKAN;
@@ -192,9 +192,7 @@ export const TableForm = ({
           setValue("ADI", obj.ADI);
           setFilterParamsWeight({
             ...filterParamsWeight,
-            q: filterParamsWeight?.q
-              ? filterParamsWeight.q + `&URUNID=${obj.URUNID}`
-              : `&URUNID=${obj.URUNID}`,
+            q: `URUNID=${obj.URUNID}`,
           });
         }}
         control={control}
@@ -221,9 +219,7 @@ export const TableForm = ({
           setValue("ADI", obj.ADI);
           setFilterParamsWeight({
             ...filterParamsWeight,
-            q: filterParamsWeight?.q
-              ? filterParamsWeight.q + `&URUNID=${obj.URUNID}`
-              : `&URUNID=${obj.URUNID}`,
+            q: `&URUNID=${obj.URUNID}`,
           });
         }}
         handleSearch={(val: string) => {
