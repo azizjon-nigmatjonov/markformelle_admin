@@ -1,6 +1,3 @@
-import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
-import { Header } from "../../../components/UI/Header";
-import { breadCrumbItems } from "./Logic";
 import { useState } from "react";
 import CTabs from "../../../components/CElements/CTab";
 import { WebsiteColors } from "./Colors";
@@ -33,12 +30,6 @@ const WebsiteSettings = () => {
 
   return (
     <>
-      <Header
-        extra={
-          <CBreadcrumbs items={breadCrumbItems} progmatic={true} type="link" />
-        }
-      />
-
       <div className="p-2">
         <div className="inline-block">
           <CTabs

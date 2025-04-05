@@ -9,25 +9,25 @@ import {
 } from "react-router-dom";
 
 interface Props {
-  passRouter?: boolean,
-  currentTab?: any,
-  setCurrentTab?: (val?: any) => void,
-  tabList?: any,
-  handleTabClick?: (val?: any) => void,
-  extra?: any,
+  passRouter?: boolean;
+  currentTab?: any;
+  setCurrentTab?: (val?: any) => void;
+  tabList?: any;
+  handleTabClick?: (val?: any) => void;
+  extra?: any;
   customStyles?: any;
-  slug?: string
+  slug?: string;
 }
 
 export default function CTabs({
   passRouter = false,
   currentTab = {},
-  setCurrentTab = () => { },
+  setCurrentTab = () => {},
   tabList = [],
-  handleTabClick = () => { },
+  handleTabClick = () => {},
   extra,
   customStyles,
-  slug = "tab"
+  slug = "tab",
 }: Props) {
   const location = useLocation();
   const pathname = location.pathname;
@@ -41,7 +41,6 @@ export default function CTabs({
       index,
     }));
   }, [tabList]);
-
 
   function handleTabAction(i: any) {
     handleTabClick(i);
@@ -67,7 +66,6 @@ export default function CTabs({
     const tab = optimizedTabList.find((tab: any) => tab.slug === query?.[slug]);
     return tab?.index;
   }, [optimizedTabList, query, currentTab, slug]);
-
 
   return (
     <div className={cls.wrapper}>

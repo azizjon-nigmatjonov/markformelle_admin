@@ -2,13 +2,14 @@
 import {
   EnglishFlag,
   RussionFlag,
+  TurkishFlag,
   UzbekFlag,
 } from "../../../components/UI/IconGenerator/Svg/Machines";
 import { SettingIcon } from "../../../components/UI/IconGenerator/Svg/Sidebar";
 import { useCMutation } from "../../../hooks/useCMutation";
 import useCQuery from "../../../hooks/useCQuery";
 import axios from "axios";
-
+const API_URL = import.meta.env.VITE_TEST_URL;
 export const CreateTranslasion = () => {
   const { mutate: create } = useCMutation({
     key: "resources_translations_create",
@@ -60,11 +61,11 @@ export const CreateTranslasion = () => {
 
 export const HandleTable = ({ refetch }: { refetch: () => void }) => {
   const obj: any = {
-    key: "",
-    id: 0,
-    uz: "",
-    ru: "",
-    en: "",
+    KEYWORD: "",
+    UZ: "",
+    RU: "",
+    EN: "",
+    TU: "",
   };
 
   const AddNewColumn = ({
@@ -74,10 +75,6 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
     listTable: any;
     setListTable: (val: any) => void;
   }) => {
-    const id = listTable?.length
-      ? listTable.length + "-" + listTable[listTable?.length - 1].id
-      : listTable?.length + 1;
-    obj.id = id;
     setListTable([obj, ...listTable]);
   };
 
@@ -103,6 +100,8 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
         <UzbekFlag />
       ) : val === "ru" ? (
         <RussionFlag />
+      ) : val === "tu" ? (
+        <TurkishFlag />
       ) : (
         <EnglishFlag />
       );
@@ -127,27 +126,24 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
     listTable = [],
     setListTable,
     value,
-    key,
     id,
-    initKey,
+    key,
   }: {
     listTable: any;
     setListTable: (val: any) => void;
-    id: any;
+    id: string;
     value: any;
     key: string;
-    initKey?: string;
   }) => {
     if (value) {
-      const obj = listTable?.find((el: any) => el.id === id);
+      const obj = listTable?.find((el: any) => el.KEYWORD === id);
 
       obj[key] = value;
-      obj.name = initKey;
-
+      console.log("111", obj, key, id);
       const arr = listTable?.map((item: any) => {
-        delete item.value["error_" + key];
+        // delete item.value["error_" + id];
 
-        if (item.id === id) {
+        if (item.KEYWORD === id) {
           return { ...obj };
         } else return { ...item };
       });
@@ -158,7 +154,7 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
 
   const onSubmit = (data: any) => {
     axios
-      .post("http://192.168.181.29:3000/translations", data, {
+      .post(`${API_URL}/translation`, data, {
         headers: {
           "Content-Type": "application/json",
         },

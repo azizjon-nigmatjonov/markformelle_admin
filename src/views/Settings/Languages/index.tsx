@@ -1,15 +1,11 @@
 import { useMemo, useRef, useState } from "react";
-import { Header } from "../../../components/UI/Header";
 import useDebounce from "../../../hooks/useDebounce";
 import { GetTranslations, HandleTable } from "./Logic";
-import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 // import { usePermissions } from "../../../hooks/usePermissions";
 import { IFilterParams } from "../../../interfaces";
 import CNewTable from "../../../components/CElements/CNewTable";
-const breadCrumbs = [
-  { label: "Настройки", link: "/settings/language" },
-  { label: "Языка" },
-];
+import { useTranslation } from "react-i18next";
+
 const LanguagesPage = () => {
   // const { checkPermission } = usePermissions();
   const [listTable, setListTable]: any = useState([]);
@@ -25,23 +21,22 @@ const LanguagesPage = () => {
     HandleTable({
       refetch,
     });
-  const handleValue = useDebounce(
-    (value: any, key: string, id: string, initKey: string) => {
-      WriteValue({ listTable, setListTable, value, key, id, initKey });
-    },
-    0
-  );
+  const handleValue = useDebounce((value: any, id: string, key: string) => {
+    console.log(value, id, key);
+
+    WriteValue({ listTable, setListTable, value, id, key });
+  }, 0);
 
   const handleSubmit = () => {
-    onSubmit(listTable);
+    onSubmit(listTable[0]);
     setFilterParams({ ...filterParams, edit: false });
   };
-
+  const { t } = useTranslation();
   const headColumns = useMemo(() => {
     return [
       {
         renderHead: () => <GetTitle val="key" />,
-        id: ["KEYWORD"],
+        id: "KEYWORD",
         width: 260,
         render: (key: any) => {
           return (
@@ -50,13 +45,15 @@ const LanguagesPage = () => {
                 <input
                   className="input-design font-medium"
                   onChange={(e) => {
-                    // handleValue(e.target.value, "key", id, key);
+                    console.log("key", key);
+
+                    handleValue(e.target.value, key, "KEYWORD");
                   }}
                   ref={inputRef}
                   defaultValue={key}
                 />
               ) : (
-                key
+                t(key)
               )}
             </div>
           );
@@ -66,14 +63,14 @@ const LanguagesPage = () => {
         renderHead: () => <GetTitle val="ru" />,
         id: ["KEYWORD", "RU"],
         width: 260,
-        render: ([key, val, id]: any) => {
+        render: ([id, val]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center">
               {filterParams.edit ? (
                 <input
                   className="input-design"
                   onChange={(e) => {
-                    // handleValue(e.target.value, "ru", id, key);
+                    handleValue(e.target.value, id, "RU");
                   }}
                   defaultValue={val}
                 />
@@ -88,14 +85,14 @@ const LanguagesPage = () => {
         renderHead: () => <GetTitle val="uz" />,
         id: ["KEYWORD", "UZ"],
         width: 260,
-        render: ([key, val]: any) => {
+        render: ([id, val]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center">
               {filterParams.edit ? (
                 <input
                   className="input-design"
                   onChange={(e) => {
-                    // handleValue(e.target.value, "uz", id, key);
+                    handleValue(e.target.value, id, "UZ");
                   }}
                   defaultValue={val}
                 />
@@ -111,14 +108,36 @@ const LanguagesPage = () => {
         renderHead: () => <GetTitle val="en" />,
         id: ["KEYWORD", "EN"],
         width: 260,
-        render: ([key, val, id]: any) => {
+        render: ([id, val]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center">
               {filterParams.edit ? (
                 <input
                   className="input-design"
                   onChange={(e) => {
-                    handleValue(e.target.value, "en", id, key);
+                    handleValue(e.target.value, id, "EN");
+                  }}
+                  defaultValue={val}
+                />
+              ) : (
+                val
+              )}
+            </div>
+          );
+        },
+      },
+      {
+        renderHead: () => <GetTitle val="tu" />,
+        id: ["KEYWORD", "TU"],
+        width: 260,
+        render: ([id, val]: any) => {
+          return (
+            <div className="h-[56px] flex items-center w-full justify-center">
+              {filterParams.edit ? (
+                <input
+                  className="input-design"
+                  onChange={(e) => {
+                    handleValue(e.target.value, id, "TU");
                   }}
                   defaultValue={val}
                 />
@@ -130,7 +149,7 @@ const LanguagesPage = () => {
         },
       },
     ];
-  }, [listTable]);
+  }, [listTable, filterParams.edit]);
 
   const handleActions = (el: any, type: string) => {
     if (type === "delete") {
@@ -144,14 +163,38 @@ const LanguagesPage = () => {
 
   return (
     <>
-      <Header
-        extra={
-          <CBreadcrumbs items={breadCrumbs} progmatic={true} type="link" />
-        }
-      />
       <div className="p-2">
+        <div className="border-b border-[var(--border)] flex justify-end pb-2">
+          <div>
+            {filterParams.edit ? (
+              <button
+                onClick={() => {
+                  handleSubmit();
+                }}
+                className="custom-btn"
+                style={{ height: "32px" }}
+                type="button"
+              >
+                Cохранить
+              </button>
+            ) : (
+              <button
+                onClick={() => {
+                  AddNewColumn({ listTable, setListTable });
+                  setFilterParams({ ...filterParams, edit: true });
+                }}
+                className="custom-btn create"
+                style={{ height: "32px" }}
+                type="button"
+              >
+                Добавить
+              </button>
+            )}
+          </div>
+        </div>
+        {t("settings")}
         <CNewTable
-          title="Translations table"
+          key={filterParams.edit ? "edit" : "view"}
           isLoading={isLoading}
           headColumns={headColumns}
           bodyColumns={listTable}
@@ -164,34 +207,6 @@ const LanguagesPage = () => {
             totalCount: count,
             pageCount: count ? Math.ceil(count / filterParams?.perPage) : 0,
           }}
-          // extra={
-          //   <div>
-          //     {filterParams.edit ? (
-          //       <button
-          //         onClick={() => {
-          //           handleSubmit();
-          //         }}
-          //         className="custom-btn"
-          //         style={{ height: "32px" }}
-          //         disabled={!checkPermission("edit")}
-          //       >
-          //         Cохранить
-          //       </button>
-          //     ) : (
-          //       <button
-          //         onClick={() => {
-          //           AddNewColumn({ listTable, setListTable });
-          //           setFilterParams({ ...filterParams, edit: true });
-          //         }}
-          //         className="custom-btn"
-          //         style={{ height: "32px" }}
-          //         disabled={!checkPermission("add")}
-          //       >
-          //         Добавить
-          //       </button>
-          //     )}
-          //   </div>
-          // }
         />
       </div>
     </>
