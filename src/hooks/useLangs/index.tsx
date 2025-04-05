@@ -12,6 +12,10 @@ export const useLangs = () => {
       label: <div>Узбекский</div>,
       value: "uz",
     },
+    {
+      label: <div>Turkish</div>,
+      value: "tu",
+    },
   ];
-  return { langList } 
+  return { langList };
 };

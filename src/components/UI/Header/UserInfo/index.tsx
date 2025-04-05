@@ -1,5 +1,6 @@
 import cls from "./style.module.scss";
 import ImageFrame from "../../ImageFrame";
+import { useTranslation } from "react-i18next";
 // import { usePermissions } from "../../../../hooks/usePermissions";
 interface Props {
   userInfo: any;
@@ -14,6 +15,7 @@ const UserInfo = ({
   wideSidebar = false,
   handleNavigate,
 }: Props) => {
+  const { t } = useTranslation();
   // const { checkAdditionals } = usePermissions();
 
   // if (!checkAdditionals("profile_info")) return <></>;
@@ -37,7 +39,7 @@ const UserInfo = ({
         </div>
         {wideSidebar && (
           <div className={cls.content}>
-            <p className="text-[12px]">Настройки</p>
+            <p className="text-[12px]">{t("settings")}</p>
           </div>
         )}
       </div>

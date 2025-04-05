@@ -115,6 +115,8 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
             ? "O'zbekcha"
             : val === "key"
             ? "Key"
+            : val === "tu"
+            ? "Turkish"
             : "English"}
         </span>
         <span className="text-2xl">{icon}</span>
@@ -167,6 +169,32 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
       });
   };
 
+  const onUpdate = (data: any) => {
+    axios
+      .put(`${API_URL}/translation/${data.KEYWORD}`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then(() => {
+        refetch();
+      })
+      .catch((error) => {
+        console.error("Error adding route:", error);
+      });
+  };
+
+  const handleDelete = (KEYWORD: string) => {
+    axios
+      .delete(`${API_URL}/translation/${KEYWORD}`)
+      .then(() => {
+        refetch();
+      })
+      .catch((error) => {
+        console.error("Error adding route:", error);
+      });
+  };
+
   const deleteTranslation = (key: string) => {
     axios.delete(`http://192.168.181.29:3000/translations/${key}`).then(() => {
       refetch();
@@ -179,6 +207,8 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
     WriteValue,
     DeleteColumn,
     onSubmit,
+    onUpdate,
+    handleDelete,
     deleteTranslation,
   };
 };

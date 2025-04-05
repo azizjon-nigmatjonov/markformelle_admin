@@ -5,4 +5,5 @@ export interface IFilterParams {
     search?: string
     title?: string
     edit?: boolean
+    currentIndex?: number
 }

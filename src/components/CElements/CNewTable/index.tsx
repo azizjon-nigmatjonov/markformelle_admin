@@ -696,13 +696,13 @@ const CNewTable = ({
                           ) : column.id === "index" ? (
                             "№"
                           ) : column.id === "multiple" ? (
-                            <div>a</div>
+                            <div></div>
                           ) : (
                             t(column?.title)
                           )}
                         </div>
 
-                        {column.id !== "multiple" ? (
+                        {column.id !== "multiple" && column.id !== "index" ? (
                           <TableFilter
                             colId={column?.id ?? currentFilter}
                             sortData={sortData}
@@ -853,6 +853,7 @@ const CNewTable = ({
                                   <button
                                     className={`w-[20px] h-full items-center justify-center ml-2`}
                                     onClick={() => setCurrentIndex(rowIndex)}
+                                    type="button"
                                   >
                                     <div
                                       className={`group-hover:flex ${

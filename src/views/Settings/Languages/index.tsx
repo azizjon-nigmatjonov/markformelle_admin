@@ -4,7 +4,11 @@ import { GetTranslations, HandleTable } from "./Logic";
 // import { usePermissions } from "../../../hooks/usePermissions";
 import { IFilterParams } from "../../../interfaces";
 import CNewTable from "../../../components/CElements/CNewTable";
-import { useTranslation } from "react-i18next";
+import {
+  DeleteIcon,
+  EditIcon,
+  SaveIcon,
+} from "../../../components/UI/IconGenerator/Svg";
 
 const LanguagesPage = () => {
   // const { checkPermission } = usePermissions();
@@ -17,10 +21,17 @@ const LanguagesPage = () => {
     perPage: 10,
   });
   const { isLoading, refetch } = GetTranslations({ setListTable, setCount });
-  const { AddNewColumn, GetTitle, WriteValue, onSubmit, deleteTranslation } =
-    HandleTable({
-      refetch,
-    });
+  const {
+    AddNewColumn,
+    GetTitle,
+    WriteValue,
+    onSubmit,
+    onUpdate,
+    handleDelete,
+    deleteTranslation,
+  } = HandleTable({
+    refetch,
+  });
   const handleValue = useDebounce((value: any, id: string, key: string) => {
     console.log(value, id, key);
 
@@ -28,20 +39,27 @@ const LanguagesPage = () => {
   }, 0);
 
   const handleSubmit = () => {
-    onSubmit(listTable[0]);
+    const currObj = listTable.find(
+      (_: any, index: number) => index + 1 === filterParams.currentIndex
+    );
+    if (filterParams.currentIndex !== 1) {
+      onUpdate(currObj);
+    } else {
+      onSubmit(currObj);
+    }
     setFilterParams({ ...filterParams, edit: false });
   };
-  const { t } = useTranslation();
+
   const headColumns = useMemo(() => {
     return [
       {
         renderHead: () => <GetTitle val="key" />,
-        id: "KEYWORD",
+        id: ["KEYWORD", "index"],
         width: 260,
-        render: (key: any) => {
+        render: ([key, index]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center font-medium">
-              {filterParams.edit ? (
+              {filterParams.edit && index === filterParams.currentIndex ? (
                 <input
                   className="input-design font-medium"
                   onChange={(e) => {
@@ -53,7 +71,7 @@ const LanguagesPage = () => {
                   defaultValue={key}
                 />
               ) : (
-                t(key)
+                key
               )}
             </div>
           );
@@ -61,12 +79,12 @@ const LanguagesPage = () => {
       },
       {
         renderHead: () => <GetTitle val="ru" />,
-        id: ["KEYWORD", "RU"],
+        id: ["KEYWORD", "RU", "index"],
         width: 260,
-        render: ([id, val]: any) => {
+        render: ([id, val, index]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center">
-              {filterParams.edit ? (
+              {filterParams.edit && index === filterParams.currentIndex ? (
                 <input
                   className="input-design"
                   onChange={(e) => {
@@ -83,12 +101,12 @@ const LanguagesPage = () => {
       },
       {
         renderHead: () => <GetTitle val="uz" />,
-        id: ["KEYWORD", "UZ"],
+        id: ["KEYWORD", "UZ", "index"],
         width: 260,
-        render: ([id, val]: any) => {
+        render: ([id, val, index]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center">
-              {filterParams.edit ? (
+              {filterParams.edit && index === filterParams.currentIndex ? (
                 <input
                   className="input-design"
                   onChange={(e) => {
@@ -106,12 +124,12 @@ const LanguagesPage = () => {
 
       {
         renderHead: () => <GetTitle val="en" />,
-        id: ["KEYWORD", "EN"],
+        id: ["KEYWORD", "EN", "index"],
         width: 260,
-        render: ([id, val]: any) => {
+        render: ([id, val, index]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center">
-              {filterParams.edit ? (
+              {filterParams.edit && index === filterParams.currentIndex ? (
                 <input
                   className="input-design"
                   onChange={(e) => {
@@ -128,12 +146,12 @@ const LanguagesPage = () => {
       },
       {
         renderHead: () => <GetTitle val="tu" />,
-        id: ["KEYWORD", "TU"],
+        id: ["KEYWORD", "TU", "index"],
         width: 260,
-        render: ([id, val]: any) => {
+        render: ([id, val, index]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center">
-              {filterParams.edit ? (
+              {filterParams.edit && index === filterParams.currentIndex ? (
                 <input
                   className="input-design"
                   onChange={(e) => {
@@ -148,6 +166,51 @@ const LanguagesPage = () => {
           );
         },
       },
+      {
+        renderHead: () => <GetTitle val="tu" />,
+        id: ["index", "KEYWORD"],
+        width: 260,
+        render: ([index, key]: any) => {
+          return (
+            <div className="h-[56px] flex items-center w-full justify-center space-x-5">
+              <button
+                type="button"
+                onClick={() => {
+                  if (filterParams.currentIndex === index) {
+                    handleSubmit();
+                  } else {
+                    setFilterParams({
+                      ...filterParams,
+                      edit: false,
+                    });
+                    setTimeout(() => {
+                      setFilterParams({
+                        ...filterParams,
+                        edit: true,
+                        currentIndex: index,
+                      });
+                    }, 0);
+                  }
+                }}
+              >
+                {filterParams.currentIndex === index ? (
+                  <SaveIcon fill="var(--primary)" />
+                ) : (
+                  <EditIcon fill="var(--main)" />
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  handleDelete(key);
+                }}
+              >
+                <DeleteIcon />
+              </button>
+            </div>
+          );
+        },
+      },
     ];
   }, [listTable, filterParams.edit]);
 
@@ -157,7 +220,6 @@ const LanguagesPage = () => {
     }
     if (type === "modal") {
       AddNewColumn({ listTable, setListTable });
-      setFilterParams({ ...filterParams, edit: true });
     }
   };
 
@@ -181,7 +243,11 @@ const LanguagesPage = () => {
               <button
                 onClick={() => {
                   AddNewColumn({ listTable, setListTable });
-                  setFilterParams({ ...filterParams, edit: true });
+                  setFilterParams({
+                    ...filterParams,
+                    edit: true,
+                    currentIndex: 1,
+                  });
                 }}
                 className="custom-btn create"
                 style={{ height: "32px" }}
@@ -192,7 +258,7 @@ const LanguagesPage = () => {
             )}
           </div>
         </div>
-        {t("settings")}
+
         <CNewTable
           key={filterParams.edit ? "edit" : "view"}
           isLoading={isLoading}
