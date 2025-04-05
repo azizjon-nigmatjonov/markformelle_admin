@@ -47,7 +47,7 @@ const LanguagesPage = () => {
     } else {
       onSubmit(currObj);
     }
-    setFilterParams({ ...filterParams, edit: false });
+    setFilterParams({ ...filterParams, edit: false, currentIndex: undefined });
   };
 
   const headColumns = useMemo(() => {
@@ -167,8 +167,8 @@ const LanguagesPage = () => {
         },
       },
       {
-        renderHead: () => <GetTitle val="tu" />,
-        id: ["index", "KEYWORD"],
+        renderHead: () => "Actions",
+        id: ["index", "KEYWORD", "actions"],
         width: 260,
         render: ([index, key]: any) => {
           return (

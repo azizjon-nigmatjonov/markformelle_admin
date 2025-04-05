@@ -702,7 +702,8 @@ const CNewTable = ({
                           )}
                         </div>
 
-                        {column.id !== "multiple" && column.id !== "index" ? (
+                        {column.id !== "multiple" &&
+                        !column.id.includes("actions") ? (
                           <TableFilter
                             colId={column?.id ?? currentFilter}
                             sortData={sortData}
