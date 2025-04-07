@@ -49,31 +49,54 @@ const LanguagesPage = () => {
     const currObj = listTable.find(
       (_: any, index: number) => index + 1 === filterParams.currentIndex
     );
-    if (filterParams.currentIndex !== 1) {
-      onUpdate(currObj);
-    } else {
-      onSubmit(currObj);
+
+    let error = false;
+
+    const newArr = listTable.map((element: { KEYWORD: string }) => {
+      if (!element.KEYWORD) {
+        error = true;
+        return {
+          ...element,
+          error: true,
+        };
+      } else {
+        return element;
+      }
+    });
+
+    setListTable(newArr);
+
+    if (!error) {
+      if (filterParams.currentIndex !== 1) {
+        onUpdate(currObj);
+      } else {
+        onSubmit(currObj);
+      }
+      setFilterParams({
+        ...filterParams,
+        edit: false,
+        currentIndex: undefined,
+      });
+      dispatch(translateActions.setTranslation(listTable));
+      localStorage.setItem("translations", JSON.stringify(listTable));
     }
-    setFilterParams({ ...filterParams, edit: false, currentIndex: undefined });
-    dispatch(translateActions.setTranslation(listTable));
-    localStorage.setItem("translations", JSON.stringify(listTable));
   };
 
   const headColumns = useMemo(() => {
     return [
       {
         renderHead: () => <GetTitle val="key" />,
-        id: ["KEYWORD", "index"],
+        id: ["KEYWORD", "index", "error"],
         width: 260,
-        render: ([key, index]: any) => {
+        render: ([key, index, error]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center font-medium">
               {filterParams.edit && index === filterParams.currentIndex ? (
                 <input
-                  className="input-design font-medium"
+                  className={`input-design font-medium ${
+                    error ? "error" : "e"
+                  }`}
                   onChange={(e) => {
-                    console.log("key", key);
-
                     handleValue(e.target.value, key, "KEYWORD");
                   }}
                   ref={inputRef}
@@ -95,7 +118,7 @@ const LanguagesPage = () => {
             <div className="h-[56px] flex items-center w-full justify-center">
               {filterParams.edit && index === filterParams.currentIndex ? (
                 <input
-                  className="input-design"
+                  className={`input-design font-medium`}
                   onChange={(e) => {
                     handleValue(e.target.value, id, "RU");
                   }}
@@ -278,6 +301,7 @@ const LanguagesPage = () => {
           handleFilterParams={setFilterParams}
           handleActions={handleActions}
           autoHeight="auto"
+          animation={false}
           meta={{
             totalCount: count,
             pageCount: count ? Math.ceil(count / filterParams?.perPage) : 0,

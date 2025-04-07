@@ -662,4 +662,8 @@ input {
   &:focus {
     border-color: var(--primary);
   }
+
+  &.error {
+    border-color: var(--error);
+  }
 }

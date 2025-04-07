@@ -759,7 +759,11 @@ const CNewTable = ({
                       <TableRow
                         key={item.index}
                         className={`group ${
-                          effect.includes(rowIndex) && animation ? "effect" : ""
+                          effect.includes(rowIndex) && animation
+                            ? "effect"
+                            : !animation
+                            ? "without_animation"
+                            : ""
                         } ${
                           clickable && !item.empty && checkPermission("view")
                             ? "clickable"
