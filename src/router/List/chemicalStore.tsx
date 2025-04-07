@@ -1,3 +1,4 @@
+import { BuyingChemicals } from "../../views/Stores/Buying";
 import { ChemicalsStock } from "../../views/Stores/ChemicalsStock";
 import { EritmaPage } from "../../views/Stores/Eritma";
 import { Transfers } from "../../views/Stores/Transfers";
@@ -42,6 +43,14 @@ export const chemicalStore = [
         path: "chemical_store/transfers",
         icon: "",
       },
+      {
+        parent: "chemical_store/list",
+        link: "buying",
+        title: "Документ покупки",
+        childLink: "buying",
+        path: "chemical_store/buying",
+        icon: "",
+      },
     ],
   },
   {
@@ -76,6 +85,13 @@ export const chemicalStore = [
     link: "transfers",
     sidebar: false,
     element: <Transfers />,
+    permissions: ["view_page"],
+  },
+  {
+    parent: "chemical_store",
+    link: "buying",
+    sidebar: false,
+    element: <BuyingChemicals />,
     permissions: ["view_page"],
   },
   {

@@ -24,6 +24,8 @@ import useDebounce from "../../../hooks/useDebounce";
 import { SideFilter, TableFilter } from "./Details/Filter";
 import CheckIcon from "@mui/icons-material/Check";
 import { convertToISO, GetCurrentDate } from "../../../utils/getDate";
+import usePageRouter from "../../../hooks/useObjectRouter";
+import { translateActions } from "../../../store/translation/translate.slice";
 interface Props {
   meta?: {
     totalCount: number;
@@ -75,6 +77,7 @@ const CNewTable = ({
   defaultFilters = ["add", "delete"],
   defaultSearch = {},
 }: Props) => {
+  const { navigateTo } = usePageRouter();
   const tableSize = useSelector((state: any) => state.tableSize.tableSize);
   const location = useLocation();
   const tableSettings: Record<string, any> = {};
@@ -497,6 +500,24 @@ const CNewTable = ({
       handleCheckbox(el.id);
     }
 
+    if (status === "translation") {
+      const newArr: object[] = [];
+      newHeadColumns.forEach((element: { id: string }) => {
+        const obj = {
+          KEYWORD: element.id,
+          RU: "",
+          EN: "",
+          UZ: "",
+          TU: "",
+        };
+        newArr.push(obj);
+      });
+
+      dispatch(translateActions.setTranslation(newArr));
+
+      navigateTo("/settings/profile?tab=translation");
+    }
+
     if (!checkPermission(status) || el.empty) return;
 
     handleActions(el, status);
@@ -738,9 +759,7 @@ const CNewTable = ({
                       <TableRow
                         key={item.index}
                         className={`group ${
-                          effect.includes(rowIndex) && animation
-                            ? "effect"
-                            : "without_animation"
+                          effect.includes(rowIndex) && animation ? "effect" : ""
                         } ${
                           clickable && !item.empty && checkPermission("view")
                             ? "clickable"

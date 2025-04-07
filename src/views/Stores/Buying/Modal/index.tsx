@@ -57,6 +57,10 @@ export const ModalUI = ({
     page: 1,
     perPage: 50,
   });
+  const [filterParamsFirma, setFilterParamsFirma] = useState<IFilterParams>({
+    page: 1,
+    perPage: 50,
+  });
   const [filterParamsDepo, setFilterParamsDepo] = useState<
     Partial<IFilterParams>
   >({
@@ -64,11 +68,13 @@ export const ModalUI = ({
     perPage: 100,
     q: "",
   });
-  const { handleActionsModal, depoOptions, dovizOptions } = ModalLogic({
-    setModalList,
-    modalList,
-    filterParamsDepo,
-  });
+  const { handleActionsModal, depoOptions, dovizOptions, firmaData } =
+    ModalLogic({
+      setModalList,
+      modalList,
+      filterParamsDepo,
+      filterParamsFirma,
+    });
   const { defaultData, tableData, refetch, deleteElement } = FetchModal({
     id: element.id,
     urunId: selectedRow?.URUNID,
@@ -81,7 +87,7 @@ export const ModalUI = ({
 
   const onSubmit: SubmitHandler<ITransferFormData> = (data) => {
     const params: Partial<any> = {
-      HAREKETTIPI: 5,
+      HAREKETTIPI: 1,
       FIRMAID: null,
       NOTU: "",
       SINIF: "B",
@@ -100,7 +106,6 @@ export const ModalUI = ({
 
     params.INSERTTARIHI = dayjs();
     params.FIILISEVKTARIHI = dayjs();
-    console.log("11", dayjs().format("DD.MM.YYYY"));
 
     params.IRSALIYETARIHI = convertToISO(dayjs().format("DD.MM.YYYY"));
 
@@ -175,7 +180,7 @@ export const ModalUI = ({
 
   return (
     <CNewModal
-      title={`Документ перемещения ${
+      title={`Документ покупки ${
         element.IRSALIYENO ? "№" + element.IRSALIYENO : ""
       }`}
       action="add"
@@ -201,6 +206,64 @@ export const ModalUI = ({
                   control={control}
                   name="IRSALIYETARIHI"
                   readOnly={true}
+                />
+              </FieldUI>
+              <FieldUI title="sevik tarihi">
+                <HFTextField
+                  control={control}
+                  name="INSERTTARIHI"
+                  readOnly={true}
+                />
+              </FieldUI>
+            </div>
+
+            <div className="space-y-2">
+              <FieldUI title="Firma">
+                <SelectOptionsTable
+                  name="FIRMAID"
+                  placeholder="Firma nomi"
+                  options={firmaData}
+                  required={true}
+                  headColumns={[
+                    { id: "FIRMAID", width: 200, title: "FIRMAID" },
+                    { id: "ADI", title: "ADI" },
+                    { id: "KISAADI", title: "KISAADI" },
+                  ]}
+                  filterParams={filterParams}
+                  handleSelect={(obj: any) => {
+                    setValue("FIRMAID", obj.FIRMAID);
+                    setValue("ADI", obj.ADI);
+                  }}
+                  handleSearch={(val: string) => {
+                    setFilterParamsFirma({ ...filterParamsFirma, q: val });
+                  }}
+                  control={control}
+                  setFilterParams={setFilterParams}
+                  disabled={tableOpen}
+                />
+              </FieldUI>
+              <FieldUI title="Firma">
+                <SelectOptionsTable
+                  name="ADI"
+                  placeholder="Firma adi"
+                  options={firmaData}
+                  required={true}
+                  headColumns={[
+                    { id: "FIRMAID", width: 200, title: "FIRMAID" },
+                    { id: "ADI", title: "ADI" },
+                    { id: "KISAADI", title: "KISAADI" },
+                  ]}
+                  filterParams={filterParams}
+                  handleSelect={(obj: any) => {
+                    setValue("FIRMAID", obj.FIRMAID);
+                    setValue("ADI", obj.ADI);
+                  }}
+                  handleSearch={(val: string) => {
+                    setFilterParamsFirma({ ...filterParamsFirma, q: val });
+                  }}
+                  control={control}
+                  setFilterParams={setFilterParams}
+                  disabled={tableOpen}
                 />
               </FieldUI>
             </div>
@@ -234,38 +297,6 @@ export const ModalUI = ({
                   control={control}
                   options={dovizOptions}
                   defaultValue="USD"
-                />
-              </FieldUI>
-            </div>
-
-            <div className="space-y-2">
-              <FieldUI title="Transfer depo no">
-                <SelectOptionsTable
-                  name="TRANSFERDEPOID"
-                  placeholder="Transfer depo no"
-                  options={depoOptions}
-                  required={true}
-                  headColumns={[
-                    { id: "DEPOID", width: 200, title: "DEPOID" },
-                    { id: "ADI", title: "ADI" },
-                  ]}
-                  filterParams={filterParams}
-                  handleSelect={(obj: any) => {
-                    setValue("TRANSFERDEPOID", obj.DEPOID);
-                  }}
-                  handleSearch={(val: string) => {
-                    setFilterParamsDepo({ ...filterParamsDepo, q: val });
-                  }}
-                  control={control}
-                  setFilterParams={setFilterParams}
-                  disabled={tableOpen}
-                />
-              </FieldUI>
-              <FieldUI title="sevik tarihi">
-                <HFTextField
-                  control={control}
-                  name="INSERTTARIHI"
-                  readOnly={true}
                 />
               </FieldUI>
             </div>

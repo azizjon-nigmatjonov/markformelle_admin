@@ -156,7 +156,7 @@ export const SelectOptionsTable = ({
                 idForTable={name + "select"}
                 disablePagination={true}
               />
-              <div>
+              <div className="h-[40px] flex items-center">
                 <button className="flex items-center space-x-1 text-[var(--main)]">
                   <PlusIcon fill="var(--main)" /> <span>Создать</span>
                 </button>

@@ -32,4 +32,6 @@ export interface ITransferFormData {
   DOVIZID: string;
   INSERTTARIHI: string;
   TRANSFERDEPOID?: string | null; // Ensure it's optional
+  FIRMAID?: string
+  ADI?: string
 }

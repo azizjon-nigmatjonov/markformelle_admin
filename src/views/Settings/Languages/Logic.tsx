@@ -1,4 +1,5 @@
 // import { useState } from "react";
+
 import {
   EnglishFlag,
   RussionFlag,
@@ -216,9 +217,11 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
 export const GetTranslations = ({
   setListTable,
   setCount,
+  storedTranslation = [],
 }: {
   setListTable: (val: any) => void;
   setCount: (val: number) => void;
+  storedTranslation: object[];
 }) => {
   const { isLoading, refetch } = useCQuery({
     key: "resources_translations",
@@ -226,7 +229,18 @@ export const GetTranslations = ({
     params: { type: "" },
     options: {
       onSuccess: (res: any) => {
-        setListTable(res?.data);
+        const newArr: any = [];
+        if (!res?.data?.length) return;
+        storedTranslation?.forEach((el: any) => {
+          if (
+            !res.data.find(
+              (item: { KEYWORD: string }) => item.KEYWORD === el.KEYWORD
+            )
+          ) {
+            newArr.push(el);
+          }
+        });
+        setListTable([...newArr, ...res.data]);
         setCount(res?.count);
       },
     },

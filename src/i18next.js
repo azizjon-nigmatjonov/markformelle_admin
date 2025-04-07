@@ -16,20 +16,40 @@ i18next
     },
     useSuspense: true,
     backend: {
-      loadPath: `${
-        import.meta.env.VITE_TEST_URL
-      }/translation/language/${localStorage.getItem("i18nextLng")}`, // Dynamic path using {{lng}}
+      loadPath: `${import.meta.env.VITE_TEST_URL}/translation/language/${
+        localStorage.getItem("i18nextLng").includes("US")
+          ? "ru"
+          : localStorage.getItem("i18nextLng")
+      }`,
       request: async (options, url, payload, callback) => {
+        let currentLang = i18next.language;
+        if (currentLang.includes("US")) currentLang = "ru";
+
+        const storedTranslation =
+          JSON.parse(localStorage.getItem("translations")) || [];
+        const obj = {};
+
+        storedTranslation.forEach((element) => {
+          if (element.KEYWORD) {
+            obj[element.KEYWORD] = element[currentLang.toLocaleUpperCase()];
+          }
+        });
+        callback(null, {
+          data: obj || {},
+          status: 200,
+        });
         try {
           const res = await axios.get(url);
-          const currentLang = i18next.language;
 
           callback(null, {
-            data: res.data[currentLang],
+            data: res.data[currentLang] || {},
             status: 200,
           });
         } catch (err) {
-          callback(err, { status: 500 });
+          callback(null, {
+            data: obj || {},
+            status: 200,
+          });
         }
       },
     },

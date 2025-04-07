@@ -10,6 +10,7 @@ import { filterReducer } from "./filterParams";
 import { tableReducer } from "./table";
 import { machineReducer } from "./machine/machine.slice";
 import { globalToolReducer } from "./globalTools";
+import { translateReducer } from "./translation/translate.slice";
 
 const authPersistConfig = {
   key: "auth",
@@ -51,6 +52,11 @@ const globalToolPersistConfig = {
   storage,
 };
 
+const translationPersistConfig = {
+  key: 'translation',
+  storage
+}
+
 const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
   tableSize: persistReducer(tableSizePersistConfig, tableSizeReducer),
@@ -60,6 +66,7 @@ const rootReducer = combineReducers({
   table: persistReducer(tablePersistConfig, tableReducer),
   machine: persistReducer(machinePersistConfig, machineReducer),
   globalTool: persistReducer(globalToolPersistConfig, globalToolReducer),
+  translation: persistReducer(translationPersistConfig, translateReducer),
   website: websiteReducer,
 });
 

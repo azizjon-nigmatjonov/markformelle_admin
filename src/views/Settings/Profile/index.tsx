@@ -20,6 +20,7 @@ import { HFMultipleSelect } from "../../../components/HFElements/HFMultipleSelec
 import CTabs from "../../../components/CElements/CTab";
 import WebsiteSettings from "../Website";
 import LanguagesPage from "../Languages";
+import { useGetQueries } from "../../../hooks/useGetQueries";
 
 const TabList = [
   {
@@ -40,7 +41,8 @@ const Profile = () => {
   const [logout, setLogout] = useState(false);
   const user = useSelector((state: any) => state.auth.user);
   const { t } = useTranslation();
-  const [currentTab, setCurrentTab] = useState({ name: "", id: "profile" });
+  const { tab } = useGetQueries();
+
   const dispatch = useDispatch();
   const {
     control,
@@ -68,13 +70,9 @@ const Profile = () => {
 
       <form className="p-2">
         <CCard style={{ minHeight: "auto" }}>
-          <CTabs
-            tabList={TabList}
-            currentTab={currentTab}
-            handleTabClick={setCurrentTab}
-          />
+          <CTabs tabList={TabList} currentTab={tab} passRouter={true} />
 
-          {currentTab.id === "profile" ? (
+          {tab === "profile" ? (
             <div className="flex justify-between mt-5">
               <div className="flex items-center space-x-8">
                 <div className="w-[150px]">
@@ -144,7 +142,7 @@ const Profile = () => {
                 />
               </div>
             </div>
-          ) : currentTab.id === "system" ? (
+          ) : tab === "system" ? (
             <WebsiteSettings />
           ) : (
             <LanguagesPage />

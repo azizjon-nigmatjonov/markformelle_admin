@@ -8,17 +8,28 @@ import {
   EditIcon,
   SaveIcon,
 } from "../../../components/UI/IconGenerator/Svg";
+import { useDispatch, useSelector } from "react-redux";
+import { translateActions } from "../../../store/translation/translate.slice";
 
 const LanguagesPage = () => {
+  const dispatch = useDispatch();
   const [listTable, setListTable]: any = useState([]);
   const [count, setCount] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const storedTranslation = useSelector(
+    (state: any) => state.translation.translation
+  );
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     edit: false,
     page: 1,
     perPage: 10,
   });
-  const { isLoading, refetch } = GetTranslations({ setListTable, setCount });
+  const { isLoading, refetch } = GetTranslations({
+    setListTable,
+    setCount,
+    storedTranslation,
+  });
+
   const {
     AddNewColumn,
     GetTitle,
@@ -31,10 +42,8 @@ const LanguagesPage = () => {
     refetch,
   });
   const handleValue = useDebounce((value: any, id: string, key: string) => {
-    console.log(value, id, key);
-
     WriteValue({ listTable, setListTable, value, id, key });
-  }, 0);
+  }, 300);
 
   const handleSubmit = () => {
     const currObj = listTable.find(
@@ -46,6 +55,8 @@ const LanguagesPage = () => {
       onSubmit(currObj);
     }
     setFilterParams({ ...filterParams, edit: false, currentIndex: undefined });
+    dispatch(translateActions.setTranslation(listTable));
+    localStorage.setItem("translations", JSON.stringify(listTable));
   };
 
   const headColumns = useMemo(() => {

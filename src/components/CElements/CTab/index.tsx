@@ -50,7 +50,7 @@ export default function CTabs({
     }
     const newQuery = {
       ...query,
-      [slug]: i?.slug,
+      [slug]: i?.id,
     };
 
     const queryParams = createSearchParams(newQuery);
@@ -63,7 +63,7 @@ export default function CTabs({
   const value = useMemo(() => {
     if (currentTab?.index) return currentTab.index;
     if (!query?.[slug]) return 0;
-    const tab = optimizedTabList.find((tab: any) => tab.slug === query?.[slug]);
+    const tab = optimizedTabList.find((tab: any) => tab.id === query?.[slug]);
     return tab?.index;
   }, [optimizedTabList, query, currentTab, slug]);
 
