@@ -1,7 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import useDebounce from "../../../hooks/useDebounce";
 import { GetTranslations, HandleTable } from "./Logic";
-// import { usePermissions } from "../../../hooks/usePermissions";
 import { IFilterParams } from "../../../interfaces";
 import CNewTable from "../../../components/CElements/CNewTable";
 import {
@@ -11,7 +10,6 @@ import {
 } from "../../../components/UI/IconGenerator/Svg";
 
 const LanguagesPage = () => {
-  // const { checkPermission } = usePermissions();
   const [listTable, setListTable]: any = useState([]);
   const [count, setCount] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);

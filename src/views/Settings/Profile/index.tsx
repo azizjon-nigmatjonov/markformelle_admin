@@ -27,12 +27,12 @@ const TabList = [
     id: "profile",
   },
   {
-    name: "Системные настройки",
-    id: "system",
-  },
-  {
     name: "Языковые настройки",
     id: "language",
+  },
+  {
+    name: "Системные настройки",
+    id: "system",
   },
 ];
 
@@ -73,6 +73,7 @@ const Profile = () => {
             currentTab={currentTab}
             handleTabClick={setCurrentTab}
           />
+
           {currentTab.id === "profile" ? (
             <div className="flex justify-between mt-5">
               <div className="flex items-center space-x-8">

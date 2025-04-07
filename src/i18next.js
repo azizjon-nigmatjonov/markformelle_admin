@@ -10,19 +10,20 @@ i18next
   .use(initReactI18next)
   .init({
     fallbackLng: "ru",
-    lng: "ru",
     whitelist: ["en", "ru", "uz", "tu"],
     interpolation: {
       escapeValue: false,
     },
     useSuspense: true,
     backend: {
-      loadPath: `${import.meta.env.VITE_TEST_URL}/translation/language/{{lng}}`, // Dynamic path using {{lng}}
+      loadPath: `${
+        import.meta.env.VITE_TEST_URL
+      }/translation/language/${localStorage.getItem("i18nextLng")}`, // Dynamic path using {{lng}}
       request: async (options, url, payload, callback) => {
         try {
           const res = await axios.get(url);
-
           const currentLang = i18next.language;
+
           callback(null, {
             data: res.data[currentLang],
             status: 200,

@@ -78,9 +78,9 @@ export default function CTab({
     },
     "& .MuiTabs-indicator": {
       // borderRadius: "8px",
-      backgroundColor: ColorConstants.gray20,
+      backgroundColor: ColorConstants.border,
       height: "100%",
-      borderBottom: "2px solid var(--gray)",
+      borderBottom: "2px solid var(--main)",
     },
     ...customStyles,
   };
