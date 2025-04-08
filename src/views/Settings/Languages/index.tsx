@@ -11,6 +11,14 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { translateActions } from "../../../store/translation/translate.slice";
 
+const defaults = {
+  RU: "",
+  TU: "",
+  EN: "",
+  UZ: "",
+  KEYWORD: "",
+};
+
 const LanguagesPage = () => {
   const dispatch = useDispatch();
   const [listTable, setListTable]: any = useState([]);
@@ -19,6 +27,7 @@ const LanguagesPage = () => {
   const storedTranslation = useSelector(
     (state: any) => state.translation.translation
   );
+  const [lastUpdaters, setLastUpdaters] = useState([]);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     edit: false,
     page: 1,
@@ -43,52 +52,54 @@ const LanguagesPage = () => {
     refetch,
   });
   const handleValue = useDebounce((value: any, id: string, key: string) => {
-    WriteValue({ listTable, setListTable, value, id, key });
+    WriteValue({
+      listTable,
+      setListTable,
+      value,
+      id,
+      key,
+      setLastUpdaters,
+      lastUpdaters,
+    });
   }, 300);
-  const [errors, setErrors]: any = useState([]);
   const handleSubmit = () => {
-    let error = false;
-    const defaults = {
-      RU: "",
-      TU: "",
-      EN: "",
-      UZ: "",
-      KEYWORD: "",
-    };
-    const newErrors = [...errors];
-    const newArr = listTable.map((element: any, index: number) => {
+    const newErrors: string[] = [];
+    const newArr = listTable.map((element: any) => {
+      element.errors = [];
       for (let key in defaults) {
         if (!element[key]?.trim()) {
-          element[key] = "error";
+          element[key] = "";
+          element.errors.push(key);
+          newErrors.push(element.KEYWORD);
         } else {
+          newErrors.filter((el: string) => el !== element.KEYWORD);
           element[key] = element[key];
         }
       }
       return element;
     });
-    setErrors(newErrors);
 
     setListTable(newArr);
+    console.log("lastUpdaters", lastUpdaters);
+    // if (!newErrors.length) {
+    const currObj = listTable.find(
+      (_: any, index: number) => index + 1 === filterParams.currentIndex
+    );
 
-    if (!errors.length) {
-      const currObj = listTable.find(
-        (_: any, index: number) => index + 1 === filterParams.currentIndex
-      );
-      // if (filterParams.currentIndex !== 1) {
-      //   onUpdate(currObj);
-      // } else {
-      //   onSubmit([listTable[0]]);
-      // }
-      setFilterParams({
-        ...filterParams,
-        edit: false,
-        currentIndex: undefined,
-      });
-      // dispatch(translateActions.setTranslation(newArr));
-      localStorage.setItem("translations", JSON.stringify(newArr));
+    if (filterParams.currentIndex !== 1) {
+      onUpdate(currObj);
+    } else {
+      onSubmit(lastUpdaters);
     }
+    setFilterParams({
+      ...filterParams,
+      edit: false,
+      currentIndex: undefined,
+    });
+    // dispatch(translateActions.setTranslation(newArr));
+    localStorage.setItem("translations", JSON.stringify(newArr));
+    // }
   };
-  console.log("listTable", listTable);
 
   const headColumns = useMemo(() => {
     const list: any = [
@@ -96,26 +107,22 @@ const LanguagesPage = () => {
         renderHead: () => <GetTitle val="key" />,
         id: ["KEYWORD", "index", "errors"],
         width: 260,
-        render: ([key, index]: any) => {
+        render: ([key, index, errors]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center font-medium">
-              <div
-                className="w-full flex justify-center"
-                style={{
-                  border: `1px solid ${key === "error" ? "red" : "yellow"}`,
-                }}
-              >
-                {filterParams.edit && index === filterParams.currentIndex ? (
+              <div className="w-full flex justify-center">
+                {(filterParams.edit && index === filterParams.currentIndex) ||
+                errors?.includes("KEYWORD") ? (
                   <input
-                    className={`input-design font-medium`}
+                    className={`input-design font-medium ${
+                      errors?.includes("KEYWORD") ? "error" : ""
+                    }`}
                     onChange={(e) => {
                       handleValue(e.target.value, key, "KEYWORD");
                     }}
                     ref={inputRef}
                     defaultValue={key}
                   />
-                ) : key === "error" ? (
-                  "-"
                 ) : (
                   key
                 )}
@@ -126,14 +133,17 @@ const LanguagesPage = () => {
       },
       {
         renderHead: () => <GetTitle val="ru" />,
-        id: ["KEYWORD", "RU", "index"],
+        id: ["KEYWORD", "RU", "index", "errors"],
         width: 260,
-        render: ([id, val, index]: any) => {
+        render: ([id, val, index, errors]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center">
-              {filterParams.edit && index === filterParams.currentIndex ? (
+              {(filterParams.edit && index === filterParams.currentIndex) ||
+              errors?.includes("RU") ? (
                 <input
-                  className={`input-design font-medium`}
+                  className={`input-design font-medium ${
+                    errors?.includes("RU") ? "error" : ""
+                  }`}
                   onChange={(e) => {
                     handleValue(e.target.value, id, "RU");
                   }}
@@ -148,14 +158,17 @@ const LanguagesPage = () => {
       },
       {
         renderHead: () => <GetTitle val="uz" />,
-        id: ["KEYWORD", "UZ", "index"],
+        id: ["KEYWORD", "UZ", "index", "errors"],
         width: 260,
-        render: ([id, val, index]: any) => {
+        render: ([id, val, index, errors]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center">
-              {filterParams.edit && index === filterParams.currentIndex ? (
+              {(filterParams.edit && index === filterParams.currentIndex) ||
+              errors?.includes("UZ") ? (
                 <input
-                  className="input-design"
+                  className={`input-design font-medium ${
+                    errors?.includes("UZ") ? "error" : ""
+                  }`}
                   onChange={(e) => {
                     handleValue(e.target.value, id, "UZ");
                   }}
@@ -171,14 +184,17 @@ const LanguagesPage = () => {
 
       {
         renderHead: () => <GetTitle val="en" />,
-        id: ["KEYWORD", "EN", "index"],
+        id: ["KEYWORD", "EN", "index", "errors"],
         width: 260,
-        render: ([id, val, index]: any) => {
+        render: ([id, val, index, errors]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center">
-              {filterParams.edit && index === filterParams.currentIndex ? (
+              {(filterParams.edit && index === filterParams.currentIndex) ||
+              errors?.includes("EN") ? (
                 <input
-                  className="input-design"
+                  className={`input-design font-medium ${
+                    errors?.includes("EN") ? "error" : ""
+                  }`}
                   onChange={(e) => {
                     handleValue(e.target.value, id, "EN");
                   }}
@@ -193,14 +209,17 @@ const LanguagesPage = () => {
       },
       {
         renderHead: () => <GetTitle val="tu" />,
-        id: ["KEYWORD", "TU", "index"],
+        id: ["KEYWORD", "TU", "index", "errors"],
         width: 260,
-        render: ([id, val, index]: any) => {
+        render: ([id, val, index, errors]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center">
-              {filterParams.edit && index === filterParams.currentIndex ? (
+              {(filterParams.edit && index === filterParams.currentIndex) ||
+              errors?.includes("TU") ? (
                 <input
-                  className="input-design"
+                  className={`input-design font-medium ${
+                    errors?.includes("TU") ? "error" : ""
+                  }`}
                   onChange={(e) => {
                     handleValue(e.target.value, id, "TU");
                   }}
@@ -260,7 +279,7 @@ const LanguagesPage = () => {
       },
     ];
     return list;
-  }, [listTable, filterParams.edit, errors]);
+  }, [listTable, filterParams.edit]);
 
   const handleActions = (el: any, type: string) => {
     if (type === "delete") {
@@ -275,7 +294,7 @@ const LanguagesPage = () => {
     <>
       <div className="p-2">
         <CNewTable
-          key={filterParams.edit ? "edit" : "view" + errors.length}
+          key={filterParams.edit ? "edit" : "view"}
           isLoading={isLoading}
           headColumns={headColumns}
           title="Таблица языки"

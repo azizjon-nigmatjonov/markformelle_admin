@@ -131,17 +131,22 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
     value,
     id,
     key,
+    lastUpdaters = [],
+    setLastUpdaters = () => {},
   }: {
     listTable: any;
     setListTable: (val: any) => void;
     id: string;
     value: any;
     key: string;
+    lastUpdaters: any;
+    setLastUpdaters: (val: any) => void;
   }) => {
     if (value) {
       const newObj: any = listTable?.find((el: any) => el.KEYWORD === id);
 
       newObj[key] = value;
+      // if (!newObj.KEYWORD) newObj.KEYWORD = value;
 
       const arr = listTable?.map((item: any) => {
         // delete item.value["error_" + id];
@@ -150,7 +155,17 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
           return { ...newObj };
         } else return { ...item };
       });
-
+      if (
+        lastUpdaters?.find((updater: any) => updater.KEYWORD === newObj.KEYWORD)
+      ) {
+        setLastUpdaters(
+          lastUpdaters.filter(
+            (updater: any) => updater.KEYWORD !== newObj.KEYWORD
+          )
+        );
+      } else {
+        setLastUpdaters([...lastUpdaters, newObj]);
+      }
       setListTable(arr);
     }
   };
@@ -167,7 +182,7 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
         }
       )
       .then(() => {
-        refetch();
+        // refetch();
       })
       .catch((error) => {
         console.error("Error adding route:", error);
