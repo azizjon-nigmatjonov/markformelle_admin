@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Closer } from "../../../../UI/Closer";
 import { MenuItem } from "./MenuItems";
 import { tableStoreActions } from "../../../../../store/table";
@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { Badge, IconButton } from "@mui/material";
 import { ListDotIcon } from "../../../../UI/IconGenerator/Svg/Machines";
 import ExcelDownload from "../../../../../hooks/useExcelDownload";
+import ExcelReader from "../../../../../hooks/useExcelImport";
 import {
   DeleteIcon,
   FilterIcon,
@@ -53,6 +54,7 @@ export const HeaderSettings = ({
   sortData,
   defaultFilters = [],
   selectedItems = [],
+  setBodySource = () => {},
 }: {
   filterParams: any;
   title: string;
@@ -66,6 +68,7 @@ export const HeaderSettings = ({
   sortData: any;
   defaultFilters: any;
   selectedItems: any;
+  setBodySource: (val: Partial<any>) => void;
   tableActions: (el: any, status: string) => void;
 }) => {
   const [open, setOpen] = useState(false);
@@ -201,12 +204,20 @@ export const HeaderSettings = ({
     return reorderedArray;
   }, [headColumns.length, bodyColumns.length, pageColumns.length]);
 
+  const handleExcelUploading = useCallback((data: any) => {
+    setBodySource(data);
+  }, []);
+
   return (
     <div className="pb-[45px] bg-white border-b border-[var(--border)] rounded-t-[8px]">
       <div className="h-[45px] absolute w-full left-0 top-0 flex items-center desktop:px-3 justify-between">
         <div className="flex items-center space-x-4 h-full">
-          <h2 className="font-medium">{title}</h2>
-          <div className="w-[1px] h-[60%] bg-[var(--border)]"></div>
+          {title ? <h2 className="font-medium">{title}</h2> : ""}
+          {title ? (
+            <div className="w-[1px] h-[60%] bg-[var(--border)]"></div>
+          ) : (
+            ""
+          )}
           <div className="space-x-4 flex items-center">
             {defaultFilters.includes("add") && (
               <IconButton onClick={() => tableActions({}, "modal")}>
@@ -218,16 +229,22 @@ export const HeaderSettings = ({
             )}
             {defaultFilters.includes("delete") && (
               <div className="relative">
-                {selectedItems?.length ? (
-                  <IconButton onClick={() => setOpenDelete(true)}>
-                    <div className="w-[30px] h-[30px] items-center justify-center flex">
-                      <DeleteIcon fill="var(--main)" width={18} />
-                    </div>
-                    <p className="text-sm pr-2 text-black">Удалить</p>
-                  </IconButton>
-                ) : (
-                  ""
-                )}
+                <IconButton
+                  onClick={() => {
+                    if (selectedItems.length) setOpenDelete(true);
+                  }}
+                >
+                  <div className="w-[30px] h-[30px] items-center justify-center flex">
+                    <DeleteIcon
+                      fill={
+                        selectedItems?.length ? "var(--main)" : "var(--gray)"
+                      }
+                      width={18}
+                    />
+                  </div>
+                  <p className="text-sm pr-2 text-black">Удалить</p>
+                </IconButton>
+
                 {openDelete && (
                   <PopoverDelete
                     closePopover={(status) => {
@@ -262,43 +279,55 @@ export const HeaderSettings = ({
               </svg>
             </div>
           </IconButton>
-          <IconButton onClick={() => tableActions({}, "sidefilter")}>
-            <div
-              className={`h-[30px] w-[30px] flex items-center justify-center`}
-            >
-              <Badge badgeContent={sortData?.length} color="secondary">
-                <FilterIcon
-                  fill={sideFilter ? "var(--primary)" : "var(--main)"}
+          {defaultFilters.includes("filter") && (
+            <IconButton onClick={() => tableActions({}, "sidefilter")}>
+              <div
+                className={`h-[30px] w-[30px] flex items-center justify-center`}
+              >
+                <Badge badgeContent={sortData?.length} color="secondary">
+                  <FilterIcon
+                    fill={sideFilter ? "var(--primary)" : "var(--main)"}
+                  />
+                </Badge>
+              </div>
+            </IconButton>
+          )}
+
+          {defaultFilters.includes("excel_download") && (
+            <ExcelDownload
+              title={filterParams?.title}
+              data={ExcelData}
+              allColumns={allColumns}
+            />
+          )}
+
+          {defaultFilters.includes("excel_upload") && (
+            <ExcelReader setExcelData={handleExcelUploading} />
+          )}
+
+          {defaultFilters.includes("active_menu") && (
+            <div className="relative">
+              <div onClick={() => setOpen(true)} className="relative">
+                <IconButton>
+                  <div
+                    className={`w-[30px] h-[30px] rounded-[8px] items-center justify-center flex`}
+                  >
+                    <ListDotIcon
+                      fill={open ? "var(--primary)" : "var(--main)"}
+                    />
+                  </div>
+                </IconButton>
+              </div>
+              {open && (
+                <SettingDropdown
+                  setOpen={setOpen}
+                  menuList={menuList}
+                  allCheck={allCheck}
+                  handleFilterSave={handleFilterSave}
                 />
-              </Badge>
+              )}
             </div>
-          </IconButton>
-
-          <ExcelDownload
-            title={filterParams?.title}
-            data={ExcelData}
-            allColumns={allColumns}
-          />
-
-          <div className="relative">
-            <div onClick={() => setOpen(true)} className="relative">
-              <IconButton>
-                <div
-                  className={`w-[30px] h-[30px] rounded-[8px] items-center justify-center flex`}
-                >
-                  <ListDotIcon fill={open ? "var(--primary)" : "var(--main)"} />
-                </div>
-              </IconButton>
-            </div>
-            {open && (
-              <SettingDropdown
-                setOpen={setOpen}
-                menuList={menuList}
-                allCheck={allCheck}
-                handleFilterSave={handleFilterSave}
-              />
-            )}
-          </div>
+          )}
           {extra}
         </div>
         {open && <Closer handleClose={() => setOpen(false)} classes="z-[91]" />}

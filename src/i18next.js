@@ -17,13 +17,13 @@ i18next
     useSuspense: true,
     backend: {
       loadPath: `${import.meta.env.VITE_TEST_URL}/translation/language/${
-        localStorage.getItem("i18nextLng").includes("US")
+        localStorage.getItem("i18nextLng")?.includes("US")
           ? "ru"
           : localStorage.getItem("i18nextLng")
       }`,
       request: async (options, url, payload, callback) => {
         let currentLang = i18next.language;
-        if (currentLang.includes("US")) currentLang = "ru";
+        if (currentLang?.includes("US")) currentLang = "ru";
 
         const storedTranslation =
           JSON.parse(localStorage.getItem("translations")) || [];

@@ -22,7 +22,8 @@ const LanguagesPage = () => {
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     edit: false,
     page: 1,
-    perPage: 10,
+    perPage: 200,
+    title: "Таблица языки",
   });
   const { isLoading, refetch } = GetTranslations({
     setListTable,
@@ -44,67 +45,81 @@ const LanguagesPage = () => {
   const handleValue = useDebounce((value: any, id: string, key: string) => {
     WriteValue({ listTable, setListTable, value, id, key });
   }, 300);
-
+  const [errors, setErrors]: any = useState([]);
   const handleSubmit = () => {
-    const currObj = listTable.find(
-      (_: any, index: number) => index + 1 === filterParams.currentIndex
-    );
-
     let error = false;
-
-    const newArr = listTable.map((element: { KEYWORD: string }) => {
-      if (!element.KEYWORD) {
-        error = true;
-        return {
-          ...element,
-          error: true,
-        };
-      } else {
-        return element;
+    const defaults = {
+      RU: "",
+      TU: "",
+      EN: "",
+      UZ: "",
+      KEYWORD: "",
+    };
+    const newErrors = [...errors];
+    const newArr = listTable.map((element: any, index: number) => {
+      for (let key in defaults) {
+        if (!element[key]?.trim()) {
+          element[key] = "error";
+        } else {
+          element[key] = element[key];
+        }
       }
+      return element;
     });
+    setErrors(newErrors);
 
     setListTable(newArr);
 
-    if (!error) {
-      if (filterParams.currentIndex !== 1) {
-        onUpdate(currObj);
-      } else {
-        onSubmit(currObj);
-      }
+    if (!errors.length) {
+      const currObj = listTable.find(
+        (_: any, index: number) => index + 1 === filterParams.currentIndex
+      );
+      // if (filterParams.currentIndex !== 1) {
+      //   onUpdate(currObj);
+      // } else {
+      //   onSubmit([listTable[0]]);
+      // }
       setFilterParams({
         ...filterParams,
         edit: false,
         currentIndex: undefined,
       });
-      dispatch(translateActions.setTranslation(listTable));
-      localStorage.setItem("translations", JSON.stringify(listTable));
+      // dispatch(translateActions.setTranslation(newArr));
+      localStorage.setItem("translations", JSON.stringify(newArr));
     }
   };
+  console.log("listTable", listTable);
 
   const headColumns = useMemo(() => {
-    return [
+    const list: any = [
       {
         renderHead: () => <GetTitle val="key" />,
-        id: ["KEYWORD", "index", "error"],
+        id: ["KEYWORD", "index", "errors"],
         width: 260,
-        render: ([key, index, error]: any) => {
+        render: ([key, index]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center font-medium">
-              {filterParams.edit && index === filterParams.currentIndex ? (
-                <input
-                  className={`input-design font-medium ${
-                    error ? "error" : "e"
-                  }`}
-                  onChange={(e) => {
-                    handleValue(e.target.value, key, "KEYWORD");
-                  }}
-                  ref={inputRef}
-                  defaultValue={key}
-                />
-              ) : (
-                key
-              )}
+              <div
+                className="w-full flex justify-center"
+                style={{
+                  border: `1px solid ${key === "error" ? "red" : "yellow"}`,
+                }}
+              >
+                {filterParams.edit && index === filterParams.currentIndex ? (
+                  <input
+                    className={`input-design font-medium`}
+                    onChange={(e) => {
+                      handleValue(e.target.value, key, "KEYWORD");
+                    }}
+                    ref={inputRef}
+                    defaultValue={key}
+                  />
+                ) : key === "error" ? (
+                  "-"
+                ) : (
+                  key
+                )}
+              </div>
             </div>
           );
         },
@@ -244,7 +259,8 @@ const LanguagesPage = () => {
         },
       },
     ];
-  }, [listTable, filterParams.edit]);
+    return list;
+  }, [listTable, filterParams.edit, errors]);
 
   const handleActions = (el: any, type: string) => {
     if (type === "delete") {
@@ -254,58 +270,59 @@ const LanguagesPage = () => {
       AddNewColumn({ listTable, setListTable });
     }
   };
-
+  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   return (
     <>
       <div className="p-2">
-        <div className="border-b border-[var(--border)] flex justify-end pb-2">
-          <div>
-            {filterParams.edit ? (
-              <button
-                onClick={() => {
-                  handleSubmit();
-                }}
-                className="custom-btn"
-                style={{ height: "32px" }}
-                type="button"
-              >
-                Cохранить
-              </button>
-            ) : (
-              <button
-                onClick={() => {
-                  AddNewColumn({ listTable, setListTable });
-                  setFilterParams({
-                    ...filterParams,
-                    edit: true,
-                    currentIndex: 1,
-                  });
-                }}
-                className="custom-btn create"
-                style={{ height: "32px" }}
-                type="button"
-              >
-                Добавить
-              </button>
-            )}
-          </div>
-        </div>
-
         <CNewTable
-          key={filterParams.edit ? "edit" : "view"}
+          key={filterParams.edit ? "edit" : "view" + errors.length}
           isLoading={isLoading}
           headColumns={headColumns}
+          title="Таблица языки"
+          defaultFilters={["excel_upload", "excel_download"]}
           bodyColumns={listTable}
           filterParams={filterParams}
           isResizeble={false}
           handleFilterParams={setFilterParams}
           handleActions={handleActions}
-          autoHeight="auto"
+          autoHeight={window.innerHeight - (openHeader ? 210 : 160) + "px"}
           animation={false}
           meta={{
             totalCount: count,
             pageCount: count ? Math.ceil(count / filterParams?.perPage) : 0,
           }}
+          extra={
+            <div>
+              {filterParams.edit ? (
+                <button
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                  className="custom-btn"
+                  style={{ height: "32px" }}
+                  type="button"
+                >
+                  Cохранить
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    AddNewColumn({ listTable, setListTable });
+                    setFilterParams({
+                      ...filterParams,
+                      edit: true,
+                      currentIndex: 1,
+                    });
+                  }}
+                  className="custom-btn create"
+                  style={{ height: "32px" }}
+                  type="button"
+                >
+                  Добавить
+                </button>
+              )}
+            </div>
+          }
         />
       </div>
     </>

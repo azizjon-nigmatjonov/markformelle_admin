@@ -74,7 +74,15 @@ const CNewTable = ({
   filterParams = { page: 1, perPage: 50 },
   handleFilterParams = () => {},
   handleActions = () => {},
-  defaultFilters = ["add", "delete"],
+  defaultFilters = [
+    "add",
+    "delete",
+    "excel_download",
+    "excel_upload",
+    "filter",
+    "active_menu",
+    "actions",
+  ],
   defaultSearch = {},
 }: Props) => {
   const { navigateTo } = usePageRouter();
@@ -582,7 +590,7 @@ const CNewTable = ({
   return (
     <div className="relative cnewtable w-full rounded-t-[8px]">
       <div className="h-full">
-        {title && (
+        {defaultFilters?.length || title ? (
           <HeaderSettings
             title={title}
             filterParams={filterParams}
@@ -597,7 +605,10 @@ const CNewTable = ({
             sortData={sortData}
             defaultFilters={defaultFilters}
             selectedItems={selectedItems}
+            setBodySource={setBodySource}
           />
+        ) : (
+          ""
         )}
         <div
           id="table"
@@ -872,7 +883,8 @@ const CNewTable = ({
                               ) : (
                                 ""
                               )}
-                              {colIndex === 0 && title ? (
+                              {colIndex === 0 &&
+                              defaultFilters.includes("actions") ? (
                                 <div className="relative flex items-center">
                                   <button
                                     className={`w-[20px] h-full items-center justify-center ml-2`}

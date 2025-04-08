@@ -139,15 +139,15 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
     key: string;
   }) => {
     if (value) {
-      const obj = listTable?.find((el: any) => el.KEYWORD === id);
+      const newObj: any = listTable?.find((el: any) => el.KEYWORD === id);
 
-      obj[key] = value;
-      console.log("111", obj, key, id);
+      newObj[key] = value;
+
       const arr = listTable?.map((item: any) => {
         // delete item.value["error_" + id];
 
         if (item.KEYWORD === id) {
-          return { ...obj };
+          return { ...newObj };
         } else return { ...item };
       });
 
@@ -157,11 +157,15 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
 
   const onSubmit = (data: any) => {
     axios
-      .post(`${API_URL}/translation`, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      .post(
+        `${API_URL}/translation/batch`,
+        { translations: data },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
       .then(() => {
         refetch();
       })
@@ -231,6 +235,7 @@ export const GetTranslations = ({
       onSuccess: (res: any) => {
         const newArr: any = [];
         if (!res?.data?.length) return;
+
         storedTranslation?.forEach((el: any) => {
           if (
             !res.data.find(

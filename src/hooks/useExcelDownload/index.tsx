@@ -30,7 +30,15 @@ const ExcelDownload = ({
       const keys = Object.keys(obj);
       const newObj: any = {};
       for (let key of keys) {
-        newObj[t(key)] = obj[key];
+        if (
+          key !== "is_freez" &&
+          key !== "is_view" &&
+          key !== "is_edit" &&
+          key !== "is_delete" &&
+          key !== "is_sellect"
+        ) {
+          newObj[t(key)] = obj[key];
+        }
       }
       newData.push(newObj);
     });
@@ -45,6 +53,7 @@ const ExcelDownload = ({
       type: "array",
     });
     const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+    console.log("title", title);
 
     saveAs(blob, `${title}.xlsx`);
     setOpen(false);

@@ -41,7 +41,7 @@ export const ChemicalsStock = () => {
           handleActions={handleActions}
           isLoading={isLoading}
           filterParams={filterParams}
-          defaultFilters={[]}
+          defaultFilters={["excel_download"]}
           handleFilterParams={setFilterParams}
           meta={{
             totalCount: bodyData?.count,

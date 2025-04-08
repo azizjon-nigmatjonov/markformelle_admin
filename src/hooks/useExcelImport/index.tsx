@@ -3,10 +3,12 @@ import { memo, useState } from "react";
 import * as XLSX from "xlsx";
 import { UploadOutlinedIcon } from "../../components/UI/IconGenerator/Svg/Machines";
 
-const ExcelReader = () => {
-  const [data, setData] = useState([]);
+const ExcelReader = ({
+  setExcelData = () => {},
+}: {
+  setExcelData: (val: any) => void;
+}) => {
   const [loading, setLoading] = useState(false);
-  console.log("data upload excel", data);
 
   const handleFileUpload = (e: any) => {
     setLoading(true);
@@ -24,7 +26,9 @@ const ExcelReader = () => {
 
         // Converting to JSON
         const jsonData: any = XLSX.utils.sheet_to_json(worksheet);
-        setData(jsonData);
+
+        setExcelData(jsonData);
+        // setExcelData(jsonData);
       };
 
       reader.readAsBinaryString(file);
@@ -41,7 +45,11 @@ const ExcelReader = () => {
           className="h-[30px] w-[30px] rounded-[8px] flex items-center justify-center relative z-[1]"
           onClick={() => document?.getElementById("fileInput")?.click()}
         >
-          {loading ? <CircularProgress size={14} /> : <UploadOutlinedIcon />}
+          {loading ? (
+            <CircularProgress size={14} />
+          ) : (
+            <UploadOutlinedIcon fill="var(--main)" />
+          )}
         </div>
       </IconButton>
 

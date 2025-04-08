@@ -151,6 +151,7 @@ export const SelectOptionsTable = ({
                 filterParams={filterParams}
                 handleFilterParams={setFilterParams}
                 handleActions={handleActions}
+                defaultFilters={[]}
                 autoHeight="300px"
                 clickable={true}
                 idForTable={name + "select"}

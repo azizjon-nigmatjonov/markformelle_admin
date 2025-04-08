@@ -51,7 +51,15 @@ export const Transfers = () => {
           title="Таблица внутреннее примешенныей"
           headColumns={newHeadColumns}
           bodyColumns={bodyColumns}
-          defaultFilters={["sidebar_filter", "add", "delete"]}
+          defaultFilters={[
+            "sidebar_filter",
+            "add",
+            "delete",
+            "actions",
+            "excel_download",
+            "active_menu",
+            "filter",
+          ]}
           defaultSearch={{ IRSALIYENO: "" }}
           handleActions={handleActions}
           isLoading={isLoading}
