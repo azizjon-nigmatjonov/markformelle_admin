@@ -206,6 +206,7 @@ export const HeaderSettings = ({
 
   const handleExcelUploading = useCallback((data: any) => {
     setBodySource(data);
+    tableActions(data, "edit");
   }, []);
 
   return (

@@ -35,7 +35,9 @@ const ExcelDownload = ({
           key !== "is_view" &&
           key !== "is_edit" &&
           key !== "is_delete" &&
-          key !== "is_sellect"
+          key !== "is_sellect" &&
+          key !== "is_sellect_more" &&
+          key !== "index"
         ) {
           newObj[t(key)] = obj[key];
         }
@@ -53,7 +55,6 @@ const ExcelDownload = ({
       type: "array",
     });
     const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-    console.log("title", title);
 
     saveAs(blob, `${title}.xlsx`);
     setOpen(false);

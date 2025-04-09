@@ -48,7 +48,7 @@ export const BuyingChemicals = () => {
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />
       <div className="p-2">
         <CNewTable
-          title="Таблица документ покупки"
+          title={"document_buying"}
           headColumns={newHeadColumns}
           bodyColumns={bodyColumns}
           defaultFilters={[

@@ -1,15 +1,14 @@
 import { useMemo, useRef, useState } from "react";
-import useDebounce from "../../../hooks/useDebounce";
 import { GetTranslations, HandleTable } from "./Logic";
 import { IFilterParams } from "../../../interfaces";
 import CNewTable from "../../../components/CElements/CNewTable";
+import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import {
-  DeleteIcon,
   EditIcon,
+  PlusIcon,
   SaveIcon,
 } from "../../../components/UI/IconGenerator/Svg";
-import { useDispatch, useSelector } from "react-redux";
-import { translateActions } from "../../../store/translation/translate.slice";
 
 const defaults = {
   RU: "",
@@ -20,24 +19,39 @@ const defaults = {
 };
 
 const LanguagesPage = () => {
-  const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [listTable, setListTable]: any = useState([]);
   const [count, setCount] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const storedTranslation = useSelector(
     (state: any) => state.translation.translation
   );
-  const [lastUpdaters, setLastUpdaters] = useState([]);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     edit: false,
     page: 1,
     perPage: 200,
     title: "Таблица языки",
   });
+
+  const editFields = () => {
+    setFilterParams({
+      ...filterParams,
+      edit: false,
+    });
+    setTimeout(() => {
+      setFilterParams({
+        ...filterParams,
+        edit: true,
+        currentIndex: 0,
+      });
+    }, 0);
+  };
+
   const { isLoading, refetch } = GetTranslations({
     setListTable,
     setCount,
     storedTranslation,
+    editFields,
   });
 
   const {
@@ -47,78 +61,85 @@ const LanguagesPage = () => {
     onSubmit,
     onUpdate,
     handleDelete,
-    deleteTranslation,
   } = HandleTable({
     refetch,
   });
-  const handleValue = useDebounce((value: any, id: string, key: string) => {
+
+  const handleValue = (value: any, ID: number, key: string) => {
     WriteValue({
       listTable,
       setListTable,
       value,
-      id,
+      ID,
       key,
-      setLastUpdaters,
-      lastUpdaters,
     });
-  }, 300);
+  };
+
   const handleSubmit = () => {
-    const newErrors: string[] = [];
+    let error = false;
+    const updateElements: any = [];
+    const newElements: any = [];
+
     const newArr = listTable.map((element: any) => {
       element.errors = [];
       for (let key in defaults) {
-        if (!element[key]?.trim()) {
+        if (!element.KEYWORD?.trim()) {
+          error = true;
           element[key] = "";
-          element.errors.push(key);
-          newErrors.push(element.KEYWORD);
+          element.errors.push("KEYWORD");
         } else {
-          newErrors.filter((el: string) => el !== element.KEYWORD);
           element[key] = element[key];
         }
+      }
+      const newObj = JSON.parse(JSON.stringify(element));
+
+      delete newObj.status;
+      delete newObj.errors;
+      newObj.TU_TOOLTIP = "-";
+      newObj.UZ_TOOLTIP = "-";
+      newObj.EN_TOOLTIP = "-";
+      newObj.RU_TOOLTIP = "-";
+      if (element?.status === "new") {
+        newElements.push(newObj);
+      }
+      if (element?.status === "update") {
+        updateElements.push(newObj);
       }
       return element;
     });
 
-    setListTable(newArr);
-    console.log("lastUpdaters", lastUpdaters);
-    // if (!newErrors.length) {
-    const currObj = listTable.find(
-      (_: any, index: number) => index + 1 === filterParams.currentIndex
-    );
+    if (!error) {
+      if (updateElements.length) onUpdate(updateElements);
+      if (newElements.length) onSubmit(newElements);
+      setFilterParams({
+        ...filterParams,
+        edit: false,
+        currentIndex: undefined,
+      });
 
-    if (filterParams.currentIndex !== 1) {
-      onUpdate(currObj);
-    } else {
-      onSubmit(lastUpdaters);
+      localStorage.setItem("translations", JSON.stringify(newArr));
     }
-    setFilterParams({
-      ...filterParams,
-      edit: false,
-      currentIndex: undefined,
-    });
-    // dispatch(translateActions.setTranslation(newArr));
-    localStorage.setItem("translations", JSON.stringify(newArr));
-    // }
+
+    setListTable(newArr);
   };
 
   const headColumns = useMemo(() => {
     const list: any = [
       {
         renderHead: () => <GetTitle val="key" />,
-        id: ["KEYWORD", "index", "errors"],
+        id: ["KEYWORD", "ID", "errors"],
         width: 260,
-        render: ([key, index, errors]: any) => {
+        render: ([key, ID, errors]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center font-medium">
               <div className="w-full flex justify-center">
-                {(filterParams.edit && index === filterParams.currentIndex) ||
-                errors?.includes("KEYWORD") ? (
+                {filterParams.edit || !key || errors?.includes("KEYWORD") ? (
                   <input
                     className={`input-design font-medium ${
                       errors?.includes("KEYWORD") ? "error" : ""
                     }`}
                     onChange={(e) => {
-                      handleValue(e.target.value, key, "KEYWORD");
+                      handleValue(e.target.value, ID, "KEYWORD");
                     }}
                     ref={inputRef}
                     defaultValue={key}
@@ -133,19 +154,18 @@ const LanguagesPage = () => {
       },
       {
         renderHead: () => <GetTitle val="ru" />,
-        id: ["KEYWORD", "RU", "index", "errors"],
+        id: ["RU", "ID", "errors"],
         width: 260,
-        render: ([id, val, index, errors]: any) => {
+        render: ([val, ID, errors]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center">
-              {(filterParams.edit && index === filterParams.currentIndex) ||
-              errors?.includes("RU") ? (
+              {filterParams.edit || errors?.includes("RU") ? (
                 <input
                   className={`input-design font-medium ${
                     errors?.includes("RU") ? "error" : ""
                   }`}
                   onChange={(e) => {
-                    handleValue(e.target.value, id, "RU");
+                    handleValue(e.target.value, ID, "RU");
                   }}
                   defaultValue={val}
                 />
@@ -158,19 +178,18 @@ const LanguagesPage = () => {
       },
       {
         renderHead: () => <GetTitle val="uz" />,
-        id: ["KEYWORD", "UZ", "index", "errors"],
+        id: ["UZ", "ID", "errors"],
         width: 260,
-        render: ([id, val, index, errors]: any) => {
+        render: ([val, ID, errors]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center">
-              {(filterParams.edit && index === filterParams.currentIndex) ||
-              errors?.includes("UZ") ? (
+              {filterParams.edit || errors?.includes("UZ") ? (
                 <input
                   className={`input-design font-medium ${
                     errors?.includes("UZ") ? "error" : ""
                   }`}
                   onChange={(e) => {
-                    handleValue(e.target.value, id, "UZ");
+                    handleValue(e.target.value, ID, "UZ");
                   }}
                   defaultValue={val}
                 />
@@ -184,19 +203,18 @@ const LanguagesPage = () => {
 
       {
         renderHead: () => <GetTitle val="en" />,
-        id: ["KEYWORD", "EN", "index", "errors"],
+        id: ["EN", "ID", "errors"],
         width: 260,
-        render: ([id, val, index, errors]: any) => {
+        render: ([val, ID, errors]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center">
-              {(filterParams.edit && index === filterParams.currentIndex) ||
-              errors?.includes("EN") ? (
+              {filterParams.edit || errors?.includes("EN") ? (
                 <input
                   className={`input-design font-medium ${
                     errors?.includes("EN") ? "error" : ""
                   }`}
                   onChange={(e) => {
-                    handleValue(e.target.value, id, "EN");
+                    handleValue(e.target.value, ID, "EN");
                   }}
                   defaultValue={val}
                 />
@@ -209,19 +227,18 @@ const LanguagesPage = () => {
       },
       {
         renderHead: () => <GetTitle val="tu" />,
-        id: ["KEYWORD", "TU", "index", "errors"],
+        id: ["TU", "ID", "errors"],
         width: 260,
-        render: ([id, val, index, errors]: any) => {
+        render: ([val, ID, errors]: any) => {
           return (
             <div className="h-[56px] flex items-center w-full justify-center">
-              {(filterParams.edit && index === filterParams.currentIndex) ||
-              errors?.includes("TU") ? (
+              {filterParams.edit || errors?.includes("TU") ? (
                 <input
                   className={`input-design font-medium ${
                     errors?.includes("TU") ? "error" : ""
                   }`}
                   onChange={(e) => {
-                    handleValue(e.target.value, id, "TU");
+                    handleValue(e.target.value, ID, "TU");
                   }}
                   defaultValue={val}
                 />
@@ -232,63 +249,84 @@ const LanguagesPage = () => {
           );
         },
       },
-      {
-        renderHead: () => "Actions",
-        id: ["index", "KEYWORD", "actions"],
-        width: 260,
-        render: ([index, key]: any) => {
-          return (
-            <div className="h-[56px] flex items-center w-full justify-center space-x-5">
-              <button
-                type="button"
-                onClick={() => {
-                  if (filterParams.currentIndex === index) {
-                    handleSubmit();
-                  } else {
-                    setFilterParams({
-                      ...filterParams,
-                      edit: false,
-                    });
-                    setTimeout(() => {
-                      setFilterParams({
-                        ...filterParams,
-                        edit: true,
-                        currentIndex: index,
-                      });
-                    }, 0);
-                  }
-                }}
-              >
-                {filterParams.currentIndex === index ? (
-                  <SaveIcon fill="var(--primary)" />
-                ) : (
-                  <EditIcon fill="var(--main)" />
-                )}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  handleDelete(key);
-                }}
-              >
-                <DeleteIcon />
-              </button>
-            </div>
-          );
-        },
-      },
+      // {
+      //   title: "actions",
+      //   id: ["index", "KEYWORD", "actions"],
+      //   width: 260,
+      //   render: ([index, key]: any) => {
+      //     return (
+      //       <div className="h-[56px] flex items-center w-full justify-center space-x-5">
+      //         <button
+      //           type="button"
+      //           onClick={() => {
+      //             deleteFirstElement();
+      //           }}
+      //         >
+      //           {filterParams.currentIndex === index ? <CloseIcon /> : ""}
+      //         </button>
+      //         <button
+      //           type="button"
+      //           onClick={() => {
+      //             handleDelete(key);
+      //           }}
+      //         >
+      //           <DeleteIcon />
+      //         </button>
+      //       </div>
+      //     );
+      //   },
+      // },
     ];
     return list;
   }, [listTable, filterParams.edit]);
 
   const handleActions = (el: any, type: string) => {
     if (type === "delete") {
-      deleteTranslation(el.key);
+      if (el.KEYWORD) {
+        handleDelete(el.KEYWORD);
+      } else {
+        setListTable(listTable.slice(1, listTable.length));
+      }
     }
     if (type === "modal") {
       AddNewColumn({ listTable, setListTable });
     }
+    if (type === "edit") {
+      setFilterParams({
+        ...filterParams,
+        edit: false,
+      });
+      setTimeout(() => {
+        setFilterParams({
+          ...filterParams,
+          edit: true,
+          currentIndex: 0,
+        });
+        const newData = el?.map((item: any) => {
+          const foundObj = listTable.find(
+            (el: { ID?: number }) => el.ID === item.ID
+          );
+
+          if (foundObj?.ID) {
+            if (
+              item.KEYWORD !== foundObj.KEYWORD ||
+              item.RU !== foundObj.RU ||
+              item.TU !== foundObj.TU ||
+              item.EN !== foundObj.EN ||
+              item.UZ !== foundObj.UZ
+            ) {
+              item.status = "update";
+            }
+          } else {
+            item.status = "new";
+          }
+          return item;
+        });
+        setListTable(newData);
+      }, 0);
+    }
   };
+
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   return (
     <>
@@ -297,9 +335,17 @@ const LanguagesPage = () => {
           key={filterParams.edit ? "edit" : "view"}
           isLoading={isLoading}
           headColumns={headColumns}
-          title="Таблица языки"
-          defaultFilters={["excel_upload", "excel_download"]}
-          bodyColumns={listTable}
+          title={t("translations_table")}
+          defaultFilters={[
+            "excel_upload",
+            "excel_download",
+            "actions",
+            "delete",
+          ]}
+          defaultActions={["delete", "is_sellect_more"]}
+          bodyColumns={listTable?.sort(
+            (a: { ID: number }, b: { ID: number }) => b.ID - a.ID
+          )}
           filterParams={filterParams}
           isResizeble={false}
           handleFilterParams={setFilterParams}
@@ -311,35 +357,42 @@ const LanguagesPage = () => {
             pageCount: count ? Math.ceil(count / filterParams?.perPage) : 0,
           }}
           extra={
-            <div>
-              {filterParams.edit ? (
-                <button
-                  onClick={() => {
+            <div className="flex space-x-2">
+              <button
+                type="button"
+                onClick={() => {
+                  if (filterParams.edit) {
                     handleSubmit();
-                  }}
-                  className="custom-btn"
-                  style={{ height: "32px" }}
-                  type="button"
-                >
-                  Cохранить
-                </button>
-              ) : (
-                <button
-                  onClick={() => {
+                  } else {
+                    setFilterParams({ ...filterParams, edit: true });
+                  }
+                }}
+              >
+                {filterParams.edit ? (
+                  <SaveIcon width={26} fill="var(--primary)" />
+                ) : (
+                  <EditIcon width={22} fill="var(--main)" />
+                )}
+              </button>
+              <button
+                onClick={() => {
+                  if (!filterParams.edit) {
                     AddNewColumn({ listTable, setListTable });
                     setFilterParams({
                       ...filterParams,
                       edit: true,
                       currentIndex: 1,
                     });
-                  }}
-                  className="custom-btn create"
-                  style={{ height: "32px" }}
-                  type="button"
-                >
-                  Добавить
-                </button>
-              )}
+                  }
+                }}
+                style={{ height: "30px" }}
+                type="button"
+              >
+                <PlusIcon
+                  fill={filterParams.edit ? "var(--gray)" : "var(--main)"}
+                  width={22}
+                />
+              </button>
             </div>
           }
         />

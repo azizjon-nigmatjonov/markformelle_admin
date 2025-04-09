@@ -51,6 +51,7 @@ interface Props {
   defaultFilters?: any;
   defaultSearch?: any;
   animation?: boolean;
+  defaultActions?: string[];
 }
 
 const CNewTable = ({
@@ -74,6 +75,7 @@ const CNewTable = ({
   filterParams = { page: 1, perPage: 50 },
   handleFilterParams = () => {},
   handleActions = () => {},
+  defaultActions = ["view", "edit", "delete", "is_sellect_more"],
   defaultFilters = [
     "add",
     "delete",
@@ -103,7 +105,6 @@ const CNewTable = ({
     filterParams,
     handleFilterParams,
   });
-
   const storedColumns = useSelector((state: any) => state.table.columns);
   const order = useSelector((state: any) => state.table.order);
   const [newBodyColumns, setNewBodyColumns] = useState([]);
@@ -123,7 +124,6 @@ const CNewTable = ({
     if (idForTable) result = result + "/" + idForTable;
     return result;
   }, [location, idForTable]);
-
   const pageColumns = storedColumns[pageName];
   const pageOrder = order[pageName] ?? [];
   const [newHeadColumns, setNewHeadColumns]: any = useState([...headColumns]);
@@ -225,7 +225,7 @@ const CNewTable = ({
       newBodyColumns.map((item: any, index?: any) => {
         setTimeout(() => {
           setEffect((prevEffect) => [...prevEffect, index]);
-        }, index * 50);
+        }, index * 30);
         return {
           ...item,
           is_freez: checks(item?.freez),
@@ -729,6 +729,8 @@ const CNewTable = ({
                             "№"
                           ) : column.id === "multiple" ? (
                             <div></div>
+                          ) : t(column?.title) === "" ? (
+                            column?.title
                           ) : (
                             t(column?.title)
                           )}
@@ -908,12 +910,7 @@ const CNewTable = ({
                                     currentIndex={currentIndex}
                                     setCurrentIndex={setCurrentIndex}
                                     handleActions={tableActions}
-                                    actions={[
-                                      "view",
-                                      "edit",
-                                      "delete",
-                                      "is_sellect_more",
-                                    ]}
+                                    actions={defaultActions}
                                     checkPermission={checkPermission}
                                   />
                                 </div>

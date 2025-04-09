@@ -71,6 +71,8 @@ export const CheckDataReason = (machine: any) => {
       return "reload_yarn";
     case "чистка машины":
       return "cleaning";
+    case "очистка":
+      return "cleaning";
     case "нет пряжи":
       return "no_yarn";
     case "нет плана":
@@ -84,6 +86,10 @@ export const CheckDataReason = (machine: any) => {
 
 export const CheckData = (machine: any) => {
   if (!machine.idlocation) return "";
+
+  if (machine.reason === "Очистка" && parseInt(machine.rotation) == 0) {
+    return "cleaning";
+  }
 
   if (machine.no_connnection === "true" && machine.reason !== "Ремонт") {
     return "no_connnection";
@@ -148,13 +154,6 @@ export const CheckData = (machine: any) => {
     machine.reason === "Замена игл"
   ) {
     return "reload_yarn";
-  }
-
-  if (
-    machine.reason === "Очистка" &&
-    (machine.rotation == 0 || !machine.rotation)
-  ) {
-    return "cleaning";
   }
 
   if (
@@ -356,6 +355,16 @@ export const CountBtns = ({
     setCounts(obj);
   }, [bodyData]);
 
+  const allCount = useMemo(() => {
+    let count = 0;
+    bodyData?.forEach((item: { id: number }) => {
+      if (item.id) {
+        count += 1;
+      }
+    });
+    return count;
+  }, [bodyData]);
+
   return (
     <div className="flex-wrap ipod:flex-nowrap flex gap-2 ipod:gap-1 desktop:gap-2">
       <CCheckButton
@@ -363,17 +372,7 @@ export const CountBtns = ({
         element={{
           label: (
             <p className="text-sm mobile:text-[10px] desktop:text-sm font-[600]">
-              Все{" "}
-              <span className="font-bold">
-                {counts?.working +
-                  counts?.no_plan +
-                  counts?.no_yarn +
-                  counts?.fixing +
-                  counts?.reload_yarn +
-                  counts?.reload +
-                  counts?.cleaning +
-                  counts?.no_status + counts?.no_connnection}
-              </span>
+              Все <span className="font-bold">{allCount}</span>
             </p>
           ),
         }}
@@ -428,12 +427,13 @@ export const CountBtns = ({
         checked={checked.includes("fixing")}
         handleCheck={() => filterCheckbox("fixing")}
       />
-        <CCheckButton
+      <CCheckButton
         color="var(--gray30)"
         element={{
           label: (
             <p className="text-sm mobile:text-[10px] desktop:text-sm font-[600]">
-              Нет подключения <span className="font-bold">{counts?.no_connnection}</span>
+              Нет подключения{" "}
+              <span className="font-bold">{counts?.no_connnection}</span>
             </p>
           ),
         }}

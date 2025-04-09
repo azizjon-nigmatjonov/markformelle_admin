@@ -1,5 +1,6 @@
 // import { useState } from "react";
 
+import toast from "react-hot-toast";
 import {
   EnglishFlag,
   RussionFlag,
@@ -8,8 +9,10 @@ import {
 } from "../../../components/UI/IconGenerator/Svg/Machines";
 import { SettingIcon } from "../../../components/UI/IconGenerator/Svg/Sidebar";
 import { useCMutation } from "../../../hooks/useCMutation";
-import useCQuery from "../../../hooks/useCQuery";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { translateActions } from "../../../store/translation/translate.slice";
 const API_URL = import.meta.env.VITE_TEST_URL;
 export const CreateTranslasion = () => {
   const { mutate: create } = useCMutation({
@@ -67,6 +70,7 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
     RU: "",
     EN: "",
     TU: "",
+    status: "new",
   };
 
   const AddNewColumn = ({
@@ -76,7 +80,8 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
     listTable: any;
     setListTable: (val: any) => void;
   }) => {
-    setListTable([obj, ...listTable]);
+    const newArr = [obj, ...listTable];
+    setListTable(newArr);
   };
 
   const DeleteColumn = ({
@@ -96,7 +101,7 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
     if (!val) return;
     const icon =
       val === "key" ? (
-        <SettingIcon fill="var(--black)" />
+        <SettingIcon fill="var(--gray)" />
       ) : val === "uz" ? (
         <UzbekFlag />
       ) : val === "ru" ? (
@@ -129,45 +134,28 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
     listTable = [],
     setListTable,
     value,
-    id,
+    ID,
     key,
-    lastUpdaters = [],
-    setLastUpdaters = () => {},
   }: {
     listTable: any;
     setListTable: (val: any) => void;
-    id: string;
+    ID: number;
     value: any;
     key: string;
-    lastUpdaters: any;
-    setLastUpdaters: (val: any) => void;
   }) => {
-    if (value) {
-      const newObj: any = listTable?.find((el: any) => el.KEYWORD === id);
+    const newObj: any = listTable?.find((el: any) => el.ID === ID);
+    if (!newObj.KEYWORD.trim()) newObj.status = "new";
 
-      newObj[key] = value;
-      // if (!newObj.KEYWORD) newObj.KEYWORD = value;
+    newObj[key] = value;
 
-      const arr = listTable?.map((item: any) => {
-        // delete item.value["error_" + id];
+    if (newObj?.status !== "new") newObj.status = "update";
+    const arr = listTable?.map((item: any) => {
+      if (item.ID === ID) {
+        return { ...newObj };
+      } else return { ...item };
+    });
 
-        if (item.KEYWORD === id) {
-          return { ...newObj };
-        } else return { ...item };
-      });
-      if (
-        lastUpdaters?.find((updater: any) => updater.KEYWORD === newObj.KEYWORD)
-      ) {
-        setLastUpdaters(
-          lastUpdaters.filter(
-            (updater: any) => updater.KEYWORD !== newObj.KEYWORD
-          )
-        );
-      } else {
-        setLastUpdaters([...lastUpdaters, newObj]);
-      }
-      setListTable(arr);
-    }
+    setListTable(arr);
   };
 
   const onSubmit = (data: any) => {
@@ -181,44 +169,42 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
           },
         }
       )
-      .then(() => {
-        // refetch();
-      })
+      .then(() => {})
       .catch((error) => {
         console.error("Error adding route:", error);
-      });
+      })
+      .finally(() => refetch());
   };
 
   const onUpdate = (data: any) => {
     axios
-      .put(`${API_URL}/translation/${data.KEYWORD}`, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then(() => {
-        refetch();
-      })
+      .put(
+        `${API_URL}/translation/batch`,
+        { translations: data },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then(() => {})
       .catch((error) => {
         console.error("Error adding route:", error);
-      });
+      })
+      .finally(() => refetch());
   };
 
+  const dispatch = useDispatch();
   const handleDelete = (KEYWORD: string) => {
     axios
       .delete(`${API_URL}/translation/${KEYWORD}`)
       .then(() => {
         refetch();
+        dispatch(translateActions.setTranslation([]));
       })
       .catch((error) => {
         console.error("Error adding route:", error);
       });
-  };
-
-  const deleteTranslation = (key: string) => {
-    axios.delete(`http://192.168.181.29:3000/translations/${key}`).then(() => {
-      refetch();
-    });
   };
 
   return {
@@ -229,42 +215,57 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
     onSubmit,
     onUpdate,
     handleDelete,
-    deleteTranslation,
   };
 };
 
 export const GetTranslations = ({
   setListTable,
-  setCount,
+  setCount = () => {},
   storedTranslation = [],
+  editFields,
 }: {
   setListTable: (val: any) => void;
   setCount: (val: number) => void;
   storedTranslation: object[];
+  editFields: () => void;
 }) => {
-  const { isLoading, refetch } = useCQuery({
-    key: "resources_translations",
-    endpoint: "http://10.40.14.193:8000/translation/",
-    params: { type: "" },
-    options: {
-      onSuccess: (res: any) => {
+  const [isLoading, setisLoading] = useState(false);
+
+  const refetch = () => {
+    setisLoading(true);
+    axios
+      .get("http://10.40.14.193:8000/translation/")
+      .then((res: any) => {
+        const data = res?.data;
         const newArr: any = [];
-        if (!res?.data?.length) return;
+        if (!data?.data?.length) return;
 
         storedTranslation?.forEach((el: any) => {
           if (
-            !res.data.find(
+            !data.data.find(
               (item: { KEYWORD: string }) => item.KEYWORD === el.KEYWORD
             )
           ) {
-            newArr.push(el);
+            newArr.push({ ...el, status: "new" });
           }
         });
-        setListTable([...newArr, ...res.data]);
-        setCount(res?.count);
-      },
-    },
-  });
+
+        if (newArr.length) editFields();
+        const newData = [...newArr, ...data.data];
+        setListTable(newData);
+        setCount(data?.count);
+      })
+      .catch(() => {
+        toast.error("Ошибка из бэкэнда");
+      })
+      .finally(() => {
+        setisLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   return { isLoading, refetch };
 };

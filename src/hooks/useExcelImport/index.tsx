@@ -20,15 +20,23 @@ const ExcelReader = ({
         const binaryStr = event.target.result;
         const workbook = XLSX.read(binaryStr, { type: "binary" });
 
-        // Assuming the first sheet
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
 
-        // Converting to JSON
         const jsonData: any = XLSX.utils.sheet_to_json(worksheet);
 
-        setExcelData(jsonData);
-        // setExcelData(jsonData);
+        setExcelData(
+          jsonData?.map(
+            (item: { index?: number; status?: string }, index: number) => {
+              if (!item?.index) item.status = "new";
+              else item.status = "update";
+              return {
+                ...item,
+                index: index + 1,
+              };
+            }
+          )
+        );
       };
 
       reader.readAsBinaryString(file);
