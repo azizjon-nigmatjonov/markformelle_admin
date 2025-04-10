@@ -252,8 +252,11 @@ export const GetTranslations = ({
 
         if (newArr.length) editFields();
         const newData = [...newArr, ...data.data];
+
         setListTable(newData);
         setCount(data?.count);
+
+        localStorage.setItem("translations", JSON.stringify(newData));
       })
       .catch(() => {
         toast.error("Ошибка из бэкэнда");

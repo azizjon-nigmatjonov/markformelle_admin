@@ -249,33 +249,6 @@ const LanguagesPage = () => {
           );
         },
       },
-      // {
-      //   title: "actions",
-      //   id: ["index", "KEYWORD", "actions"],
-      //   width: 260,
-      //   render: ([index, key]: any) => {
-      //     return (
-      //       <div className="h-[56px] flex items-center w-full justify-center space-x-5">
-      //         <button
-      //           type="button"
-      //           onClick={() => {
-      //             deleteFirstElement();
-      //           }}
-      //         >
-      //           {filterParams.currentIndex === index ? <CloseIcon /> : ""}
-      //         </button>
-      //         <button
-      //           type="button"
-      //           onClick={() => {
-      //             handleDelete(key);
-      //           }}
-      //         >
-      //           <DeleteIcon />
-      //         </button>
-      //       </div>
-      //     );
-      //   },
-      // },
     ];
     return list;
   }, [listTable, filterParams.edit]);
@@ -294,36 +267,32 @@ const LanguagesPage = () => {
     if (type === "edit") {
       setFilterParams({
         ...filterParams,
-        edit: false,
+        edit: true,
+        currentIndex: 0,
       });
-      setTimeout(() => {
-        setFilterParams({
-          ...filterParams,
-          edit: true,
-          currentIndex: 0,
-        });
-        const newData = el?.map((item: any) => {
-          const foundObj = listTable.find(
-            (el: { ID?: number }) => el.ID === item.ID
-          );
+      let oldArr: any = localStorage.getItem("translations");
+      if (oldArr) oldArr = JSON.parse(oldArr);
 
-          if (foundObj?.ID) {
-            if (
-              item.KEYWORD !== foundObj.KEYWORD ||
-              item.RU !== foundObj.RU ||
-              item.TU !== foundObj.TU ||
-              item.EN !== foundObj.EN ||
-              item.UZ !== foundObj.UZ
-            ) {
-              item.status = "update";
-            }
-          } else {
-            item.status = "new";
+      const newData = el?.map((item: any) => {
+        const foundObj = oldArr.find(
+          (old: { KEYWORD?: string }) => old.KEYWORD === item.KEYWORD
+        );
+
+        if (foundObj) {
+          if (
+            item.RU !== foundObj.RU ||
+            item.TU !== foundObj.TU ||
+            item.EN !== foundObj.EN ||
+            item.UZ !== foundObj.UZ
+          ) {
+            item.status = "update";
           }
-          return item;
-        });
-        setListTable(newData);
-      }, 0);
+        } else {
+          item.status = "new";
+        }
+        return item;
+      });
+      setListTable(newData);
     }
   };
 
@@ -356,6 +325,7 @@ const LanguagesPage = () => {
             totalCount: count,
             pageCount: count ? Math.ceil(count / filterParams?.perPage) : 0,
           }}
+          defaultExcelFields={["KEYWORD", "RU", "UZ", "EN", "TU"]}
           extra={
             <div className="flex space-x-2">
               <button

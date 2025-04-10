@@ -52,6 +52,7 @@ interface Props {
   defaultSearch?: any;
   animation?: boolean;
   defaultActions?: string[];
+  defaultExcelFields?: string[];
 }
 
 const CNewTable = ({
@@ -75,6 +76,7 @@ const CNewTable = ({
   filterParams = { page: 1, perPage: 50 },
   handleFilterParams = () => {},
   handleActions = () => {},
+  defaultExcelFields = [],
   defaultActions = ["view", "edit", "delete", "is_sellect_more"],
   defaultFilters = [
     "add",
@@ -605,7 +607,7 @@ const CNewTable = ({
             sortData={sortData}
             defaultFilters={defaultFilters}
             selectedItems={selectedItems}
-            setBodySource={setBodySource}
+            defaultExcelFields={defaultExcelFields}
           />
         ) : (
           ""

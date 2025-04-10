@@ -242,7 +242,7 @@ export const ModalUI = ({
                   disabled={tableOpen}
                 />
               </FieldUI>
-              <FieldUI title="Firma">
+              <FieldUI title="Firma adi">
                 <SelectOptionsTable
                   name="ADI"
                   placeholder="Firma adi"

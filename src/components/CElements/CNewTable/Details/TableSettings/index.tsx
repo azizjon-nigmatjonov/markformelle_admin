@@ -54,7 +54,7 @@ export const HeaderSettings = ({
   sortData,
   defaultFilters = [],
   selectedItems = [],
-  setBodySource = () => {},
+  defaultExcelFields,
 }: {
   filterParams: any;
   title: string;
@@ -68,7 +68,7 @@ export const HeaderSettings = ({
   sortData: any;
   defaultFilters: any;
   selectedItems: any;
-  setBodySource: (val: Partial<any>) => void;
+  defaultExcelFields: string[];
   tableActions: (el: any, status: string) => void;
 }) => {
   const [open, setOpen] = useState(false);
@@ -205,7 +205,6 @@ export const HeaderSettings = ({
   }, [headColumns.length, bodyColumns.length, pageColumns.length]);
 
   const handleExcelUploading = useCallback((data: any) => {
-    setBodySource(data);
     tableActions(data, "edit");
   }, []);
 
@@ -299,6 +298,7 @@ export const HeaderSettings = ({
               title={filterParams?.title}
               data={ExcelData}
               allColumns={allColumns}
+              defaultExcelFields={defaultExcelFields}
             />
           )}
 

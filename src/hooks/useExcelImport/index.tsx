@@ -25,18 +25,7 @@ const ExcelReader = ({
 
         const jsonData: any = XLSX.utils.sheet_to_json(worksheet);
 
-        setExcelData(
-          jsonData?.map(
-            (item: { index?: number; status?: string }, index: number) => {
-              if (!item?.index) item.status = "new";
-              else item.status = "update";
-              return {
-                ...item,
-                index: index + 1,
-              };
-            }
-          )
-        );
+        setExcelData(jsonData);
       };
 
       reader.readAsBinaryString(file);

@@ -10,19 +10,29 @@ interface Props {
   data: any;
   title?: string;
   allColumns: any;
+  defaultExcelFields: string[];
 }
 
 const ExcelDownload = ({
   data = [],
   title = "example",
   allColumns = [],
+  defaultExcelFields = [],
 }: Props) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const downloadExcel = (type: string) => {
     let arr = [...data];
-    if (type === "all") {
+    if (defaultExcelFields.length) {
+      arr = allColumns.map((item: any) => {
+        const newObj: any = {};
+        defaultExcelFields.forEach((def: string) => {
+          newObj[def] = item[def];
+        });
+        return newObj;
+      });
+    } else if (type === "all") {
       arr = allColumns;
     }
     const newData: any = [];
