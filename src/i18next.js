@@ -26,21 +26,19 @@ i18next
         if (currentLang?.includes("US")) currentLang = "ru";
 
         const storedTranslation =
-          JSON.parse(localStorage.getItem("translations")) || [];
-        const obj = {};
+          JSON.parse(localStorage.getItem("translation_by_lang")) || {};
 
-        storedTranslation.forEach((element) => {
-          if (element.KEYWORD) {
-            obj[element.KEYWORD] = element[currentLang.toLocaleUpperCase()];
-          }
-        });
         callback(null, {
-          data: obj || {},
+          data: storedTranslation,
           status: 200,
         });
+
         try {
           const res = await axios.get(url);
-
+          localStorage.setItem(
+            "translation_by_lang",
+            JSON.stringify(res.data[currentLang])
+          );
           callback(null, {
             data: res.data[currentLang] || {},
             status: 200,

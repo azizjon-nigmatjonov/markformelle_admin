@@ -563,9 +563,9 @@ const CNewTable = ({
         setSelectedItems([]);
       }
 
-      if (e.key === "Enter") {
-        SetFiltersFn(searchedElements);
-      }
+      // if (e.key === "Enter") {
+      //   SetFiltersFn(searchedElements);
+      // }
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -838,7 +838,7 @@ const CNewTable = ({
                                   }
                                 >
                                   <div
-                                    className={`w-[20px] h-[20px] rounded-full border border-[var(--primary70)] flex items-center justify-center ${
+                                    className={`w-[20px] h-[20px] rounded-[4px] border border-[var(--primary70)] flex items-center justify-center ${
                                       selectedItems.includes(item.index - 1)
                                         ? "bg-[var(--primary70)]"
                                         : ""

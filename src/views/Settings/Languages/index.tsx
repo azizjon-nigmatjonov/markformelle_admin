@@ -65,13 +65,14 @@ const LanguagesPage = () => {
     refetch,
   });
 
-  const handleValue = (value: any, ID: number, key: string) => {
+  const handleValue = (value: any, ID: number, key: string, index: number) => {
     WriteValue({
       listTable,
       setListTable,
       value,
       ID,
       key,
+      index,
     });
   };
 
@@ -80,8 +81,9 @@ const LanguagesPage = () => {
     const updateElements: any = [];
     const newElements: any = [];
 
-    const newArr = listTable.map((element: any) => {
+    const newArr = listTable.map((element: any, index: number) => {
       element.errors = [];
+      element.index += index + 1;
       for (let key in defaults) {
         if (!element.KEYWORD?.trim()) {
           error = true;
@@ -127,19 +129,19 @@ const LanguagesPage = () => {
     const list: any = [
       {
         renderHead: () => <GetTitle val="key" />,
-        id: ["KEYWORD", "ID", "errors"],
+        id: ["KEYWORD", "ID", "errors", "index"],
         width: 260,
-        render: ([key, ID, errors]: any) => {
+        render: ([key, ID, errors, index]: any) => {
           return (
-            <div className="h-[56px] flex items-center w-full justify-center font-medium">
-              <div className="w-full flex justify-center">
+            <div className="h-[56px] flex items-center w-full font-medium">
+              <div className="w-full flex">
                 {filterParams.edit || !key || errors?.includes("KEYWORD") ? (
                   <input
                     className={`input-design font-medium ${
                       errors?.includes("KEYWORD") ? "error" : ""
                     }`}
                     onChange={(e) => {
-                      handleValue(e.target.value, ID, "KEYWORD");
+                      handleValue(e.target.value, ID, "KEYWORD", index);
                     }}
                     ref={inputRef}
                     defaultValue={key}
@@ -154,18 +156,18 @@ const LanguagesPage = () => {
       },
       {
         renderHead: () => <GetTitle val="ru" />,
-        id: ["RU", "ID", "errors"],
+        id: ["RU", "ID", "errors", "index"],
         width: 260,
-        render: ([val, ID, errors]: any) => {
+        render: ([val, ID, errors, index]: any) => {
           return (
-            <div className="h-[56px] flex items-center w-full justify-center">
+            <div className="h-[56px] flex items-center w-full">
               {filterParams.edit || errors?.includes("RU") ? (
                 <input
                   className={`input-design font-medium ${
                     errors?.includes("RU") ? "error" : ""
                   }`}
                   onChange={(e) => {
-                    handleValue(e.target.value, ID, "RU");
+                    handleValue(e.target.value, ID, "RU", index);
                   }}
                   defaultValue={val}
                 />
@@ -178,18 +180,18 @@ const LanguagesPage = () => {
       },
       {
         renderHead: () => <GetTitle val="uz" />,
-        id: ["UZ", "ID", "errors"],
+        id: ["UZ", "ID", "errors", "index"],
         width: 260,
-        render: ([val, ID, errors]: any) => {
+        render: ([val, ID, errors, index]: any) => {
           return (
-            <div className="h-[56px] flex items-center w-full justify-center">
+            <div className="h-[56px] flex items-center w-full">
               {filterParams.edit || errors?.includes("UZ") ? (
                 <input
                   className={`input-design font-medium ${
                     errors?.includes("UZ") ? "error" : ""
                   }`}
                   onChange={(e) => {
-                    handleValue(e.target.value, ID, "UZ");
+                    handleValue(e.target.value, ID, "UZ", index);
                   }}
                   defaultValue={val}
                 />
@@ -203,18 +205,18 @@ const LanguagesPage = () => {
 
       {
         renderHead: () => <GetTitle val="en" />,
-        id: ["EN", "ID", "errors"],
+        id: ["EN", "ID", "errors", "index"],
         width: 260,
-        render: ([val, ID, errors]: any) => {
+        render: ([val, ID, errors, index]: any) => {
           return (
-            <div className="h-[56px] flex items-center w-full justify-center">
+            <div className="h-[56px] flex items-center w-full">
               {filterParams.edit || errors?.includes("EN") ? (
                 <input
                   className={`input-design font-medium ${
                     errors?.includes("EN") ? "error" : ""
                   }`}
                   onChange={(e) => {
-                    handleValue(e.target.value, ID, "EN");
+                    handleValue(e.target.value, ID, "EN", index);
                   }}
                   defaultValue={val}
                 />
@@ -227,18 +229,18 @@ const LanguagesPage = () => {
       },
       {
         renderHead: () => <GetTitle val="tu" />,
-        id: ["TU", "ID", "errors"],
+        id: ["TU", "ID", "errors", "index"],
         width: 260,
-        render: ([val, ID, errors]: any) => {
+        render: ([val, ID, errors, index]: any) => {
           return (
-            <div className="h-[56px] flex items-center w-full justify-center">
+            <div className="h-[56px] flex items-center w-full">
               {filterParams.edit || errors?.includes("TU") ? (
                 <input
                   className={`input-design font-medium ${
                     errors?.includes("TU") ? "error" : ""
                   }`}
                   onChange={(e) => {
-                    handleValue(e.target.value, ID, "TU");
+                    handleValue(e.target.value, ID, "TU", index);
                   }}
                   defaultValue={val}
                 />
@@ -258,7 +260,14 @@ const LanguagesPage = () => {
       if (el.KEYWORD) {
         handleDelete(el.KEYWORD);
       } else {
-        setListTable(listTable.slice(1, listTable.length));
+        setListTable(
+          listTable
+            .slice(1, listTable.length)
+            .map((item: { index: number }, index: number) => {
+              item.index += index + 1;
+              return item;
+            })
+        );
       }
     }
     if (type === "modal") {
@@ -273,7 +282,7 @@ const LanguagesPage = () => {
       let oldArr: any = localStorage.getItem("translations");
       if (oldArr) oldArr = JSON.parse(oldArr);
 
-      const newData = el?.map((item: any) => {
+      const newData = el?.map((item: any, index: number) => {
         const foundObj = oldArr.find(
           (old: { KEYWORD?: string }) => old.KEYWORD === item.KEYWORD
         );
@@ -290,6 +299,7 @@ const LanguagesPage = () => {
         } else {
           item.status = "new";
         }
+        item.index = index + 1;
         return item;
       });
       setListTable(newData);

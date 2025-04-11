@@ -10,7 +10,7 @@ interface Props {
   data: any;
   title?: string;
   allColumns: any;
-  defaultExcelFields: string[];
+  defaultExcelFields?: string[];
 }
 
 const ExcelDownload = ({

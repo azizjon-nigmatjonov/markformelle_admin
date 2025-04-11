@@ -13,7 +13,18 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { translateActions } from "../../../store/translation/translate.slice";
+import { allTranslations } from "../../../constants/allTranslations";
 const API_URL = import.meta.env.VITE_TEST_URL;
+
+const defObj: any = {
+  KEYWORD: "",
+  UZ: "",
+  RU: "",
+  EN: "",
+  TU: "",
+  status: "new",
+};
+
 export const CreateTranslasion = () => {
   const { mutate: create } = useCMutation({
     key: "resources_translations_create",
@@ -64,15 +75,6 @@ export const CreateTranslasion = () => {
 };
 
 export const HandleTable = ({ refetch }: { refetch: () => void }) => {
-  const obj: any = {
-    KEYWORD: "",
-    UZ: "",
-    RU: "",
-    EN: "",
-    TU: "",
-    status: "new",
-  };
-
   const AddNewColumn = ({
     listTable,
     setListTable,
@@ -80,7 +82,12 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
     listTable: any;
     setListTable: (val: any) => void;
   }) => {
-    const newArr = [obj, ...listTable];
+    const newArr = [defObj, ...listTable].map((item: {}, index: number) => {
+      return {
+        ...item,
+        index: index + 1,
+      };
+    });
     setListTable(newArr);
   };
 
@@ -136,21 +143,26 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
     value,
     ID,
     key,
+    index,
   }: {
     listTable: any;
     setListTable: (val: any) => void;
     ID: number;
     value: any;
     key: string;
+    index: number;
   }) => {
-    const newObj: any = listTable?.find((el: any) => el.ID === ID);
+    const keyTochoose = ID ? "ID" : "index";
+    const valueToChoose = ID ? ID : index;
+    const newObj: any =
+      listTable?.find((el: any) => el[keyTochoose] === valueToChoose) ?? {};
     if (!newObj.KEYWORD.trim()) newObj.status = "new";
 
     newObj[key] = value;
 
     if (newObj?.status !== "new") newObj.status = "update";
     const arr = listTable?.map((item: any) => {
-      if (item.ID === ID) {
+      if (item[keyTochoose] === valueToChoose) {
         return { ...newObj };
       } else return { ...item };
     });
@@ -239,6 +251,15 @@ export const GetTranslations = ({
         const data = res?.data;
         const newArr: any = [];
         if (!data?.data?.length) return;
+        // let no_translations: any = localStorage.getItem("no_translations");
+
+        for (let key in allTranslations) {
+          if (
+            !data.data.find((item: { KEYWORD: string }) => item.KEYWORD === key)
+          ) {
+            newArr.push({ ...defObj, KEYWORD: key, status: "new" });
+          }
+        }
 
         storedTranslation?.forEach((el: any) => {
           if (
@@ -251,7 +272,14 @@ export const GetTranslations = ({
         });
 
         if (newArr.length) editFields();
-        const newData = [...newArr, ...data.data];
+        const newData = [...newArr, ...data.data].map(
+          (item: {}, index: number) => {
+            return {
+              ...item,
+              index: index + 1,
+            };
+          }
+        );
 
         setListTable(newData);
         setCount(data?.count);

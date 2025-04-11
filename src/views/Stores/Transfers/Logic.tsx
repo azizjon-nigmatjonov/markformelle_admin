@@ -2,10 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import useCQuery from "../../../hooks/useCQuery";
-import { ITransferCreate } from "../../../interfaces/transfers";
-
 const API_URL = import.meta.env.VITE_TEST_URL;
-
 export const breadCrumbs = [
   { label: "Внутреннее примешенные", link: "/chemical_store/transfers" },
 ];
@@ -82,17 +79,6 @@ export const TableData = ({
     }
   };
 
-  const createElement = async (params: Partial<ITransferCreate>) => {
-    try {
-      const { data } = await axios.post(`${API_URL}/irsaliye/`, params);
-      await getList(filterParams);
-      return data;
-    } catch (error) {
-      console.error("Error creating element:", error);
-      return null;
-    }
-  };
-
   useEffect(() => {
     getList(filterParams);
   }, [filterParams]);
@@ -111,7 +97,7 @@ export const TableData = ({
     defaultData: {},
     bodyData,
     setBodyData,
-    createElement,
+    getList,
   };
 };
 
@@ -176,6 +162,7 @@ export const ModalLogic = ({
           initial_order: modalList.length + 1,
           type: "edit",
           id: element?.IRSALIYEID,
+          DEPOID: element.DEPOID,
           ...element,
         },
       ]);

@@ -18,6 +18,7 @@ export const BuyingChemicals = () => {
     TableData({
       handleActionsModal,
       filterParams,
+      setModalList,
     });
 
   const newHeadColumns = useMemo(() => {

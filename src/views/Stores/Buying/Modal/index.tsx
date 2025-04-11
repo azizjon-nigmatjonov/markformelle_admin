@@ -18,6 +18,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Validation } from "./Validate";
 import { SelectOptionsTable } from "../../../../components/UI/Options/Table";
 import { convertToISO, GetCurrentDate } from "../../../../utils/getDate";
+import { useTranslationHook } from "../../../../hooks/useTranslation";
+
 const schema = Validation;
 
 const FieldUI = ({
@@ -50,7 +52,7 @@ export const ModalUI = ({
   createElement: (val: ITransferElement) => void;
 }) => {
   const [open, setOpen] = useState(false);
-
+  const { t } = useTranslationHook();
   const [tableOpen, setTableOpen] = useState(!!element.id);
   const [selectedRow, setSelectedRow] = useState<ITransferElement | null>(null);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
@@ -80,15 +82,17 @@ export const ModalUI = ({
     urunId: selectedRow?.URUNID,
   });
 
-  const { control, handleSubmit, setValue } = useForm<ITransferFormData>({
-    mode: "onSubmit",
-    resolver: yupResolver(schema),
-  });
+  const { control, handleSubmit, setValue, watch } = useForm<ITransferFormData>(
+    {
+      mode: "onSubmit",
+      resolver: yupResolver(schema),
+    }
+  );
 
   const onSubmit: SubmitHandler<ITransferFormData> = (data) => {
     const params: Partial<any> = {
       HAREKETTIPI: 1,
-      FIRMAID: null,
+      FIRMAID: data.FIRMAID,
       NOTU: "",
       SINIF: "B",
       INSERTKULLANICIID: 1,
@@ -178,6 +182,15 @@ export const ModalUI = ({
     ];
   }, []);
 
+  const headColumnsFirma = useMemo(() => {
+    return [
+      { id: "FIRMAID", width: 200, title: "FIRMAID" },
+      { id: "ADI", title: "ADI" },
+      { id: "KISAADI", title: "KISAADI" },
+    ];
+  }, []);
+  const FIRMAID = watch("FIRMAID");
+
   return (
     <CNewModal
       title={`Документ покупки ${
@@ -192,7 +205,7 @@ export const ModalUI = ({
         <div className="w-full flex space-x-4">
           <div className="grid grid-cols-3 gap-x-5 gap-y-2 pb-5 w-full">
             <div className="space-y-2">
-              <FieldUI title="irsaliye no">
+              <FieldUI title={t("IRSALIYENO")}>
                 <div className="flex items-center space-x-2">
                   <HFTextField
                     control={control}
@@ -201,14 +214,14 @@ export const ModalUI = ({
                   />
                 </div>
               </FieldUI>
-              <FieldUI title="tarih">
+              <FieldUI title={t("tarih")}>
                 <HFTextField
                   control={control}
                   name="IRSALIYETARIHI"
                   readOnly={true}
                 />
               </FieldUI>
-              <FieldUI title="sevik tarihi">
+              <FieldUI title={t("INSERTTARIHI")}>
                 <HFTextField
                   control={control}
                   name="INSERTTARIHI"
@@ -218,17 +231,13 @@ export const ModalUI = ({
             </div>
 
             <div className="space-y-2">
-              <FieldUI title="Firma">
+              <FieldUI title={t("FIRMAID")}>
                 <SelectOptionsTable
                   name="FIRMAID"
-                  placeholder="Firma nomi"
+                  placeholder={t("FIRMAID")}
                   options={firmaData}
                   required={true}
-                  headColumns={[
-                    { id: "FIRMAID", width: 200, title: "FIRMAID" },
-                    { id: "ADI", title: "ADI" },
-                    { id: "KISAADI", title: "KISAADI" },
-                  ]}
+                  headColumns={headColumnsFirma}
                   filterParams={filterParams}
                   handleSelect={(obj: any) => {
                     setValue("FIRMAID", obj.FIRMAID);
@@ -240,19 +249,16 @@ export const ModalUI = ({
                   control={control}
                   setFilterParams={setFilterParams}
                   disabled={tableOpen}
+                  defaultValue={FIRMAID}
                 />
               </FieldUI>
-              <FieldUI title="Firma adi">
+              <FieldUI title={t("ADI")}>
                 <SelectOptionsTable
                   name="ADI"
-                  placeholder="Firma adi"
+                  placeholder={t("ADI")}
                   options={firmaData}
                   required={true}
-                  headColumns={[
-                    { id: "FIRMAID", width: 200, title: "FIRMAID" },
-                    { id: "ADI", title: "ADI" },
-                    { id: "KISAADI", title: "KISAADI" },
-                  ]}
+                  headColumns={headColumnsFirma}
                   filterParams={filterParams}
                   handleSelect={(obj: any) => {
                     setValue("FIRMAID", obj.FIRMAID);
@@ -269,10 +275,10 @@ export const ModalUI = ({
             </div>
 
             <div className="space-y-2">
-              <FieldUI title="Depo no">
+              <FieldUI title={t("DEPOID")}>
                 <SelectOptionsTable
                   name="DEPOID"
-                  placeholder="Depo no"
+                  placeholder={t("DEPOID")}
                   options={depoOptions}
                   required={true}
                   headColumns={[
@@ -291,7 +297,7 @@ export const ModalUI = ({
                   disabled={tableOpen}
                 />
               </FieldUI>
-              <FieldUI title="doviz cinsi">
+              <FieldUI title={t("DOVIZID")}>
                 <HFSelect
                   name="DOVIZID"
                   control={control}
@@ -312,29 +318,25 @@ export const ModalUI = ({
           </div>
         </div>
 
-        {tableOpen ? (
-          <CollapseUI
-            title="Содержание документа"
-            defaultOpen={tableOpen}
-            disabled={true}
-          >
-            <CNewTable
-              title="Примешенныей"
-              headColumns={headColumns}
-              bodyColumns={tableData?.data ?? []}
-              handleActions={handleActions}
-              isLoading={false}
-              filterParams={filterParams}
-              autoHeight={"440px"}
-              disablePagination={true}
-              idForTable="modal"
-              animation={false}
-              handleFilterParams={setFilterParams}
-            />
-          </CollapseUI>
-        ) : (
-          ""
-        )}
+        <CollapseUI
+          title={t("document_content")}
+          defaultOpen={tableOpen}
+          disabled={true}
+        >
+          <CNewTable
+            title={""}
+            headColumns={headColumns}
+            bodyColumns={tableData?.data ?? []}
+            handleActions={handleActions}
+            isLoading={false}
+            filterParams={filterParams}
+            autoHeight={"440px"}
+            disablePagination={true}
+            idForTable="modal"
+            animation={false}
+            handleFilterParams={setFilterParams}
+          />
+        </CollapseUI>
       </form>
 
       {open && (

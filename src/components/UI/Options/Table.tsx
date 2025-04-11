@@ -45,6 +45,7 @@ export const SelectOptionsTable = ({
   const [open, setOpen] = useState(false);
   const [defaultData, setDefaultData]: any = useState({});
   const [search, setSearch] = useState("");
+
   const handleActions = (el: any, _: string) => {
     setOpen(false);
     handleSelect(el);
@@ -54,17 +55,19 @@ export const SelectOptionsTable = ({
     if (defaultValue) {
       const selectName = secondName ? secondName : name;
 
-      const obj =
-        options?.find(
-          (item: Partial<any>) => item[selectName] === defaultValue
-        ) ?? {};
+      let obj: any = {};
+      for (let i = 0; i < options.length; i++) {
+        if (options[i][selectName] === defaultData) {
+          obj = options[i];
+        }
+      }
 
       if (obj?.[selectName]) {
         setDefaultData(obj);
         handleSelect(obj);
       }
     }
-  }, [defaultValue, options]);
+  }, [defaultValue, options, open]);
 
   useEffect(() => {
     if (!options.length && search) {
@@ -81,19 +84,20 @@ export const SelectOptionsTable = ({
     }
   }, [focused]);
 
-  // useEffect(() => {
-  //   const handleKeyDown = (event: any) => {
-  //     if (event.key === "Escape") {
-  //       setOpen(false);
-  //     }
-  //     if (event.key === "F8") {
-  //       setOpen(!open);
-  //     }
-  //   };
+  useEffect(() => {
+    const handleKeyDown = (event: any) => {
+      if (!name) return;
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+      if (event.key === "F8") {
+        setOpen(!open);
+      }
+    };
 
-  //   window.addEventListener("keydown", handleKeyDown);
-  //   return () => window.removeEventListener("keydown", handleKeyDown);
-  // }, []);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   return (
     <div className="relative">
