@@ -3,6 +3,7 @@ import Backend from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 import axios from "axios";
+import { TranslationsObject } from "./constants/translations";
 
 i18next
   .use(Backend)
@@ -29,13 +30,18 @@ i18next
           JSON.parse(localStorage.getItem("translations")) || [];
         const obj = {};
 
-        storedTranslation.forEach((element) => {
-          if (element.KEYWORD) {
-            obj[element.KEYWORD] = element[currentLang.toLocaleUpperCase()];
-          }
-        });
+        if (storedTranslation?.length) {
+          storedTranslation.forEach((element) => {
+            if (element.KEYWORD) {
+              obj[element.KEYWORD] = element[currentLang.toLocaleUpperCase()];
+            }
+          });
+        } else {
+          obj = TranslationsObject;
+        }
+
         callback(null, {
-          data: obj || {},
+          data: TranslationsObject,
           status: 200,
         });
         try {
