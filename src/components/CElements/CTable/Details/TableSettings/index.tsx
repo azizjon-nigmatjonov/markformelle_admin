@@ -9,7 +9,6 @@ import { ListDotIcon } from "../../../../UI/IconGenerator/Svg/Machines";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import ExcelDownload from "../../../../../hooks/useExcelDownload";
-import ExcelReader from "../../../../../hooks/useExcelImport";
 
 export const SettingDropdown = ({
   allCheck = false,
@@ -201,7 +200,6 @@ export const HeaderSettings = ({
           </h2>
         </div>
         <div className="flex items-center space-x-2 h-full pr-2">
-          <ExcelReader />
           <ExcelDownload
             title={filterParams?.title}
             data={ExcelData}

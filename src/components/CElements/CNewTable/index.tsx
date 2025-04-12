@@ -51,6 +51,8 @@ interface Props {
   defaultFilters?: any;
   defaultSearch?: any;
   animation?: boolean;
+  defaultActions?: string[];
+  defaultExcelFields?: string[];
 }
 
 const CNewTable = ({
@@ -74,6 +76,8 @@ const CNewTable = ({
   filterParams = { page: 1, perPage: 50 },
   handleFilterParams = () => {},
   handleActions = () => {},
+  defaultExcelFields = [],
+  defaultActions = ["view", "edit", "delete", "is_sellect_more"],
   defaultFilters = [
     "add",
     "delete",
@@ -103,7 +107,6 @@ const CNewTable = ({
     filterParams,
     handleFilterParams,
   });
-
   const storedColumns = useSelector((state: any) => state.table.columns);
   const order = useSelector((state: any) => state.table.order);
   const [newBodyColumns, setNewBodyColumns] = useState([]);
@@ -123,7 +126,6 @@ const CNewTable = ({
     if (idForTable) result = result + "/" + idForTable;
     return result;
   }, [location, idForTable]);
-
   const pageColumns = storedColumns[pageName];
   const pageOrder = order[pageName] ?? [];
   const [newHeadColumns, setNewHeadColumns]: any = useState([...headColumns]);
@@ -225,7 +227,7 @@ const CNewTable = ({
       newBodyColumns.map((item: any, index?: any) => {
         setTimeout(() => {
           setEffect((prevEffect) => [...prevEffect, index]);
-        }, index * 50);
+        }, index * 30);
         return {
           ...item,
           is_freez: checks(item?.freez),
@@ -561,9 +563,9 @@ const CNewTable = ({
         setSelectedItems([]);
       }
 
-      if (e.key === "Enter") {
-        SetFiltersFn(searchedElements);
-      }
+      // if (e.key === "Enter") {
+      //   SetFiltersFn(searchedElements);
+      // }
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -605,7 +607,7 @@ const CNewTable = ({
             sortData={sortData}
             defaultFilters={defaultFilters}
             selectedItems={selectedItems}
-            setBodySource={setBodySource}
+            defaultExcelFields={defaultExcelFields}
           />
         ) : (
           ""
@@ -729,6 +731,8 @@ const CNewTable = ({
                             "№"
                           ) : column.id === "multiple" ? (
                             <div></div>
+                          ) : t(column?.title) === "" ? (
+                            column?.title
                           ) : (
                             t(column?.title)
                           )}
@@ -834,7 +838,7 @@ const CNewTable = ({
                                   }
                                 >
                                   <div
-                                    className={`w-[20px] h-[20px] rounded-full border border-[var(--primary70)] flex items-center justify-center ${
+                                    className={`w-[20px] h-[20px] rounded-[4px] border border-[var(--primary70)] flex items-center justify-center ${
                                       selectedItems.includes(item.index - 1)
                                         ? "bg-[var(--primary70)]"
                                         : ""
@@ -908,12 +912,7 @@ const CNewTable = ({
                                     currentIndex={currentIndex}
                                     setCurrentIndex={setCurrentIndex}
                                     handleActions={tableActions}
-                                    actions={[
-                                      "view",
-                                      "edit",
-                                      "delete",
-                                      "is_sellect_more",
-                                    ]}
+                                    actions={defaultActions}
                                     checkPermission={checkPermission}
                                   />
                                 </div>

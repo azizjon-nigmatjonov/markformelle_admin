@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   translation: [],
+
 };
 
 export const { actions: translateActions, reducer: translateReducer } = createSlice(
@@ -12,6 +13,7 @@ export const { actions: translateActions, reducer: translateReducer } = createSl
       setTranslation: (state: any, { payload }) => {
         state.translation = payload;
       },
+
     },
   }
 );

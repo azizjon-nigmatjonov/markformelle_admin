@@ -8,7 +8,6 @@ import { LogoutIcon } from "../../../components/UI/IconGenerator/Svg";
 import { useState } from "react";
 import CModal from "../../../components/CElements/CModal";
 import CancelButton from "../../../components/UI/Buttons/Cancel";
-// import { usePermissions } from "../../../hooks/usePermissions";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../../store/auth/auth.slice";
 import { useTranslation } from "react-i18next";
@@ -16,23 +15,23 @@ import usePageRouter from "../../../hooks/useObjectRouter";
 import { Header } from "../../../components/UI/Header";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { breadCrumbItems } from "./Logic";
-import { HFMultipleSelect } from "../../../components/HFElements/HFMultipleSelect";
 import CTabs from "../../../components/CElements/CTab";
 import WebsiteSettings from "../Website";
 import LanguagesPage from "../Languages";
 import { useGetQueries } from "../../../hooks/useGetQueries";
+import { HFMultipleSelect } from "../../../components/HFElements/HFMultipleSelect";
 
 const TabList = [
   {
-    name: "Профиль",
+    name: "profile",
     id: "profile",
   },
   {
-    name: "Языковые настройки",
-    id: "language",
+    name: "language_translation",
+    id: "translation",
   },
   {
-    name: "Системные настройки",
+    name: "system_settings",
     id: "system",
   },
 ];
@@ -51,7 +50,6 @@ const Profile = () => {
   } = useForm({
     mode: "onSubmit",
   });
-  // const { checkPermission } = usePermissions();
   const { navigateTo } = usePageRouter();
   const Logout = () => {
     dispatch(authActions.logout());
@@ -72,7 +70,11 @@ const Profile = () => {
         <CCard style={{ minHeight: "auto" }}>
           <CTabs tabList={TabList} currentTab={tab} passRouter={true} />
 
-          {tab === "profile" ? (
+          {tab === "system" ? (
+            <WebsiteSettings />
+          ) : tab === "translation" ? (
+            <LanguagesPage />
+          ) : (
             <div className="flex justify-between mt-5">
               <div className="flex items-center space-x-8">
                 <div className="w-[150px]">
@@ -142,10 +144,6 @@ const Profile = () => {
                 />
               </div>
             </div>
-          ) : tab === "system" ? (
-            <WebsiteSettings />
-          ) : (
-            <LanguagesPage />
           )}
         </CCard>
 

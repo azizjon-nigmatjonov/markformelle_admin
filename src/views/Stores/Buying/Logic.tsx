@@ -12,9 +12,11 @@ export const breadCrumbs = [
 
 export const TableData = ({
   filterParams,
+  setModalList = () => {},
   handleActionsModal = () => {},
 }: {
   filterParams: any;
+  setModalList?: (val: any) => void;
   handleActionsModal?: (val: any, element?: any) => void;
 }) => {
   const [headColumns, setHeadColumns] = useState<
@@ -85,7 +87,17 @@ export const TableData = ({
   const createElement = async (params: Partial<ITransferCreate>) => {
     try {
       const { data } = await axios.post(`${API_URL}/irsaliye/`, params);
+      console.log("data", data);
+      setModalList([
+        {
+          order: 1,
+          initial_order: 1,
+          type: "add",
+          id: data.id,
+        },
+      ]);
       await getList(filterParams);
+
       return data;
     } catch (error) {
       console.error("Error creating element:", error);

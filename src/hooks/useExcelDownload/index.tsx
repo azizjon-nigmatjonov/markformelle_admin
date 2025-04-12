@@ -10,19 +10,29 @@ interface Props {
   data: any;
   title?: string;
   allColumns: any;
+  defaultExcelFields?: string[];
 }
 
 const ExcelDownload = ({
   data = [],
   title = "example",
   allColumns = [],
+  defaultExcelFields = [],
 }: Props) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const downloadExcel = (type: string) => {
     let arr = [...data];
-    if (type === "all") {
+    if (defaultExcelFields.length) {
+      arr = allColumns.map((item: any) => {
+        const newObj: any = {};
+        defaultExcelFields.forEach((def: string) => {
+          newObj[def] = item[def];
+        });
+        return newObj;
+      });
+    } else if (type === "all") {
       arr = allColumns;
     }
     const newData: any = [];
@@ -35,7 +45,9 @@ const ExcelDownload = ({
           key !== "is_view" &&
           key !== "is_edit" &&
           key !== "is_delete" &&
-          key !== "is_sellect"
+          key !== "is_sellect" &&
+          key !== "is_sellect_more" &&
+          key !== "index"
         ) {
           newObj[t(key)] = obj[key];
         }
@@ -53,7 +65,6 @@ const ExcelDownload = ({
       type: "array",
     });
     const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
-    console.log("title", title);
 
     saveAs(blob, `${title}.xlsx`);
     setOpen(false);

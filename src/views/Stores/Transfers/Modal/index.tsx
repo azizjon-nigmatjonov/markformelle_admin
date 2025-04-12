@@ -18,6 +18,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Validation } from "./Validate";
 import { SelectOptionsTable } from "../../../../components/UI/Options/Table";
 import { convertToISO, GetCurrentDate } from "../../../../utils/getDate";
+const API_URL = import.meta.env.VITE_TEST_URL;
+import axios from "axios";
+import { useTranslationHook } from "../../../../hooks/useTranslation";
 const schema = Validation;
 
 const FieldUI = ({
@@ -40,18 +43,20 @@ export const ModalUI = ({
   element = {} as Partial<ITransferElement>,
   modalList = [],
   setModalList = () => {},
-  createElement = () => {},
   irsaliyaNo,
+  getList,
 }: {
   element: Partial<ITransferElement>;
   setModalList: (list: ITransferElement[]) => void;
   modalList: ITransferElement[];
   irsaliyaNo: number;
-  createElement: (val: ITransferElement) => void;
+  getList: () => void;
 }) => {
+  const { t } = useTranslationHook();
   const [open, setOpen] = useState(false);
-
-  const [tableOpen, setTableOpen] = useState(!!element.id);
+  const [depoId, setDepoId]: any = useState(element?.DEPOID);
+  const [irsaliyaId, setIrsaliyaId]: any = useState(element.id);
+  const [tableOpen, setTableOpen] = useState(!!depoId);
   const [selectedRow, setSelectedRow] = useState<ITransferElement | null>(null);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
@@ -70,7 +75,7 @@ export const ModalUI = ({
     filterParamsDepo,
   });
   const { defaultData, tableData, refetch, deleteElement } = FetchModal({
-    id: element.id,
+    id: irsaliyaId,
     urunId: selectedRow?.URUNID,
   });
 
@@ -78,6 +83,22 @@ export const ModalUI = ({
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
+
+  const createElement = async (params: any) => {
+    try {
+      const { data } = await axios.post(`${API_URL}/irsaliye/`, params);
+
+      setDepoId(data.DEPOID);
+      setIrsaliyaId(data.IRSALIYEID);
+
+      await getList();
+
+      setTableOpen(true);
+    } catch (error) {
+      console.error("Error creating element:", error);
+      return null;
+    }
+  };
 
   const onSubmit: SubmitHandler<ITransferFormData> = (data) => {
     const params: Partial<any> = {
@@ -100,12 +121,10 @@ export const ModalUI = ({
 
     params.INSERTTARIHI = dayjs();
     params.FIILISEVKTARIHI = dayjs();
-    console.log("11", dayjs().format("DD.MM.YYYY"));
 
     params.IRSALIYETARIHI = convertToISO(dayjs().format("DD.MM.YYYY"));
 
-    const response: any = createElement(params);
-    if (response) setTableOpen(true);
+    createElement(params);
   };
 
   const handleActions = (el: ITransferElement, type: string) => {
@@ -153,6 +172,7 @@ export const ModalUI = ({
       setValue("IRSALIYENO", irsaliyaNo + 1 + "");
     }
   }, [defaultData, irsaliyaNo]);
+
   const headColumns = useMemo(() => {
     return [
       { id: "STOKDETAYID", title: "STOKDETAYID", width: 80 },
@@ -187,7 +207,7 @@ export const ModalUI = ({
         <div className="w-full flex space-x-4">
           <div className="grid grid-cols-3 gap-x-5 gap-y-2 pb-5 w-full">
             <div className="space-y-2">
-              <FieldUI title="irsaliye no">
+              <FieldUI title={t("IRSALIYENO")}>
                 <div className="flex items-center space-x-2">
                   <HFTextField
                     control={control}
@@ -196,7 +216,7 @@ export const ModalUI = ({
                   />
                 </div>
               </FieldUI>
-              <FieldUI title="tarih">
+              <FieldUI title={t("IRSALIYETARIHI")}>
                 <HFTextField
                   control={control}
                   name="IRSALIYETARIHI"
@@ -206,7 +226,7 @@ export const ModalUI = ({
             </div>
 
             <div className="space-y-2">
-              <FieldUI title="Depo no">
+              <FieldUI title={t("DEPOID")}>
                 <SelectOptionsTable
                   name="DEPOID"
                   placeholder="Depo no"
@@ -228,7 +248,7 @@ export const ModalUI = ({
                   disabled={tableOpen}
                 />
               </FieldUI>
-              <FieldUI title="doviz cinsi">
+              <FieldUI title={t("DOVIZID")}>
                 <HFSelect
                   name="DOVIZID"
                   control={control}
@@ -239,7 +259,7 @@ export const ModalUI = ({
             </div>
 
             <div className="space-y-2">
-              <FieldUI title="Transfer depo no">
+              <FieldUI title={t("TRANSFERDEPOID")}>
                 <SelectOptionsTable
                   name="TRANSFERDEPOID"
                   placeholder="Transfer depo no"
@@ -261,7 +281,7 @@ export const ModalUI = ({
                   disabled={tableOpen}
                 />
               </FieldUI>
-              <FieldUI title="sevik tarihi">
+              <FieldUI title={t("INSERTTARIHI")}>
                 <HFTextField
                   control={control}
                   name="INSERTTARIHI"
@@ -313,6 +333,7 @@ export const ModalUI = ({
             defaultData={{
               ...selectedRow,
               ...defaultData,
+              DEPOID: depoId,
             }}
             refetch={refetch}
           />

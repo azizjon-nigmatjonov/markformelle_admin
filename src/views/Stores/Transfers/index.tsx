@@ -14,7 +14,7 @@ export const Transfers = () => {
     perPage: 50,
   });
   const { handleActionsModal } = ModalLogic({ setModalList, modalList });
-  const { bodyColumns, handleActions, isLoading, bodyData, createElement } =
+  const { bodyColumns, handleActions, isLoading, bodyData, getList } =
     TableData({
       handleActionsModal,
       filterParams,
@@ -81,7 +81,7 @@ export const Transfers = () => {
           element={modalList[0]}
           setModalList={setModalList}
           modalList={modalList}
-          createElement={createElement}
+          getList={() => getList(filterParams)}
           irsaliyaNo={bodyColumns?.[0]?.IRSALIYEID || 9000}
         />
       ) : (

@@ -1,6 +1,6 @@
 import { memo, useEffect, useState } from "react";
 import IconGenerator from "../../IconGenerator";
-import { useTranslation } from "react-i18next";
+
 import cls from "./style.module.scss";
 import { DropDown, OneDropdown } from "./DropDown";
 import { useDispatch } from "react-redux";
@@ -11,6 +11,7 @@ import { AccordionDetails, AccordionSummary } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import usePageRouter from "../../../../hooks/useObjectRouter";
 import "./style.scss";
+import { useTranslationHook } from "../../../../hooks/useTranslation";
 interface Props {
   list: any;
   collapsed: boolean;
@@ -25,7 +26,7 @@ const SidebarSection = ({
   wideSidebar,
 }: Props) => {
   const dispatch = useDispatch();
-  const { t } = useTranslation();
+  const { t } = useTranslationHook();
   const { navigateTo } = usePageRouter();
   const [expanded, setExpanded] = useState<string | false>(false);
   const [expandedInner, setExpandedInner] = useState<string | false>(false);

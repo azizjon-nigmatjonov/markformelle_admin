@@ -97,6 +97,7 @@ export const TableForm = ({
       createStokElement(params);
     }
   };
+  console.log("212", defaultData);
 
   const checkAmount = (search: any) => {
     const amount = +search;
@@ -113,10 +114,9 @@ export const TableForm = ({
       clearErrors(["MIKTAR"]);
     }
   };
-  console.log("defaultData", defaultData);
 
   const getDepoStock = (depoId: string, urunId: string) => {
-    // if (!urunId || !depoId) return;
+    if (!urunId || !depoId) return;
     axios.get(`${API_URL}/depostok/${depoId}/${urunId}`).then((res: any) => {
       const stock = res?.data ?? {};
       const weight = stock.ALIS - stock.DEPOYACIKAN;
@@ -140,7 +140,7 @@ export const TableForm = ({
   useEffect(() => {
     setValue("BIRIMID", urunBirim?.[0]?.BIRIMID ?? "Kg");
     const values = getValues();
-
+    if (!defaultData.DEPOID) return;
     getDepoStock(defaultData.DEPOID, values.URUNID);
   }, [urunBirim]);
 
@@ -150,6 +150,8 @@ export const TableForm = ({
         ...filterParams,
         q: `URUNID=${defaultData.URUNID.substring(3, -1)}`,
       });
+      setValue("URUNID", defaultData.URUNID);
+      setValue("ADI", defaultData.URUNADI);
     }
   }, [defaultData]);
 

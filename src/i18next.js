@@ -27,8 +27,7 @@ i18next
         if (currentLang?.includes("US")) currentLang = "ru";
 
         const storedTranslation =
-          JSON.parse(localStorage.getItem("translations")) || [];
-        const obj = {};
+          JSON.parse(localStorage.getItem("translation_by_lang")) || {};
 
         if (storedTranslation?.length) {
           storedTranslation.forEach((element) => {
@@ -41,12 +40,16 @@ i18next
         }
 
         callback(null, {
-          data: TranslationsObject,
+          data: obj,
           status: 200,
         });
+
         try {
           const res = await axios.get(url);
-
+          localStorage.setItem(
+            "translation_by_lang",
+            JSON.stringify(res.data[currentLang])
+          );
           callback(null, {
             data: res.data[currentLang] || {},
             status: 200,

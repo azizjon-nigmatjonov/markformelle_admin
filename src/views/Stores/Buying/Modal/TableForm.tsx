@@ -7,9 +7,7 @@ import { InnerModalLogic } from "./Logic";
 import { CloseIcon } from "../../../../components/UI/IconGenerator/Svg";
 import { IFilterParams } from "../../../../interfaces";
 import dayjs from "dayjs";
-import { Alert } from "@mui/material";
-import axios from "axios";
-const API_URL = import.meta.env.VITE_TEST_URL;
+import { useTranslationHook } from "../../../../hooks/useTranslation";
 
 interface TableFormProps {
   setOpen: (val: boolean) => void;
@@ -19,7 +17,7 @@ interface TableFormProps {
 interface FormData {
   BARKODKODU: string;
   URUNID: string;
-  ADI: string;
+  URUNADI: string;
   MIKTAR: number;
   URUNBIRIMID: number;
   BIRIMFIYAT: number;
@@ -31,11 +29,8 @@ export const TableForm = ({
   defaultData = {},
   refetch = () => {},
 }: TableFormProps) => {
-  const [alettInfo, setAlertInfo]: any = useState({
-    title: "Осататка в складе",
-    type: "info",
-    amount: 0,
-  });
+  const { t } = useTranslationHook();
+
   const [filterParams, setFilterParams] = useState<Partial<IFilterParams>>({
     page: 1,
     perPage: 100,
@@ -47,10 +42,9 @@ export const TableForm = ({
     page: 1,
     perPage: 100,
   });
-  const { control, handleSubmit, setValue, getValues, setError, clearErrors } =
-    useForm<FormData>({
-      mode: "onSubmit",
-    });
+  const { control, handleSubmit, setValue } = useForm<FormData>({
+    mode: "onSubmit",
+  });
   const { urunData, urunBirim, createStokElement, updateElement } =
     InnerModalLogic({
       filterParams,
@@ -69,7 +63,7 @@ export const TableForm = ({
       DEPOID: "D003",
       TRANSFERDEPOID: "D008",
       IRSALIYEID: 5626,
-      FIRMAID: null,
+      FIRMAID: defaultData.FIRMAID,
       NOTU: "",
       STOKVAR: true,
       INSERTKULLANICIID: 1,
@@ -79,7 +73,7 @@ export const TableForm = ({
     params.IRSALIYEID = defaultData.IRSALIYEID;
     params.DEPOID = defaultData.DEPOID;
     params.TRANSFERDEPOID = defaultData.TRANSFERDEPOID;
-    params.INSERTTARIHI = defaultData.INSERTTARIHI;
+    params.STOKID = params.STOKDETAYID;
     params.TARIH = defaultData.IRSALIYETARIHI;
     params = { ...params, ...data };
     params.URUNBIRIMID =
@@ -87,8 +81,10 @@ export const TableForm = ({
         ?.URUNBIRIMID ?? 0;
     params.MIKTAR = +params.MIKTAR;
     params.BIRIMFIYAT = +params.BIRIMFIYAT;
+    params.STOKDETAYID = defaultData.STOKDETAYID;
+    params.INSERTTARIHI = defaultData.INSERTTARIHI;
     delete params.BIRIMID;
-    delete params.ADI;
+    delete params.URUNADI;
     delete params.IRSALIYETARIHI;
 
     if (defaultData?.URUNID) {
@@ -98,50 +94,8 @@ export const TableForm = ({
     }
   };
 
-  const checkAmount = (search: any) => {
-    const amount = +search;
-    const values = getValues();
-
-    const currentVal = amount / (values.BIRIMID === "Kg" ? 1 : 1000);
-
-    if (currentVal > alettInfo.amount) {
-      setError("MIKTAR", {
-        type: "manual",
-        message: "Incorrect username",
-      });
-    } else {
-      clearErrors(["MIKTAR"]);
-    }
-  };
-  console.log("defaultData", defaultData);
-
-  const getDepoStock = (depoId: string, urunId: string) => {
-    // if (!urunId || !depoId) return;
-    axios.get(`${API_URL}/depostok/${depoId}/${urunId}`).then((res: any) => {
-      const stock = res?.data ?? {};
-      const weight = stock.ALIS - stock.DEPOYACIKAN;
-      const values = getValues();
-      if (weight) {
-        setAlertInfo({
-          title: `В осататка есть ${weight} ${values.BIRIMID}` + "",
-          type: "success",
-          amount: weight,
-        });
-      } else {
-        setAlertInfo({
-          title: `В осататка ${weight} ${values.BIRIMID}` + "",
-          type: "error",
-          amount: 0,
-        });
-      }
-    });
-  };
-
   useEffect(() => {
     setValue("BIRIMID", urunBirim?.[0]?.BIRIMID ?? "Kg");
-    const values = getValues();
-
-    getDepoStock(defaultData.DEPOID, values.URUNID);
   }, [urunBirim]);
 
   useEffect(() => {
@@ -150,8 +104,10 @@ export const TableForm = ({
         ...filterParams,
         q: `URUNID=${defaultData.URUNID.substring(3, -1)}`,
       });
+      setValue("URUNID", defaultData.URUNID);
+      setValue("URUNADI", defaultData.URUNADI);
     }
-  }, [defaultData]);
+  }, [defaultData?.URUNID]);
 
   return (
     <form
@@ -160,7 +116,7 @@ export const TableForm = ({
     >
       <div className="flex justify-between mb-2">
         <div className="w-[20px]"></div>
-        <h2>Примешенные</h2>
+        <h2>{t("document_content")}</h2>
         <div className="w-[20px] cursor-pointer" onClick={() => setOpen(false)}>
           <CloseIcon />
         </div>
@@ -177,19 +133,19 @@ export const TableForm = ({
 
       <SelectOptionsTable
         name="URUNID"
-        label="Urun kodi"
+        label={t("URUNID")}
         focused={true}
-        placeholder="Urun kodi"
+        placeholder={t("URUNID")}
         options={urunData?.data ?? []}
         required={true}
         headColumns={[
-          { id: "BARKOD", width: 200, title: "BARKODI" },
-          { id: "ADI", title: "ADIS", innerId: "URUNID" },
+          { id: "BARKOD", width: 200, title: "BARKOD" },
+          { id: "ADI", title: "URUNADI", innerId: "URUNID" },
         ]}
         filterParams={filterParams}
         handleSelect={(obj: any) => {
           setValue("URUNID", obj.URUNID);
-          setValue("ADI", obj.ADI);
+          setValue("URUNADI", obj.ADI);
           setFilterParamsWeight({
             ...filterParamsWeight,
             q: `URUNID=${obj.URUNID}`,
@@ -204,19 +160,19 @@ export const TableForm = ({
       />
 
       <SelectOptionsTable
-        name="ADI"
-        label="Urun adi"
-        placeholder="Urun adi"
+        name="URUNADI"
+        label={t("URUNADI")}
+        placeholder={t("URUNADI")}
         options={urunData?.data}
         required={true}
         headColumns={[
-          { id: "BARKOD", width: 200, title: "BARKODI" },
-          { id: "ADI", title: "ADIS", innerId: "URUNID" },
+          { id: "BARKOD", width: 200, title: "BARKOD" },
+          { id: "ADI", title: "URUNADI", innerId: "URUNID" },
         ]}
         filterParams={filterParams}
         handleSelect={(obj: any) => {
           setValue("URUNID", obj.URUNID);
-          setValue("ADI", obj.ADI);
+          setValue("URUNADI", obj.ADI);
           setFilterParamsWeight({
             ...filterParamsWeight,
             q: `&URUNID=${obj.URUNID}`,
@@ -237,7 +193,6 @@ export const TableForm = ({
           type="number"
           required={true}
           placeholder="Miktar"
-          handleChange={(val?: string) => checkAmount(val)}
           defaultValue={defaultData?.MIKTAR}
         />
         <div className="w-[90px]">
@@ -248,7 +203,7 @@ export const TableForm = ({
             headColumns={[
               { id: "BIRIMID", title: "Birim id" },
               { id: "BIRIMADI", title: "Adi" },
-              { id: "CARPAN", title: "Carpani" },
+              { id: "CARPAN", title: "CARPAN" },
             ]}
             filterParams={filterParamsWeight}
             handleSelect={(obj: any) => {
@@ -261,7 +216,7 @@ export const TableForm = ({
           />
         </div>
       </div>
-      <Alert severity={alettInfo.type}>{alettInfo.title}</Alert>
+
       <HFInputMask
         control={control}
         name="BIRIMFIYAT"
