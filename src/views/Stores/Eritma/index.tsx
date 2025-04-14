@@ -50,6 +50,7 @@ export const EritmaPage = () => {
             "excel_download",
             "active_menu",
             "filter",
+            "sellect_more",
           ]}
           defaultSearch={{ URUNID: "" }}
           meta={{

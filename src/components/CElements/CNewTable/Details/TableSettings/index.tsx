@@ -13,6 +13,7 @@ import {
   PlusIcon,
 } from "../../../../UI/IconGenerator/Svg";
 import { PopoverDelete } from "../Actions/EditDelete/PopOver";
+import { useTranslationHook } from "../../../../../hooks/useTranslation";
 
 export const SettingDropdown = ({
   allCheck = false,
@@ -71,6 +72,7 @@ export const HeaderSettings = ({
   defaultExcelFields: string[];
   tableActions: (el: any, status: string) => void;
 }) => {
+  const { t } = useTranslationHook();
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const dispatch = useDispatch();
@@ -224,7 +226,29 @@ export const HeaderSettings = ({
                 <div className="w-[30px] h-[30px] items-center justify-center flex">
                   <PlusIcon fill="var(--main)" width={20} />
                 </div>
-                <p className="text-sm pr-2 text-black">Добавить</p>
+                <p className="text-sm pr-2 text-[var(--black)]">{t("add")}</p>
+              </IconButton>
+            )}
+            {defaultFilters.includes("sellect_more") && (
+              <IconButton
+                onClick={() => tableActions({}, "sellect_more_active")}
+              >
+                <div className="w-[30px] h-[30px] items-center justify-center flex">
+                  <img
+                    width={20}
+                    src="/public/images/task-list.png"
+                    alt="task list"
+                  />
+                </div>
+                <p
+                  className={`text-sm pr-2 ${
+                    selectedItems.length
+                      ? "text-[var(--main)]"
+                      : "text-[var(--black)]"
+                  }`}
+                >
+                  {t("sellect_more")}
+                </p>
               </IconButton>
             )}
             {defaultFilters.includes("delete") && (
@@ -242,7 +266,9 @@ export const HeaderSettings = ({
                       width={18}
                     />
                   </div>
-                  <p className="text-sm pr-2 text-black">Удалить</p>
+                  <p className="text-sm pr-2 text-[var(--black)]">
+                    {t("delete")}
+                  </p>
                 </IconButton>
 
                 {openDelete && (

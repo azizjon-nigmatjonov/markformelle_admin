@@ -59,6 +59,7 @@ export const Transfers = () => {
             "excel_download",
             "active_menu",
             "filter",
+            "sellect_more",
           ]}
           defaultSearch={{ IRSALIYENO: "" }}
           handleActions={handleActions}

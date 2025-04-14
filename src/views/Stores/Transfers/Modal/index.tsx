@@ -318,6 +318,7 @@ export const ModalUI = ({
               disablePagination={true}
               idForTable="modal"
               animation={false}
+              clickable={true}
               handleFilterParams={setFilterParams}
             />
           </CollapseUI>

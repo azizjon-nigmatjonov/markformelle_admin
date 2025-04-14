@@ -88,7 +88,6 @@ export const CTableBody = ({
 
       <tbody className="CTableBody w-full" {...props} ref={ref}>
         {children}
-        {/* <EmptyDataComponent isVisible={dataLength < 1 && !loader} /> */}
       </tbody>
     </>
   );

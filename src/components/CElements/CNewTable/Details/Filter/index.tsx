@@ -5,6 +5,7 @@ import { Field } from "./Field";
 import { SearchField } from "./Search";
 import { useEffect, useState } from "react";
 import { SelectFilter } from "./Select";
+import { useTranslationHook } from "../../../../../hooks/useTranslation";
 // import { CPeriodPicker } from "../../../CPeriodPicker";
 interface Props {
   colId?: any;
@@ -91,6 +92,7 @@ export const SideFilter = ({
   defaultSearch: any;
 }) => {
   const [newHeadColumns, setNewHeadColumns] = useState<any>([]);
+  const { t } = useTranslationHook();
   useEffect(() => {
     const arr: any = [];
     headColumns.forEach((item: any) => {
@@ -136,24 +138,13 @@ export const SideFilter = ({
           ) : (
             ""
           )}
-          {/* <div className="bg-[var(--border)] w-full h-[1px] my-1"></div>
-
-          <div className="mt-3 px-2">
-            <p className="text-[12px] mb-2">Временной фильтр</p>
-            <CPeriodPicker
-              handleValue={(val: any) =>
-                handleSortLogic({ value: "period", search: val ? val : [] })
-              }
-            />
-          </div> */}
-
           {Object.keys(searchedElements).length ? (
             <div className="border-t border-[var(--border)] mt-4">
               {Object.entries(searchedElements).map(([key, val]: any) => (
                 <div key={key} className="border-b border-[var(--border)] pb-2">
                   <Field
                     obj={{
-                      title: key,
+                      title: t(key),
                       id: key,
                       value: val,
                       close: !(key in defaultSearch),

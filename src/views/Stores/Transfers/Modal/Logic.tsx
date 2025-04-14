@@ -170,6 +170,7 @@ export const InnerModalLogic = ({
   const updateElement = (params: any, id: string) => {
     axios.put(`${API_URL}/stokdetay/${id}`, params).then(() => {
       setOpen(false);
+      refetch();
     });
   };
 

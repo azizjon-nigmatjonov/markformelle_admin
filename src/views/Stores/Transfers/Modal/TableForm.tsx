@@ -6,9 +6,9 @@ import { useEffect, useState } from "react";
 import { InnerModalLogic } from "./Logic";
 import { CloseIcon } from "../../../../components/UI/IconGenerator/Svg";
 import { IFilterParams } from "../../../../interfaces";
-import dayjs from "dayjs";
 import { Alert } from "@mui/material";
 import axios from "axios";
+import dayjs from "dayjs";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
 interface TableFormProps {
@@ -60,44 +60,81 @@ export const TableForm = ({
     });
 
   const onSubmit = (data: any) => {
-    let params: any = {
-      HAREKETTIPI: 5,
-      URUNID: defaultData?.URUNID,
-      URUNBIRIMID: 1288,
-      MIKTAR: 17,
-      BIRIMFIYAT: 0,
-      DEPOID: "D003",
-      TRANSFERDEPOID: "D008",
-      IRSALIYEID: 5626,
-      FIRMAID: null,
-      NOTU: "",
-      STOKVAR: true,
-      INSERTKULLANICIID: 1,
-      KULLANICIID: 1,
-      DEGISIMTARIHI: dayjs(),
-    };
-    params.IRSALIYEID = defaultData.IRSALIYEID;
-    params.DEPOID = defaultData.DEPOID;
-    params.TRANSFERDEPOID = defaultData.TRANSFERDEPOID;
-    params.INSERTTARIHI = defaultData.INSERTTARIHI;
-    params.TARIH = defaultData.IRSALIYETARIHI;
-    params = { ...params, ...data };
-    params.URUNBIRIMID =
-      urunBirim.find((obj: any) => obj.BIRIMID === params.BIRIMID)
-        ?.URUNBIRIMID ?? 0;
-    params.MIKTAR = +params.MIKTAR;
-    params.BIRIMFIYAT = +params.BIRIMFIYAT;
-    delete params.BIRIMID;
-    delete params.ADI;
-    delete params.IRSALIYETARIHI;
+    if (defaultData.URUNID) {
+      let params: any = {
+        STOKDETAYID: defaultData.STOKDETAYID,
+        STOKID: null,
+        IRSALIYEID: 5652,
+        URUNID: defaultData.URUNID,
+        URUNBIRIMID: 1284,
+        KULLANICIID: 1,
+        DEPOID: "D003",
+        TRANSFERDEPOID: "D009",
+        MIKTAR: 4,
+        BIRIMFIYAT: 0,
+        DEGISIMTARIHI: "2025-04-12T07:37:38.184000",
+        NOTU: "",
+        IRSALIYETARIHI: "2025-04-12T00:00:00",
+      };
 
-    if (defaultData?.URUNID) {
-      updateElement(params, defaultData.STOKDETAYID);
+      params.IRSALIYEID = defaultData.IRSALIYEID;
+      params.DEPOID = defaultData.DEPOID;
+      params.TRANSFERDEPOID = defaultData.TRANSFERDEPOID;
+      params.DEGISIMTARIHI = defaultData.INSERTTARIHI;
+      params.IRSALIYETARIHI = defaultData.IRSALIYETARIHI;
+      params = { ...params, ...data };
+
+      params.URUNBIRIMID = defaultData.URUNBIRIMID;
+      params.MIKTAR = +params.MIKTAR;
+      params.BIRIMFIYAT = +params.BIRIMFIYAT;
+      delete params.BIRIMID;
+      delete params.ADI;
+      delete params.BARKODKODU;
+
+      if (defaultData?.URUNID) {
+        updateElement(params, defaultData.STOKDETAYID);
+      } else {
+        createStokElement(params);
+      }
     } else {
-      createStokElement(params);
+      let params: any = {
+        HAREKETTIPI: 5,
+        URUNID: defaultData?.URUNID,
+        URUNBIRIMID: 1288,
+        MIKTAR: 17,
+        BIRIMFIYAT: 0,
+        DEPOID: "D003",
+        TRANSFERDEPOID: "D008",
+        IRSALIYEID: 5626,
+        FIRMAID: null,
+        NOTU: "",
+        STOKVAR: true,
+        INSERTKULLANICIID: 1,
+        KULLANICIID: 1,
+        DEGISIMTARIHI: dayjs(),
+      };
+      params.IRSALIYEID = defaultData.IRSALIYEID;
+      params.DEPOID = defaultData.DEPOID;
+      params.TRANSFERDEPOID = defaultData.TRANSFERDEPOID;
+      params.INSERTTARIHI = defaultData.INSERTTARIHI;
+      params.TARIH = defaultData.IRSALIYETARIHI;
+      params = { ...params, ...data };
+      params.URUNBIRIMID =
+        urunBirim.find((obj: any) => obj.BIRIMID === params.BIRIMID)
+          ?.URUNBIRIMID ?? 0;
+      params.MIKTAR = +params.MIKTAR;
+      params.BIRIMFIYAT = +params.BIRIMFIYAT;
+      delete params.BIRIMID;
+      delete params.ADI;
+      delete params.IRSALIYETARIHI;
+
+      if (defaultData?.URUNID) {
+        updateElement(params, defaultData.STOKDETAYID);
+      } else {
+        createStokElement(params);
+      }
     }
   };
-  console.log("212", defaultData);
 
   const checkAmount = (search: any) => {
     const amount = +search;
