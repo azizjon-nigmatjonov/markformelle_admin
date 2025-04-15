@@ -331,6 +331,7 @@ const LanguagesPage = () => {
             "excel_download",
             "actions",
             "delete",
+            "sellect_more",
           ]}
           defaultActions={["delete", "is_sellect_more"]}
           bodyColumns={listTable?.sort(

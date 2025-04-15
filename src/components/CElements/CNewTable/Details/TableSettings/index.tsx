@@ -144,22 +144,26 @@ export const HeaderSettings = ({
   const menuList = useMemo(() => {
     return [
       {
-        label: "Активные столбцы",
+        label: t("active_columns"),
         id: "columns",
         type: "checkbox",
-        data: headColumns?.map((item: { id: string; checked: boolean }) => {
-          let id: any = item.id;
-          if (id?.[0] && typeof id === "object") {
-            id = id.join("");
-          }
+        data: headColumns?.map(
+          (item: { id: string; checked: boolean; title: string }) => {
+            let id: any = item.id;
+            if (id?.[0] && typeof id === "object") {
+              id = id.join("");
+            }
 
-          if (pageColumns.includes(id)) {
-            item.checked = true;
-          } else {
-            item.checked = false;
+            item.title = t(item.title);
+
+            if (pageColumns.includes(id)) {
+              item.checked = true;
+            } else {
+              item.checked = false;
+            }
+            return item;
           }
-          return item;
-        }),
+        ),
       },
     ];
   }, [headColumns, pageColumns?.length]);
@@ -234,11 +238,7 @@ export const HeaderSettings = ({
                 onClick={() => tableActions({}, "sellect_more_active")}
               >
                 <div className="w-[30px] h-[30px] items-center justify-center flex">
-                  <img
-                    width={20}
-                    src="/public/images/task-list.png"
-                    alt="task list"
-                  />
+                  <img width={20} src="/images/tasklist.png" alt="task list" />
                 </div>
                 <p
                   className={`text-sm pr-2 ${
@@ -275,13 +275,7 @@ export const HeaderSettings = ({
                   <PopoverDelete
                     closePopover={(status) => {
                       setOpenDelete(false);
-                      if (status)
-                        tableActions(
-                          bodyColumns.filter((item: any) =>
-                            selectedItems.includes(item.index - 1)
-                          ),
-                          "delete_multiple"
-                        );
+                      if (status) tableActions({}, "delete_multiple");
                     }}
                   />
                 )}

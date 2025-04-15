@@ -151,7 +151,7 @@ export const ModalUI = ({
           </div>
         </div>
       </CollapseUI>
-      <CollapseUI title="Birimler" defaultOpen={false}>
+      <CollapseUI title="Birimler" defaultOpen={true}>
         <TableUI defaultData={defaultData} />
       </CollapseUI>
     </form>

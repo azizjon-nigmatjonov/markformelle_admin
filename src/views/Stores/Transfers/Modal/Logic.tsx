@@ -91,7 +91,6 @@ export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
   return {
     defaultData: modal?.data,
     tableData: modalTable?.data,
-
     urunData: urunData?.data ?? {},
     refetch,
     deleteElement,

@@ -198,8 +198,6 @@ export const ModalUI = ({
       }`}
       action="add"
       handleActions={handleActionsModal}
-      element={element}
-      list={modalList}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full flex space-x-4">
@@ -318,11 +316,7 @@ export const ModalUI = ({
           </div>
         </div>
 
-        <CollapseUI
-          title={t("document_content")}
-          defaultOpen={tableOpen}
-          disabled={true}
-        >
+        <CollapseUI title={t("document_content")} defaultOpen={true}>
           <CNewTable
             title={""}
             headColumns={headColumns}

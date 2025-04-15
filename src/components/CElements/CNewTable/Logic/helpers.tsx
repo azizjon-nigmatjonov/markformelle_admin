@@ -18,7 +18,7 @@ export const areAllRowsSelectedOnPage = (
   selectedItems: number[],
   dataSource: { index: number }[]
 ): boolean => {
-  const pageIndexes = dataSource.map((item) => item.index - 1); // normalize to 0-based
+  const pageIndexes = dataSource.map((item) => item.index - 1);
 
   return pageIndexes.every((i) => selectedItems.includes(i));
 };

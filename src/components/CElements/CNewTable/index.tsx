@@ -57,6 +57,7 @@ interface Props {
   animation?: boolean;
   defaultActions?: string[];
   defaultExcelFields?: string[];
+  doubleClick?: boolean;
 }
 
 const CNewTable = ({
@@ -79,6 +80,7 @@ const CNewTable = ({
   limitList = [50, 100, 200],
   filterParams = { page: 1, perPage: 50 },
   handleFilterParams = () => {},
+  doubleClick = true,
   handleActions = () => {},
   defaultExcelFields = [],
   defaultActions = ["view", "edit", "delete", "is_sellect_more"],
@@ -152,7 +154,7 @@ const CNewTable = ({
       }
     }
 
-    handleFilterParams({ ...filterParams, q: str });
+    handleFilterParams({ ...filterParams, page: 0, q: str });
   };
 
   useEffect(() => {
@@ -496,9 +498,6 @@ const CNewTable = ({
       setReorder((prev) => !prev);
       return;
     }
-    if (status === "delete_by") {
-      // return;
-    }
 
     if (status === "sellect_more") {
       if (selectedItems.includes(el.index - 1)) {
@@ -536,7 +535,22 @@ const CNewTable = ({
       setOpenSelect((prev: boolean) => !prev);
     }
 
-    // if (!checkPermission(status) || el.empty) return;
+    if (status === "delete_multiple") {
+      const selectedElements = bodySource.filter((item: { index: number }) =>
+        selectedItems.includes(item.index - 1)
+      );
+      setSelectedItems(
+        selectedItems.filter(
+          (item: number) =>
+            !selectedElements.some(
+              (el: { index: number }) => el.index - 1 === item
+            )
+        )
+      );
+      handleActions(selectedElements, status);
+
+      return;
+    }
 
     handleActions(el, status);
   };
@@ -569,7 +583,10 @@ const CNewTable = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setSelectedItems([]);
+        setOpenSelect(false);
       }
+
+      if (e.key === "Enter") SetFiltersFn(searchedElements);
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -807,7 +824,14 @@ const CNewTable = ({
                           currentIndex === rowIndex
                             ? "bg-[var(--primary50)]"
                             : ""
+                        } ${
+                          selectedItems.includes(rowIndex) ? "sellected" : ""
                         }`}
+                        onClick={() => {
+                          if (openSelect) {
+                            tableActions(item, "sellect_more");
+                          }
+                        }}
                       >
                         <td
                           className="h-[35px] border-b border-[var(--border)] w-full flex justify-center items-center"
@@ -816,7 +840,11 @@ const CNewTable = ({
                           {openSelect && (
                             <div
                               onClick={() => tableActions(item, "sellect_more")}
-                              className="w-[18px] h-[18px] rounded-[4px] border border-[var(--gray)] flex items-center justify-center cursor-pointer "
+                              className={`w-[18px] h-[18px] check rounded-[4px] border flex items-center justify-center cursor-pointer ${
+                                selectedItems.includes(item.index - 1)
+                                  ? "border-[var(--black)]"
+                                  : "border-[var(--gray)]"
+                              }`}
                             >
                               {selectedItems.includes(item.index - 1) && (
                                 <CheckIcon
@@ -877,11 +905,11 @@ const CNewTable = ({
                                       tableActions(item, "view");
                                     }
                                   }}
-                                  // onClick={() => {
-                                  //   if (clickable) {
-                                  //     tableActions(item, "view");
-                                  //   }
-                                  // }}
+                                  onClick={() => {
+                                    if (!doubleClick) {
+                                      tableActions(item, "view");
+                                    }
+                                  }}
                                   className="w-full whitespace-nowrap"
                                 >
                                   <>{getBodyCol(column, item)}</>
@@ -890,10 +918,14 @@ const CNewTable = ({
                                 ""
                               )}
                               {defaultFilters.includes("actions") &&
-                              colIndex === (openSelect ? 1 : 0) ? (
+                              colIndex === 0 ? (
                                 <div className="relative flex items-center">
                                   <button
-                                    className={`w-[20px] h-full items-center justify-center ml-2`}
+                                    className={`w-[20px] h-full items-center justify-center flex ml-2 ${
+                                      selectedItems.length
+                                        ? "invisible"
+                                        : "visible"
+                                    }`}
                                     onClick={() => setCurrentIndex(rowIndex)}
                                     type="button"
                                   >

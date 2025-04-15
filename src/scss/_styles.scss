@@ -281,14 +281,13 @@ input {
   }
 
   &.disabled {
-    background-color: var(--border);
-    color: var(--gray);
-
+    background-color: #fafafa;
+    color: var(--black);
   }
 }
 
 .Mui-disabled {
-  background-color: var(--border);
+  background-color: #fafafa;
   color: var(--black);
 }
 

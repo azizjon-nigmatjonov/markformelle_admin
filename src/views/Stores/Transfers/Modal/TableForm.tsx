@@ -9,6 +9,7 @@ import { IFilterParams } from "../../../../interfaces";
 import { Alert } from "@mui/material";
 import axios from "axios";
 import dayjs from "dayjs";
+import { useTranslationHook } from "../../../../hooks/useTranslation";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
 interface TableFormProps {
@@ -31,6 +32,7 @@ export const TableForm = ({
   defaultData = {},
   refetch = () => {},
 }: TableFormProps) => {
+  const { t } = useTranslationHook();
   const [alettInfo, setAlertInfo]: any = useState({
     title: "Осататка в складе",
     type: "info",
@@ -304,7 +306,7 @@ export const TableForm = ({
       <HFInputMask
         control={control}
         name="BIRIMFIYAT"
-        label="Birim fiyat"
+        label={t("BIRIMFIYAT")}
         type="number"
         placeholder="Birim fiyat"
       />

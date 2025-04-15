@@ -1,6 +1,7 @@
 import { BuyingChemicals } from "../../views/Stores/Buying";
 import { ChemicalsStock } from "../../views/Stores/ChemicalsStock";
 import { EritmaPage } from "../../views/Stores/Eritma";
+import { MixturesPage } from "../../views/Stores/Mixtures";
 import { Transfers } from "../../views/Stores/Transfers";
 
 export const chemicalStore = [
@@ -8,9 +9,11 @@ export const chemicalStore = [
     parent: "chemical_store",
     link: "list",
     sidebar: true,
-    title: "Справочники",
-    parent_icon: <img width={20} src="/images/store.png" alt="store" />,
-    icon: "",
+    title: "catalogies",
+    parent_icon: (
+      <img width={20} src="/images/store_chemical.png" alt="store" />
+    ),
+    icon: <img width={20} src="/images/catalogue.png" alt="catalogue" />,
     element: "",
     auth: true,
     permissions: ["view_page"],
@@ -18,10 +21,18 @@ export const chemicalStore = [
       {
         parent: "chemical_store/list",
         link: "chemicals",
-        title: "Химикаты",
+        title: "chemicals",
         childLink: "chemicals",
         path: "chemical_store/chemicals",
-        icon: "",
+        icon: <img width={20} src="/images/chemical.png" alt="chemical" />,
+      },
+      {
+        parent: "chemical_store/mixtures",
+        link: "mixtures",
+        title: "chemicals_mixtures",
+        childLink: "mixtures",
+        path: "chemical_store/mixtures",
+        icon: <img width={20} src="/images/mixtures.png" alt="mixtures" />,
       },
     ],
   },
@@ -30,7 +41,7 @@ export const chemicalStore = [
     link: "documents",
     sidebar: true,
     title: "Документы",
-    icon: "",
+    icon: <img width={20} src="/images/documents.png" alt="documents" />,
     element: "",
     auth: true,
     permissions: ["view_page"],
@@ -41,7 +52,7 @@ export const chemicalStore = [
         title: "Внутреннее примешенные",
         childLink: "transfers",
         path: "chemical_store/transfers",
-        icon: "",
+        icon: <img width={20} src="/images/transfers.png" alt="transfers" />,
       },
       {
         parent: "chemical_store/list",
@@ -49,7 +60,7 @@ export const chemicalStore = [
         title: "Документ покупки",
         childLink: "buying",
         path: "chemical_store/buying",
-        icon: "",
+        icon: <img width={20} src="/images/store.png" alt="store" />,
       },
     ],
   },
@@ -58,7 +69,7 @@ export const chemicalStore = [
     link: "reports",
     sidebar: true,
     title: "Отчёты",
-    icon: "",
+    icon: <img width={20} src="/images/report.png" alt="report" />,
     element: "",
     auth: true,
     permissions: ["view_page"],
@@ -78,6 +89,13 @@ export const chemicalStore = [
     link: "chemicals",
     sidebar: false,
     element: <EritmaPage />,
+    permissions: ["view_page"],
+  },
+  {
+    parent: "chemical_store",
+    link: "mixtures",
+    sidebar: false,
+    element: <MixturesPage />,
     permissions: ["view_page"],
   },
   {

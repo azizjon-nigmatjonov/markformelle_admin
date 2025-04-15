@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { breadCrumbs, ModalLogic, TableData } from "./Logic";
+import { breadCrumbs, TableData } from "./Logic";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { Header } from "../../../components/UI/Header";
 import CNewTable from "../../../components/CElements/CNewTable";
@@ -7,18 +7,66 @@ import { ModalUI } from "./Modal";
 import { IFilterParams } from "../../../interfaces";
 import { GetCurrentDate } from "../../../utils/getDate";
 
+interface ModalTypes {
+  IRSALIYENO?: string;
+  DEPOID?: string;
+}
+
 export const Transfers = () => {
-  const [modalList, setModalList]: any = useState([]);
+  const [open, setOpen] = useState(false);
+  const [modalInitialData, setModalInitialData] = useState<ModalTypes>({});
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
   });
-  const { handleActionsModal } = ModalLogic({ setModalList, modalList });
-  const { bodyColumns, handleActions, isLoading, bodyData, getList } =
-    TableData({
-      handleActionsModal,
-      filterParams,
-    });
+
+  const { bodyColumns, isLoading, bodyData, getList, deleteFn } = TableData({
+    filterParams,
+  });
+
+  const handleActionsModal = (type: string, element?: any) => {
+    if (type === "edit") {
+      setOpen(true);
+    }
+    if (type === "delete") {
+      setOpen(false);
+      console.log("el", element);
+      setModalInitialData({});
+      // deleteFn([element.IRSALIYEID]);
+    }
+    if (type === "add") {
+      setOpen(true);
+    }
+    if (type === "close") {
+      setOpen(false);
+      setModalInitialData({});
+    }
+  };
+
+  const handleActions = (el: any, status: string) => {
+    console.log("el", el, status);
+
+    if (status === "delete") {
+      deleteFn([el.IRSALIYEID]);
+    }
+    if (status === "delete_multiple") {
+      deleteFn(
+        el.map((item: { IRSALIYEID: string }) => {
+          return item.IRSALIYEID;
+        })
+      );
+    }
+    if (status === "modal") {
+      setOpen(true);
+    }
+    if (status === "view" || status === "edit") {
+      setOpen(true);
+      setModalInitialData({
+        IRSALIYENO: el.IRSALIYENO,
+        DEPOID: el.DEPOID,
+      });
+    }
+  };
 
   const newHeadColumns = useMemo(() => {
     if (!bodyColumns?.length) return [];
@@ -77,16 +125,13 @@ export const Transfers = () => {
         />
       </div>
 
-      {modalList?.length ? (
+      {open && (
         <ModalUI
-          element={modalList[0]}
-          setModalList={setModalList}
-          modalList={modalList}
+          defaultData={modalInitialData}
           getList={() => getList(filterParams)}
           irsaliyaNo={bodyColumns?.[0]?.IRSALIYEID || 9000}
+          handleActionsModal={handleActionsModal}
         />
-      ) : (
-        ""
       )}
     </>
   );

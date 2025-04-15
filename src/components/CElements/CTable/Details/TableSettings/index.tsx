@@ -9,6 +9,7 @@ import { ListDotIcon } from "../../../../UI/IconGenerator/Svg/Machines";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import ExcelDownload from "../../../../../hooks/useExcelDownload";
+import { useTranslationHook } from "../../../../../hooks/useTranslation";
 
 export const SettingDropdown = ({
   allCheck = false,
@@ -58,6 +59,7 @@ export const HeaderSettings = ({
   extra?: any;
   tableActions: (el: any, status: string) => void;
 }) => {
+  const { t } = useTranslationHook();
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const [allCheck, setAllCheck] = useState(true);
@@ -128,22 +130,26 @@ export const HeaderSettings = ({
   const menuList = useMemo(() => {
     return [
       {
-        label: "Активные столбцы",
+        label: t("active_columns"),
         id: "columns",
         type: "checkbox",
-        data: headColumns?.map((item: { id: string; checked: boolean }) => {
-          let id: any = item.id;
-          if (id?.[0] && typeof id === "object") {
-            id = id.join("");
-          }
+        data: headColumns?.map(
+          (item: { id: string; checked: boolean; title: string }) => {
+            let id: any = item.id;
+            if (id?.[0] && typeof id === "object") {
+              id = id.join("");
+            }
 
-          if (pageColumns.includes(id)) {
-            item.checked = true;
-          } else {
-            item.checked = false;
+            item.title = t(item.title);
+
+            if (pageColumns.includes(id)) {
+              item.checked = true;
+            } else {
+              item.checked = false;
+            }
+            return item;
           }
-          return item;
-        }),
+        ),
       },
     ];
   }, [headColumns, pageColumns?.length]);

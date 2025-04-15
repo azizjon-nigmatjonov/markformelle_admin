@@ -4,7 +4,6 @@ import CLabel from "../../CElements/CLabel";
 import "../style.scss";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 const InputUI = ({
   value,
@@ -120,7 +119,7 @@ const HFTextField = ({
   ...props
 }: Props) => {
   const [password, setPassword] = useState(true);
-  const { t } = useTranslation();
+
   useEffect(() => {
     if (defaultValue) {
       setValue(name, defaultValue);
@@ -152,7 +151,7 @@ const HFTextField = ({
             errors={errors}
             defaultValue={defaultValue}
             setPassword={setPassword}
-            placeholder={placeholder ? t(placeholder) : ""}
+            placeholder={placeholder ? placeholder : ""}
           />
         )}
       ></Controller>
