@@ -6,4 +6,5 @@ export interface IFilterParams {
     title?: string
     edit?: boolean
     currentIndex?: number
+    [key: string]: any
 }

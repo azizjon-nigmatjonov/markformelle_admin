@@ -20,17 +20,16 @@ export const CollapseUI = ({
   }, [defaultOpen]);
   return (
     <div className="pb-5">
-      <div
-        className="flex items-center space-x-2 mt-2 pb-1"
-        onClick={() => {
-          !disabled ? setOpen((prev) => !prev) : "";
-        }}
-      >
+      <div className="flex items-center space-x-2 mt-2 pb-1">
         <h3 className="text-[14px] ">{title}</h3>
         {disabled ? (
           ""
         ) : (
-          <button>
+          <button
+            onClick={() => {
+              !disabled ? setOpen((prev) => !prev) : "";
+            }}
+          >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </button>
         )}

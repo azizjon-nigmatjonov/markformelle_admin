@@ -130,10 +130,9 @@ const LanguagesPage = () => {
       {
         renderHead: () => <GetTitle val="key" />,
         id: ["KEYWORD", "ID", "errors", "index"],
-        width: 260,
         render: ([key, ID, errors, index]: any) => {
           return (
-            <div className="h-[56px] flex items-center w-full font-medium">
+            <div className="flex items-center w-full font-medium">
               <div className="w-full flex">
                 {filterParams.edit || !key || errors?.includes("KEYWORD") ? (
                   <input
@@ -143,6 +142,7 @@ const LanguagesPage = () => {
                     onChange={(e) => {
                       handleValue(e.target.value, ID, "KEYWORD", index);
                     }}
+                    style={{ height: "28px" }}
                     ref={inputRef}
                     defaultValue={key}
                   />
@@ -157,10 +157,10 @@ const LanguagesPage = () => {
       {
         renderHead: () => <GetTitle val="ru" />,
         id: ["RU", "ID", "errors", "index"],
-        width: 260,
+
         render: ([val, ID, errors, index]: any) => {
           return (
-            <div className="h-[56px] flex items-center w-full">
+            <div className="px-8 flex items-center w-full">
               {filterParams.edit || errors?.includes("RU") ? (
                 <input
                   className={`input-design font-medium ${
@@ -169,6 +169,7 @@ const LanguagesPage = () => {
                   onChange={(e) => {
                     handleValue(e.target.value, ID, "RU", index);
                   }}
+                  style={{ height: "28px" }}
                   defaultValue={val}
                 />
               ) : (
@@ -181,15 +182,16 @@ const LanguagesPage = () => {
       {
         renderHead: () => <GetTitle val="uz" />,
         id: ["UZ", "ID", "errors", "index"],
-        width: 260,
+
         render: ([val, ID, errors, index]: any) => {
           return (
-            <div className="h-[56px] flex items-center w-full">
+            <div className="px-8 flex items-center w-full">
               {filterParams.edit || errors?.includes("UZ") ? (
                 <input
                   className={`input-design font-medium ${
                     errors?.includes("UZ") ? "error" : ""
                   }`}
+                  style={{ height: "28px" }}
                   onChange={(e) => {
                     handleValue(e.target.value, ID, "UZ", index);
                   }}
@@ -206,15 +208,16 @@ const LanguagesPage = () => {
       {
         renderHead: () => <GetTitle val="en" />,
         id: ["EN", "ID", "errors", "index"],
-        width: 260,
+
         render: ([val, ID, errors, index]: any) => {
           return (
-            <div className="h-[56px] flex items-center w-full">
+            <div className="px-8 flex items-center w-full">
               {filterParams.edit || errors?.includes("EN") ? (
                 <input
                   className={`input-design font-medium ${
                     errors?.includes("EN") ? "error" : ""
                   }`}
+                  style={{ height: "28px" }}
                   onChange={(e) => {
                     handleValue(e.target.value, ID, "EN", index);
                   }}
@@ -230,15 +233,16 @@ const LanguagesPage = () => {
       {
         renderHead: () => <GetTitle val="tu" />,
         id: ["TU", "ID", "errors", "index"],
-        width: 260,
+
         render: ([val, ID, errors, index]: any) => {
           return (
-            <div className="h-[56px] flex items-center w-full">
+            <div className="px-8 flex items-center w-full">
               {filterParams.edit || errors?.includes("TU") ? (
                 <input
                   className={`input-design font-medium ${
                     errors?.includes("TU") ? "error" : ""
                   }`}
+                  style={{ height: "28px" }}
                   onChange={(e) => {
                     handleValue(e.target.value, ID, "TU", index);
                   }}
@@ -258,7 +262,7 @@ const LanguagesPage = () => {
   const handleActions = (el: any, type: string) => {
     if (type === "delete") {
       if (el.KEYWORD) {
-        handleDelete(el.KEYWORD);
+        handleDelete([el.KEYWORD]);
       } else {
         setListTable(
           listTable
@@ -269,6 +273,13 @@ const LanguagesPage = () => {
             })
         );
       }
+    }
+    if (type === "delete_multiple") {
+      handleDelete(
+        el.map((item: { KEYWORD: string }) => {
+          return item.KEYWORD;
+        })
+      );
     }
     if (type === "modal") {
       AddNewColumn({ listTable, setListTable });
@@ -320,11 +331,13 @@ const LanguagesPage = () => {
             "excel_download",
             "actions",
             "delete",
+            "sellect_more",
           ]}
           defaultActions={["delete", "is_sellect_more"]}
           bodyColumns={listTable?.sort(
             (a: { ID: number }, b: { ID: number }) => b.ID - a.ID
           )}
+          disablePagination={true}
           filterParams={filterParams}
           isResizeble={false}
           handleFilterParams={setFilterParams}

@@ -9,8 +9,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import RemoveIcon from "@mui/icons-material/Remove";
 
 interface Props {
-  element?: any;
-  list?: any;
   title?: string;
   minWidth?: string | number;
   maxWidth?: string | number;
@@ -20,16 +18,16 @@ interface Props {
   classes?: string;
   closable?: boolean;
   action?: any;
+  defaultData?: { id: string | number | undefined };
   handleActions?: (val: string, val2?: any) => void;
 }
 
 const CNewModal: FC<Props> = ({
-  element,
-  list = [],
   title = "",
   padding = "14px",
   children,
   action = "add",
+  defaultData = {},
   handleActions = () => {},
 }) => {
   const [screen, setScreen] = useState(true);
@@ -104,20 +102,12 @@ const CNewModal: FC<Props> = ({
     <>
       <div
         ref={modalRef}
-        className={`fixed rounded-[4px] z-[99] bg-white shadow-lg ${
+        className={`fixed rounded-[12px] z-[99] bg-white shadow-lg ${
           isDragging ? "cursor-grabbing" : ""
         }`}
         style={{
-          left: position
-            ? `${position.x}px`
-            : element?.order && element.order < list?.length
-            ? `calc(${50 - (list.length - element.order)}%)`
-            : "50%",
-          top: position
-            ? `${position.y}px`
-            : element?.order && element.order < list?.length
-            ? `calc(${50 + (list.length - element.order)}%)`
-            : "50%",
+          left: position ? `${position.x}px` : "50%",
+          top: position ? `${position.y}px` : "50%",
           transform: position ? "none" : "translate(-50%, -50%)",
           transition: isDragging ? "none" : "width 0.3s, height 0.3s",
         }}
@@ -133,9 +123,9 @@ const CNewModal: FC<Props> = ({
             }`}
           >
             {title && (
-              <div className="flex items-center justify-between p-3 sticky top-0 bg-white z-[94] border-b border-[var(--border)]">
+              <div className="flex items-center justify-between p-3 sticky top-0 bg-white z-[91] border-b border-[var(--border)]">
                 <div className="flex items-center space-x-3">
-                  <IconButton onClick={() => handleActions("close", element)}>
+                  <IconButton onClick={() => handleActions("close")}>
                     <div className="w-[30px] h-[30px] items-center justify-center flex bg-[var(--main80)] rounded-full">
                       <ArrowBackIcon
                         style={{ color: "var(--main)", width: 18 }}
@@ -147,9 +137,7 @@ const CNewModal: FC<Props> = ({
                 </div>
 
                 <div className="flex items-center space-x-3">
-                  <IconButton
-                    onClick={() => handleActions("edit_modal", element)}
-                  >
+                  <IconButton onClick={() => handleActions("edit_modal")}>
                     <div
                       className={`flex items-center justify-center rounded-full w-[30px] h-[30px] ${
                         action === "edit" ? "border border-[var(--main)]" : ""
@@ -159,15 +147,21 @@ const CNewModal: FC<Props> = ({
                     </div>
                   </IconButton>
 
-                  <IconButton onClick={() => {}}>
-                    <div
-                      className={`flex items-center justify-center rounded-full w-[30px] h-[30px] ${
-                        action === "delete" ? "border border-[var(--main)]" : ""
-                      }`}
+                  {defaultData?.id && (
+                    <IconButton
+                      onClick={() => handleActions("delete", defaultData.id)}
                     >
-                      <DeleteIcon fill="var(--main)" />
-                    </div>
-                  </IconButton>
+                      <div
+                        className={`flex items-center justify-center rounded-full w-[30px] h-[30px] ${
+                          action === "delete"
+                            ? "border border-[var(--main)]"
+                            : ""
+                        }`}
+                      >
+                        <DeleteIcon fill="var(--main)" />
+                      </div>
+                    </IconButton>
+                  )}
                   <IconButton
                     onMouseDown={handleDragStart}
                     className={`transition-colors ${
@@ -186,12 +180,12 @@ const CNewModal: FC<Props> = ({
 
                 <div className="flex items-center space-x-4">
                   {action === "edit" && (
-                    <button className="text-[14px] border border-[var(--border)] px-2 py-1 rounded-[4px]">
+                    <button className="text-[14px] border border-[var(--border)] px-2 py-1 rounded-[8px]">
                       Сохранить
                     </button>
                   )}
                   <div>
-                    <IconButton onClick={() => handleActions("close", element)}>
+                    <IconButton onClick={() => handleActions("close")}>
                       <div className="w-[30px] h-[30px] items-center justify-center flex hover:bg-[var(--primary50)]">
                         <RemoveIcon className="text-[var(--main)]" />
                       </div>
@@ -208,7 +202,7 @@ const CNewModal: FC<Props> = ({
                         )}
                       </div>
                     </IconButton>
-                    <IconButton onClick={() => handleActions("close", element)}>
+                    <IconButton onClick={() => handleActions("close")}>
                       <div className="w-[30px] h-[30px] items-center justify-center flex group hover:bg-[var(--primary50)]">
                         <CloseIcon className="text-[var(--main)]" />
                       </div>
@@ -232,22 +226,12 @@ const CNewModal: FC<Props> = ({
         </Card>
       </div>
 
-      {element?.order && element.order < 2 ? (
-        <div
-          className="bg-[rgba(0,0,0,0.5)] w-full h-full fixed top-0 left-0 z-[97]"
-          onClick={() => handleActions("close", list[list.length - 1])}
-        ></div>
-      ) : (
-        <></>
-      )}
-      {!element && (
-        <div
-          className={`w-full h-full fixed top-0 left-0 z-[97] ${
-            title ? "bg-[rgba(0,0,0,0.5)]" : ""
-          }`}
-          onClick={() => handleActions("close", element)}
-        ></div>
-      )}
+      <div
+        className={`w-full h-full fixed top-0 left-0 z-[97] ${
+          title ? "bg-[rgba(0,0,0,0.3)]" : ""
+        }`}
+        onClick={() => handleActions("close")}
+      ></div>
     </>
   );
 };

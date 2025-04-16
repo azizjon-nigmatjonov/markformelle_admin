@@ -91,7 +91,6 @@ export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
   return {
     defaultData: modal?.data,
     tableData: modalTable?.data,
-
     urunData: urunData?.data ?? {},
     refetch,
     deleteElement,
@@ -170,6 +169,7 @@ export const InnerModalLogic = ({
   const updateElement = (params: any, id: string) => {
     axios.put(`${API_URL}/stokdetay/${id}`, params).then(() => {
       setOpen(false);
+      refetch();
     });
   };
 

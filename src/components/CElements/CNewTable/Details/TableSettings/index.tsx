@@ -13,6 +13,7 @@ import {
   PlusIcon,
 } from "../../../../UI/IconGenerator/Svg";
 import { PopoverDelete } from "../Actions/EditDelete/PopOver";
+import { useTranslationHook } from "../../../../../hooks/useTranslation";
 
 export const SettingDropdown = ({
   allCheck = false,
@@ -54,6 +55,7 @@ export const HeaderSettings = ({
   sortData,
   defaultFilters = [],
   selectedItems = [],
+  disabled = false,
   defaultExcelFields,
 }: {
   filterParams: any;
@@ -68,9 +70,11 @@ export const HeaderSettings = ({
   sortData: any;
   defaultFilters: any;
   selectedItems: any;
+  disabled: boolean;
   defaultExcelFields: string[];
   tableActions: (el: any, status: string) => void;
 }) => {
+  const { t } = useTranslationHook();
   const [open, setOpen] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const dispatch = useDispatch();
@@ -142,22 +146,26 @@ export const HeaderSettings = ({
   const menuList = useMemo(() => {
     return [
       {
-        label: "Активные столбцы",
+        label: t("active_columns"),
         id: "columns",
         type: "checkbox",
-        data: headColumns?.map((item: { id: string; checked: boolean }) => {
-          let id: any = item.id;
-          if (id?.[0] && typeof id === "object") {
-            id = id.join("");
-          }
+        data: headColumns?.map(
+          (item: { id: string; checked: boolean; title: string }) => {
+            let id: any = item.id;
+            if (id?.[0] && typeof id === "object") {
+              id = id.join("");
+            }
 
-          if (pageColumns.includes(id)) {
-            item.checked = true;
-          } else {
-            item.checked = false;
+            item.title = t(item.title);
+
+            if (pageColumns.includes(id)) {
+              item.checked = true;
+            } else {
+              item.checked = false;
+            }
+            return item;
           }
-          return item;
-        }),
+        ),
       },
     ];
   }, [headColumns, pageColumns?.length]);
@@ -208,6 +216,8 @@ export const HeaderSettings = ({
     tableActions(data, "edit");
   }, []);
 
+  const colorMain = disabled ? "var(--gray)" : "var(--main)";
+
   return (
     <div className="pb-[45px] bg-white border-b border-[var(--border)] rounded-t-[8px]">
       <div className="h-[45px] absolute w-full left-0 top-0 flex items-center desktop:px-3 justify-between">
@@ -222,9 +232,27 @@ export const HeaderSettings = ({
             {defaultFilters.includes("add") && (
               <IconButton onClick={() => tableActions({}, "modal")}>
                 <div className="w-[30px] h-[30px] items-center justify-center flex">
-                  <PlusIcon fill="var(--main)" width={20} />
+                  <PlusIcon fill={colorMain} width={20} />
                 </div>
-                <p className="text-sm pr-2 text-black">Добавить</p>
+                <p className="text-sm pr-2 text-[var(--black)]">{t("add")}</p>
+              </IconButton>
+            )}
+            {defaultFilters.includes("sellect_more") && (
+              <IconButton
+                onClick={() => tableActions({}, "sellect_more_active")}
+              >
+                <div className="w-[30px] h-[30px] items-center justify-center flex">
+                  <img width={20} src="/images/tasklist.png" alt="task list" />
+                </div>
+                <p
+                  className={`text-sm pr-2 ${
+                    selectedItems.length
+                      ? "text-[var(--main)]"
+                      : "text-[var(--black)]"
+                  }`}
+                >
+                  {t("sellect_more")}
+                </p>
               </IconButton>
             )}
             {defaultFilters.includes("delete") && (
@@ -242,20 +270,16 @@ export const HeaderSettings = ({
                       width={18}
                     />
                   </div>
-                  <p className="text-sm pr-2 text-black">Удалить</p>
+                  <p className="text-sm pr-2 text-[var(--black)]">
+                    {t("delete")}
+                  </p>
                 </IconButton>
 
                 {openDelete && (
                   <PopoverDelete
                     closePopover={(status) => {
                       setOpenDelete(false);
-                      if (status)
-                        tableActions(
-                          bodyColumns.filter((item: any) =>
-                            selectedItems.includes(item.index - 1)
-                          ),
-                          "delete_multiple"
-                        );
+                      if (status) tableActions({}, "delete_multiple");
                     }}
                   />
                 )}

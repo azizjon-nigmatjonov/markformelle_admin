@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
   ITransferElement,
@@ -21,47 +21,32 @@ import { convertToISO, GetCurrentDate } from "../../../../utils/getDate";
 const API_URL = import.meta.env.VITE_TEST_URL;
 import axios from "axios";
 import { useTranslationHook } from "../../../../hooks/useTranslation";
+import { InputFieldUI } from "../../../../components/UI/FieldUI";
 const schema = Validation;
 
-const FieldUI = ({
-  title,
-  children,
-}: {
-  title: string;
-  children: ReactNode;
-}) => {
-  return (
-    <div className="flex items-center justify-between space-x-3 whitespace-nowrap">
-      <p className="text-sm">{title}</p>
-      <hr className="w-[90%] border-t-[3px] border-dotted border-[var(--border)]" />
-      <div className="max-w-[50%] min-w-[50%]">{children}</div>
-    </div>
-  );
-};
-
 export const ModalUI = ({
-  element = {} as Partial<ITransferElement>,
-  modalList = [],
-  setModalList = () => {},
+  defaultData = {} as Partial<ITransferElement>,
   irsaliyaNo,
   getList,
+  handleActionsModal,
 }: {
-  element: Partial<ITransferElement>;
-  setModalList: (list: ITransferElement[]) => void;
-  modalList: ITransferElement[];
+  defaultData: Partial<ITransferElement>;
   irsaliyaNo: number;
   getList: () => void;
+  handleActionsModal: (val: string, element?: any) => void;
 }) => {
   const { t } = useTranslationHook();
   const [open, setOpen] = useState(false);
-  const [depoId, setDepoId]: any = useState(element?.DEPOID);
-  const [irsaliyaId, setIrsaliyaId]: any = useState(element.id);
+  const [depoId, setDepoId]: any = useState(defaultData?.DEPOID);
+  const [irsaliyaId, setIrsaliyaId]: any = useState(defaultData.IRSALIYENO);
   const [tableOpen, setTableOpen] = useState(!!depoId);
   const [selectedRow, setSelectedRow] = useState<ITransferElement | null>(null);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
   });
+  console.log("irsaliyaNo", irsaliyaNo);
+
   const [filterParamsDepo, setFilterParamsDepo] = useState<
     Partial<IFilterParams>
   >({
@@ -69,12 +54,15 @@ export const ModalUI = ({
     perPage: 100,
     q: "",
   });
-  const { handleActionsModal, depoOptions, dovizOptions } = ModalLogic({
-    setModalList,
-    modalList,
+  const { depoOptions, dovizOptions } = ModalLogic({
     filterParamsDepo,
   });
-  const { defaultData, tableData, refetch, deleteElement } = FetchModal({
+  const {
+    defaultData: defaults,
+    tableData,
+    refetch,
+    deleteElement,
+  } = FetchModal({
     id: irsaliyaId,
     urunId: selectedRow?.URUNID,
   });
@@ -144,34 +132,35 @@ export const ModalUI = ({
   };
 
   useEffect(() => {
-    if (defaultData?.IRSALIYETARIHI) {
+    if (defaults?.IRSALIYETARIHI) {
       setValue(
         "IRSALIYETARIHI",
-        dayjs(defaultData?.IRSALIYETARIHI).format("DD.MM.YYYY")
+        dayjs(defaults?.IRSALIYETARIHI).format("DD.MM.YYYY")
       );
     } else {
       setValue("IRSALIYETARIHI", dayjs().format("DD.MM.YYYY"));
     }
 
-    if (defaultData?.INSERTTARIHI) {
+    if (defaults?.INSERTTARIHI) {
       setValue(
         "INSERTTARIHI",
-        dayjs(defaultData?.INSERTTARIHI).format("DD.MM.YYYY HH:MM")
+        dayjs(defaults?.INSERTTARIHI).format("DD.MM.YYYY HH:MM")
       );
     } else {
       setValue("INSERTTARIHI", dayjs().format("DD.MM.YYYY HH:MM"));
     }
-  }, [defaultData]);
+  }, [defaults]);
+  console.log("defaults", defaults);
 
   useEffect(() => {
-    if (defaultData?.DEPOID) {
-      setValue("DEPOID", defaultData.DEPOID);
-      setValue("TRANSFERDEPOID", defaultData.TRANSFERDEPOID);
-      setValue("IRSALIYENO", defaultData.IRSALIYEID);
+    if (defaults?.DEPOID) {
+      setValue("DEPOID", defaults.DEPOID);
+      setValue("TRANSFERDEPOID", defaults.TRANSFERDEPOID);
+      setValue("IRSALIYENO", defaults.IRSALIYEID);
     } else {
       setValue("IRSALIYENO", irsaliyaNo + 1 + "");
     }
-  }, [defaultData, irsaliyaNo]);
+  }, [defaults?.DEPOID, irsaliyaNo]);
 
   const headColumns = useMemo(() => {
     return [
@@ -195,41 +184,40 @@ export const ModalUI = ({
 
   return (
     <CNewModal
-      title={`Документ перемещения ${
-        element.IRSALIYENO ? "№" + element.IRSALIYENO : ""
+      title={`${t("document_transfer")} ${
+        defaultData.IRSALIYENO ? "№" + defaultData.IRSALIYENO : ""
       }`}
       action="add"
       handleActions={handleActionsModal}
-      element={element}
-      list={modalList}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full flex space-x-4">
           <div className="grid grid-cols-3 gap-x-5 gap-y-2 pb-5 w-full">
             <div className="space-y-2">
-              <FieldUI title={t("IRSALIYENO")}>
+              <InputFieldUI title={t("IRSALIYENO")}>
                 <div className="flex items-center space-x-2">
                   <HFTextField
                     control={control}
                     name="IRSALIYENO"
-                    defaultValue={defaultData?.IRSALIYEID}
+                    defaultValue={defaults?.IRSALIYEID}
+                    disabled={tableOpen}
                   />
                 </div>
-              </FieldUI>
-              <FieldUI title={t("IRSALIYETARIHI")}>
+              </InputFieldUI>
+              <InputFieldUI title={t("IRSALIYETARIHI")}>
                 <HFTextField
                   control={control}
                   name="IRSALIYETARIHI"
-                  readOnly={true}
+                  disabled={true}
                 />
-              </FieldUI>
+              </InputFieldUI>
             </div>
 
             <div className="space-y-2">
-              <FieldUI title={t("DEPOID")}>
+              <InputFieldUI title={t("DEPOID")}>
                 <SelectOptionsTable
                   name="DEPOID"
-                  placeholder="Depo no"
+                  placeholder={t("DEPOID")}
                   options={depoOptions}
                   required={true}
                   headColumns={[
@@ -247,22 +235,23 @@ export const ModalUI = ({
                   setFilterParams={setFilterParams}
                   disabled={tableOpen}
                 />
-              </FieldUI>
-              <FieldUI title={t("DOVIZID")}>
+              </InputFieldUI>
+              <InputFieldUI title={t("DOVIZID")}>
                 <HFSelect
                   name="DOVIZID"
                   control={control}
                   options={dovizOptions}
                   defaultValue="USD"
+                  disabled={tableOpen}
                 />
-              </FieldUI>
+              </InputFieldUI>
             </div>
 
             <div className="space-y-2">
-              <FieldUI title={t("TRANSFERDEPOID")}>
+              <InputFieldUI title={t("TRANSFERDEPOID")}>
                 <SelectOptionsTable
                   name="TRANSFERDEPOID"
-                  placeholder="Transfer depo no"
+                  placeholder={t("TRANSFERDEPOID")}
                   options={depoOptions}
                   required={true}
                   headColumns={[
@@ -280,50 +269,47 @@ export const ModalUI = ({
                   setFilterParams={setFilterParams}
                   disabled={tableOpen}
                 />
-              </FieldUI>
-              <FieldUI title={t("INSERTTARIHI")}>
+              </InputFieldUI>
+              <InputFieldUI title={t("INSERTTARIHI")}>
                 <HFTextField
                   control={control}
                   name="INSERTTARIHI"
-                  readOnly={true}
+                  disabled={true}
                 />
-              </FieldUI>
+              </InputFieldUI>
             </div>
           </div>
-          <div className="space-y-2 flex justify-end">
+          <div className="flex justify-end">
             <button
               className={`custom-btn ${tableOpen ? "disabled" : ""}`}
               type={tableOpen ? "button" : "submit"}
               style={{ maxWidth: "100px" }}
             >
-              Создавать
+              {t("create")}
             </button>
           </div>
         </div>
 
-        {tableOpen ? (
-          <CollapseUI
-            title="Содержание документа"
-            defaultOpen={tableOpen}
-            disabled={true}
-          >
-            <CNewTable
-              title="Примешенныей"
-              headColumns={headColumns}
-              bodyColumns={tableData?.data ?? []}
-              handleActions={handleActions}
-              isLoading={false}
-              filterParams={filterParams}
-              autoHeight={"440px"}
-              disablePagination={true}
-              idForTable="modal"
-              animation={false}
-              handleFilterParams={setFilterParams}
-            />
-          </CollapseUI>
-        ) : (
-          ""
-        )}
+        <CollapseUI
+          title={t("document_content")}
+          defaultOpen={true}
+          // disabled={true}
+        >
+          <CNewTable
+            title="Примешенныей"
+            headColumns={headColumns}
+            bodyColumns={tableData?.data ?? []}
+            handleActions={handleActions}
+            isLoading={false}
+            filterParams={filterParams}
+            autoHeight={"440px"}
+            disablePagination={true}
+            idForTable="modal"
+            animation={false}
+            clickable={true}
+            handleFilterParams={setFilterParams}
+          />
+        </CollapseUI>
       </form>
 
       {open && (
@@ -332,7 +318,7 @@ export const ModalUI = ({
             setOpen={setOpen}
             defaultData={{
               ...selectedRow,
-              ...defaultData,
+              ...defaults,
               DEPOID: depoId,
             }}
             refetch={refetch}

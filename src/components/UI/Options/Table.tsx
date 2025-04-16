@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { PlusIcon, SearchIcon } from "../IconGenerator/Svg";
+import { PlusIcon } from "../IconGenerator/Svg";
 import CLabel from "../../CElements/CLabel";
 import CNewTable from "../../CElements/CNewTable";
 import { Controller } from "react-hook-form";
-
+import ManageSearchIcon from "@mui/icons-material/ManageSearch";
 interface Props {
   options: any;
   handleSelect: any;
@@ -21,6 +21,7 @@ interface Props {
   disabled?: boolean;
   handleSearch?: (val: string) => void;
   setFilterParams: (val: any) => void;
+  position?: string;
 }
 
 export const SelectOptionsTable = ({
@@ -38,6 +39,7 @@ export const SelectOptionsTable = ({
   secondName = "",
   focused = false,
   disabled,
+  position = "left",
   handleSearch = () => {},
   setFilterParams = () => {},
 }: Props) => {
@@ -102,29 +104,29 @@ export const SelectOptionsTable = ({
   return (
     <div className="relative">
       {label && <CLabel title={label} required={required} />}
-      <div
-        className={`flex items-center w-full border border-[var(--border)] relative rounded-[8px] h-[35px] p-2 ${
-          disabled ? "bg-[var(--border)]" : ""
-        }`}
-      >
+      <div className={`w-full relative`}>
         <div
-          className="cursor-pointer"
+          className="cursor-pointer absolute z-[1] left-2 top-1/2 -translate-y-1/2"
           onClick={() => {
             if (!disabled) setOpen(true);
           }}
         >
-          <SearchIcon width={16} />
+          <ManageSearchIcon />
         </div>
 
         <Controller
           control={control}
           name={name}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
-            <div className={`relative ${open ? "z-[91]" : ""}`}>
+            <div className={`relative ${open ? "z-[99]" : ""}`}>
               <input
                 value={value ? value : defaultData[name] || search}
                 type="text"
-                className="h-full w-full px-2"
+                className={`h-[35px] w-full pl-8 pr-2 rounded-[8px] border ${
+                  error?.message
+                    ? "border-[var(--error)]"
+                    : "border-[var(--border)]"
+                }`}
                 placeholder={placeholder}
                 onChange={(e: any) => {
                   handleSearch(`${name}=${e.target.value}`);
@@ -134,20 +136,18 @@ export const SelectOptionsTable = ({
                 disabled={disabled}
                 ref={inputRef}
                 readOnly={readOnly}
-                // onClick={() => setOpen(true)}
                 style={{ borderColor: error?.message ? "var(--error)" : "" }}
               />
-              {/* {error?.message ? (
-                <p className="text-[var(--error)]">{error.message}</p>
-              ) : (
-                ""
-              )} */}
             </div>
           )}
         ></Controller>
 
         {open ? (
-          <div className="absolute left-0 top-full z-[99] flex items-center justify-center max-w-[800px]">
+          <div
+            className={`absolute top-[36px] z-[97] flex items-center justify-center max-w-[800px] ${
+              position === "left" ? "left-0" : "right-0"
+            }`}
+          >
             <div className="bg-white relative z-[99] border border-[var(--border)] p-2 shadow-2xl rounded-[8px]">
               <CNewTable
                 headColumns={headColumns}
@@ -157,7 +157,7 @@ export const SelectOptionsTable = ({
                 handleActions={handleActions}
                 defaultFilters={[]}
                 autoHeight="300px"
-                clickable={true}
+                doubleClick={false}
                 idForTable={name + "select"}
                 disablePagination={true}
               />

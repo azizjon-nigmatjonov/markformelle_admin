@@ -8,6 +8,11 @@
       height: 35px;
       border-radius: 8px;
       border: 1px solid var(--border);
+      padding: 0 !important;
+
+      input {
+        padding: 0 8px;
+      }
     
       fieldset {
         border: none;
@@ -18,12 +23,11 @@
           border: none;
           outline: none;
         }
-        border-color: var(--main);
+        // border-color: var(--main);
       }
 
       .Mui-disabled {
         cursor: default;
-        background-color: var(--border);
         color: black;
       }
     }
@@ -35,6 +39,7 @@
       left: -10px;
       font-size: 12px;
     }
+    
     &.error {
       .MuiOutlinedInput-notchedOutline {
         border-color: red !important;

@@ -19,50 +19,13 @@ export const TableData = ({
   const [isLoading, setIsLoading] = useState(false);
   const [bodyData, setBodyData]: any = useState({});
 
-  const deleteFn = (id: string | number) => {
+  const getList = (filters: any) => {
     setIsLoading(true);
-    axios
-      .delete(`${API_URL}/urun/${id}`)
-      .then((_: any) => {
-        toast.success("Muvaffaqiyatli amalga oshirildi!");
-      })
-      .catch(() => {
-        toast.error("O'chirib bo'lmaydi");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-
-  const handleActions = (el: any, status: string) => {
-    if (status === "modal") {
-      handleActionsModal("add");
-    }
-    if (status === "view") {
-      handleActionsModal("view", el);
-    }
-    if (status === "edit") {
-      handleActionsModal("edit", el);
-    }
-    if (status === "delete") {
-      console.log(el);
-      deleteFn(el.URUNID);
-    }
-    if (status === "delete_multiple") {
-      console.log(el);
-    }
-  };
-
-  useEffect(() => {
-    setIsLoading(true);
-
     axios
       .get(
         `${API_URL}/urun/?skip=${
-          filterParams.page < 2
-            ? 0
-            : (filterParams.page - 1) * filterParams.perPage
-        }&limit=${filterParams.perPage}`
+          filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
+        }&limit=${filters.perPage}${filters.q ? "&" + filters.q : ""}`
       )
       .then((res) => {
         setBodyData(res.data);
@@ -70,7 +33,29 @@ export const TableData = ({
       .finally(() => {
         setIsLoading(false);
       });
-  }, [filterParams.page, filterParams.perPage]);
+  };
+  const deleteFn = async (id: string[]) => {
+    try {
+      await axios.delete(`${API_URL}/urun/`, {
+        method: "DELETE",
+        url: `${API_URL}/urun/`,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        data: id,
+      });
+      getList(filterParams);
+      toast.success("Muvaffaqiyatli amalga oshirildi!");
+    } catch (error) {
+      toast.error(`Error creating element:, ${error}`);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    getList(filterParams);
+  }, [filterParams]);
 
   useEffect(() => {
     const headColumns: any = [];
@@ -97,99 +82,25 @@ export const TableData = ({
 
   return {
     headColumns,
-    handleActions,
+
     bodyColumns: bodyData?.data ?? [],
     isLoading,
     defaultData: {},
     bodyData,
     setBodyData,
+    deleteFn,
   };
 };
 
-export const ModalLogic = ({
-  modalList,
-  setModalList,
-}: {
-  modalList: any;
-  setModalList: any;
-}) => {
-  const reorderItems = (array: any[], fromIndex: number, toIndex: number) => {
-    if (fromIndex === toIndex) return array;
+export const ModalLogic = ({ urunId = "" }: { urunId: string }) => {
+  const [formData, setFormData] = useState<any>({});
 
-    const newArray = [...array];
-    const [movedItem] = newArray.splice(fromIndex, 1);
-    newArray.splice(toIndex, 0, movedItem);
-
-    return newArray?.map((item, index) => {
-      return {
-        ...item,
-        order: index + 1,
-      };
+  useEffect(() => {
+    if (!urunId) return;
+    axios.get(`${API_URL}/urun/${urunId}`).then((res) => {
+      setFormData(res.data);
     });
-  };
-  const handleActionsModal = (val: string, element?: any) => {
-    if (val === "edit_modal") {
-      setModalList(
-        modalList?.map((item: any) => {
-          return {
-            ...item,
-            type: "edit",
-            id: element?.URUNID,
-            initial_order: item.order,
-          };
-        })
-      );
-    }
-    if (val === "view") {
-      setModalList([
-        ...modalList,
-        {
-          order: modalList.length + 1,
-          initial_order: modalList.length + 1,
-          type: "view",
-          id: element?.URUNID,
-        },
-      ]);
-    }
-    if (val === "edit") {
-      setModalList([
-        ...modalList,
-        {
-          order: modalList.length + 1,
-          initial_order: modalList.length + 1,
-          type: "edit",
-          id: element?.URUNID,
-        },
-      ]);
-    }
+  }, [urunId]);
 
-    if (val === "close") {
-      setModalList(
-        modalList.filter((item: any) => item.order !== element.order)
-      );
-    }
-
-    if (val === "reorder") {
-      const newModalList = reorderItems(
-        modalList,
-        element.order - 1,
-        modalList.length
-      );
-
-      setModalList(newModalList);
-    }
-    if (val === "add") {
-      setModalList([
-        ...modalList,
-        {
-          order: modalList.length + 1,
-          initial_order: modalList.length + 1,
-          type: "add",
-        },
-      ]);
-    }
-  };
-  return {
-    handleActionsModal,
-  };
+  return { formData };
 };

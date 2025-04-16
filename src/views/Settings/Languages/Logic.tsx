@@ -1,5 +1,3 @@
-// import { useState } from "react";
-
 import toast from "react-hot-toast";
 import {
   EnglishFlag,
@@ -127,7 +125,7 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
             : val === "uz"
             ? "O'zbekcha"
             : val === "key"
-            ? "Key"
+            ? "KEYWORD"
             : val === "tu"
             ? "Turkish"
             : "English"}
@@ -207,16 +205,33 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
   };
 
   const dispatch = useDispatch();
-  const handleDelete = (KEYWORD: string) => {
+
+  const handleDelete = async (KEYWORD: string[]) => {
     axios
-      .delete(`${API_URL}/translation/${KEYWORD}`)
-      .then(() => {
-        refetch();
-        dispatch(translateActions.setTranslation([]));
-      })
+      .delete(`${API_URL}`)
+      .then(() => {})
       .catch((error) => {
         console.error("Error adding route:", error);
       });
+
+    try {
+      await axios.delete(`${API_URL}/translation/batch`, {
+        method: "DELETE",
+        url: `${API_URL}/translation/batch`,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        data: {
+          keywords: KEYWORD,
+        },
+      });
+      toast.success("Muvaffaqiyatli amalga oshirildi!");
+      refetch();
+      dispatch(translateActions.setTranslation([]));
+    } catch (error) {
+      toast.error("O'chirib bo'lmaydi");
+    }
   };
 
   return {
@@ -246,7 +261,7 @@ export const GetTranslations = ({
   const refetch = () => {
     setisLoading(true);
     axios
-      .get("http://10.40.14.193:8000/translation/")
+      .get("http://10.40.14.193:8000/translation/?limit=1000&page=0")
       .then((res: any) => {
         const data = res?.data;
         const newArr: any = [];

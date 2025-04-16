@@ -1,6 +1,5 @@
 import { useState } from "react";
 import CCheckbox from "../../../../CElements/CCheckbox";
-import { useTranslation } from "react-i18next";
 
 const CheckBox = ({
   element,
@@ -55,8 +54,6 @@ export const MenuItem = ({
   allCheck: boolean;
   handleFilterSave: (val: any) => void;
 }) => {
-  const { t } = useTranslation();
-
   const GetUi = (el: any) => {
     switch (el.type) {
       case "checkbox":
@@ -71,7 +68,7 @@ export const MenuItem = ({
   return (
     <li className="w-[240px]">
       <div className="mb-2 flex justify-between w-full items-center pr-1">
-        <span>{t(element.label)}</span>
+        <span>{element.label}</span>
         <div>
           <CCheckbox
             checked={allCheck}

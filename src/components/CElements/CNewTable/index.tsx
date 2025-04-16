@@ -23,9 +23,13 @@ import { tableStoreActions } from "../../../store/table";
 import useDebounce from "../../../hooks/useDebounce";
 import { SideFilter, TableFilter } from "./Details/Filter";
 import CheckIcon from "@mui/icons-material/Check";
-import { convertToISO, GetCurrentDate } from "../../../utils/getDate";
+import { GetCurrentDate } from "../../../utils/getDate";
 import usePageRouter from "../../../hooks/useObjectRouter";
 import { translateActions } from "../../../store/translation/translate.slice";
+import {
+  areAllRowsSelectedOnPage,
+  toggleRowGroupSelection,
+} from "./Logic/helpers";
 interface Props {
   meta?: {
     totalCount: number;
@@ -53,6 +57,8 @@ interface Props {
   animation?: boolean;
   defaultActions?: string[];
   defaultExcelFields?: string[];
+  doubleClick?: boolean;
+  disabled?: boolean;
 }
 
 const CNewTable = ({
@@ -66,7 +72,7 @@ const CNewTable = ({
   autoHeight = "",
   headColumns = [],
   bodyColumns = [],
-  clickable = false,
+  clickable = true,
   isLoading = false,
   passRouter = false,
   isResizeble = true,
@@ -75,8 +81,10 @@ const CNewTable = ({
   limitList = [50, 100, 200],
   filterParams = { page: 1, perPage: 50 },
   handleFilterParams = () => {},
+  doubleClick = true,
   handleActions = () => {},
   defaultExcelFields = [],
+  disabled = false,
   defaultActions = ["view", "edit", "delete", "is_sellect_more"],
   defaultFilters = [
     "add",
@@ -86,6 +94,7 @@ const CNewTable = ({
     "filter",
     "active_menu",
     "actions",
+    "sellect_more",
   ],
   defaultSearch = {},
 }: Props) => {
@@ -133,6 +142,7 @@ const CNewTable = ({
   const [currentFilter, setCurrentFilter]: any = useState(null);
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const [height, setHeight] = useState(0);
+  const [openSelect, setOpenSelect] = useState(false);
 
   const SetFiltersFn = (obj: any) => {
     const newObj: any = JSON.parse(JSON.stringify(obj));
@@ -146,7 +156,7 @@ const CNewTable = ({
       }
     }
 
-    handleFilterParams({ ...filterParams, q: str });
+    handleFilterParams({ ...filterParams, page: 0, q: str });
   };
 
   useEffect(() => {
@@ -238,7 +248,7 @@ const CNewTable = ({
           index:
             filterParams.page < 2
               ? index + 1
-              : index + filterParams.perPage * (filterParams.page - 1),
+              : index + filterParams.perPage * (filterParams.page - 1) + 1,
         };
       }) ?? [];
     setBodySource(list);
@@ -354,6 +364,7 @@ const CNewTable = ({
       });
       setSortData(arr);
     };
+    // console.log("aaaaaaaaaaa", value, search);
 
     if (value === "sort") {
       if (search) {
@@ -384,21 +395,21 @@ const CNewTable = ({
       setSearchedElements({ ...searchedElements, [id]: "" });
     }
 
-    if (value === "period") {
-      if (search?.length > 1) {
-        handleFilterParams({
-          ...filterParams,
-          DATE_FROM: convertToISO(search[0]),
-          DATE_TO: convertToISO(search[1]),
-        });
-      } else {
-        handleFilterParams({
-          ...filterParams,
-          DATE_FROM: "",
-          DATE_TO: "",
-        });
-      }
-    }
+    // if (value === "period") {
+    //   if (search?.length > 1) {
+    //     handleFilterParams({
+    //       ...filterParams,
+    //       DATE_FROM: convertToISO(search[0]),
+    //       DATE_TO: convertToISO(search[1]),
+    //     });
+    //   } else {
+    //     handleFilterParams({
+    //       ...filterParams,
+    //       DATE_FROM: "",
+    //       DATE_TO: "",
+    //     });
+    //   }
+    // }
 
     if (value === "clear") {
       setSearchedElements(defaultSearch);
@@ -428,14 +439,13 @@ const CNewTable = ({
       setItems(arr);
     } else {
       setItems(headColumns);
-      // setNewHeadColumns(headColumns);
     }
   }, [headColumns, pageOrder]);
 
   useEffect(() => {
     const data: any = [];
     if (selectedItems.length) {
-      data.unshift({ id: "multiple", width: 50 });
+      setOpenSelect(true);
     }
     const arr = pageColumns ?? [];
     items?.forEach((el: { id: string }) => {
@@ -447,7 +457,6 @@ const CNewTable = ({
     });
     if (title) setNewHeadColumns(data);
   }, [pageColumns, items, title, selectedItems]);
-
   const handleDragStart = (index: any) => {
     setDraggingIndex(index);
 
@@ -481,6 +490,9 @@ const CNewTable = ({
   };
 
   const tableActions = (el: any, status: string) => {
+    if (disabled) {
+      return;
+    }
     if (status === "sidefilter") {
       setSideFilter(!sideFilter);
     }
@@ -491,9 +503,6 @@ const CNewTable = ({
       handleFilterParams({ ...filterParams, edit: !reOrder });
       setReorder((prev) => !prev);
       return;
-    }
-    if (status === "delete_by") {
-      // return;
     }
 
     if (status === "sellect_more") {
@@ -528,7 +537,26 @@ const CNewTable = ({
       navigateTo("/settings/profile?tab=translation");
     }
 
-    if (!checkPermission(status) || el.empty) return;
+    if (status === "sellect_more_active") {
+      setOpenSelect((prev: boolean) => !prev);
+    }
+
+    if (status === "delete_multiple") {
+      const selectedElements = bodySource.filter((item: { index: number }) =>
+        selectedItems.includes(item.index - 1)
+      );
+      setSelectedItems(
+        selectedItems.filter(
+          (item: number) =>
+            !selectedElements.some(
+              (el: { index: number }) => el.index - 1 === item
+            )
+        )
+      );
+      handleActions(selectedElements, status);
+
+      return;
+    }
 
     handleActions(el, status);
   };
@@ -561,11 +589,10 @@ const CNewTable = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setSelectedItems([]);
+        setOpenSelect(false);
       }
 
-      // if (e.key === "Enter") {
-      //   SetFiltersFn(searchedElements);
-      // }
+      if (e.key === "Enter") SetFiltersFn(searchedElements);
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -575,19 +602,25 @@ const CNewTable = ({
     };
   }, [searchedElements]);
 
-  // useEffect(() => {
-  //   if (selectedItems.length) {
-  //     setNewHeadColumns([{ id: "multiple" }, ...newHeadColumns]);
-  //     setBodySource(
-  //       bodySource.map((item: any) => {
-  //         return {
-  //           multiple: "1",
-  //           ...item,
-  //         };
-  //       })
-  //     );
-  //   }
-  // }, [selectedItems.length]);
+  const handleSelectAll = () => {
+    const rowIndexes = bodySource.map(
+      (item: { index: number }) => item.index - 1
+    );
+    setSelectedItems(
+      toggleRowGroupSelection({ selectedItems, currentGroup: rowIndexes })
+    );
+  };
+
+  const getBodyCol = (column: any, item: any) => {
+    return column.render
+      ? Array.isArray(column?.id)
+        ? column.render(column?.id.map((data: any) => item[data]))
+        : column.render(item[column?.id], item)
+      : GetCurrentDate({
+          date: item[column?.id],
+          type: "usually",
+        });
+  };
 
   return (
     <div className="relative cnewtable w-full rounded-t-[8px]">
@@ -607,6 +640,7 @@ const CNewTable = ({
             sortData={sortData}
             defaultFilters={defaultFilters}
             selectedItems={selectedItems}
+            disabled={disabled}
             defaultExcelFields={defaultExcelFields}
           />
         ) : (
@@ -647,6 +681,22 @@ const CNewTable = ({
             >
               <CTableHead>
                 <CTableRow className="">
+                  <div
+                    style={{ width: openSelect ? "40px" : 0 }}
+                    className="sticky bg-white h-[41px] flex items-center border-b justify-center duration-100"
+                  >
+                    {openSelect && (
+                      <div
+                        onClick={() => handleSelectAll()}
+                        className={`w-[18px] h-[18px] rounded-[4px] border border-[var(--main)] flex items-center justify-center cursor-pointer`}
+                      >
+                        {areAllRowsSelectedOnPage(
+                          selectedItems,
+                          bodySource
+                        ) && <CheckIcon style={{ fill: "red", width: 14 }} />}
+                      </div>
+                    )}
+                  </div>
                   {newHeadColumns?.map((column: any, index: number) => (
                     <CTableHeadCell
                       id={column?.id}
@@ -717,28 +767,23 @@ const CNewTable = ({
                         <div
                           className={`w-full min-h-[40px] flex items-center whitespace-nowrap cursor-move`}
                         >
-                          {column.renderHead ? (
-                            Array.isArray(column.renderHead) ? (
-                              column.renderHead(
-                                column.renderHead.map(
-                                  (data: any) => column[data]
+                          {column.renderHead
+                            ? Array.isArray(column.renderHead)
+                              ? column.renderHead(
+                                  column.renderHead.map(
+                                    (data: any) => column[data]
+                                  )
                                 )
-                              )
-                            ) : (
-                              column.renderHead()
-                            )
-                          ) : column.id === "index" ? (
-                            "№"
-                          ) : column.id === "multiple" ? (
-                            <div></div>
-                          ) : t(column?.title) === "" ? (
-                            column?.title
-                          ) : (
-                            t(column?.title)
-                          )}
+                              : column.renderHead()
+                            : column.id === "index"
+                            ? "№"
+                            : t(column?.title) === ""
+                            ? column?.title
+                            : t(column?.title)}
                         </div>
 
                         {column.id !== "multiple" &&
+                        column.id !== "index" &&
                         !column.id.includes("actions") ? (
                           <TableFilter
                             colId={column?.id ?? currentFilter}
@@ -787,8 +832,36 @@ const CNewTable = ({
                           currentIndex === rowIndex
                             ? "bg-[var(--primary50)]"
                             : ""
+                        } ${
+                          selectedItems.includes(rowIndex) ? "sellected" : ""
                         }`}
+                        onClick={() => {
+                          if (openSelect) {
+                            tableActions(item, "sellect_more");
+                          }
+                        }}
                       >
+                        <td
+                          className="h-[35px] border-b border-[var(--border)] w-full flex justify-center items-center"
+                          style={{ padding: "0px !importaint" }}
+                        >
+                          {openSelect && (
+                            <div
+                              onClick={() => tableActions(item, "sellect_more")}
+                              className={`w-[18px] h-[18px] check rounded-[4px] border flex items-center justify-center cursor-pointer ${
+                                selectedItems.includes(item.index - 1)
+                                  ? "border-[var(--black)]"
+                                  : "border-[var(--gray)]"
+                              }`}
+                            >
+                              {selectedItems.includes(item.index - 1) && (
+                                <CheckIcon
+                                  style={{ color: "black", width: 14 }}
+                                />
+                              )}
+                            </div>
+                          )}
+                        </td>
                         {newHeadColumns.map((column: any, colIndex: number) => (
                           <CTableCell
                             key={colIndex + column?.id || colIndex}
@@ -817,8 +890,6 @@ const CNewTable = ({
                             <div
                               style={{
                                 textAlign: column?.textAlign || "left",
-                                minWidth:
-                                  colIndex === 0 && title ? "160px" : "auto",
                               }}
                               className={`relative h-full flex items-center text-[13px] ${
                                 hoveredIndex === colIndex &&
@@ -830,29 +901,9 @@ const CNewTable = ({
                                   : ""
                               }`}
                             >
-                              {selectedItems.length && colIndex === 0 ? (
-                                <div
-                                  className="mr-2"
-                                  onClick={() =>
-                                    tableActions(item, "sellect_more")
-                                  }
-                                >
-                                  <div
-                                    className={`w-[20px] h-[20px] rounded-[4px] border border-[var(--primary70)] flex items-center justify-center ${
-                                      selectedItems.includes(item.index - 1)
-                                        ? "bg-[var(--primary70)]"
-                                        : ""
-                                    }`}
-                                  >
-                                    <CheckIcon
-                                      style={{ color: "white", width: 14 }}
-                                    />
-                                  </div>
-                                </div>
-                              ) : (
-                                ""
-                              )}
-                              {column?.id !== "actions" && !item.empty ? (
+                              {column?.id !== "actions" &&
+                              !item.empty &&
+                              getBodyCol(column, item) ? (
                                 <div
                                   onDoubleClick={() => {
                                     if (
@@ -863,35 +914,26 @@ const CNewTable = ({
                                     }
                                   }}
                                   onClick={() => {
-                                    if (clickable) {
+                                    if (!doubleClick) {
                                       tableActions(item, "view");
                                     }
                                   }}
                                   className="w-full whitespace-nowrap"
                                 >
-                                  <>
-                                    {column.render
-                                      ? Array.isArray(column?.id)
-                                        ? column.render(
-                                            column?.id.map(
-                                              (data: any) => item[data]
-                                            )
-                                          )
-                                        : column.render(item[column?.id], item)
-                                      : GetCurrentDate({
-                                          date: item[column?.id],
-                                          type: "usually",
-                                        })}
-                                  </>
+                                  <>{getBodyCol(column, item)}</>
                                 </div>
                               ) : (
                                 ""
                               )}
-                              {colIndex === 0 &&
-                              defaultFilters.includes("actions") ? (
+                              {defaultFilters.includes("actions") &&
+                              colIndex === 0 ? (
                                 <div className="relative flex items-center">
                                   <button
-                                    className={`w-[20px] h-full items-center justify-center ml-2`}
+                                    className={`w-[20px] h-full items-center justify-center flex ml-2 ${
+                                      selectedItems.length
+                                        ? "invisible"
+                                        : "visible"
+                                    }`}
                                     onClick={() => setCurrentIndex(rowIndex)}
                                     type="button"
                                   >

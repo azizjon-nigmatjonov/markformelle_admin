@@ -7,13 +7,7 @@ export const breadCrumbs = [
   { label: "Внутреннее примешенные", link: "/chemical_store/transfers" },
 ];
 
-export const TableData = ({
-  filterParams,
-  handleActionsModal = () => {},
-}: {
-  filterParams: any;
-  handleActionsModal?: (val: any, element?: any) => void;
-}) => {
+export const TableData = ({ filterParams }: { filterParams: any }) => {
   const [headColumns, setHeadColumns] = useState<
     { title: string; id: string }[]
   >([]);
@@ -63,22 +57,6 @@ export const TableData = ({
     }
   };
 
-  const handleActions = (el: any, status: string) => {
-    if (["modal", "edit", "view"].includes(status)) {
-      handleActionsModal("edit", el);
-    }
-    if (status === "delete") {
-      deleteFn([el.IRSALIYEID]);
-    }
-    if (status === "delete_multiple") {
-      deleteFn(
-        el.map((item: { IRSALIYEID: string }) => {
-          return item.IRSALIYEID;
-        })
-      );
-    }
-  };
-
   useEffect(() => {
     getList(filterParams);
   }, [filterParams]);
@@ -91,24 +69,20 @@ export const TableData = ({
 
   return {
     headColumns,
-    handleActions,
     bodyColumns: bodyData?.data ?? [],
     isLoading,
     defaultData: {},
     bodyData,
     setBodyData,
     getList,
+    deleteFn,
   };
 };
 
 export const ModalLogic = ({
-  modalList,
-  setModalList,
   filterParamsDepo = {},
 }: {
   filterParamsDepo?: any;
-  modalList: any[];
-  setModalList: (value: any[]) => void;
 }) => {
   const [depoData, setDepoData]: any = useState({});
   const getDepoData = (filters: any) => {
@@ -134,59 +108,6 @@ export const ModalLogic = ({
     params: {},
   });
 
-  const reorderItems = (array: any[], fromIndex: number, toIndex: number) => {
-    if (fromIndex === toIndex) return array;
-    const newArray = [...array];
-    const [movedItem] = newArray.splice(fromIndex, 1);
-    newArray.splice(toIndex, 0, movedItem);
-    return newArray.map((item, index) => ({ ...item, order: index + 1 }));
-  };
-
-  const handleActionsModal = (val: string, element?: any) => {
-    if (val === "edit_modal") {
-      setModalList(
-        modalList.map((item) => ({
-          ...item,
-          type: "edit",
-          id: element?.IRSALIYEID,
-          initial_order: item.order,
-          ...element,
-        }))
-      );
-    }
-    if (val === "edit") {
-      setModalList([
-        ...modalList,
-        {
-          order: modalList.length + 1,
-          initial_order: modalList.length + 1,
-          type: "edit",
-          id: element?.IRSALIYEID,
-          DEPOID: element.DEPOID,
-          ...element,
-        },
-      ]);
-    }
-    if (val === "close") {
-      setModalList(modalList.filter((item) => item.order !== element.order));
-    }
-    if (val === "reorder") {
-      setModalList(
-        reorderItems(modalList, element.order - 1, modalList.length)
-      );
-    }
-    if (val === "add") {
-      setModalList([
-        ...modalList,
-        {
-          order: modalList.length + 1,
-          initial_order: modalList.length + 1,
-          type: "add",
-        },
-      ]);
-    }
-  };
-
   const dovizOptions = useMemo(
     () =>
       dovizData?.data?.map((item: any) => ({
@@ -197,7 +118,6 @@ export const ModalLogic = ({
   );
 
   return {
-    handleActionsModal,
     depoOptions: depoData?.data,
     dovizOptions,
   };

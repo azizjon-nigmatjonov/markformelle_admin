@@ -3,6 +3,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { useState } from "react";
 import "./style.scss";
 import { PlusIcon } from "../../../../UI/IconGenerator/Svg";
+import { useTranslationHook } from "../../../../../hooks/useTranslation";
 
 interface Props {
   handleClick: (val: any) => void;
@@ -13,6 +14,7 @@ export const SelectFilter = ({
   handleClick = () => {},
   options = [],
 }: Props) => {
+  const { t } = useTranslationHook();
   const [open, setOpen] = useState(false);
   const [currentValue, setCurrentValue]: any = useState("");
 
@@ -38,7 +40,7 @@ export const SelectFilter = ({
             key={value}
             value={value}
           >
-            {label}
+            {t(label)}
           </MenuItem>
         ))}
       </Select>

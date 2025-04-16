@@ -53,6 +53,7 @@ const CPagination = ({
 
       if (queryObj?.limit) {
         obj.perPage = queryObj.limit;
+        obj.page = 1;
       }
 
       handleFilterParams({ ...obj });
