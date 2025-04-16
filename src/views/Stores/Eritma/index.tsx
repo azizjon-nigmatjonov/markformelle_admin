@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { breadCrumbs, ModalLogic, TableData } from "./Logic";
+import { breadCrumbs, TableData } from "./Logic";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { Header } from "../../../components/UI/Header";
 import CNewTable from "../../../components/CElements/CNewTable";
@@ -248,7 +248,10 @@ export const EritmaPage = () => {
       </div>
 
       {open && (
-        <CNewModal title="Urin tanitimi" handleActions={handleModalActions}>
+        <CNewModal
+          title={t("creating_urun")}
+          handleActions={handleModalActions}
+        >
           <ModalUI defaultData={modalInitialData} />
         </CNewModal>
       )}

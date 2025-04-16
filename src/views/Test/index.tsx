@@ -3,8 +3,10 @@ import { ViewingModal } from "./ViewingModal/ViewingModal";
 import { AllViewTable } from "./AllViewTable/AllViewTable";
 import { TanitimModal } from "./InsertModal";
 import { TanitimUrun } from "./Urun";
+import { useTranslationHook } from "../../hooks/useTranslation";
 
 export const TestExampleView = () => {
+  const { t } = useTranslationHook();
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState("");
   return (
@@ -15,7 +17,7 @@ export const TestExampleView = () => {
       </button>
 
       <button onClick={() => setModalOpen("urun")} className="ml-10">
-        urun tanitimi
+        {t("creating_urun")}
       </button>
 
       <ViewingModal open={open} onClose={() => setOpen(false)}>
@@ -32,7 +34,7 @@ export const TestExampleView = () => {
       <ViewingModal
         open={modalOpen === "urun"}
         onClose={() => setModalOpen("")}
-        title="Urun Tanitimi"
+        title={t("urun_creating")}
       >
         <TanitimUrun />
       </ViewingModal>
