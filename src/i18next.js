@@ -29,18 +29,15 @@ i18next
         const storedTranslation =
           JSON.parse(localStorage.getItem("translation_by_lang")) || {};
 
-        if (storedTranslation?.length) {
-          storedTranslation.forEach((element) => {
-            if (element.KEYWORD) {
-              obj[element.KEYWORD] = element[currentLang.toLocaleUpperCase()];
-            }
-          });
-        } else {
-          obj = TranslationsObject;
+        let newObj = { ...TranslationsObject };
+        if (Object.values(storedTranslation)?.length) {
+          for (let KEYWORD in storedTranslation) {
+            newObj[KEYWORD] = KEYWORD;
+          }
         }
 
         callback(null, {
-          data: obj,
+          data: newObj,
           status: 200,
         });
 
