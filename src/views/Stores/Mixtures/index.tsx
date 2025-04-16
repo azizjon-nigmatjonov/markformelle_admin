@@ -24,10 +24,57 @@ export const MixturesPage = () => {
   const newHeadColumns = useMemo(() => {
     const obj = { ...bodyColumns?.[0] };
     const keys = Object.keys(obj);
-    const newColumns: any = [];
+    const newColumns: any = [
+      {
+        title: "Роствор ID",
+        id: "URUNRECETEURUNID",
+        checked: true,
+      },
+      {
+        title: "Продукт",
+        id: "URUNADI",
+        checked: true,
+      },
+      {
+        title: "Единица",
+        id: "URUNBIRIMADI",
+        checked: true,
+      },
+      {
+        title: "Дата изменения",
+        id: "DEGISIMTARIHI",
+        checked: true,
+      },
+      {
+        title: "Пользователь",
+        id: "KULLANICIADI",
+        checked: true,
+      },
+      {
+        title: "Единица ID",
+        id: "URUNBIRIMID",
+        checked: true,
+      },
+
+      {
+        title: "Пользователь ID",
+        id: "KULLANICIID",
+        checked: true,
+      },
+      {
+        title: "Заметка",
+        id: "NOTU",
+        checked: true,
+      },
+    ];
 
     keys.forEach((key: string) => {
-      newColumns.push({ title: key, id: key });
+      if (!newColumns.find((item: { id: string }) => item.id === key)) {
+        newColumns.push({
+          title: key,
+          id: key,
+        });
+      }
     });
 
     return newColumns;

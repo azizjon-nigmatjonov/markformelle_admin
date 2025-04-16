@@ -1,6 +1,5 @@
 export interface ModalTypes {
-    URUNADI?: string;
-    URUNRECETEURUNID?: string;
+  URUNID?: string;
   }
 
   export interface IModalForm {

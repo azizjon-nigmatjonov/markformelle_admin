@@ -58,8 +58,6 @@ export const TableForm = ({
     formId,
     refetch,
   });
-  console.log("defaultData", defaultData);
-  console.log("formData", formData);
 
   const onSubmit = (data: any) => {
     if (formId) {
@@ -72,6 +70,7 @@ export const TableForm = ({
       params.KULLANICIID = "1";
       params.URUNRECETEURUNID = defaultData?.URUNRECETEURUNID;
       delete params.BIRIMID;
+      delete params.URUNADI;
       createForm(params);
     }
   };
@@ -146,7 +145,7 @@ export const TableForm = ({
         options={urunData?.data ?? []}
         required={true}
         headColumns={[
-          { id: "BARKOD", width: 200, title: "BARKOD" },
+          { id: "BARKOD", title: "BARKOD" },
           { id: "ADI", title: "URUNADI", innerId: "URUNID" },
         ]}
         filterParams={filterParams}
@@ -204,7 +203,7 @@ export const TableForm = ({
         />
         <div className="w-[90px]">
           <SelectOptionsTable
-            name="URUNBIRIMID"
+            name="BIRIMID"
             options={birimData?.data ?? []}
             required={true}
             headColumns={[

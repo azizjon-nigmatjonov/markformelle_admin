@@ -33,6 +33,112 @@ export const BuyingChemicals = () => {
           return GetCurrentDate({ date: val, type: "date" });
         },
       },
+
+      {
+        title: "Номер документа",
+        id: "IRSALIYENO",
+        checked: true,
+      },
+      {
+        title: "Фирма ID",
+        id: "FIRMAID",
+        checked: true,
+      },
+      {
+        title: "Фирма",
+        id: "FIRMAADI",
+        checked: true,
+      },
+      {
+        title: "Склад ID",
+        id: "DEPOID",
+        checked: true,
+      },
+      {
+        title: "Склад",
+        id: "DEPOADI",
+        checked: true,
+      },
+      {
+        title: "Дата изменения",
+        id: "DEGISIMTARIHI",
+        checked: true,
+      },
+      {
+        title: "Пользователь",
+        id: "KULLANICIADI",
+        checked: true,
+      },
+      {
+        title: "Дата(создание)",
+        id: "INSERTTARIHI",
+        checked: true,
+      },
+      {
+        title: "Документ ID",
+        id: "IRSALIYEID",
+        checked: true,
+      },
+      {
+        title: "Дата отгрузки",
+        id: "FIILISEVKTARIHI",
+        checked: true,
+      },
+      {
+        title: "Пользователь(создание)",
+        id: "INSERKULLANICIADI",
+        checked: true,
+      },
+      {
+        title: "Валюта",
+        id: "DOVIZID",
+        checked: true,
+      },
+      {
+        title: "Регистрации документа ID",
+        id: "EVRAKKAYITID",
+        checked: true,
+      },
+      {
+        title: "Пользователь ID",
+        id: "KULLANICIID",
+        checked: true,
+      },
+      {
+        title: "Тип операции",
+        id: "HAREKETTIPI",
+        checked: true,
+      },
+      {
+        title: "Отдел перемещения ID",
+        id: "TRANSFERDEPOID",
+        checked: true,
+      },
+      {
+        title: "Серийный номер",
+        id: "SERINO",
+        checked: true,
+      },
+      {
+        title: "Заметка",
+        id: "NOTU",
+        checked: true,
+      },
+      {
+        title: "Класс",
+        id: "SINIF",
+        checked: true,
+      },
+      {
+        title: "Пользователь ID(создание)",
+        id: "INSERTKULLANICIID",
+        checked: true,
+      },
+      {
+        title: "Склад перемещения",
+        id: "TRANSFERDEPOADI",
+        checked: true,
+      },
     ];
 
     keys.forEach((key: string) => {

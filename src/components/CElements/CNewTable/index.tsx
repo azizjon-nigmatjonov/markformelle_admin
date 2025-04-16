@@ -23,7 +23,7 @@ import { tableStoreActions } from "../../../store/table";
 import useDebounce from "../../../hooks/useDebounce";
 import { SideFilter, TableFilter } from "./Details/Filter";
 import CheckIcon from "@mui/icons-material/Check";
-import { convertToISO, GetCurrentDate } from "../../../utils/getDate";
+import { GetCurrentDate } from "../../../utils/getDate";
 import usePageRouter from "../../../hooks/useObjectRouter";
 import { translateActions } from "../../../store/translation/translate.slice";
 import {
@@ -58,6 +58,7 @@ interface Props {
   defaultActions?: string[];
   defaultExcelFields?: string[];
   doubleClick?: boolean;
+  disabled?: boolean;
 }
 
 const CNewTable = ({
@@ -83,6 +84,7 @@ const CNewTable = ({
   doubleClick = true,
   handleActions = () => {},
   defaultExcelFields = [],
+  disabled = false,
   defaultActions = ["view", "edit", "delete", "is_sellect_more"],
   defaultFilters = [
     "add",
@@ -362,6 +364,7 @@ const CNewTable = ({
       });
       setSortData(arr);
     };
+    // console.log("aaaaaaaaaaa", value, search);
 
     if (value === "sort") {
       if (search) {
@@ -392,21 +395,21 @@ const CNewTable = ({
       setSearchedElements({ ...searchedElements, [id]: "" });
     }
 
-    if (value === "period") {
-      if (search?.length > 1) {
-        handleFilterParams({
-          ...filterParams,
-          DATE_FROM: convertToISO(search[0]),
-          DATE_TO: convertToISO(search[1]),
-        });
-      } else {
-        handleFilterParams({
-          ...filterParams,
-          DATE_FROM: "",
-          DATE_TO: "",
-        });
-      }
-    }
+    // if (value === "period") {
+    //   if (search?.length > 1) {
+    //     handleFilterParams({
+    //       ...filterParams,
+    //       DATE_FROM: convertToISO(search[0]),
+    //       DATE_TO: convertToISO(search[1]),
+    //     });
+    //   } else {
+    //     handleFilterParams({
+    //       ...filterParams,
+    //       DATE_FROM: "",
+    //       DATE_TO: "",
+    //     });
+    //   }
+    // }
 
     if (value === "clear") {
       setSearchedElements(defaultSearch);
@@ -487,6 +490,9 @@ const CNewTable = ({
   };
 
   const tableActions = (el: any, status: string) => {
+    if (disabled) {
+      return;
+    }
     if (status === "sidefilter") {
       setSideFilter(!sideFilter);
     }
@@ -634,6 +640,7 @@ const CNewTable = ({
             sortData={sortData}
             defaultFilters={defaultFilters}
             selectedItems={selectedItems}
+            disabled={disabled}
             defaultExcelFields={defaultExcelFields}
           />
         ) : (
@@ -776,6 +783,7 @@ const CNewTable = ({
                         </div>
 
                         {column.id !== "multiple" &&
+                        column.id !== "index" &&
                         !column.id.includes("actions") ? (
                           <TableFilter
                             colId={column?.id ?? currentFilter}

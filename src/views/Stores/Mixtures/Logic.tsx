@@ -27,7 +27,7 @@ export const TableData = ({
       .get(
         `${API_URL}/urunrecete/?skip=${
           filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
-        }&limit=${filters.perPage}${filterParams.q ? "&" + filterParams.q : ""}`
+        }&limit=${filters.perPage}${filters.q ? "&" + filters.q : ""}`
       )
       .then((res) => {
         setBodyData(res.data);
@@ -121,17 +121,21 @@ export const ModalTableLogic = ({
     ];
   }, []);
 
-  const { data: modalTable, refetch } = useQuery(
-    ["GET_URUNRECETEDETAY_TABLE", urunId],
-    () => {
-      return axios.get(
-        `${API_URL}/urunrecetedetay/?URUNRECETEURUNID=${urunId}`
-      );
-    },
-    {
-      enabled: !!urunId,
+  const [bodyData, setBodyData]: any = useState({});
+  const getDetay = () => {
+    setBodyData({});
+    axios
+      .get(`${API_URL}/urunrecetedetay/?URUNRECETEURUNID=${urunId}`)
+      .then((res) => {
+        setBodyData(res.data);
+      });
+  };
+
+  useEffect(() => {
+    if (urunId) {
+      getDetay();
     }
-  );
+  }, [urunId]);
 
   const { data: formData } = useQuery(
     ["GET_URUNRECETE_FORM", urunId],
@@ -146,7 +150,7 @@ export const ModalTableLogic = ({
   const createForm = async (params: {}) => {
     try {
       const { data } = await axios.post(`${API_URL}/urunrecete/`, params);
-      console.log("data", data);
+
       setFormId(data?.URUNRECETEURUNID);
       return data;
     } catch (error) {
@@ -178,7 +182,7 @@ export const ModalTableLogic = ({
         data: id,
       });
       toast.success(t("deleted_successfully"));
-      refetch();
+      getDetay();
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
       return null;
@@ -187,8 +191,8 @@ export const ModalTableLogic = ({
 
   return {
     headColumns,
-    tableData: modalTable?.data,
-    refetch,
+    tableData: bodyData ?? {},
+    refetch: getDetay,
     updateForm,
     createForm,
     deleteFn,
@@ -224,7 +228,8 @@ export const DetailsFormLogic = ({
       setOpen(false);
       refetch();
     } catch (error) {
-      toast.error(`Error creating element:, ${error}`);
+      setOpen(false);
+      refetch();
       return null;
     }
   };

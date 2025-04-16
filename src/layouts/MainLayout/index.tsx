@@ -13,6 +13,7 @@ import axios from "axios";
 import { globalToolActions } from "../../store/globalTools";
 import { RollLogic } from "./Logic/Roll";
 import { useScreenSize } from "../../hooks/useScreenSize";
+import { tableStoreActions } from "../../store/table";
 
 const MainLayout = () => {
   const wrapperRef: any = useRef(null);
@@ -28,9 +29,8 @@ const MainLayout = () => {
     dispatch(sidebarActions.setResize(!resize));
   };
 
-  const setTimeStore = (data: any) => {
+  const setTimeStore = (data: any) =>
     dispatch(globalToolActions.setCurrTime(data));
-  };
 
   const GetTimeGlobal = () => {
     axios
@@ -58,6 +58,7 @@ const MainLayout = () => {
       }, 1000);
 
       setTimeout(() => {
+        dispatch(tableStoreActions.setOrder({}));
         window.location.reload();
       }, 2000);
     }

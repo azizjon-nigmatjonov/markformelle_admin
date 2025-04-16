@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import HFTextField from "../../../../components/HFElements/HFTextField";
 import { FetchFunction } from "./Logic";
@@ -7,6 +7,20 @@ import CCheckbox from "../../../../components/CElements/CCheckbox";
 import { TableUI } from "./Table";
 import { CollapseUI } from "../../../../components/CElements/CCollapse";
 import HFSelect from "../../../../components/HFElements/HFSelect";
+import { ModalTypes } from "../interfaces";
+import { useTranslationHook } from "../../../../hooks/useTranslation";
+import { ModalLogic } from "../Logic";
+import { useGetUniteList } from "../../../../hooks/useFetchRequests/useUniteList";
+import { InputFieldUI } from "../../../../components/UI/FieldUI";
+import { SelectOptionsTable } from "../../../../components/UI/Options/Table";
+import { useGetUrunList } from "../../../../hooks/useFetchRequests/useUrunList";
+
+interface ModalUIProps {
+  defaultData?: ModalTypes;
+  URUNRECETEDETAYID?: number;
+  URUNRECETEURUNID?: string;
+  URUNADI?: string;
+}
 
 const FieldUI = ({
   title,
@@ -24,15 +38,30 @@ const FieldUI = ({
   );
 };
 
-export const ModalUI = ({
-  defaultData,
-  setData,
-}: {
-  defaultData: any;
-  action: string;
-  setData: (val: any) => void;
-}) => {
+export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
+  const { t } = useTranslationHook();
+  const [open, setOpen] = useState(false);
+  const [formId, setFormId] = useState<string>("");
+  const [modalInitialData, setModalInitialData] = useState<ModalUIProps>({});
+
   const { urunType, depo, boyaTypes, uniteOptions } = FetchFunction();
+
+  const {
+    setFilterParams: setUrunFilterParams,
+    filterParams: urunFilterParams,
+    urunData,
+  } = useGetUrunList({});
+  const {
+    filterParams: uniteFilerParams,
+    setFilterParams: setUniteFilterParams,
+    uniteData,
+  } = useGetUniteList();
+
+  const { formData } = ModalLogic({
+    urunId: defaultData?.URUNID || formId,
+  });
+
+  console.log("formData", formData);
 
   const { control, handleSubmit, setValue } = useForm({
     mode: "onSubmit",
@@ -41,26 +70,49 @@ export const ModalUI = ({
     console.log(data);
   };
 
+  useEffect(() => {
+    if (formData) {
+      setValue("URUNID", formData.URUNID);
+      setValue("UNITEID", formData.UNITEID);
+      setValue("UNITEADI", formData.UNITEADI);
+    }
+  }, [formData]);
+  useEffect(() => {
+    if (defaultData?.URUNID) {
+      setFormId(defaultData.URUNID);
+    }
+  }, [defaultData]);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="">
-      <div className="pb-3  flex items-center space-x-2 border-b border-[var(--border)]">
-        <p className="text-sm">Urun kodi</p>
-        <SearchModal setData={setData} defaultData={defaultData} />
+      <div className="pb-3 inline-block">
+        <InputFieldUI title={t("URUNID")}>
+          <SelectOptionsTable
+            name="URUNID"
+            placeholder={t("UNITEID")}
+            options={urunData?.data}
+            required={true}
+            headColumns={[
+              { id: "URUNID", title: "URUNID" },
+              { id: "ADI", title: "ADI" },
+            ]}
+            filterParams={urunFilterParams}
+            handleSelect={(obj: any) => {
+              setValue("URUNID", obj.URUNID);
+            }}
+            handleSearch={(val: string) => {
+              setUrunFilterParams({ ...urunFilterParams, q: val });
+            }}
+            control={control}
+            setFilterParams={setUrunFilterParams}
+            disabled={!!formId}
+          />
+        </InputFieldUI>
       </div>
 
       <CollapseUI title="Urun bilgileri">
         <div className="flex gap-x-10">
           <div className="space-y-3 w-full">
-            <FieldUI title="Urun adi">
-              <HFTextField
-                name="ADI"
-                control={control}
-                setValue={setValue}
-                required={true}
-                defaultValue={defaultData?.ADI}
-                // disabled={action === "view"}
-              />
-            </FieldUI>
             <FieldUI title="Urun tipi">
               <HFSelect
                 options={urunType?.data?.map((item: any) => {
@@ -71,7 +123,6 @@ export const ModalUI = ({
                 })}
                 control={control}
                 name="URUNTIPIID"
-                defaultValue={defaultData?.URUNTIPIID}
               />
             </FieldUI>
             <FieldUI title="Boya tipi">
@@ -79,7 +130,6 @@ export const ModalUI = ({
                 name="BOYATIPIID"
                 control={control}
                 options={boyaTypes}
-                defaultValue={defaultData?.BOYATIPIID}
               />
             </FieldUI>
             <FieldUI title="Mutfak depo">
@@ -92,7 +142,7 @@ export const ModalUI = ({
                 })}
                 control={control}
                 name="DEPOID"
-                defaultValue={defaultData?.MUTFAKDEPONO}
+
                 // disabled={action === "view"}
               />
             </FieldUI>
@@ -101,9 +151,31 @@ export const ModalUI = ({
                 name="UNITEID"
                 control={control}
                 options={uniteOptions}
-                defaultValue={defaultData?.UNITEID}
               />
             </FieldUI>
+            <InputFieldUI title={t("UNITEID")}>
+              <SelectOptionsTable
+                name="UNITEADI"
+                placeholder={t("UNITEID")}
+                options={uniteData?.data}
+                required={true}
+                headColumns={[
+                  { id: "ADI", title: "ADI" },
+                  { id: "UNITEID", title: "UNITEID" },
+                ]}
+                filterParams={uniteFilerParams}
+                handleSelect={(obj: any) => {
+                  setValue("UNITEID", obj.UNITEID);
+                  setValue("UNITEADI", obj.ADI);
+                }}
+                handleSearch={(val: string) => {
+                  setUniteFilterParams({ ...uniteFilerParams, q: val });
+                }}
+                control={control}
+                setFilterParams={setUniteFilterParams}
+                disabled={!!formId}
+              />
+            </InputFieldUI>
           </div>
           <div className="space-y-3 w-full">
             <FieldUI title="Barkod kodu">
@@ -112,7 +184,7 @@ export const ModalUI = ({
                 control={control}
                 setValue={setValue}
                 required={true}
-                defaultValue={defaultData?.BARKOD}
+
                 // disabled={action === "view"}
               />
             </FieldUI>
@@ -122,7 +194,7 @@ export const ModalUI = ({
                 control={control}
                 setValue={setValue}
                 required={true}
-                defaultValue={defaultData?.URUNID}
+
                 // disabled={action === "view"}
               />
             </FieldUI>
@@ -132,7 +204,7 @@ export const ModalUI = ({
                 control={control}
                 setValue={setValue}
                 required={true}
-                defaultValue={defaultData?.URUNID}
+
                 // disabled={action === "view"}
               />
             </FieldUI>

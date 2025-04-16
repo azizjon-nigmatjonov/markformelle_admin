@@ -26,7 +26,6 @@ const schema = Validation;
 export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
   const { t } = useTranslationHook();
   const [open, setOpen] = useState(false);
-
   const [formId, setFormId] = useState<string>("");
   const [modalInitialData, setModalInitialData] = useState<ModalUIProps>({});
   const {
@@ -36,9 +35,11 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
     createForm,
     updateForm,
     deleteFn,
-
     formData,
-  } = ModalTableLogic({ urunId: defaultData?.URUNRECETEURUNID, setFormId });
+  } = ModalTableLogic({
+    urunId: defaultData?.URUNRECETEURUNID || formId,
+    setFormId,
+  });
 
   const { setFilterParams, filterParams, urunData } = useGetUrunList({});
   const {
@@ -53,7 +54,6 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
-  console.log("def", defaultData);
 
   const onSubmit = (data: IModalForm) => {
     if (formId) {
@@ -63,6 +63,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
       params.DEGISIMTARIHI = dayjs();
       params.KULLANICIID = "1";
       delete params.BIRIMID;
+
       createForm(params);
     }
   };
@@ -106,6 +107,13 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
       setValue("BIRIMID", birimData?.data[0]?.BIRIMID);
     }
   }, [birimData]);
+
+  useEffect(() => {
+    if (formData?.URUNBIRIMADI) {
+      setValue("BIRIMID", formData.URUNBIRIMADI);
+      setValue("NOTU", formData.NOTE);
+    }
+  }, [formData]);
 
   return (
     <>
@@ -163,11 +171,11 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
               />
             </InputFieldUI>
 
-            <InputFieldUI title={t("NOTE")}>
+            <InputFieldUI title={t("NOTU")}>
               <HFTextField
                 control={control}
-                name="NOTE"
-                placeholder={t("NOTE")}
+                name="NOTU"
+                placeholder={t("NOTU")}
                 setValue={setValue}
                 disabled={!!formId}
                 //   defaultValue={defaultData?.BARKODKODI}
@@ -185,13 +193,10 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
           </div>
         </div>
 
-        <CollapseUI
-          title={t("details")}
-          defaultOpen={true}
-          // disabled={true}
-        >
+        <CollapseUI title={t("details")} defaultOpen={true}>
           <CNewTable
             title={t("table_mixtures_details")}
+            key={tableData?.data?.length ? "table_mixtures_details" : "empty"}
             headColumns={headColumns}
             bodyColumns={tableData?.data ?? []}
             handleActions={handleActions}
@@ -202,6 +207,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
             disablePagination={true}
             animation={false}
             clickable={true}
+            disabled={!formId}
             handleFilterParams={setFilterParams}
           />
         </CollapseUI>

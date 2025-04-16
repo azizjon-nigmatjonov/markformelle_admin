@@ -55,6 +55,7 @@ export const HeaderSettings = ({
   sortData,
   defaultFilters = [],
   selectedItems = [],
+  disabled = false,
   defaultExcelFields,
 }: {
   filterParams: any;
@@ -69,6 +70,7 @@ export const HeaderSettings = ({
   sortData: any;
   defaultFilters: any;
   selectedItems: any;
+  disabled: boolean;
   defaultExcelFields: string[];
   tableActions: (el: any, status: string) => void;
 }) => {
@@ -214,6 +216,8 @@ export const HeaderSettings = ({
     tableActions(data, "edit");
   }, []);
 
+  const colorMain = disabled ? "var(--gray)" : "var(--main)";
+
   return (
     <div className="pb-[45px] bg-white border-b border-[var(--border)] rounded-t-[8px]">
       <div className="h-[45px] absolute w-full left-0 top-0 flex items-center desktop:px-3 justify-between">
@@ -228,7 +232,7 @@ export const HeaderSettings = ({
             {defaultFilters.includes("add") && (
               <IconButton onClick={() => tableActions({}, "modal")}>
                 <div className="w-[30px] h-[30px] items-center justify-center flex">
-                  <PlusIcon fill="var(--main)" width={20} />
+                  <PlusIcon fill={colorMain} width={20} />
                 </div>
                 <p className="text-sm pr-2 text-[var(--black)]">{t("add")}</p>
               </IconButton>

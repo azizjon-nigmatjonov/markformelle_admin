@@ -1,5 +1,3 @@
-// import { useState } from "react";
-
 import toast from "react-hot-toast";
 import {
   EnglishFlag,
@@ -127,7 +125,7 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
             : val === "uz"
             ? "O'zbekcha"
             : val === "key"
-            ? "Key"
+            ? "KEYWORD"
             : val === "tu"
             ? "Turkish"
             : "English"}
