@@ -27,7 +27,7 @@ const CCheckbox = ({
       onClick={() => {
         if (!disabled) {
           setValue(!value);
-          handleCheck(element);
+          handleCheck({ ...element, checked: !value });
         }
       }}
       className={`flex items-center rounded-[4px] border-[var(--border)] w-full whitespace-nowrap ${

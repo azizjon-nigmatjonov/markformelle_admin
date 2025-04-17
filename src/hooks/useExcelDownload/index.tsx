@@ -10,6 +10,7 @@ interface Props {
   data: any;
   title?: string;
   allColumns: any;
+  disabled?: boolean;
   defaultExcelFields?: string[];
 }
 
@@ -17,6 +18,7 @@ const ExcelDownload = ({
   data = [],
   title = "example",
   allColumns = [],
+  disabled = false,
   defaultExcelFields = [],
 }: Props) => {
   const { t } = useTranslation();
@@ -71,9 +73,9 @@ const ExcelDownload = ({
   };
   return (
     <div className="relative">
-      <IconButton onClick={() => setOpen(true)}>
+      <IconButton onClick={() => setOpen(true)} disabled={disabled}>
         <div className="h-[30px] w-[30px] rounded-[8px] flex items-center justify-center">
-          <ExcelIconOutlined fill="var(--main)" />
+          <ExcelIconOutlined fill={disabled ? "var(--gray)" : "var(--main)"} />
         </div>
       </IconButton>
       {open && (

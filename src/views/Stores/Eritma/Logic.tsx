@@ -9,10 +9,8 @@ export const breadCrumbs = [
 
 export const TableData = ({
   filterParams,
-  handleActionsModal = () => {},
 }: {
   filterParams: any;
-  handleActionsModal?: (val: any, element?: any) => void;
   setOpen?: (val: boolean) => void;
 }) => {
   const [headColumns, setHeadColumns] = useState([]);
@@ -90,17 +88,4 @@ export const TableData = ({
     setBodyData,
     deleteFn,
   };
-};
-
-export const ModalLogic = ({ urunId = "" }: { urunId: string }) => {
-  const [formData, setFormData] = useState<any>({});
-
-  useEffect(() => {
-    if (!urunId) return;
-    axios.get(`${API_URL}/urun/${urunId}`).then((res) => {
-      setFormData(res.data);
-    });
-  }, [urunId]);
-
-  return { formData };
 };

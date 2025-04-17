@@ -100,6 +100,7 @@ interface Props {
   errors?: any;
   readOnly?: boolean;
   autoComplete?: string;
+  handleChange?: (name: string, value: any) => void;
 }
 
 const HFTextField = ({
@@ -116,6 +117,7 @@ const HFTextField = ({
   errors = {},
   readOnly = false,
   placeholder,
+  handleChange = () => {},
   ...props
 }: Props) => {
   const [password, setPassword] = useState(true);
@@ -145,7 +147,10 @@ const HFTextField = ({
             activatePassword={activatePassword}
             password={password}
             type={type}
-            onChange={onChange}
+            onChange={(value: any) => {
+              onChange(value);
+              handleChange(name, value);
+            }}
             readOnly={readOnly}
             disabled={disabled}
             errors={errors}

@@ -26,6 +26,7 @@ export const CollapseUI = ({
           ""
         ) : (
           <button
+            type="button"
             onClick={() => {
               !disabled ? setOpen((prev) => !prev) : "";
             }}

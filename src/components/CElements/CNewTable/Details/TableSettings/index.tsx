@@ -230,7 +230,10 @@ export const HeaderSettings = ({
           )}
           <div className="space-x-4 flex items-center">
             {defaultFilters.includes("add") && (
-              <IconButton onClick={() => tableActions({}, "modal")}>
+              <IconButton
+                onClick={() => tableActions({}, "modal")}
+                disabled={disabled}
+              >
                 <div className="w-[30px] h-[30px] items-center justify-center flex">
                   <PlusIcon fill={colorMain} width={20} />
                 </div>
@@ -240,6 +243,7 @@ export const HeaderSettings = ({
             {defaultFilters.includes("sellect_more") && (
               <IconButton
                 onClick={() => tableActions({}, "sellect_more_active")}
+                disabled={disabled}
               >
                 <div className="w-[30px] h-[30px] items-center justify-center flex">
                   <img width={20} src="/images/tasklist.png" alt="task list" />
@@ -261,6 +265,7 @@ export const HeaderSettings = ({
                   onClick={() => {
                     if (selectedItems.length) setOpenDelete(true);
                   }}
+                  disabled={disabled}
                 >
                   <div className="w-[30px] h-[30px] items-center justify-center flex">
                     <DeleteIcon
@@ -289,7 +294,10 @@ export const HeaderSettings = ({
         </div>
 
         <div className="flex items-center space-x-2 h-full">
-          <IconButton onClick={() => tableActions({}, "translation")}>
+          <IconButton
+            onClick={() => tableActions({}, "translation")}
+            disabled={disabled}
+          >
             <div
               className={`h-[30px] w-[30px] flex items-center justify-center`}
             >
@@ -297,20 +305,29 @@ export const HeaderSettings = ({
                 width={24}
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
-                fill="var(--main)"
+                fill={colorMain}
               >
                 <path d="M5 15V17C5 18.0544 5.81588 18.9182 6.85074 18.9945L7 19H10V21H7C4.79086 21 3 19.2091 3 17V15H5ZM18 10L22.4 21H20.245L19.044 18H14.954L13.755 21H11.601L16 10H18ZM17 12.8852L15.753 16H18.245L17 12.8852ZM8 2V4H12V11H8V14H6V11H2V4H6V2H8ZM17 3C19.2091 3 21 4.79086 21 7V9H19V7C19 5.89543 18.1046 5 17 5H14V3H17ZM6 6H4V9H6V6ZM10 6H8V9H10V6Z"></path>
               </svg>
             </div>
           </IconButton>
           {defaultFilters.includes("filter") && (
-            <IconButton onClick={() => tableActions({}, "sidefilter")}>
+            <IconButton
+              onClick={() => tableActions({}, "sidefilter")}
+              disabled={disabled}
+            >
               <div
                 className={`h-[30px] w-[30px] flex items-center justify-center`}
               >
                 <Badge badgeContent={sortData?.length} color="secondary">
                   <FilterIcon
-                    fill={sideFilter ? "var(--primary)" : "var(--main)"}
+                    fill={
+                      disabled
+                        ? "var(--gray)"
+                        : sideFilter
+                        ? "var(--primary)"
+                        : "var(--main)"
+                    }
                   />
                 </Badge>
               </div>
@@ -322,23 +339,36 @@ export const HeaderSettings = ({
               title={filterParams?.title}
               data={ExcelData}
               allColumns={allColumns}
+              disabled={disabled}
               defaultExcelFields={defaultExcelFields}
             />
           )}
 
           {defaultFilters.includes("excel_upload") && (
-            <ExcelReader setExcelData={handleExcelUploading} />
+            <ExcelReader
+              setExcelData={handleExcelUploading}
+              disabled={disabled}
+            />
           )}
 
           {defaultFilters.includes("active_menu") && (
             <div className="relative">
-              <div onClick={() => setOpen(true)} className="relative">
-                <IconButton>
+              <div
+                onClick={() => (disabled ? {} : setOpen(true))}
+                className="relative"
+              >
+                <IconButton disabled={disabled}>
                   <div
                     className={`w-[30px] h-[30px] rounded-[8px] items-center justify-center flex`}
                   >
                     <ListDotIcon
-                      fill={open ? "var(--primary)" : "var(--main)"}
+                      fill={
+                        disabled
+                          ? "var(--gray)"
+                          : open
+                          ? "var(--primary)"
+                          : "var(--main)"
+                      }
                     />
                   </div>
                 </IconButton>

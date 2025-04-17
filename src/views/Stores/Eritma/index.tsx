@@ -182,7 +182,7 @@ export const EritmaPage = () => {
 
     if (status === "view" || status === "edit") {
       setOpen(true);
-      console.log("el", el);
+
       setModalInitialData({
         URUNID: el?.URUNID,
       });

@@ -1,36 +1,32 @@
 import { useForm } from "react-hook-form";
-import HFInputMask from "../../../components/HFElements/HFInputMask";
-import { SelectOptionsTable } from "../../../components/UI/Options/Table";
+import HFInputMask from "../../../../components/HFElements/HFInputMask";
+import { SelectOptionsTable } from "../../../../components/UI/Options/Table";
 import { useEffect } from "react";
 import { DetailsFormLogic } from "./Logic";
-import { CloseIcon } from "../../../components/UI/IconGenerator/Svg";
-import { useTranslationHook } from "../../../hooks/useTranslation";
+import { CloseIcon } from "../../../../components/UI/IconGenerator/Svg";
+import { useTranslationHook } from "../../../../hooks/useTranslation";
 import dayjs from "dayjs";
-import { useGetUrunList } from "../../../hooks/useFetchRequests/useUrunList";
-import { useGetBirimList } from "../../../hooks/useFetchRequests/useBirimList";
-import { useGetDepoList } from "../../../hooks/useFetchRequests/useDepoList";
+import { useGetUrunList } from "../../../../hooks/useFetchRequests/useUrunList";
+import { useGetBirimList } from "../../../../hooks/useFetchRequests/useBirimList";
 
 interface TableFormProps {
   setOpen: (val: boolean) => void;
-  defaultData?: Partial<any>;
   refetch: () => void;
   formId?: string | number | undefined;
 }
 interface FormData {
-  BARKODKODU: string;
   URUNID: string;
   URUNADI: string;
-  MIKTAR: number;
   URUNBIRIMID: number;
-  BIRIMFIYAT: number;
   BIRIMID: string;
-  DEPOID: string;
-  DEGISIMTARIHI: string;
+  INSERTTARIHI: string;
+  CARPAN: number;
+  ADI: string;
+  KULLANICIADI?: string;
 }
 
 export const TableForm = ({
   setOpen,
-  defaultData = {},
   formId = "",
   refetch = () => {},
 }: TableFormProps) => {
@@ -39,12 +35,12 @@ export const TableForm = ({
     mode: "onSubmit",
   });
 
-  const { setFilterParams, filterParams, urunData } = useGetUrunList({});
   const {
-    setFilterParams: setDepoFilterParams,
-    filterParams: depoFilterParams,
-    depoData,
-  } = useGetDepoList();
+    setFilterParams: setUrunFilterParams,
+    filterParams: urunFilterParams,
+    urunData,
+  } = useGetUrunList({});
+
   const {
     birimData,
     setFilterParams: setFilterParamsBirim,
@@ -59,41 +55,69 @@ export const TableForm = ({
     refetch,
   });
 
+  //   {
+  //     "URUNID": "BY001",
+  //     "ADI": "NYLOSET YELLOW N-PGL",
+  //     "CARPAN": "100",
+  //     "BIRIMID": "Gr",
+  //     "URUNBIRIMID": 2,
+  //     "KULLANICIADI": "Supervisor",
+  //     "INSERTKULLANICIID": 1,
+  //     "INSERTTARIHI": "2021-05-17T03:46:37",
+  //     "KULLANICIID": 1,
+  //     "DEGISIMTARIHI": "2025-04-17T16:05:43"
+  // }
+
+  //   {
+  //     "URUNID": "BY001",
+  //     "ADI": "NYLOSET YELLOW N-PGL",
+  //     "CARPAN": "1",
+  //     "BIRIMID": "Kg",
+  //     "URUNBIRIMID": 1,
+  //     "DEGISIMTARIHI": "2025-04-17T16:10:46",
+  //     "KULLANICIID": 1,
+  //     "INSERTKULLANICIID": 1,
+  //     "INSERTTARIHI": "2025-04-17T16:10:46",
+  //     "KULLANICIADI": "Supervisor"
+  // }
   const onSubmit = (data: any) => {
+    const params: any = data;
     if (formId) {
-      const params: any = data;
-      params.URUNRECETEURUNID = defaultData?.URUNRECETEURUNID;
+      params.INSERTKULLANICIID = formData.INSERTKULLANICIID;
+      params.INSERTTARIHI = formData.INSERTTARIHI;
+      params.KULLANICIID = formData.KULLANICIID;
+      params.DEGISIMTARIHI = formData.DEGISIMTARIHI;
+      console.log("params", params);
+
       updateForm(params, formId);
     } else {
-      const params: any = data;
-      params.DEGISIMTARIHI = dayjs();
-      params.KULLANICIID = "1";
-      params.URUNRECETEURUNID = defaultData?.URUNRECETEURUNID;
-      delete params.BIRIMID;
-      delete params.URUNADI;
+      params.DEGISIMTARIHI = dayjs().format("YYYY-MM-DDTHH:mm:ss");
+      params.KULLANICIID = 1;
+      params.INSERTKULLANICIID = 1;
+      params.INSERTTARIHI = dayjs().format("YYYY-MM-DDTHH:mm:ss");
+      params.KULLANICIADI = "Supervisor";
+
+      // delete params.BIRIMID;
+      // delete params.URUNADI;
+
+      console.log("params", params);
+
       createForm(params);
     }
   };
 
   useEffect(() => {
-    if (birimData?.data?.length) {
-      setValue("URUNBIRIMID", birimData?.data[0]?.URUNBIRIMID);
-      setValue("BIRIMID", birimData?.data[0]?.BIRIMID);
-    }
-  }, [birimData]);
-
-  useEffect(() => {
     if (formData?.URUNID) {
-      setFilterParams({
-        ...filterParams,
+      setFilterParamsBirim({
+        ...filterParamsBirim,
         q: `URUNID=${formData.URUNID}`,
       });
+      setValue("CARPAN", formData.CARPAN);
       setValue("URUNID", formData.URUNID);
-      setValue("URUNADI", formData.URUNADI);
-      setValue("MIKTAR", formData.MIKTAR);
-      setValue("DEPOID", formData.DEPOID);
+      setValue("ADI", formData.URUNADI);
+      setValue("BIRIMID", formData.BIRIMID);
       setValue("URUNBIRIMID", formData.URUNBIRIMID);
-      setValue("DEGISIMTARIHI", formData.DEGISIMTARIHI);
+      setValue("KULLANICIADI", formData.KULLANICIADI);
     }
   }, [formData]);
 
@@ -111,33 +135,6 @@ export const TableForm = ({
       </div>
 
       <SelectOptionsTable
-        name="DEPOID"
-        label={t("DEPOID")}
-        focused={true}
-        placeholder={t("DEPOID")}
-        options={depoData?.data ?? []}
-        required={true}
-        headColumns={[
-          { id: "DEPOID", title: "DEPOID" },
-          { id: "ADI", title: "ADI" },
-        ]}
-        filterParams={filterParams}
-        handleSelect={(obj: any) => {
-          setValue("DEPOID", obj.DEPOID);
-          setDepoFilterParams({
-            ...depoFilterParams,
-            q: `DEPOID=${obj.DEPOID}`,
-          });
-        }}
-        control={control}
-        handleSearch={(val: string) => {
-          setDepoFilterParams({ ...depoFilterParams, q: val });
-        }}
-        setFilterParams={setDepoFilterParams}
-        defaultValue={formData?.DEPOID}
-      />
-
-      <SelectOptionsTable
         name="URUNID"
         label={t("URUNID")}
         focused={true}
@@ -145,13 +142,13 @@ export const TableForm = ({
         options={urunData?.data ?? []}
         required={true}
         headColumns={[
-          { id: "BARKOD", title: "BARKOD" },
-          { id: "ADI", title: "URUNADI", innerId: "URUNID" },
+          { id: "URUNID", title: "URUNID" },
+          { id: "ADI", title: "ADI" },
         ]}
-        filterParams={filterParams}
+        filterParams={urunFilterParams}
         handleSelect={(obj: any) => {
           setValue("URUNID", obj.URUNID);
-          setValue("URUNADI", obj.ADI);
+          setValue("ADI", obj.ADI);
           setFilterParamsBirim({
             ...filterParamsBirim,
             q: `URUNID=${obj.URUNID}`,
@@ -159,46 +156,48 @@ export const TableForm = ({
         }}
         control={control}
         handleSearch={(val: string) => {
-          setFilterParams({ ...filterParams, q: val });
+          setUrunFilterParams({ ...urunFilterParams, q: val });
         }}
-        setFilterParams={setFilterParams}
+        setFilterParams={setUrunFilterParams}
         defaultValue={formData?.URUNID}
       />
 
       <SelectOptionsTable
-        name="URUNADI"
+        name="ADI"
         label={t("URUNADI")}
+        focused={true}
         placeholder={t("URUNADI")}
-        options={urunData?.data}
+        options={urunData?.data ?? []}
         required={true}
         headColumns={[
-          { id: "BARKOD", width: 200, title: "BARKOD" },
-          { id: "ADI", title: "URUNADI", innerId: "URUNID" },
+          { id: "URUNID", title: "URUNID" },
+          { id: "ADI", title: "ADI" },
         ]}
-        filterParams={filterParams}
+        filterParams={urunFilterParams}
         handleSelect={(obj: any) => {
           setValue("URUNID", obj.URUNID);
-          setValue("URUNADI", obj.ADI);
+          setValue("ADI", obj.ADI);
           setFilterParamsBirim({
             ...filterParamsBirim,
-            q: `&URUNID=${obj.URUNID}`,
+            q: `URUNID=${obj.URUNID}`,
           });
         }}
-        handleSearch={(val: string) => {
-          setFilterParams({ ...filterParams, q: val });
-        }}
         control={control}
-        setFilterParams={setFilterParams}
+        handleSearch={(val: string) => {
+          setUrunFilterParams({ ...urunFilterParams, q: val });
+        }}
+        setFilterParams={setUrunFilterParams}
+        defaultValue={formData?.URUNID}
       />
 
       <div className="flex space-x-2 items-end">
         <HFInputMask
           control={control}
-          name="MIKTAR"
-          label={t("MIKTAR")}
+          name="CARPAN"
+          label={t("CARPAN")}
           type="number"
           required={true}
-          placeholder={t("MIKTAR")}
+          placeholder={t("CARPAN")}
           defaultValue={formData?.MIKTAR}
         />
         <div className="w-[90px]">
@@ -224,16 +223,22 @@ export const TableForm = ({
         </div>
       </div>
 
+      {/* <HFTextField
+        name="KULLANICIADI"
+        control={control}
+        setValue={setValue}
+        disabled={!!formId}
+      /> */}
       <div className="flex space-x-2 mt-3">
         <button
           className="cancel-btn"
           type="button"
           onClick={() => setOpen(false)}
         >
-          Отменить
+          {t("cancel")}
         </button>
         <button className="custom-btn save" type="submit">
-          {formId ? "Редикировать" : "Сохранить"}
+          {t(formId ? "update" : "create")}
         </button>
       </div>
     </form>

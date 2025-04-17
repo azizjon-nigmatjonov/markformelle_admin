@@ -13,7 +13,7 @@ export const useGetDepoList = () => {
     if (!filters?.page) return;
     axios
       .get(
-        `${API_URL}/depo/?skip=${filters.page}&limit=${filters.perPage}${
+        `${API_URL}/depo/?skip=${filters.page - 1}&limit=${filters.perPage}${
           filters?.q ? "&" + filters.q : ""
         }`
       )

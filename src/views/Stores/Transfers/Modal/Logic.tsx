@@ -113,7 +113,7 @@ export const InnerModalLogic = ({
   const getUrun = (filters: IFilterParams) => {
     axios
       .get(
-        `${API_URL}/urun/?skip=${filters.page}&limit=${filters.perPage}${
+        `${API_URL}/urun/?skip=${filters.page - 1}&limit=${filters.perPage}${
           filters?.q ? "&" + filters.q : ""
         }`
       )

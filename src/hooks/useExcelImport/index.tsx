@@ -5,7 +5,9 @@ import { UploadOutlinedIcon } from "../../components/UI/IconGenerator/Svg/Machin
 
 const ExcelReader = ({
   setExcelData = () => {},
+  disabled = false,
 }: {
+  disabled?: boolean;
   setExcelData: (val: any) => void;
 }) => {
   const [loading, setLoading] = useState(false);
@@ -37,7 +39,7 @@ const ExcelReader = ({
 
   return (
     <div className="relative">
-      <IconButton>
+      <IconButton disabled={disabled}>
         <div
           className="h-[30px] w-[30px] rounded-[8px] flex items-center justify-center relative z-[1]"
           onClick={() => document?.getElementById("fileInput")?.click()}
@@ -45,7 +47,9 @@ const ExcelReader = ({
           {loading ? (
             <CircularProgress size={14} />
           ) : (
-            <UploadOutlinedIcon fill="var(--main)" />
+            <UploadOutlinedIcon
+              fill={disabled ? "var(--gray)" : "var(--main)"}
+            />
           )}
         </div>
       </IconButton>

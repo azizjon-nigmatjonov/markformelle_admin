@@ -1,60 +1,191 @@
 import axios from "axios";
 import { useQuery } from "react-query";
+import { useTranslationHook } from "../../../../hooks/useTranslation";
+import { GetCurrentDate } from "../../../../utils/getDate";
+import { useEffect, useMemo, useState } from "react";
+import toast from "react-hot-toast";
+import { IFilterParams } from "../../../../interfaces";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
-export const FetchFunction = () => {
-  const { data: urunType } = useQuery(["GET_URUN_TIPI"], () => {
-    return axios.get(`${API_URL}/uruntipi/?skip=0&limit=100`);
-  });
-
-  const { data: depo } = useQuery(["DET_DEPO"], () => {
-    return axios.get(`${API_URL}/depo/?skip=0&limit=100`);
-  });
-
-  const { data: boyaTipi } = useQuery(["GET_BOYA_TIPI_FOR_URUN"], () => {
-    return axios.get(`${API_URL}/boyatipi/?skip=0&limit=100`);
-  });
-
-  const { data: unite } = useQuery(["GET_INITE_FOR_URUN"], () => {
-    return axios.get(`${API_URL}/unite/?skip=0&limit=100`);
-  });
-
-  return {
-    urunType: urunType?.data,
-    depo: depo?.data,
-    boyaTypes:
-      boyaTipi?.data?.data?.map((item: any) => {
-        return {
-          label: item.ADI,
-          value: item.BOYATIPIID,
-        };
-      }) ?? [],
-    uniteOptions:
-      unite?.data?.data?.map((item: any) => {
-        return {
-          label: item.ADI,
-          value: item.UNITEID,
-        };
-      }) ?? [],
-  };
-};
-
-export const FetchTable = ({
-  filterParams = {},
-  id,
+export const ModalTableLogic = ({
+  setFormId,
+  urunId,
+  filterParams,
+  setDisabled = () => {},
 }: {
-  filterParams: any;
-  id?: any;
+  urunId?: string;
+  filterParams: IFilterParams;
+  setDisabled: (val: boolean) => void;
+  setFormId: (val: string) => void;
 }) => {
-  const { data: birimler, isLoading } = useQuery(
-    ["GET_BIRIMLER", filterParams],
+  const { t } = useTranslationHook();
+  const headColumns = useMemo(() => {
+    return [
+      { id: "URUNID", title: "URUNID" },
+      { id: "URUNADI", title: "URUNADI" },
+      { id: "CARPAN", title: "CARPAN" },
+      { id: "BIRIMID", title: "BIRIMID" },
+      { id: "BIRIMADI", title: "BIRIMADI" },
+      { id: "INSERKULLANICIADI", title: "INSERKULLANICIADI" },
+      { id: "KULLANICIID", title: "KULLANICIID" },
+      {
+        id: "INSERTTARIHI",
+        title: "INSERTTARIHI",
+        render: (val: string) => {
+          return GetCurrentDate({ type: "usually", date: val });
+        },
+      },
+      {
+        id: "DEGISIMTARIHI",
+        title: "DEGISIMTARIHI",
+        render: (val: string) => {
+          return GetCurrentDate({ type: "usually", date: val });
+        },
+      },
+    ];
+  }, []);
+
+  const [bodyData, setBodyData]: any = useState({});
+  const getTableData = (filters?: IFilterParams) => {
+    if (!filters?.page) filters = filterParams;
+    setBodyData({});
+    axios
+      .get(
+        `${API_URL}/urunbirim/?URUNID=${urunId}&skip=${
+          filters.page - 1
+        }&limit=${filters.perPage}${filters?.q ? "&" + filters.q : ""}`
+      )
+      .then((res) => {
+        setBodyData(res.data);
+      });
+  };
+
+  useEffect(() => {
+    if (urunId) {
+      getTableData(filterParams);
+    }
+  }, [urunId, filterParams]);
+
+  const { data: formData } = useQuery(
+    ["GET_URUN_DATA_FORM", urunId],
     () => {
-      return axios.get(`${API_URL}/urunbirim/${id}`);
+      return axios.get(`${API_URL}/urun/${urunId}`);
     },
     {
-      enabled: !!id,
+      enabled: !!urunId,
     }
   );
 
-  return { birimler: birimler?.data, isLoading };
+  const testForm = (id: string) => {
+    axios
+      .get(`${API_URL}/urun/${id.toLocaleUpperCase()}`)
+      .then((res: any) => {
+        setFormId(res?.data?.URUNID);
+        setDisabled(false);
+      })
+      .catch(() => {
+        setDisabled(false);
+      });
+  };
+
+  const createForm = async (params: {}) => {
+    try {
+      const { data } = await axios.post(`${API_URL}/urun/`, params);
+      console.log("data", data);
+
+      setFormId(data?.URUNID);
+      return data;
+    } catch (error) {
+      toast.error(`Error creating element:, ${error}`);
+
+      return null;
+    }
+  };
+
+  const updateForm = async (params: {}, id: string) => {
+    try {
+      const { data } = await axios.put(`${API_URL}/urunrecete/${id}`, params);
+
+      return data;
+    } catch (error) {
+      toast.error(`Error creating element:, ${error}`);
+      return null;
+    }
+  };
+
+  const deleteFn = async (id: string[]) => {
+    try {
+      await axios.delete(`${API_URL}/urunrecetedetay/`, {
+        method: "DELETE",
+        url: `${API_URL}/urunrecetedetay/`,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        data: id,
+      });
+      toast.success(t("deleted_successfully"));
+      getTableData();
+    } catch (error) {
+      toast.error(`Error creating element:, ${error}`);
+      return null;
+    }
+  };
+
+  return {
+    headColumns,
+    tableData: bodyData ?? {},
+    refetch: getTableData,
+    updateForm,
+    createForm,
+    deleteFn,
+    testForm,
+    formData: formData?.data ?? {},
+  };
+};
+
+export const DetailsFormLogic = ({
+  formId = "",
+  setOpen = () => {},
+  refetch,
+}: {
+  formId?: string | number;
+  setOpen: (val: boolean) => void;
+  refetch: () => void;
+}) => {
+  const { t } = useTranslationHook();
+  const { data: formData } = useQuery(
+    ["GET_URUNBIRIM_FORM", formId],
+    () => {
+      return axios.get(`${API_URL}/urunbirim/${formId}`);
+    },
+    {
+      enabled: !!formId,
+    }
+  );
+
+  const createForm = async (params: {}) => {
+    try {
+      await axios.post(`${API_URL}/urunbirim/`, params);
+      toast.success(t("created_successfully"));
+      setOpen(false);
+      refetch();
+    } catch (error) {
+      return null;
+    }
+  };
+
+  const updateForm = async (params: {}, id: string | number) => {
+    try {
+      await axios.put(`${API_URL}/urunbirim/${id}`, params);
+      toast.success(t("updated_successfully"));
+      setOpen(false);
+      refetch();
+    } catch (error) {
+      toast.error(`Error creating element:, ${error}`);
+      return null;
+    }
+  };
+
+  return { updateForm, createForm, formData: formData?.data };
 };

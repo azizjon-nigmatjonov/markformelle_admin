@@ -13,7 +13,7 @@ export const useGetUniteList = () => {
     if (!filters?.page) return;
     axios
       .get(
-        `${API_URL}/unite/?skip=${filters.page}&limit=${filters.perPage}${
+        `${API_URL}/unite/?skip=${filters.page - 1}&limit=${filters.perPage}${
           filters?.q ? "&" + filters.q : ""
         }`
       )

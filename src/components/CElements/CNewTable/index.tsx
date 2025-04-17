@@ -592,7 +592,9 @@ const CNewTable = ({
         setOpenSelect(false);
       }
 
-      if (e.key === "Enter") SetFiltersFn(searchedElements);
+      if (e.key === "Enter" && Object.values(searchedElements)?.[0]) {
+        SetFiltersFn(searchedElements);
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
