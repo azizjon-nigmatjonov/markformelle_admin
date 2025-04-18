@@ -741,7 +741,7 @@ const CNewTable = ({
                         }}
                         onDragLeave={handleDragLeave}
                         onDrop={() => handleDrop(index)}
-                        className={`w-full group flex items-center min-h-[40px] px-2 flex-nowrap cursor-pointer hover:bg-[var(--primary50)] ${
+                        className={`w-full group flex items-center min-h-[40px] px-2 flex-nowrap cursor-pointer hover:bg-[var(--border)] ${
                           column?.id === "index"
                             ? "justify-center"
                             : "justify-between"
@@ -767,7 +767,9 @@ const CNewTable = ({
                         }}
                       >
                         <div
-                          className={`w-full min-h-[40px] flex items-center whitespace-nowrap cursor-move`}
+                          className={`w-full min-h-[40px] flex items-center whitespace-nowrap cursor-move ${
+                            disabled ? "text-[var(--gray)]" : ""
+                          }`}
                         >
                           {column.renderHead
                             ? Array.isArray(column.renderHead)
@@ -798,6 +800,7 @@ const CNewTable = ({
                             searchDebounce={(val: any, val2: any) =>
                               searchDebounce(val, val2, column?.title)
                             }
+                            disabled={disabled}
                             handleClick={() => setCurrentFilter(index)}
                             closeFilter={() => setCurrentFilter(null)}
                           />

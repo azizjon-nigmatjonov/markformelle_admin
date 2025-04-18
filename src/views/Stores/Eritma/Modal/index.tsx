@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import HFTextField from "../../../../components/HFElements/HFTextField";
 import CCheckbox from "../../../../components/CElements/CCheckbox";
@@ -18,28 +18,15 @@ import { TableForm } from "./TableForm";
 import dayjs from "dayjs";
 import { Alert } from "@mui/material";
 import { SearchIcon } from "../../../../components/UI/IconGenerator/Svg";
+import axios from "axios";
+const API_URL = import.meta.env.VITE_TEST_URL;
+// import { SearchIcon } from "../../../../components/UI/IconGenerator/Svg";
 // const schema = Validation;
 interface ModalUIProps {
   defaultData?: ModalTypes;
   URUNBIRIMID?: string;
   ADI?: string;
 }
-
-const FieldUI = ({
-  title,
-  children,
-}: {
-  title: string;
-  children: ReactNode;
-}) => {
-  return (
-    <div className="flex items-center justify-between space-x-3 whitespace-nowrap">
-      <p className="text-sm">{title}</p>
-      <hr className="w-full border-t-[3px] border-dotted border-[var(--border)]" />
-      <div className="max-w-[30%] min-w-[30%]">{children}</div>
-    </div>
-  );
-};
 
 export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
@@ -57,11 +44,9 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
     updateForm,
     deleteFn,
     formData,
-    testForm,
   } = ModalTableLogic({
     filterParams,
     setFormId,
-    setDisabled,
     urunId: defaultData?.URUNID || formId,
   });
 
@@ -100,10 +85,40 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
     mode: "onSubmit",
     // resolver: yupResolver(schema),
   });
+
+  // {
+  //   "URUNID": "OY001",
+  //   "ADI": "test",
+  //   "URUNTIPIID": 0,
+  //   "BOYATIPIID": 1,
+  //   "MUTFAKDEPONO": "D008",
+  //   "UNITEID": 1,
+  //   "KIMYASALTIPIID": null,
+  //   "KDVORANI": 0,
+  //   "NOTU": "test",
+  //   "TEMINSURESI": 0,
+  //   "RAF": null,
+  //   "TRANSFERKODU": null,
+  //   "ENVANTEREDAHIL": true,
+  //   "SONALISSTOKDETAYID": null,
+  //   "SONALISTARIHI": "2025-04-18T06:03:48.648Z",
+  //   "BARKOD": "string",
+  //   "KAPALI": false,
+  //   "INSERTKULLANICIID": 1,
+  //   "INSERTTARIHI": "2025-04-18T06:03:48.648Z",
+  //   "DEGISIMTARIHI": "2025-04-18T06:03:48.648Z",
+  //   "KULLANICIID": 1
+  // }
+
   const onSubmit = (data: any) => {
     const params: any = data;
 
+    createForm(params);
     if (formId) {
+      delete params.BOYATIPIADI;
+      delete params.KULLANICIADI;
+      delete params.URUNTIPIADI;
+      delete params.UNITEADI;
       updateForm(params, formId);
     } else {
       params.DEGISIMTARIHI = dayjs();
@@ -111,9 +126,22 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
       params.INSERTKULLANICIID = 1;
       params.KDVORANI = 0;
       params.KULLANICIADI = "Supervisor";
+      params.INSERTTARIHI = dayjs();
+      params.SONALISTARIHI = dayjs();
+      params.KIMYASALTIPIID = null;
+      params.TEMINSURESI = 0;
+      params.RAF = null;
+      params.TRANSFERKODU = null;
+      params.SONALISSTOKDETAYID = null;
+
+      delete params.BOYATIPIADI;
+      delete params.KULLANICIADI;
+      delete params.URUNTIPIADI;
+      delete params.UNITEADI;
+
       createForm(params);
     }
-    console.log("params", params);
+    // console.log("params", params);
   };
 
   useEffect(() => {
@@ -177,198 +205,234 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
     }
   };
 
+  const handleCheck = () => {
+    let urunId = getValues("URUNID") || "";
+    urunId = urunId.toLocaleUpperCase();
+    axios
+      .get(`${API_URL}/urun/${urunId}`)
+      .then((res: any) => {
+        setFormId(res?.data?.URUNID);
+        setDisabled(false);
+      })
+      .catch(() => {
+        setDisabled(false);
+      })
+      .finally(() => {
+        setValue("URUNID", urunId);
+      });
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="pb-3 flex justify-between space-x-2">
-          <div className="flex space-x-3 items-center">
-            <InputFieldUI title={t("URUNID")}>
-              <HFTextField
-                name="URUNID"
-                control={control}
-                setValue={setValue}
-              />
-            </InputFieldUI>
-            <InputFieldUI title={t("ADI")}>
-              <HFTextField name="ADI" control={control} setValue={setValue} />
-            </InputFieldUI>
+        <div className="pb-3 flex justify-between space-x-3">
+          <div className="flex space-x-2 items-center">
+            <div className="min-w-[400px]">
+              <InputFieldUI title={t("URUNID")}>
+                <div className="w-[200px]">
+                  <HFTextField
+                    name="URUNID"
+                    control={control}
+                    setValue={setValue}
+                    placeholder={t("URUNID")}
+                  />
+                </div>
+              </InputFieldUI>
+            </div>
             <button
-              className="bg-[var(--primary)] w-[40px] h-[30px] flex items-center justify-center rounded-[8px]"
+              className="bg-[var(--primary)] w-[40px] h-[34px] flex items-center justify-center rounded-[8px]"
               type="button"
-              onClick={() => {
-                const val = getValues()?.URUNID || "";
-
-                testForm(val.toLocaleLowerCase());
-              }}
+              onClick={() => handleCheck()}
             >
               <SearchIcon fill="white" width={18} />
             </button>
           </div>
+          <div className="w-full">
+            <Alert severity={"info"} style={{ height: "35px" }}>
+              {t("add_unique_id")}
+            </Alert>
+          </div>
 
-          <div>
-            <button className="custom-btn" type="submit">
-              {t(disabled ? "update" : "create")}
+          <div className="w-[300px]">
+            <button
+              className="custom-btn"
+              style={{ backgroundColor: disabled ? "var(--gray)" : "" }}
+              type={disabled ? "button" : "submit"}
+            >
+              {t(formId ? "update" : "create")}
             </button>
           </div>
         </div>
-        <div className="w-1/3">
-          <Alert severity={"info"}>
-            {t("after_you_add_urun_id_you_can_continue")}
-          </Alert>
-        </div>
 
         <CollapseUI title={t("urun_form")}>
-          <div className="flex gap-x-10">
-            <div className="space-y-3 w-full">
-              <FieldUI title={t("URUNTIPIADI")}>
-                <SelectOptionsTable
-                  name="URUNTIPIADI"
-                  placeholder={t("URUNTIPIID")}
-                  options={urunTypeData?.data}
-                  required={true}
-                  headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
-                  filterParams={urunTypeFilterParams}
-                  handleSelect={(obj: any) => {
-                    setValue("URUNTIPIID", obj.URUNTIPIID);
-                    setValue("URUNTIPIADI", obj.ADI);
-                  }}
-                  handleSearch={(val: string) => {
-                    setUrunTypeFilterParams({
-                      ...urunTypeFilterParams,
-                      q: val,
-                    });
-                  }}
-                  control={control}
-                  disabled={disabled}
-                  setFilterParams={setUrunTypeFilterParams}
-                />
-              </FieldUI>
-              <FieldUI title={t("BOYATIPIADI")}>
-                <SelectOptionsTable
-                  name="BOYATIPIADI"
-                  placeholder={t("BOYATIPIID")}
-                  options={paintTypeData?.data}
-                  required={true}
-                  headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
-                  filterParams={paintTypeFilterParas}
-                  handleSelect={(obj: any) => {
-                    setValue("BOYATIPIID", obj.BOYATIPIID);
-                    setValue("BOYATIPIADI", obj.ADI);
-                  }}
-                  handleSearch={(val: string) => {
-                    setPaintTypeFilterParams({
-                      ...paintTypeFilterParas,
-                      q: val,
-                    });
-                  }}
-                  disabled={disabled}
-                  control={control}
-                  setFilterParams={setPaintTypeFilterParams}
-                />
-              </FieldUI>
+          <div className="h-[500px] overflow-y-scroll designed-scroll">
+            <div className="flex gap-x-10 pb-5">
+              <div className="space-y-3 w-full">
+                <InputFieldUI title={t("ADI")} disabled={disabled}>
+                  <HFTextField
+                    name="ADI"
+                    control={control}
+                    setValue={setValue}
+                    disabled={disabled}
+                    placeholder={t("ADI")}
+                  />
+                </InputFieldUI>
+                <InputFieldUI title={t("URUNTIPIADI")} disabled={disabled}>
+                  <div className="">
+                    <SelectOptionsTable
+                      name="URUNTIPIADI"
+                      placeholder={t("URUNTIPIID")}
+                      options={urunTypeData?.data}
+                      required={true}
+                      headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
+                      filterParams={urunTypeFilterParams}
+                      handleSelect={(obj: any) => {
+                        setValue("URUNTIPIID", obj.URUNTIPIID);
+                        setValue("URUNTIPIADI", obj.ADI);
+                      }}
+                      handleSearch={(val: string) => {
+                        setUrunTypeFilterParams({
+                          ...urunTypeFilterParams,
+                          q: val,
+                        });
+                      }}
+                      control={control}
+                      disabled={disabled}
+                      setFilterParams={setUrunTypeFilterParams}
+                    />
+                  </div>
+                </InputFieldUI>
+                <InputFieldUI title={t("BOYATIPIADI")} disabled={disabled}>
+                  <SelectOptionsTable
+                    name="BOYATIPIADI"
+                    placeholder={t("BOYATIPIID")}
+                    options={paintTypeData?.data}
+                    required={true}
+                    headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
+                    filterParams={paintTypeFilterParas}
+                    handleSelect={(obj: any) => {
+                      setValue("BOYATIPIID", obj.BOYATIPIID);
+                      setValue("BOYATIPIADI", obj.ADI);
+                    }}
+                    handleSearch={(val: string) => {
+                      setPaintTypeFilterParams({
+                        ...paintTypeFilterParas,
+                        q: val,
+                      });
+                    }}
+                    disabled={disabled}
+                    control={control}
+                    setFilterParams={setPaintTypeFilterParams}
+                  />
+                </InputFieldUI>
 
-              <FieldUI title={t("MUTFAKDEPONO")}>
-                <SelectOptionsTable
-                  name="MUTFAKDEPONO"
-                  placeholder={t("MUTFAKDEPONO")}
-                  options={depoData?.data}
-                  required={true}
-                  headColumns={[
-                    { id: "DEPOID", title: "DEPOID", width: 200 },
-                    { id: "ADI", title: "ADI", width: 200 },
-                  ]}
-                  filterParams={depoFilterParams}
-                  handleSelect={(obj: any) => {
-                    setValue("MUTFAKDEPONO", obj.DEPOID);
-                  }}
-                  handleSearch={(val: string) => {
-                    setDepoFilterParams({ ...depoFilterParams, q: val });
-                  }}
-                  control={control}
-                  setFilterParams={setDepoFilterParams}
-                  disabled={disabled}
-                />
-              </FieldUI>
+                <InputFieldUI title={t("MUTFAKDEPONO")} disabled={disabled}>
+                  <SelectOptionsTable
+                    name="MUTFAKDEPONO"
+                    placeholder={t("MUTFAKDEPONO")}
+                    options={depoData?.data}
+                    required={true}
+                    headColumns={[
+                      { id: "DEPOID", title: "DEPOID", width: 200 },
+                      { id: "ADI", title: "ADI", width: 200 },
+                    ]}
+                    filterParams={depoFilterParams}
+                    handleSelect={(obj: any) => {
+                      setValue("MUTFAKDEPONO", obj.DEPOID);
+                    }}
+                    handleSearch={(val: string) => {
+                      setDepoFilterParams({ ...depoFilterParams, q: val });
+                    }}
+                    control={control}
+                    setFilterParams={setDepoFilterParams}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
 
-              <FieldUI title={t("UNITEID")}>
-                <SelectOptionsTable
-                  name="UNITEADI"
-                  placeholder={t("UNITEID")}
-                  options={uniteData?.data}
-                  required={true}
-                  headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
-                  filterParams={uniteFilerParams}
-                  handleSelect={(obj: any) => {
-                    setValue("UNITEID", obj.UNITEID);
-                    setValue("UNITEADI", obj.ADI);
-                  }}
-                  handleSearch={(val: string) => {
-                    setUniteFilterParams({ ...uniteFilerParams, q: val });
-                  }}
-                  control={control}
-                  setFilterParams={setUniteFilterParams}
-                  disabled={disabled}
-                />
-              </FieldUI>
-            </div>
-            <div className="space-y-3 w-full">
-              <FieldUI title={t("BARKOD")}>
-                <HFTextField
-                  name="BARKOD"
-                  control={control}
-                  setValue={setValue}
-                  disabled={disabled}
-                />
-              </FieldUI>
-              {/* <FieldUI title={t("KULLANICIADI")}>
-                <HFTextField
-                  name="KULLANICIADI"
-                  control={control}
-                  setValue={setValue}
-                />
-              </FieldUI> */}
+                <InputFieldUI title={t("UNITEID")} disabled={disabled}>
+                  <SelectOptionsTable
+                    name="UNITEADI"
+                    placeholder={t("UNITEID")}
+                    options={uniteData?.data}
+                    required={true}
+                    headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
+                    filterParams={uniteFilerParams}
+                    handleSelect={(obj: any) => {
+                      setValue("UNITEID", obj.UNITEID);
+                      setValue("UNITEADI", obj.ADI);
+                    }}
+                    handleSearch={(val: string) => {
+                      setUniteFilterParams({ ...uniteFilerParams, q: val });
+                    }}
+                    control={control}
+                    setFilterParams={setUniteFilterParams}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+                <InputFieldUI title={t("BARKOD")} disabled={disabled}>
+                  <HFTextField
+                    name="BARKOD"
+                    control={control}
+                    setValue={setValue}
+                    disabled={disabled}
+                    placeholder={t("BARKOD")}
+                  />
+                </InputFieldUI>
+              </div>
+              <div className="space-y-3 w-full">
+                <div className="grid grid-cols-2 gap-x-2">
+                  <CCheckbox
+                    element={{ label: t("ENVANTEREDAHIL") }}
+                    checked={false}
+                    handleCheck={(obj: { checked: boolean }) => {
+                      setValue("ENVANTEREDAHIL", obj.checked);
+                    }}
+                    disabled={disabled}
+                  />
+                  <CCheckbox
+                    element={{ label: t("KAPALI") }}
+                    checked={false}
+                    handleCheck={(obj: { checked: boolean }) => {
+                      setValue("KAPALI", obj.checked);
+                    }}
+                    disabled={disabled}
+                  />
+                </div>
 
-              <FieldUI title={t("NOTU")}>
-                <HFTextField
-                  name="NOTU"
-                  control={control}
-                  setValue={setValue}
-                  disabled={disabled}
-                />
-              </FieldUI>
-              <div className="grid grid-cols-3 gap-x-2">
-                <CCheckbox
-                  element={{ label: t("ENVANTEREDAHIL") }}
-                  checked={false}
-                  handleCheck={(obj: { checked: boolean }) => {
-                    setValue("ENVANTEREDAHIL", obj.checked);
-                  }}
-                  disabled={disabled}
-                />
-                <CCheckbox
-                  element={{ label: t("KAPALI") }}
-                  checked={false}
-                  handleCheck={(obj: { checked: boolean }) => {
-                    setValue("KAPALI", obj.checked);
-                  }}
-                  disabled={disabled}
-                />
+                <div>
+                  <textarea
+                    className="p-3 h-[217px] transparent border border-[var(--border)] outline-none focus:border-[var(--primary)] resize-none rounded-[8px] w-full"
+                    rows={9}
+                    placeholder={t("NOTU")}
+                    onChange={(e: any) => setValue("NOTU", e.target.value)}
+                  ></textarea>
+                </div>
+
+                {/* <HFTextField
+                name="NOTU"
+                control={control}
+                label={t("NOTU")}
+                setValue={setValue}
+                disabled={disabled}
+              /> */}
               </div>
             </div>
+
+            <div className="ml-[-10px]">
+              <CNewTable
+                title={t("urun_birim_table")}
+                headColumns={headColumns}
+                bodyColumns={tableData?.data ?? []}
+                handleActions={handleActions}
+                isLoading={false}
+                filterParams={filterParams}
+                handleFilterParams={setFilterParams}
+                disablePagination={true}
+                autoHeight={"auto"}
+                disabled={disabled}
+              />
+            </div>
           </div>
-        </CollapseUI>
-        <CollapseUI title={t("urun_birim_table")} defaultOpen={true}>
-          <CNewTable
-            headColumns={headColumns}
-            bodyColumns={tableData?.data ?? []}
-            handleActions={handleActions}
-            isLoading={false}
-            filterParams={filterParams}
-            handleFilterParams={setFilterParams}
-            disablePagination={true}
-            autoHeight={"440px"}
-            disabled={disabled}
-          />
         </CollapseUI>
       </form>
       {open && (

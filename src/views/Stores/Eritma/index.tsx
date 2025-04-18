@@ -193,12 +193,12 @@ export const EritmaPage = () => {
     }
 
     if (status === "delete") {
-      deleteFn([el.URUNRECETEURUNID]);
+      deleteFn([el.URUNID]);
     }
     if (status === "delete_multiple") {
       deleteFn(
-        el.map((item: { URUNRECETEURUNID: string }) => {
-          return item.URUNRECETEURUNID;
+        el.map((item: { URUNID: string }) => {
+          return item.URUNID;
         })
       );
     }

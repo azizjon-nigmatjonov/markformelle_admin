@@ -16,6 +16,7 @@ interface Props {
   handleSortLogic: (val: any) => void;
   searchDebounce: (val: any, val2: any) => void;
   searchedElements: any;
+  disabled: boolean;
 }
 
 export const TableFilter = ({
@@ -27,6 +28,7 @@ export const TableFilter = ({
   handleClick = () => {},
   searchedElements = {},
   sortData,
+  disabled = false,
 }: Props) => {
   return (
     <>
@@ -35,7 +37,9 @@ export const TableFilter = ({
         onClick={handleClick}
       >
         <div>
-          <ExpandMoreIcon style={{ color: "var(--main)" }} />
+          <ExpandMoreIcon
+            style={{ color: disabled ? "var(--gray)" : "var(--main)" }}
+          />
         </div>
       </div>
 

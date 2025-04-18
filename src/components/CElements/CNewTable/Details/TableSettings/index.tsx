@@ -222,7 +222,17 @@ export const HeaderSettings = ({
     <div className="pb-[45px] bg-white border-b border-[var(--border)] rounded-t-[8px]">
       <div className="h-[45px] absolute w-full left-0 top-0 flex items-center desktop:px-3 justify-between">
         <div className="flex items-center space-x-4 h-full">
-          {title ? <h2 className="font-medium">{title}</h2> : ""}
+          {title ? (
+            <h2
+              className={`font-medium ${
+                disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
+              }`}
+            >
+              {title}
+            </h2>
+          ) : (
+            ""
+          )}
           {title ? (
             <div className="w-[1px] h-[60%] bg-[var(--border)]"></div>
           ) : (
@@ -237,7 +247,13 @@ export const HeaderSettings = ({
                 <div className="w-[30px] h-[30px] items-center justify-center flex">
                   <PlusIcon fill={colorMain} width={20} />
                 </div>
-                <p className="text-sm pr-2 text-[var(--black)]">{t("add")}</p>
+                <p
+                  className={`text-sm pr-2 ${
+                    disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
+                  }`}
+                >
+                  {t("add")}
+                </p>
               </IconButton>
             )}
             {defaultFilters.includes("sellect_more") && (
@@ -252,7 +268,7 @@ export const HeaderSettings = ({
                   className={`text-sm pr-2 ${
                     selectedItems.length
                       ? "text-[var(--main)]"
-                      : "text-[var(--black)]"
+                      : "${disabled ? 'text-[var(--gray)]' : 'text-[var(--black)]'}"
                   }`}
                 >
                   {t("sellect_more")}
@@ -275,7 +291,7 @@ export const HeaderSettings = ({
                       width={18}
                     />
                   </div>
-                  <p className="text-sm pr-2 text-[var(--black)]">
+                  <p className="text-sm pr-2 ${disabled ? 'text-[var(--gray)]' : 'text-[var(--black)]'}">
                     {t("delete")}
                   </p>
                 </IconButton>

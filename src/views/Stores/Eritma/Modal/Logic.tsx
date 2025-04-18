@@ -11,11 +11,9 @@ export const ModalTableLogic = ({
   setFormId,
   urunId,
   filterParams,
-  setDisabled = () => {},
 }: {
   urunId?: string;
   filterParams: IFilterParams;
-  setDisabled: (val: boolean) => void;
   setFormId: (val: string) => void;
 }) => {
   const { t } = useTranslationHook();
@@ -76,17 +74,7 @@ export const ModalTableLogic = ({
     }
   );
 
-  const testForm = (id: string) => {
-    axios
-      .get(`${API_URL}/urun/${id.toLocaleUpperCase()}`)
-      .then((res: any) => {
-        setFormId(res?.data?.URUNID);
-        setDisabled(false);
-      })
-      .catch(() => {
-        setDisabled(false);
-      });
-  };
+  const testForm = (_: string) => {};
 
   const createForm = async (params: {}) => {
     try {

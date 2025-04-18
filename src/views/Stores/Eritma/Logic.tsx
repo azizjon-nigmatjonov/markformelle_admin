@@ -32,6 +32,7 @@ export const TableData = ({
         setIsLoading(false);
       });
   };
+
   const deleteFn = async (id: string[]) => {
     try {
       await axios.delete(`${API_URL}/urun/`, {
