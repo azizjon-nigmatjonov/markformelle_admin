@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import HFInputMask from "../../../../components/HFElements/HFInputMask";
 import { SelectOptionsTable } from "../../../../components/UI/Options/Table";
 import { useEffect } from "react";
 import { DetailsFormLogic } from "./Logic";
@@ -7,7 +6,6 @@ import { CloseIcon } from "../../../../components/UI/IconGenerator/Svg";
 import { useTranslationHook } from "../../../../hooks/useTranslation";
 import dayjs from "dayjs";
 import { useGetUrunList } from "../../../../hooks/useFetchRequests/useUrunList";
-import { useGetBirimList } from "../../../../hooks/useFetchRequests/useBirimList";
 import { useGetBirimTypeList } from "../../../../hooks/useFetchRequests/useBrimTypesList";
 import CCheckbox from "../../../../components/CElements/CCheckbox";
 
@@ -159,7 +157,7 @@ export const TableForm = ({
         <CCheckbox
           element={{ label: t("DEFAULTBIRIM") }}
           checked={false}
-          handleCheck={(obj: { checked: boolean }) => {}}
+          handleCheck={(_: { checked: boolean }) => {}}
           // disabled={disabled}
         />
       </div>
