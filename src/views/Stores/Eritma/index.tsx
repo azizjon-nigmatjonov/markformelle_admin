@@ -194,6 +194,7 @@ export const EritmaPage = () => {
 
     if (status === "delete") {
       deleteFn([el.URUNID]);
+      setFilterParams({ page: 0, perPage: 50 });
     }
     if (status === "delete_multiple") {
       deleteFn(
@@ -201,6 +202,7 @@ export const EritmaPage = () => {
           return item.URUNID;
         })
       );
+      setFilterParams({ page: 0, perPage: 50 });
     }
   };
 

@@ -111,7 +111,9 @@ export const SelectOptionsTable = ({
             if (!disabled) setOpen(true);
           }}
         >
-          <ManageSearchIcon />
+          <ManageSearchIcon
+            style={{ color: disabled ? "var(--gray)" : "var(--black)" }}
+          />
         </div>
 
         <Controller

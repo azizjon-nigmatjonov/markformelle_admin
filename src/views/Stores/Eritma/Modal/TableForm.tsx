@@ -8,11 +8,14 @@ import { useTranslationHook } from "../../../../hooks/useTranslation";
 import dayjs from "dayjs";
 import { useGetUrunList } from "../../../../hooks/useFetchRequests/useUrunList";
 import { useGetBirimList } from "../../../../hooks/useFetchRequests/useBirimList";
+import { useGetBirimTypeList } from "../../../../hooks/useFetchRequests/useBrimTypesList";
+import CCheckbox from "../../../../components/CElements/CCheckbox";
 
 interface TableFormProps {
   setOpen: (val: boolean) => void;
   refetch: () => void;
   formId?: string | number | undefined;
+  defaultValue?: any;
 }
 interface FormData {
   URUNID: string;
@@ -29,6 +32,7 @@ export const TableForm = ({
   setOpen,
   formId = "",
   refetch = () => {},
+  defaultValue = {},
 }: TableFormProps) => {
   const { t } = useTranslationHook();
   const { control, handleSubmit, setValue } = useForm<FormData>({
@@ -42,12 +46,10 @@ export const TableForm = ({
   } = useGetUrunList({});
 
   const {
-    birimData,
+    birimTypeData,
     setFilterParams: setFilterParamsBirim,
     filterParams: filterParamsBirim,
-  } = useGetBirimList({
-    enabled: "q",
-  });
+  } = useGetBirimTypeList({});
 
   const { createForm, updateForm, formData } = DetailsFormLogic({
     setOpen,
@@ -77,6 +79,7 @@ export const TableForm = ({
       params.RECETEDEFAULTBIRIM = null;
       params.BARKODDEFAULTBIRIM = null;
       delete params.ADI;
+      delete params.URUNBIRIMID;
 
       // delete params.BIRIMID;
       // delete params.URUNADI;
@@ -105,6 +108,13 @@ export const TableForm = ({
     }
   }, [formData]);
 
+  useEffect(() => {
+    if (defaultValue?.URUNID) {
+      setValue("URUNID", defaultValue.URUNID);
+      setValue("ADI", defaultValue.ADI);
+    }
+  }, [defaultValue]);
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -117,65 +127,44 @@ export const TableForm = ({
           <CloseIcon />
         </div>
       </div>
-
-      <SelectOptionsTable
-        name="URUNID"
-        label={t("URUNID")}
-        focused={true}
-        placeholder={t("URUNID")}
-        options={urunData?.data ?? []}
-        required={true}
-        headColumns={[
-          { id: "URUNID", title: "URUNID" },
-          { id: "ADI", title: "ADI" },
-        ]}
-        filterParams={urunFilterParams}
-        handleSelect={(obj: any) => {
-          setValue("URUNID", obj.URUNID);
-          setValue("ADI", obj.ADI);
-          setFilterParamsBirim({
-            ...filterParamsBirim,
-            q: `URUNID=${obj.URUNID}`,
-          });
-        }}
-        control={control}
-        handleSearch={(val: string) => {
-          setUrunFilterParams({ ...urunFilterParams, q: val });
-        }}
-        setFilterParams={setUrunFilterParams}
-        defaultValue={formData?.URUNID}
-      />
-
-      <SelectOptionsTable
-        name="ADI"
-        label={t("URUNADI")}
-        focused={true}
-        placeholder={t("URUNADI")}
-        options={urunData?.data ?? []}
-        required={true}
-        headColumns={[
-          { id: "URUNID", title: "URUNID" },
-          { id: "ADI", title: "ADI" },
-        ]}
-        filterParams={urunFilterParams}
-        handleSelect={(obj: any) => {
-          setValue("URUNID", obj.URUNID);
-          setValue("ADI", obj.ADI);
-          setFilterParamsBirim({
-            ...filterParamsBirim,
-            q: `URUNID=${obj.URUNID}`,
-          });
-        }}
-        control={control}
-        handleSearch={(val: string) => {
-          setUrunFilterParams({ ...urunFilterParams, q: val });
-        }}
-        setFilterParams={setUrunFilterParams}
-        defaultValue={formData?.URUNID}
-      />
-
+      <div className="grid grid-cols-2 items-end space-x-2">
+        <SelectOptionsTable
+          name="URUNID"
+          label={t("URUNID")}
+          focused={true}
+          placeholder={t("URUNID")}
+          options={urunData?.data ?? []}
+          required={true}
+          headColumns={[
+            { id: "URUNID", title: "URUNID" },
+            { id: "ADI", title: "ADI" },
+          ]}
+          filterParams={urunFilterParams}
+          handleSelect={(obj: any) => {
+            setValue("URUNID", obj.URUNID);
+            setValue("ADI", obj.ADI);
+            setFilterParamsBirim({
+              ...filterParamsBirim,
+              q: `URUNID=${obj.URUNID}`,
+            });
+          }}
+          control={control}
+          handleSearch={(val: string) => {
+            setUrunFilterParams({ ...urunFilterParams, q: val });
+          }}
+          disabled={true}
+          setFilterParams={setUrunFilterParams}
+          defaultValue={formData?.URUNID}
+        />
+        <CCheckbox
+          element={{ label: t("DEFAULTBIRIM") }}
+          checked={false}
+          handleCheck={(obj: { checked: boolean }) => {}}
+          // disabled={disabled}
+        />
+      </div>
       <div className="flex space-x-2 items-end">
-        <HFInputMask
+        {/* <HFInputMask
           control={control}
           name="CARPAN"
           label={t("CARPAN")}
@@ -183,11 +172,33 @@ export const TableForm = ({
           required={true}
           placeholder={t("CARPAN")}
           defaultValue={formData?.MIKTAR}
+        /> */}
+        <SelectOptionsTable
+          name="CARPAN"
+          options={birimTypeData?.data ?? []}
+          required={true}
+          headColumns={[
+            { id: "BIRIMID", title: "Birim id" },
+            { id: "BIRIMADI", title: "Adi" },
+            { id: "CARPAN", title: "CARPAN" },
+          ]}
+          label={t("BIRIMID")}
+          placeholder={t("BIRIMID")}
+          filterParams={filterParamsBirim}
+          handleSelect={(obj: any) => {
+            setValue("BIRIMID", obj.BIRIMID);
+            setValue("CARPAN", obj.CARPAN);
+          }}
+          defaultValue={0}
+          readOnly={true}
+          control={control}
+          position="right"
+          setFilterParams={setFilterParamsBirim}
         />
         <div className="w-[90px]">
           <SelectOptionsTable
             name="BIRIMID"
-            options={birimData?.data ?? []}
+            options={birimTypeData?.data ?? []}
             required={true}
             headColumns={[
               { id: "BIRIMID", title: "Birim id" },
@@ -196,19 +207,17 @@ export const TableForm = ({
             ]}
             filterParams={filterParamsBirim}
             handleSelect={(obj: any) => {
-              console.log("ob", obj);
-
               setValue("BIRIMID", obj.BIRIMID);
-              setValue("URUNBIRIMID", obj.URUNBIRIMID);
+              setValue("CARPAN", obj.CARPAN);
             }}
             defaultValue={0}
             readOnly={true}
             control={control}
+            position="right"
             setFilterParams={setFilterParamsBirim}
           />
         </div>
-      </div>
-
+      </div>{" "}
       {/* <HFTextField
         name="KULLANICIADI"
         control={control}

@@ -30,7 +30,7 @@ const CCheckbox = ({
           handleCheck({ ...element, checked: !value });
         }
       }}
-      className={`flex items-center rounded-[4px] border-[var(--border)] w-full whitespace-nowrap ${
+      className={`flex items-center rounded-[8px] border-[var(--border)] w-full whitespace-nowrap ${
         element?.label ? "border gap-2 px-[12px] h-[35px]" : ""
       } ${disabled ? "cursor-not-allowed " : "cursor-pointer "}`}
     >

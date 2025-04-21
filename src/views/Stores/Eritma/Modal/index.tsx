@@ -74,16 +74,16 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
     uniteData,
   } = useGetUniteList();
 
-  const { control, handleSubmit, setValue, getValues, reset } =
+  const { control, handleSubmit, setValue, getValues, reset, watch } =
     useForm<IModalForm>({
       mode: "onSubmit",
       // resolver: yupResolver(schema),
     });
 
   const onSubmit = (data: any) => {
-    if (!data.URUNID || !data.INSERTTARIHI) {
-      return;
-    }
+    // if (!data.URUNID || !data.INSERTTARIHI) {
+    //   return;
+    // }
     let params: any = data;
 
     if (formId) {
@@ -102,12 +102,12 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
       params.KDVORANI = 0;
       params.KULLANICIADI = "Supervisor";
       params.INSERTTARIHI = dayjs();
-      params.SONALISTARIHI = dayjs();
+      // params.SONALISTARIHI = dayjs();
       params.KIMYASALTIPIID = null;
       params.TEMINSURESI = 0;
       params.RAF = null;
       params.TRANSFERKODU = null;
-      params.SONALISSTOKDETAYID = null;
+      // params.SONALISSTOKDETAYID = null;
 
       delete params.BOYATIPIADI;
       delete params.KULLANICIADI;
@@ -140,25 +140,14 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
   };
 
   useEffect(() => {
-    if (formData?.URUNID) {
-      setFormValues(formData);
-    } else {
-      setValue("KAPALI", false);
-      setValue("ENVANTEREDAHIL", false);
-      setValue("BOYATIPIADI", "");
-      setValue("URUNTIPIADI", "");
-      setValue("UNITEADI", "");
-      setValue("URUNTIPIADI", "");
-      setValue("MUTFAKDEPONO", "D008");
-      setValue("URUNID", "");
-    }
+    if (formData?.URUNID) setFormValues(formData);
   }, [formData]);
 
   useEffect(() => {
     if (defaultData?.URUNID) {
       setFormId(defaultData.URUNID);
     }
-  }, [defaultData]);
+  }, [defaultData, disabled]);
 
   const handleActions = (el: any, status: string) => {
     setModalInitialData({});
@@ -192,14 +181,18 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
       .catch(() => {
         reset();
         setFormId("");
+        setValue("URUNID", urunId);
+        setValue("MUTFAKDEPONO", "D008");
+        setValue("ENVANTEREDAHIL", true);
       })
       .finally(() => {
+        setValue("URUNID", urunId);
         setTimeout(() => {
           setDisabled(false);
-          setValue("URUNID", urunId);
-        }, 0);
+        }, 200);
       });
   };
+  const disableType = watch("URUNTIPIID");
 
   return (
     <>
@@ -263,6 +256,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
                       handleSelect={(obj: any) => {
                         setValue("URUNTIPIID", obj.URUNTIPIID);
                         setValue("URUNTIPIADI", obj.ADI);
+                        // setEditPaint(obj.URUNTIPIID);
                       }}
                       handleSearch={(val: string) => {
                         setUrunTypeFilterParams({
@@ -276,6 +270,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
                     />
                   </div>
                 </InputFieldUI>
+
                 <InputFieldUI title={t("BOYATIPIADI")} disabled={disabled}>
                   <SelectOptionsTable
                     name="BOYATIPIADI"
@@ -294,7 +289,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
                         q: val,
                       });
                     }}
-                    disabled={disabled}
+                    disabled={disableType !== 0}
                     control={control}
                     setFilterParams={setPaintTypeFilterParams}
                   />
@@ -388,8 +383,9 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
             <div className="ml-[-10px]">
               <CNewTable
                 title={t("urun_birim_table")}
-                key={formId ? formId : "empty"}
-                headColumns={formId ? headColumns : []}
+                key={formId ? formId : "modal"}
+                headColumns={headColumns}
+                idForTable="inner_table_birim"
                 bodyColumns={formId ? tableData?.data : []}
                 handleActions={handleActions}
                 isLoading={false}
@@ -409,6 +405,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
             setOpen={setOpen}
             refetch={refetch}
             formId={modalInitialData?.URUNBIRIMID}
+            defaultValue={formData}
           />
 
           <div
