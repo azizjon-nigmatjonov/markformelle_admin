@@ -5,12 +5,14 @@ interface Props {
   value: any;
   searchDebounce: (val: any, val2: any) => void;
   colId: any;
+  handleKeyDown?: (val: {}) => void;
 }
 
 export const SearchField = ({
   value,
   searchDebounce = () => {},
   colId,
+  handleKeyDown = () => {},
 }: Props) => {
   return (
     <Tooltip
@@ -41,6 +43,7 @@ export const SearchField = ({
           onChange={(e: any) => {
             searchDebounce(e.target.value, colId);
           }}
+          onKeyDown={(e: {}) => handleKeyDown(e)}
           value={value}
           className="ml-6 h-full w-full border border-[var(--border)] rounded-[4px] text-[var(--black)] pl-1 pr-3"
           style={{ padding: "0" }}

@@ -13,15 +13,11 @@ import { useGetPaintTypeList } from "../../../../hooks/useFetchRequests/usePaint
 import { useGetDepoList } from "../../../../hooks/useFetchRequests/useDepoList";
 import CNewTable from "../../../../components/CElements/CNewTable";
 import { ModalTableLogic } from "./Logic";
-import { GetCurrentDate } from "../../../../utils/getDate";
 import { TableForm } from "./TableForm";
 import dayjs from "dayjs";
 import { Alert } from "@mui/material";
-import { SearchIcon } from "../../../../components/UI/IconGenerator/Svg";
 import axios from "axios";
 const API_URL = import.meta.env.VITE_TEST_URL;
-// import { SearchIcon } from "../../../../components/UI/IconGenerator/Svg";
-// const schema = Validation;
 interface ModalUIProps {
   defaultData?: ModalTypes;
   URUNBIRIMID?: string;
@@ -78,47 +74,26 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
     uniteData,
   } = useGetUniteList();
 
-  // console.log("formData", formData);
-  // console.log("defaultData", defaultData);
-
-  const { control, handleSubmit, setValue, getValues } = useForm<IModalForm>({
-    mode: "onSubmit",
-    // resolver: yupResolver(schema),
-  });
-
-  // {
-  //   "URUNID": "OY001",
-  //   "ADI": "test",
-  //   "URUNTIPIID": 0,
-  //   "BOYATIPIID": 1,
-  //   "MUTFAKDEPONO": "D008",
-  //   "UNITEID": 1,
-  //   "KIMYASALTIPIID": null,
-  //   "KDVORANI": 0,
-  //   "NOTU": "test",
-  //   "TEMINSURESI": 0,
-  //   "RAF": null,
-  //   "TRANSFERKODU": null,
-  //   "ENVANTEREDAHIL": true,
-  //   "SONALISSTOKDETAYID": null,
-  //   "SONALISTARIHI": "2025-04-18T06:03:48.648Z",
-  //   "BARKOD": "string",
-  //   "KAPALI": false,
-  //   "INSERTKULLANICIID": 1,
-  //   "INSERTTARIHI": "2025-04-18T06:03:48.648Z",
-  //   "DEGISIMTARIHI": "2025-04-18T06:03:48.648Z",
-  //   "KULLANICIID": 1
-  // }
+  const { control, handleSubmit, setValue, getValues, reset } =
+    useForm<IModalForm>({
+      mode: "onSubmit",
+      // resolver: yupResolver(schema),
+    });
 
   const onSubmit = (data: any) => {
-    const params: any = data;
+    if (!data.URUNID || !data.INSERTTARIHI) {
+      return;
+    }
+    let params: any = data;
 
-    createForm(params);
     if (formId) {
+      params = { ...formData, ...params };
+
       delete params.BOYATIPIADI;
       delete params.KULLANICIADI;
       delete params.URUNTIPIADI;
       delete params.UNITEADI;
+
       updateForm(params, formId);
     } else {
       params.DEGISIMTARIHI = dayjs();
@@ -141,32 +116,32 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
 
       createForm(params);
     }
-    // console.log("params", params);
+  };
+
+  const setFormValues = (form: any) => {
+    setValue("URUNID", form.URUNID);
+    setValue("UNITEID", form.UNITEID);
+    setValue("UNITEADI", form.UNITEADI);
+    setValue("ADI", form.ADI);
+    setValue("BARKOD", form.BARKOD);
+
+    setValue("MUTFAKDEPONO", form.MUTFAKDEPONO);
+
+    setValue("BOYATIPIID", form.BOYATIPIID);
+    setValue("BOYATIPIADI", form.BOYATIPIADI);
+
+    setValue("URUNTIPIID", form.URUNTIPIID);
+    setValue("URUNTIPIADI", form.URUNTIPIADI);
+    setValue("KULLANICIADI", form.KULLANICIADI);
+
+    setValue("NOTU", form.NOTU);
+    setValue("KAPALI", form.KAPALI);
+    setValue("ENVANTEREDAHIL", form.ENVANTEREDAHIL);
   };
 
   useEffect(() => {
     if (formData?.URUNID) {
-      setValue("URUNID", formData.URUNID);
-      setValue("UNITEID", formData.UNITEID);
-      setValue("UNITEADI", formData.UNITEADI);
-      setValue("ADI", formData.ADI);
-      setValue("BARKOD", formData.BARKOD);
-
-      setValue("MUTFAKDEPONO", formData.MUTFAKDEPONO);
-
-      setValue("BOYATIPIID", formData.BOYATIPIID);
-      setValue("BOYATIPIADI", formData.BOYATIPIADI);
-
-      setValue("URUNTIPIID", formData.URUNTIPIID);
-      setValue("URUNTIPIADI", formData.URUNTIPIADI);
-      setValue("KULLANICIADI", formData.KULLANICIADI);
-      setValue("INSERTTARIHI", formData.INSERTTARIHI);
-      setValue("ENVANTEREDAHIL", formData.ENVANTEREDAHIL);
-
-      setValue(
-        "DEGISIMTARIHI",
-        GetCurrentDate({ type: "usually", date: formData.DEGISIMTARIHI })
-      );
+      setFormValues(formData);
     } else {
       setValue("KAPALI", false);
       setValue("ENVANTEREDAHIL", false);
@@ -174,7 +149,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
       setValue("URUNTIPIADI", "");
       setValue("UNITEADI", "");
       setValue("URUNTIPIADI", "");
-      setValue("MUTFAKDEPONO", "");
+      setValue("MUTFAKDEPONO", "D008");
       setValue("URUNID", "");
     }
   }, [formData]);
@@ -194,12 +169,12 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
       setModalInitialData(el);
     }
 
-    if (status === "delete") deleteFn([el.URUNRECETEDETAYID]);
+    if (status === "delete") deleteFn([el.URUNBIRIMID]);
 
     if (status === "delete_multiple") {
       deleteFn(
-        el.map((item: { URUNRECETEDETAYID: number }) => {
-          return item.URUNRECETEDETAYID;
+        el.map((item: { URUNBIRIMID: number }) => {
+          return item.URUNBIRIMID;
         })
       );
     }
@@ -211,60 +186,59 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
     axios
       .get(`${API_URL}/urun/${urunId}`)
       .then((res: any) => {
+        setFormValues(res?.data);
         setFormId(res?.data?.URUNID);
-        setDisabled(false);
       })
       .catch(() => {
-        setDisabled(false);
+        reset();
+        setFormId("");
       })
       .finally(() => {
-        setValue("URUNID", urunId);
+        setTimeout(() => {
+          setDisabled(false);
+          setValue("URUNID", urunId);
+        }, 0);
       });
   };
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="pb-3 flex justify-between space-x-3">
-          <div className="flex space-x-2 items-center">
-            <div className="min-w-[400px]">
-              <InputFieldUI title={t("URUNID")}>
-                <div className="w-[200px]">
-                  <HFTextField
-                    name="URUNID"
-                    control={control}
-                    setValue={setValue}
-                    placeholder={t("URUNID")}
-                  />
-                </div>
-              </InputFieldUI>
+        <div className="pb-3 grid grid-cols-2 gap-x-10">
+          <InputFieldUI title={t("URUNID")}>
+            <div className="w-full">
+              <HFTextField
+                name="URUNID"
+                control={control}
+                setValue={setValue}
+                placeholder={t("URUNID")}
+                onKeydown={(keyCode: number) => {
+                  if (keyCode === 13) handleCheck();
+                }}
+              />
             </div>
-            <button
-              className="bg-[var(--primary)] w-[40px] h-[34px] flex items-center justify-center rounded-[8px]"
-              type="button"
-              onClick={() => handleCheck()}
-            >
-              <SearchIcon fill="white" width={18} />
-            </button>
-          </div>
-          <div className="w-full">
-            <Alert severity={"info"} style={{ height: "35px" }}>
-              {t("add_unique_id")}
-            </Alert>
-          </div>
+          </InputFieldUI>
 
-          <div className="w-[300px]">
-            <button
-              className="custom-btn"
-              style={{ backgroundColor: disabled ? "var(--gray)" : "" }}
-              type={disabled ? "button" : "submit"}
-            >
-              {t(formId ? "update" : "create")}
-            </button>
+          <div className="flex space-x-3">
+            <div className="w-full">
+              <Alert severity={"info"} style={{ height: "35px" }}>
+                {t("add_unique_id")}
+              </Alert>
+            </div>
+
+            <div className="w-[200px]">
+              <button
+                className="custom-btn"
+                style={{ backgroundColor: disabled ? "var(--gray)" : "" }}
+                type={disabled ? "button" : "submit"}
+              >
+                {t(formId ? "update" : "create")}
+              </button>
+            </div>
           </div>
         </div>
 
-        <CollapseUI title={t("urun_form")}>
+        <CollapseUI title={t("urun_form")} disabled={disabled}>
           <div className="h-[500px] overflow-y-scroll designed-scroll">
             <div className="flex gap-x-10 pb-5">
               <div className="space-y-3 w-full">
@@ -383,7 +357,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
                 <div className="grid grid-cols-2 gap-x-2">
                   <CCheckbox
                     element={{ label: t("ENVANTEREDAHIL") }}
-                    checked={false}
+                    checked={getValues("ENVANTEREDAHIL")}
                     handleCheck={(obj: { checked: boolean }) => {
                       setValue("ENVANTEREDAHIL", obj.checked);
                     }}
@@ -391,7 +365,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
                   />
                   <CCheckbox
                     element={{ label: t("KAPALI") }}
-                    checked={false}
+                    checked={getValues("KAPALI")}
                     handleCheck={(obj: { checked: boolean }) => {
                       setValue("KAPALI", obj.checked);
                     }}
@@ -404,25 +378,19 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
                     className="p-3 h-[217px] transparent border border-[var(--border)] outline-none focus:border-[var(--primary)] resize-none rounded-[8px] w-full"
                     rows={9}
                     placeholder={t("NOTU")}
+                    defaultValue={getValues("NOTU")}
                     onChange={(e: any) => setValue("NOTU", e.target.value)}
                   ></textarea>
                 </div>
-
-                {/* <HFTextField
-                name="NOTU"
-                control={control}
-                label={t("NOTU")}
-                setValue={setValue}
-                disabled={disabled}
-              /> */}
               </div>
             </div>
 
             <div className="ml-[-10px]">
               <CNewTable
                 title={t("urun_birim_table")}
-                headColumns={headColumns}
-                bodyColumns={tableData?.data ?? []}
+                key={formId ? formId : "empty"}
+                headColumns={formId ? headColumns : []}
+                bodyColumns={formId ? tableData?.data : []}
                 handleActions={handleActions}
                 isLoading={false}
                 filterParams={filterParams}

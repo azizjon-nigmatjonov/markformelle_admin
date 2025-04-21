@@ -9,6 +9,7 @@ interface Props {
   title?: string;
   id?: string;
   close?: any;
+  handleKeyDown?: (val: {}) => void;
 }
 
 const Closer = ({ closeField = () => {}, title, close = false }: Props) => {
@@ -26,7 +27,11 @@ const Closer = ({ closeField = () => {}, title, close = false }: Props) => {
   );
 };
 
-export const Field = ({ obj = {}, searchDebounce = () => {} }: Props) => {
+export const Field = ({
+  obj = {},
+  searchDebounce = () => {},
+  handleKeyDown = () => {},
+}: Props) => {
   return (
     <div>
       <>
@@ -41,6 +46,7 @@ export const Field = ({ obj = {}, searchDebounce = () => {} }: Props) => {
           searchDebounce={searchDebounce}
           colId={obj?.id}
           value={obj.value}
+          handleKeyDown={handleKeyDown}
         />
       </>
     </div>

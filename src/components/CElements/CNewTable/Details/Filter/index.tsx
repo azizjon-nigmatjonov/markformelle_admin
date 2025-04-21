@@ -86,6 +86,7 @@ export const SideFilter = ({
   headColumns = [],
   searchedElements = {},
   defaultSearch = {},
+  handleKeyDown = () => {},
 }: {
   handleClick: () => void;
   sideFilter: boolean;
@@ -94,6 +95,8 @@ export const SideFilter = ({
   headColumns: any;
   searchedElements: any;
   defaultSearch: any;
+
+  handleKeyDown: (val: any) => void;
 }) => {
   const [newHeadColumns, setNewHeadColumns] = useState<any>([]);
   const { t } = useTranslationHook();
@@ -153,6 +156,7 @@ export const SideFilter = ({
                       value: val,
                       close: !(key in defaultSearch),
                     }}
+                    handleKeyDown={handleKeyDown}
                     searchDebounce={searchDebounce}
                   />
                 </div>

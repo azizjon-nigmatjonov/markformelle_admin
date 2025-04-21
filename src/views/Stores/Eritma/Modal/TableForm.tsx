@@ -55,31 +55,6 @@ export const TableForm = ({
     refetch,
   });
 
-  //   {
-  //     "URUNID": "BY001",
-  //     "ADI": "NYLOSET YELLOW N-PGL",
-  //     "CARPAN": "100",
-  //     "BIRIMID": "Gr",
-  //     "URUNBIRIMID": 2,
-  //     "KULLANICIADI": "Supervisor",
-  //     "INSERTKULLANICIID": 1,
-  //     "INSERTTARIHI": "2021-05-17T03:46:37",
-  //     "KULLANICIID": 1,
-  //     "DEGISIMTARIHI": "2025-04-17T16:05:43"
-  // }
-
-  //   {
-  //     "URUNID": "BY001",
-  //     "ADI": "NYLOSET YELLOW N-PGL",
-  //     "CARPAN": "1",
-  //     "BIRIMID": "Kg",
-  //     "URUNBIRIMID": 1,
-  //     "DEGISIMTARIHI": "2025-04-17T16:10:46",
-  //     "KULLANICIID": 1,
-  //     "INSERTKULLANICIID": 1,
-  //     "INSERTTARIHI": "2025-04-17T16:10:46",
-  //     "KULLANICIADI": "Supervisor"
-  // }
   const onSubmit = (data: any) => {
     const params: any = data;
     if (formId) {
@@ -91,11 +66,17 @@ export const TableForm = ({
 
       updateForm(params, formId);
     } else {
-      params.DEGISIMTARIHI = dayjs().format("YYYY-MM-DDTHH:mm:ss");
+      params.DEGISIMTARIHI = dayjs();
       params.KULLANICIID = 1;
       params.INSERTKULLANICIID = 1;
-      params.INSERTTARIHI = dayjs().format("YYYY-MM-DDTHH:mm:ss");
-      params.KULLANICIADI = "Supervisor";
+      params.INSERTTARIHI = dayjs();
+      // params.KULLANICIADI = "Supervisor";
+      // params.INSERKULLANICIADI = 'Superviser'
+      params.CARPAN = +params.CARPAN;
+      params.DEFAULTBIRIM = params.URUNBIRIMID;
+      params.RECETEDEFAULTBIRIM = null;
+      params.BARKODDEFAULTBIRIM = null;
+      delete params.ADI;
 
       // delete params.BIRIMID;
       // delete params.URUNADI;
@@ -118,6 +99,9 @@ export const TableForm = ({
       setValue("BIRIMID", formData.BIRIMID);
       setValue("URUNBIRIMID", formData.URUNBIRIMID);
       setValue("KULLANICIADI", formData.KULLANICIADI);
+    } else {
+      setValue("URUNBIRIMID", 1);
+      setValue("BIRIMID", "Kg");
     }
   }, [formData]);
 
@@ -212,6 +196,8 @@ export const TableForm = ({
             ]}
             filterParams={filterParamsBirim}
             handleSelect={(obj: any) => {
+              console.log("ob", obj);
+
               setValue("BIRIMID", obj.BIRIMID);
               setValue("URUNBIRIMID", obj.URUNBIRIMID);
             }}

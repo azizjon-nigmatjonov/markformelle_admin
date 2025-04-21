@@ -585,24 +585,16 @@ const CNewTable = ({
     setHeight(height);
   }, [openHeader]);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setSelectedItems([]);
-        setOpenSelect(false);
-      }
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      setSelectedItems([]);
+      setOpenSelect(false);
+    }
 
-      if (e.key === "Enter" && Object.values(searchedElements)?.[0]) {
-        SetFiltersFn(searchedElements);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [searchedElements]);
+    if (e.key === "Enter" && Object.values(searchedElements)?.[0]) {
+      SetFiltersFn(searchedElements);
+    }
+  };
 
   const handleSelectAll = () => {
     const rowIndexes = bodySource.map(
@@ -668,6 +660,7 @@ const CNewTable = ({
             searchDebounce={searchDebounce}
             headColumns={newHeadColumns}
             defaultSearch={defaultSearch}
+            handleKeyDown={handleKeyDown}
           />
           <div className={`w-full overflow-x-scroll designed-scroll`}>
             <CTableWrapper
@@ -695,7 +688,11 @@ const CNewTable = ({
                         {areAllRowsSelectedOnPage(
                           selectedItems,
                           bodySource
-                        ) && <CheckIcon style={{ fill: "red", width: 14 }} />}
+                        ) && (
+                          <CheckIcon
+                            style={{ fill: "var(--main)", width: 14 }}
+                          />
+                        )}
                       </div>
                     )}
                   </div>

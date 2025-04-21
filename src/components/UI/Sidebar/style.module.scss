@@ -5,4 +5,5 @@
   background-color: white;
   position: relative;
   @include  remove-scroll;
+  border-bottom-right-radius: 12px;
 }

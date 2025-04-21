@@ -20,6 +20,7 @@ const InputUI = ({
   errors = {},
   placeholder,
   setPassword = () => {},
+  onKeydown = () => {},
 }: {
   value: any;
   name: string;
@@ -34,6 +35,7 @@ const InputUI = ({
   defaultValue?: any;
   onChange: any;
   placeholder: string;
+  onKeydown?: (val: number) => void;
   setPassword: (val: any) => void;
 }) => {
   useEffect(() => {
@@ -59,6 +61,7 @@ const InputUI = ({
             ? "text"
             : type
         }
+        onKeyDown={(e: { keyCode: number }) => onKeydown(e.keyCode)}
         autoComplete="off"
         InputProps={{
           readOnly: readOnly,
@@ -100,6 +103,7 @@ interface Props {
   errors?: any;
   readOnly?: boolean;
   autoComplete?: string;
+  onKeydown?: (val: number) => void;
   handleChange?: (name: string, value: any) => void;
 }
 
@@ -118,6 +122,7 @@ const HFTextField = ({
   readOnly = false,
   placeholder,
   handleChange = () => {},
+  onKeydown = () => {},
   ...props
 }: Props) => {
   const [password, setPassword] = useState(true);
@@ -151,6 +156,7 @@ const HFTextField = ({
               onChange(value);
               handleChange(name, value);
             }}
+            onKeydown={onKeydown}
             readOnly={readOnly}
             disabled={disabled}
             errors={errors}

@@ -17,6 +17,8 @@ export const ModalTableLogic = ({
   setFormId: (val: string) => void;
 }) => {
   const { t } = useTranslationHook();
+  const [bodyData, setBodyData]: any = useState({});
+
   const headColumns = useMemo(() => {
     return [
       { id: "URUNID", title: "URUNID" },
@@ -43,10 +45,24 @@ export const ModalTableLogic = ({
     ];
   }, []);
 
-  const [bodyData, setBodyData]: any = useState({});
+  const { data: formData, refetch } = useQuery(
+    ["GET_URUN_DATA_FORM", urunId],
+    () => {
+      return axios.get(`${API_URL}/urun/${urunId}`);
+    },
+    {
+      enabled: !!urunId,
+    }
+  );
+
   const getTableData = (filters?: IFilterParams) => {
-    if (!filters?.page) filters = filterParams;
     setBodyData({});
+    if (!filters?.page)
+      filters = {
+        page: 1,
+        perPage: 100,
+      };
+
     axios
       .get(
         `${API_URL}/urunbirim/?URUNID=${urunId}&skip=${
@@ -64,22 +80,11 @@ export const ModalTableLogic = ({
     }
   }, [urunId, filterParams]);
 
-  const { data: formData } = useQuery(
-    ["GET_URUN_DATA_FORM", urunId],
-    () => {
-      return axios.get(`${API_URL}/urun/${urunId}`);
-    },
-    {
-      enabled: !!urunId,
-    }
-  );
-
   const testForm = (_: string) => {};
 
   const createForm = async (params: {}) => {
     try {
       const { data } = await axios.post(`${API_URL}/urun/`, params);
-      console.log("data", data);
 
       setFormId(data?.URUNID);
       return data;
@@ -92,8 +97,8 @@ export const ModalTableLogic = ({
 
   const updateForm = async (params: {}, id: string) => {
     try {
-      const { data } = await axios.put(`${API_URL}/urunrecete/${id}`, params);
-
+      const { data } = await axios.put(`${API_URL}/urun/${id}`, params);
+      refetch();
       return data;
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
@@ -103,9 +108,9 @@ export const ModalTableLogic = ({
 
   const deleteFn = async (id: string[]) => {
     try {
-      await axios.delete(`${API_URL}/urunrecetedetay/`, {
+      await axios.delete(`${API_URL}/urunbirim/`, {
         method: "DELETE",
-        url: `${API_URL}/urunrecetedetay/`,
+        url: `${API_URL}/urunbirim/`,
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",

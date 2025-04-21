@@ -268,7 +268,11 @@ export const HeaderSettings = ({
                   className={`text-sm pr-2 ${
                     selectedItems.length
                       ? "text-[var(--main)]"
-                      : "${disabled ? 'text-[var(--gray)]' : 'text-[var(--black)]'}"
+                      : `${
+                          disabled
+                            ? "text-[var(--gray)]"
+                            : "text-[var(--black)]"
+                        }`
                   }`}
                 >
                   {t("sellect_more")}
@@ -291,7 +295,11 @@ export const HeaderSettings = ({
                       width={18}
                     />
                   </div>
-                  <p className="text-sm pr-2 ${disabled ? 'text-[var(--gray)]' : 'text-[var(--black)]'}">
+                  <p
+                    className={`text-sm pr-2 ${
+                      disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
+                    }`}
+                  >
                     {t("delete")}
                   </p>
                 </IconButton>
