@@ -251,7 +251,9 @@ export const EritmaPage = () => {
 
       {open && (
         <CNewModal
-          title={t("creating_urun")}
+          title={t(
+            modalInitialData.URUNID ? "updating_chemical" : "creating_chemical"
+          )}
           handleActions={handleModalActions}
         >
           <ModalUI defaultData={modalInitialData} />

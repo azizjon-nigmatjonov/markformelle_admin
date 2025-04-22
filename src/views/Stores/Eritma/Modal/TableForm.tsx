@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import { useGetBirimTypeList } from "../../../../hooks/useFetchRequests/useBrimTypesList";
 import CCheckbox from "../../../../components/CElements/CCheckbox";
 import HFTextField from "../../../../components/HFElements/HFTextField";
+import CLabel from "../../../../components/CElements/CLabel";
 
 interface TableFormProps {
   setOpen: (val: boolean) => void;
@@ -22,7 +23,7 @@ interface FormData {
   BIRIMID: string;
   INSERTTARIHI: string;
   CARPAN: number;
-  ADI: string;
+  DEFAULTBIRIM?: string;
   KULLANICIADI?: string;
 }
 
@@ -33,7 +34,7 @@ export const TableForm = ({
   defaultValue = {},
 }: TableFormProps) => {
   const { t } = useTranslationHook();
-  const { control, handleSubmit, setValue } = useForm<FormData>({
+  const { control, handleSubmit, setValue, getValues } = useForm<FormData>({
     mode: "onSubmit",
   });
 
@@ -50,33 +51,24 @@ export const TableForm = ({
   });
 
   const onSubmit = (data: any) => {
-    const params: any = data;
-    if (formId) {
-      params.INSERTKULLANICIID = formData.INSERTKULLANICIID;
-      params.INSERTTARIHI = formData.INSERTTARIHI;
-      params.KULLANICIID = formData.KULLANICIID;
-      params.DEGISIMTARIHI = formData.DEGISIMTARIHI;
-      console.log("params", params);
+    let params: any = data;
+
+    if (formData?.INSERTTARIHI) {
+      params = { ...formData, ...data };
+      params.DEFAULTBIRIM = +params.DEFAULTBIRIM;
 
       updateForm(params, formId);
     } else {
-      params.DEGISIMTARIHI = dayjs();
-      params.KULLANICIID = 1;
-      params.INSERTKULLANICIID = 1;
-      params.INSERTTARIHI = dayjs();
-      // params.KULLANICIADI = "Supervisor";
-      // params.INSERKULLANICIADI = 'Superviser'
-      params.CARPAN = +params.CARPAN;
-      params.DEFAULTBIRIM = params.URUNBIRIMID;
-      params.RECETEDEFAULTBIRIM = null;
-      params.BARKODDEFAULTBIRIM = null;
       delete params.ADI;
       delete params.URUNBIRIMID;
 
-      // delete params.BIRIMID;
-      // delete params.URUNADI;
-
-      console.log("params", params);
+      params.DEFAULTBIRIM = +params.DEFAULTBIRIM;
+      params.RECETEDEFAULTBIRIM = null;
+      params.BARKODDEFAULTBIRIM = null;
+      params.INSERTKULLANICIID = 1;
+      params.INSERTTARIHI = dayjs();
+      params.DEGISIMTARIHI = dayjs();
+      params.KULLANICIID = 1;
 
       createForm(params);
     }
@@ -84,26 +76,23 @@ export const TableForm = ({
 
   useEffect(() => {
     if (formData?.URUNID) {
-      setFilterParamsBirim({
-        ...filterParamsBirim,
-        q: `URUNID=${formData.URUNID}`,
-      });
       setValue("CARPAN", formData.CARPAN);
       setValue("URUNID", formData.URUNID);
-      setValue("ADI", formData.URUNADI);
       setValue("BIRIMID", formData.BIRIMID);
       setValue("URUNBIRIMID", formData.URUNBIRIMID);
       setValue("KULLANICIADI", formData.KULLANICIADI);
+      setValue("DEFAULTBIRIM", "" + formData.DEFAULTBIRIM);
     } else {
       setValue("URUNBIRIMID", 1);
       setValue("BIRIMID", "Kg");
+      setValue("CARPAN", 1);
+      setValue("DEFAULTBIRIM", "0");
     }
   }, [formData]);
 
   useEffect(() => {
     if (defaultValue?.URUNID) {
       setValue("URUNID", defaultValue.URUNID);
-      setValue("ADI", defaultValue.ADI);
     }
   }, [defaultValue]);
 
@@ -119,31 +108,16 @@ export const TableForm = ({
           <CloseIcon />
         </div>
       </div>
-      <div className="grid grid-cols-2 items-end space-x-2">
-        <HFTextField
-          control={control}
-          name="URUNID"
-          placeholder={t("URUNID")}
-          label={t("URUNID")}
-          disabled={true}
-        />
-        <CCheckbox
-          element={{ label: t("DEFAULTBIRIM") }}
-          checked={false}
-          handleCheck={(_: { checked: boolean }) => {}}
-          // disabled={disabled}
-        />
-      </div>
-      <div className="flex space-x-2 items-end">
-        {/* <HFInputMask
-          control={control}
-          name="CARPAN"
-          label={t("CARPAN")}
-          type="number"
-          required={true}
-          placeholder={t("CARPAN")}
-          defaultValue={formData?.MIKTAR}
-        /> */}
+
+      <HFTextField
+        control={control}
+        name="URUNID"
+        placeholder={t("URUNID")}
+        label={t("URUNID")}
+        disabled={true}
+      />
+
+      <div className="grid grid-cols-2 gap-x-2 items-end">
         <SelectOptionsTable
           name="BIRIMID"
           label={t("BIRIMID")}
@@ -185,6 +159,16 @@ export const TableForm = ({
           control={control}
           position="right"
           setFilterParams={setFilterParamsBirim}
+        />
+      </div>
+      <div>
+        <CLabel title={t("DEFAULTBIRIM")} />
+        <CCheckbox
+          element={{ label: t("DEFAULTBIRIM") }}
+          checked={getValues("DEFAULTBIRIM") == "1"}
+          handleCheck={(obj: { checked: boolean }) => {
+            setValue("DEFAULTBIRIM", obj.checked ? "1" : "0");
+          }}
         />
       </div>
       <div className="flex space-x-2 mt-3">

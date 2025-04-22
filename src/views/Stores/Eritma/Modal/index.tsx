@@ -153,7 +153,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
     setModalInitialData({});
     if (status === "modal") setOpen(true);
 
-    if (status === "view") {
+    if (status === "view" || status === "edit") {
       setOpen(true);
       setModalInitialData(el);
     }
@@ -256,7 +256,6 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
                       handleSelect={(obj: any) => {
                         setValue("URUNTIPIID", obj.URUNTIPIID);
                         setValue("URUNTIPIADI", obj.ADI);
-                        // setEditPaint(obj.URUNTIPIID);
                       }}
                       handleSearch={(val: string) => {
                         setUrunTypeFilterParams({

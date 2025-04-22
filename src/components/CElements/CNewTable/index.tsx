@@ -1,4 +1,4 @@
-import { styled, TableRow } from "@mui/material";
+import { TableRow } from "@mui/material";
 
 import {
   CTableHeadCell,
@@ -12,7 +12,6 @@ import { HeaderSettings } from "./Details/TableSettings";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import TabbleActions from "./Details/Actions";
-import { DotsVerticalIcon } from "../../UI/IconGenerator/Svg";
 import { t } from "i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { tableSizeAction } from "../../../store/tableSize/tableSizeSlice";
@@ -26,7 +25,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import { GetCurrentDate } from "../../../utils/getDate";
 import usePageRouter from "../../../hooks/useObjectRouter";
 import { translateActions } from "../../../store/translation/translate.slice";
-import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
+
 import {
   areAllRowsSelectedOnPage,
   toggleRowGroupSelection,
@@ -62,28 +61,6 @@ interface Props {
   doubleClick?: boolean;
   disabled?: boolean;
 }
-
-const PopupBody = styled("div")(
-  ({ theme }) => `
-  width: max-content;
-  padding: 12px 16px;
-  margin: 8px;
-  border-radius: 8px;
-  border: 1px solid ${
-    theme.palette.mode === "dark" ? "var(--gray30)" : "var(--gray30)"
-  };
-  background-color: ${theme.palette.mode === "dark" ? "var(--gray30)" : "#fff"};
-  box-shadow: ${
-    theme.palette.mode === "dark"
-      ? `0px 4px 8px rgb(0 0 0 / 0.7)`
-      : `0px 4px 8px rgb(0 0 0 / 0.1)`
-  };
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-weight: 500;
-  font-size: 0.875rem;
-  z-index: 1;
-`
-);
 
 const CNewTable = ({
   meta = {
@@ -644,8 +621,6 @@ const CNewTable = ({
         });
   };
 
-  const [anchor, setAnchor] = useState<null | HTMLElement>(null);
-
   return (
     <div className="relative cnewtable w-full rounded-t-[8px]">
       <div className="h-full">
@@ -960,62 +935,24 @@ const CNewTable = ({
                               {defaultFilters.includes("actions") &&
                               colIndex === 0 ? (
                                 <div className="relative flex items-center">
-                                  <button
-                                    className={`w-[20px] h-full items-center justify-center flex ml-2 ${
-                                      selectedItems.length
-                                        ? "invisible"
-                                        : "visible"
-                                    }`}
-                                    onClick={(event) => {
-                                      setCurrentIndex(rowIndex);
-                                      setAnchor(
-                                        anchor ? null : event.currentTarget
-                                      );
-                                    }}
-                                    type="button"
-                                  >
-                                    <div
-                                      className={`group-hover:flex ${
-                                        rowIndex === currentIndex
-                                          ? "bg-[var(--gray20)] flex"
-                                          : "hidden"
-                                      }`}
-                                    >
-                                      <DotsVerticalIcon fill="black" />
-                                    </div>
-                                  </button>
+                                  <TabbleActions
+                                    element={item}
+                                    rowIndex={rowIndex}
+                                    currentIndex={currentIndex}
+                                    setCurrentIndex={setCurrentIndex}
+                                    handleActions={tableActions}
+                                    actions={defaultActions}
+                                    checkPermission={checkPermission}
+                                    selectedItems={selectedItems}
+                                  />
 
-                                  <BasePopup
-                                    id={
-                                      currentIndex === rowIndex
-                                        ? "simple-popup"
-                                        : undefined
-                                    }
-                                    open={currentIndex === rowIndex}
-                                    anchor={anchor}
-                                  >
-                                    <PopupBody>
-                                      <TabbleActions
-                                        element={item}
-                                        rowIndex={rowIndex}
-                                        currentIndex={currentIndex}
-                                        setCurrentIndex={setCurrentIndex}
-                                        handleActions={tableActions}
-                                        actions={defaultActions}
-                                        checkPermission={checkPermission}
-                                      />
-                                    </PopupBody>
-                                  </BasePopup>
-                                  {currentIndex === rowIndex ? (
+                                  {currentIndex === rowIndex && (
                                     <div
-                                      className="w-full h-full fixed left-0 top-0 z-[98]"
+                                      className="w-[200vw] h-[200vh] fixed left-[-50vw] top-[-50vw] z-[97]"
                                       onClick={() => {
                                         setCurrentIndex(null);
-                                        setAnchor(null);
                                       }}
                                     ></div>
-                                  ) : (
-                                    ""
                                   )}
                                 </div>
                               ) : (

@@ -5,6 +5,7 @@ import { GetCurrentDate } from "../../../../utils/getDate";
 import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { IFilterParams } from "../../../../interfaces";
+import CCheckbox from "../../../../components/CElements/CCheckbox";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const ModalTableLogic = ({
@@ -28,6 +29,13 @@ export const ModalTableLogic = ({
       { id: "BIRIMADI", title: "BIRIMADI" },
       { id: "INSERKULLANICIADI", title: "INSERKULLANICIADI" },
       { id: "KULLANICIID", title: "KULLANICIID" },
+      {
+        id: "DEFAULTBIRIM",
+        title: "DEFAULTBIRIM",
+        render: (val: number) => {
+          return <CCheckbox checked={!!val} disabled={true} />;
+        },
+      },
       {
         id: "INSERTTARIHI",
         title: "INSERTTARIHI",

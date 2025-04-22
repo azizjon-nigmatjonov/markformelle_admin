@@ -666,3 +666,10 @@ input {
     border-color: var(--error);
   }
 }
+
+
+#simple-popup {
+  & > div {
+    padding: 0 !important;
+  }
+}
