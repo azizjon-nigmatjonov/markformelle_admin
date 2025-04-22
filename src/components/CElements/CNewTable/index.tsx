@@ -1,4 +1,4 @@
-import { TableRow } from "@mui/material";
+import { styled, TableRow } from "@mui/material";
 
 import {
   CTableHeadCell,
@@ -26,10 +26,12 @@ import CheckIcon from "@mui/icons-material/Check";
 import { GetCurrentDate } from "../../../utils/getDate";
 import usePageRouter from "../../../hooks/useObjectRouter";
 import { translateActions } from "../../../store/translation/translate.slice";
+import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 import {
   areAllRowsSelectedOnPage,
   toggleRowGroupSelection,
 } from "./Logic/helpers";
+
 interface Props {
   meta?: {
     totalCount: number;
@@ -60,6 +62,28 @@ interface Props {
   doubleClick?: boolean;
   disabled?: boolean;
 }
+
+const PopupBody = styled("div")(
+  ({ theme }) => `
+  width: max-content;
+  padding: 12px 16px;
+  margin: 8px;
+  border-radius: 8px;
+  border: 1px solid ${
+    theme.palette.mode === "dark" ? "var(--gray30)" : "var(--gray30)"
+  };
+  background-color: ${theme.palette.mode === "dark" ? "var(--gray30)" : "#fff"};
+  box-shadow: ${
+    theme.palette.mode === "dark"
+      ? `0px 4px 8px rgb(0 0 0 / 0.7)`
+      : `0px 4px 8px rgb(0 0 0 / 0.1)`
+  };
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  z-index: 1;
+`
+);
 
 const CNewTable = ({
   meta = {
@@ -557,6 +581,11 @@ const CNewTable = ({
 
       return;
     }
+    console.log("sta", status);
+
+    if (status === "delete" || status === "delete_multiple") {
+      handleSortLogic({ value: "clear" });
+    }
 
     handleActions(el, status);
   };
@@ -615,6 +644,8 @@ const CNewTable = ({
           type: "usually",
         });
   };
+
+  const [anchor, setAnchor] = useState<null | HTMLElement>(null);
 
   return (
     <div className="relative cnewtable w-full rounded-t-[8px]">
@@ -936,7 +967,12 @@ const CNewTable = ({
                                         ? "invisible"
                                         : "visible"
                                     }`}
-                                    onClick={() => setCurrentIndex(rowIndex)}
+                                    onClick={(event) => {
+                                      setCurrentIndex(rowIndex);
+                                      setAnchor(
+                                        anchor ? null : event.currentTarget
+                                      );
+                                    }}
                                     type="button"
                                   >
                                     <div
@@ -950,15 +986,38 @@ const CNewTable = ({
                                     </div>
                                   </button>
 
-                                  <TabbleActions
-                                    element={item}
-                                    rowIndex={rowIndex}
-                                    currentIndex={currentIndex}
-                                    setCurrentIndex={setCurrentIndex}
-                                    handleActions={tableActions}
-                                    actions={defaultActions}
-                                    checkPermission={checkPermission}
-                                  />
+                                  <BasePopup
+                                    id={
+                                      currentIndex === rowIndex
+                                        ? "simple-popup"
+                                        : undefined
+                                    }
+                                    open={currentIndex === rowIndex}
+                                    anchor={anchor}
+                                  >
+                                    <PopupBody>
+                                      <TabbleActions
+                                        element={item}
+                                        rowIndex={rowIndex}
+                                        currentIndex={currentIndex}
+                                        setCurrentIndex={setCurrentIndex}
+                                        handleActions={tableActions}
+                                        actions={defaultActions}
+                                        checkPermission={checkPermission}
+                                      />
+                                    </PopupBody>
+                                  </BasePopup>
+                                  {currentIndex === rowIndex ? (
+                                    <div
+                                      className="w-full h-full fixed left-0 top-0 z-[98]"
+                                      onClick={() => {
+                                        setCurrentIndex(null);
+                                        setAnchor(null);
+                                      }}
+                                    ></div>
+                                  ) : (
+                                    ""
+                                  )}
                                 </div>
                               ) : (
                                 ""

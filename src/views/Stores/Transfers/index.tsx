@@ -6,6 +6,7 @@ import CNewTable from "../../../components/CElements/CNewTable";
 import { ModalUI } from "./Modal";
 import { IFilterParams } from "../../../interfaces";
 import { GetCurrentDate } from "../../../utils/getDate";
+import { useTranslationHook } from "../../../hooks/useTranslation";
 
 interface ModalTypes {
   IRSALIYENO?: string;
@@ -13,6 +14,7 @@ interface ModalTypes {
 }
 
 export const Transfers = () => {
+  const { t } = useTranslationHook();
   const [open, setOpen] = useState(false);
   const [modalInitialData, setModalInitialData] = useState<ModalTypes>({});
   const [filterParams, setFilterParams] = useState<IFilterParams>({
@@ -216,7 +218,7 @@ export const Transfers = () => {
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />
       <div className="p-2">
         <CNewTable
-          title="Таблица внутреннее примешенныей"
+          title={t("table_transfers")}
           headColumns={newHeadColumns}
           bodyColumns={bodyColumns}
           defaultFilters={[

@@ -11,7 +11,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { translateActions } from "../../../store/translation/translate.slice";
-import { allTranslations } from "../../../constants/allTranslations";
+// import { allTranslations } from "../../../constants/allTranslations";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
 const defObj: any = {
@@ -268,13 +268,13 @@ export const GetTranslations = ({
         if (!data?.data?.length) return;
         // let no_translations: any = localStorage.getItem("no_translations");
 
-        for (let key in allTranslations) {
-          if (
-            !data.data.find((item: { KEYWORD: string }) => item.KEYWORD === key)
-          ) {
-            newArr.push({ ...defObj, KEYWORD: key, status: "new" });
-          }
-        }
+        // for (let key in allTranslations) {
+        //   if (
+        //     !data.data.find((item: { KEYWORD: string }) => item.KEYWORD === key)
+        //   ) {
+        //     newArr.push({ ...defObj, KEYWORD: key, status: "new" });
+        //   }
+        // }
 
         storedTranslation?.forEach((el: any) => {
           if (

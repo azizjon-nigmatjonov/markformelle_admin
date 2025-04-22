@@ -50,11 +50,7 @@ const TabbleActions = ({
   return (
     <>
       {currentIndex === rowIndex ? (
-        <div
-          className={`absolute right-[-160px] bg-white z-[99] rounded-[4px] border border-[var(--border)] shadow-xl ${
-            rowIndex < 4 ? "top-0" : "top-[-50px]"
-          } ${cls.card}`}
-        >
+        <div className={`${cls.card}`}>
           <Element
             text="freez"
             active={element?.is_freez && checkPermission("freez")}
@@ -109,15 +105,6 @@ const TabbleActions = ({
             show={actions.includes("delete")}
           />
         </div>
-      ) : (
-        ""
-      )}
-
-      {currentIndex === rowIndex ? (
-        <div
-          className="w-full h-full fixed left-0 top-0 z-[98]"
-          onClick={() => setCurrentIndex(999)}
-        ></div>
       ) : (
         ""
       )}
