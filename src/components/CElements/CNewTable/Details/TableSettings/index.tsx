@@ -26,7 +26,7 @@ export const SettingDropdown = ({
   handleFilterSave: (val: any) => void;
 }) => {
   return (
-    <div className="absolute right-0 top-[33px] bg-white border border-[var(--gray20)] card-shadow rounded-[4px] z-[92] min-w-[150px] whitespace-nowrap px-2 py-2">
+    <div className="absolute right-3 top-[33px] bg-white border border-[var(--gray30)] shadow-2xl rounded-[8px] z-[92] min-w-[150px] whitespace-nowrap px-2 py-2">
       <ul className="grid gap-y-3 max-h-[400px] overflow-y-scroll designed-scroll">
         {menuList.map((item: {}, index: number) => (
           <MenuItem
@@ -149,14 +149,14 @@ export const HeaderSettings = ({
         label: t("active_columns"),
         id: "columns",
         type: "checkbox",
-        data: headColumns?.map(
+        data: JSON.parse(JSON.stringify(headColumns))?.map(
           (item: { id: string; checked: boolean; title: string }) => {
             let id: any = item.id;
             if (id?.[0] && typeof id === "object") {
               id = id.join("");
             }
 
-            item.title = t(item.title);
+            item.title = item.title || item.id;
 
             if (pageColumns.includes(id)) {
               item.checked = true;
@@ -168,7 +168,7 @@ export const HeaderSettings = ({
         ),
       },
     ];
-  }, [headColumns, pageColumns?.length]);
+  }, [headColumns?.length, pageColumns?.length]);
 
   const ExcelData = useMemo(() => {
     const keyOrder: any = [];
@@ -213,7 +213,7 @@ export const HeaderSettings = ({
   }, [headColumns.length, bodyColumns.length, pageColumns.length]);
 
   const handleExcelUploading = useCallback((data: any) => {
-    tableActions(data, "edit");
+    tableActions(data, "read_excel");
   }, []);
 
   const colorMain = disabled ? "var(--gray)" : "var(--main)";

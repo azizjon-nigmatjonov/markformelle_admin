@@ -581,7 +581,6 @@ const CNewTable = ({
 
       return;
     }
-    console.log("sta", status);
 
     if (status === "delete" || status === "delete_multiple") {
       handleSortLogic({ value: "clear" });

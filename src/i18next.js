@@ -43,12 +43,19 @@ i18next
 
         try {
           const res = await axios.get(url);
+          const translatedObj = res.data[currentLang] || {};
+          for (let key in translatedObj) {
+            const newKey = key.toLocaleLowerCase();
+            const oldVal = translatedObj[key];
+            delete translatedObj[key];
+            translatedObj[newKey] = oldVal;
+          }
           localStorage.setItem(
             "translation_by_lang",
-            JSON.stringify(res.data[currentLang])
+            JSON.stringify(translatedObj)
           );
           callback(null, {
-            data: res.data[currentLang] || {},
+            data: translatedObj,
             status: 200,
           });
         } catch (err) {

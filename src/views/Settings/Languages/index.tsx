@@ -90,6 +90,10 @@ const LanguagesPage = () => {
           element[key] = "";
           element.errors.push("KEYWORD");
         } else {
+          element.KEYWORD = element.KEYWORD.toLocaleLowerCase().replace(
+            / /g,
+            "_"
+          );
           element[key] = element[key];
         }
       }
@@ -284,7 +288,7 @@ const LanguagesPage = () => {
     if (type === "modal") {
       AddNewColumn({ listTable, setListTable });
     }
-    if (type === "edit") {
+    if (type === "read_excel") {
       setFilterParams({
         ...filterParams,
         edit: true,

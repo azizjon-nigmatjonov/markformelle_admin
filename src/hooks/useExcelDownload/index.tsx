@@ -79,7 +79,7 @@ const ExcelDownload = ({
         </div>
       </IconButton>
       {open && (
-        <div className="absolute right-0 top-[33px] bg-white card-shadow rounded-[12px] z-[92] min-w-[150px] whitespace-nowrap text-left">
+        <div className="absolute right-0 top-[33px] bg-white shadow-2xl border border-[var(--gray30)] rounded-[8px] z-[92] min-w-[150px] whitespace-nowrap text-left">
           <ul>
             <li className="p-2 hover:bg-[var(--border)]">
               <button

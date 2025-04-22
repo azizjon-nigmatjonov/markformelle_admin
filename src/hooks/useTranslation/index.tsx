@@ -4,8 +4,9 @@ export const useTranslationHook = () => {
   const { t } = useTranslation();
 
   const tr = (key: any) => {
-    if (t(key)?.trim()) {
-      return t(key);
+    if (!key) return "-";
+    if (t(key.toLocaleLowerCase())?.trim()) {
+      return t(key.toLocaleLowerCase());
     }
 
     return key;

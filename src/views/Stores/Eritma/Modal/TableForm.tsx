@@ -5,9 +5,9 @@ import { DetailsFormLogic } from "./Logic";
 import { CloseIcon } from "../../../../components/UI/IconGenerator/Svg";
 import { useTranslationHook } from "../../../../hooks/useTranslation";
 import dayjs from "dayjs";
-import { useGetUrunList } from "../../../../hooks/useFetchRequests/useUrunList";
 import { useGetBirimTypeList } from "../../../../hooks/useFetchRequests/useBrimTypesList";
 import CCheckbox from "../../../../components/CElements/CCheckbox";
+import HFTextField from "../../../../components/HFElements/HFTextField";
 
 interface TableFormProps {
   setOpen: (val: boolean) => void;
@@ -36,12 +36,6 @@ export const TableForm = ({
   const { control, handleSubmit, setValue } = useForm<FormData>({
     mode: "onSubmit",
   });
-
-  const {
-    setFilterParams: setUrunFilterParams,
-    filterParams: urunFilterParams,
-    urunData,
-  } = useGetUrunList({});
 
   const {
     birimTypeData,
@@ -126,33 +120,12 @@ export const TableForm = ({
         </div>
       </div>
       <div className="grid grid-cols-2 items-end space-x-2">
-        <SelectOptionsTable
-          name="URUNID"
-          label={t("URUNID")}
-          focused={true}
-          placeholder={t("URUNID")}
-          options={urunData?.data ?? []}
-          required={true}
-          headColumns={[
-            { id: "URUNID", title: "URUNID" },
-            { id: "ADI", title: "ADI" },
-          ]}
-          filterParams={urunFilterParams}
-          handleSelect={(obj: any) => {
-            setValue("URUNID", obj.URUNID);
-            setValue("ADI", obj.ADI);
-            setFilterParamsBirim({
-              ...filterParamsBirim,
-              q: `URUNID=${obj.URUNID}`,
-            });
-          }}
+        <HFTextField
           control={control}
-          handleSearch={(val: string) => {
-            setUrunFilterParams({ ...urunFilterParams, q: val });
-          }}
+          name="URUNID"
+          placeholder={t("URUNID")}
+          label={t("URUNID")}
           disabled={true}
-          setFilterParams={setUrunFilterParams}
-          defaultValue={formData?.URUNID}
         />
         <CCheckbox
           element={{ label: t("DEFAULTBIRIM") }}
@@ -172,6 +145,27 @@ export const TableForm = ({
           defaultValue={formData?.MIKTAR}
         /> */}
         <SelectOptionsTable
+          name="BIRIMID"
+          label={t("BIRIMID")}
+          options={birimTypeData?.data ?? []}
+          required={true}
+          headColumns={[
+            { id: "BIRIMID", title: "Birim id" },
+            { id: "BIRIMADI", title: "Adi" },
+            { id: "CARPAN", title: "CARPAN" },
+          ]}
+          filterParams={filterParamsBirim}
+          handleSelect={(obj: any) => {
+            setValue("BIRIMID", obj.BIRIMID);
+            setValue("CARPAN", obj.CARPAN);
+          }}
+          defaultValue={0}
+          readOnly={true}
+          control={control}
+          position="right"
+          setFilterParams={setFilterParamsBirim}
+        />
+        <SelectOptionsTable
           name="CARPAN"
           options={birimTypeData?.data ?? []}
           required={true}
@@ -180,7 +174,6 @@ export const TableForm = ({
             { id: "BIRIMADI", title: "Adi" },
             { id: "CARPAN", title: "CARPAN" },
           ]}
-          label={t("BIRIMID")}
           placeholder={t("BIRIMID")}
           filterParams={filterParamsBirim}
           handleSelect={(obj: any) => {
@@ -193,35 +186,7 @@ export const TableForm = ({
           position="right"
           setFilterParams={setFilterParamsBirim}
         />
-        <div className="w-[90px]">
-          <SelectOptionsTable
-            name="BIRIMID"
-            options={birimTypeData?.data ?? []}
-            required={true}
-            headColumns={[
-              { id: "BIRIMID", title: "Birim id" },
-              { id: "BIRIMADI", title: "Adi" },
-              { id: "CARPAN", title: "CARPAN" },
-            ]}
-            filterParams={filterParamsBirim}
-            handleSelect={(obj: any) => {
-              setValue("BIRIMID", obj.BIRIMID);
-              setValue("CARPAN", obj.CARPAN);
-            }}
-            defaultValue={0}
-            readOnly={true}
-            control={control}
-            position="right"
-            setFilterParams={setFilterParamsBirim}
-          />
-        </div>
-      </div>{" "}
-      {/* <HFTextField
-        name="KULLANICIADI"
-        control={control}
-        setValue={setValue}
-        disabled={!!formId}
-      /> */}
+      </div>
       <div className="flex space-x-2 mt-3">
         <button
           className="cancel-btn"

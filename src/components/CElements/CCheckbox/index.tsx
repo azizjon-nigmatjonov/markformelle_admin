@@ -1,6 +1,6 @@
-import { useTranslation } from "react-i18next";
 import { CheckLine } from "../../../components/UI/IconGenerator/Svg";
 import { useEffect, useState } from "react";
+import { useTranslationHook } from "../../../hooks/useTranslation";
 
 interface Props {
   element?: any;
@@ -15,7 +15,7 @@ const CCheckbox = ({
   checked = false,
   disabled = false,
 }: Props) => {
-  const { t } = useTranslation();
+  const { t } = useTranslationHook();
   const [value, setValue] = useState(false);
 
   useEffect(() => {
