@@ -231,7 +231,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
           </div>
         </div>
 
-        <CollapseUI title={t("urun_form")} disabled={disabled}>
+        <CollapseUI title={t("form_chemical")} disabled={disabled}>
           <div className="h-[500px] overflow-y-scroll designed-scroll">
             <div className="flex gap-x-10 pb-5">
               <div className="space-y-3 w-full">
@@ -381,7 +381,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
 
             <div className="ml-[-10px]">
               <CNewTable
-                title={t("urun_birim_table")}
+                title={t("table_chemical_weight")}
                 key={formId ? formId : "modal"}
                 headColumns={headColumns}
                 idForTable="inner_table_birim"

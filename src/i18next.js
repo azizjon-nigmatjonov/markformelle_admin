@@ -45,8 +45,9 @@ i18next
           const res = await axios.get(url);
           const translatedObj = res.data[currentLang] || {};
           for (let key in translatedObj) {
-            const newKey = key.toLocaleLowerCase();
             const oldVal = translatedObj[key];
+            const newKey = key.toLocaleLowerCase();
+
             delete translatedObj[key];
             translatedObj[newKey] = oldVal;
           }
