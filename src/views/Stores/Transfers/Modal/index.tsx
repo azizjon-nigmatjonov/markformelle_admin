@@ -45,7 +45,6 @@ export const ModalUI = ({
     page: 1,
     perPage: 50,
   });
-  console.log("irsaliyaNo", irsaliyaNo);
 
   const [filterParamsDepo, setFilterParamsDepo] = useState<
     Partial<IFilterParams>
@@ -115,7 +114,7 @@ export const ModalUI = ({
     createElement(params);
   };
 
-  const handleActions = (el: ITransferElement, type: string) => {
+  const handleActions = (el: ITransferElement | any, type: string) => {
     if (type === "edit" || type === "view") {
       setOpen(true);
       setSelectedRow(el);
@@ -123,6 +122,14 @@ export const ModalUI = ({
 
     if (type === "delete") {
       deleteElement([el.STOKDETAYID]);
+    }
+
+    if (type === "delete_multiple") {
+      deleteElement(
+        el.map((item: { STOKDETAYID: string }) => {
+          return item.STOKDETAYID;
+        })
+      );
     }
 
     if (type === "modal") {
@@ -150,7 +157,6 @@ export const ModalUI = ({
       setValue("INSERTTARIHI", dayjs().format("DD.MM.YYYY HH:MM"));
     }
   }, [defaults]);
-  console.log("defaults", defaults);
 
   useEffect(() => {
     if (defaults?.DEPOID) {
@@ -283,7 +289,7 @@ export const ModalUI = ({
             <button
               className={`custom-btn ${tableOpen ? "disabled" : ""}`}
               type={tableOpen ? "button" : "submit"}
-              style={{ maxWidth: "100px" }}
+              style={{ minWidth: "150px" }}
             >
               {t("create")}
             </button>
@@ -296,8 +302,9 @@ export const ModalUI = ({
           // disabled={true}
         >
           <CNewTable
-            title="Примешенныей"
+            title={t("transfers_stokedetay")}
             headColumns={headColumns}
+            key={tableData?.data.length}
             bodyColumns={tableData?.data ?? []}
             handleActions={handleActions}
             isLoading={false}

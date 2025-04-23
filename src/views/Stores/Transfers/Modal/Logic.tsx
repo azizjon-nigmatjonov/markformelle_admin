@@ -50,15 +50,24 @@ export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
     }
   );
 
-  const { data: modalTable, refetch } = useQuery(
-    ["GET_IRSALIYE_TABLE", id],
-    () => {
-      return axios.get(`${API_URL}/stokdetay/irsaliye/${id}`);
-    },
-    {
-      enabled: !!id,
+  const [modalTable, setModalTable] = useState({ data: { data: [] } });
+
+  const getTableData = () => {
+    axios
+      .get(`${API_URL}/stokdetay/irsaliye/${id}`)
+      .then((res: { data: any }) => {
+        setModalTable(res);
+      })
+      .catch(() => {
+        setModalTable({ data: { data: [] } });
+      });
+  };
+
+  useEffect(() => {
+    if (id) {
+      getTableData();
     }
-  );
+  }, [id]);
 
   const { data: urunData } = useQuery(
     ["GET_URUN_FOR_IRSALIYE", urunId],
@@ -81,7 +90,7 @@ export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
         },
         data: id, // Array of IDs
       });
-      refetch();
+      getTableData();
       console.log("Deleted successfully:", response.data);
     } catch (error) {
       console.error("Error deleting items:", error);
@@ -92,7 +101,7 @@ export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
     defaultData: modal?.data,
     tableData: modalTable?.data,
     urunData: urunData?.data ?? {},
-    refetch,
+    refetch: getTableData,
     deleteElement,
   };
 };

@@ -56,10 +56,13 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
   });
 
   const onSubmit = (data: IModalForm) => {
+    console.log("111s");
+
     if (formId) {
       updateForm(data, formId);
     } else {
-      const params: any = data;
+      const params: Partial<any> = data;
+      params.URUNRECETEURUNID = params.URUNID;
       params.DEGISIMTARIHI = dayjs();
       params.KULLANICIID = "1";
       delete params.BIRIMID;
@@ -71,13 +74,13 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
   useEffect(() => {
     if (defaultData?.URUNRECETEURUNID) {
       setFormId(defaultData?.URUNRECETEURUNID);
-      setValue("URUNRECETEURUNID", defaultData?.URUNRECETEURUNID || "");
+      setValue("URUNID", defaultData?.URUNRECETEURUNID || "");
     }
   }, [defaultData]);
 
   useEffect(() => {
     if (formId) {
-      setValue("URUNRECETEURUNID", formId);
+      setValue("URUNID", formId);
     }
   }, [formId]);
 
@@ -85,7 +88,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
     setModalInitialData({});
     if (status === "modal") setOpen(true);
 
-    if (status === "view") {
+    if (status === "view" || status === "edit") {
       setOpen(true);
       setModalInitialData(el);
     }
@@ -111,7 +114,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
   useEffect(() => {
     if (formData?.URUNBIRIMADI) {
       setValue("BIRIMID", formData.URUNBIRIMADI);
-      setValue("NOTU", formData.NOTE);
+      setValue("NOTU", formData.NOTU);
     }
   }, [formData]);
 
@@ -119,10 +122,10 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex space-x-4 mb-5">
-          <div className="grid grid-cols-3 gap-3 w-full">
+          <div className="grid grid-cols-3 gap-x-5 w-full">
             <InputFieldUI title={t("URUNRECETEURUNID")}>
               <SelectOptionsTable
-                name="URUNRECETEURUNID"
+                name="URUNID"
                 placeholder={t("URUNRECETEURUNID")}
                 options={urunData?.data}
                 required={true}
@@ -132,8 +135,8 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
                 ]}
                 filterParams={filterParams}
                 handleSelect={(obj: any) => {
+                  setValue("URUNID", obj.URUNID);
                   setValue("URUNRECETEURUNID", obj.URUNID);
-
                   setFilterParamsBirim({
                     ...filterParamsBirim,
                     q: `&URUNID=${obj.URUNID}`,
@@ -185,8 +188,9 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
           <div className="flex justify-end">
             <button
               className={`custom-btn ${formId ? "disabled" : ""}`}
-              type={formId ? "button" : "submit"}
-              style={{ maxWidth: "100px" }}
+              type="submit"
+              style={{ minWidth: "150px" }}
+              disabled={formId ? true : false}
             >
               {t("create")}
             </button>

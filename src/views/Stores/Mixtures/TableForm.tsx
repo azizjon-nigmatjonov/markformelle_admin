@@ -140,7 +140,6 @@ export const TableForm = ({
       <SelectOptionsTable
         name="URUNID"
         label={t("URUNID")}
-        focused={true}
         placeholder={t("URUNID")}
         options={urunData?.data ?? []}
         required={true}
@@ -230,10 +229,10 @@ export const TableForm = ({
           type="button"
           onClick={() => setOpen(false)}
         >
-          Отменить
+          {t("cancel")}
         </button>
         <button className="custom-btn save" type="submit">
-          {formId ? "Редикировать" : "Сохранить"}
+          {formId ? t("edit") : t("save")}
         </button>
       </div>
     </form>

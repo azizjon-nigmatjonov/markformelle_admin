@@ -206,14 +206,14 @@ export const EritmaPage = () => {
     }
   };
 
-  const handleModalActions = (status: string, id: string | number) => {
+  const handleModalActions = (status: string, id: string) => {
     if (status === "close") {
       setOpen(false);
       setModalInitialData({});
     }
     if (status === "delete") {
       setOpen(false);
-      deleteFn([id + ""]);
+      deleteFn([id]);
     }
   };
 
@@ -255,6 +255,9 @@ export const EritmaPage = () => {
             modalInitialData.URUNID ? "updating_chemical" : "creating_chemical"
           )}
           handleActions={handleModalActions}
+          defaultData={{
+            id: modalInitialData?.URUNID,
+          }}
         >
           <ModalUI defaultData={modalInitialData} />
         </CNewModal>

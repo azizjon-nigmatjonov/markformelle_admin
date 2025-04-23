@@ -7,6 +7,7 @@ import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { DeleteIcon, EditIcon } from "../../UI/IconGenerator/Svg";
 import CloseIcon from "@mui/icons-material/Close";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { PopoverDelete } from "../CNewTable/Details/Actions/EditDelete/PopOver";
 
 interface Props {
   title?: string;
@@ -98,6 +99,8 @@ const CNewModal: FC<Props> = ({
     };
   }, [isDragging, dragOffset]);
 
+  const [openPopup, setOpenPopup] = useState(false);
+
   return (
     <>
       <div
@@ -148,19 +151,32 @@ const CNewModal: FC<Props> = ({
                   </IconButton>
 
                   {defaultData?.id && (
-                    <IconButton
-                      onClick={() => handleActions("delete", defaultData.id)}
-                    >
-                      <div
-                        className={`flex items-center justify-center rounded-full w-[30px] h-[30px] ${
-                          action === "delete"
-                            ? "border border-[var(--main)]"
-                            : ""
-                        }`}
-                      >
-                        <DeleteIcon fill="var(--main)" />
-                      </div>
-                    </IconButton>
+                    <div className="relative">
+                      <IconButton onClick={() => setOpenPopup((prev) => !prev)}>
+                        <div
+                          className={`flex items-center justify-center rounded-full w-[30px] h-[30px] ${
+                            action === "delete"
+                              ? "border border-[var(--main)]"
+                              : ""
+                          }`}
+                        >
+                          <DeleteIcon fill="var(--main)" />
+                        </div>
+                      </IconButton>
+                      {openPopup && (
+                        <div className="absolute top-full left-1/2 -translate-x-1/2 shadow-2xl border border-[var(--gray30)] w-[300px] z-[95] bg-white rounded-[8px] text-sm">
+                          <div className="relative z-[999]">
+                            <PopoverDelete
+                              closePopover={(status) => {
+                                setOpenPopup(false);
+                                if (status)
+                                  handleActions(status, defaultData.id);
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   )}
                   <IconButton
                     onMouseDown={handleDragStart}

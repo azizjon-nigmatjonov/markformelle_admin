@@ -87,7 +87,7 @@ export const MixturesPage = () => {
 
     if (status === "view" || status === "edit") {
       setOpen(true);
-      console.log("el", el);
+
       setModalInitialData({
         URUNRECETEURUNID: el?.URUNRECETEURUNID,
         URUNADI: el?.URUNADI,
@@ -143,7 +143,7 @@ export const MixturesPage = () => {
             "filter",
             "sellect_more",
           ]}
-          defaultSearch={{ URUNID: "" }}
+          defaultSearch={{ URUNRECETEURUNID: "" }}
           meta={{
             totalCount: bodyData?.count,
             pageCount: bodyData?.count

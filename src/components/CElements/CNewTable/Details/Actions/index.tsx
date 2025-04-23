@@ -89,8 +89,10 @@ const TabbleActions = ({
         type="button"
       >
         <div
-          className={`group-hover:flex ${
-            rowIndex === currentIndex ? "bg-[var(--gray20)] flex" : "hidden"
+          className={`group-hover:visible flex ${
+            rowIndex === currentIndex || deletePopover
+              ? "bg-[var(--gray20)] visible"
+              : "invisible"
           }`}
         >
           <DotsVerticalIcon fill="black" />

@@ -90,10 +90,7 @@ const LanguagesPage = () => {
           element[key] = "";
           element.errors.push("KEYWORD");
         } else {
-          element.KEYWORD = element.KEYWORD.toLocaleLowerCase().replace(
-            / /g,
-            "_"
-          );
+          element.KEYWORD = element.KEYWORD.replace(/ /g, "_");
           element[key] = element[key];
         }
       }

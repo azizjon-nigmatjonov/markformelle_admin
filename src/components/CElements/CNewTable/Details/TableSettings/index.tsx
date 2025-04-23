@@ -305,12 +305,14 @@ export const HeaderSettings = ({
                 </IconButton>
 
                 {openDelete && (
-                  <PopoverDelete
-                    closePopover={(status) => {
-                      setOpenDelete(false);
-                      if (status) tableActions({}, "delete_multiple");
-                    }}
-                  />
+                  <div className="absolute top-full shadow-2xl border border-[var(--gray30)] w-[300px] z-[99] bg-white rounded-[8px]">
+                    <PopoverDelete
+                      closePopover={(status) => {
+                        setOpenDelete(false);
+                        if (status) tableActions({}, "delete_multiple");
+                      }}
+                    />
+                  </div>
                 )}
               </div>
             )}

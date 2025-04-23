@@ -8,6 +8,7 @@ export interface ModalTypes {
     URUNBIRIMID: string;
     NOTU?: string;
     BIRIMID: string
+    URUNID?: string
     // DEPOID: string;
     // MIKTAR: number;
   }

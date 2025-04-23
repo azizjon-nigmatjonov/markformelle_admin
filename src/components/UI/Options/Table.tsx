@@ -128,7 +128,7 @@ export const SelectOptionsTable = ({
                   error?.message
                     ? "border-[var(--error)]"
                     : "border-[var(--border)]"
-                }`}
+                } ${disabled ? "text-[var(--gray)]" : ""}`}
                 placeholder={placeholder}
                 onChange={(e: any) => {
                   handleSearch(`${name}=${e.target.value}`);
