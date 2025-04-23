@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { IFilterParams } from "../../../../interfaces";
+import toast from "react-hot-toast";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const FetchFunction = () => {
@@ -39,26 +40,42 @@ export const FetchTable = ({
   return { birimler: birimler?.data, isLoading };
 };
 
-export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
-  const { data: modal } = useQuery(
-    ["GET_IRSALIYE_FOR_MODAL", id],
+export const FetchModal = ({
+  formId,
+  urunId,
+  setFormId,
+  getList = () => {},
+}: {
+  formId?: string;
+  urunId?: any;
+  getList?: () => void;
+  setFormId: (val: string) => void;
+}) => {
+  const { data: modal, refetch: refetchForm } = useQuery(
+    ["GET_IRSALIYE_FOR_MODAL", formId],
     () => {
-      return axios.get(`${API_URL}/irsaliye/${id}`);
+      return axios.get(`${API_URL}/irsaliye/${formId}`);
     },
     {
-      enabled: !!id,
+      enabled: !!formId,
     }
   );
+  const [modalTable, setmodalTable]: any = useState({ data: {} });
 
-  const { data: modalTable, refetch } = useQuery(
-    ["GET_IRSALIYE_TABLE", id],
-    () => {
-      return axios.get(`${API_URL}/stokdetay/irsaliye/${id}`);
-    },
-    {
-      enabled: !!id,
+  const getModalTable = () => {
+    setmodalTable({ data: {} });
+    axios
+      .get(`${API_URL}/stokdetay/irsaliye/${formId}`)
+      .then((res: { data: any }) => {
+        setmodalTable(res.data);
+      });
+  };
+
+  useEffect(() => {
+    if (formId) {
+      getModalTable();
     }
-  );
+  }, [formId]);
 
   const { data: urunData } = useQuery(
     ["GET_URUN_FOR_IRSALIYE", urunId],
@@ -70,6 +87,34 @@ export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
     }
   );
 
+  const createElement = async (params: Partial<any>) => {
+    try {
+      const { data } = await axios.post(`${API_URL}/irsaliye/`, params);
+
+      setFormId(data.IRSALIYEID);
+      getList();
+      toast.success("Created!");
+      return data;
+    } catch (error) {
+      console.error("Error creating element:", error);
+      return null;
+    }
+  };
+
+  const updateElement = async (params: Partial<any>) => {
+    try {
+      const { data } = await axios.put(
+        `${API_URL}/irsaliye/${params.IRSALIYEID}`,
+        params
+      );
+      refetchForm();
+      toast.success("Updated!");
+      return data;
+    } catch (error) {
+      toast.error(`Error creating element:, ${error}`);
+      return null;
+    }
+  };
   const deleteElement = async (id: any) => {
     try {
       const response = await axios.request({
@@ -81,29 +126,33 @@ export const FetchModal = ({ id, urunId }: { id?: any; urunId?: any }) => {
         },
         data: id, // Array of IDs
       });
-      refetch();
-      console.log("Deleted successfully:", response.data);
+      getModalTable();
+      toast.success("Deleted successfully:", response.data);
     } catch (error) {
-      console.error("Error deleting items:", error);
+      getModalTable();
+      toast.error(`Error creating element:, ${error}`);
     }
   };
 
   return {
-    defaultData: modal?.data,
-    tableData: modalTable?.data,
-
+    formData: modal?.data ?? {},
+    tableData: modalTable,
+    updateElement,
+    createElement,
     urunData: urunData?.data ?? {},
-    refetch,
+    refetch: getModalTable,
     deleteElement,
   };
 };
 
 export const InnerModalLogic = ({
+  formId,
   filterParams = {},
   filterParamsWeight = {},
   refetch = () => {},
   setOpen = () => {},
 }: {
+  formId?: string;
   filterParams?: any;
   filterParamsWeight: any;
   refetch: () => void;
@@ -111,6 +160,17 @@ export const InnerModalLogic = ({
 }) => {
   const [urunData, setUrunData]: any = useState({});
   const [urunBirim, setUrunBirim]: any = useState([]);
+
+  const { data: formData } = useQuery(
+    ["GET_URUNBIRIM_FORM", formId],
+    () => {
+      return axios.get(`${API_URL}/stokdetay/${formId}`);
+    },
+    {
+      enabled: !!formId,
+    }
+  );
+
   const getUrun = (filters: IFilterParams) => {
     axios
       .get(
@@ -170,6 +230,7 @@ export const InnerModalLogic = ({
   const updateElement = (params: any, id: string) => {
     axios.put(`${API_URL}/stokdetay/${id}`, params).then(() => {
       setOpen(false);
+      refetch();
     });
   };
 
@@ -187,5 +248,6 @@ export const InnerModalLogic = ({
     createElement,
     createStokElement,
     updateElement,
+    formData: formData?.data ?? {},
   };
 };

@@ -1,9 +1,5 @@
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import {
-  ITransferElement,
-  ITransferFormData,
-} from "../../../../interfaces/transfers";
 import { CollapseUI } from "../../../../components/CElements/CCollapse";
 import { ModalLogic } from "../Logic";
 import { FetchModal } from "./Logic";
@@ -11,14 +7,14 @@ import { TableForm } from "./TableForm";
 import HFSelect from "../../../../components/HFElements/HFSelect";
 import HFTextField from "../../../../components/HFElements/HFTextField";
 import dayjs from "dayjs";
-import CNewModal from "../../../../components/CElements/CNewModal";
 import CNewTable from "../../../../components/CElements/CNewTable";
 import { IFilterParams } from "../../../../interfaces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Validation } from "./Validate";
 import { SelectOptionsTable } from "../../../../components/UI/Options/Table";
-import { convertToISO, GetCurrentDate } from "../../../../utils/getDate";
+import { GetCurrentDate } from "../../../../utils/getDate";
 import { useTranslationHook } from "../../../../hooks/useTranslation";
+import { IBuyingForm, ModalTypes } from "../interfaces";
 
 const schema = Validation;
 
@@ -38,23 +34,24 @@ const FieldUI = ({
   );
 };
 
-export const ModalUI = ({
-  element = {} as Partial<ITransferElement>,
-  modalList = [],
-  setModalList = () => {},
-  createElement = () => {},
-  irsaliyaNo,
-}: {
-  element: Partial<ITransferElement>;
-  setModalList: (list: ITransferElement[]) => void;
-  modalList: ITransferElement[];
-  irsaliyaNo: number;
-  createElement: (val: ITransferElement) => void;
-}) => {
+interface ModalUIProps {
+  defaultData?: ModalTypes;
+  URUNBIRIMID?: string;
+  IRSALIYEID?: number;
+  ADI?: string;
+  URUNID?: string;
+  DEPOID?: string;
+  FIRMAID?: string;
+  URUNBIRIMADI?: string;
+  getList?: () => void;
+}
+
+export const ModalUI = ({ defaultData = {}, getList }: ModalUIProps) => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslationHook();
-  const [tableOpen, setTableOpen] = useState(!!element.id);
-  const [selectedRow, setSelectedRow] = useState<ITransferElement | null>(null);
+  const [formId, setFormId] = useState<string>("");
+  const [modalInitialData, setModalInitialData] = useState<ModalUIProps>({});
+
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
@@ -70,98 +67,115 @@ export const ModalUI = ({
     perPage: 100,
     q: "",
   });
-  const { handleActionsModal, depoOptions, dovizOptions, firmaData } =
-    ModalLogic({
-      setModalList,
-      modalList,
-      filterParamsDepo,
-      filterParamsFirma,
-    });
-  const { defaultData, tableData, refetch, deleteElement } = FetchModal({
-    id: element.id,
-    urunId: selectedRow?.URUNID,
+  const { depoOptions, dovizOptions, firmaData } = ModalLogic({
+    filterParamsDepo,
+    filterParamsFirma,
+  });
+  const {
+    formData,
+    tableData,
+    refetch,
+    deleteElement,
+    createElement,
+    updateElement,
+  } = FetchModal({
+    formId: formId,
+    urunId: modalInitialData?.URUNID,
+    setFormId,
+    getList,
   });
 
-  const { control, handleSubmit, setValue, watch } = useForm<ITransferFormData>(
-    {
-      mode: "onSubmit",
-      resolver: yupResolver(schema),
+  const { control, handleSubmit, setValue } = useForm<any>({
+    mode: "onSubmit",
+    resolver: yupResolver(schema),
+  });
+
+  useEffect(() => {
+    if (defaultData?.IRSALIYEID) {
+      setFormId(defaultData.IRSALIYEID);
     }
-  );
+  }, [defaultData]);
 
-  const onSubmit: SubmitHandler<ITransferFormData> = (data) => {
-    const params: Partial<any> = {
-      HAREKETTIPI: 1,
-      FIRMAID: data.FIRMAID,
-      NOTU: "",
-      SINIF: "B",
-      INSERTKULLANICIID: 1,
-      KULLANICIID: 1,
-      DEGISIMTARIHI: "2025-03-26T11:06:37.447Z",
-      IRSALIYENO: data.IRSALIYENO ? String(data.IRSALIYENO) : "",
-      IRSALIYETARIHI: data.IRSALIYETARIHI,
-      INSERTTARIHI: String(data.INSERTTARIHI),
-      DEPOID: data.DEPOID ? String(data.DEPOID) : undefined, //
-      TRANSFERDEPOID: data.TRANSFERDEPOID
-        ? String(data.TRANSFERDEPOID)
-        : undefined,
-      DOVIZID: data.DOVIZID ? String(data.DOVIZID) : undefined,
-    };
+  const onSubmit: SubmitHandler<IBuyingForm> = (data) => {
+    let params: Partial<any> = data;
 
-    params.INSERTTARIHI = dayjs();
     params.FIILISEVKTARIHI = dayjs();
 
-    params.IRSALIYETARIHI = convertToISO(dayjs().format("DD.MM.YYYY"));
+    if (formId) {
+      params = { ...formData, ...params };
+      params.INSERTTARIHI = dayjs();
+      params.IRSALIYETARIHI = formData.IRSALIYETARIHI;
+      updateElement(params);
+    } else {
+      params.NOTU = "";
+      params.HAREKETTIPI = 1;
+      params.SINIF = "B";
+      params.INSERTKULLANICIID = 1;
+      params.KULLANICIID = 1;
+      params.DEGISIMTARIHI = dayjs();
+      params.IRSALIYETARIHI = dayjs();
+      params.INSERTTARIHI = dayjs();
+      params.IRSALIYENO = +params.IRSALIYENO;
+      params.IRSALIYEID = defaultData.IRSALIYEID;
 
-    const response: any = createElement(params);
-    if (response) setTableOpen(true);
+      createElement(params);
+    }
   };
 
-  const handleActions = (el: ITransferElement, type: string) => {
+  const handleActions = (el: any, type: string) => {
     if (type === "edit" || type === "view") {
       setOpen(true);
-      setSelectedRow(el);
+      setModalInitialData(el);
     }
 
     if (type === "delete") {
       deleteElement([el.STOKDETAYID]);
     }
 
+    if (type === "delete_multiple") {
+      deleteElement(
+        el.map((item: { STOKDETAYID: number }) => {
+          return item.STOKDETAYID;
+        })
+      );
+    }
+
     if (type === "modal") {
       setOpen(true);
-      setSelectedRow(null);
+      setModalInitialData({
+        IRSALIYEID: formData.IRSALIYEID,
+        DEPOID: formData.DEPOID,
+        FIRMAID: formData.FIRMAID,
+        URUNBIRIMADI: formData?.URUNBIRIMADI,
+      });
     }
   };
 
   useEffect(() => {
-    if (defaultData?.IRSALIYETARIHI) {
-      setValue(
-        "IRSALIYETARIHI",
-        dayjs(defaultData?.IRSALIYETARIHI).format("DD.MM.YYYY")
-      );
-    } else {
-      setValue("IRSALIYETARIHI", dayjs().format("DD.MM.YYYY"));
-    }
-
-    if (defaultData?.INSERTTARIHI) {
+    if (formData?.DEPOID) {
+      setValue("DEPOID", formData.DEPOID);
+      setValue("TRANSFERDEPOID", formData.TRANSFERDEPOID);
+      setValue("IRSALIYEID", formData.IRSALIYEID);
       setValue(
         "INSERTTARIHI",
-        dayjs(defaultData?.INSERTTARIHI).format("DD.MM.YYYY HH:MM")
+        dayjs(formData?.INSERTTARIHI).format("DD.MM.YYYY HH:MM")
       );
+      setValue(
+        "IRSALIYETARIHI",
+        dayjs(formData?.IRSALIYETARIHI).format("DD.MM.YYYY")
+      );
+      setValue("IRSALIYENO", formData.IRSALIYENO);
+      setValue("FIRMAID", formData.FIRMAID);
+      setValue("FIRMAADI", formData.FIRMAADI);
+      setValue("DOVIZID", formData.DOVIZID);
     } else {
-      setValue("INSERTTARIHI", dayjs().format("DD.MM.YYYY HH:MM"));
+      setValue(
+        "IRSALIYENO",
+        defaultData.IRSALIYENO ? defaultData.IRSALIYENO + 1 + "" : ""
+      );
     }
-  }, [defaultData]);
+  }, [formData, defaultData]);
 
-  useEffect(() => {
-    if (defaultData?.DEPOID) {
-      setValue("DEPOID", defaultData.DEPOID);
-      setValue("TRANSFERDEPOID", defaultData.TRANSFERDEPOID);
-      setValue("IRSALIYENO", defaultData.IRSALIYEID);
-    } else {
-      setValue("IRSALIYENO", irsaliyaNo + 1 + "");
-    }
-  }, [defaultData, irsaliyaNo]);
   const headColumns = useMemo(() => {
     return [
       { id: "STOKDETAYID", title: "STOKDETAYID", width: 80 },
@@ -182,33 +196,18 @@ export const ModalUI = ({
     ];
   }, []);
 
-  const headColumnsFirma = useMemo(() => {
-    return [
-      { id: "FIRMAID", width: 200, title: "FIRMAID" },
-      { id: "ADI", title: "ADI" },
-      { id: "KISAADI", title: "KISAADI" },
-    ];
-  }, []);
-  const FIRMAID = watch("FIRMAID");
-
   return (
-    <CNewModal
-      title={`Документ покупки ${
-        element.IRSALIYENO ? "№" + element.IRSALIYENO : ""
-      }`}
-      action="add"
-      handleActions={handleActionsModal}
-    >
+    <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full flex space-x-4">
-          <div className="grid grid-cols-3 gap-x-5 gap-y-2 pb-5 w-full">
+          <div className="grid grid-cols-3 gap-x-5 gap-y-2 pb-10 w-full">
             <div className="space-y-2">
               <FieldUI title={t("IRSALIYENO")}>
                 <div className="flex items-center space-x-2">
                   <HFTextField
                     control={control}
                     name="IRSALIYENO"
-                    defaultValue={defaultData?.IRSALIYEID}
+                    defaultValue={formData?.IRSALIYEID}
                   />
                 </div>
               </FieldUI>
@@ -216,14 +215,14 @@ export const ModalUI = ({
                 <HFTextField
                   control={control}
                   name="IRSALIYETARIHI"
-                  readOnly={true}
+                  disabled={true}
                 />
               </FieldUI>
               <FieldUI title={t("INSERTTARIHI")}>
                 <HFTextField
                   control={control}
                   name="INSERTTARIHI"
-                  readOnly={true}
+                  disabled={true}
                 />
               </FieldUI>
             </div>
@@ -235,39 +234,44 @@ export const ModalUI = ({
                   placeholder={t("FIRMAID")}
                   options={firmaData}
                   required={true}
-                  headColumns={headColumnsFirma}
+                  headColumns={[
+                    { id: "FIRMAID", width: 200, title: "FIRMAID" },
+                    { id: "FIRMAADI", title: "FIRMAADI" },
+                    { id: "KISAADI", title: "KISAADI" },
+                  ]}
                   filterParams={filterParams}
                   handleSelect={(obj: any) => {
                     setValue("FIRMAID", obj.FIRMAID);
-                    setValue("ADI", obj.ADI);
+                    setValue("FIRMAADI", obj.FIRMAADI);
                   }}
                   handleSearch={(val: string) => {
                     setFilterParamsFirma({ ...filterParamsFirma, q: val });
                   }}
                   control={control}
                   setFilterParams={setFilterParams}
-                  disabled={tableOpen}
-                  defaultValue={FIRMAID}
                 />
               </FieldUI>
-              <FieldUI title={t("ADI")}>
+              <FieldUI title={t("FIRMAADI")}>
                 <SelectOptionsTable
-                  name="ADI"
-                  placeholder={t("ADI")}
+                  name="FIRMAADI"
+                  placeholder={t("FIRMAADI")}
                   options={firmaData}
                   required={true}
-                  headColumns={headColumnsFirma}
+                  headColumns={[
+                    { id: "FIRMAID", width: 200, title: "FIRMAID" },
+                    { id: "FIRMAADI", title: "FIRMAADI" },
+                    { id: "KISAADI", title: "KISAADI" },
+                  ]}
                   filterParams={filterParams}
                   handleSelect={(obj: any) => {
                     setValue("FIRMAID", obj.FIRMAID);
-                    setValue("ADI", obj.ADI);
+                    setValue("FIRMAADI", obj.FIRMAADI);
                   }}
                   handleSearch={(val: string) => {
                     setFilterParamsFirma({ ...filterParamsFirma, q: val });
                   }}
                   control={control}
                   setFilterParams={setFilterParams}
-                  disabled={tableOpen}
                 />
               </FieldUI>
             </div>
@@ -292,7 +296,6 @@ export const ModalUI = ({
                   }}
                   control={control}
                   setFilterParams={setFilterParams}
-                  disabled={tableOpen}
                 />
               </FieldUI>
               <FieldUI title={t("DOVIZID")}>
@@ -300,6 +303,9 @@ export const ModalUI = ({
                   name="DOVIZID"
                   control={control}
                   options={dovizOptions}
+                  handleClick={(obj: { DOVIZID: string }) => {
+                    setValue("DOVIZID", obj.DOVIZID);
+                  }}
                   defaultValue="USD"
                 />
               </FieldUI>
@@ -307,18 +313,23 @@ export const ModalUI = ({
           </div>
           <div className="space-y-2 flex justify-end">
             <button
-              className={`custom-btn ${tableOpen ? "disabled" : ""}`}
-              type={tableOpen ? "button" : "submit"}
-              style={{ maxWidth: "100px" }}
+              className={`custom-btn`}
+              type="submit"
+              style={{ minWidth: "140px" }}
             >
-              Создавать
+              {t(formId ? "edit" : "create")}
             </button>
           </div>
         </div>
 
-        <CollapseUI title={t("document_content")} defaultOpen={true}>
+        <CollapseUI
+          title={t("document_content")}
+          defaultOpen={true}
+          disabled={!formId}
+        >
           <CNewTable
-            title={""}
+            disabled={!formId}
+            key={tableData?.data?.length + ""}
             headColumns={headColumns}
             bodyColumns={tableData?.data ?? []}
             handleActions={handleActions}
@@ -326,7 +337,7 @@ export const ModalUI = ({
             filterParams={filterParams}
             autoHeight={"440px"}
             disablePagination={true}
-            idForTable="modal"
+            idForTable="stokdetay_modal"
             animation={false}
             handleFilterParams={setFilterParams}
           />
@@ -337,10 +348,7 @@ export const ModalUI = ({
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-[99]">
           <TableForm
             setOpen={setOpen}
-            defaultData={{
-              ...selectedRow,
-              ...defaultData,
-            }}
+            defaultData={modalInitialData}
             refetch={refetch}
           />
 
@@ -350,6 +358,6 @@ export const ModalUI = ({
           ></div>
         </div>
       )}
-    </CNewModal>
+    </>
   );
 };

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import useCQuery from "../../../hooks/useCQuery";
-import { ITransferCreate } from "../../../interfaces/transfers";
+import { IFilterParams } from "../../../interfaces";
 
 const API_URL = import.meta.env.VITE_TEST_URL;
 
@@ -10,15 +10,7 @@ export const breadCrumbs = [
   { label: "Документ покупки", link: "/chemical_store/buying" },
 ];
 
-export const TableData = ({
-  filterParams,
-  setModalList = () => {},
-  handleActionsModal = () => {},
-}: {
-  filterParams: any;
-  setModalList?: (val: any) => void;
-  handleActionsModal?: (val: any, element?: any) => void;
-}) => {
+export const TableData = ({ filterParams }: { filterParams: any }) => {
   const [headColumns, setHeadColumns] = useState<
     { title: string; id: string }[]
   >([]);
@@ -28,8 +20,12 @@ export const TableData = ({
     count: 0,
   });
 
-  const getList = async (filters: any) => {
-    if (!filters?.page) return;
+  const getList = async (filters?: IFilterParams) => {
+    if (!filters?.page)
+      filters = {
+        page: 1,
+        perPage: 50,
+      };
     setIsLoading(true);
     try {
       const { data } = await axios.get(
@@ -68,43 +64,6 @@ export const TableData = ({
     }
   };
 
-  const handleActions = (el: any, status: string) => {
-    if (["modal", "edit", "view"].includes(status)) {
-      handleActionsModal("edit", el);
-    }
-    if (status === "delete") {
-      deleteFn([el.IRSALIYEID]);
-    }
-    if (status === "delete_multiple") {
-      deleteFn(
-        el.map((item: { IRSALIYEID: string }) => {
-          return item.IRSALIYEID;
-        })
-      );
-    }
-  };
-
-  const createElement = async (params: Partial<ITransferCreate>) => {
-    try {
-      const { data } = await axios.post(`${API_URL}/irsaliye/`, params);
-      console.log("data", data);
-      setModalList([
-        {
-          order: 1,
-          initial_order: 1,
-          type: "add",
-          id: data.id,
-        },
-      ]);
-      await getList(filterParams);
-
-      return data;
-    } catch (error) {
-      console.error("Error creating element:", error);
-      return null;
-    }
-  };
-
   useEffect(() => {
     getList(filterParams);
   }, [filterParams]);
@@ -117,26 +76,22 @@ export const TableData = ({
 
   return {
     headColumns,
-    handleActions,
+    deleteFn,
     bodyColumns: bodyData?.data ?? [],
     isLoading,
     defaultData: {},
     bodyData,
     setBodyData,
-    createElement,
+    getList,
   };
 };
 
 export const ModalLogic = ({
-  modalList,
-  setModalList,
   filterParamsDepo = {},
   filterParamsFirma = {},
 }: {
   filterParamsDepo?: any;
   filterParamsFirma?: any;
-  modalList: any[];
-  setModalList: (value: any[]) => void;
 }) => {
   const [depoData, setDepoData]: any = useState({});
   const [firmaData, setFirmaData]: any = useState({});
@@ -180,58 +135,6 @@ export const ModalLogic = ({
     params: {},
   });
 
-  const reorderItems = (array: any[], fromIndex: number, toIndex: number) => {
-    if (fromIndex === toIndex) return array;
-    const newArray = [...array];
-    const [movedItem] = newArray.splice(fromIndex, 1);
-    newArray.splice(toIndex, 0, movedItem);
-    return newArray.map((item, index) => ({ ...item, order: index + 1 }));
-  };
-
-  const handleActionsModal = (val: string, element?: any) => {
-    if (val === "edit_modal") {
-      setModalList(
-        modalList.map((item) => ({
-          ...item,
-          type: "edit",
-          id: element?.IRSALIYEID,
-          initial_order: item.order,
-          ...element,
-        }))
-      );
-    }
-    if (val === "edit") {
-      setModalList([
-        ...modalList,
-        {
-          order: modalList.length + 1,
-          initial_order: modalList.length + 1,
-          type: "edit",
-          id: element?.IRSALIYEID,
-          ...element,
-        },
-      ]);
-    }
-    if (val === "close") {
-      setModalList(modalList.filter((item) => item.order !== element.order));
-    }
-    if (val === "reorder") {
-      setModalList(
-        reorderItems(modalList, element.order - 1, modalList.length)
-      );
-    }
-    if (val === "add") {
-      setModalList([
-        ...modalList,
-        {
-          order: modalList.length + 1,
-          initial_order: modalList.length + 1,
-          type: "add",
-        },
-      ]);
-    }
-  };
-
   const dovizOptions = useMemo(
     () =>
       dovizData?.data?.map((item: any) => ({
@@ -242,7 +145,6 @@ export const ModalLogic = ({
   );
 
   return {
-    handleActionsModal,
     depoOptions: depoData?.data,
     dovizOptions,
     firmaData: firmaData?.data,

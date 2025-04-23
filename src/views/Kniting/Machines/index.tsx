@@ -10,7 +10,6 @@ import { sidebarActions } from "../../../store/sidebar";
 import GlobalSearch from "../../../components/UI/GlobalSearch";
 import { MachinesList } from "./Components/List";
 import { IFilterParams } from "../../../interfaces";
-import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 
 const KnittingMachines = () => {
   const dispatch = useDispatch();
@@ -181,14 +180,7 @@ const KnittingMachines = () => {
 
   return (
     <>
-      <Header
-        extra={
-          <CBreadcrumbs items={[{ label: "Вязальные машины", link: "main" }]} />
-        }
-        filters={MobileHeaderElements()}
-      >
-        {HeaderElements()}
-      </Header>
+      <Header filters={MobileHeaderElements()}>{HeaderElements()}</Header>
 
       {loading && listType === "grid" ? (
         <MachinSkeletons openHeader={openHeader} />

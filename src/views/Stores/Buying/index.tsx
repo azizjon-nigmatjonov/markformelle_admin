@@ -1,25 +1,25 @@
 import { useMemo, useState } from "react";
-import { breadCrumbs, ModalLogic, TableData } from "./Logic";
+import { breadCrumbs, TableData } from "./Logic";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { Header } from "../../../components/UI/Header";
 import CNewTable from "../../../components/CElements/CNewTable";
 import { ModalUI } from "./Modal";
 import { IFilterParams } from "../../../interfaces";
 import { GetCurrentDate } from "../../../utils/getDate";
+import { ModalTypes } from "./interfaces";
+import CNewModal from "../../../components/CElements/CNewModal";
 
 export const BuyingChemicals = () => {
-  const [modalList, setModalList]: any = useState([]);
+  const [open, setOpen] = useState(false);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
   });
-  const { handleActionsModal } = ModalLogic({ setModalList, modalList });
-  const { bodyColumns, handleActions, isLoading, bodyData, createElement } =
-    TableData({
-      handleActionsModal,
-      filterParams,
-      setModalList,
-    });
+  const [modalInitialData, setModalInitialData] = useState<ModalTypes>({});
+
+  const { bodyColumns, isLoading, bodyData, deleteFn, getList } = TableData({
+    filterParams,
+  });
 
   const newHeadColumns = useMemo(() => {
     if (!bodyColumns?.length) return [];
@@ -150,6 +150,40 @@ export const BuyingChemicals = () => {
     return newColumns;
   }, [bodyColumns?.length]);
 
+  const handleActions = (el: any, status: string) => {
+    if (status === "modal") {
+      setOpen(true);
+      setModalInitialData({ IRSALIYENO: bodyColumns[0].IRSALIYENO + 1 });
+    }
+
+    if (status === "view" || status === "edit") {
+      setOpen(true);
+
+      setModalInitialData(el);
+    }
+
+    if (status === "delete") deleteFn([el.IRSALIYEID]);
+
+    if (status === "delete_multiple") {
+      deleteFn(
+        el.map((item: { IRSALIYEID: string }) => {
+          return item.IRSALIYEID;
+        })
+      );
+    }
+  };
+
+  const handleModalActions = (status: string, id: string) => {
+    if (status === "close") {
+      setOpen(false);
+      setModalInitialData({});
+    }
+    if (status === "delete") {
+      setOpen(false);
+      deleteFn([id]);
+    }
+  };
+
   return (
     <>
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />
@@ -184,16 +218,16 @@ export const BuyingChemicals = () => {
         />
       </div>
 
-      {modalList?.length ? (
-        <ModalUI
-          element={modalList[0]}
-          setModalList={setModalList}
-          modalList={modalList}
-          createElement={createElement}
-          irsaliyaNo={bodyColumns?.[0]?.IRSALIYEID || 9000}
-        />
-      ) : (
-        ""
+      {open && (
+        <CNewModal
+          title={`Документ покупки ${
+            modalInitialData.IRSALIYENO ? "№" + modalInitialData.IRSALIYENO : ""
+          }`}
+          action="add"
+          handleActions={handleModalActions}
+        >
+          <ModalUI defaultData={modalInitialData} getList={getList} />
+        </CNewModal>
       )}
     </>
   );

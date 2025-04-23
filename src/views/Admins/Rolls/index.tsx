@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import CTable from "../../../components/CElements/CTable";
 import AddButton from "../../../components/UI/Buttons/AddButton";
 import usePageRouter from "../../../hooks/useObjectRouter";
 import { Header } from "../../../components/UI/Header";

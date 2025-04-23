@@ -34,7 +34,6 @@ export const Transfers = () => {
       setOpen(false);
       console.log("el", element);
       setModalInitialData({});
-      // deleteFn([element.IRSALIYEID]);
     }
     if (type === "add") {
       setOpen(true);
