@@ -4,6 +4,7 @@ import usePageRouter from "../../../../hooks/useObjectRouter";
 import { getStoredFilters } from "../../../../components/UI/Filter/Logic";
 import useCQuery from "../../../../hooks/useCQuery";
 import { useTranslation } from "react-i18next";
+import { EyeIcon } from "../../../../components/UI/IconGenerator/Svg";
 
 export const FetchFunction = () => {
   const { filters } = getStoredFilters({});
@@ -15,7 +16,7 @@ export const FetchFunction = () => {
     refetch,
   } = useCQuery({
     key: `GET_USERS_LIST`,
-    endpoint: `http://192.168.181.29:3000/users`,
+    endpoint: `http://127.0.0.1:8000/users/`,
     params: {},
   });
 
@@ -55,6 +56,14 @@ export const TableData = () => {
       {
         title: "Тел.номер",
         id: "phone",
+        render: (val: string) => {
+          return (
+            <div className="flex space-x-2 items-center">
+              <p>{val.substring(0, 7)} •••••••</p>
+              <EyeIcon fill="var(--black)" width={14} />
+            </div>
+          );
+        },
       },
       {
         title: "Отдел кадров",

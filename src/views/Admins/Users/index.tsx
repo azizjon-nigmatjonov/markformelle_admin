@@ -1,14 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
-import CTable from "../../../components/CElements/CTable";
-import AddButton from "../../../components/UI/Buttons/AddButton";
 import usePageRouter from "../../../hooks/useObjectRouter";
 import Form from "./Form";
 import { Header } from "../../../components/UI/Header";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { FetchFunction, TableData, breadCrumbs } from "./Logic";
 import { FilterFunctions } from "../../../components/UI/Filter/Logic";
-import CCard from "../../../components/CElements/CCard";
 import axios from "axios";
+import CNewTable from "../../../components/CElements/CNewTable";
 
 const Users = () => {
   const { navigateQuery } = usePageRouter();
@@ -64,27 +62,38 @@ const Users = () => {
         }
       ></Header>
       <div className="p-2">
-        <CCard>
-          <CTable
-            headColumns={headColumns}
-            bodyColumns={bodyColumns?.list ?? []}
-            meta={bodyColumns?.meta}
-            isResizeble={true}
-            isLoading={isLoading}
-            handleActions={handleActions}
-            filterParams={filterParams}
-            handleFilterParams={handleFilterParams}
-            extra={
-              <AddButton
-                text="add"
-                onClick={() => navigateQuery({ id: "create" })}
-                classes="h-[25px] desktop:h-[30px]"
-              />
-            }
-          />
+        <CNewTable
+          headColumns={headColumns}
+          bodyColumns={bodyColumns?.list ?? []}
+          meta={{
+            totalCount: 50,
+            pageCount: 19,
+          }}
+          defaultFilters={[
+            "sidebar_filter",
+            "add",
+            "delete",
+            "actions",
+            "excel_download",
+            "active_menu",
+            "filter",
+            "sellect_more",
+          ]}
+          isResizeble={true}
+          isLoading={isLoading}
+          handleActions={handleActions}
+          filterParams={filterParams}
+          handleFilterParams={handleFilterParams}
+          // extra={
+          //   <AddButton
+          //     text="add"
+          //     onClick={() => navigateQuery({ id: "create" })}
+          //     classes="h-[25px] desktop:h-[30px]"
+          //   />
+          // }
+        />
 
-          {query?.id && <Form refetch={refetch} id={query.id} />}
-        </CCard>
+        {query?.id && <Form refetch={refetch} id={query.id} />}
       </div>
     </>
   );

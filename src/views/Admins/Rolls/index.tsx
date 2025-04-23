@@ -7,6 +7,7 @@ import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { DeleteFunction, FetchFunction, TableData, breadCrumbs } from "./Logic";
 import { FilterFunctions } from "../../../components/UI/Filter/Logic";
 import CCard from "../../../components/CElements/CCard";
+import CNewTable from "../../../components/CElements/CNewTable";
 
 const Rolls = () => {
   const { navigateTo } = usePageRouter();
@@ -48,7 +49,7 @@ const Rolls = () => {
       ></Header>
       <div className="p-2">
         <CCard>
-          <CTable
+          <CNewTable
             headColumns={headColumns}
             bodyColumns={bodyColumns}
             isResizeble={true}
@@ -56,6 +57,20 @@ const Rolls = () => {
             isLoading={isLoading}
             filterParams={filterParams}
             handleFilterParams={handleFilterParams}
+            meta={{
+              totalCount: 4,
+              pageCount: 1,
+            }}
+            defaultFilters={[
+              "sidebar_filter",
+              "add",
+              "delete",
+              "actions",
+              "excel_download",
+              "active_menu",
+              "filter",
+              "sellect_more",
+            ]}
             extra={
               <AddButton
                 text="Добавить новую роль"

@@ -46,7 +46,7 @@ export const Header = ({
   return (
     <div
       className={`duration-300 ${
-        openHeader ? "mb-[35px] desktop:mb-[45px]" : ""
+        openHeader ? "mb-[45px] desktop:mb-[45px]" : ""
       }`}
     >
       <div className="fixed z-[96]">
@@ -55,7 +55,7 @@ export const Header = ({
           setCollapsed={setCollapsed}
         />
         <div
-          className={`h-[35px] desktop:h-[45px] relative z-[98] bg-white w-full duration-300 ${
+          className={`h-[45px] desktop:h-[45px] relative z-[98] bg-white w-full duration-300 ${
             openHeader || open ? "" : "hidden"
           }`}
         >

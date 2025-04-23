@@ -50,7 +50,7 @@ export const Sidebar = () => {
           style={{ height: "100vh" }}
         >
           <div
-            className={`h-[35px] desktop:h-[45px] text-xl flex ${
+            className={`h-[45px] desktop:h-[45px] text-xl flex ${
               wideSidebar ? "" : "justify-center mb-10"
             } w-full items-center border-b border-[var(--border)] px-1`}
           >
