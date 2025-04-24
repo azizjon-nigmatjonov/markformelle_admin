@@ -9,6 +9,7 @@ interface Props {
 
 const MachinCardUI = ({ machine = {} }: Props) => {
   const [open, setOpen]: any = useState(false);
+
   return (
     <div
       className={`rounded-[12px] relative w-full pb-4 bg-white ${machine.new_status.color}`}
@@ -31,7 +32,7 @@ const MachinCardUI = ({ machine = {} }: Props) => {
         }}
         count={6}
       />
-      
+
       {open && (
         <Modal
           aria-labelledby="modal-title"

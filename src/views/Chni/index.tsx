@@ -65,7 +65,7 @@ const ChniDashboard = () => {
       <ToggleBtn type={type} setType={setType} />
     </div>
   );
-    
+
   return (
     <>
       <Header

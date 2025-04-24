@@ -1,5 +1,6 @@
 import { BuyingChemicals } from "../../views/Stores/Buying";
 import { ChemicalsStock } from "../../views/Stores/ChemicalsStock";
+import { CreateMixture } from "../../views/Stores/CreateMixture";
 import { EritmaPage } from "../../views/Stores/Eritma";
 import { MixturesPage } from "../../views/Stores/Mixtures";
 import { Transfers } from "../../views/Stores/Transfers";
@@ -33,6 +34,14 @@ export const chemicalStore = [
         childLink: "mixtures",
         path: "chemical_store/mixtures",
         icon: <img width={20} src="/images/mixtures.png" alt="mixtures" />,
+      },
+      {
+        parent: "chemical_store/mixture_create",
+        link: "mixture_create",
+        title: "chemicals_mixture_create",
+        childLink: "mixture_create",
+        path: "chemical_store/mixture_create",
+        icon: <img width={20} src="/images/create.png" alt="mixture_create" />,
       },
     ],
   },
@@ -96,6 +105,13 @@ export const chemicalStore = [
     link: "mixtures",
     sidebar: false,
     element: <MixturesPage />,
+    permissions: ["view_page"],
+  },
+  {
+    parent: "chemical_store",
+    link: "mixture_create",
+    sidebar: false,
+    element: <CreateMixture />,
     permissions: ["view_page"],
   },
   {

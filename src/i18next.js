@@ -21,7 +21,7 @@ i18next
         localStorage.getItem("i18nextLng")?.includes("US")
           ? "ru"
           : localStorage.getItem("i18nextLng")
-      }`,
+      }?limit=1000`,
       request: async (options, url, payload, callback) => {
         let currentLang = i18next.language;
         if (currentLang?.includes("US")) currentLang = "ru";

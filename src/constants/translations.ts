@@ -73,4 +73,8 @@ export const TranslationsObject = {
   URUNADI: "Продукт",
   MIKTAR: "Количество",
   URUNBIRIMADI: "Ед. измерения",
+  table_chemicals: 'Таблица химикатов',
+  modal_mixtures: "Ростворь",
+  details: 'Информация',
+  table_mixtures_details: 'Таблица ростворь расходов'
 };

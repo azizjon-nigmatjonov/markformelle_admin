@@ -9,7 +9,7 @@ import { ModalUI } from "./Modal";
 import { ModalTypes } from "./interfaces";
 import { useTranslation } from "react-i18next";
 
-export const MixturesPage = () => {
+export const CreateMixture = () => {
   const { t } = useTranslation();
   const [modalInitialData, setModalInitialData] = useState<ModalTypes>({});
   const [filterParams, setFilterParams] = useState<IFilterParams>({
@@ -126,7 +126,7 @@ export const MixturesPage = () => {
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />
       <div className="p-2">
         <CNewTable
-          title={t("table_mixtures")}
+          title={t("chemicals_mixture_create")}
           headColumns={newHeadColumns}
           bodyColumns={bodyColumns}
           handleActions={handleActions}
@@ -155,7 +155,7 @@ export const MixturesPage = () => {
 
       {open && (
         <CNewModal
-          title={t("modal_mixtures")}
+          title={t("modal_creating_mixture")}
           action={"add"}
           handleActions={handleModalActions}
           defaultData={{

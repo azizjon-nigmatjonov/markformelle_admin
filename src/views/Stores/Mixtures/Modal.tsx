@@ -197,7 +197,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
           </div>
         </div>
 
-        <CollapseUI title={t("details")} defaultOpen={true}>
+        <CollapseUI title="" disabled={true} defaultOpen={true}>
           <CNewTable
             title={t("table_mixtures_details")}
             key={tableData?.data?.length ? "table_mixtures_details" : "empty"}

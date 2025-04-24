@@ -4,10 +4,10 @@ import { PersistGate } from "redux-persist/integration/react";
 import { QueryClientProvider } from "react-query";
 import queryClient from "./services/queryClient";
 import { BrowserRouter } from "react-router-dom";
-import Router from "./router";
 import { persistor, store } from "./store";
-import "./i18next";
 import PageFallback from "./components/UI/PageFallback";
+import Router from "./router";
+import "./i18next";
 
 function App() {
   return (

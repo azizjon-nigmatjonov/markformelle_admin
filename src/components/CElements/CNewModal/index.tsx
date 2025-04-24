@@ -19,6 +19,7 @@ interface Props {
   classes?: string;
   closable?: boolean;
   action?: any;
+  actions?: string[];
   defaultData?: { id: string | number | undefined };
   handleActions?: (val: string, val2?: any) => void;
 }
@@ -30,6 +31,7 @@ const CNewModal: FC<Props> = ({
   action = "add",
   defaultData = {},
   handleActions = () => {},
+  actions = [],
 }) => {
   const [screen, setScreen] = useState(true);
   const [position, setPosition] = useState<{ x: number; y: number } | null>(
@@ -117,11 +119,11 @@ const CNewModal: FC<Props> = ({
       >
         <Card className={`${cls.card}`} style={{ padding }}>
           <div
-            className={`duration-300 relative overflow-y-scroll designed-scroll ${
+            className={`duration-300 relative overflow-y-scroll remove-scroll ${
               title
                 ? screen
-                  ? "w-[1200px] h-[700px]"
-                  : "w-[90vw] h-[80vh]"
+                  ? "w-[1200px] max-h-[700px]"
+                  : "w-[90vw] max-h-[80vh]"
                 : "w-auto h-[800px]"
             }`}
           >
@@ -140,15 +142,17 @@ const CNewModal: FC<Props> = ({
                 </div>
 
                 <div className="flex items-center space-x-3">
-                  <IconButton onClick={() => handleActions("edit_modal")}>
-                    <div
-                      className={`flex items-center justify-center rounded-full w-[30px] h-[30px] ${
-                        action === "edit" ? "border border-[var(--main)]" : ""
-                      }`}
-                    >
-                      <EditIcon fill="var(--main)" />
-                    </div>
-                  </IconButton>
+                  {actions.includes("edit") && (
+                    <IconButton onClick={() => handleActions("edit_modal")}>
+                      <div
+                        className={`flex items-center justify-center rounded-full w-[30px] h-[30px] ${
+                          action === "edit" ? "border border-[var(--main)]" : ""
+                        }`}
+                      >
+                        <EditIcon fill="var(--main)" />
+                      </div>
+                    </IconButton>
+                  )}
 
                   {defaultData?.id && (
                     <div className="relative">
