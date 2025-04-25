@@ -6,6 +6,7 @@ import { paintSection } from "./paint";
 import { settingList } from "./settings";
 import { chemicalStore } from "./chemicalStore";
 import { wareHouse } from "./warehouse";
+import { labaratorySection } from "./labaratory";
 
 export const routeList = [
   ...settingList,
@@ -14,6 +15,7 @@ export const routeList = [
   ...paintSection,
   ...dryingList,
   ...chniSection,
-  ...adminList,
   ...chemicalStore,
+  ...labaratorySection,
+  ...adminList,
 ];

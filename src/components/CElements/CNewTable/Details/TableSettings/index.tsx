@@ -220,7 +220,11 @@ export const HeaderSettings = ({
 
   return (
     <div className="pb-[45px] bg-white border-b border-[var(--border)] rounded-t-[8px]">
-      <div className="h-[45px] absolute w-full left-0 top-0 flex items-center desktop:px-3 justify-between">
+      <div
+        className={`h-[45px] absolute w-full left-0 top-0 flex items-center ${
+          title ? "desktop:px-3" : ""
+        } justify-between`}
+      >
         <div className="flex items-center space-x-4 h-full">
           {title ? (
             <h2

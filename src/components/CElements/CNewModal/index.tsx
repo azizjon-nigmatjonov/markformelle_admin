@@ -20,6 +20,7 @@ interface Props {
   closable?: boolean;
   action?: any;
   actions?: string[];
+  disabled?: string;
   defaultData?: { id: string | number | undefined };
   handleActions?: (val: string, val2?: any) => void;
 }
@@ -32,6 +33,7 @@ const CNewModal: FC<Props> = ({
   defaultData = {},
   handleActions = () => {},
   actions = [],
+  disabled = "",
 }) => {
   const [screen, setScreen] = useState(true);
   const [position, setPosition] = useState<{ x: number; y: number } | null>(
@@ -53,6 +55,11 @@ const CNewModal: FC<Props> = ({
       setPosition(null);
     }
   };
+  useEffect(() => {
+    if (disabled) {
+      disabled === "big" ? setScreen(false) : setScreen(true);
+    }
+  }, [disabled]);
 
   const handleDragStart = (e: React.MouseEvent) => {
     e.preventDefault();
