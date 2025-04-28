@@ -777,7 +777,9 @@ const CNewTable = ({
                               disabled ? "text-[var(--gray)]" : ""
                             }`}
                           >
-                            {column.renderHead
+                            {removeHeader
+                              ? ""
+                              : column.renderHead
                               ? Array.isArray(column.renderHead)
                                 ? column.renderHead(
                                     column.renderHead.map(
@@ -794,7 +796,8 @@ const CNewTable = ({
 
                           {column.id !== "multiple" &&
                           column.id !== "index" &&
-                          !column.id.includes("actions") ? (
+                          !column.id.includes("actions") &&
+                          !removeHeader ? (
                             <TableFilter
                               colId={column?.id ?? currentFilter}
                               sortData={sortData}

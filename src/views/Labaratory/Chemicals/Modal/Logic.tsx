@@ -190,3 +190,14 @@ export const DetailsFormLogic = ({
 
   return { updateForm, createForm, formData: formData?.data };
 };
+
+export const TablesLogic = () => {
+  const headColumnsTrail = [
+    {
+      title: "no",
+      id: "no",
+    },
+  ];
+
+  return { headColumnsTrail };
+};

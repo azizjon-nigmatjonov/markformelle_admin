@@ -7,11 +7,15 @@ import { useTranslationHook } from "../../../../hooks/useTranslation";
 import { InputFieldUI } from "../../../../components/UI/FieldUI";
 import { SelectOptionsTable } from "../../../../components/UI/Options/Table";
 import { useGetUrunTypeList } from "../../../../hooks/useFetchRequests/useUrunType";
-import { ModalTableLogic } from "./Logic";
+import { ModalTableLogic, TablesLogic } from "./Logic";
 import { TableForm } from "./TableForm";
 import dayjs from "dayjs";
 import { useGetFirmList } from "../../../../hooks/useFetchRequests/useFirmaList";
 import CNewTable from "../../../../components/CElements/CNewTable";
+import HFSelect from "../../../../components/HFElements/HFSelect";
+import { PlusIcon } from "../../../../components/UI/IconGenerator/Svg";
+
+import { MaterialForm } from "./MaterialForm";
 
 interface ModalUIProps {
   defaultData?: ModalTypes;
@@ -20,13 +24,14 @@ interface ModalUIProps {
 }
 
 export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
+  const [anchorMaterial, setAchorMaterial] = useState<null | HTMLElement>(null);
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
   const { t } = useTranslationHook();
   const [open, setOpen] = useState(false);
   const [formId, setFormId] = useState<string>("");
   const [disabled, setDisabled] = useState(true);
   const [modalInitialData, setModalInitialData] = useState<ModalUIProps>({});
-
+  const { headColumnsTrail } = TablesLogic();
   const {
     headColumns,
     tableData,
@@ -128,6 +133,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
       );
     }
   };
+  console.log("anchorMaterial", anchorMaterial);
 
   return (
     <>
@@ -166,7 +172,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
         </div>
         <CollapseUI title="" disabled={true}>
           <div className="flex justify-between space-x-4">
-            <div className="w-full grid grid-cols-3 gap-3">
+            <div className="w-full grid grid-cols-3 gap-y-3 gap-x-5">
               <InputFieldUI title={t("URUNRECETEADI")}>
                 <HFTextField
                   name="URUNRECETEADI"
@@ -175,12 +181,125 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
                   placeholder={t("URUNRECETEADI")}
                 />
               </InputFieldUI>
+              {/* <InputFieldUI title={t("Miktar")}>
+                <HFInputMask
+                  control={control}
+                  name="MIKTAR"
+                  type="number"
+                  required={true}
+                  placeholder="Miktar"
+                />
+              </InputFieldUI> */}
               <InputFieldUI title={t("URUNID")}>
                 <HFTextField
                   name="URUNID"
                   control={control}
                   setValue={setValue}
                   placeholder={t("URUNID")}
+                />
+              </InputFieldUI>
+              <InputFieldUI title={t("TALEPTARIHI")}>
+                <HFTextField
+                  name="TALEPTARIHI"
+                  control={control}
+                  setValue={setValue}
+                  placeholder={t("TALEPTARIHI")}
+                />
+              </InputFieldUI>
+              <InputFieldUI title={t("ASHKLAMA")}>
+                <HFTextField
+                  name="ASHKLAMA"
+                  control={control}
+                  setValue={setValue}
+                  placeholder={t("ASHKLAMA")}
+                />
+              </InputFieldUI>
+              <InputFieldUI title={t("ESKIRECETEKODU")}>
+                <HFTextField
+                  name="ESKIRECETEKODU"
+                  control={control}
+                  setValue={setValue}
+                  placeholder={t("ESKIRECETEKODU")}
+                />
+              </InputFieldUI>
+              <InputFieldUI title={t("RENKDIENLIGI")}>
+                <HFSelect
+                  name="RENKDIENLIGI"
+                  control={control}
+                  setValue={setValue}
+                  placeholder={t("RENKDIENLIGI")}
+                />
+              </InputFieldUI>
+              <InputFieldUI title={t("RENKGRUP")}>
+                <HFSelect
+                  name="RENKGRUP"
+                  control={control}
+                  setValue={setValue}
+                  placeholder={t("RENKGRUP")}
+                />
+              </InputFieldUI>
+              <InputFieldUI title={t("DOVIZ")}>
+                <HFSelect
+                  name="DOVIZ"
+                  control={control}
+                  setValue={setValue}
+                  placeholder={t("DOVIZ")}
+                />
+              </InputFieldUI>
+              <InputFieldUI title={t("RECETETURU")}>
+                <HFSelect
+                  name="RECETETURU"
+                  control={control}
+                  setValue={setValue}
+                  placeholder={t("RECETETURU")}
+                />
+              </InputFieldUI>
+              <InputFieldUI title={t("HAMSTOCK")}>
+                <SelectOptionsTable
+                  name="HAMSTOCK"
+                  placeholder={t("HAMSTOCK")}
+                  options={firmaData}
+                  required={true}
+                  headColumns={[
+                    { id: "FIRMAID", width: 200, title: "FIRMAID" },
+                    { id: "FIRMAADI", title: "FIRMAADI" },
+                    { id: "KISAADI", title: "KISAADI" },
+                  ]}
+                  filterParams={filterParams}
+                  handleSelect={(_: {}) => {}}
+                  handleSearch={(val: string) => {
+                    setFilterParamsFirm({ ...filterParamsFirm, q: val });
+                  }}
+                  control={control}
+                  setFilterParams={setFilterParams}
+                />
+              </InputFieldUI>
+              <InputFieldUI title={t("USTASAMA")}>
+                <SelectOptionsTable
+                  name="USTASAMA"
+                  placeholder={t("USTASAMA")}
+                  options={firmaData}
+                  required={true}
+                  headColumns={[
+                    { id: "FIRMAID", width: 200, title: "FIRMAID" },
+                    { id: "FIRMAADI", title: "FIRMAADI" },
+                    { id: "KISAADI", title: "KISAADI" },
+                  ]}
+                  filterParams={filterParams}
+                  handleSelect={(_: {}) => {}}
+                  handleSearch={(val: string) => {
+                    setFilterParamsFirm({ ...filterParamsFirm, q: val });
+                  }}
+                  control={control}
+                  setFilterParams={setFilterParams}
+                />
+              </InputFieldUI>
+              <InputFieldUI title={t("PANTONEKODU")}>
+                <HFSelect
+                  name="PANTONEKODU"
+                  control={control}
+                  setValue={setValue}
+                  placeholder={t("PANTONEKODU")}
                 />
               </InputFieldUI>
               <InputFieldUI title={t("FIRMAID")}>
@@ -228,38 +347,43 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
             </div>
           </div>
         </CollapseUI>
+      </form>
 
-        {/* <CollapseUI title={t("form_material")} disabled={disabled}>
-          A
-        </CollapseUI> */}
-
-        <div className="grid grid-cols-3">
-          <div className="border border-[var(--border)] border-r-0">
+      <div className="grid grid-cols-3 border rounded-[12px] border-[var(--border)]">
+        <div className="border-r border-[var(--border)] px-2">
+          <CNewTable
+            title="Material"
+            headColumns={headColumns}
+            defaultFilters={["actions"]}
+            defaultActions={["delete", "edit"]}
+            idForTable="modal_table_material"
+            bodyColumns={[]}
+            handleActions={handleActions}
+            isLoading={false}
+            filterParams={filterParams}
+            handleFilterParams={setFilterParams}
+            disablePagination={true}
+            autoHeight={"400px"}
+            disabled={disabled}
+            extra={
+              <button
+                onClick={(event) => setAchorMaterial(event.currentTarget)}
+                className="flex items-center"
+              >
+                <PlusIcon fill="var(--black)" /> {t("add")}
+              </button>
+            }
+          />
+        </div>
+        <div className=" px-2">
+          <div>
             <CNewTable
-              title=""
-              key={formId ? formId : "modal"}
-              headColumns={headColumns}
-              defaultFilters={["add", "delete", "actions", "sellect_more"]}
-              idForTable="modal_table_material"
-              bodyColumns={formId ? tableData?.data : []}
-              handleActions={handleActions}
-              isLoading={false}
-              filterParams={filterParams}
-              handleFilterParams={setFilterParams}
-              disablePagination={true}
-              autoHeight={"400px"}
-              disabled={disabled}
-            />
-          </div>
-          <div className="border border-[var(--border)] border-r-0">
-            <CNewTable
-              title=""
-              key={formId ? formId : "modal"}
-              headColumns={headColumns}
-              defaultActions={["view", "edit", "delete"]}
-              defaultFilters={["add", "delete", "actions", "sellect_more"]}
+              title="Trail"
+              headColumns={headColumnsTrail}
+              defaultFilters={["actions"]}
+              defaultActions={["delete", "edit"]}
               idForTable="modal_table_trial_first"
-              bodyColumns={formId ? tableData?.data : []}
+              bodyColumns={[]}
               handleActions={handleActions}
               isLoading={false}
               filterParams={filterParams}
@@ -267,43 +391,52 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
               disablePagination={true}
               autoHeight={"180px"}
               disabled={disabled}
+              extra={
+                <button className="flex items-center">
+                  <PlusIcon fill="var(--black)" /> {t("add")}
+                </button>
+              }
             />
             <CNewTable
               title=""
-              key={formId ? formId : "modal"}
-              headColumns={headColumns}
+              headColumns={headColumnsTrail}
               removeHeader={true}
-              defaultFilters={["add", "delete", "actions", "sellect_more"]}
-              idForTable="modal_table_trial_second"
-              bodyColumns={formId ? tableData?.data : []}
+              defaultFilters={["actions"]}
+              defaultActions={["delete", "edit"]}
+              idForTable="modal_table_trial_first"
+              bodyColumns={[]}
               handleActions={handleActions}
               isLoading={false}
               filterParams={filterParams}
               handleFilterParams={setFilterParams}
               disablePagination={true}
               autoHeight={"180px"}
-              disabled={disabled}
-            />
-          </div>
-          <div className="border border-[var(--border)]">
-            <CNewTable
-              title=""
-              key={formId ? formId : "modal"}
-              headColumns={headColumns}
-              defaultFilters={["add", "delete", "actions", "sellect_more"]}
-              idForTable="modal_table_details"
-              bodyColumns={formId ? tableData?.data : []}
-              handleActions={handleActions}
-              isLoading={false}
-              filterParams={filterParams}
-              handleFilterParams={setFilterParams}
-              disablePagination={true}
-              autoHeight={"auto"}
               disabled={disabled}
             />
           </div>
         </div>
-      </form>
+        <div className="border-l border-[var(--border)] px-2">
+          <CNewTable
+            title="Details"
+            headColumns={headColumns}
+            defaultFilters={["actions"]}
+            defaultActions={["delete", "edit"]}
+            bodyColumns={formId ? tableData?.data : []}
+            handleActions={handleActions}
+            isLoading={false}
+            filterParams={filterParams}
+            handleFilterParams={setFilterParams}
+            disablePagination={true}
+            autoHeight={"auto"}
+            disabled={disabled}
+            extra={
+              <button className="flex items-center">
+                <PlusIcon fill="var(--black)" /> {t("add")}
+              </button>
+            }
+          />
+        </div>
+      </div>
       {open && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-[99]">
           <TableForm
@@ -319,6 +452,10 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
           ></div>
         </div>
       )}
+
+      <MaterialForm anchor={anchorMaterial} setAnchor={setAchorMaterial} />
+
+      {/* <div className="w-full h-full fixed bg-red-500 top-0 left-0"></div> */}
     </>
   );
 };

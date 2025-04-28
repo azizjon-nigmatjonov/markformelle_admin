@@ -130,7 +130,7 @@ const CNewModal: FC<Props> = ({
               title
                 ? screen
                   ? "w-[1200px] max-h-[700px]"
-                  : "w-[90vw] max-h-[80vh]"
+                  : "w-[90vw] max-h-[90vh]"
                 : "w-auto h-[800px]"
             }`}
           >
@@ -240,15 +240,6 @@ const CNewModal: FC<Props> = ({
             )}
 
             <div className="p-4 relative z-[94]">{children}</div>
-
-            {/* {element?.order && !element.last ? (
-              <div
-                onClick={() => handleActions("reorder", element)}
-                className="absolute left-0 top-0 z-[97] w-full h-full"
-              ></div>
-            ) : (
-              <></>
-            )} */}
           </div>
         </Card>
       </div>

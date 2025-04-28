@@ -77,13 +77,9 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
   const { control, handleSubmit, setValue, getValues, reset, watch } =
     useForm<IModalForm>({
       mode: "onSubmit",
-      // resolver: yupResolver(schema),
     });
 
   const onSubmit = (data: any) => {
-    // if (!data.URUNID || !data.INSERTTARIHI) {
-    //   return;
-    // }
     let params: any = data;
 
     if (formId) {

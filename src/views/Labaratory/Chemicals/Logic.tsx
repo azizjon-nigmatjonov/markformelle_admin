@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useTranslationHook } from "../../../hooks/useTranslation";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const breadCrumbs = [
@@ -13,6 +14,7 @@ export const TableData = ({
   filterParams: any;
   setOpen?: (val: boolean) => void;
 }) => {
+  const { t } = useTranslationHook();
   const [headColumns, setHeadColumns] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [bodyData, setBodyData]: any = useState({});
@@ -45,7 +47,7 @@ export const TableData = ({
         data: id,
       });
       getList(filterParams);
-      toast.success("Muvaffaqiyatli amalga oshirildi!");
+      toast.success(t("deleted!"));
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
       return null;
