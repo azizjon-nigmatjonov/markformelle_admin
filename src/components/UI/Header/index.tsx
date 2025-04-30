@@ -86,7 +86,9 @@ export const Header = ({
               <div className="h-[20px] w-[2px] bg-[var(--gray20)] mx-3"></div>
 
               <div className="flex items-center space-x-3">
-                <LangDropdown />
+                <div className="w-[140px]">
+                  <LangDropdown />
+                </div>
                 {/* <OrderDriver /> */}
                 <Notification />
               </div>

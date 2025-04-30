@@ -8,9 +8,8 @@ import { useTranslationHook } from "../../../hooks/useTranslation";
 import CNewModal from "../../../components/CElements/CNewModal";
 import { ModalUI } from "./Modal";
 import { ModalTypes } from "./interfaces";
-import { PantoneColors } from "../../../constants/pantone";
 
-export const LabChemicals = () => {
+export const RecipeList = () => {
   const { t } = useTranslationHook();
   const [open, setOpen] = useState(false);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
@@ -24,12 +23,10 @@ export const LabChemicals = () => {
   });
 
   const newHeadColumns = useMemo(() => {
-    const obj = { ...bodyColumns?.[0] };
-    const keys = Object.keys(obj);
     const newColumns: any = [
       {
-        title: "RECETE KODU",
-        id: "URUNID",
+        title: "Image",
+        id: "image",
       },
       {
         title: "RECETE AD",
@@ -39,72 +36,7 @@ export const LabChemicals = () => {
         title: "FIMRA KODU",
         id: "MUTFAKDEPONO",
       },
-      {
-        title: "PANTONE KODU",
-        id: "PANTONE",
-        render: () => {
-          const value = "TCX 16-5123";
-          return (
-            <div className="flex space-x-2 items-center">
-              <p>{value}</p>
-              <div
-                className={`w-[70px] h-[25px] rounded-[8px]`}
-                style={{
-                  backgroundColor:
-                    "#" + PantoneColors[value.substring(4, 11)]?.hex,
-                }}
-              ></div>
-            </div>
-          );
-        },
-      },
-      {
-        title: "FIRMA AD",
-        id: "UNITEADI",
-      },
-      {
-        title: "TALEP TARIHI",
-        id: "URUNTIPIADI",
-      },
-      {
-        title: "LAB RECETE GRUP",
-        id: "BOYATIPIADI",
-      },
-      {
-        title: "RENK GRUP",
-        id: "KULLANICIADI",
-      },
-      {
-        title: "SABS TIPI",
-        id: "INSERTTARIHI",
-      },
-      {
-        title: "ESKI LAB RECETE KODU",
-        id: "INSERKULLANICIADI",
-      },
-
-      {
-        title: "RECETE TURU",
-        id: "DEGISIMTARIHI",
-      },
-      {
-        title: "HAD ADI",
-        id: "SONALISSTOKDETAYID",
-      },
-      {
-        title: "ILK HAYDEDEN KULLANUCI",
-        id: "BARKOD",
-      },
     ];
-
-    keys.forEach((key: string) => {
-      if (!newColumns.find((item: { id: string }) => item.id === key)) {
-        newColumns.push({
-          title: key,
-          id: key,
-        });
-      }
-    });
 
     return newColumns;
   }, [bodyColumns]);
@@ -156,7 +88,7 @@ export const LabChemicals = () => {
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />
       <div className="p-2">
         <CNewTable
-          title={t("table_chemicals")}
+          title={t("table_recipe")}
           headColumns={newHeadColumns}
           bodyColumns={bodyColumns}
           handleActions={handleActions}
@@ -173,7 +105,7 @@ export const LabChemicals = () => {
             "filter",
             "sellect_more",
           ]}
-          defaultSearch={{ DATE: "", PANTONE: "", MATERIAL: "" }}
+          defaultSearch={{ DATE: "" }}
           meta={{
             totalCount: bodyData?.count,
             pageCount: bodyData?.count

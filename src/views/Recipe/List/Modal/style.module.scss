@@ -1,0 +1,13 @@
+.customTable {
+    .cellFirst {
+        width: 400px;
+    }
+    .cell {
+        width: 200px;
+        border-bottom: 1px solid var(--border);
+
+        &:first-child {
+            width: 25%;
+        }
+    }
+}

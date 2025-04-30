@@ -14,6 +14,7 @@ import {
 } from "../../../../UI/IconGenerator/Svg";
 import { PopoverDelete } from "../Actions/EditDelete/PopOver";
 import { useTranslationHook } from "../../../../../hooks/useTranslation";
+import { CheckMultipleIcon } from "../../../../UI/IconGenerator/Svg/Table";
 
 export const SettingDropdown = ({
   allCheck = false,
@@ -305,10 +306,9 @@ export const HeaderSettings = ({
                   disabled={disabled}
                 >
                   <div className="w-[30px] h-[30px] items-center justify-center flex">
-                    <img
+                    <CheckMultipleIcon
                       width={20}
-                      src="/images/tasklist.png"
-                      alt="task list"
+                      fill={disabled ? "var(--gray)" : "var(--main)"}
                     />
                   </div>
                   <p

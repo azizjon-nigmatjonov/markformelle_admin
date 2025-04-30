@@ -6,6 +6,7 @@ export const routeParents = {
   chni: [],
   chemical_store: [],
   labaratory: [],
+  recipe: [],
   access: [],
   settings: [],
 };
