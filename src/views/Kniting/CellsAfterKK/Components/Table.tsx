@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
-import CTable from "../../../../components/CElements/CTable";
 import CCard from "../../../../components/CElements/CCard";
 import { GetCurrentDate } from "../../../../utils/getDate";
 import { IFilterParams } from "../../../../interfaces";
+import CNewTable from "../../../../components/CElements/CNewTable";
+import { useTranslation } from "react-i18next";
 interface Props {
   list: any;
 }
 
 export const CellsAfterKKTable = ({ list }: Props) => {
+  const { t } = useTranslation();
   const [headColumns, setHeadColumns]: any = useState([]);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
@@ -61,7 +63,8 @@ export const CellsAfterKKTable = ({ list }: Props) => {
   return (
     <div className="p-2">
       <CCard classes="border-0" childClasses="p-0">
-        <CTable
+        <CNewTable
+          title={t("Клетки после КК")}
           headColumns={headColumns}
           bodyColumns={bodyColumns}
           meta={{ totalCount: 60, pageCount: 5 }}

@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
-import CTable from "../../../components/CElements/CTable";
 import CCard from "../../../components/CElements/CCard";
 import { Modal } from "@mui/joy";
 import { PaintCardModal } from "./Modal";
 import { GetCurrentDate } from "../../../utils/getDate";
 import { IFilterParams } from "../../../interfaces";
+import CNewTable from "../../../components/CElements/CNewTable";
+import { useTranslation } from "react-i18next";
 interface Props {
   list: any;
+  type: string | undefined;
 }
 
-export const PaintTable = ({ list = [] }: Props) => {
+export const PaintTable = ({ list = [], type = "table" }: Props) => {
+  const { t } = useTranslation();
   const [open, setOpen]: any = useState({});
   const [headColumns, setHeadColumns]: any = useState([]);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
@@ -98,7 +101,8 @@ export const PaintTable = ({ list = [] }: Props) => {
     <>
       <div className="p-2">
         <CCard classes="border-0" childClasses="p-0">
-          <CTable
+          <CNewTable
+            title={t(type)}
             headColumns={headColumns}
             bodyColumns={bodyColumns}
             meta={{ totalCount: 60, pageCount: 5 }}

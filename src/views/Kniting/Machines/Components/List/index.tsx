@@ -1,11 +1,11 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useMemo, useState } from "react";
-import CTable from "../../../../../components/CElements/CTable";
-import CCard from "../../../../../components/CElements/CCard";
 import {
   FormatTime,
   GetGoursFromMinutes,
 } from "../../../../../utils/formatTime";
+import CNewTable from "../../../../../components/CElements/CNewTable";
+import CCard from "../../../../../components/CElements/CCard";
 
 interface Props {
   list: any;
@@ -149,11 +149,11 @@ export const MachinesList = ({
 
   return (
     <div className="p-2">
-      <CCard classes="border-0" childClasses="p-0">
-        <CTable
+      <CCard childClasses="p-[0]">
+        <CNewTable
+          title={t("knitting")}
           headColumns={headColumns}
           bodyColumns={bodyColumns}
-          meta={{ totalCount: 60, pageCount: 5 }}
           isResizeble={true}
           isLoading={false}
           disablePagination={true}

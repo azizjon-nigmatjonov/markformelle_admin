@@ -169,7 +169,7 @@ const PaintSectionYarn = () => {
       {type === "grid" ? (
         <PaintList data={newData ?? []} />
       ) : (
-        <PaintTable list={newData ?? []} />
+        <PaintTable list={newData ?? []} type="Крашения пряжи" />
       )}
     </>
   );

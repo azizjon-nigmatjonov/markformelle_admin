@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import CCard from "../../../components/CElements/CCard";
-import CTable from "../../../components/CElements/CTable";
+
 import { IFilterParams } from "../../../interfaces";
+import CNewTable from "../../../components/CElements/CNewTable";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   data: any;
 }
 
 export const DryTable = ({ data = [] }: Props) => {
+  const { t } = useTranslation();
   const [headColumns, setHeadColumns]: any = useState([]);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
@@ -36,7 +39,8 @@ export const DryTable = ({ data = [] }: Props) => {
   return (
     <div className="p-2">
       <CCard classes="border-0" childClasses="p-0">
-        <CTable
+        <CNewTable
+          title={t("table_chemicals")}
           headColumns={headColumns}
           bodyColumns={data}
           meta={{ totalCount: 60, pageCount: 5 }}

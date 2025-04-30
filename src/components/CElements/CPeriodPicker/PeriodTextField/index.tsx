@@ -25,8 +25,6 @@ export const PeriodTextField = ({
 }: Props) => {
   const firstInput: any = useRef(null);
   const secondInput: any = useRef(null);
-  console.log("firstInput", firstInput);
-  console.log("secondInput", secondInput);
 
   const handleChange = (index: number, e: any) => {
     console.log("va", value, e);

@@ -8,6 +8,7 @@ import { useTranslationHook } from "../../../hooks/useTranslation";
 import CNewModal from "../../../components/CElements/CNewModal";
 import { ModalUI } from "./Modal";
 import { ModalTypes } from "./interfaces";
+import { PantoneColors } from "../../../constants/pantone";
 
 export const LabChemicals = () => {
   const { t } = useTranslationHook();
@@ -29,67 +30,70 @@ export const LabChemicals = () => {
       {
         title: "RECETE KODU",
         id: "URUNID",
-        checked: true,
       },
       {
         title: "RECETE AD",
         id: "ADI",
-        checked: true,
       },
       {
         title: "FIMRA KODU",
         id: "MUTFAKDEPONO",
-        checked: true,
+      },
+      {
+        title: "PANTONE KODU",
+        id: "PANTONE",
+        render: () => {
+          const value = "TCX 16-5123";
+          return (
+            <div className="flex space-x-2 items-center">
+              <p>{value}</p>
+              <div
+                className={`w-[70px] h-[25px] rounded-[8px]`}
+                style={{
+                  backgroundColor:
+                    "#" + PantoneColors[value.substring(4, 11)]?.hex,
+                }}
+              ></div>
+            </div>
+          );
+        },
       },
       {
         title: "FIRMA AD",
         id: "UNITEADI",
-        checked: true,
       },
       {
         title: "TALEP TARIHI",
         id: "URUNTIPIADI",
-        checked: true,
       },
       {
         title: "LAB RECETE GRUP",
         id: "BOYATIPIADI",
-        checked: true,
       },
       {
         title: "RENK GRUP",
         id: "KULLANICIADI",
-        checked: true,
       },
       {
         title: "SABS TIPI",
         id: "INSERTTARIHI",
-        checked: true,
       },
       {
         title: "ESKI LAB RECETE KODU",
         id: "INSERKULLANICIADI",
-        checked: true,
       },
-      {
-        title: "PANTONE KODU",
-        id: "SONALISTARIHI",
-        checked: true,
-      },
+
       {
         title: "RECETE TURU",
         id: "DEGISIMTARIHI",
-        checked: true,
       },
       {
         title: "HAD ADI",
         id: "SONALISSTOKDETAYID",
-        checked: true,
       },
       {
         title: "ILK HAYDEDEN KULLANUCI",
         id: "BARKOD",
-        checked: true,
       },
     ];
 

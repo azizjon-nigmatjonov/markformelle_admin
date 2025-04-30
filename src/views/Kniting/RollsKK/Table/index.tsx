@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import CCard from "../../../../components/CElements/CCard";
-import CTable from "../../../../components/CElements/CTable";
 import { SkeletonUI } from "../Skeleton/Skeleton";
+import CNewTable from "../../../../components/CElements/CNewTable";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   list: any;
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export const TableUI = ({ list = [], isLoading = false }: Props) => {
+  const { t } = useTranslation();
   const [filterParams, setFilterParams]: any = useState({});
   const [headColumns, setHeadColumns]: any = useState([]);
 
@@ -73,7 +75,8 @@ export const TableUI = ({ list = [], isLoading = false }: Props) => {
         {isLoading ? (
           <SkeletonUI />
         ) : (
-          <CTable
+          <CNewTable
+            title={t("rolls_for_kk")}
             headColumns={headColumns}
             bodyColumns={list}
             isResizeble={true}
@@ -81,7 +84,7 @@ export const TableUI = ({ list = [], isLoading = false }: Props) => {
             filterParams={filterParams}
             handleFilterParams={setFilterParams}
             disablePagination={true}
-            defaultSortData={{ value: "down", id: "DATE_KNIT" }}
+            // defaultSortData={{ value: "down", id: "DATE_KNIT" }}
           />
         )}
       </CCard>

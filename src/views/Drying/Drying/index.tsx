@@ -162,7 +162,7 @@ const DryingPage = () => {
       {type === "grid" ? (
         <PaintList data={newData ?? []} />
       ) : (
-        <PaintTable list={newData ?? []} />
+        <PaintTable list={newData ?? []} type="drying_table" />
       )}
     </>
   );
