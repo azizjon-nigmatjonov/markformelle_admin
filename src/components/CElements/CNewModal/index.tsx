@@ -35,7 +35,7 @@ const CNewModal: FC<Props> = ({
   actions = [],
   disabled = "",
 }) => {
-  const [screen, setScreen] = useState(true);
+  const [screen, setScreen] = useState(!disabled);
   const [position, setPosition] = useState<{ x: number; y: number } | null>(
     null
   );
@@ -55,11 +55,6 @@ const CNewModal: FC<Props> = ({
       setPosition(null);
     }
   };
-  useEffect(() => {
-    if (disabled) {
-      disabled === "big" ? setScreen(false) : setScreen(true);
-    }
-  }, [disabled]);
 
   const handleDragStart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -126,7 +121,7 @@ const CNewModal: FC<Props> = ({
       >
         <Card className={`${cls.card}`} style={{ padding }}>
           <div
-            className={`duration-300 relative overflow-y-scroll remove-scroll ${
+            className={`duration-300 relative ${
               title
                 ? screen
                   ? "w-[1200px] max-h-[700px]"
@@ -208,7 +203,7 @@ const CNewModal: FC<Props> = ({
                 <div className="flex items-center space-x-4">
                   {action === "edit" && (
                     <button className="text-[14px] border border-[var(--border)] px-2 py-1 rounded-[8px]">
-                      Сохранить
+                      {t("save")}
                     </button>
                   )}
                   <div>

@@ -1,26 +1,21 @@
 import { useForm } from "react-hook-form";
-import { IModalForm } from "../interfaces";
 import HFInputMask from "../../../../components/HFElements/HFInputMask";
 import { useTranslation } from "react-i18next";
-import HFSelect from "../../../../components/HFElements/HFSelect";
-import HFTextField from "../../../../components/HFElements/HFTextField";
 import { SelectOptionsTable } from "../../../../components/UI/Options/Table";
-import CCheckbox from "../../../../components/CElements/CCheckbox";
-
-import CLabel from "../../../../components/CElements/CLabel";
-import { CAnchorPopup } from "../../../../components/CElements/CAnchorPopup";
+import { HFDatePicker } from "../../../../components/HFElements/HFDatePicker";
+import { useGetDovizList } from "../../../../hooks/useFetchRequests/useDovizList";
+import { IMaterialForm } from "./interface";
 
 interface Props {
-  anchor: null | HTMLElement;
-  setAnchor: (val: HTMLElement | null) => void;
+  onClose: () => void;
 }
 
-export const MaterialForm = ({ anchor, setAnchor }: Props) => {
+export const MaterialForm = ({ onClose }: Props) => {
   const { t } = useTranslation();
-  const { control, handleSubmit, setValue, getValues, reset, watch } =
-    useForm<IModalForm>({
-      mode: "onSubmit",
-    });
+  const { control, handleSubmit, setValue } = useForm<IMaterialForm>({
+    mode: "onSubmit",
+  });
+  const { dovizData } = useGetDovizList({});
 
   const onSubmit = (data: any) => {
     let params: any = data;
@@ -28,39 +23,23 @@ export const MaterialForm = ({ anchor, setAnchor }: Props) => {
   };
 
   return (
-    <CAnchorPopup anchor={anchor} setAnchor={setAnchor}>
-      <div
-        onSubmit={handleSubmit(onSubmit)}
-        className="bg-[#fff] rounded-[12px] border border-[var(--border)] shadow-2xl z-[99] relative p-3"
-      >
-        <form onSubmit={handleSubmit(onSubmit)} className="p-3 space-y-5">
-          <div className="grid grid-cols-2 gap-3">
+    <div onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 w-[480px]">
+        <div className="grid grid-cols-1 gap-x-3">
+          <div className="space-y-2">
             <HFInputMask
               control={control}
-              name="ATISNO"
-              label={t("ATISNO")}
+              name="TELEPNO"
+              label={t("TELEPNO")}
               type="number"
               required={true}
-              placeholder={t("ATISNO")}
-            />
-            <HFSelect
-              control={control}
-              name="MIGRASYUN"
-              label={t("MIGRASYUN")}
-              placeholder={t("MIGRASYUN")}
+              placeholder={t("TELEPNO")}
             />
 
-            <HFTextField
-              control={control}
-              name="GIDISTARIHI"
-              required={true}
-              label={t("GIDISTARIHI")}
-              placeholder={t("GIDISTARIHI")}
-            />
             <SelectOptionsTable
-              name="RECETEASAMA"
-              label={t("RECETEASAMA")}
-              placeholder={t("RECETEASAMA")}
+              name="HOMESTOK"
+              label={t("HOMESTOK")}
+              placeholder={t("HOMESTOK")}
               options={[]}
               required={true}
               headColumns={[
@@ -77,55 +56,87 @@ export const MaterialForm = ({ anchor, setAnchor }: Props) => {
               control={control}
               setFilterParams={() => {}}
             />
-            <HFTextField
+
+            <HFDatePicker
               control={control}
-              name="TARIHI"
-              required={true}
-              label={t("TARIHI")}
-              placeholder={t("TARIHI")}
+              name="CALISMATARIHI"
+              label="CALISMATARIHI"
+              placeholder="CALISMATARIHI"
+              format="DD.MM.YYYY"
             />
-            <HFInputMask
+
+            <HFDatePicker
               control={control}
-              name="BOYAMILYETU"
-              label={t("BOYAMILYETU")}
-              type="number"
-              required={true}
-              placeholder={t("BOYAMILYETU")}
+              name="TEMINTARIHI"
+              label="TEMINTARIHI"
+              placeholder="TEMINTARIHI"
+              format="DD.MM.YYYY"
             />
-            <HFInputMask
-              control={control}
-              name="BOYAYUZDESI"
-              label={t("BOYAYUZDESI")}
-              type="number"
-              required={true}
-              placeholder={t("BOYAYUZDESI")}
-            />
-            <div>
-              <CLabel title={t("Okey")} />
-              <CCheckbox
-                checked={false}
-                handleCheck={(_: any) => {}}
-                element={{
-                  label: "Okey",
-                }}
-              />
-            </div>
           </div>
 
-          <div className="flex space-x-2">
-            <button
-              onClick={() => setAnchor(null)}
-              className="cancel-btn"
-              type="button"
-            >
-              {t("cancel")}
-            </button>
-            <button className="custom-btn" type="submit">
-              {t("save")}
-            </button>
+          <div className="space-y-2">
+            <SelectOptionsTable
+              name="USTASAMA"
+              label={t("USTASAMA")}
+              placeholder={t("USTASAMA")}
+              options={[]}
+              required={true}
+              headColumns={[
+                { id: "FIRMAID", width: 200, title: "FIRMAID" },
+                { id: "FIRMAADI", title: "FIRMAADI" },
+                { id: "KISAADI", title: "KISAADI" },
+              ]}
+              filterParams={{}}
+              handleSelect={(_: {}) => {}}
+              handleSearch={(_: string) => {
+                {
+                }
+              }}
+              control={control}
+              setFilterParams={() => {}}
+            />
+            <HFInputMask
+              control={control}
+              name="BIRIMFIYAT"
+              label={t("BIRIMFIYAT")}
+              type="number"
+              placeholder={t("BIRIMFIYAT")}
+            />
+
+            <SelectOptionsTable
+              name="DOVIZID"
+              label={t("DOVIZID")}
+              placeholder={t("DOVIZID")}
+              options={dovizData?.data}
+              required={true}
+              headColumns={[
+                { id: "DOVIZID", title: "DOVIZID" },
+                { id: "CINSI", title: "CINSI" },
+              ]}
+              filterParams={{}}
+              handleSelect={(obj: { DOVIZID: string }) => {
+                setValue("DOVIZID", obj.DOVIZID);
+              }}
+              handleSearch={(_: string) => {}}
+              control={control}
+              setFilterParams={() => {}}
+            />
           </div>
-        </form>
-      </div>
-    </CAnchorPopup>
+        </div>
+
+        <div className="flex space-x-2">
+          <button
+            onClick={() => onClose()}
+            className="cancel-btn"
+            type="button"
+          >
+            {t("cancel")}
+          </button>
+          <button className="custom-btn" type="submit">
+            {t("save")}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };

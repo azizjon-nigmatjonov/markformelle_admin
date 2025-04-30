@@ -23,7 +23,7 @@ export const TableData = ({
     setIsLoading(true);
     axios
       .get(
-        `${API_URL}/urun/?skip=${
+        `${API_URL}/lab/?skip=${
           filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
         }&limit=${filters.perPage}${filters.q ? "&" + filters.q : ""}`
       )

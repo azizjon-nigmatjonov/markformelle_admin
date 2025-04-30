@@ -1,6 +1,6 @@
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import { ExcelIconOutlined } from "../../components/UI/IconGenerator/Svg/Machines";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
@@ -73,11 +73,31 @@ const ExcelDownload = ({
   };
   return (
     <div className="relative">
-      <IconButton onClick={() => setOpen(true)} disabled={disabled}>
-        <div className="h-[30px] w-[30px] rounded-[8px] flex items-center justify-center">
-          <ExcelIconOutlined fill={disabled ? "var(--gray)" : "var(--main)"} />
-        </div>
-      </IconButton>
+      <Tooltip
+        title="Скачать Excel"
+        arrow
+        slotProps={{
+          popper: {
+            modifiers: [
+              {
+                name: "offset",
+                options: {
+                  offset: [0, -5],
+                },
+              },
+            ],
+          },
+        }}
+      >
+        <IconButton onClick={() => setOpen(true)} disabled={disabled}>
+          <div className="h-[30px] w-[30px] rounded-[8px] flex items-center justify-center">
+            <ExcelIconOutlined
+              fill={disabled ? "var(--gray)" : "var(--main)"}
+            />
+          </div>
+        </IconButton>
+      </Tooltip>
+
       {open && (
         <div className="absolute right-0 top-[33px] bg-white shadow-2xl border border-[var(--gray30)] rounded-[8px] z-[92] min-w-[150px] whitespace-nowrap text-left">
           <ul>

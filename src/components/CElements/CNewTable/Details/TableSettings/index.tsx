@@ -3,7 +3,7 @@ import { Closer } from "../../../../UI/Closer";
 import { MenuItem } from "./MenuItems";
 import { tableStoreActions } from "../../../../../store/table";
 import { useDispatch } from "react-redux";
-import { Badge, IconButton } from "@mui/material";
+import { Badge, IconButton, Tooltip } from "@mui/material";
 import { ListDotIcon } from "../../../../UI/IconGenerator/Svg/Machines";
 import ExcelDownload from "../../../../../hooks/useExcelDownload";
 import ExcelReader from "../../../../../hooks/useExcelImport";
@@ -250,126 +250,215 @@ export const HeaderSettings = ({
           )}
           <div className="space-x-4 flex items-center">
             {defaultFilters.includes("add") && (
-              <IconButton
-                onClick={() => tableActions({}, "modal")}
-                disabled={disabled}
+              <Tooltip
+                title="Нажмите, чтобы добавить строку"
+                arrow
+                slotProps={{
+                  popper: {
+                    modifiers: [
+                      {
+                        name: "offset",
+                        options: {
+                          offset: [0, -5],
+                        },
+                      },
+                    ],
+                  },
+                }}
               >
-                <div className="w-[30px] h-[30px] items-center justify-center flex">
-                  <PlusIcon fill={colorMain} width={20} />
-                </div>
-                <p
-                  className={`text-sm pr-2 ${
-                    disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
-                  }`}
-                >
-                  {t("add")}
-                </p>
-              </IconButton>
-            )}
-            {defaultFilters.includes("sellect_more") && (
-              <IconButton
-                onClick={() => tableActions({}, "sellect_more_active")}
-                disabled={disabled}
-              >
-                <div className="w-[30px] h-[30px] items-center justify-center flex">
-                  <img width={20} src="/images/tasklist.png" alt="task list" />
-                </div>
-                <p
-                  className={`text-sm pr-2 ${
-                    selectedItems.length
-                      ? "text-[var(--main)]"
-                      : `${
-                          disabled
-                            ? "text-[var(--gray)]"
-                            : "text-[var(--black)]"
-                        }`
-                  }`}
-                >
-                  {t("sellect_more")}
-                </p>
-              </IconButton>
-            )}
-            {defaultFilters.includes("delete") && (
-              <div className="relative">
                 <IconButton
-                  onClick={() => {
-                    if (selectedItems.length) setOpenDelete(true);
-                  }}
+                  onClick={() => tableActions({}, "modal")}
                   disabled={disabled}
                 >
                   <div className="w-[30px] h-[30px] items-center justify-center flex">
-                    <DeleteIcon
-                      fill={
-                        selectedItems?.length ? "var(--main)" : "var(--gray)"
-                      }
-                      width={18}
-                    />
+                    <PlusIcon fill={colorMain} width={20} />
                   </div>
                   <p
                     className={`text-sm pr-2 ${
                       disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
                     }`}
                   >
-                    {t("delete")}
+                    {t("add")}
                   </p>
                 </IconButton>
-
-                {openDelete && (
-                  <div className="absolute top-full shadow-2xl border border-[var(--gray30)] w-[300px] z-[99] bg-white rounded-[8px]">
-                    <PopoverDelete
-                      closePopover={(status) => {
-                        setOpenDelete(false);
-                        if (status) tableActions({}, "delete_multiple");
-                      }}
+              </Tooltip>
+            )}
+            {defaultFilters.includes("sellect_more") && (
+              <Tooltip
+                title="Нажмите, чтобы выбрать строки"
+                arrow
+                slotProps={{
+                  popper: {
+                    modifiers: [
+                      {
+                        name: "offset",
+                        options: {
+                          offset: [0, -5],
+                        },
+                      },
+                    ],
+                  },
+                }}
+              >
+                <IconButton
+                  onClick={() => tableActions({}, "sellect_more_active")}
+                  disabled={disabled}
+                >
+                  <div className="w-[30px] h-[30px] items-center justify-center flex">
+                    <img
+                      width={20}
+                      src="/images/tasklist.png"
+                      alt="task list"
                     />
                   </div>
-                )}
-              </div>
+                  <p
+                    className={`text-sm pr-2 ${
+                      selectedItems.length
+                        ? "text-[var(--main)]"
+                        : `${
+                            disabled
+                              ? "text-[var(--gray)]"
+                              : "text-[var(--black)]"
+                          }`
+                    }`}
+                  >
+                    {t("sellect_more")}
+                  </p>
+                </IconButton>
+              </Tooltip>
+            )}
+            {defaultFilters.includes("delete") && (
+              <Tooltip
+                title="Выберите строки для удаления"
+                arrow
+                slotProps={{
+                  popper: {
+                    modifiers: [
+                      {
+                        name: "offset",
+                        options: {
+                          offset: [0, -5],
+                        },
+                      },
+                    ],
+                  },
+                }}
+              >
+                <div className="relative">
+                  <IconButton
+                    onClick={() => {
+                      if (selectedItems.length) setOpenDelete(true);
+                    }}
+                    disabled={disabled}
+                  >
+                    <div className="w-[30px] h-[30px] items-center justify-center flex">
+                      <DeleteIcon
+                        fill={
+                          selectedItems?.length ? "var(--main)" : "var(--gray)"
+                        }
+                        width={18}
+                      />
+                    </div>
+                    <p
+                      className={`text-sm pr-2 ${
+                        disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
+                      }`}
+                    >
+                      {t("delete")}
+                    </p>
+                  </IconButton>
+
+                  {openDelete && (
+                    <div className="absolute top-full shadow-2xl border border-[var(--gray30)] w-[300px] z-[99] bg-white rounded-[8px]">
+                      <PopoverDelete
+                        closePopover={(status) => {
+                          setOpenDelete(false);
+                          if (status) tableActions({}, "delete_multiple");
+                        }}
+                      />
+                    </div>
+                  )}
+                </div>
+              </Tooltip>
             )}
           </div>
         </div>
 
         <div className="flex items-center space-x-2 h-full">
           {defaultFilters.includes("add") && (
-            <IconButton
-              onClick={() => tableActions({}, "translation")}
-              disabled={disabled}
+            <Tooltip
+              title="Нажмите, чтобы перейти к переводам"
+              arrow
+              slotProps={{
+                popper: {
+                  modifiers: [
+                    {
+                      name: "offset",
+                      options: {
+                        offset: [0, -5],
+                      },
+                    },
+                  ],
+                },
+              }}
             >
-              <div
-                className={`h-[30px] w-[30px] flex items-center justify-center`}
+              <IconButton
+                onClick={() => tableActions({}, "translation")}
+                disabled={disabled}
               >
-                <svg
-                  width={24}
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill={colorMain}
+                <div
+                  className={`h-[30px] w-[30px] flex items-center justify-center`}
                 >
-                  <path d="M5 15V17C5 18.0544 5.81588 18.9182 6.85074 18.9945L7 19H10V21H7C4.79086 21 3 19.2091 3 17V15H5ZM18 10L22.4 21H20.245L19.044 18H14.954L13.755 21H11.601L16 10H18ZM17 12.8852L15.753 16H18.245L17 12.8852ZM8 2V4H12V11H8V14H6V11H2V4H6V2H8ZM17 3C19.2091 3 21 4.79086 21 7V9H19V7C19 5.89543 18.1046 5 17 5H14V3H17ZM6 6H4V9H6V6ZM10 6H8V9H10V6Z"></path>
-                </svg>
-              </div>
-            </IconButton>
+                  <svg
+                    width={24}
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill={colorMain}
+                  >
+                    <path d="M5 15V17C5 18.0544 5.81588 18.9182 6.85074 18.9945L7 19H10V21H7C4.79086 21 3 19.2091 3 17V15H5ZM18 10L22.4 21H20.245L19.044 18H14.954L13.755 21H11.601L16 10H18ZM17 12.8852L15.753 16H18.245L17 12.8852ZM8 2V4H12V11H8V14H6V11H2V4H6V2H8ZM17 3C19.2091 3 21 4.79086 21 7V9H19V7C19 5.89543 18.1046 5 17 5H14V3H17ZM6 6H4V9H6V6ZM10 6H8V9H10V6Z"></path>
+                  </svg>
+                </div>
+              </IconButton>
+            </Tooltip>
           )}
           {defaultFilters.includes("filter") && (
-            <IconButton
-              onClick={() => tableActions({}, "sidefilter")}
-              disabled={disabled}
+            <Tooltip
+              title="Активный фильтр"
+              arrow
+              slotProps={{
+                popper: {
+                  modifiers: [
+                    {
+                      name: "offset",
+                      options: {
+                        offset: [0, -5],
+                      },
+                    },
+                  ],
+                },
+              }}
             >
-              <div
-                className={`h-[30px] w-[30px] flex items-center justify-center`}
+              <IconButton
+                onClick={() => tableActions({}, "sidefilter")}
+                disabled={disabled}
               >
-                <Badge badgeContent={sortData?.length} color="secondary">
-                  <FilterIcon
-                    fill={
-                      disabled
-                        ? "var(--gray)"
-                        : sideFilter
-                        ? "var(--primary)"
-                        : "var(--main)"
-                    }
-                  />
-                </Badge>
-              </div>
-            </IconButton>
+                <div
+                  className={`h-[30px] w-[30px] flex items-center justify-center`}
+                >
+                  <Badge badgeContent={sortData?.length} color="secondary">
+                    <FilterIcon
+                      fill={
+                        disabled
+                          ? "var(--gray)"
+                          : sideFilter
+                          ? "var(--primary)"
+                          : "var(--main)"
+                      }
+                    />
+                  </Badge>
+                </div>
+              </IconButton>
+            </Tooltip>
           )}
 
           {defaultFilters.includes("excel_download") && (
@@ -390,36 +479,53 @@ export const HeaderSettings = ({
           )}
 
           {defaultFilters.includes("active_menu") && (
-            <div className="relative">
-              <div
-                onClick={() => (disabled ? {} : setOpen(true))}
-                className="relative"
-              >
-                <IconButton disabled={disabled}>
-                  <div
-                    className={`w-[30px] h-[30px] rounded-[8px] items-center justify-center flex`}
-                  >
-                    <ListDotIcon
-                      fill={
-                        disabled
-                          ? "var(--gray)"
-                          : open
-                          ? "var(--primary)"
-                          : "var(--main)"
-                      }
-                    />
-                  </div>
-                </IconButton>
+            <Tooltip
+              title="Активные меню"
+              arrow
+              slotProps={{
+                popper: {
+                  modifiers: [
+                    {
+                      name: "offset",
+                      options: {
+                        offset: [0, -5],
+                      },
+                    },
+                  ],
+                },
+              }}
+            >
+              <div className="relative">
+                <div
+                  onClick={() => (disabled ? {} : setOpen(true))}
+                  className="relative"
+                >
+                  <IconButton disabled={disabled}>
+                    <div
+                      className={`w-[30px] h-[30px] rounded-[8px] items-center justify-center flex`}
+                    >
+                      <ListDotIcon
+                        fill={
+                          disabled
+                            ? "var(--gray)"
+                            : open
+                            ? "var(--primary)"
+                            : "var(--main)"
+                        }
+                      />
+                    </div>
+                  </IconButton>
+                </div>
+                {open && (
+                  <SettingDropdown
+                    setOpen={setOpen}
+                    menuList={menuList}
+                    allCheck={allCheck}
+                    handleFilterSave={handleFilterSave}
+                  />
+                )}
               </div>
-              {open && (
-                <SettingDropdown
-                  setOpen={setOpen}
-                  menuList={menuList}
-                  allCheck={allCheck}
-                  handleFilterSave={handleFilterSave}
-                />
-              )}
-            </div>
+            </Tooltip>
           )}
           {extra}
         </div>

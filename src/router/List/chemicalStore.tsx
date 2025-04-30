@@ -89,7 +89,7 @@ export const chemicalStore = [
         title: "Остатки химикатов",
         childLink: "chemical_stock",
         path: "chemical_store/chemical_stock",
-        icon: "",
+        icon: <img width={20} src="/images/chemical.png" alt="chemical" />,
       },
     ],
   },

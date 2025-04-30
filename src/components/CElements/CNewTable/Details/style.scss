@@ -10,7 +10,6 @@
 .cnewtable {
   background-color: white;
 
-  
   .CTableContainer {
     width: 100%;
     .table {
@@ -18,7 +17,7 @@
       position: relative;
       color: var(--main);
       background-color: white;
-  
+
       table {
         width: 100%;
         border-collapse: separate;
@@ -36,7 +35,7 @@
     bottom: -35px;
     width: 100%;
     background-color: white;
-  
+
     .MuiPagination-ul {
       display: flex;
       gap: 3px;
@@ -60,11 +59,11 @@
         width: 24px;
         height: 24px;
         @include center-center;
-  
+
         button {
           color: var(--gray);
         }
-  
+
         .Mui-selected {
           color: var(--main);
           font-weight: 600;
@@ -90,15 +89,15 @@
       }
     }
   }
-  
+
   .CTableHead {
     position: sticky;
     top: 0px;
     z-index: 3;
     height: auto;
-  
+
     th {
-      padding: 0  !important;
+      padding: 0 !important;
       border-right: 0 !important;
       border-bottom: 1px solid var(--gray20);
       font-size: 12px;
@@ -110,14 +109,14 @@
       }
     }
   }
-  
+
   .CTableCell {
     // padding: 0 8px !important;
     background-color: transparent !important;
     color: var(--black);
     border-right: 0 !important;
     border-bottom: 1px solid var(--gray20);
-  
+
     &:first-child {
       margin-top: 30px;
       border-left: 0;
@@ -126,10 +125,10 @@
       border-right: 0;
     }
   }
-  
+
   .MuiTableRow-root {
     height: 35px !important;
-  
+
     // &:last-child {
     //   .CTableCell {
     //     border-bottom: 0;
@@ -144,8 +143,6 @@
       opacity: 100;
     }
 
-   
-  
     &.clickable {
       cursor: pointer;
       transition-duration: 0.2s;
@@ -153,30 +150,32 @@
         background-color: var(--primary50);
 
         .check {
-         transform: scale(1.2);
+          transform: scale(1.2);
         }
       }
     }
 
     &.sellected {
       background-color: var(--primary80);
+      border-radius: 8px !important;
+
       td {
-        border-color: var(--primary80);
+        border: none;
       }
     }
   }
-  
+
   .CTableBody {
     z-index: 1;
   }
-  
+
   #table {
     .CTableContainer {
       border-radius: 4px !important;
       box-shadow: none;
     }
   }
-  
+
   thead {
     height: 50px;
     th {
@@ -189,7 +188,7 @@
         @include center;
         position: relative;
       }
-  
+
       &:first-child {
         border-top-left-radius: 4px;
         border-bottom-left-radius: 4px;
@@ -200,7 +199,7 @@
       }
     }
   }
-  
+
   .resizer {
     position: absolute;
     top: -3px;
@@ -228,14 +227,14 @@
     background-image: url("/svg/expandSide.svg");
     background-repeat: no-repeat;
   }
-  
+
   .resizable {
     border: 1px solid red;
     height: 100px;
     width: 100px;
     position: relative;
   }
-  
+
   #tableActions {
     position: relative;
     @include center-center;
@@ -271,12 +270,12 @@
   .MuiPaper-root {
     background-color: transparent !important;
   }
-  
+
   .drag-and-drop {
     background-color: var(--border);
     position: relative;
   }
-  
+
   .drag-hovered {
     &.left::after {
       content: "";
@@ -297,5 +296,4 @@
       background-color: var(--primary);
     }
   }
-  
 }

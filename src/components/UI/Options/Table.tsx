@@ -4,6 +4,31 @@ import CLabel from "../../CElements/CLabel";
 import CNewTable from "../../CElements/CNewTable";
 import { Controller } from "react-hook-form";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
+import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
+import { styled } from "@mui/material";
+import { useTranslationHook } from "../../../hooks/useTranslation";
+const PopupBody = styled("div")(
+  ({ theme }) => `
+  width: max-content;
+  padding: 12px 16px;
+  margin: 8px;
+  border-radius: 8px;
+  border: 1px solid ${
+    theme.palette.mode === "dark" ? "var(--gray30)" : "var(--gray30)"
+  };
+  background-color: ${theme.palette.mode === "dark" ? "var(--gray30)" : "#fff"};
+  box-shadow: ${
+    theme.palette.mode === "dark"
+      ? `0px 4px 8px rgb(0 0 0 / 0.7)`
+      : `0px 4px 8px rgb(0 0 0 / 0.1)`
+  };
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  z-index: 1;
+`
+);
+
 interface Props {
   options: any;
   handleSelect: any;
@@ -38,15 +63,17 @@ export const SelectOptionsTable = ({
   readOnly = false,
   secondName = "",
   focused = false,
-  disabled,
-  position = "left",
+  disabled = false,
+  // position = "left",
   handleSearch = () => {},
   setFilterParams = () => {},
 }: Props) => {
+  const { t } = useTranslationHook();
   const inputRef: any = useRef(null);
   const [open, setOpen] = useState(false);
   const [defaultData, setDefaultData]: any = useState({});
   const [search, setSearch] = useState("");
+  const [anchor, setAnchor] = useState(null);
 
   const handleActions = (el: any, _: string) => {
     setOpen(false);
@@ -104,11 +131,18 @@ export const SelectOptionsTable = ({
   return (
     <div className="relative">
       {label && <CLabel title={label} required={required} />}
-      <div className={`w-full relative`}>
+      <div
+        className={`w-full relative flex items-center rounded-[8px] border border-[var(--border)] px-2 ${
+          disabled ? "bg-[#fafafa]" : ""
+        }`}
+      >
         <div
-          className="cursor-pointer absolute z-[1] left-2 top-1/2 -translate-y-1/2"
-          onClick={() => {
-            if (!disabled) setOpen(true);
+          className="cursor-pointer"
+          onClick={(event: any) => {
+            if (!disabled) {
+              setOpen(true);
+              setAnchor(event.currentTarget);
+            }
           }}
         >
           <ManageSearchIcon
@@ -124,7 +158,7 @@ export const SelectOptionsTable = ({
               <input
                 value={value ? value : defaultData[name] || search}
                 type="text"
-                className={`h-[35px] w-full pl-8 pr-2 rounded-[8px] border ${
+                className={`h-[35px] w-full px-1 bg-transparent ${
                   error?.message
                     ? "border-[var(--error)]"
                     : "border-[var(--border)]"
@@ -135,43 +169,47 @@ export const SelectOptionsTable = ({
                   onChange(e.target.value);
                   setSearch(e.target.value);
                 }}
-                disabled={disabled}
                 ref={inputRef}
-                readOnly={readOnly}
+                readOnly={readOnly || disabled}
                 style={{ borderColor: error?.message ? "var(--error)" : "" }}
               />
             </div>
           )}
         ></Controller>
 
-        {open ? (
-          <div
-            className={`absolute top-[36px] z-[97] flex items-center justify-center max-w-[800px] ${
-              position === "left" ? "left-0" : "right-0"
-            }`}
+        {open && (
+          <BasePopup
+            id={open ? "simple-popup" : undefined}
+            open={open}
+            anchor={anchor}
+            style={{
+              padding: 0,
+              zIndex: 99,
+              // transform: "translate(-50%)",
+            }}
           >
-            <div className="bg-white relative z-[99] border border-[var(--border)] p-2 shadow-2xl rounded-[8px]">
-              <CNewTable
-                headColumns={headColumns}
-                bodyColumns={options}
-                filterParams={filterParams}
-                handleFilterParams={setFilterParams}
-                handleActions={handleActions}
-                defaultFilters={[]}
-                autoHeight="300px"
-                doubleClick={false}
-                idForTable={name + "select"}
-                disablePagination={true}
-              />
-              <div className="h-[40px] flex items-center">
-                <button className="flex items-center space-x-1 text-[var(--main)]">
-                  <PlusIcon fill="var(--main)" /> <span>Создать</span>
-                </button>
+            <PopupBody>
+              <div className="px-1">
+                <CNewTable
+                  headColumns={headColumns}
+                  bodyColumns={options}
+                  filterParams={filterParams}
+                  handleFilterParams={setFilterParams}
+                  handleActions={handleActions}
+                  defaultFilters={[]}
+                  autoHeight="300px"
+                  doubleClick={false}
+                  idForTable={name + "select"}
+                  disablePagination={true}
+                />
+                <div className="h-[40px] flex items-center">
+                  <button className="flex items-center space-x-1 text-[var(--main)]">
+                    <PlusIcon fill="var(--main)" /> <span>{t("create")}</span>
+                  </button>
+                </div>
               </div>
-            </div>
-          </div>
-        ) : (
-          ""
+            </PopupBody>
+          </BasePopup>
         )}
       </div>
 

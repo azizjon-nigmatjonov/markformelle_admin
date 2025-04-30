@@ -64,14 +64,15 @@ export const PeriodTextField = ({
   }, [value]);
 
   return (
-    <div className="PeriodTextField z-20 relative">
-      <div className="relative h-[35px] rounded-[8px] px-2 space-x-2 border border-[var(--border)] flex overflow-hidden items-center">
+    <div className="z-20 relative flex items-center h-[35px] border border-[var(--border)] rounded-[8px] w-full px-2">
+      <div className="relative h-[35px] space-x-2 flex items-center w-full">
         <InputMask
           mask="99.99.9999"
           value={value[0]}
           onChange={(e) => handleChange(0, e.target.value)}
           placeholder="Start Date"
           className="date-input"
+          style={{ width: "80px" }}
         />
         <span> - </span>
         <InputMask
@@ -80,6 +81,7 @@ export const PeriodTextField = ({
           onChange={(e) => handleChange(1, e.target.value)}
           placeholder="End Date"
           className="date-input"
+          style={{ width: "80px" }}
         />
       </div>
       <div className="h-full">

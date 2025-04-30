@@ -1,4 +1,5 @@
 import { CloseIcon } from "../../../../UI/IconGenerator/Svg";
+import { CPeriodPicker } from "../../../CPeriodPicker";
 import { SearchField } from "./Search";
 
 interface Props {
@@ -33,22 +34,24 @@ export const Field = ({
   handleKeyDown = () => {},
 }: Props) => {
   return (
-    <div>
-      <>
-        <Closer
-          closeField={() => searchDebounce("", obj.id)}
-          title={obj.title}
-          id={obj?.id}
-          close={obj?.close}
-        />
+    <div className="px-2">
+      <Closer
+        closeField={() => searchDebounce("", obj.id)}
+        title={obj.title}
+        id={obj?.id}
+        close={obj?.close}
+      />
 
+      {obj.id === "DATE" ? (
+        <CPeriodPicker handleValue={() => {}} />
+      ) : (
         <SearchField
           searchDebounce={searchDebounce}
           colId={obj?.id}
           value={obj.value}
           handleKeyDown={handleKeyDown}
         />
-      </>
+      )}
     </div>
   );
 };

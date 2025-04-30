@@ -26,7 +26,6 @@ input {
   font-size: 12px !important;
 }
 
-
 .MuiMenu-paper {
   ul {
     @include remove-scroll;
@@ -49,8 +48,12 @@ input {
 #HFMultipleSelect {
   width: 100%;
 
+  .MuiSelect-select {
+    padding: 0 8px !important;
+  }
 
   .MuiInputBase-root {
+    padding: 0 !important;
     width: 100%;
     outline: none;
     width: 100%;
@@ -59,7 +62,8 @@ input {
     height: 35px !important;
     position: relative;
     z-index: 90;
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: 500;
 
     @media (max-width: 1400px) {
       height: 35px !important;
@@ -69,23 +73,30 @@ input {
     //   display: none;
     // }
 
-
-
     &.Mui-focused {
       .MuiOutlinedInput-notchedOutline {
         border-color: var(--main);
       }
     }
 
+    // &.Mui-disabled {
+    //   input {
+    //     color: red;
+    //     &::placeholder {
+    //       color: red !important;
+    //     }
+    //   }
+    // }
+
     fieldset {
       border: none;
-      border-radius: 4px;
+      border-radius: 8px;
       background-color: transparent;
     }
 
     input {
       width: 100%;
-      border-radius: 4px;
+      border-radius: 8px;
     }
   }
 }
@@ -159,7 +170,6 @@ input {
     }
   }
 }
-
 
 #multiDatePicker {
   width: 100%;
@@ -314,7 +324,6 @@ input {
 
 .custom-btn.success {
   background-color: var(--success);
-
 }
 
 .custom-btn.save {
@@ -341,7 +350,6 @@ input {
   align-items: center;
   padding: 6px !important;
 
-
   .MuiAlert-icon {
     // margin-left: -5px;
     margin-right: 6px;
@@ -361,24 +369,20 @@ input {
       border-radius: 4px;
     }
   }
-  &.MuiAlert-standardSuccess  {
+  &.MuiAlert-standardSuccess {
     background-color: #edf7ed !important;
     .MuiAlert-message {
       &::before {
-
         background-color: #418a45;
-
       }
     }
   }
   &.MuiAlert-standardError {
-      background-color:  #fdeded !important;
+    background-color: #fdeded !important;
 
-       .MuiAlert-message {
+    .MuiAlert-message {
       &::before {
-
         background-color: var(--error);
-
       }
     }
   }
@@ -666,7 +670,6 @@ input {
     border-color: var(--error);
   }
 }
-
 
 #simple-popup {
   & > div {

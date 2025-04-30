@@ -60,8 +60,8 @@ $xl2: 24px;
 @mixin design-scroll() {
   &::-webkit-scrollbar {
     display: block;
-    width: 10px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     border-radius: 8px;
   }
   &::-webkit-scrollbar-track {
@@ -80,7 +80,6 @@ $xl2: 24px;
 .designed-scroll {
   @include design-scroll;
   scroll-behavior: smooth;
-
 }
 @mixin smooth-scroll() {
   scroll-behavior: smooth;

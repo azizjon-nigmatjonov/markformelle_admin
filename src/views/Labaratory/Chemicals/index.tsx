@@ -27,138 +27,68 @@ export const LabChemicals = () => {
     const keys = Object.keys(obj);
     const newColumns: any = [
       {
-        title: "Продукт ID",
+        title: "RECETE KODU",
         id: "URUNID",
         checked: true,
       },
       {
-        title: "Название",
+        title: "RECETE AD",
         id: "ADI",
         checked: true,
       },
       {
-        title: "Номер склада",
+        title: "FIMRA KODU",
         id: "MUTFAKDEPONO",
         checked: true,
       },
       {
-        title: "Подрозделения",
+        title: "FIRMA AD",
         id: "UNITEADI",
         checked: true,
       },
       {
-        title: "Тип товара",
+        title: "TALEP TARIHI",
         id: "URUNTIPIADI",
         checked: true,
       },
       {
-        title: "Тип красителя",
+        title: "LAB RECETE GRUP",
         id: "BOYATIPIADI",
         checked: true,
       },
       {
-        title: "Пользователь",
+        title: "RENK GRUP",
         id: "KULLANICIADI",
         checked: true,
       },
       {
-        title: "Дата(создание)",
+        title: "SABS TIPI",
         id: "INSERTTARIHI",
         checked: true,
       },
       {
-        title: "Пользователь(создание)",
+        title: "ESKI LAB RECETE KODU",
         id: "INSERKULLANICIADI",
         checked: true,
       },
       {
-        title: "Дата последный покупки",
+        title: "PANTONE KODU",
         id: "SONALISTARIHI",
         checked: true,
       },
       {
-        title: "Дата изменения",
+        title: "RECETE TURU",
         id: "DEGISIMTARIHI",
         checked: true,
       },
       {
-        title: "ID строки последного покупки",
+        title: "HAD ADI",
         id: "SONALISSTOKDETAYID",
         checked: true,
       },
       {
-        title: "Баркод",
+        title: "ILK HAYDEDEN KULLANUCI",
         id: "BARKOD",
-        checked: true,
-      },
-      {
-        title: "Тип товара ID",
-        id: "URUNTIPIID",
-        checked: true,
-      },
-      {
-        title: "Пользователь ID",
-        id: "KULLANICIID",
-        checked: true,
-      },
-      {
-        title: "Тип красителя ID",
-        id: "BOYATIPIID",
-        checked: true,
-      },
-      {
-        title: "Единица ID",
-        id: "UNITEID",
-        checked: true,
-      },
-      {
-        title: "Тип химиката ID",
-        id: "KIMYASALTIPIID",
-        checked: true,
-      },
-      {
-        title: "Ставка НДС",
-        id: "KDVORANI",
-        checked: true,
-      },
-      {
-        title: "Заметка",
-        id: "NOTU",
-        checked: true,
-      },
-      {
-        title: "Период закупки",
-        id: "TEMINSURESI",
-        checked: true,
-      },
-      {
-        title: "Ячейка",
-        id: "RAF",
-        checked: true,
-      },
-      {
-        title: "Код перевода",
-        id: "TRANSFERKODU",
-        checked: true,
-      },
-      {
-        title: "В инвентаре",
-        id: "ENVANTEREDAHIL",
-        checked: true,
-      },
-      {
-        title: "Архивирован",
-        id: "KAPALI",
-        checked: true,
-      },
-      {
-        title: "Пользователь ID(создание)",
-        id: "INSERTKULLANICIID",
-        checked: true,
-      },
-      {
-        title: "Тип химиката",
-        id: "KIMYASALTIPIADI",
         checked: true,
       },
     ];
@@ -239,7 +169,7 @@ export const LabChemicals = () => {
             "filter",
             "sellect_more",
           ]}
-          defaultSearch={{ URUNID: "" }}
+          defaultSearch={{ DATE: "", URUNID: "", PANTONE: "", MATERIAL: "" }}
           meta={{
             totalCount: bodyData?.count,
             pageCount: bodyData?.count

@@ -1,11 +1,9 @@
 import axios from "axios";
 import { useQuery } from "react-query";
 import { useTranslationHook } from "../../../../hooks/useTranslation";
-import { GetCurrentDate } from "../../../../utils/getDate";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { IFilterParams } from "../../../../interfaces";
-import CCheckbox from "../../../../components/CElements/CCheckbox";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const ModalTableLogic = ({
@@ -19,39 +17,6 @@ export const ModalTableLogic = ({
 }) => {
   const { t } = useTranslationHook();
   const [bodyData, setBodyData]: any = useState({});
-
-  const headColumns = useMemo(() => {
-    return [
-      { id: "URUNID", title: "URUNID" },
-      { id: "URUNADI", title: "URUNADI" },
-      { id: "CARPAN", title: "CARPAN" },
-      { id: "BIRIMID", title: "BIRIMID" },
-      { id: "BIRIMADI", title: "BIRIMADI" },
-      { id: "INSERKULLANICIADI", title: "INSERKULLANICIADI" },
-      { id: "KULLANICIID", title: "KULLANICIID" },
-      {
-        id: "DEFAULTBIRIM",
-        title: "DEFAULTBIRIM",
-        render: (val: number) => {
-          return <CCheckbox checked={!!val} disabled={true} />;
-        },
-      },
-      {
-        id: "INSERTTARIHI",
-        title: "INSERTTARIHI",
-        render: (val: string) => {
-          return GetCurrentDate({ type: "usually", date: val });
-        },
-      },
-      {
-        id: "DEGISIMTARIHI",
-        title: "DEGISIMTARIHI",
-        render: (val: string) => {
-          return GetCurrentDate({ type: "usually", date: val });
-        },
-      },
-    ];
-  }, []);
 
   const { data: formData, refetch } = useQuery(
     ["GET_URUN_DATA_FORM", urunId],
@@ -134,7 +99,6 @@ export const ModalTableLogic = ({
   };
 
   return {
-    headColumns,
     tableData: bodyData ?? {},
     refetch: getTableData,
     updateForm,

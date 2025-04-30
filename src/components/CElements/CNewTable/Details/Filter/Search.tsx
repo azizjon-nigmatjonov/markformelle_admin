@@ -32,7 +32,7 @@ export const SearchField = ({
       }}
     >
       <div
-        className={`relative w-full h-[40px] flex items-center p-2 text-[12px] rounded-[4px]`}
+        className={`relative w-full h-[35px] flex items-center text-[12px] rounded-[8px]`}
       >
         <div className="absolute top-1/2 left-2 -translate-y-1/2">
           <SearchIcon fill="var(--main)" width={16} />
@@ -45,8 +45,8 @@ export const SearchField = ({
           }}
           onKeyDown={(e: {}) => handleKeyDown(e)}
           value={value}
-          className="ml-6 h-full w-full border border-[var(--border)] rounded-[4px] text-[var(--black)] pl-1 pr-3"
-          style={{ padding: "0" }}
+          className="h-[35px] w-full border border-[var(--border)] rounded-[8px] text-[var(--black)]"
+          style={{ padding: "0 24px" }}
         />
         <div
           onClick={() => searchDebounce("", colId)}
