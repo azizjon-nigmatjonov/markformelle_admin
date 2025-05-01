@@ -82,7 +82,7 @@ const ExcelDownload = ({
               {
                 name: "offset",
                 options: {
-                  offset: [0, -5],
+                  offset: [0, 15],
                 },
               },
             ],

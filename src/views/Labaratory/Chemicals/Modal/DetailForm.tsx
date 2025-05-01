@@ -28,7 +28,7 @@ export const DetailForm = ({ onClose }: Props) => {
 
   return (
     <div onSubmit={handleSubmit(onSubmit)}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 w-[480px]">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 w-[400px]">
         <div className="grid grid-cols-1 gap-x-3 gap-y-2">
           <SelectOptionsTable
             name="URUNKODU"

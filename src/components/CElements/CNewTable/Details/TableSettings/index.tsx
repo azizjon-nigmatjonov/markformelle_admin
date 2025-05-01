@@ -260,7 +260,7 @@ export const HeaderSettings = ({
                       {
                         name: "offset",
                         options: {
-                          offset: [0, -5],
+                          offset: [0, 15],
                         },
                       },
                     ],
@@ -294,7 +294,7 @@ export const HeaderSettings = ({
                       {
                         name: "offset",
                         options: {
-                          offset: [0, -5],
+                          offset: [0, 15],
                         },
                       },
                     ],
@@ -337,7 +337,7 @@ export const HeaderSettings = ({
                       {
                         name: "offset",
                         options: {
-                          offset: [0, -5],
+                          offset: [0, 15],
                         },
                       },
                     ],
@@ -395,7 +395,7 @@ export const HeaderSettings = ({
                     {
                       name: "offset",
                       options: {
-                        offset: [0, -5],
+                        offset: [0, 15],
                       },
                     },
                   ],
@@ -431,7 +431,7 @@ export const HeaderSettings = ({
                     {
                       name: "offset",
                       options: {
-                        offset: [0, -5],
+                        offset: [0, 15],
                       },
                     },
                   ],
@@ -488,7 +488,7 @@ export const HeaderSettings = ({
                     {
                       name: "offset",
                       options: {
-                        offset: [0, -5],
+                        offset: [0, 15],
                       },
                     },
                   ],

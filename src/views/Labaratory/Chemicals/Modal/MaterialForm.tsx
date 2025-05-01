@@ -24,7 +24,7 @@ export const MaterialForm = ({ onClose }: Props) => {
 
   return (
     <div onSubmit={handleSubmit(onSubmit)}>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 w-[480px]">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 w-[400px]">
         <div className="grid grid-cols-1 gap-x-3">
           <div className="space-y-2">
             <HFInputMask

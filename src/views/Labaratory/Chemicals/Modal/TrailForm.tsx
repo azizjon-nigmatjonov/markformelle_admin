@@ -53,7 +53,7 @@ export const TrailForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 w-[840px]">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 w-[760px]">
       <div className="grid grid-cols-2 gap-x-3 gap-y-2">
         <HFInputMask
           control={control}

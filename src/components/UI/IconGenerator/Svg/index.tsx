@@ -281,8 +281,8 @@ export const ArrowDownFilled = ({ fill = "#858592" }: { fill?: string }) => (
 export const PlusIcon = ({ fill = "white", width = 18 }) => (
   <svg
     width={width}
-    height={width}
-    viewBox="0 0 18 18"
+    // height={width}
+    viewBox={`0 0 ${width} ${width}`}
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >

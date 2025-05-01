@@ -4,6 +4,7 @@ import CLabel from "../../CElements/CLabel";
 import "../style.scss";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const InputUI = ({
   value,
@@ -38,6 +39,7 @@ const InputUI = ({
   onKeydown?: (val: number) => void;
   setPassword: (val: any) => void;
 }) => {
+  const { t } = useTranslation();
   useEffect(() => {
     if (defaultValue) {
       onChange(defaultValue);
@@ -66,7 +68,7 @@ const InputUI = ({
         InputProps={{
           readOnly: readOnly,
         }}
-        placeholder={placeholder}
+        placeholder={t(placeholder)}
         className={error ? "error" : ""}
         disabled={disabled}
       />

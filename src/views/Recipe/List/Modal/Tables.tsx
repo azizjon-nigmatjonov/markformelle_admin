@@ -6,6 +6,7 @@ import { DetailForm } from "./DetailForm";
 import { StokeDeteyContantList } from "../../../../constants/stokedetey";
 import "./style.scss";
 import { TableUI } from "./TableUI";
+import { DragDrop } from "./DragDrop";
 export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
 
@@ -39,9 +40,9 @@ export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
   }, []);
 
   return (
-    <>
-      <TableUI TableList={TableList} />
-
+    <div className="pb-10">
+      {/* <TableUI TableList={TableList} /> */}
+      <DragDrop />
       {open.length ? (
         <CNewMiniModal
           title={
@@ -69,6 +70,6 @@ export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
       ) : (
         ""
       )}
-    </>
+    </div>
   );
 };

@@ -120,7 +120,8 @@ export const TableForm = ({
       <div className="grid grid-cols-2 gap-x-2 items-end">
         <SelectOptionsTable
           name="BIRIMID"
-          label={t("BIRIMID")}
+          label="BIRIMID"
+          placeholder="BIRIMID"
           options={birimTypeData?.data ?? []}
           required={true}
           headColumns={[

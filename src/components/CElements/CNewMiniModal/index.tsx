@@ -1,9 +1,9 @@
 import { Card, IconButton } from "@mui/material";
 import cls from "./style.module.scss";
 import { FC, ReactNode, useState, useRef, useEffect } from "react";
-import { t } from "i18next";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { CloseIcon } from "../../UI/IconGenerator/Svg";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   title?: string;
@@ -18,6 +18,7 @@ const CNewMiniModal: FC<Props> = ({
   children,
   handleActions = () => {},
 }) => {
+  const { t } = useTranslation();
   const [position, setPosition] = useState<{ x: number; y: number } | null>(
     null
   );
@@ -123,7 +124,7 @@ const CNewMiniModal: FC<Props> = ({
               </div>
             )}
 
-            <div className="p-4 relative z-[94]">{children}</div>
+            <div className="p-3 relative z-[94]">{children}</div>
           </div>
         </Card>
       </div>
