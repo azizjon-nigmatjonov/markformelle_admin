@@ -1,0 +1,48 @@
+.customTable {
+    .cellFirst {
+        width: 400px;
+    }
+    .cell {
+        width: 200px;
+        border-bottom: 1px solid var(--border);
+
+        &:first-child {
+            width: 25%;
+        }
+    }
+}
+
+.c-table {
+    .header {
+        max-height: 30px !important;
+        height: 30px !important;
+    }
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    tr {
+        td {
+            &:nth-child(2) {
+                width: 140px !important;
+            }
+            &:nth-child(3) {
+                width: 170px !important;
+            }
+            &:nth-child(4) {
+                width: 70px !important;
+            }
+        }
+    }
+    .cell {
+        font-size: 13px;
+        white-space: nowrap;
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--primary50);
+        }
+    }
+    .ccell {
+        width: 35% !important;
+    }
+}

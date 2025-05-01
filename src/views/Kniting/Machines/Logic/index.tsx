@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import CCheckButton from "../../../../components/CElements/CCheckButton";
 import useCQuery from "../../../../hooks/useCQuery";
+import { useTranslation } from "react-i18next";
 
 export const breadCrumbItems = [
   { label: "dashboard", link: "/dashboard/dashboard" },
@@ -326,6 +327,7 @@ export const CountBtns = ({
   bodyData = [],
   setSearch = () => {},
 }: Props) => {
+  const { t } = useTranslation();
   const filterCheckbox = (val: string) => {
     setChecked([]);
     let list: any = checked.filter((i: string) => i !== "all") ?? [];
@@ -372,7 +374,7 @@ export const CountBtns = ({
         element={{
           label: (
             <p className="text-sm mobile:text-[10px] desktop:text-sm font-[600]">
-              Все <span className="font-bold">{allCount}</span>
+              {t("all")} <span className="font-bold">{allCount}</span>
             </p>
           ),
         }}

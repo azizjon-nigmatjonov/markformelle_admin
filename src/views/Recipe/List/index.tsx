@@ -23,20 +23,22 @@ export const RecipeList = () => {
   });
 
   const newHeadColumns = useMemo(() => {
-    const newColumns: any = [
-      {
-        title: "Image",
-        id: "image",
-      },
-      {
-        title: "RECETE AD",
-        id: "ADI",
-      },
-      {
-        title: "FIMRA KODU",
-        id: "MUTFAKDEPONO",
-      },
-    ];
+    const headColumns: any = [];
+    const arr: any = bodyData?.data ?? [];
+
+    const obj = { ...arr?.[0] };
+    const keys = Object.keys(obj);
+    const newColumns: any = [];
+
+    keys.forEach((key: string) => {
+      const found = headColumns.find((item: any) => item.id === key);
+
+      if (found?.id) {
+        newColumns.push(found);
+      } else {
+        newColumns.push({ title: key, id: key });
+      }
+    });
 
     return newColumns;
   }, [bodyColumns]);

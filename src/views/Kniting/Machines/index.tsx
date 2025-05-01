@@ -132,7 +132,7 @@ const KnittingMachines = () => {
   }, [list, dimensions]);
 
   const HeaderElements = () => (
-    <div className="w-[400px] ipod:w-auto overflow-x-scroll ipod:overflow-x-visible hide-scrollbar flex pr-3">
+    <div className="w-[400px] ipod:w-auto overflow-x-scroll ipod:overflow-x-visible hide-scrollbar flex pr-3 items-center">
       <CountBtns
         checked={checked}
         setChecked={setChecked}

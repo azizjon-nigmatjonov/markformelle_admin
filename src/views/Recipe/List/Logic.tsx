@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useTranslationHook } from "../../../hooks/useTranslation";
+import { StokeDeteyContantList } from "../../../constants/stokedetey";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const breadCrumbs = [
@@ -18,25 +19,19 @@ export const TableData = ({
   const [headColumns, setHeadColumns] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [bodyData, setBodyData]: any = useState({
-    data: [
-      {
-        order: 130,
-        image: "/images/test/test1.png",
-        step_1: { URUNID: "KM006A" },
-      },
-    ],
+    data: StokeDeteyContantList,
   });
 
   const getList = (filters: any) => {
     setIsLoading(true);
     axios
       .get(
-        `${API_URL}/urun/?skip=${
+        `${API_URL}/lab/?skip=${
           filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
         }&limit=${filters.perPage}${filters.q ? "&" + filters.q : ""}`
       )
       .then((res) => {
-        // setBodyData(res.data);
+        setBodyData(res.data);
       })
       .finally(() => {
         setIsLoading(false);
