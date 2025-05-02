@@ -1,26 +1,29 @@
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
-import { Button, Divider, ListDivider, Stack, Switch } from "@mui/joy";
+import { Button, ListDivider, Switch } from "@mui/joy";
 import { Bolt } from "@mui/icons-material";
 import { Alert } from "@mui/material";
-import CircularProgress from "../../../../components/CElements/CCircularProgress";
 import "./style.scss";
 import { useState } from "react";
-import { ModalBtn } from "../../../Kniting/Machines/Card/Btn";
 import { GetCurrentDate } from "../../../../utils/getDate";
 import { usePermissions } from "../../../../hooks/usePermissions";
+import { t } from "i18next";
+import { ImageViewer } from "../../../../components/UI/ImageViewer";
+import { MachineCardHeader } from "../../../../components/UI/Cards/MahineCard/Header";
+import { MachineCardBody } from "../../../../components/UI/Cards/MahineCard/Body";
 
 export const ChniCardList = ({ machine }: { machine: any }) => {
   const { getFontSize } = useDeviceHeight();
   const [checked1, setChecked1] = useState(machine.machine_is_on == "true");
   const [checked2, setChecked2] = useState(machine.not_broken == "true");
   const height = window?.screen?.height ?? 0;
-  const [checkedReason, setCheckedReason]: any = useState("1");
   const [alertInfo, setAlertInfo]: any = useState({
     type: "error",
     title: "",
   });
   const { checkPermission } = usePermissions();
   const [descriptionText, setDescriptionText] = useState("");
+  const [imageView, setImageView] = useState("");
+
   const createStatus = () => {
     setAlertInfo({ type: "error", title: "No API" });
   };
@@ -29,146 +32,103 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
 
     return Number(num.toFixed(2));
   };
-  
+
   return (
-    <div className="grid mobile:grid-cols-2">
-      <ul
-        className="grid grid-cols-1 paintlist text-[var(--black10)] mr-6 space-y-1 desktop:space-y-2"
-        style={{
-          fontSize: getFontSize({
-            type: "machine",
-            count: 1,
-            percent:
-              height > 1200 ? 2.5 : height < 800 && height > 600 ? 1.5 : 1.5,
-          }),
-        }}
-      >
-        <li style={{ display: "flex", justifyContent: "space-between" }}>
+    <div className="grid mobile:grid-cols-2 h-full">
+      <div className="text-base list remove-scroll">
+        <div className="flex justify-between px-2 py-1">
           <p>Номер машины</p>
-          <p>{machine.DeviceNo ?? '-'}</p>
-        </li>
+          <p>{machine.machine_name ?? "-"}</p>
+        </div>
         <ListDivider />
-        <li style={{ display: "flex", justifyContent: "space-between" }}>
+        <div className="flex justify-between px-2 py-1">
           <p>Название машины</p>
-          <p>{machine?.Description ?? '-'}</p>
-        </li>
+          <p>{machine?.machine_name ?? "-"}</p>
+        </div>
         <ListDivider />
-        <li className="flex items-center justify-between">
+        <div className="flex justify-between px-2 py-1">
           <p>Мощность машины</p> <p>{machine.plan_hourly} носков / час</p>
-        </li>
+        </div>
         <ListDivider />
-        <li style={{ display: "flex", justifyContent: "space-between" }}>
+        <div className="flex justify-between px-2 py-1">
           <p>Статус машины</p>
-          <p>{machine.status ?? '-'}</p>
-        </li>
+          <p>{t(machine.status) ?? "-"}</p>
+        </div>
         <ListDivider />
-        <li style={{ display: "flex", justifyContent: "space-between" }}>
+        <div className="flex justify-between px-2 py-1">
           <p>IP адрес </p>
-          <p>{machine.ip_address ?? '-'}</p>
-        </li>
-        <ListDivider />
-        <li style={{ display: "flex", justifyContent: "space-between" }}>
-          <p>Версия программы </p>
-          <p>{machine.soft_version ?? '-'}</p>
-        </li>
+          <p>{machine.ip_address ?? "-"}</p>
+        </div>
+
         <ListDivider sx={{ background: "var(--gray)" }} />
-        <li style={{ display: "flex", justifyContent: "space-between" }}>
+        <div className="flex justify-between px-2 py-1">
           <p>Номер заказа </p>
-          <p>{machine.zakaz ?? '-'}</p>
-        </li>
+          <p>{machine.zakaz ?? "-"}</p>
+        </div>
         <ListDivider />
-        <li style={{ display: "flex", justifyContent: "space-between" }}>
+        <div className="flex justify-between px-2 py-1">
           <p>Артикул </p>
-          <p>{machine.art ?? '-'}</p>
-        </li>
+          <p>{machine.program ?? "-"}</p>
+        </div>
         <ListDivider />
-        <li style={{ display: "flex", justifyContent: "space-between" }}>
+        <div className="flex justify-between px-2 py-1">
           <p>Лот пряжи </p>
-          <p>{machine.lotno ?? '-'}</p>
-        </li>
+          <p>{machine.lotno ?? "-"}</p>
+        </div>
 
         <ListDivider />
-        <li style={{ display: "flex", justifyContent: "space-between" }}>
+        <div className="flex justify-between px-2 py-1">
           <p>План </p>
-          <p>{machine.plan}</p>
-        </li>
+          <p>{machine.total_socks_plan}</p>
+        </div>
         <ListDivider />
-        <li style={{ display: "flex", justifyContent: "space-between" }}>
+        <div className="flex justify-between px-2 py-1">
           <p>План факт </p>
-          <p>{machine.plan_fact}</p>
-        </li>
+          <p>{machine.total_socks_fact}</p>
+        </div>
         <ListDivider />
-        <li style={{ display: "flex", justifyContent: "space-between" }}>
+        <div className="flex justify-between px-2 py-1">
           <p>Почасовой план </p>
-          <p>{machine.plan_fact}</p>
-        </li>
+          <p>{machine.socks_in_basket_plan}</p>
+        </div>
         <ListDivider />
-        <li style={{ display: "flex", justifyContent: "space-between" }}>
+        <div className="flex justify-between px-2 py-1">
           <p>Остатка </p>
           <p>{getWeight(machine)} кг</p>
-        </li>
+        </div>
         <ListDivider />
-        <li className="flex items-center justify-between ">
+        <div className="flex justify-between px-2 py-1">
           <p>Рецепт </p>{" "}
           <div>
             <p>-</p>
           </div>
-        </li>
-
-        <ListDivider />
-        <li className="flex items-center justify-between ">
-          <p>ФИО сотрудника </p> <p>-</p>
-        </li>
-
-        <ListDivider />
-        <li className="flex items-center justify-between ">
-          <p>Время предыдущего выпуска</p>{" "}
-          <p>
-            {GetCurrentDate({ date: machine.PrevDateTime, type: "usually" })}
-          </p>
-        </li>
-
-        <ListDivider />
-        <li className="flex items-center justify-between ">
-          <p>Время последнего выпуска</p>
-          <p>
-            {GetCurrentDate({ date: machine.LastDateTime, type: "usually" })}
-          </p>
-        </li>
-      </ul>
+        </div>
+      </div>
 
       <div className="border-l py-3 pr-6 pl-6 w-full flex items-center flex-col">
         <div className="w-full">
-          <ul className={`flex flex-col space-y-5 ${checked2 ? "mb-10" : ""}`}>
-            <li
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                padding: 0,
-              }}
-            >
+          <div
+            className={`flex flex-col space-y-5 remove-scroll ${
+              checked2 ? "mb-10" : ""
+            }`}
+          >
+            <div className="flex justify-between">
               <p className="mr-1">Машина</p>
               <Switch
                 checked={checked1}
                 startDecorator={checked1 ? "Вкл" : "Отк"}
                 onChange={(event) => setChecked1(event.target.checked)}
               />
-            </li>
-            <li
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                padding: 0,
-              }}
-            >
+            </div>
+            <div className="flex justify-between">
               <p className="mr-1">Состояние машины</p>
               <Switch
                 checked={checked2}
                 startDecorator={checked2 ? "Работает" : "Сломан"}
                 onChange={(event) => setChecked2(event.target.checked)}
               />
-            </li>
-          </ul>
+            </div>
+          </div>
         </div>
         {checked2 ? (
           <div
@@ -186,48 +146,20 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
             >
               {machine.machine_number}
             </p>
-            <CircularProgress
-              strokeWidth={getFontSize({
-                count: 6,
-                percent: 6,
-                type: "machine",
-              })}
-              value={
-                Number(machine.plan_fact) > 100
-                  ? 100
-                  : Number(machine.plan_fact)
-              }
-              maxValue={100}
-              size={getFontSize({
-                count: 6,
-                percent: 100,
-                type: "machine",
-              })}
-            >
-              <div
-                className="flex flex-col"
-                style={{
-                  fontSize: getFontSize({
-                    type: "machine",
-                    count: 6,
-                    percent: 15,
-                  }),
-                }}
-              >
-                <p>{machine.plan}</p>
-                <Divider
-                  orientation="horizontal"
-                  sx={{
-                    height: 2,
-                    backgroundColor: "gray",
-                    opacity: 0.5,
-                  }}
-                  style={{ background: "black" }}
-                />
-                <p>{machine.plan_fact}</p>
-                <p>{machine.plan_fact}</p>
-              </div>
-            </CircularProgress>
+            <MachineCardHeader
+              data={{
+                title: machine.machine_name,
+              }}
+              count={6}
+            />
+            <MachineCardBody
+              data={{
+                plan: machine.total_socks_plan ?? "",
+                plan_hourly: machine.socks_in_basket_fact,
+                plan_fact: machine.total_socks_fact,
+              }}
+              count={6}
+            />
             <div className="flex justify-between items-end w-full">
               <p></p>
               <p
@@ -248,24 +180,40 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
                     }),
                   }}
                 />
-                {machine.efficiency + "%"}
+                {/* {machine.efficiency + "%"} */}
               </p>
             </div>
           </div>
         ) : (
           <div className="w-full h-full border-t border-[var(--border)] pt-2 mt-3">
-            <h3 className="mb-5">Причина поломки</h3>
-            <ModalBtn
-              checkedReason={checkedReason}
-              setCheckedReason={setCheckedReason}
-            />
+            <div className="flex items-center justify-between mb-1">
+              <h3>{t("screen_image")}</h3>
+              <p>
+                {GetCurrentDate({ date: machine.log_time, type: "usually" })}
+              </p>
+            </div>
+
+            <div
+              className="rounded-[12px] overflow-hidden border border-[var(--gray30)] cursor-pointer"
+              onClick={() =>
+                setImageView(
+                  `http://10.40.14.193:8080/v1/machine_status/${machine.machine_id}/image`
+                )
+              }
+            >
+              <img
+                src={`http://10.40.14.193:8080/v1/machine_status/${machine.machine_id}/image`}
+                alt={machine.machine_id}
+              />
+            </div>
             <p className="mb-2 text-[var(--gray)] mt-3">
               Введите причину поломки
             </p>
+
             <textarea
               value={descriptionText}
               className="p-3 bg-transparent border border-[var(--border)] outline-none focus:border-[var(--primary)] rounded-[8px] w-full"
-              rows={window?.screen?.height < 800 ? 1 : 5}
+              rows={1}
               onChange={(e: any) => setDescriptionText(e.target.value)}
             ></textarea>
 
@@ -280,30 +228,30 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
               </div>
             )}
 
-            <Stack
-              spacing={1}
-              direction={"row"}
-              justifyContent={"space-between"}
-              sx={{ width: "100%" }}
-              mt={2}
-            >
-              <Button
+            <div className="flex py-1 space-x-3">
+              <Button onClick={() => {}} fullWidth variant="outlined">
+                Отменить
+              </Button>
+              <button
+                className="custom-btn create"
                 onClick={() => {
                   // setOpen(false);
                   createStatus();
                 }}
-                fullWidth
                 disabled={!checkPermission("edit")}
               >
                 Отправить
-              </Button>
-              <Button onClick={() => {}} fullWidth variant="outlined">
-                Отменить
-              </Button>
-            </Stack>
+              </button>
+            </div>
           </div>
         )}
       </div>
+
+      {imageView ? (
+        <ImageViewer url={imageView} closeViewer={() => setImageView("")} />
+      ) : (
+        ""
+      )}
     </div>
   );
 };

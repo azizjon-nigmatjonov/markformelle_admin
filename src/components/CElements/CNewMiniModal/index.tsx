@@ -118,7 +118,9 @@ const CNewMiniModal: FC<Props> = ({
 
                 <div className="flex justify-end">
                   <IconButton onClick={() => handleActions("close")}>
-                    <CloseIcon />
+                    <div className="hover:rotate-[90deg] duration-200">
+                      <CloseIcon />
+                    </div>
                   </IconButton>
                 </div>
               </div>

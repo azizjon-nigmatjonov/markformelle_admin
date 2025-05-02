@@ -1,12 +1,10 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { MaterialForm } from "./MaterialForm";
 import CNewMiniModal from "../../../../components/CElements/CNewMiniModal";
 import { TrailForm } from "./TrailForm";
 import { DetailForm } from "./DetailForm";
-import { StokeDeteyContantList } from "../../../../constants/stokedetey";
 import "./style.scss";
-import { TableUI } from "./TableUI";
-import { DragDrop } from "./DragDrop";
+import { DragDrop } from "./StepComponents/DragDrop";
 export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
 
@@ -18,26 +16,26 @@ export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
     }
   };
 
-  const TableList = useMemo(() => {
-    const objects: any = {};
-    let lastId = "";
-    for (let i = 0; i < StokeDeteyContantList.length; i++) {
-      const obj = StokeDeteyContantList[i];
-      if (obj.RECETEASAMAID) lastId = "" + obj.RECETEASAMAID;
+  // const TableList = useMemo(() => {
+  //   const objects: any = {};
+  //   let lastId = "";
+  //   for (let i = 0; i < StokeDeteyContantList.length; i++) {
+  //     const obj = StokeDeteyContantList[i];
+  //     if (obj.RECETEASAMAID) lastId = "" + obj.RECETEASAMAID;
 
-      if (lastId in objects && !obj.RECETEASAMAID) {
-        objects[lastId].rows.push(obj);
-      } else {
-        objects[obj.RECETEASAMAID] = {
-          rows: [obj],
-          id: obj.RECETEASAMAID,
-          image: "/images/test/test1.png",
-        };
-      }
-    }
+  //     if (lastId in objects && !obj.RECETEASAMAID) {
+  //       objects[lastId].rows.push(obj);
+  //     } else {
+  //       objects[obj.RECETEASAMAID] = {
+  //         rows: [obj],
+  //         id: obj.RECETEASAMAID,
+  //         image: "/images/test/test1.png",
+  //       };
+  //     }
+  //   }
 
-    return Object.values(objects);
-  }, []);
+  //   return Object.values(objects);
+  // }, []);
 
   return (
     <div className="pb-10">

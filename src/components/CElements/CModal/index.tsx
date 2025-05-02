@@ -63,7 +63,10 @@ const CModal: FC<Props> = ({
             </IconButton>
           </div>
 
-          <div className={cls.body} style={{ minHeight, minWidth, maxWidth }}>
+          <div
+            className={`${cls.body} p-3`}
+            style={{ minHeight, minWidth, maxWidth }}
+          >
             {children}
           </div>
 

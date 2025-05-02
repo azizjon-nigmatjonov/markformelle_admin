@@ -1,7 +1,7 @@
 import { useState } from "react";
 // import { NotificationData } from "./Logic";
 import { NitifList } from "./List";
-import { Badge, IconButton } from "@mui/material";
+import { Badge, IconButton, Tooltip } from "@mui/material";
 import { NotificationIcon } from "../../../../components/UI/IconGenerator/Svg";
 import { NotificationData } from "./Logic";
 import { Closer } from "../../../../components/UI/Closer";
@@ -14,26 +14,43 @@ const Notification = () => {
   const { checkAdditionals } = usePermissions();
   return (
     <div className="relative z-[4]">
-      <IconButton
-        className={`w-[25px] h-[25px] desktop:h-[30px] desktop:w-[30px] rounded-[8px] shadow-sm bg-white common-shadow ${
-          checkAdditionals("show_notification") ? "" : "cursor-not-allowed"
-        }`}
-        onClick={() => {
-          if (!checkAdditionals("show_notification")) return;
-          setOpen(true);
-          clearCount();
+      <Tooltip
+        arrow
+        slotProps={{
+          popper: {
+            modifiers: [
+              {
+                name: "offset",
+                options: {
+                  offset: [0, 15],
+                },
+              },
+            ],
+          },
         }}
+        title={`Новости о системе`}
       >
-        <Badge badgeContent={notifCount} color="primary">
-          <NotificationIcon
-            fill={
-              checkAdditionals("show_notification")
-                ? "var(--gray)"
-                : "var(--gray30)"
-            }
-          />
-        </Badge>
-      </IconButton>
+        <IconButton
+          className={`w-[25px] h-[25px] desktop:h-[30px] desktop:w-[30px] rounded-[8px] shadow-sm bg-white common-shadow ${
+            checkAdditionals("show_notification") ? "" : "cursor-not-allowed"
+          }`}
+          onClick={() => {
+            if (!checkAdditionals("show_notification")) return;
+            setOpen(true);
+            clearCount();
+          }}
+        >
+          <Badge badgeContent={notifCount} color="primary">
+            <NotificationIcon
+              fill={
+                checkAdditionals("show_notification")
+                  ? "var(--gray)"
+                  : "var(--gray30)"
+              }
+            />
+          </Badge>
+        </IconButton>
+      </Tooltip>
 
       {open && <NitifList setOpen={setOpen} list={notificationList} />}
       {open && <Closer handleClose={() => setOpen(false)} />}

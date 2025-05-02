@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import HFTextField from "../../../../components/HFElements/HFTextField";
-import { CollapseUI } from "../../../../components/CElements/CCollapse";
 import { IModalForm, ModalTypes } from "../interfaces";
 import { useTranslationHook } from "../../../../hooks/useTranslation";
 import { InputFieldUI } from "../../../../components/UI/FieldUI";
@@ -102,235 +101,233 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-3 gap-x-5">
-          <InputFieldUI title={t("LABRECETEKOD")} disabled={disabled}>
-            <SelectOptionsTable
-              name="LABRECETEKOD"
-              placeholder={t("LABRECETEKOD")}
-              options={urunTypeData?.data}
-              required={true}
-              headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
-              filterParams={urunTypeFilterParams}
-              handleSelect={(_: {}) => {}}
-              handleSearch={(val: string) => {
-                setUrunTypeFilterParams({
-                  ...urunTypeFilterParams,
-                  q: val,
-                });
-              }}
-              control={control}
-              setFilterParams={setUrunTypeFilterParams}
-            />
-          </InputFieldUI>
+        <div className="space-y-5 h-[700px] overflow-y-scroll designed-scroll">
+          <div className="grid grid-cols-3 gap-x-5 border-b border-[var(--border)] pb-5">
+            <InputFieldUI title={t("LABRECETEKOD")} disabled={disabled}>
+              <SelectOptionsTable
+                name="LABRECETEKOD"
+                placeholder={t("LABRECETEKOD")}
+                options={urunTypeData?.data}
+                required={true}
+                headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
+                filterParams={urunTypeFilterParams}
+                handleSelect={(_: {}) => {}}
+                handleSearch={(val: string) => {
+                  setUrunTypeFilterParams({
+                    ...urunTypeFilterParams,
+                    q: val,
+                  });
+                }}
+                control={control}
+                setFilterParams={setUrunTypeFilterParams}
+              />
+            </InputFieldUI>
 
-          <div className="w-full pr-2">
-            <Alert severity={"info"} style={{ height: "35px" }}>
-              {t("add_unique_id")}
-            </Alert>
-          </div>
-          <div className="flex justify-end">
-            <div className="w-[200px]">
-              <button
-                className="custom-btn"
-                style={{ backgroundColor: disabled ? "var(--gray)" : "" }}
-                type={disabled ? "button" : "submit"}
-              >
-                {t(formId ? "update" : "create")}
-              </button>
+            <div className="w-full pr-2">
+              <Alert severity={"info"} style={{ height: "35px" }}>
+                {t("add_unique_id")}
+              </Alert>
             </div>
-          </div>
-        </div>
-        <CollapseUI title="" disabled={true}>
-          <div className="space-y-5 h-[700px] overflow-y-scroll designed-scroll">
-            <div className="flex justify-between space-x-4">
-              <div className="w-full grid grid-cols-3 gap-y-3 gap-x-5">
-                <div className="space-y-2">
-                  <InputFieldUI title={t("URUNRECETEADI")}>
-                    <HFTextField
-                      name="URUNRECETEADI"
-                      control={control}
-                      setValue={setValue}
-                      placeholder={t("URUNRECETEADI")}
-                      disabled={disabled}
-                    />
-                  </InputFieldUI>
-                  <InputFieldUI title={t("URUNID")}>
-                    <HFTextField
-                      name="URUNID"
-                      control={control}
-                      setValue={setValue}
-                      placeholder={t("URUNID")}
-                      disabled={disabled}
-                    />
-                  </InputFieldUI>
-                  <InputFieldUI title={t("TALEPTARIHI")}>
-                    <HFTextField
-                      name="TALEPTARIHI"
-                      control={control}
-                      setValue={setValue}
-                      placeholder={t("TALEPTARIHI")}
-                      disabled={disabled}
-                    />
-                  </InputFieldUI>
-                  <InputFieldUI title={t("DOVIZ")}>
-                    <HFSelect
-                      name="DOVIZ"
-                      control={control}
-                      setValue={setValue}
-                      placeholder={t("DOVIZ")}
-                      disabled={disabled}
-                    />
-                  </InputFieldUI>
-                  <InputFieldUI title={t("RECETETURU")}>
-                    <HFSelect
-                      name="RECETETURU"
-                      control={control}
-                      setValue={setValue}
-                      placeholder={t("RECETETURU")}
-                      disabled={disabled}
-                    />
-                  </InputFieldUI>
-                </div>
-                <div className="space-y-2">
-                  <InputFieldUI title={t("ASHKLAMA")}>
-                    <HFTextField
-                      name="ASHKLAMA"
-                      control={control}
-                      setValue={setValue}
-                      placeholder={t("ASHKLAMA")}
-                      disabled={disabled}
-                    />
-                  </InputFieldUI>
-                  <InputFieldUI title={t("ESKIRECETEKODU")}>
-                    <HFTextField
-                      name="ESKIRECETEKODU"
-                      control={control}
-                      setValue={setValue}
-                      placeholder={t("ESKIRECETEKODU")}
-                      disabled={disabled}
-                    />
-                  </InputFieldUI>
-                  <InputFieldUI title={t("RENKDIENLIGI")}>
-                    <HFSelect
-                      name="RENKDIENLIGI"
-                      control={control}
-                      setValue={setValue}
-                      placeholder={t("RENKDIENLIGI")}
-                      disabled={disabled}
-                    />
-                  </InputFieldUI>
-                  <InputFieldUI title={t("RENKGRUP")}>
-                    <HFSelect
-                      name="RENKGRUP"
-                      control={control}
-                      setValue={setValue}
-                      placeholder={t("RENKGRUP")}
-                      disabled={disabled}
-                    />
-                  </InputFieldUI>
-                  <InputFieldUI title={t("HAMSTOCK")}>
-                    <SelectOptionsTable
-                      name="HAMSTOCK"
-                      placeholder={t("HAMSTOCK")}
-                      options={firmaData}
-                      required={true}
-                      headColumns={[
-                        { id: "FIRMAID", title: "FIRMAID" },
-                        { id: "FIRMAADI", title: "FIRMAADI" },
-                        { id: "KISAADI", title: "KISAADI" },
-                      ]}
-                      filterParams={filterParams}
-                      handleSelect={(_: {}) => {}}
-                      handleSearch={(val: string) => {
-                        setFilterParamsFirm({ ...filterParamsFirm, q: val });
-                      }}
-                      control={control}
-                      setFilterParams={setFilterParams}
-                      disabled={disabled}
-                    />
-                  </InputFieldUI>
-                </div>
-                <div className="space-y-2">
-                  <InputFieldUI title={t("USTASAMA")}>
-                    <SelectOptionsTable
-                      name="USTASAMA"
-                      placeholder={t("USTASAMA")}
-                      options={firmaData}
-                      required={true}
-                      headColumns={[
-                        { id: "FIRMAID", width: 200, title: "FIRMAID" },
-                        { id: "FIRMAADI", title: "FIRMAADI" },
-                        { id: "KISAADI", title: "KISAADI" },
-                      ]}
-                      filterParams={filterParams}
-                      handleSelect={(_: {}) => {}}
-                      handleSearch={(val: string) => {
-                        setFilterParamsFirm({ ...filterParamsFirm, q: val });
-                      }}
-                      control={control}
-                      setFilterParams={setFilterParams}
-                      disabled={disabled}
-                    />
-                  </InputFieldUI>
-                  <InputFieldUI title={t("PANTONEKODU")}>
-                    <HFSelect
-                      name="PANTONEKODU"
-                      control={control}
-                      setValue={setValue}
-                      placeholder={t("PANTONEKODU")}
-                      disabled={disabled}
-                    />
-                  </InputFieldUI>
-                  <InputFieldUI title={t("FIRMAID")}>
-                    <SelectOptionsTable
-                      name="FIRMAID"
-                      placeholder={t("FIRMAID")}
-                      options={firmaData}
-                      required={true}
-                      headColumns={[
-                        { id: "FIRMAID", width: 200, title: "FIRMAID" },
-                        { id: "FIRMAADI", title: "FIRMAADI" },
-                        { id: "KISAADI", title: "KISAADI" },
-                      ]}
-                      filterParams={filterParams}
-                      handleSelect={(_: {}) => {}}
-                      handleSearch={(val: string) => {
-                        setFilterParamsFirm({ ...filterParamsFirm, q: val });
-                      }}
-                      control={control}
-                      setFilterParams={setFilterParams}
-                      disabled={disabled}
-                    />
-                  </InputFieldUI>
-                  <InputFieldUI title={t("URUNTIPIADI")}>
-                    <SelectOptionsTable
-                      name="URUNTIPIADI"
-                      placeholder={t("URUNTIPIID")}
-                      options={urunTypeData?.data}
-                      required={true}
-                      headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
-                      filterParams={urunTypeFilterParams}
-                      handleSelect={(obj: any) => {
-                        setValue("URUNTIPIID", obj.URUNTIPIID);
-                        setValue("URUNTIPIADI", obj.ADI);
-                      }}
-                      handleSearch={(val: string) => {
-                        setUrunTypeFilterParams({
-                          ...urunTypeFilterParams,
-                          q: val,
-                        });
-                      }}
-                      control={control}
-                      setFilterParams={setUrunTypeFilterParams}
-                      disabled={disabled}
-                    />
-                  </InputFieldUI>
-                </div>
+            <div className="flex justify-end">
+              <div className="w-[200px]">
+                <button
+                  className="custom-btn"
+                  style={{ backgroundColor: disabled ? "var(--gray)" : "" }}
+                  type={disabled ? "button" : "submit"}
+                >
+                  {t(formId ? "update" : "create")}
+                </button>
               </div>
             </div>
-            <LabModalTables disabled={disabled} />
           </div>
-        </CollapseUI>
+          <div className="flex justify-between space-x-4">
+            <div className="w-full grid grid-cols-3 gap-y-3 gap-x-5">
+              <div className="space-y-2">
+                <InputFieldUI title={t("URUNRECETEADI")}>
+                  <HFTextField
+                    name="URUNRECETEADI"
+                    control={control}
+                    setValue={setValue}
+                    placeholder={t("URUNRECETEADI")}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+                <InputFieldUI title={t("URUNID")}>
+                  <HFTextField
+                    name="URUNID"
+                    control={control}
+                    setValue={setValue}
+                    placeholder={t("URUNID")}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+                <InputFieldUI title={t("TALEPTARIHI")}>
+                  <HFTextField
+                    name="TALEPTARIHI"
+                    control={control}
+                    setValue={setValue}
+                    placeholder={t("TALEPTARIHI")}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+                <InputFieldUI title={t("DOVIZ")}>
+                  <HFSelect
+                    name="DOVIZ"
+                    control={control}
+                    setValue={setValue}
+                    placeholder={t("DOVIZ")}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+                <InputFieldUI title={t("RECETETURU")}>
+                  <HFSelect
+                    name="RECETETURU"
+                    control={control}
+                    setValue={setValue}
+                    placeholder={t("RECETETURU")}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+              </div>
+              <div className="space-y-2">
+                <InputFieldUI title={t("ASHKLAMA")}>
+                  <HFTextField
+                    name="ASHKLAMA"
+                    control={control}
+                    setValue={setValue}
+                    placeholder={t("ASHKLAMA")}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+                <InputFieldUI title={t("ESKIRECETEKODU")}>
+                  <HFTextField
+                    name="ESKIRECETEKODU"
+                    control={control}
+                    setValue={setValue}
+                    placeholder={t("ESKIRECETEKODU")}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+                <InputFieldUI title={t("RENKDIENLIGI")}>
+                  <HFSelect
+                    name="RENKDIENLIGI"
+                    control={control}
+                    setValue={setValue}
+                    placeholder={t("RENKDIENLIGI")}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+                <InputFieldUI title={t("RENKGRUP")}>
+                  <HFSelect
+                    name="RENKGRUP"
+                    control={control}
+                    setValue={setValue}
+                    placeholder={t("RENKGRUP")}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+                <InputFieldUI title={t("HAMSTOCK")}>
+                  <SelectOptionsTable
+                    name="HAMSTOCK"
+                    placeholder={t("HAMSTOCK")}
+                    options={firmaData}
+                    required={true}
+                    headColumns={[
+                      { id: "FIRMAID", title: "FIRMAID" },
+                      { id: "FIRMAADI", title: "FIRMAADI" },
+                      { id: "KISAADI", title: "KISAADI" },
+                    ]}
+                    filterParams={filterParams}
+                    handleSelect={(_: {}) => {}}
+                    handleSearch={(val: string) => {
+                      setFilterParamsFirm({ ...filterParamsFirm, q: val });
+                    }}
+                    control={control}
+                    setFilterParams={setFilterParams}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+              </div>
+              <div className="space-y-2">
+                <InputFieldUI title={t("USTASAMA")}>
+                  <SelectOptionsTable
+                    name="USTASAMA"
+                    placeholder={t("USTASAMA")}
+                    options={firmaData}
+                    required={true}
+                    headColumns={[
+                      { id: "FIRMAID", width: 200, title: "FIRMAID" },
+                      { id: "FIRMAADI", title: "FIRMAADI" },
+                      { id: "KISAADI", title: "KISAADI" },
+                    ]}
+                    filterParams={filterParams}
+                    handleSelect={(_: {}) => {}}
+                    handleSearch={(val: string) => {
+                      setFilterParamsFirm({ ...filterParamsFirm, q: val });
+                    }}
+                    control={control}
+                    setFilterParams={setFilterParams}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+                <InputFieldUI title={t("PANTONEKODU")}>
+                  <HFSelect
+                    name="PANTONEKODU"
+                    control={control}
+                    setValue={setValue}
+                    placeholder={t("PANTONEKODU")}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+                <InputFieldUI title={t("FIRMAID")}>
+                  <SelectOptionsTable
+                    name="FIRMAID"
+                    placeholder={t("FIRMAID")}
+                    options={firmaData}
+                    required={true}
+                    headColumns={[
+                      { id: "FIRMAID", width: 200, title: "FIRMAID" },
+                      { id: "FIRMAADI", title: "FIRMAADI" },
+                      { id: "KISAADI", title: "KISAADI" },
+                    ]}
+                    filterParams={filterParams}
+                    handleSelect={(_: {}) => {}}
+                    handleSearch={(val: string) => {
+                      setFilterParamsFirm({ ...filterParamsFirm, q: val });
+                    }}
+                    control={control}
+                    setFilterParams={setFilterParams}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+                <InputFieldUI title={t("URUNTIPIADI")}>
+                  <SelectOptionsTable
+                    name="URUNTIPIADI"
+                    placeholder={t("URUNTIPIID")}
+                    options={urunTypeData?.data}
+                    required={true}
+                    headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
+                    filterParams={urunTypeFilterParams}
+                    handleSelect={(obj: any) => {
+                      setValue("URUNTIPIID", obj.URUNTIPIID);
+                      setValue("URUNTIPIADI", obj.ADI);
+                    }}
+                    handleSearch={(val: string) => {
+                      setUrunTypeFilterParams({
+                        ...urunTypeFilterParams,
+                        q: val,
+                      });
+                    }}
+                    control={control}
+                    setFilterParams={setUrunTypeFilterParams}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+              </div>
+            </div>
+          </div>
+          <LabModalTables disabled={disabled} />
+        </div>
       </form>
     </>
   );

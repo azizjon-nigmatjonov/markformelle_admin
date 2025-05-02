@@ -7,18 +7,16 @@ import { ChniMachines } from "./Logic";
 import CBreadcrumbs from "../../components/CElements/CBreadcrumbs";
 import GlobalSearch from "../../components/UI/GlobalSearch";
 import useCQuery from "../../hooks/useCQuery";
-import { useTimeDifference } from "../../hooks/useCalucaleTime";
 import { Skeletons, SkeletonTable } from "./Components/Skeleton";
 import { useSelector } from "react-redux";
 const breadCrumbs = [{ label: "Дашборд ЧНИ", link: "/chni/dashboard" }];
 const ChniDashboard = () => {
   const [type, setType] = useState("grid");
   const [list, setList] = useState([...ChniMachines]);
-  const { GetTimeDifference } = useTimeDifference();
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   const { data, isLoading, refetch } = useCQuery({
     key: `GET_CHNI_LIST`,
-    endpoint: `http://srv-nav.praktik.loc:1880/socsdata?mac`,
+    endpoint: `http://10.40.14.193:8080/v1/get_all_machine_status`,
     params: {},
   });
 
@@ -33,29 +31,18 @@ const ChniDashboard = () => {
   }, []);
 
   const newList = useMemo(() => {
-    return (
-      data?.map((item: any) => {
-        const minutes: any = GetTimeDifference(
-          item.PrevDateTime,
-          item.LastDateTime
-        );
-        const plan_hourly = minutes > 0 ? Math.ceil(60 / minutes) : 0;
-
+    const arr: any = [];
+    data?.results
+      ?.sort((a: any, b: any) => a.machine_name - b.machine_name)
+      ?.forEach((item: any) => {
         const obj = {
           new_status: {
-            color: "green",
+            color: item.status === "success" ? "green" : "grey",
           },
-          plan_hourly,
-          plan_fact: 0,
-          plan: 100,
-          id: item.MAC_Address,
         };
-        return {
-          ...obj,
-          ...item,
-        };
-      }) ?? []
-    );
+        arr.push({ ...item, ...obj });
+      });
+    return arr;
   }, [data]);
 
   const FilterUI = () => (

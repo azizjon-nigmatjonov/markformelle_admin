@@ -336,6 +336,10 @@ input {
 .custom-btn.create {
   background-color: var(--primary);
 }
+.custom-btn.disabled {
+  background-color: var(--gray20);
+  cursor: not-allowed;
+}
 
 .success-btn {
   background-color: var(--green);
@@ -346,6 +350,7 @@ input {
   color: var(--black);
   text-transform: none;
   height: 34px;
+  font-weight: 500;
 }
 
 .MuiAlert-root {

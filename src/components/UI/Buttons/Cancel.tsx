@@ -1,7 +1,6 @@
-import { Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { ArrowDownFilled, PlusIcon } from "../IconGenerator/Svg";
-import './style.scss'
+import "./style.scss";
 
 interface Props {
   text?: string;
@@ -10,7 +9,7 @@ interface Props {
   leftIcon?: boolean;
   rightIcon?: boolean;
   classes?: string;
-  onClick?: (val?: any) => void
+  onClick?: (val?: any) => void;
 }
 
 const CancelButton = ({
@@ -23,18 +22,10 @@ const CancelButton = ({
   ...props
 }: Props) => {
   const { t } = useTranslation();
- 
-  
+
   return (
     <div id="deleteButton" {...props}>
-      <Button
-        id="demo-customized-button"
-        aria-haspopup="true"
-        variant="contained"
-        disableElevation
-        onClick={handleClick}
-        className={`gap-[6px] ${classes}`}
-      >
+      <button className="custom-btn">
         {leftIcon === true ? <PlusIcon /> : leftIcon}
         <span className="text-white">{t(text)}</span>
         {rightIcon && (
@@ -42,7 +33,7 @@ const CancelButton = ({
             <ArrowDownFilled fill={open ? "white" : undefined} />
           </div>
         )}
-      </Button>
+      </button>
     </div>
   );
 };

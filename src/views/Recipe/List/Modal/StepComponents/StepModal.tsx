@@ -73,6 +73,7 @@ export const StepModal = ({
             {
             }
           }}
+          focused
           control={control}
           setFilterParams={() => {}}
         />

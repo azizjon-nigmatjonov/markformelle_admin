@@ -83,26 +83,51 @@
 }
 
 .cdraganddrop {
-    .row {
-        border-radius: 8px;
-        overflow: hidden;
+    .header {
+        .cell {
+            background-color: transparent !important;
+        }
     }
     .cell {
-        border-radius: 8px;
-
-        &:first-child {
-            border-top-left-radius: 8px;
-        }
         p {
-            min-width: 100px;
-            background-color: white;
             height: 100%;
             padding: 6px 8px;
         }
     }
 
-    .hover-trigger:hover {
+    .header,
+    .body {
+        .cell {
+            min-width: 200px;
+            background-color: white;
+            &:first-child {
+                border-top-left-radius: 8px;
+                border-bottom-left-radius: 8px;
+                min-width: 170px;
+                // min-width: 200px;
+            }
+            &:last-child {
+                border-top-right-radius: 8px;
+                border-bottom-right-radius: 8px;
+            }
+        }
+    }
+
+    .hover-trigger {
         @include hover-style;
+        &::before {
+            display: none;
+        }
+        &::after {
+            height: 3px;
+            bottom: 3px;
+            opacity: 0;
+        }
+        &:hover {
+            &::after {
+                opacity: 1;
+            }
+        }
     }
 
     .hovered-step {

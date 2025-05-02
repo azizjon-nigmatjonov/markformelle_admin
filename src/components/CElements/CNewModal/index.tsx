@@ -130,7 +130,7 @@ const CNewModal: FC<Props> = ({
             }`}
           >
             {title && (
-              <div className="flex items-center justify-between p-3  top-0 bg-white z-[91] border-b border-[var(--border)]">
+              <div className="flex items-center justify-between p-3 top-0 bg-white z-[91] border-b border-[var(--border)]">
                 <div className="flex items-center space-x-3">
                   <IconButton onClick={() => handleActions("close")}>
                     <div className="w-[30px] h-[30px] items-center justify-center flex bg-[var(--main80)] rounded-full">
@@ -225,7 +225,7 @@ const CNewModal: FC<Props> = ({
                       </div>
                     </IconButton>
                     <IconButton onClick={() => handleActions("close")}>
-                      <div className="w-[30px] h-[30px] items-center justify-center flex group hover:bg-[var(--primary50)]">
+                      <div className="w-[30px] h-[30px] items-center justify-center flex group hover:bg-[var(--primary50)] hover:rotate-[90deg] duration-200">
                         <CloseIcon className="text-[var(--main)]" />
                       </div>
                     </IconButton>

@@ -7,7 +7,6 @@ import CustomBtn from "../../../components/CElements/CustomBtn";
 import { LogoutIcon } from "../../../components/UI/IconGenerator/Svg";
 import { useState } from "react";
 import CModal from "../../../components/CElements/CModal";
-import CancelButton from "../../../components/UI/Buttons/Cancel";
 import { useDispatch, useSelector } from "react-redux";
 import { authActions } from "../../../store/auth/auth.slice";
 import { useTranslation } from "react-i18next";
@@ -167,11 +166,13 @@ const Profile = () => {
           footerActive={false}
         >
           <p className="text-[var(--danger)] font-medium">
-            {t("do_you_want_to_leave_account")}
+            {t("want_l_account")}
           </p>
 
           <div className="grid gap-2 grid-cols-2 mt-8">
-            <CancelButton text="no" onClick={() => setLogout(false)} />
+            <button className="cancel-btn" onClick={() => setLogout(false)}>
+              {t("no")}
+            </button>
             <button className="custom-btn" onClick={() => Logout()}>
               {t("yes")}
             </button>

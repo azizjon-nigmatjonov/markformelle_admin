@@ -1,4 +1,3 @@
-import { ModalDialog, ModalClose } from "@mui/joy";
 import { ChniCardList } from "./List";
 import CTabs from "../../../../components/CElements/CTab";
 import { useState } from "react";
@@ -33,27 +32,13 @@ export const ChniCardModal = ({ element, open = false }: Props) => {
     }
   };
   return (
-    <ModalDialog
-      sx={{
-        width:
-          window?.screen?.height > 600 && window?.screen?.height < 800
-            ? "70vw"
-            : window?.screen?.width < 1440
-            ? (90 / 100) * window?.screen?.width
-            : window?.screen?.height > 1200
-            ? (60 / 100) * window?.screen?.width
-            : 1200,
-        height: 750,
-      }}
-    >
-      <ModalClose />
-
+    <>
       <CTabs
         tabList={TabList}
         currentTab={currentTab}
         handleTabClick={setCurrentTab}
       />
       <div className="h-full">{GetUI(currentTab.id)}</div>
-    </ModalDialog>
+    </>
   );
 };

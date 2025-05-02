@@ -7,6 +7,7 @@ import { HeaderFoldButton } from "./FoldButton";
 import { sidebarActions } from "../../../store/sidebar";
 import { useScreenSize } from "../../../hooks/useScreenSize";
 import { MobileHeader } from "./MobileHeader";
+import { Tooltip } from "@mui/material";
 
 interface Props {
   open?: boolean;
@@ -86,9 +87,26 @@ export const Header = ({
               <div className="h-[20px] w-[2px] bg-[var(--gray20)] mx-3"></div>
 
               <div className="flex items-center space-x-3">
-                <div className="w-[140px]">
-                  <LangDropdown />
-                </div>
+                <Tooltip
+                  arrow
+                  slotProps={{
+                    popper: {
+                      modifiers: [
+                        {
+                          name: "offset",
+                          options: {
+                            offset: [0, 15],
+                          },
+                        },
+                      ],
+                    },
+                  }}
+                  title={`Изменение язык системы`}
+                >
+                  <div className="w-[140px]">
+                    <LangDropdown />
+                  </div>
+                </Tooltip>
                 {/* <OrderDriver /> */}
                 <Notification />
               </div>

@@ -12,15 +12,15 @@ export const MachineCardBody = ({ data = {}, count = 6 }: Props) => {
   const { getFontSize } = useDeviceHeight();
   const height = window?.screen?.height ?? 0;
   return (
-    <div className="w-full flex justify-center h-full">
+    <div className="w-full flex justify-center h-full relative">
       <CircularProgress
         strokeWidth={getFontSize({
           count,
           percent: height > 1200 ? 8 : 5,
           type: "machine",
         })}
-        value={Number(data.plan_fact) > 100 ? 100 : Number(data.plan_fact)}
-        maxValue={data.plan}
+        value={data.fact && data.plan ? (data.fact / data.plan) * 100 : 0}
+        maxValue={100}
         size={getFontSize({
           count,
           percent: height > 1200 ? 87 : 52,
@@ -28,7 +28,7 @@ export const MachineCardBody = ({ data = {}, count = 6 }: Props) => {
         })}
       >
         <div
-          className="font-semibold"
+          className="font-semibold w-full flex flex-col items-center"
           style={{
             fontSize: getFontSize({
               count,
@@ -37,34 +37,47 @@ export const MachineCardBody = ({ data = {}, count = 6 }: Props) => {
             }),
           }}
         >
-          <p>{data.plan}</p>
+          <p>{data.fact ?? 0}</p>
           <div className="w-full h-[1px] bg-[var(--black)] mb-[2px]"></div>
-        <Tooltip title={`Производительность машины
-${data.plan_hourly} носков в час.`} placement="right" arrow followCursor>
-          <div className="flex items-center">
-            
-            <div
-              className="rotate-[90deg]"
-              style={{
-                width: getFontSize({
-                  count,
-                  percent: height > 1200 ? 15 : 9,
-                  type: "machine",
-                }),
-                height: getFontSize({
-                  count,
-                  percent: height > 1200 ? 15 : 9,
-                  type: "machine",
-                }),
-              }}
-            >
-              <WatchIcon />
+          <p>{data.plan}</p>
+
+          <Tooltip
+            arrow
+            slotProps={{
+              popper: {
+                modifiers: [
+                  {
+                    name: "offset",
+                    options: {
+                      offset: [0, 15],
+                    },
+                  },
+                ],
+              },
+            }}
+            title={`Производительность машины ${data.plan_hourly} носков в час.`}
+          >
+            <div className="flex items-center">
+              <div
+                className="rotate-[90deg]"
+                style={{
+                  width: getFontSize({
+                    count,
+                    percent: height > 1200 ? 15 : 9,
+                    type: "machine",
+                  }),
+                  height: getFontSize({
+                    count,
+                    percent: height > 1200 ? 15 : 9,
+                    type: "machine",
+                  }),
+                }}
+              >
+                <WatchIcon />
+              </div>
+
+              <p>{data.plan_hourly}</p>
             </div>
-          
-            <p>{data.plan_hourly}</p>
-          
-           
-          </div>
           </Tooltip>
         </div>
       </CircularProgress>
