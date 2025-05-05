@@ -1,14 +1,11 @@
 import { useState } from "react";
-import ModalClose from "@mui/joy/ModalClose";
 import {
   Button,
   Card,
   CardContent,
   CircularProgress,
   Divider,
-  List,
   ListDivider,
-  ModalDialog,
   Stack,
   Switch,
 } from "@mui/joy";
@@ -132,11 +129,8 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
   };
 
   return (
-    <ModalDialog sx={{ width: "900px", height: "650px" }}>
-      <ModalClose />
-      <p></p>
-      <p></p>
-      <h2 className="hidden ipod:flex absolute text-2xl right-5 top-[42px] items-center h-[35px] z-[99] font-semibold border-[1.5px] border-[var(--border)] border-b-0 px-2">
+    <div className="relative">
+      <h2 className="hidden ipod:flex absolute text-2xl right-5 top-[3px] items-center h-[35px] z-[99] font-semibold border-[2px] border-[var(--border)] border-b-0 px-2">
         {machine.name}
       </h2>
 
@@ -147,8 +141,8 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
       />
 
       {currentTab.id === "info" ? (
-        <div className="flex flex-col ipod:flex-row overflow-y-scroll ipod:overflow-y-visible">
-          <ul
+        <div className="flex flex-col ipod:flex-row overflow-y-scroll ipod:overflow-y-visible py-5">
+          <div
             className="grid grid-cols-1 paintlist text-[var(--black10)] mr-6 space-y-1 desktop:space-y-2 ipod:w-[50%]"
             style={{
               fontSize: getFontSize({
@@ -163,69 +157,69 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
               }),
             }}
           >
-            <li style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <p>Номер машины</p>
               <p>
                 {machine.name} ({machine.id})
               </p>
-            </li>
+            </div>
             <ListDivider />
-            <li style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <p>Название машины</p>
               <p>{machine.model}</p>
-            </li>
+            </div>
             <ListDivider />
-            <li style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <p>Статус машины</p>
               <p>{machine.reason}</p>
-            </li>
+            </div>
             <ListDivider />
-            <li style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <p>IP адрес </p>
               <p>{machine.ip_address}</p>
-            </li>
+            </div>
             <ListDivider />
-            <li style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <p>Версия программы </p>
               <p>{machine.soft_version}</p>
-            </li>
+            </div>
             <ListDivider sx={{ background: "var(--gray)" }} />
-            <li style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <p>Номер заказа </p>
               <p>{machine.zakaz}</p>
-            </li>
+            </div>
             <ListDivider />
-            <li style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <p>Артикул </p>
               <p>{machine.art}</p>
-            </li>
+            </div>
             <ListDivider />
-            <li style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <p>Лот пряжи </p>
               <p>{machine.lotno}</p>
-            </li>
+            </div>
             <ListDivider />
-            <li style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <p>Мощность машины </p>
               <p>{machine.capacity}</p>
-            </li>
+            </div>
             <ListDivider />
-            <li style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <p>План </p>
               <p>№ {machine.nplan == undefined ? "0" : machine.nplan}</p>
-            </li>
+            </div>
             <ListDivider />
-            <li style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <p>Факт </p>
               <p>{machine.fkol_knit} кг</p>
-            </li>
+            </div>
             <ListDivider />
-            <li style={{ display: "flex", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
               <p>Остатка </p>
               <p>{getWeight(machine)} кг</p>
-            </li>
+            </div>
             <ListDivider />
-          </ul>
+          </div>
           <CDriver direction="vertical" classes="h-[100%]" />
           <Stack
             spacing={2}
@@ -234,10 +228,10 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
             alignItems="center"
           >
             <Stack sx={{ width: "100%" }}>
-              <ul
+              <div
                 className={`flex flex-col space-y-5 ${checked2 ? "mb-10" : ""}`}
               >
-                <li
+                <div
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -250,8 +244,8 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
                     startDecorator={checked1 ? "Вкл" : "Отк"}
                     onChange={(event) => setChecked1(event.target.checked)}
                   />
-                </li>
-                <li
+                </div>
+                <div
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -264,16 +258,16 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
                     startDecorator={checked2 ? "Работает" : "Сломан"}
                     onChange={(event) => setChecked2(event.target.checked)}
                   />
-                </li>
-              </ul>
+                </div>
+              </div>
             </Stack>
             {checked2 ? (
               <Card
                 className={`machine-card custom ${machine.new_status.color}`}
                 sx={{ width: 250 }}
               >
-                <List aria-labelledby="decorated-list-demo">
-                  <li
+                <div>
+                  <div
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
@@ -284,9 +278,9 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
                       <Speed />
                       {machine.rotation}
                     </p>
-                  </li>
+                  </div>
 
-                  <li
+                  <div
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
@@ -297,8 +291,8 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
                       <Bolt />
                       {machine.efficiency}
                     </p>
-                  </li>
-                </List>
+                  </div>
+                </div>
                 <CardContent sx={{ mx: "auto", alignItems: "center" }}>
                   <CircularProgress
                     variant="soft"
@@ -403,7 +397,7 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
       ) : (
         <OrderList machineName={machine.name} machineId={machine.id} />
       )}
-    </ModalDialog>
+    </div>
   );
 };
 

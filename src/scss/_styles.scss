@@ -13,6 +13,10 @@ input {
   }
 }
 
+ul {
+  @include remove-scroll;
+}
+
 .hide-scrollbar::-webkit-scrollbar {
   width: 0px;
   height: 0px;
@@ -339,6 +343,7 @@ input {
 .custom-btn.disabled {
   background-color: var(--gray20);
   cursor: not-allowed;
+  border: 1px solid var(--gray);
 }
 
 .success-btn {
@@ -349,6 +354,7 @@ input {
   background-color: var(--gray20);
   color: var(--black);
   text-transform: none;
+  border: 1px solid var(--gray);
   height: 34px;
   font-weight: 500;
 }

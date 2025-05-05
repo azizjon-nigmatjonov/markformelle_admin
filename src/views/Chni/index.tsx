@@ -74,7 +74,11 @@ const ChniDashboard = () => {
       ) : (
         ""
       )}
-      {type === "grid" ? <ChniList list={list} /> : <ChniTable list={data} />}
+      {type === "grid" ? (
+        <ChniList list={list} />
+      ) : (
+        <ChniTable list={data?.results ?? []} />
+      )}
     </>
   );
 };

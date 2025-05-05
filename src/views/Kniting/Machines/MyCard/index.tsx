@@ -3,10 +3,11 @@ import ViewDayOutlinedIcon from "@mui/icons-material/ViewDayOutlined";
 import "./style.scss";
 import CircularProgress from "../../../../components/CElements/CCircularProgress";
 import { Bolt, WifiOff } from "@mui/icons-material";
-import { Modal } from "@mui/joy";
 import ModalCard from "../Card/ModalCard";
 import SpeedIcon from "@mui/icons-material/Speed";
 import useDeviceHeight from "../../../../hooks/useDeviceHeight";
+import CNewModal from "../../../../components/CElements/CNewModal";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   machine: any;
@@ -19,6 +20,7 @@ export const MyCard = ({ machine = {}, refetch }: Props) => {
   const cardRef: any = useRef(null);
   const [cardColor, setCardColor] = useState<string>("");
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
 
   const getCardColor = (): string => {
     if (
@@ -276,19 +278,14 @@ export const MyCard = ({ machine = {}, refetch }: Props) => {
           </div>
         )}
       </div>
-      <Modal
-        aria-labelledby="modal-title"
-        aria-describedby="modal-desc"
-        open={open}
-        onClose={() => setOpen(false)}
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <ModalCard machine={machine} setOpen={setOpen} />
-      </Modal>
+      {open && (
+        <CNewModal
+          title={t("knitting_machine")}
+          handleActions={() => setOpen(false)}
+        >
+          <ModalCard machine={machine} setOpen={setOpen} />
+        </CNewModal>
+      )}
     </>
   );
 };

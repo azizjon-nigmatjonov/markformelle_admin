@@ -27,9 +27,9 @@ const MachinCardUI = ({ machine = {} }: Props) => {
         />
         <MachineCardBody
           data={{
-            plan: machine.total_socks_plan ?? "",
+            plan: machine.total_socks_plan ?? 0,
             plan_hourly: 0,
-            fact: machine.total_socks_fact,
+            fact: machine.total_socks_fact ?? 0,
           }}
           count={6}
         />

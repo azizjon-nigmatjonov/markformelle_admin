@@ -10,13 +10,15 @@ interface Props {
 
 export const DropDown = ({ value, handleNavigate = () => {} }: Props) => {
   const location = useLocation();
+  // const { t } = useTranslation();
 
   return (
     <div className="mt-[-40px]">
       <div className="absolute left-[45px] group-hover:block hidden min-w-[250px] z-[99]">
         <div className="relative">
-          <div className="absolute left-[-4px] top-[15px] w-[15px] h-[15px] rotate-[45deg] bg-white border border-[var(--gray20)] z-[33]"></div>
+          <div className="absolute left-[-4px] top-[15px] w-[15px] h-[15px] rotate-[45deg] bg-transparent border border-[var(--border)] z-[33]"></div>
           <div className="relative z-[99] bg-white card-shadow min-w-[200px] rounded-[12px] border border-[var(--gray20)] pt-2">
+            {/* <h3 className="px-3 py-2">{t(title)}</h3> */}
             <div className="show">
               {Object.values(value as keyof typeof value)?.map(
                 (el: any, i, arr) => {

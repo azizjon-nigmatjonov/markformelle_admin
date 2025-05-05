@@ -79,7 +79,7 @@ const OrderList: React.FC<OrderListProps> = ({ machineName }) => {
   }, [machineName]);
 
   return (
-    <div className="h-[550px] ">
+    <div className="max-h-[500px] min-h-[440px]">
       {/* {data.loading ? (
         <div>
           <OneSkeleton />

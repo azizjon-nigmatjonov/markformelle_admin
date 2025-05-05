@@ -482,6 +482,7 @@ export const HeaderSettings = ({
             <Tooltip
               title="Активные меню"
               arrow
+              placement="top"
               slotProps={{
                 popper: {
                   modifiers: [

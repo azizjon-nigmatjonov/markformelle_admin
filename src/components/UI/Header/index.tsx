@@ -101,6 +101,7 @@ export const Header = ({
                       ],
                     },
                   }}
+                  placement="right"
                   title={`Изменение язык системы`}
                 >
                   <div className="w-[140px]">

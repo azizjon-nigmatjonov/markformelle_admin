@@ -5,9 +5,22 @@ import { TrailForm } from "./TrailForm";
 import { DetailForm } from "./DetailForm";
 import "./style.scss";
 import { DragDrop } from "./StepComponents/DragDrop";
-export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
+export const LabModalTables = ({
+  disabled,
+  setChanged = () => {},
+  changed = false,
+  askAction,
+  setAskAction = () => {},
+  setOpenMainModal,
+}: {
+  disabled: boolean;
+  changed: boolean;
+  askAction: boolean;
+  setOpenMainModal: (val: boolean) => void;
+  setAskAction: (val: boolean) => void;
+  setChanged: (val: boolean) => void;
+}) => {
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
-
   const [open, setOpen] = useState("");
 
   const handleActionsDetails = (_: {}, type: string) => {
@@ -16,31 +29,15 @@ export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
     }
   };
 
-  // const TableList = useMemo(() => {
-  //   const objects: any = {};
-  //   let lastId = "";
-  //   for (let i = 0; i < StokeDeteyContantList.length; i++) {
-  //     const obj = StokeDeteyContantList[i];
-  //     if (obj.RECETEASAMAID) lastId = "" + obj.RECETEASAMAID;
-
-  //     if (lastId in objects && !obj.RECETEASAMAID) {
-  //       objects[lastId].rows.push(obj);
-  //     } else {
-  //       objects[obj.RECETEASAMAID] = {
-  //         rows: [obj],
-  //         id: obj.RECETEASAMAID,
-  //         image: "/images/test/test1.png",
-  //       };
-  //     }
-  //   }
-
-  //   return Object.values(objects);
-  // }, []);
-
   return (
-    <div className="pb-10">
-      {/* <TableUI TableList={TableList} /> */}
-      <DragDrop />
+    <div className="pb-40 pt-3 border-t border-[var(--border)]">
+      <DragDrop
+        changed={changed}
+        setChanged={setChanged}
+        askAction={askAction}
+        setAskAction={setAskAction}
+        setOpenMainModal={setOpenMainModal}
+      />
       {open.length ? (
         <CNewMiniModal
           title={

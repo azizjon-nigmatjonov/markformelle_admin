@@ -8,10 +8,13 @@ import { useTranslationHook } from "../../../hooks/useTranslation";
 import CNewModal from "../../../components/CElements/CNewModal";
 import { ModalUI } from "./Modal";
 import { ModalTypes } from "./interfaces";
+import { playSound } from "../../../utils/playAudio";
 
 export const RecipeList = () => {
   const { t } = useTranslationHook();
   const [open, setOpen] = useState(false);
+  const [changed, setChanged] = useState(false);
+  const [askAction, setAskAction] = useState(false);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
@@ -76,8 +79,13 @@ export const RecipeList = () => {
 
   const handleModalActions = (status: string, id: string) => {
     if (status === "close") {
-      setOpen(false);
-      setModalInitialData({});
+      if (!changed) {
+        setModalInitialData({});
+        setOpen(false);
+      } else {
+        playSound("/error-m.mp3");
+        setAskAction(true);
+      }
     }
     if (status === "delete") {
       setOpen(false);
@@ -117,10 +125,10 @@ export const RecipeList = () => {
         />
       </div>
 
-      {open && (
+      {open || changed ? (
         <CNewModal
           title={t(
-            modalInitialData.URUNID ? "updating_chemical" : "creating_chemical"
+            modalInitialData.URUNID ? "updating_recipe" : "creating_recipe"
           )}
           handleActions={handleModalActions}
           defaultData={{
@@ -128,8 +136,17 @@ export const RecipeList = () => {
           }}
           disabled="big"
         >
-          <ModalUI defaultData={modalInitialData} />
+          <ModalUI
+            defaultData={modalInitialData}
+            changed={changed}
+            setChanged={setChanged}
+            askAction={askAction}
+            setOpen={setOpen}
+            setAskAction={setAskAction}
+          />
         </CNewModal>
+      ) : (
+        ""
       )}
     </>
   );

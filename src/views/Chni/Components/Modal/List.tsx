@@ -180,7 +180,6 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
                     }),
                   }}
                 />
-                {/* {machine.efficiency + "%"} */}
               </p>
             </div>
           </div>
@@ -194,7 +193,7 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
             </div>
 
             <div
-              className="rounded-[12px] overflow-hidden border border-[var(--gray30)] cursor-pointer"
+              className="rounded-[12px] overflow-hidden border border-[var(--gray30)] cursor-pointer min-h-[250px]"
               onClick={() =>
                 setImageView(
                   `http://10.40.14.193:8080/v1/machine_status/${machine.machine_id}/image`
@@ -203,7 +202,7 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
             >
               <img
                 src={`http://10.40.14.193:8080/v1/machine_status/${machine.machine_id}/image`}
-                alt={machine.machine_id}
+                alt={"Номер машины " + machine.machine_name}
               />
             </div>
             <p className="mb-2 text-[var(--gray)] mt-3">
@@ -230,7 +229,7 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
 
             <div className="flex py-1 space-x-3">
               <Button onClick={() => {}} fullWidth variant="outlined">
-                Отменить
+                {t("cancel")}
               </Button>
               <button
                 className="custom-btn create"
@@ -240,7 +239,7 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
                 }}
                 disabled={!checkPermission("edit")}
               >
-                Отправить
+                {t("send")}
               </button>
             </div>
           </div>

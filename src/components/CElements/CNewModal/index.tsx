@@ -1,4 +1,4 @@
-import { Card, IconButton } from "@mui/material";
+import { Card, IconButton, Tooltip } from "@mui/material";
 import cls from "./style.module.scss";
 import { FC, ReactNode, useState, useRef, useEffect } from "react";
 import { t } from "i18next";
@@ -184,20 +184,37 @@ const CNewModal: FC<Props> = ({
                       )}
                     </div>
                   )}
-                  <IconButton
-                    onMouseDown={handleDragStart}
-                    className={`transition-colors ${
-                      isDragging ? "bg-[var(--main80)]" : ""
-                    }`}
+                  <Tooltip
+                    title="Переместить модальное окно"
+                    arrow
+                    slotProps={{
+                      popper: {
+                        modifiers: [
+                          {
+                            name: "offset",
+                            options: {
+                              offset: [0, 15],
+                            },
+                          },
+                        ],
+                      },
+                    }}
                   >
-                    <div
-                      className={`flex items-center justify-center rounded-full w-[30px] h-[30px] ${
-                        isDragging ? "border border-[var(--main)]" : ""
+                    <IconButton
+                      onMouseDown={handleDragStart}
+                      className={`transition-colors ${
+                        isDragging ? "bg-[var(--main80)]" : ""
                       }`}
                     >
-                      <DragIndicatorIcon style={{ color: "var(--main)" }} />
-                    </div>
-                  </IconButton>
+                      <div
+                        className={`flex items-center justify-center rounded-full w-[30px] h-[30px] ${
+                          isDragging ? "border border-[var(--main)]" : ""
+                        }`}
+                      >
+                        <DragIndicatorIcon style={{ color: "var(--main)" }} />
+                      </div>
+                    </IconButton>
+                  </Tooltip>
                 </div>
 
                 <div className="flex items-center space-x-4">
@@ -212,18 +229,36 @@ const CNewModal: FC<Props> = ({
                         <RemoveIcon className="text-[var(--main)]" />
                       </div>
                     </IconButton>
-                    <IconButton onClick={() => handleScreen()}>
-                      <div className="w-[30px] h-[30px] items-center justify-center flex group hover:bg-[var(--primary50)]">
-                        {!screen ? (
-                          <div className="relative w-[18px] h-[18px]">
-                            <div className="w-[12px] h-[12px] border border-[var(--main)] absolute top-[2px] right-[1px]"></div>
-                            <div className="w-[12px] h-[12px] border border-[var(--main)] absolute left-[2px] bottom-[1px] bg-white group-hover:bg-[var(--primary50)]"></div>
-                          </div>
-                        ) : (
-                          <div className="w-[15px] h-[15px] border border-[var(--main)]"></div>
-                        )}
-                      </div>
-                    </IconButton>
+                    <Tooltip
+                      title="Изменить размер"
+                      arrow
+                      slotProps={{
+                        popper: {
+                          modifiers: [
+                            {
+                              name: "offset",
+                              options: {
+                                offset: [0, 15],
+                              },
+                            },
+                          ],
+                        },
+                      }}
+                    >
+                      <IconButton onClick={() => handleScreen()}>
+                        <div className="w-[30px] h-[30px] items-center justify-center flex group hover:bg-[var(--primary50)]">
+                          {!screen ? (
+                            <div className="relative w-[18px] h-[18px]">
+                              <div className="w-[12px] h-[12px] border border-[var(--main)] absolute top-[2px] right-[1px]"></div>
+                              <div className="w-[12px] h-[12px] border border-[var(--main)] absolute left-[2px] bottom-[1px] bg-white group-hover:bg-[var(--primary50)]"></div>
+                            </div>
+                          ) : (
+                            <div className="w-[15px] h-[15px] border border-[var(--main)]"></div>
+                          )}
+                        </div>
+                      </IconButton>
+                    </Tooltip>
+
                     <IconButton onClick={() => handleActions("close")}>
                       <div className="w-[30px] h-[30px] items-center justify-center flex group hover:bg-[var(--primary50)] hover:rotate-[90deg] duration-200">
                         <CloseIcon className="text-[var(--main)]" />

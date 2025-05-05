@@ -12,14 +12,27 @@ import { useGetFirmList } from "../../../../hooks/useFetchRequests/useFirmaList"
 import HFSelect from "../../../../components/HFElements/HFSelect";
 import { LabModalTables } from "./Tables";
 import { Alert } from "@mui/material";
+import CCheckbox from "../../../../components/CElements/CCheckbox";
 
 interface ModalUIProps {
   defaultData?: ModalTypes;
   URUNBIRIMID?: string;
   ADI?: string;
+  changed: boolean;
+  setChanged: (val: boolean) => void;
+  askAction: boolean;
+  setAskAction: (val: boolean) => void;
+  setOpen: (val: boolean) => void;
 }
 
-export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
+export const ModalUI = ({
+  askAction,
+  setAskAction = () => {},
+  defaultData = {},
+  setChanged = () => {},
+  changed = false,
+  setOpen,
+}: ModalUIProps) => {
   const { t } = useTranslationHook();
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
   const [formId, setFormId] = useState<string>("");
@@ -152,33 +165,29 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
                     disabled={disabled}
                   />
                 </InputFieldUI>
-                <InputFieldUI title={t("URUNID")}>
-                  <HFTextField
-                    name="URUNID"
+
+                <InputFieldUI title={t("USTASAMA")}>
+                  <SelectOptionsTable
+                    name="USTASAMA"
+                    placeholder={t("USTASAMA")}
+                    options={firmaData}
+                    required={true}
+                    headColumns={[
+                      { id: "FIRMAID", width: 200, title: "FIRMAID" },
+                      { id: "FIRMAADI", title: "FIRMAADI" },
+                      { id: "KISAADI", title: "KISAADI" },
+                    ]}
+                    filterParams={filterParams}
+                    handleSelect={(_: {}) => {}}
+                    handleSearch={(val: string) => {
+                      setFilterParamsFirm({ ...filterParamsFirm, q: val });
+                    }}
                     control={control}
-                    setValue={setValue}
-                    placeholder={t("URUNID")}
+                    setFilterParams={setFilterParams}
                     disabled={disabled}
                   />
                 </InputFieldUI>
-                <InputFieldUI title={t("TALEPTARIHI")}>
-                  <HFTextField
-                    name="TALEPTARIHI"
-                    control={control}
-                    setValue={setValue}
-                    placeholder={t("TALEPTARIHI")}
-                    disabled={disabled}
-                  />
-                </InputFieldUI>
-                <InputFieldUI title={t("DOVIZ")}>
-                  <HFSelect
-                    name="DOVIZ"
-                    control={control}
-                    setValue={setValue}
-                    placeholder={t("DOVIZ")}
-                    disabled={disabled}
-                  />
-                </InputFieldUI>
+
                 <InputFieldUI title={t("RECETETURU")}>
                   <HFSelect
                     name="RECETETURU"
@@ -188,8 +197,6 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
                     disabled={disabled}
                   />
                 </InputFieldUI>
-              </div>
-              <div className="space-y-2">
                 <InputFieldUI title={t("ASHKLAMA")}>
                   <HFTextField
                     name="ASHKLAMA"
@@ -199,21 +206,23 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
                     disabled={disabled}
                   />
                 </InputFieldUI>
-                <InputFieldUI title={t("ESKIRECETEKODU")}>
-                  <HFTextField
-                    name="ESKIRECETEKODU"
-                    control={control}
-                    setValue={setValue}
-                    placeholder={t("ESKIRECETEKODU")}
-                    disabled={disabled}
-                  />
-                </InputFieldUI>
+              </div>
+              <div className="space-y-2">
                 <InputFieldUI title={t("RENKDIENLIGI")}>
                   <HFSelect
                     name="RENKDIENLIGI"
                     control={control}
                     setValue={setValue}
                     placeholder={t("RENKDIENLIGI")}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+                <InputFieldUI title={t("RECETEGRUP")}>
+                  <HFSelect
+                    name="RECETEGRUP"
+                    control={control}
+                    setValue={setValue}
+                    placeholder={t("RECETEGRUP")}
                     disabled={disabled}
                   />
                 </InputFieldUI>
@@ -249,26 +258,11 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
                 </InputFieldUI>
               </div>
               <div className="space-y-2">
-                <InputFieldUI title={t("USTASAMA")}>
-                  <SelectOptionsTable
-                    name="USTASAMA"
-                    placeholder={t("USTASAMA")}
-                    options={firmaData}
-                    required={true}
-                    headColumns={[
-                      { id: "FIRMAID", width: 200, title: "FIRMAID" },
-                      { id: "FIRMAADI", title: "FIRMAADI" },
-                      { id: "KISAADI", title: "KISAADI" },
-                    ]}
-                    filterParams={filterParams}
-                    handleSelect={(_: {}) => {}}
-                    handleSearch={(val: string) => {
-                      setFilterParamsFirm({ ...filterParamsFirm, q: val });
-                    }}
-                    control={control}
-                    setFilterParams={setFilterParams}
-                    disabled={disabled}
-                  />
+                <InputFieldUI title={t("RECETETIPI")}>
+                  <div className="flex space-x-2">
+                    <CCheckbox element={{ label: "Normal" }} />
+                    <CCheckbox element={{ label: "Numure" }} />
+                  </div>
                 </InputFieldUI>
                 <InputFieldUI title={t("PANTONEKODU")}>
                   <HFSelect
@@ -326,7 +320,14 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
               </div>
             </div>
           </div>
-          <LabModalTables disabled={disabled} />
+          <LabModalTables
+            disabled={disabled}
+            changed={changed}
+            setChanged={setChanged}
+            askAction={askAction}
+            setOpenMainModal={setOpen}
+            setAskAction={setAskAction}
+          />
         </div>
       </form>
     </>

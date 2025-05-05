@@ -143,7 +143,7 @@ const CNewTable = ({
   const [items, setItems]: any = useState([...headColumns]);
   const [currentFilter, setCurrentFilter]: any = useState(null);
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
-  const [height, setHeight] = useState(0);
+
   const [openSelect, setOpenSelect] = useState(false);
 
   const SetFiltersFn = (obj: any) => {
@@ -270,14 +270,11 @@ const CNewTable = ({
       const cols = table.querySelectorAll("th");
 
       [].forEach.call(cols, function (col: any, idx: number) {
-        // Add a resizer element to the column
         const resizer = document.createElement("span");
         resizer.classList.add("resizer");
-        // Set the height
         resizer.style.height = `${table.offsetHeight}px`;
 
         col.appendChild(resizer);
-        // setHeadColHeight(col.offset);
 
         createResizableColumn(col, resizer, idx);
       });
@@ -586,11 +583,6 @@ const CNewTable = ({
     setSearchedElements(obj);
   }, 0);
 
-  useEffect(() => {
-    const height = window.innerHeight;
-    setHeight(height);
-  }, [openHeader]);
-
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Escape") {
       setSelectedItems([]);
@@ -665,8 +657,8 @@ const CNewTable = ({
             height: autoHeight
               ? autoHeight
               : openHeader
-              ? height - 140
-              : height - 100,
+              ? "calc(100vh - 140px)"
+              : "calc(100vh - 95px)",
           }}
         >
           <SideFilter
