@@ -13,8 +13,8 @@ import { playSound } from "../../../utils/playAudio";
 export const RecipeList = () => {
   const { t } = useTranslationHook();
   const [open, setOpen] = useState(false);
-  const [changed, setChanged] = useState(false);
-  const [askAction, setAskAction] = useState(false);
+  const [changed, setChanged] = useState("");
+  const [askAction, setAskAction] = useState("");
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
@@ -84,7 +84,7 @@ export const RecipeList = () => {
         setOpen(false);
       } else {
         playSound("/error-m.mp3");
-        setAskAction(true);
+        setAskAction(changed);
       }
     }
     if (status === "delete") {

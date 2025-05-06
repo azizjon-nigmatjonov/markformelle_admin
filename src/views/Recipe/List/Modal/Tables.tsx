@@ -8,17 +8,17 @@ import { DragDrop } from "./StepComponents/DragDrop";
 export const LabModalTables = ({
   disabled,
   setChanged = () => {},
-  changed = false,
+  changed,
   askAction,
   setAskAction = () => {},
   setOpenMainModal,
 }: {
   disabled: boolean;
-  changed: boolean;
-  askAction: boolean;
+  changed: string;
+  askAction: string;
   setOpenMainModal: (val: boolean) => void;
-  setAskAction: (val: boolean) => void;
-  setChanged: (val: boolean) => void;
+  setAskAction: (val: string) => void;
+  setChanged: (val: string) => void;
 }) => {
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
   const [open, setOpen] = useState("");

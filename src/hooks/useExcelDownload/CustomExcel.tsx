@@ -1,11 +1,9 @@
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
-import { IconButton, Tooltip } from "@mui/material";
 import { ExcelIconOutlined } from "../../components/UI/IconGenerator/Svg/Machines";
-import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { Closer } from "../../components/UI/Closer";
-import { TooltipPosition } from "../../constants/toolPosition";
+import { Tooltip } from "@mui/material";
 
 interface Props {
   data: any;
@@ -13,20 +11,15 @@ interface Props {
   allColumns: any;
   disabled?: boolean;
   defaultExcelFields?: string[];
-  type?: string;
-  label?: string;
 }
 
-const ExcelDownload = ({
+const useCustomExcelDownload = ({
   data = [],
   title = "example",
   allColumns = [],
   disabled = false,
-  type = "",
-  label = "",
   defaultExcelFields = [],
 }: Props) => {
-  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const downloadExcel = (status: string) => {
@@ -42,31 +35,8 @@ const ExcelDownload = ({
     } else if (status === "all") {
       arr = allColumns;
     }
-    const newData: any = [];
-    if (type === "directly") {
-      newData.push(...arr);
-    } else {
-      arr.forEach((obj: any) => {
-        const keys = Object.keys(obj);
-        const newObj: any = {};
-        for (let key of keys) {
-          if (
-            key !== "is_freez" &&
-            key !== "is_view" &&
-            key !== "is_edit" &&
-            key !== "is_delete" &&
-            key !== "is_sellect" &&
-            key !== "is_sellect_more" &&
-            key !== "index"
-          ) {
-            newObj[t(key)] = obj[key] || "";
-          }
-        }
-        newData.push(newObj);
-      });
-    }
 
-    const worksheet = XLSX.utils.json_to_sheet(newData);
+    const worksheet = XLSX.utils.json_to_sheet(arr);
 
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
@@ -83,27 +53,28 @@ const ExcelDownload = ({
   return (
     <div className="relative">
       <Tooltip
-        title="Загрузить данные в Excel"
+        title="Скачать Excel"
         arrow
-        slotProps={TooltipPosition}
+        slotProps={{
+          popper: {
+            modifiers: [
+              {
+                name: "offset",
+                options: {
+                  offset: [0, 15],
+                },
+              },
+            ],
+          },
+        }}
       >
-        <IconButton
-          onClick={() => {
-            if (type === "directly") {
-              downloadExcel("selected");
-            } else setOpen(true);
-          }}
-          disabled={disabled}
-        >
+        <button className="custom-btn">
           <div className="h-[30px] w-[30px] rounded-[8px] flex items-center justify-center">
             <ExcelIconOutlined
               fill={disabled ? "var(--gray)" : "var(--main)"}
             />
           </div>
-          <span className="whitespace-nowrap ml-1 text-base font-medium text-[var(--black)]">
-            {t(label)}
-          </span>
-        </IconButton>
+        </button>
       </Tooltip>
 
       {open && (
@@ -132,4 +103,4 @@ const ExcelDownload = ({
   );
 };
 
-export default ExcelDownload;
+export default useCustomExcelDownload;

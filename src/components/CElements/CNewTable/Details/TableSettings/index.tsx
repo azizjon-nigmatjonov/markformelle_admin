@@ -15,6 +15,7 @@ import {
 import { PopoverDelete } from "../Actions/EditDelete/PopOver";
 import { useTranslationHook } from "../../../../../hooks/useTranslation";
 import { CheckMultipleIcon } from "../../../../UI/IconGenerator/Svg/Table";
+import { TooltipPosition } from "../../../../../constants/toolPosition";
 
 export const SettingDropdown = ({
   allCheck = false,
@@ -288,18 +289,7 @@ export const HeaderSettings = ({
               <Tooltip
                 title="Нажмите, чтобы выбрать строки"
                 arrow
-                slotProps={{
-                  popper: {
-                    modifiers: [
-                      {
-                        name: "offset",
-                        options: {
-                          offset: [0, 15],
-                        },
-                      },
-                    ],
-                  },
-                }}
+                slotProps={TooltipPosition}
               >
                 <IconButton
                   onClick={() => tableActions({}, "sellect_more_active")}
@@ -331,18 +321,7 @@ export const HeaderSettings = ({
               <Tooltip
                 title="Выберите строки для удаления"
                 arrow
-                slotProps={{
-                  popper: {
-                    modifiers: [
-                      {
-                        name: "offset",
-                        options: {
-                          offset: [0, 15],
-                        },
-                      },
-                    ],
-                  },
-                }}
+                slotProps={TooltipPosition}
               >
                 <div className="relative">
                   <IconButton
@@ -422,22 +401,7 @@ export const HeaderSettings = ({
             </Tooltip>
           )}
           {defaultFilters.includes("filter") && (
-            <Tooltip
-              title="Активный фильтр"
-              arrow
-              slotProps={{
-                popper: {
-                  modifiers: [
-                    {
-                      name: "offset",
-                      options: {
-                        offset: [0, 15],
-                      },
-                    },
-                  ],
-                },
-              }}
-            >
+            <Tooltip title="Активный фильтр" arrow slotProps={TooltipPosition}>
               <IconButton
                 onClick={() => tableActions({}, "sidefilter")}
                 disabled={disabled}
@@ -483,18 +447,7 @@ export const HeaderSettings = ({
               title="Активные меню"
               arrow
               placement="top"
-              slotProps={{
-                popper: {
-                  modifiers: [
-                    {
-                      name: "offset",
-                      options: {
-                        offset: [0, 15],
-                      },
-                    },
-                  ],
-                },
-              }}
+              slotProps={TooltipPosition}
             >
               <div className="relative">
                 <div

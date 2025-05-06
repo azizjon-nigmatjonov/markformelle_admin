@@ -3,7 +3,6 @@ import {
   DeleteIcon,
   DotsIcon,
   ImageFrame,
-  InfoIcon,
   EditIcon,
 } from "../../UI/IconGenerator/Svg";
 import fileService from "../../../services/fileService";
@@ -12,6 +11,8 @@ import { CircularProgress } from "@mui/material";
 import CLabel from "../CLabel";
 // import { RxCross2 } from "react-icons/rx";
 import { Closer } from "../../../components/UI/Closer";
+import { useTranslation } from "react-i18next";
+
 interface Props {
   error?: any;
   isDelete?: boolean;
@@ -45,7 +46,7 @@ export const DImageUploadUI = ({
   const [loading, setLoading] = useState(false);
   const [imageTool, setImageTool] = useState(false);
   const [viewImage, setViewImage] = useState("");
-
+  const { t } = useTranslation();
   const inputChangeHandler = (e: any) => {
     setLoading(true);
     const file = e?.target.files[0];
@@ -103,17 +104,17 @@ export const DImageUploadUI = ({
         {label ? (
           <div className="flex items-center justify-between">
             <CLabel title={label} required={required} />
-            <div className="relative p-5" onClick={() => setImageTool(true)}>
+            <div className="relative" onClick={() => setImageTool(true)}>
               <DotsIcon />
               {imageTool && (
-                <div className="bg-white divide-y-[1px] absolute w-[156px] top-[30px] right-0 z-10 rounded-xl border border-[var--softgray]">
+                <div className="bg-white divide-y-[1px] absolute top-[7px] right-0 z-10 rounded-xl border border-[var--softgray]">
                   <div
                     onClick={updateImage}
                     className="flex items-center relative z-20 gap-2 p-2 hover:bg-[var(--lineGray)] rounded-t-xl cursor-pointer"
                   >
                     <EditIcon fill="#858592" />
                     <p className="text-xs font-normal text-[var(--gray)]">
-                      Rasm yuklash
+                      {t("upload_image")}
                     </p>
                   </div>
                   <div
@@ -122,7 +123,7 @@ export const DImageUploadUI = ({
                   >
                     <DeleteIcon fill="#858592" />
                     <p className="text-xs font-normal text-[var(--gray)]">
-                      O’chirish
+                      {t("delete_image")}
                     </p>
                   </div>
                 </div>
@@ -134,7 +135,8 @@ export const DImageUploadUI = ({
         )}
 
         <div
-          className={`cursor-pointer flex overflow-hidden text-[var(--gray)] font-medium border border-[var(--lineGray)] rounded-[8px] h-[100px] bg-[var(--lightGray)] flex-col justify-center items-center max-w-[250px]  min-w-[249px]`}
+          onClick={updateImage}
+          className={`cursor-pointer flex overflow-hidden text-[var(--gray)] font-medium border border-[var(--lineGray)] rounded-[8px] h-[80px] bg-[var(--lightGray)] flex-col justify-center items-center w-full`}
         >
           <span>{text}</span>
           {defaultValue || (image && !loading) ? (
@@ -170,16 +172,6 @@ export const DImageUploadUI = ({
           )}
         </div>
 
-        {!image && !defaultValue && (
-          <div className="flex items-start gap-1 mt-2">
-            <InfoIcon size={14} />
-            <span className="text-xs font-normal leading-[18px] text-[var(--gray)]">
-              Rasm formati png, jpg bo’lishi kerak. <br />
-              O’lchami maksimum 12 MB.{" "}
-            </span>
-          </div>
-        )}
-
         {error?.message && (
           <p className="text-sm text-[var(--error)] absolute left-1 -bottom-5 whitespace-nowrap">
             {error.message}
@@ -199,9 +191,7 @@ export const DImageUploadUI = ({
                   setViewImage("");
                 }}
                 className="bg-white rounded-lg inline-block p-[10px] absolute top-10 right-10 z-[99]"
-              >
-                {/* <RxCross2 size={15} /> */}
-              </div>
+              ></div>
             </div>
             <div className="bg-black/20 w-full h-full fixed top-0 left-0" />
           </div>

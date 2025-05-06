@@ -4,6 +4,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import { DragingEl } from "./DragingEl";
 interface Props {
   rows: any[];
+  headColumns: any[];
   editStep?: boolean;
   outerIndex: number;
   hoveredIndexStep?: number;
@@ -24,10 +25,14 @@ interface Props {
   currentScroll: number;
   scrollInterval: any;
   maxScroll: number;
+  deleteStep: boolean;
+  checkedList: any;
+  handleCheck: (val: any) => void;
 }
 
 const ScrollView = ({
   rows = [],
+  headColumns = [],
   editStep,
   outerIndex,
   hoveredIndexStep,
@@ -48,6 +53,8 @@ const ScrollView = ({
   scrollInterval,
   setMaxScroll,
   maxScroll,
+  deleteStep = false,
+  handleCheck = () => {},
 }: Props) => {
   const ScrollBody = useRef<HTMLDivElement>(null);
 
@@ -76,7 +83,7 @@ const ScrollView = ({
     if (container) {
       setMaxScroll(container.scrollWidth - container.clientWidth);
     }
-  }, []);
+  }, [headColumns.length]);
 
   const startScrolling = (left: boolean) => {
     stopScrolling();
@@ -94,11 +101,12 @@ const ScrollView = ({
     <div className="group relative">
       <div
         ref={ScrollBody}
-        className="flex items-start overflow-x-scroll remove-scroll py-2 pl-7"
+        className="flex items-start overflow-x-scroll remove-scroll py-2 pl-5"
       >
         <div className="body">
           <DragingEl
             rows={rows}
+            headColumns={headColumns}
             editStep={editStep}
             handleDragStartStep={handleDragStartStep}
             handleDragOverStep={handleDragOverStep}
@@ -113,13 +121,15 @@ const ScrollView = ({
             draggingIndexStep={draggingIndexStep}
             handleDragLeaveStep={handleDragLeaveStep}
             handleAdd={handleAdd}
+            deleteStep={deleteStep}
+            handleCheck={handleCheck}
           />
         </div>
       </div>
 
       {currentScroll > 0 && (
         <div
-          className="absolute left-0 top-1/2 -translate-y-1/2 h-full w-[40px] flex items-center"
+          className="absolute left-0 top-1/2 -translate-y-1/2 h-full z-[10] w-[40px] flex items-center"
           style={{ boxShadow: "inset 8px 0 8px -8px rgba(0,0,0,0.3)" }}
         >
           <button
@@ -135,7 +145,7 @@ const ScrollView = ({
 
       {maxScroll > currentScroll && (
         <div
-          className="absolute right-0 top-1/2 -translate-y-1/2 h-full w-[40px] flex items-center justify-end"
+          className="absolute right-0 top-1/2 -translate-y-1/2 h-full z-[10] w-[40px] flex items-center justify-end"
           style={{ boxShadow: "inset -8px 0 8px -8px rgba(0, 0, 0, 0.3)" }}
         >
           <button

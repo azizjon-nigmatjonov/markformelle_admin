@@ -18,10 +18,10 @@ interface ModalUIProps {
   defaultData?: ModalTypes;
   URUNBIRIMID?: string;
   ADI?: string;
-  changed: boolean;
-  setChanged: (val: boolean) => void;
-  askAction: boolean;
-  setAskAction: (val: boolean) => void;
+  changed: string;
+  setChanged: (val: string) => void;
+  askAction: string;
+  setAskAction: (val: string) => void;
   setOpen: (val: boolean) => void;
 }
 
@@ -30,7 +30,7 @@ export const ModalUI = ({
   setAskAction = () => {},
   defaultData = {},
   setChanged = () => {},
-  changed = false,
+  changed = "",
   setOpen,
 }: ModalUIProps) => {
   const { t } = useTranslationHook();
@@ -114,7 +114,7 @@ export const ModalUI = ({
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-5 h-[700px] overflow-y-scroll designed-scroll">
+        <div className="space-y-5 h-[700px] overflow-y-scroll designed-scroll pr-2">
           <div className="grid grid-cols-3 gap-x-5 border-b border-[var(--border)] pb-5">
             <InputFieldUI title={t("LABRECETEKOD")} disabled={disabled}>
               <SelectOptionsTable

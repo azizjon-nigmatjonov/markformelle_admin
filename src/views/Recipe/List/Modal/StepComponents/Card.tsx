@@ -1,27 +1,34 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ScrollView from "./ScrollView";
-import { useTranslation } from "react-i18next";
 import AddIcon from "@mui/icons-material/Add";
+import { CardHeader } from "./CardHeader";
 interface Props {
   items: any;
   oldValues: any;
+  headColumns: any;
   setItems: (val: any) => void;
   editStep: any;
-  setChanged: (val: boolean) => void;
+  deleteStep: boolean;
+  setChanged: (val: string) => void;
   setImageView: (val: string) => void;
   setInitialModalData: (val: any) => void;
+  checkedList: any;
+  handleCheck: (val: any) => void;
 }
 
 export const StepCard = ({
   oldValues = [],
   items = [],
+  headColumns = [],
   setItems = () => {},
+  deleteStep = false,
   editStep = false,
   setChanged = () => {},
   setImageView = () => {},
+  checkedList = [],
+  handleCheck = () => {},
   setInitialModalData = () => {},
 }: Props) => {
-  const { t } = useTranslation();
   const [draggingIndex, setDraggingIndex]: any = useState(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [draggingIndexStep, setDraggingIndexStep]: any = useState(null);
@@ -30,15 +37,24 @@ export const StepCard = ({
   );
   const timeoutRef = useRef<number | null>(null);
   const [hoverAdd, setHoverAdd] = useState(999);
+  const headerScrollRef: any = useRef(null);
+  const [currentScroll, setCurrentScroll] = useState(0);
+  const [maxScroll, setMaxScroll] = useState(0);
+  const scrollInterval = useRef<NodeJS.Timeout | null>(null);
+  const [newColumns, setNewColumns] = useState([]);
+
+  useEffect(() => {
+    setNewColumns(headColumns);
+  }, [headColumns]);
 
   const checkChanges = (newValues: any) => {
-    let change = false;
+    let change = "";
 
     for (let i = 0; i < oldValues.length; i++) {
       const arr = oldValues[i];
       const newArr = newValues[i];
       if (arr.id !== newArr.id) {
-        change = true;
+        change = "order";
         break;
       }
       for (let j = 0; j < arr.rows.length; j++) {
@@ -46,7 +62,7 @@ export const StepCard = ({
         const newObj = newArr.rows[j];
 
         if (obj.index !== newObj.index) {
-          change = true;
+          change = "order";
           break;
         }
       }
@@ -132,46 +148,13 @@ export const StepCard = ({
     setHoverAdd(999);
   };
 
-  const headerScrollRef: any = useRef(null);
-  const [currentScroll, setCurrentScroll] = useState(0);
-  const [maxScroll, setMaxScroll] = useState(0);
-  const scrollInterval = useRef<NodeJS.Timeout | null>(null);
+  const handleAddCard = (outerIndex: number) => {
+    setInitialModalData({ outerIndex, type: "card_add" });
+  };
 
   return (
-    <div className="space-y-3">
-      <div className="grid grid-cols-3 text-[var(--main)] sticky top-0 bg-white z-[90]">
-        <div className="px-[8px] py-[6px]">
-          <p>{t("image")}</p>
-        </div>
-        <div
-          className="header col-span-2 ml-10 overflow-x-scroll remove-scroll"
-          ref={headerScrollRef}
-        >
-          <div className="flex px-1">
-            <div className="cell">
-              <p>Recete Asama Kodu</p>
-            </div>
-            <div className="cell">
-              <p>Recete Asama Adi</p>
-            </div>
-            <div className="cell">
-              <p>Alt Asama Kodu</p>
-            </div>
-            <div className="cell">
-              <p>Alt Asama Adi</p>
-            </div>
-            <div className="cell">
-              <p>Urun Adi</p>
-            </div>
-            <div className="cell">
-              <p>Urun kodu</p>
-            </div>
-            <div className="cell">
-              <p>Urun kodu</p>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div>
+      <CardHeader headColumns={newColumns} headerScrollRef={headerScrollRef} />
       {items.map((row: any, outerIndex: number) => (
         <div
           key={outerIndex}
@@ -190,26 +173,13 @@ export const StepCard = ({
             if (!editStep) return;
             handleDrop(outerIndex);
           }}
-          className={`w-full grid grid-cols-3 p-3 rounded-[12px] h-full text-indigo-700 font-medium relative ${
+          className={`w-full grid grid-cols-3 rounded-[12px] py-3 h-full text-indigo-700 font-medium relative mb-5 shadow-md ${
             hoveredIndex === outerIndex && !hoveredIndexStep
               ? "hovered-card"
               : ""
           } ${row.bg}`}
         >
-          <div>
-            <div className="sticky top-[40px]">
-              <h1 className="text-[45px] font-semibold py-2 text-center leading-[35px]">
-                {row.id}
-              </h1>
-              <div
-                className="cursor-pointer mt-5"
-                onClick={() => setImageView(row.image)}
-              >
-                <img src={row.image} alt="Main" className="w-full h-auto" />
-              </div>
-            </div>
-          </div>
-          <div className="col-span-2 pl-3">
+          <div className="col-span-2">
             <ScrollView
               rows={row?.rows ?? []}
               editStep={editStep}
@@ -227,14 +197,32 @@ export const StepCard = ({
               handleDragLeaveStep={handleDragLeaveStep}
               handleAdd={handleAdd}
               maxScroll={maxScroll}
+              headColumns={newColumns}
+              deleteStep={deleteStep}
               scrollInterval={scrollInterval}
               setMaxScroll={setMaxScroll}
               currentScroll={currentScroll}
               setCurrentScroll={setCurrentScroll}
               headerScrollRef={headerScrollRef}
+              checkedList={checkedList}
+              handleCheck={handleCheck}
             />
           </div>
-          <div className="bottom-[-12px] left-0 w-full h-[18px] group absolute">
+          <div>
+            <div className="sticky top-[40px] flex flex-col items-center">
+              <h1 className="text-6xl font-semibold text-center">{row.id}</h1>
+              <div
+                className="cursor-pointer w-[80%]"
+                onClick={() => setImageView(row.image)}
+              >
+                <img src={row.image} alt="Main" className="w-full h-auto" />
+              </div>
+            </div>
+          </div>
+          <div
+            onClick={() => handleAddCard(outerIndex)}
+            className="bottom-[-12px] left-0 w-full h-[18px] group absolute"
+          >
             <button
               type="button"
               onClick={() => {}}

@@ -2,7 +2,7 @@ import { Controller } from "react-hook-form";
 import { DImageUploadUI } from "./DImageUpload";
 
 interface Props {
-  control?: any;
+  control: any;
   isDelete?: boolean;
   defaultValue?: string;
   name: string;
