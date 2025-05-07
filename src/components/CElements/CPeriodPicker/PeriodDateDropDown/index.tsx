@@ -53,7 +53,7 @@ export const PeriodDateDropDown = ({
         />
       </LocalizationProvider>
       <div className="periodPickerFooter">
-        <div className="w-[260px] pr-3">
+        <div className="w-[240px] pr-3">
           <PeriodTextField
             setValue={setValue}
             setOpen={setOpen}

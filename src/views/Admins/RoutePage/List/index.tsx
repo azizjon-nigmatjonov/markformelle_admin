@@ -64,7 +64,12 @@ export const RouteList = ({
   if (!testData?.length) {
     return (
       <div className="w-full flex justify-center mt-10">
-        <img className="w-[200px]" src="/images/no-data.png" alt="no data" />
+        <img
+          className="w-[200px]"
+          src="/images/no-data.png"
+          alt="no data"
+          loading="lazy"
+        />
       </div>
     );
   }

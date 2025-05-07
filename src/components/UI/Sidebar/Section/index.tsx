@@ -79,7 +79,6 @@ const SidebarSection = ({
   if (wideSidebar) {
     return (
       <div id="sidebarCollapse">
-        {" "}
         {Object.entries(list).map(([key, value]: [string, any]) => {
           const visibleSidebarItems: any = value.filter(
             (el: any) => el.sidebar
@@ -108,7 +107,7 @@ const SidebarSection = ({
                   </h2>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <ul>
+                  <ul className="pl-2">
                     {visibleSidebarItems?.map((item: any) => (
                       <li key={item.id} className="">
                         {item?.children?.length ? (
@@ -122,7 +121,7 @@ const SidebarSection = ({
                                 aria-controls="panel1bh-content"
                                 id="panel1bh-header"
                               >
-                                <div className="flex items-center relative overflow-hidden h-full">
+                                <div className="flex items-center relative overflow-hidden h-full ml-2">
                                   <div className="w-[45px] flex justify-center">
                                     <IconGenerator
                                       icon={item?.icon}
@@ -146,7 +145,7 @@ const SidebarSection = ({
                                 </div>
                               </AccordionSummary>
                               <AccordionDetails>
-                                <ul className="ml-3">
+                                <ul className="ml-5">
                                   {item.children.map(
                                     (child: any, index: number) => (
                                       <li key={index + child.path}>

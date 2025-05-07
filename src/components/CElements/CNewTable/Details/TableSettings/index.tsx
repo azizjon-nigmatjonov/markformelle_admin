@@ -14,7 +14,10 @@ import {
 } from "../../../../UI/IconGenerator/Svg";
 import { PopoverDelete } from "../Actions/EditDelete/PopOver";
 import { useTranslationHook } from "../../../../../hooks/useTranslation";
-import { CheckMultipleIcon } from "../../../../UI/IconGenerator/Svg/Table";
+import {
+  CheckMultipleIcon,
+  UncheckMultipleIcon,
+} from "../../../../UI/IconGenerator/Svg/Table";
 import { TooltipPosition } from "../../../../../constants/toolPosition";
 
 export const SettingDropdown = ({
@@ -58,6 +61,7 @@ export const HeaderSettings = ({
   defaultFilters = [],
   selectedItems = [],
   disabled = false,
+  openSelect = false,
   defaultExcelFields,
 }: {
   filterParams: any;
@@ -73,6 +77,7 @@ export const HeaderSettings = ({
   defaultFilters: any;
   selectedItems: any;
   disabled: boolean;
+  openSelect: boolean;
   defaultExcelFields: string[];
   tableActions: (el: any, status: string) => void;
 }) => {
@@ -227,13 +232,13 @@ export const HeaderSettings = ({
     return "";
   }
   return (
-    <div className="pb-[45px] bg-white border-b border-[var(--border)] rounded-t-[8px]">
+    <div className="pb-[45px] bg-white border-b border-[var(--border)] rounded-t-[12px]">
       <div
         className={`h-[45px] absolute w-full left-0 top-0 flex items-center ${
           title ? "desktop:px-3" : ""
         } justify-between`}
       >
-        <div className="flex items-center space-x-4 h-full">
+        <div className="flex items-center space-x-2 h-full">
           {title ? (
             <h2
               className={`font-medium ${
@@ -296,10 +301,14 @@ export const HeaderSettings = ({
                   disabled={disabled}
                 >
                   <div className="w-[30px] h-[30px] items-center justify-center flex">
-                    <CheckMultipleIcon
-                      width={20}
-                      fill={disabled ? "var(--gray)" : "var(--main)"}
-                    />
+                    {openSelect ? (
+                      <UncheckMultipleIcon width={20} fill="var(--main)" />
+                    ) : (
+                      <CheckMultipleIcon
+                        width={20}
+                        fill={disabled ? "var(--gray)" : "var(--main)"}
+                      />
+                    )}
                   </div>
                   <p
                     className={`text-sm pr-2 ${
@@ -312,7 +321,7 @@ export const HeaderSettings = ({
                           }`
                     }`}
                   >
-                    {t("sellect_more")}
+                    {t(openSelect ? "close_sellect" : "sellect_columns")}
                   </p>
                 </IconButton>
               </Tooltip>

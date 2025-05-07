@@ -137,7 +137,7 @@ export const ModalUI = ({
             </InputFieldUI>
 
             <div className="w-full pr-2">
-              <Alert severity={"info"} style={{ height: "35px" }}>
+              <Alert severity={"info"} style={{ height: "30px" }}>
                 {t("add_unique_id")}
               </Alert>
             </div>

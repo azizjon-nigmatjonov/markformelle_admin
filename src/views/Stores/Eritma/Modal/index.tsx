@@ -210,7 +210,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
 
           <div className="flex space-x-3">
             <div className="w-full">
-              <Alert severity={"info"} style={{ height: "35px" }}>
+              <Alert severity={"info"} style={{ height: "30px" }}>
                 {t("add_unique_id")}
               </Alert>
             </div>

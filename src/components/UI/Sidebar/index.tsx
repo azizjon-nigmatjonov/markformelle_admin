@@ -42,9 +42,9 @@ export const Sidebar = () => {
         overflow: wideSidebar ? "" : collapsed ? "" : "hidden",
       }}
     >
-      <div className="overflow-y-scroll remove-scroll">
+      <div>
         <div
-          className={`overflow-y-scroll remove-scroll overflow-x-hidden duration-300 ${
+          className={`overflow-y-scroll remove-scroll duration-300 ${
             collapsed ? "" : "pr-[14px]"
           }`}
           style={{ height: "100vh" }}
@@ -85,7 +85,7 @@ export const Sidebar = () => {
         </div>
 
         <div
-          className={`absolute bottom-0 h-[70px] flex items-center w-full z-[2] bg-white ${
+          className={`absolute bottom-0 h-[40px] border-t border-[var(--border)] flex items-center w-full z-[2] bg-white ${
             collapsed ? "" : "px-16px"
           }`}
         >

@@ -31,7 +31,7 @@ const CCheckbox = ({
         }
       }}
       className={`flex items-center rounded-[8px] border-[var(--border)] w-full whitespace-nowrap ${
-        element?.label ? "border gap-2 px-[12px] h-[35px]" : ""
+        element?.label ? "border gap-2 px-[12px] h-[30px]" : ""
       } ${disabled ? "cursor-not-allowed " : "cursor-pointer "}`}
     >
       <div className="w-[18px] h-[18px]">

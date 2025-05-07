@@ -66,14 +66,14 @@ ul {
     width: 100%;
     border-radius: 8px;
     border: 1px solid var(--border) !important;
-    height: 35px !important;
+    height: 30px !important;
     position: relative;
     z-index: 90;
     font-size: 14px;
     font-weight: 500;
 
     @media (max-width: 1400px) {
-      height: 35px !important;
+      height: 30px !important;
     }
 
     // svg {
@@ -127,7 +127,7 @@ ul {
 #hfInputMask {
   input {
     background-color: transparent;
-    height: 35px;
+    height: 30px;
     width: 100%;
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -274,7 +274,7 @@ ul {
   text-transform: none;
   border-radius: 8px;
   border: 1px solid var(--border);
-  height: 35px;
+  height: 30px;
   padding: 0 16px;
   width: 100%;
   white-space: nowrap;
@@ -285,7 +285,7 @@ ul {
   font-size: 13px;
 
   &.form {
-    height: 35px;
+    height: 30px;
     font-size: 14px;
   }
 
@@ -675,7 +675,7 @@ ul {
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 0px 12px;
-  height: 35px;
+  height: 30px;
   &:focus {
     border-color: var(--primary);
   }

@@ -116,7 +116,7 @@ export const SideFilter = ({
   return (
     <div
       className={`bg-white relative duration-200  ${
-        sideFilter ? "w-[260px]" : "w-0 -ml-5"
+        sideFilter ? "w-[240px]" : "w-0 -ml-5"
       }`}
     >
       {sideFilter && (
@@ -129,11 +129,11 @@ export const SideFilter = ({
       )}
 
       {sideFilter ? (
-        <div className="w-[260px] border-r border-[var(--border)] h-full overflow-y-scroll remove-scroll py-3">
-          <h3 className="font-medium h-[35px] pl-2">Фильтр</h3>
+        <div className="w-[240px] border-r border-[var(--border)] h-full overflow-y-scroll remove-scroll py-3">
+          <h3 className="font-medium h-[30px] pl-2">Фильтр</h3>
           {Object.keys(searchedElements).length ? (
             <button
-              className="text-[var(--error)] underline text-sm h-[35px] pl-2"
+              className="text-[var(--error)] underline text-sm h-[30px] pl-2"
               onClick={() =>
                 handleSortLogic({
                   value: "clear",

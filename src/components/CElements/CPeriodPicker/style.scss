@@ -35,7 +35,7 @@
   }
 
   .MuiPickersToolbar-root {
-    grid-row:unset !important;
+    grid-row: unset !important;
     .MuiTypography-root.MuiTypography-overline {
       display: none;
     }
@@ -50,13 +50,13 @@
     }
   }
 
-  .MuiList-root  {
+  .MuiList-root {
     width: 200px;
     height: 100% !important;
     max-height: none !important;
     min-height: auto !important;
     grid-column: unset !important;
-    grid-row: unset !important; 
+    grid-row: unset !important;
     border-right: 1px solid var(--border);
     overflow: hidden;
     .MuiListItem-root {
@@ -82,7 +82,7 @@
   .MuiFormControl-root {
     width: 100%;
     background-color: #fff;
-    height: 35px;
+    height: 30px;
     border-radius: 8px;
     border: 1px solid var(--border);
   }
@@ -103,6 +103,5 @@
     &::placeholder {
       color: var(--gray60) !important;
     }
-
   }
 }

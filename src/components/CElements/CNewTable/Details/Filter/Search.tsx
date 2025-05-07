@@ -32,7 +32,7 @@ export const SearchField = ({
       }}
     >
       <div
-        className={`relative w-full h-[35px] flex items-center text-[12px] rounded-[8px]`}
+        className={`relative w-full h-[30px] flex items-center text-[12px] rounded-[8px]`}
       >
         <div className="absolute top-1/2 left-2 -translate-y-1/2">
           <SearchIcon fill="var(--main)" width={16} />
@@ -45,7 +45,7 @@ export const SearchField = ({
           }}
           onKeyDown={(e: {}) => handleKeyDown(e)}
           value={value}
-          className="h-[35px] w-full border border-[var(--border)] rounded-[8px] text-[var(--black)]"
+          className="h-[30px] w-full border border-[var(--border)] rounded-[8px] text-[var(--black)]"
           style={{ padding: "0 24px" }}
         />
         <div

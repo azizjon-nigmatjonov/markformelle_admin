@@ -215,7 +215,12 @@ export const StepCard = ({
                 className="cursor-pointer w-[80%]"
                 onClick={() => setImageView(row.image)}
               >
-                <img src={row.image} alt="Main" className="w-full h-auto" />
+                <img
+                  src={row.image}
+                  alt="Main"
+                  className="w-full h-auto"
+                  loading="lazy"
+                />
               </div>
             </div>
           </div>

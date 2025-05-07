@@ -151,7 +151,12 @@ const OrderList: React.FC<OrderListProps> = ({ machineName }) => {
       )} */}
       {!data.loading && !data.list?.length ? (
         <div className="flex justify-center flex-col items-center h-full w-full">
-          <img width={200} src="/images/no-data.png" alt="data" />
+          <img
+            width={200}
+            src="/images/no-data.png"
+            alt="data"
+            loading="lazy"
+          />
           <p>Нет информации</p>
         </div>
       ) : data.list?.length ? (

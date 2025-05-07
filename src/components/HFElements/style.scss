@@ -5,7 +5,7 @@
     position: relative;
     width: 100%;
     .MuiInputBase-root {
-      height: 35px;
+      height: 30px;
       border-radius: 8px;
       border: 1px solid var(--border);
       padding: 0 !important;
@@ -27,7 +27,6 @@
       }
 
       .Mui-disabled {
-        cursor: none;
         color: var(--black) !important;
       }
     }

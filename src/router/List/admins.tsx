@@ -11,7 +11,9 @@ export const adminList = [
     sidebar: true,
     title: "users",
     icon: "users",
-    parent_icon: <img width={18} src="/images/access.webp" alt="access" />,
+    parent_icon: (
+      <img width={18} src="/images/access.webp" alt="access" loading="lazy" />
+    ),
     element: <Users />,
     auth: true,
     permissions: ["view_page", "add", "delete", "edit"],
@@ -22,7 +24,9 @@ export const adminList = [
     sidebar: true,
     title: "rolls",
     icon: "rolls_icon",
-    parent_icon: <img width={18} src="/images/access.webp" alt="access" />,
+    parent_icon: (
+      <img width={18} src="/images/access.webp" alt="access" loading="lazy" />
+    ),
     element: <Rolls />,
     auth: true,
     permissions: ["view_page", "add", "delete", "edit"],

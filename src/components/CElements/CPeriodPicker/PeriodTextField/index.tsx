@@ -60,8 +60,8 @@ export const PeriodTextField = ({
   }, [value]);
 
   return (
-    <div className="z-20 relative flex items-center h-[35px] border border-[var(--border)] rounded-[8px] w-full px-2">
-      <div className="relative h-[35px] space-x-2 flex items-center w-full">
+    <div className="z-20 relative flex items-center h-[30px] border border-[var(--border)] rounded-[8px] w-full px-2">
+      <div className="relative h-[30px] space-x-2 flex items-center w-full">
         <InputMask
           mask="99.99.9999"
           value={value[0]}

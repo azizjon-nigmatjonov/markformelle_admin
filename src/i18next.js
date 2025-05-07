@@ -26,18 +26,18 @@ i18next
         let currentLang = i18next.language;
         if (currentLang?.includes("US")) currentLang = "ru";
 
-        const storedTranslation =
-          JSON.parse(localStorage.getItem("translation_by_lang")) || {};
+        // const storedTranslation =
+        //   JSON.parse(localStorage.getItem("translation_by_lang")) || {};
 
-        let newObj = { ...TranslationsObject };
-        if (Object.values(storedTranslation)?.length) {
-          for (let KEYWORD in storedTranslation) {
-            newObj[KEYWORD] = KEYWORD;
-          }
-        }
+        // let newObj = { ...TranslationsObject };
+        // if (Object.values(storedTranslation)?.length) {
+        //   for (let KEYWORD in storedTranslation) {
+        //     newObj[KEYWORD] = KEYWORD;
+        //   }
+        // }
 
         callback(null, {
-          data: newObj,
+          data: TranslationsObject,
           status: 200,
         });
 
@@ -61,7 +61,7 @@ i18next
           });
         } catch (err) {
           callback(null, {
-            data: newObj || {},
+            data: TranslationsObject || {},
             status: 200,
           });
         }

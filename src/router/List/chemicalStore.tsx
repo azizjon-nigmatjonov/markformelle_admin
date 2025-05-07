@@ -12,9 +12,9 @@ export const chemicalStore = [
     sidebar: true,
     title: "catalogies",
     parent_icon: (
-      <img width={20} src="/images/store_chemical.png" alt="store" />
+      <img width={22} src="/images/store_chemical.png" alt="store" />
     ),
-    icon: <img width={20} src="/images/catalogue.webp" alt="catalogue" />,
+    icon: <img width={20} src="/images/catalogue.png" alt="catalogue" />,
     element: "",
     auth: true,
     permissions: ["view_page"],
@@ -25,7 +25,14 @@ export const chemicalStore = [
         title: "chemicals",
         childLink: "chemicals",
         path: "chemical_store/chemicals",
-        icon: <img width={20} src="/images/chemical.png" alt="chemical" />,
+        icon: (
+          <img
+            width={20}
+            src="/images/chemical.webp"
+            alt="chemical"
+            loading="lazy"
+          />
+        ),
       },
       {
         parent: "chemical_store/mixtures",
@@ -33,7 +40,14 @@ export const chemicalStore = [
         title: "chemicals_mixtures",
         childLink: "mixtures",
         path: "chemical_store/mixtures",
-        icon: <img width={20} src="/images/mixtures.png" alt="mixtures" />,
+        icon: (
+          <img
+            width={20}
+            src="/images/mixtures.png"
+            alt="mixtures"
+            loading="lazy"
+          />
+        ),
       },
       {
         parent: "chemical_store/mixture_create",
@@ -41,7 +55,14 @@ export const chemicalStore = [
         title: "chemicals_mixture_create",
         childLink: "mixture_create",
         path: "chemical_store/mixture_create",
-        icon: <img width={20} src="/images/create.png" alt="mixture_create" />,
+        icon: (
+          <img
+            width={20}
+            src="/images/create.webp"
+            alt="mixture_create"
+            loading="lazy"
+          />
+        ),
       },
     ],
   },
@@ -50,7 +71,14 @@ export const chemicalStore = [
     link: "documents",
     sidebar: true,
     title: "Документы",
-    icon: <img width={20} src="/images/documents.png" alt="documents" />,
+    icon: (
+      <img
+        width={20}
+        src="/images/documents.webp"
+        alt="documents"
+        loading="lazy"
+      />
+    ),
     element: "",
     auth: true,
     permissions: ["view_page"],
@@ -61,7 +89,14 @@ export const chemicalStore = [
         title: "Внутреннее примешенные",
         childLink: "transfers",
         path: "chemical_store/transfers",
-        icon: <img width={20} src="/images/transfers.png" alt="transfers" />,
+        icon: (
+          <img
+            width={20}
+            src="/images/transfers.png"
+            alt="transfers"
+            loading="lazy"
+          />
+        ),
       },
       {
         parent: "chemical_store/list",
@@ -69,7 +104,9 @@ export const chemicalStore = [
         title: "Документ покупки",
         childLink: "buying",
         path: "chemical_store/buying",
-        icon: <img width={20} src="/images/store.png" alt="store" />,
+        icon: (
+          <img width={20} src="/images/store.png" alt="store" loading="lazy" />
+        ),
       },
     ],
   },
@@ -78,7 +115,9 @@ export const chemicalStore = [
     link: "reports",
     sidebar: true,
     title: "Отчёты",
-    icon: <img width={20} src="/images/report.png" alt="report" />,
+    icon: (
+      <img width={20} src="/images/report.png" alt="report" loading="lazy" />
+    ),
     element: "",
     auth: true,
     permissions: ["view_page"],
@@ -89,7 +128,14 @@ export const chemicalStore = [
         title: "Остатки химикатов",
         childLink: "chemical_stock",
         path: "chemical_store/chemical_stock",
-        icon: <img width={20} src="/images/chemical.png" alt="chemical" />,
+        icon: (
+          <img
+            width={20}
+            src="/images/chemical.png"
+            alt="chemical"
+            loading="lazy"
+          />
+        ),
       },
     ],
   },

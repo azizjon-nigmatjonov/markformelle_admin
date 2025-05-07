@@ -218,7 +218,7 @@ const GlobalSearch = ({
 
   return (
     <div
-      className={`w-full ipod:w-[180px] desktop:w-[240px] relative bg-white rounded-[8px] flex border justify-between items-center h-[35px] bigDesktop:h-[45px] px-9 ${
+      className={`w-full ipod:w-[180px] desktop:w-[240px] relative bg-white rounded-[8px] flex border justify-between items-center h-[30px] px-9 ${
         value ? " border-[var(--main)]" : "border-[var(--border)]"
       }`}
     >

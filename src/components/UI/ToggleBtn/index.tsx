@@ -8,7 +8,6 @@ interface Props {
 }
 
 export const ToggleBtn = ({ type = "", setType = () => {} }: Props) => {
-
   const handleToggle = (type: any) => {
     setType(type);
   };
@@ -19,7 +18,7 @@ export const ToggleBtn = ({ type = "", setType = () => {} }: Props) => {
       className="flex justify-between items-center"
     >
       <IconButton>
-        <div className="relative flex items-center justify-between border border-[var(--border)] overflow-hidden h-[35px] bigDesktop:h-[45px] ipod:rounded-[12px] rounded-[8px]">
+        <div className="relative flex items-center justify-between border border-[var(--border)] overflow-hidden h-[30px] rounded-[8px]">
           <div className="w-[30px] desktop:w-[40px] h-full flex items-center justify-center z-[2] relative">
             <AppsIcon
               style={{
@@ -38,7 +37,7 @@ export const ToggleBtn = ({ type = "", setType = () => {} }: Props) => {
           </div>
 
           <div
-            className={`absolute left-0 top-0 w-1/2 h-full bg-[#2E90FA] z-[1] rounded-[8px] ipod:rounded-[12px] ${
+            className={`absolute left-0 top-0 w-1/2 h-full bg-[#2E90FA] z-[1] rounded-[8px] ${
               type === "list" ? "right-0 left-auto" : ""
             }`}
           ></div>

@@ -19,7 +19,12 @@ export const TableUI = ({ TableList = [] }: Props) => {
             className="hover:scale-[1.008] duration-200 cursor-pointer w-[45%]"
             onClick={() => setImageView(table.image)}
           >
-            <img src={table.image} alt="Main" className="w-full h-auto" />
+            <img
+              src={table.image}
+              alt="Main"
+              className="w-full h-auto"
+              loading="lazy"
+            />
           </div>
           <div key={table} className={`overflow-x-auto c-table w-full`}>
             <table className="min-w-full text-left">

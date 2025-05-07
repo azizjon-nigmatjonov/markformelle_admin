@@ -66,7 +66,7 @@ const AddButton = ({
           if (!checkPermission(permission)) return;
           onClick();
         }}
-        className={`rounded-[8px]  flex items-center whitespace-nowrap px-2 h-[25px] desktop:h-[35px] ${
+        className={`rounded-[8px]  flex items-center whitespace-nowrap px-2 h-[25px] desktop:h-[30px] ${
           checkPermission(permission)
             ? "bg-[var(--main)]"
             : "bg-[var(--gray30)] cursor-not-allowed"

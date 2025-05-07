@@ -8,9 +8,21 @@ export const paintSection = [
     sidebar: true,
     title: "Крашения плотно",
     parent_icon: (
-      <img width={20} src="/images/paint.png" alt="warehouse paint" />
+      <img
+        width={20}
+        src="/images/paint.png"
+        alt="warehouse paint"
+        loading="lazy"
+      />
     ),
-    icon: <img width={18} src="/images/paint-fabrik.png" alt="paint" />,
+    icon: (
+      <img
+        width={18}
+        src="/images/paint-fabrik.png"
+        alt="paint"
+        loading="lazy"
+      />
+    ),
     element: <PaintSection />,
     auth: true,
     permissions: ["view_page"],
@@ -20,7 +32,14 @@ export const paintSection = [
     link: "yarn",
     sidebar: true,
     title: "Крашения пряжи",
-    icon: <img width={18} src="/images/paint-yarn.png" alt="paint yarn" />,
+    icon: (
+      <img
+        width={18}
+        src="/images/paint-yarn.png"
+        alt="paint yarn"
+        loading="lazy"
+      />
+    ),
     element: <PaintSectionYarn />,
     auth: true,
     permissions: ["view_page"],

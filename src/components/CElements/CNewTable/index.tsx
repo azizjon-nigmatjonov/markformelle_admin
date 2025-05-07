@@ -636,7 +636,7 @@ const CNewTable = ({
   }, []);
 
   return (
-    <div className="relative cnewtable w-full rounded-t-[8px]">
+    <div className="relative cnewtable w-full rounded-t-[12px]">
       <div className="h-full">
         {defaultFilters?.length || title ? (
           <HeaderSettings
@@ -654,6 +654,7 @@ const CNewTable = ({
             defaultFilters={defaultFilters}
             selectedItems={selectedItems}
             disabled={disabled}
+            openSelect={openSelect}
             defaultExcelFields={defaultExcelFields}
           />
         ) : (

@@ -5,6 +5,7 @@ import { MaterialForm } from "./MaterialForm";
 import CNewMiniModal from "../../../../components/CElements/CNewMiniModal";
 import { TrailForm } from "./TrailForm";
 import { DetailForm } from "./DetailForm";
+import { TwoRowTable } from "./TableUI/TwoRowTable";
 
 const TrialList = [
   {
@@ -182,109 +183,7 @@ export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
         </div>
 
         <div>
-          <CNewTable
-            title="Trail"
-            headColumns={[
-              {
-                title: "Ask No",
-                id: "ASKNO",
-              },
-              {
-                title: "Ask Tarihi",
-                id: "ASKTARIHI",
-              },
-              {
-                title: "Pipetleme No",
-                id: "PIPETLEMENO",
-              },
-              {
-                title: "Migrasoyun",
-                id: "MIGROSOYUN",
-              },
-              {
-                title: "Gadisi tarihi",
-                id: "askno",
-              },
-              {
-                title: "Boya Malyeti",
-                id: "askno",
-              },
-              {
-                title: "Guncel Boya",
-                id: "askno",
-              },
-            ]}
-            defaultFilters={["actions"]}
-            defaultActions={["delete", "edit"]}
-            idForTable="modal_table_trial_first"
-            bodyColumns={trialTable}
-            handleActions={handleActionsTrial}
-            isLoading={false}
-            filterParams={filterParams}
-            handleFilterParams={setFilterParams}
-            disablePagination={true}
-            autoHeight={"200px"}
-            disabled={disabled}
-            animation={false}
-            extra={
-              <button
-                onClick={() => {
-                  if (disabled) return;
-                  setOpen("trial");
-                }}
-                className="flex items-center"
-                type="button"
-              >
-                <PlusIcon fill={disabled ? "var(--gray)" : "var(--main)"} />
-              </button>
-            }
-          />
-
-          <CNewTable
-            headColumns={[
-              {
-                title: "Ask No",
-                id: "ASKNO",
-              },
-              {
-                title: "Ask Tarihi",
-                id: "ASKTARIHI",
-              },
-              {
-                title: "Pipetleme No",
-                id: "PIPETLEMENO",
-              },
-              {
-                title: "Migrasoyun",
-                id: "MIGROSOYUN",
-              },
-              {
-                title: "Gadisi tarihi",
-                id: "askno",
-              },
-              {
-                title: "Boya Malyeti",
-                id: "askno",
-              },
-              {
-                title: "Guncel Boya",
-                id: "askno",
-              },
-            ]}
-            removeHeader={true}
-            defaultFilters={["actions"]}
-            defaultActions={["delete", "edit"]}
-            idForTable="modal_table_trial_second"
-            bodyColumns={[]}
-            handleActions={handleActionsTrial}
-            isLoading={false}
-            filterParams={filterParams}
-            handleFilterParams={setFilterParams}
-            disablePagination={true}
-            autoHeight={"200px"}
-            disabled={disabled}
-            animation={false}
-          />
+          <TwoRowTable />
         </div>
 
         <div className="border-l border-[var(--border)]">

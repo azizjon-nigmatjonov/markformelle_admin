@@ -8,6 +8,7 @@ import { sidebarActions } from "../../../store/sidebar";
 import { useScreenSize } from "../../../hooks/useScreenSize";
 import { MobileHeader } from "./MobileHeader";
 import { Tooltip } from "@mui/material";
+import { TooltipPosition } from "../../../constants/toolPosition";
 
 interface Props {
   open?: boolean;
@@ -65,9 +66,9 @@ export const Header = ({
             {...props}
             style={{
               width: wideSidebar
-                ? "calc(100vw - 245px)"
+                ? "calc(100vw - 240px)"
                 : collapsed
-                ? "calc(100vw - 50px)"
+                ? "calc(100vw - 45px)"
                 : "",
               left: wideSidebar ? "240px" : collapsed ? "45px" : "",
             }}
@@ -84,23 +85,12 @@ export const Header = ({
                   {titleIn ? "/" + titleIn : ""}
                 </h3>
               )}
-              <div className="h-[20px] w-[2px] bg-[var(--gray20)] mx-3"></div>
+              <div className="h-[20px] w-[2px] bg-[var(--gray20)] mx-2"></div>
 
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2">
                 <Tooltip
                   arrow
-                  slotProps={{
-                    popper: {
-                      modifiers: [
-                        {
-                          name: "offset",
-                          options: {
-                            offset: [0, 15],
-                          },
-                        },
-                      ],
-                    },
-                  }}
+                  slotProps={TooltipPosition}
                   placement="right"
                   title={`Изменение язык системы`}
                 >
@@ -108,15 +98,9 @@ export const Header = ({
                     <LangDropdown />
                   </div>
                 </Tooltip>
-                {/* <OrderDriver /> */}
+
                 <Notification />
               </div>
-
-              {/* <img
-              className="absolute right-[-15px] top-0 z-[1]"
-              src="/svg/headerLine.svg"
-              alt="line"
-            /> */}
             </div>
           </div>
         </div>

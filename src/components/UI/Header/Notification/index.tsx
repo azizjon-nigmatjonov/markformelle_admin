@@ -6,6 +6,7 @@ import { NotificationIcon } from "../../../../components/UI/IconGenerator/Svg";
 import { NotificationData } from "./Logic";
 import { Closer } from "../../../../components/UI/Closer";
 import { usePermissions } from "../../../../hooks/usePermissions";
+import { TooltipPosition } from "../../../../constants/toolPosition";
 // import { useSelector } from "react-redux";
 
 const Notification = () => {
@@ -16,22 +17,12 @@ const Notification = () => {
     <div className="relative z-[4]">
       <Tooltip
         arrow
-        slotProps={{
-          popper: {
-            modifiers: [
-              {
-                name: "offset",
-                options: {
-                  offset: [0, 15],
-                },
-              },
-            ],
-          },
-        }}
+        slotProps={TooltipPosition}
         title={`Новости о системе`}
+        placement="left"
       >
         <IconButton
-          className={`w-[25px] h-[25px] desktop:h-[30px] desktop:w-[30px] rounded-[8px] shadow-sm bg-white common-shadow ${
+          className={`w-[25px] h-[25px] desktop:h-[30px] desktop:w-[30px] bg-white ${
             checkAdditionals("show_notification") ? "" : "cursor-not-allowed"
           }`}
           onClick={() => {
@@ -40,15 +31,17 @@ const Notification = () => {
             clearCount();
           }}
         >
-          <Badge badgeContent={notifCount} color="primary">
-            <NotificationIcon
-              fill={
-                checkAdditionals("show_notification")
-                  ? "var(--gray)"
-                  : "var(--gray30)"
-              }
-            />
-          </Badge>
+          <div className="border border-[var(--border)] h-full w-full flex items-center justify-center rounded-[8px]">
+            <Badge badgeContent={notifCount} color="primary">
+              <NotificationIcon
+                fill={
+                  checkAdditionals("show_notification")
+                    ? "var(--gray)"
+                    : "var(--gray30)"
+                }
+              />
+            </Badge>
+          </div>
         </IconButton>
       </Tooltip>
 

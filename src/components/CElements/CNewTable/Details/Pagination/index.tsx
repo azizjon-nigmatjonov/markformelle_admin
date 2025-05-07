@@ -76,7 +76,7 @@ const CPagination = ({
   }
 
   return (
-    <div className="table__pagination  flex items-center justify-left space-x-3 border-t border-[var(--border)]">
+    <div className="table__pagination flex items-center justify-left space-x-3 border-t border-[var(--border)]">
       <div>
         <PaginationLimits
           limit={limit}

@@ -16,7 +16,12 @@ export const OrderList = () => {
       }}
     >
       <div className="flex justify-center items-center h-full">
-        <img src="/images/no-data.png" width={200} alt="no data" />
+        <img
+          src="/images/no-data.png"
+          width={200}
+          alt="no data"
+          loading="lazy"
+        />
       </div>
       {Array.from(new Array(0)).map((item: number) => (
         <ul
