@@ -43,7 +43,7 @@ export const Field = ({
       />
 
       {obj.id === "DATE" ? (
-        <CPeriodPicker handleValue={() => {}} />
+        <CPeriodPicker />
       ) : (
         <SearchField
           searchDebounce={searchDebounce}

@@ -22,77 +22,78 @@ $maxWidthContainer: 1800;
     }
 }
 
-.card {
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.8s ease-in-out;
-
-    .main-title {
-        @include adapviteValue(font-size, 120, 44, 1);
-    }
-
-    .main-sub-text-614 {
-        @include adapviteValue(font-size, 36, 20, 1);
-        font-weight: 700;
-    
-    }
-
-    .title {
-        @include adapviteValue(font-size, 36, 20, 1);
-    }
-
-    .sub-text-614 {
-        @include adapviteValue(font-size, 28, 20, 1);
-        margin-top: 4px;
-        font-weight: 500;
-    }
-}
-
-@media (max-width: 1000px) {
+.first_row_styles {
     .card {
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.8s ease-in-out;
+
+        .main-title {
+            @include adapviteValue(font-size, 120, 44, 1);
+        }
+
+        .main-sub-text-614 {
+            @include adapviteValue(font-size, 36, 20, 1);
+            font-weight: 700;
+        }
+
+        .title {
+            @include adapviteValue(font-size, 36, 20, 1);
+        }
+
         .sub-text-614 {
-            margin-top: 0;
+            @include adapviteValue(font-size, 28, 20, 1);
+            margin-top: 4px;
+            font-weight: 500;
         }
     }
-}
 
-.card.rotated {
-    transform: rotateY(180deg);
-}
-
-.frontofcard,
-.backofcard {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-}
-
-.backofcard {
-    transform: rotateY(180deg);
-    left: 0;
-    top: 0;
-    z-index: 3;
-}
-
-.table {
-    .title {
-        @include adapviteValue(font-size, 30, 19, 1);
-        font-weight: bold;
+    @media (max-width: 1000px) {
+        .card {
+            .sub-text-614 {
+                margin-top: 0;
+            }
+        }
     }
-    .text {
-        @include adapviteValue(font-size, 28, 19, 1);
-        font-weight: bold;
-    }
-    .footer_text {
-        @include adapviteValue(font-size, 38, 28, 1);
-        font-weight: bold;
-    }
-}
 
-.sticky-sub-header-process {
-    position: sticky;
-    inset: 0px 100px 100px 0px;
-    background-color: white;
-    z-index: 2;
+    .card.rotated {
+        transform: rotateY(180deg);
+    }
+
+    .frontofcard,
+    .backofcard {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+    }
+
+    .backofcard {
+        transform: rotateY(180deg);
+        left: 0;
+        top: 0;
+        z-index: 3;
+    }
+
+    .table {
+        .title {
+            @include adapviteValue(font-size, 30, 19, 1);
+            font-weight: bold;
+        }
+        .text {
+            @include adapviteValue(font-size, 28, 19, 1);
+            font-weight: bold;
+        }
+        .footer_text {
+            @include adapviteValue(font-size, 38, 28, 1);
+            font-weight: bold;
+        }
+    }
+
+    .sticky-sub-header-process {
+        position: sticky;
+        inset: 0px 100px 100px 0px;
+        background-color: white;
+        z-index: 2;
+    }
 }

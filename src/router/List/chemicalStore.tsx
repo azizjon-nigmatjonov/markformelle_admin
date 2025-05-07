@@ -14,7 +14,7 @@ export const chemicalStore = [
     parent_icon: (
       <img width={20} src="/images/store_chemical.png" alt="store" />
     ),
-    icon: <img width={20} src="/images/catalogue.png" alt="catalogue" />,
+    icon: <img width={20} src="/images/catalogue.webp" alt="catalogue" />,
     element: "",
     auth: true,
     permissions: ["view_page"],

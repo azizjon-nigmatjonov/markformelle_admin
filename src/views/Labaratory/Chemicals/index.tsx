@@ -156,7 +156,7 @@ export const LabChemicals = () => {
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />
       <div className="p-2">
         <CNewTable
-          title={t("table_chemicals")}
+          title={t("table_labaratory")}
           headColumns={newHeadColumns}
           bodyColumns={bodyColumns}
           handleActions={handleActions}

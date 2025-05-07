@@ -127,7 +127,7 @@ export const FourthColumn = ({ data = [] }: Props) => {
                       ) : (
                         <img
                           className="w-full"
-                          src="/images/danger.png"
+                          src="/images/danger.webp"
                           alt={`last ${item.order}`}
                           style={{
                             width: getHeight({ type: "card", count: 30 }),

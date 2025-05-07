@@ -165,6 +165,7 @@ export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
             disablePagination={true}
             autoHeight={"400px"}
             disabled={disabled}
+            animation={false}
             extra={
               <button
                 onClick={() => {
@@ -224,6 +225,7 @@ export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
             disablePagination={true}
             autoHeight={"200px"}
             disabled={disabled}
+            animation={false}
             extra={
               <button
                 onClick={() => {
@@ -281,6 +283,7 @@ export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
             disablePagination={true}
             autoHeight={"200px"}
             disabled={disabled}
+            animation={false}
           />
         </div>
 
@@ -332,6 +335,7 @@ export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
             handleFilterParams={setFilterParams}
             disablePagination={true}
             autoHeight={"400px"}
+            animation={false}
             disabled={disabled}
             extra={
               <button

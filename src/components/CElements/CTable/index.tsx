@@ -492,7 +492,7 @@ const CTable = ({
               dataLength={newBodyColumns?.length}
             >
               <CTableHead>
-                <CTableRow className="">
+                <CTableRow>
                   {newHeadColumns?.map((column: any, index: number) => (
                     <CTableHeadCell
                       id={column?.id}

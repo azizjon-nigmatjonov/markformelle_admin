@@ -90,7 +90,7 @@ export const SecondColumn = ({ data = [] }: Props) => {
                 ) : (
                   <img
                     className="w-[35px]"
-                    src="/images/danger.png"
+                    src="/images/danger.webp"
                     alt={`last ${val[1]}`}
                   />
                 )}
@@ -218,7 +218,7 @@ export const SecondColumn = ({ data = [] }: Props) => {
                       ) : (
                         <img
                           className="w-full"
-                          src="/images/danger.png"
+                          src="/images/danger.webp"
                           alt={`last ${item.order}`}
                           style={{
                             width: getHeight({ type: "card", count: 28 }),

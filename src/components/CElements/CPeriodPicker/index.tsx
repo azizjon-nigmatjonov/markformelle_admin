@@ -8,7 +8,7 @@ interface Props {
   label?: string;
   placeholder?: string;
   defaultValue?: any;
-  handleValue: (val: any) => void;
+  handleValue?: (val: any) => void;
 }
 
 export const CPeriodPicker = ({

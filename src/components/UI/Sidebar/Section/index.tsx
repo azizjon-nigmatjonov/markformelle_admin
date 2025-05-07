@@ -147,36 +147,38 @@ const SidebarSection = ({
                               </AccordionSummary>
                               <AccordionDetails>
                                 <ul className="ml-3">
-                                  {item.children.map((child: any) => (
-                                    <li key={child.id}>
-                                      <div
-                                        onClick={() =>
-                                          navigateTo("/" + child.path)
-                                        }
-                                        className="flex items-center justify-between h-[40px] relative overflow-hidden cursor-pointer text-[12px]"
-                                      >
-                                        <div className="w-[45px] flex justify-center">
-                                          <IconGenerator
-                                            icon={child?.icon}
-                                            fill={
-                                              child.child === locationName
-                                                ? "var(--main)"
-                                                : "var(--gray)"
-                                            }
-                                          />
-                                        </div>
-                                        <p
-                                          className={`w-full ${
-                                            child.path === locationName
-                                              ? "text-[var(--main)] font-medium"
-                                              : ""
-                                          }`}
+                                  {item.children.map(
+                                    (child: any, index: number) => (
+                                      <li key={index + child.path}>
+                                        <div
+                                          onClick={() =>
+                                            navigateTo("/" + child.path)
+                                          }
+                                          className="flex items-center justify-between h-[40px] relative overflow-hidden cursor-pointer text-[12px]"
                                         >
-                                          {t(child.title)}
-                                        </p>
-                                      </div>
-                                    </li>
-                                  ))}
+                                          <div className="w-[45px] flex justify-center">
+                                            <IconGenerator
+                                              icon={child?.icon}
+                                              fill={
+                                                child.child === locationName
+                                                  ? "var(--main)"
+                                                  : "var(--gray)"
+                                              }
+                                            />
+                                          </div>
+                                          <p
+                                            className={`w-full ${
+                                              child.path === locationName
+                                                ? "text-[var(--main)] font-medium"
+                                                : ""
+                                            }`}
+                                          >
+                                            {t(child.title)}
+                                          </p>
+                                        </div>
+                                      </li>
+                                    )
+                                  )}
                                 </ul>
                               </AccordionDetails>
                             </Accordion>

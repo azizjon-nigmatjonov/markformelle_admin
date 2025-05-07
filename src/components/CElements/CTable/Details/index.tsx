@@ -96,14 +96,14 @@ export const CTableBody = ({
 
 export const CTableRow = ({
   children,
-  className,
+  classes,
   ...props
 }: {
   children: any;
-  className: string;
+  classes?: string;
 }) => {
   return (
-    <tr className={`CTableRow ${className}`} {...props}>
+    <tr className={`CTableRow ${classes}`} {...props}>
       {children}
     </tr>
   );

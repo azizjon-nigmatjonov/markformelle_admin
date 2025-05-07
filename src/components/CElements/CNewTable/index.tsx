@@ -107,7 +107,7 @@ const CNewTable = ({
   const [currentIndex, setCurrentIndex] = useState(null);
   const [activeSort, setActiveSort] = useState(false);
   const dispatch = useDispatch();
-  const [effect, setEffect] = useState<string[]>([]);
+  const [effect, setEffect] = useState<number[]>([]);
   const { checkPermission } = usePermissions();
   const tableRef: any = useRef(null);
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
@@ -221,13 +221,24 @@ const CNewTable = ({
 
   const [bodySource, setBodySource]: any = useState([]);
 
+  const SetAnimationEffectTime = (index: number) => {
+    setTimeout(() => {
+      setEffect((prevEffect) => [...prevEffect, index]);
+    }, index * 30);
+  };
+
   useEffect(() => {
     if (!newBodyColumns?.length) {
       return;
     }
     if (isLoading) {
       setBodySource([]);
+    }
+    if (animation && isLoading) {
       setEffect([]);
+    }
+    if (!animation) {
+      setEffect(newBodyColumns.map((_, index: number) => index));
     }
 
     const checks = (status: any) => {
@@ -237,9 +248,7 @@ const CNewTable = ({
 
     const list =
       newBodyColumns.map((item: any, index?: any) => {
-        setTimeout(() => {
-          setEffect((prevEffect) => [...prevEffect, index]);
-        }, index * 30);
+        if (animation) SetAnimationEffectTime(index);
         return {
           ...item,
           is_freez: checks(item?.freez),
@@ -260,6 +269,7 @@ const CNewTable = ({
     filterParams.page,
     headColumns,
     isLoading,
+    animation,
   ]);
 
   useEffect(() => {
@@ -688,8 +698,8 @@ const CNewTable = ({
               dataLength={newBodyColumns?.length}
             >
               <CTableHead>
-                <CTableRow className="">
-                  <div
+                <CTableRow>
+                  <td
                     style={{ width: openSelect ? "40px" : 0 }}
                     className="sticky bg-white h-[41px] flex items-center border-b justify-center duration-100"
                   >
@@ -708,7 +718,7 @@ const CNewTable = ({
                         )}
                       </div>
                     )}
-                  </div>
+                  </td>
                   {newHeadColumns?.map((column: any, index: number) => (
                     <CTableHeadCell
                       id={column?.id}
@@ -832,149 +842,145 @@ const CNewTable = ({
                 rowsCount={filterParams.perPage}
                 dataLength={newBodyColumns?.length}
               >
-                {bodySource?.length
-                  ? bodySource?.map((item: any, rowIndex: any) => (
-                      <TableRow
-                        key={item.index}
-                        className={`group ${
-                          effect.includes(rowIndex) && animation
-                            ? "effect"
-                            : !animation
-                            ? "without_animation"
-                            : ""
-                        } ${
-                          clickable && !item.empty && checkPermission("view")
-                            ? "clickable"
-                            : ""
-                        } ${
-                          currentIndex === rowIndex
-                            ? "bg-[var(--primary50)]"
-                            : ""
-                        } ${
-                          selectedItems.includes(rowIndex) || item?.checked
-                            ? "sellected"
-                            : ""
-                        }`}
-                        onClick={() => {
-                          if (openSelect) {
-                            tableActions(item, "sellect_more");
-                          }
-                        }}
+                {bodySource?.length ? (
+                  bodySource?.map((item: any, rowIndex: any) => (
+                    <TableRow
+                      key={item.index}
+                      className={`group ${
+                        effect.includes(rowIndex) ? "effect" : ""
+                      } ${
+                        clickable && !item.empty && checkPermission("view")
+                          ? "clickable"
+                          : ""
+                      } ${
+                        currentIndex === rowIndex ? "bg-[var(--primary50)]" : ""
+                      } ${
+                        selectedItems.includes(rowIndex) || item?.checked
+                          ? "sellected"
+                          : ""
+                      }`}
+                      onClick={() => {
+                        if (openSelect) {
+                          tableActions(item, "sellect_more");
+                        }
+                      }}
+                    >
+                      <td
+                        className="h-[35px] border-b border-[var(--border)] w-full flex justify-center items-center"
+                        style={{ padding: "0px !importaint" }}
                       >
-                        <td
-                          className="h-[35px] border-b border-[var(--border)] w-full flex justify-center items-center"
-                          style={{ padding: "0px !importaint" }}
-                        >
-                          {openSelect && (
-                            <div
-                              onClick={() => tableActions(item, "sellect_more")}
-                              className={`w-[18px] h-[18px] check rounded-[4px] border flex items-center justify-center cursor-pointer ${
-                                selectedItems.includes(item.index - 1)
-                                  ? "border-[var(--black)]"
-                                  : "border-[var(--gray)]"
-                              }`}
-                            >
-                              {selectedItems.includes(item.index - 1) && (
-                                <CheckIcon
-                                  style={{ color: "black", width: 14 }}
-                                />
-                              )}
-                            </div>
-                          )}
-                        </td>
-                        {newHeadColumns.map((column: any, colIndex: number) => (
-                          <CTableCell
-                            key={colIndex + column?.id || colIndex}
-                            className={`overflow-ellipsis`}
-                            style={{
-                              minWidth: "max-content",
-                              padding: "0px",
-                              position: tableSettings?.[pageName]?.find(
-                                (item: any) => item?.id === column?.id
-                              )?.isStiky
-                                ? "sticky"
-                                : "relative",
-                              left: tableSettings?.[pageName]?.find(
-                                (item: any) => item?.id === column?.id
-                              )?.isStiky
-                                ? calculateWidth(column?.id, colIndex)
-                                : "0",
-                              backgroundColor: "#fff",
-                              zIndex: tableSettings?.[pageName]?.find(
-                                (item: any) => item?.id === column?.id
-                              )?.isStiky
-                                ? "1"
-                                : "",
-                            }}
+                        {openSelect && (
+                          <div
+                            onClick={() => tableActions(item, "sellect_more")}
+                            className={`w-[18px] h-[18px] check rounded-[4px] border flex items-center justify-center cursor-pointer ${
+                              selectedItems.includes(item.index - 1)
+                                ? "border-[var(--black)]"
+                                : "border-[var(--gray)]"
+                            }`}
                           >
-                            <div
-                              style={{
-                                textAlign: column?.textAlign || "left",
-                              }}
-                              className={`relative h-full flex items-center text-[13px] ${
-                                hoveredIndex === colIndex &&
-                                hoveredIndex > draggingIndex
-                                  ? "drag-hovered right"
-                                  : hoveredIndex === colIndex &&
-                                    hoveredIndex < draggingIndex
-                                  ? "drag-hovered left"
-                                  : ""
-                              }`}
-                            >
-                              {column?.id !== "actions" &&
-                              !item.empty &&
-                              getBodyCol(column, item) ? (
-                                <div
-                                  onDoubleClick={() => {
-                                    if (
-                                      column?.click !== "custom" &&
-                                      column?.id !== "actions"
-                                    ) {
-                                      tableActions(item, "view");
-                                    }
-                                  }}
-                                  onClick={() => {
-                                    tableActions(item, "view_single");
-                                  }}
-                                  className="w-full whitespace-nowrap"
-                                >
-                                  <>{getBodyCol(column, item)}</>
-                                </div>
-                              ) : (
-                                ""
-                              )}
-                              {defaultFilters.includes("actions") &&
-                              colIndex === 0 ? (
-                                <div className="relative flex items-center">
-                                  <TabbleActions
-                                    element={item}
-                                    rowIndex={rowIndex}
-                                    currentIndex={currentIndex}
-                                    setCurrentIndex={setCurrentIndex}
-                                    handleActions={tableActions}
-                                    actions={defaultActions}
-                                    checkPermission={checkPermission}
-                                    selectedItems={selectedItems}
-                                  />
+                            {selectedItems.includes(item.index - 1) && (
+                              <CheckIcon
+                                style={{ color: "black", width: 14 }}
+                              />
+                            )}
+                          </div>
+                        )}
+                      </td>
+                      {newHeadColumns.map((column: any, colIndex: number) => (
+                        <CTableCell
+                          key={colIndex + column?.id || colIndex}
+                          className={`overflow-ellipsis`}
+                          style={{
+                            minWidth: "max-content",
+                            padding: "0px",
+                            position: tableSettings?.[pageName]?.find(
+                              (item: any) => item?.id === column?.id
+                            )?.isStiky
+                              ? "sticky"
+                              : "relative",
+                            left: tableSettings?.[pageName]?.find(
+                              (item: any) => item?.id === column?.id
+                            )?.isStiky
+                              ? calculateWidth(column?.id, colIndex)
+                              : "0",
+                            backgroundColor: "#fff",
+                            zIndex: tableSettings?.[pageName]?.find(
+                              (item: any) => item?.id === column?.id
+                            )?.isStiky
+                              ? "1"
+                              : "",
+                          }}
+                        >
+                          <div
+                            style={{
+                              textAlign: column?.textAlign || "left",
+                            }}
+                            className={`relative h-full flex items-center text-[13px] ${
+                              hoveredIndex === colIndex &&
+                              hoveredIndex > draggingIndex
+                                ? "drag-hovered right"
+                                : hoveredIndex === colIndex &&
+                                  hoveredIndex < draggingIndex
+                                ? "drag-hovered left"
+                                : ""
+                            }`}
+                          >
+                            {column?.id !== "actions" &&
+                            !item.empty &&
+                            getBodyCol(column, item) ? (
+                              <div
+                                onDoubleClick={() => {
+                                  if (
+                                    column?.click !== "custom" &&
+                                    column?.id !== "actions"
+                                  ) {
+                                    tableActions(item, "view");
+                                  }
+                                }}
+                                onClick={() => {
+                                  tableActions(item, "view_single");
+                                }}
+                                className="w-full whitespace-nowrap"
+                              >
+                                <>{getBodyCol(column, item)}</>
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                            {defaultFilters.includes("actions") &&
+                            colIndex === 0 ? (
+                              <div className="relative flex items-center">
+                                <TabbleActions
+                                  element={item}
+                                  rowIndex={rowIndex}
+                                  currentIndex={currentIndex}
+                                  setCurrentIndex={setCurrentIndex}
+                                  handleActions={tableActions}
+                                  actions={defaultActions}
+                                  checkPermission={checkPermission}
+                                  selectedItems={selectedItems}
+                                />
 
-                                  {currentIndex === rowIndex && (
-                                    <div
-                                      className="w-[200vw] h-[200vh] fixed left-[-50vw] top-[-50vw] z-[97]"
-                                      onClick={() => {
-                                        setCurrentIndex(null);
-                                      }}
-                                    ></div>
-                                  )}
-                                </div>
-                              ) : (
-                                ""
-                              )}
-                            </div>
-                          </CTableCell>
-                        ))}
-                      </TableRow>
-                    ))
-                  : ""}
+                                {currentIndex === rowIndex && (
+                                  <div
+                                    className="w-[200vw] h-[200vh] fixed left-[-50vw] top-[-50vw] z-[97]"
+                                    onClick={() => {
+                                      setCurrentIndex(null);
+                                    }}
+                                  ></div>
+                                )}
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </CTableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : (
+                  <tr></tr>
+                )}
               </CTableBody>
             </CTableWrapper>
           </div>

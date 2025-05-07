@@ -4,9 +4,7 @@ import toast from "react-hot-toast";
 import { useTranslationHook } from "../../../hooks/useTranslation";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
-export const breadCrumbs = [
-  { label: "Химикаты", link: "/chemical_store/chemicals" },
-];
+export const breadCrumbs = [{ label: "labaratory", link: "/labaratory/list" }];
 
 export const TableData = ({
   filterParams,

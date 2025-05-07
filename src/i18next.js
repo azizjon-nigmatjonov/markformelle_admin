@@ -61,7 +61,7 @@ i18next
           });
         } catch (err) {
           callback(null, {
-            data: obj || {},
+            data: newObj || {},
             status: 200,
           });
         }

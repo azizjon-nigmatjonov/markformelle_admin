@@ -10,9 +10,9 @@ export const knittingList = [
     sidebar: true,
     title: "knittingavto",
     parent_icon: (
-      <img width={18} src="/images/kniting.png" alt="knitting parent" />
+      <img width={18} src="/images/kniting.webp" alt="knitting parent" />
     ),
-    icon: <img width={18} src="/images/kniting.png" alt="knitting" />,
+    icon: <img width={18} src="/images/kniting.webp" alt="knitting" />,
     element: <KnittingMachines />,
     permissions: ["view_page", "edit"],
     auth: false,
@@ -42,7 +42,7 @@ export const knittingList = [
     link: "cells-after-kk",
     sidebar: true,
     title: "Клетки после КК",
-    icon: <img width={24} src="/images/box.png" alt="box cell" />,
+    icon: <img width={24} src="/images/box.webp" alt="box cell" />,
     element: <CellsAfterKK />,
     permissions: ["view_page"],
     auth: true,
@@ -52,7 +52,7 @@ export const knittingList = [
     link: "loaders",
     sidebar: true,
     title: "Дашборд грузчиков 614",
-    icon: <img width={24} src="/images/fork-loader.png" alt="loader" />,
+    icon: <img width={24} src="/images/fork-loader.webp" alt="loader" />,
     element: <KnittingProcess />,
     permissions: ["view_page"],
     auth: true,

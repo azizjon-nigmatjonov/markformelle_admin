@@ -67,7 +67,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
     );
   }
   return (
-    <CCard classes="h-full" childClasses="h-full">
+    <div className="h-full">
       <div className="grid flex-col grid-flow-row-dense gap-y-2 h-full grid-rows-4">
         <div className="grid grid-flow-row-dense grid-cols-3 gap-2 row-span-2">
           {/* Big Card */}
@@ -83,12 +83,13 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                   <h2 className="main-title font-bold title-big">
                     {item.OBORUD_NUMBER}
                   </h2>
-                  <p className="main-sub-text-614">{item?.ART}</p>                                                                                                                                                                                                                                                                                                                                                         
-                  <p className="main-sub-text-614">{item?.LOT?.substring(0, item?.LOT?.indexOf('(') - 1)}</p>
-                  <p className="main-sub-text-614">{item.COUNT_RECORDS} рулон</p>
+                  <p className="text-lg">{item?.ART}</p>
+                  <p className="text-2xl">
+                    {item?.LOT?.substring(0, item?.LOT?.indexOf("(") - 1)}
+                  </p>
+                  <p className="text-2xl">{item.COUNT_RECORDS} рулон</p>
 
-                  <p className="main-sub-text-614 text-red-700">
-                    {" "}
+                  <p className="text-2xl text-red-700">
                     {item?.DATE_CONTROL_FOR_TIMER}
                   </p>
                 </div>
@@ -98,11 +99,13 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                   <h2 className="main-title font-bold title-big">
                     {item.OBORUD_NUMBER}
                   </h2>
-                  <p className="main-sub-text-614">{item?.ART}</p>
-                  <p className="main-sub-text-614">{item?.LOT?.substring(0, item?.LOT?.indexOf('(') - 1)}</p>
-                  <p className="main-sub-text-614">{item.COUNT_RECORDS} рулон</p>
+                  <p className="text-2xl">{item?.ART}</p>
+                  <p className="text-2xl">
+                    {item?.LOT?.substring(0, item?.LOT?.indexOf("(") - 1)}
+                  </p>
+                  <p className="text-2xl">{item.COUNT_RECORDS} рулон</p>
 
-                  <p className="main-sub-text-614 text-red-700">
+                  <p className="text-2xl text-red-700">
                     {item?.DATE_CONTROL_FOR_TIMER}
                   </p>
                 </div>
@@ -121,16 +124,16 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
               >
                 <div className="card frontofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
                   <div className="flex w-full flex-col items-center font-medium h-full justify-center">
-                    <h2 className="font-bold title mb-2">
+                    <h2 className="font-bold small_desktop:text-5xl mb-2">
                       {item.OBORUD_NUMBER}
                     </h2>
-                    <p className="sub-text-614">{item?.ART}</p>
-                    <p className="sub-text-614">{item?.LOT?.substring(0, item?.LOT?.indexOf('(') - 1)}</p>
-                    <p className="sub-text-614">
-                      {item.COUNT_RECORDS} рулон
+                    <p className="text-lg">{item?.ART}</p>
+                    <p className="text-lg">
+                      {item?.LOT?.substring(0, item?.LOT?.indexOf("(") - 1)}
                     </p>
+                    <p className="text-lg">{item.COUNT_RECORDS} рулон</p>
 
-                    <p className="sub-text-614 text-red-700">
+                    <p className="text-lg text-red-700">
                       {item?.DATE_CONTROL_FOR_TIMER}
                     </p>
                   </div>
@@ -140,12 +143,14 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                     <h2 className="font-bold small_desktop:text-5xl mb-2">
                       {item.OBORUD_NUMBER}
                     </h2>
-                    <p className="sub-text-614">{item?.ART}</p>
-                    <p className="sub-text-614">{item?.LOT?.substring(0, item?.LOT?.indexOf('(') - 1)}</p>
-                    <p className="sub-text-614 font-semibold">
+                    <p className="text-lg">{item?.ART}</p>
+                    <p className="text-lg">
+                      {item?.LOT?.substring(0, item?.LOT?.indexOf("(") - 1)}
+                    </p>
+                    <p className="text-lg font-semibold">
                       {item.COUNT_RECORDS} рулон
                     </p>
-                    <p className="sub-text-614 text-red-700">
+                    <p className="text-lg text-red-700">
                       {item?.DATE_CONTROL_FOR_TIMER}
                     </p>
                   </div>
@@ -157,7 +162,7 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
 
         {/* Last Row */}
         <div className="grid grid-cols-3 grid-rows-2 gap-2 row-span-2">
-          {newData.slice(4, 12).map((item: any) => (
+          {newData.slice(4, 10).map((item: any) => (
             <div
               key={item.OBORUD_NUMBER}
               className={`h-full card ${
@@ -166,16 +171,18 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
             >
               <div className="frontofcard bg-[#6cce65] rounded-xl flex items-center justify-center text-2xl h-full">
                 <div className="flex flex-col w-full items-center font-medium h-full justify-center">
-                  <h2 className="sub-title font-bold small_desktop:text-5xl mb-2">
+                  <h2 className="font-bold small_desktop:text-5xl mb-2">
                     {item.OBORUD_NUMBER}
                   </h2>
-                  <p className="sub-text-614">{item?.ART}</p>
-                  <p className="sub-text-614">{item?.LOT?.substring(0, item?.LOT?.indexOf('(') - 1)}</p>
-                  <p className="sub-text-614 font-semibold">
+                  <p className="text-lg">{item?.ART}</p>
+                  <p className="text-lg">
+                    {item?.LOT?.substring(0, item?.LOT?.indexOf("(") - 1)}
+                  </p>
+                  <p className="text-lg font-semibold">
                     {item.COUNT_RECORDS} рулон
                   </p>
 
-                  <p className="sub-text-614 text-red-700">
+                  <p className="text-lg text-red-700">
                     {item?.DATE_CONTROL_FOR_TIMER}
                   </p>
                 </div>
@@ -185,13 +192,15 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
                   <h2 className="font-bold small_desktop:text-5xl mb-2">
                     {item.OBORUD_NUMBER}
                   </h2>
-                  <p className="sub-text-614">{item?.ART}</p>
-                  <p className="sub-text-614">{item?.LOT?.substring(0, item?.LOT?.indexOf('(') - 1)}</p>
-                  <p className="sub-text-614 font-semibold">
+                  <p className="text-lg">{item?.ART}</p>
+                  <p className="text-lg">
+                    {item?.LOT?.substring(0, item?.LOT?.indexOf("(") - 1)}
+                  </p>
+                  <p className="text-lg font-semibold">
                     {item.COUNT_RECORDS} рулон
                   </p>
 
-                  <p className="sub-text-614 text-red-700">
+                  <p className="text-lg text-red-700">
                     {item?.DATE_CONTROL_FOR_TIMER}
                   </p>
                 </div>
@@ -200,6 +209,6 @@ export const FirstColumn = ({ data = [], isLoading = true }: Props) => {
           ))}
         </div>
       </div>
-    </CCard>
+    </div>
   );
 };
