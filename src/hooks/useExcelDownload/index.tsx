@@ -14,7 +14,7 @@ interface Props {
   disabled?: boolean;
   defaultExcelFields?: string[];
   type?: string;
-  label?: string;
+  label?: any;
 }
 
 const ExcelDownload = ({
@@ -100,9 +100,9 @@ const ExcelDownload = ({
               fill={disabled ? "var(--gray)" : "var(--main)"}
             />
           </div>
-          <span className="whitespace-nowrap ml-1 text-base font-medium text-[var(--black)]">
-            {t(label)}
-          </span>
+          <div className="whitespace-nowrap ml-1 text-[var(--black)]">
+            {label}
+          </div>
         </IconButton>
       </Tooltip>
 

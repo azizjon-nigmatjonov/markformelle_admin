@@ -1,11 +1,11 @@
 import { useState } from "react";
-import CNewTable from "../../../../components/CElements/CNewTable";
-import { PlusIcon } from "../../../../components/UI/IconGenerator/Svg";
+// import { PlusIcon } from "../../../../components/UI/IconGenerator/Svg";
 import { MaterialForm } from "./MaterialForm";
 import CNewMiniModal from "../../../../components/CElements/CNewMiniModal";
 import { TrailForm } from "./TrailForm";
 import { DetailForm } from "./DetailForm";
 import { TwoRowTable } from "./TableUI/TwoRowTable";
+import { TableUI } from "./TableUI/TableUI";
 
 const TrialList = [
   {
@@ -66,10 +66,6 @@ const DetailsList2 = [
 ];
 
 export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
-  const [filterParamsMaterial, setFilterParamsMaterial] = useState({
-    page: 1,
-    perPage: 100,
-  });
   const [trialTable, setTrailTable]: any = useState(TrialList);
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
   const [detailsTable, setDetailsTable] = useState(DetailsList);
@@ -137,10 +133,9 @@ export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-x-5 border rounded-[12px] border-[var(--border)] overflow-hidden">
+      <div className="grid grid-cols-3 border rounded-[12px] border-[var(--border)] h-[700px]">
         <div className="border-r border-[var(--border)]">
-          <CNewTable
-            title="Material"
+          <TableUI
             headColumns={[
               {
                 title: "Ham Adi",
@@ -154,31 +149,13 @@ export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
                 title: "Termin tarihi",
                 id: "1",
               },
+              {
+                title: "Termin tarihi",
+                id: "1",
+              },
             ]}
-            defaultFilters={["actions"]}
-            defaultActions={["delete", "edit"]}
-            idForTable="modal_table_material"
             bodyColumns={bodyList}
-            handleActions={handleActionsMaterial}
-            isLoading={false}
-            filterParams={filterParamsMaterial}
-            handleFilterParams={setFilterParamsMaterial}
-            disablePagination={true}
-            autoHeight={"400px"}
-            disabled={disabled}
-            animation={false}
-            extra={
-              <button
-                onClick={() => {
-                  if (disabled) return;
-                  setOpen("material");
-                }}
-                className="flex items-center"
-                type="button"
-              >
-                <PlusIcon fill={disabled ? "var(--gray)" : "var(--main)"} />
-              </button>
-            }
+            handleRowClick={handleActionsMaterial}
           />
         </div>
 
@@ -187,8 +164,8 @@ export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
         </div>
 
         <div className="border-l border-[var(--border)]">
-          <CNewTable
-            title="Details"
+          <TableUI
+            handleRowClick={handleActionsTrial}
             headColumns={[
               {
                 title: "Sira",
@@ -224,30 +201,7 @@ export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
                 id: "TURLAR",
               },
             ]}
-            defaultFilters={["actions"]}
-            idForTable="table_modal_details"
-            defaultActions={["delete", "edit"]}
             bodyColumns={detailsTable}
-            handleActions={handleActionsDetails}
-            isLoading={false}
-            filterParams={filterParams}
-            handleFilterParams={setFilterParams}
-            disablePagination={true}
-            autoHeight={"400px"}
-            animation={false}
-            disabled={disabled}
-            extra={
-              <button
-                onClick={() => {
-                  if (disabled) return;
-                  setOpen("detail");
-                }}
-                className="flex items-center"
-                type="button"
-              >
-                <PlusIcon fill={disabled ? "var(--gray)" : "var(--main)"} />
-              </button>
-            }
           />
         </div>
       </div>

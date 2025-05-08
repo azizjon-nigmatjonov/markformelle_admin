@@ -1,0 +1,12 @@
+.twoRowTable {
+    .header,
+    .body {
+        .cell {
+            min-width: 140px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+        }
+    }
+}

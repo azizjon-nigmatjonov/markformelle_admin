@@ -8,6 +8,8 @@ import { DeleteIcon, EditIcon } from "../../UI/IconGenerator/Svg";
 import CloseIcon from "@mui/icons-material/Close";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { PopoverDelete } from "../CNewTable/Details/Actions/EditDelete/PopOver";
+import { useDispatch, useSelector } from "react-redux";
+import { globalToolActions } from "../../../store/globalTools";
 
 interface Props {
   title?: string;
@@ -36,23 +38,20 @@ const CNewModal: FC<Props> = ({
   disabled = "",
 }) => {
   const [screen, setScreen] = useState(!disabled);
-  const [position, setPosition] = useState<{ x: number; y: number } | null>(
-    null
-  );
+  const position = useSelector((state: any) => state.globalTool.modal_position);
+  const dispatch = useDispatch();
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const modalRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!position && modalRef.current) {
-      setPosition(null);
-    }
-  }, [position]);
+  const handlePosition = (obj: any) => {
+    dispatch(globalToolActions.setModalPosition(obj));
+  };
 
   const handleScreen = () => {
     setScreen(!screen);
     if (screen) {
-      setPosition(null);
+      handlePosition(null);
     }
   };
 
@@ -63,7 +62,7 @@ const CNewModal: FC<Props> = ({
       const rect = modalRef.current.getBoundingClientRect();
 
       if (!position) {
-        setPosition({
+        handlePosition({
           x: rect.left,
           y: rect.top,
         });
@@ -80,7 +79,7 @@ const CNewModal: FC<Props> = ({
 
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging && position) {
-      setPosition({
+      handlePosition({
         x: e.clientX - dragOffset.x,
         y: e.clientY - dragOffset.y,
       });

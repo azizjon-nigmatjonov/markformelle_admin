@@ -141,7 +141,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
           </div>
         </div>
         <CollapseUI title="" disabled={true}>
-          <div className="space-y-5 h-[700px] overflow-y-scroll designed-scroll">
+          <div className="space-y-5 h-[800px] overflow-y-scroll designed-scroll">
             <div className="flex justify-between space-x-4">
               <div className="w-full grid grid-cols-3 gap-y-3 gap-x-5">
                 <div className="space-y-2">
