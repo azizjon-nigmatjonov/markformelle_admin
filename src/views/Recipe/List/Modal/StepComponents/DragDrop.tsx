@@ -6,6 +6,7 @@ import { ImageViewer } from "../../../../../components/UI/ImageViewer";
 import { useTranslation } from "react-i18next";
 import { StepModal } from "./StepModal";
 import {
+  CheckLine,
   CloseIcon,
   DeleteIcon,
   EditIcon,
@@ -17,7 +18,7 @@ import toast from "react-hot-toast";
 import { playSound } from "../../../../../utils/playAudio";
 import { CardModal } from "./CardModal";
 import ExcelDownload from "../../../../../hooks/useExcelDownload";
-import { Tooltip } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import { TooltipPosition } from "../../../../../constants/toolPosition";
 import {
   CheckMultipleIcon,
@@ -52,6 +53,9 @@ export const DragDrop = ({
   const [askClear, setAskClear] = useState(false);
   const [askDelete, setAskDelete] = useState(false);
   const [checkedList, setCheckedList]: any = useState([]);
+  const [deleteCard, setDeleteCard] = useState(null);
+  const [deleteCardActive, setDeleteCardActive] = useState(false);
+
   const onSubmit = () => {
     console.log("save");
     setEditStep(false);
@@ -160,7 +164,7 @@ export const DragDrop = ({
   };
 
   return (
-    <div className="cdraganddrop">
+    <div className="cdraganddrop text-sm">
       <div className="flex justify-end items-center mb-1 pb-2 border-b">
         <div className="flex space-x-8 items-center font-medium">
           <div>
@@ -171,7 +175,9 @@ export const DragDrop = ({
               defaultExcelFields={Fields}
               disabled={false}
               type="directly"
-              label="download_excel"
+              label={
+                <span className="text-sm uppercase">{t("download_excel")}</span>
+              }
             />
           </div>
           <Tooltip
@@ -179,10 +185,10 @@ export const DragDrop = ({
             arrow
             slotProps={TooltipPosition}
           >
-            <button
+            <Button
               onClick={() => handleDelete()}
               type="button"
-              className={`flex items-center space-x-1 ${
+              className={`flex items-center space-x-2 ${
                 checkedList.length ? "text-[var(--error)]" : ""
               }`}
             >
@@ -194,7 +200,7 @@ export const DragDrop = ({
                 <CheckMultipleIcon width={23} fill="var(--main)" />
               )}
 
-              <span>
+              <span className="text-[var(--black)]">
                 {t(
                   checkedList.length
                     ? "delete_elements"
@@ -203,29 +209,52 @@ export const DragDrop = ({
                     : "select_delete"
                 )}
               </span>
-            </button>
+            </Button>
           </Tooltip>
+
+          <Tooltip title={t("delete_card")} arrow slotProps={TooltipPosition}>
+            <Button
+              onClick={() => setDeleteCardActive(!deleteCardActive)}
+              type="button"
+              className={`flex items-center space-x-2`}
+            >
+              <div
+                onClick={() => {}}
+                className={`w-[18px] h-[18px] border-[1.5px] border-[var(--main)] rounded-[4px] hover:cursor-pointer flex items-center justify-center`}
+              >
+                <div className="w-[18px]">
+                  {deleteCardActive && <CheckLine fill="var(--main)" />}
+                </div>
+              </div>
+              <span className="text-[var(--black)]">{t("delete_card")}</span>
+            </Button>
+          </Tooltip>
+
           <Tooltip
             title={t(editStep ? "cancel_changes" : "edit")}
             arrow
             slotProps={TooltipPosition}
           >
-            <button
+            <Button
               onClick={() => clearChanges()}
               type="button"
-              className={`flex items-center space-x-1 ${
-                editStep ? "text-[var(--error)]" : ""
-              } `}
+              className={`flex items-center space-x-2`}
             >
               {editStep ? (
-                <CloseIcon width={22} fill="red" />
+                <CloseIcon width={22} fill="black" />
               ) : (
                 <EditIcon width={20} fill="var(--main)" />
               )}
-              <span>
-                {t(changed ? "cancel_changes" : editStep ? "cancel" : "edit")}
+              <span className="text-[var(--black)]">
+                {t(
+                  changed
+                    ? "cancel_changes"
+                    : editStep
+                    ? "cancel_order"
+                    : "edit_order"
+                )}
               </span>
-            </button>
+            </Button>
           </Tooltip>
 
           <Tooltip
@@ -233,13 +262,13 @@ export const DragDrop = ({
             arrow
             slotProps={TooltipPosition}
           >
-            <button
+            <Button
               onClick={() => {
                 if (editStep && changed) setSaveData(true);
               }}
               disabled={!editStep && !changed}
               type="button"
-              className={`flex items-center space-x-1 ${
+              className={`flex items-center space-x-2 ${
                 editStep && changed ? "text-[var(--main)]" : "disabled"
               }`}
             >
@@ -247,8 +276,8 @@ export const DragDrop = ({
                 width={24}
                 fill={editStep && changed ? "var(--main)" : "var(--gray)"}
               />
-              <span>{t("save")}</span>
-            </button>
+              <span className="text-[var(--black)]">{t("save")}</span>
+            </Button>
           </Tooltip>
         </div>
       </div>
@@ -263,6 +292,8 @@ export const DragDrop = ({
         headColumns={headColumns}
         checkedList={checkedList}
         handleCheck={handleCheck}
+        setDeleteCard={setDeleteCard}
+        deleteCardActive={deleteCardActive}
         setInitialModalData={setInitialModalData}
       />
       <ImageViewer url={imageView} closeViewer={() => setImageView("")} />
@@ -411,6 +442,43 @@ export const DragDrop = ({
               setAskAction("");
               setChanged("");
               clearSelect();
+            }}
+          >
+            {t("yes")}
+          </button>
+        </div>
+      </CModal>
+
+      <CModal
+        open={!!deleteCard}
+        handleClose={() => {
+          setDeleteCard(null);
+        }}
+        footerActive={false}
+      >
+        <p className="text-[var(--black)] text-2xl font-medium">
+          Вы точно хотите удалить этот данных?
+        </p>
+
+        <p className="text-[var(--error)] text-lg mt-3">
+          Это изменение повлияет на производительность машины!
+        </p>
+
+        <div className="grid gap-2 grid-cols-2 mt-8">
+          <button
+            className="cancel-btn"
+            onClick={() => {
+              setDeleteCard(null);
+            }}
+          >
+            {t("no")}
+          </button>
+          <button
+            className="custom-btn"
+            onClick={() => {
+              toast.success(t("deleted!"));
+              playSound("/notif.wav");
+              setDeleteCard(null);
             }}
           >
             {t("yes")}

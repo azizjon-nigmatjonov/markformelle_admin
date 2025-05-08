@@ -2,18 +2,22 @@ import { useEffect, useRef, useState } from "react";
 import ScrollView from "./ScrollView";
 import AddIcon from "@mui/icons-material/Add";
 import { CardHeader } from "./CardHeader";
+import { DeleteIcon } from "../../../../../components/UI/IconGenerator/Svg";
+import { Button } from "@mui/material";
 interface Props {
   items: any;
   oldValues: any;
   headColumns: any;
   setItems: (val: any) => void;
   editStep: any;
+  deleteCardActive: boolean;
   deleteStep: boolean;
   setChanged: (val: string) => void;
   setImageView: (val: string) => void;
   setInitialModalData: (val: any) => void;
   checkedList: any;
   handleCheck: (val: any) => void;
+  setDeleteCard: (val: any) => void;
 }
 
 export const StepCard = ({
@@ -23,10 +27,12 @@ export const StepCard = ({
   setItems = () => {},
   deleteStep = false,
   editStep = false,
+  deleteCardActive = false,
   setChanged = () => {},
   setImageView = () => {},
   checkedList = [],
   handleCheck = () => {},
+  setDeleteCard = () => {},
   setInitialModalData = () => {},
 }: Props) => {
   const [draggingIndex, setDraggingIndex]: any = useState(null);
@@ -35,8 +41,7 @@ export const StepCard = ({
   const [hoveredIndexStep, setHoveredIndexStep] = useState<number | null | any>(
     null
   );
-  const timeoutRef = useRef<number | null>(null);
-  const [hoverAdd, setHoverAdd] = useState(999);
+
   const headerScrollRef: any = useRef(null);
   const [currentScroll, setCurrentScroll] = useState(0);
   const [maxScroll, setMaxScroll] = useState(0);
@@ -134,20 +139,6 @@ export const StepCard = ({
     setInitialModalData({ ...item, index, outerIndex });
   };
 
-  const handleMouseEnter = (ind: number) => {
-    timeoutRef.current = window.setTimeout(() => {
-      setHoverAdd(ind);
-    }, 300);
-  };
-
-  const handleMouseLeave = () => {
-    if (timeoutRef.current !== null) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
-    setHoverAdd(999);
-  };
-
   const handleAddCard = (outerIndex: number) => {
     setInitialModalData({ outerIndex, type: "card_add" });
   };
@@ -190,9 +181,6 @@ export const StepCard = ({
               hoveredIndexStep={hoveredIndexStep}
               hoveredIndex={hoveredIndex}
               outerIndex={outerIndex}
-              hoverAdd={hoverAdd}
-              handleMouseEnter={handleMouseEnter}
-              handleMouseLeave={handleMouseLeave}
               draggingIndexStep={draggingIndexStep}
               handleDragLeaveStep={handleDragLeaveStep}
               handleAdd={handleAdd}
@@ -208,7 +196,7 @@ export const StepCard = ({
               handleCheck={handleCheck}
             />
           </div>
-          <div>
+          <div className="relative">
             <div className="sticky top-[40px] flex flex-col items-center">
               <h1 className="text-6xl font-semibold text-center">{row.id}</h1>
               <div
@@ -222,20 +210,31 @@ export const StepCard = ({
                   loading="lazy"
                 />
               </div>
+              {deleteCardActive && (
+                <div className="absolute right-2 top-1">
+                  <Button type="button" onClick={() => setDeleteCard(row.id)}>
+                    <DeleteIcon width={26} />
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
-          <div
-            onClick={() => handleAddCard(outerIndex)}
-            className="bottom-[-12px] left-0 w-full h-[18px] group absolute"
-          >
-            <button
-              type="button"
-              onClick={() => {}}
-              className={`hidden group-hover:flex absolute z-[1] left-1/2 w-[20px] h-[20px] bottom-[-3px]  items-center justify-center bg-[var(--primary)] rounded-[4px]`}
+          {!editStep && (
+            <div
+              onClick={() => handleAddCard(outerIndex)}
+              className="bottom-[-16px] left-0 w-full h-[18px] group absolute flex items-center justify-around"
             >
-              <AddIcon style={{ color: "white", fontSize: "24px" }} />
-            </button>
-          </div>
+              <div className="hidden group-hover:flex bg-[var(--primary)] h-[4px] w-[48%] mt-1.5 rounded-full"></div>
+              <button
+                type="button"
+                onClick={() => {}}
+                className={`hidden group-hover:flex absolute z-[1] left-1/2 w-[20px] h-[20px] bottom-[-3px]  items-center justify-center bg-[var(--primary)] rounded-[4px]`}
+              >
+                <AddIcon style={{ color: "white", fontSize: "24px" }} />
+              </button>
+              <div className="hidden group-hover:flex bg-[var(--primary)] h-[4px] w-[46.86%] mt-1.5 rounded-full"></div>
+            </div>
+          )}
         </div>
       ))}
     </div>

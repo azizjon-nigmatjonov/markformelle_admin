@@ -15,12 +15,9 @@ interface Props {
   handleDropSteps: (innerIndex: number, outerIndex: number) => void;
   handleDragLeaveStep: () => void;
   setInitialModalData: (data: any) => void;
-  handleMouseEnter: (ind: number) => void;
-  handleMouseLeave: () => void;
   handleAdd: (ind: number, outInd: number, item: any) => void;
   setMaxScroll: (val: number) => void;
   setCurrentScroll: (val: number) => void;
-  hoverAdd: number;
   headerScrollRef: any;
   currentScroll: number;
   scrollInterval: any;
@@ -43,10 +40,7 @@ const ScrollView = ({
   handleDropSteps,
   handleDragLeaveStep,
   setInitialModalData,
-  handleMouseEnter,
-  handleMouseLeave,
   handleAdd,
-  hoverAdd,
   currentScroll,
   setCurrentScroll = () => {},
   headerScrollRef,
@@ -101,7 +95,7 @@ const ScrollView = ({
     <div className="group relative">
       <div
         ref={ScrollBody}
-        className="flex items-start overflow-x-scroll remove-scroll py-2 pl-5"
+        className="flex items-start overflow-x-scroll remove-scroll py-2 pb-3 pl-5"
       >
         <div className="body">
           <DragingEl
@@ -115,9 +109,6 @@ const ScrollView = ({
             hoveredIndexStep={hoveredIndexStep}
             hoveredIndex={hoveredIndex}
             outerIndex={outerIndex}
-            hoverAdd={hoverAdd}
-            handleMouseEnter={handleMouseEnter}
-            handleMouseLeave={handleMouseLeave}
             draggingIndexStep={draggingIndexStep}
             handleDragLeaveStep={handleDragLeaveStep}
             handleAdd={handleAdd}

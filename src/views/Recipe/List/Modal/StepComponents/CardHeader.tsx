@@ -13,7 +13,7 @@ export const CardHeader = ({ headerScrollRef, headColumns = [] }: Props) => {
         className="header col-span-2 mr-5 pl-4 overflow-x-scroll remove-scroll"
         ref={headerScrollRef}
       >
-        <div className="flex px-1 text-sm">
+        <div className="flex px-1">
           {headColumns.map((head: { id: string; title: string }) => (
             <div key={head.id + head.title} className="cell">
               <p>{head.title}</p>
