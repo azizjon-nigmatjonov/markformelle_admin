@@ -18,15 +18,16 @@ export const RollsKK = () => {
   });
 
   const newData = useMemo(() => {
-    return data?.dashboard_data?.map((item: any) => {
+    return (
+      data?.dashboard_data?.map((item: any) => {
+        return {
+          ...item,
+          DATE_KNIT: GetCurrentDate({ date: item.DATE_KNIT, type: "usually" }),
+        };
+      }) ?? []
+    );
+  }, [data]);
 
-      return {
-        ...item,
-        DATE_KNIT: GetCurrentDate({ date: item.DATE_KNIT, type: 'usually' })
-      }
-    }) ?? []
-  }, [data])
-  
   useEffect(() => {
     setList(newData ?? []);
   }, [newData]);
@@ -56,7 +57,7 @@ export const RollsKK = () => {
           <CBreadcrumbs items={breadCrumbs} progmatic={true} type="link" />
         }
       >
-        <div className="mx-3">
+        <div className="mx-2">
           <GlobalSearch list={newData ?? []} setList={setList} />
         </div>
       </Header>

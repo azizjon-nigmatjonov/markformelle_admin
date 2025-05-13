@@ -34,7 +34,8 @@ export const Header = ({
 }: Props) => {
   const ipodScreen = useScreenSize("ipod");
   const collapsed = useSelector((state: any) => state.sidebar.collapsed);
-  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
+  const openHeader =
+    useSelector((state: any) => state.sidebar.openHeader) ?? open;
   const dispatch = useDispatch();
   const wideSidebar = useSelector((state: any) => state.sidebar.wideSidebar);
   const setCollapsed = (val: boolean) => {
@@ -52,13 +53,10 @@ export const Header = ({
       }`}
     >
       <div className="fixed z-[96]">
-        <HeaderFoldButton
-          collapsed={open || openHeader}
-          setCollapsed={setCollapsed}
-        />
+        <HeaderFoldButton collapsed={openHeader} setCollapsed={setCollapsed} />
         <div
           className={`h-[45px] desktop:h-[45px] relative z-[98] bg-white w-full duration-300 ${
-            openHeader || open ? "" : "hidden"
+            openHeader ? "" : "hidden"
           }`}
         >
           <div

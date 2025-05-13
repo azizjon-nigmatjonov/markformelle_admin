@@ -1,11 +1,13 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import "../style.scss";
-import {
-  ArrowDownOutline,
-  CloseIcon,
-} from "../../../../components/UI/IconGenerator/Svg";
+// import {
+//   ArrowDownOutline,
+//   CloseIcon,
+// } from "../../../../components/UI/IconGenerator/Svg";
 // import { MaskInputUI } from "../../../HFElements/HFInputMask";
 import InputMask from "react-input-mask";
+import ManageSearchIcon from "@mui/icons-material/ManageSearch";
+// import { CloseIcon } from "../../../UI/IconGenerator/Svg";
 
 interface Props {
   open: boolean;
@@ -17,14 +19,14 @@ interface Props {
 }
 
 export const PeriodTextField = ({
-  open = false,
+  // open = false,
   value,
   handleDropdown,
   setOpen,
   setValue,
 }: Props) => {
-  const firstInput: any = useRef(null);
-  const secondInput: any = useRef(null);
+  // const firstInput: any = useRef(null);
+  // const secondInput: any = useRef(null);
 
   const handleChange = (index: number, e: any) => {
     const newValue = [...value];
@@ -61,6 +63,22 @@ export const PeriodTextField = ({
 
   return (
     <div className="z-20 relative flex items-center h-[30px] border border-[var(--border)] rounded-[8px] w-full px-2">
+      <button onClick={() => setOpen(true)}>
+        <ManageSearchIcon style={{ color: "var(--black)" }} />
+      </button>{" "}
+      {/* <div
+        className={`flex items-center justify-center cursor-pointer w-[30px] h-full ${
+          open ? "rotate-[180deg]" : ""
+        }`}
+        onClick={() => {
+          setValue([]);
+          handleDropdown([]);
+          firstInput.current.value = "";
+          secondInput.current.value = "";
+        }}
+      >
+        <CloseIcon />
+      </div> */}
       <div className="relative h-[30px] space-x-2 flex items-center w-full">
         <InputMask
           mask="99.99.9999"
@@ -80,7 +98,7 @@ export const PeriodTextField = ({
           style={{ width: "80px" }}
         />
       </div>
-      <div className="h-full">
+      {/* <div className="h-full">
         {value?.[0]?.length === 10 && value?.[1]?.length === 10 ? (
           <div
             className={`flex items-center justify-center cursor-pointer w-[30px] h-full ${
@@ -105,7 +123,7 @@ export const PeriodTextField = ({
             <ArrowDownOutline />
           </div>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

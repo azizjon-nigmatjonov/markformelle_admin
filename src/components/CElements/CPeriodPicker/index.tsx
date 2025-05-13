@@ -27,6 +27,7 @@ export const CPeriodPicker = ({
   return (
     <div className="flex flex-col relative w-full" ref={datePickerRef}>
       {label && <CLabel title={label} />}
+
       <PeriodTextField
         value={value}
         open={open}

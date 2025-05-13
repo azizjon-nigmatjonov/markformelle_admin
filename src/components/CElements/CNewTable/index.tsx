@@ -682,6 +682,7 @@ const CNewTable = ({
             defaultSearch={defaultSearch}
             handleKeyDown={handleKeyDown}
           />
+
           <div
             className={`w-full overflow-x-scroll designed-scroll ${
               sideFilter ? "" : "pl-5"

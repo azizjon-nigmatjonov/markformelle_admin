@@ -1,7 +1,6 @@
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import CLabel from "../CLabel";
-import { ArrowDownOutline } from "../../../components/UI/IconGenerator/Svg";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -68,13 +67,13 @@ const CSelect = ({
               )}
             </Select>
           </div>
-          <div
+          {/* <div
             className={`absolute right-12px top-1/2 -translate-y-1/2 ${
               open ? "rotate-[180deg]" : ""
             }`}
           >
             <ArrowDownOutline width={15} />
-          </div>
+          </div> */}
         </div>
         {placeholder &&
         !currentValue &&
