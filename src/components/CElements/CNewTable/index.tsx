@@ -25,7 +25,6 @@ import CheckIcon from "@mui/icons-material/Check";
 import { GetCurrentDate } from "../../../utils/getDate";
 import usePageRouter from "../../../hooks/useObjectRouter";
 import { translateActions } from "../../../store/translation/translate.slice";
-
 import {
   areAllRowsSelectedOnPage,
   toggleRowGroupSelection,
