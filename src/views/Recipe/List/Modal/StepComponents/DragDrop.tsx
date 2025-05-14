@@ -185,7 +185,7 @@ export const DragDrop = ({
             arrow
             slotProps={TooltipPosition}
           >
-            <Button
+            <button
               onClick={() => handleDelete()}
               type="button"
               className={`flex items-center space-x-2 ${
@@ -209,25 +209,25 @@ export const DragDrop = ({
                     : "select_delete"
                 )}
               </span>
-            </Button>
+            </button>
           </Tooltip>
 
           <Tooltip title={t("delete_card")} arrow slotProps={TooltipPosition}>
-            <Button
+            <button
               onClick={() => setDeleteCardActive(!deleteCardActive)}
               type="button"
               className={`flex items-center space-x-2`}
             >
               <div
                 onClick={() => {}}
-                className={`w-[18px] h-[18px] border-[1.5px] border-[var(--main)] rounded-[4px] hover:cursor-pointer flex items-center justify-center`}
+                className={`w-[17px] h-[17px] border-[1.5px] border-[var(--main)] rounded-[4px] hover:cursor-pointer flex items-center justify-center`}
               >
                 <div className="w-[18px]">
                   {deleteCardActive && <CheckLine fill="var(--main)" />}
                 </div>
               </div>
               <span className="text-[var(--black)]">{t("delete_card")}</span>
-            </Button>
+            </button>
           </Tooltip>
 
           <Tooltip
@@ -235,7 +235,7 @@ export const DragDrop = ({
             arrow
             slotProps={TooltipPosition}
           >
-            <Button
+            <button
               onClick={() => clearChanges()}
               type="button"
               className={`flex items-center space-x-2`}
@@ -243,7 +243,7 @@ export const DragDrop = ({
               {editStep ? (
                 <CloseIcon width={22} fill="black" />
               ) : (
-                <EditIcon width={20} fill="var(--main)" />
+                <EditIcon width={18} fill="var(--main)" />
               )}
               <span className="text-[var(--black)]">
                 {t(
@@ -254,7 +254,7 @@ export const DragDrop = ({
                     : "edit_order"
                 )}
               </span>
-            </Button>
+            </button>
           </Tooltip>
 
           <Tooltip
@@ -262,7 +262,7 @@ export const DragDrop = ({
             arrow
             slotProps={TooltipPosition}
           >
-            <Button
+            <button
               onClick={() => {
                 if (editStep && changed) setSaveData(true);
               }}
@@ -277,7 +277,7 @@ export const DragDrop = ({
                 fill={editStep && changed ? "var(--main)" : "var(--gray)"}
               />
               <span className="text-[var(--black)]">{t("save")}</span>
-            </Button>
+            </button>
           </Tooltip>
         </div>
       </div>
