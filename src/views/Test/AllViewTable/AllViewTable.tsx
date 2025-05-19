@@ -25,20 +25,17 @@ export const AllViewTable = () => {
   const handleActions = () => {};
 
   return (
-    <div>
-      {" "}
-      <CCard>
-        <CTable
-          headColumns={headColumns}
-          bodyColumns={bodyColumns}
-          isResizeble={true}
-          handleActions={handleActions}
-          isLoading={false}
-          filterParams={filterParams}
-          tableSetting={false}
-          handleFilterParams={setFilterParams}
-        />
-      </CCard>
-    </div>
+    <CCard>
+      <CTable
+        headColumns={headColumns}
+        bodyColumns={bodyColumns}
+        isResizeble={true}
+        handleActions={handleActions}
+        isLoading={false}
+        filterParams={filterParams}
+        tableSetting={false}
+        handleFilterParams={setFilterParams}
+      />
+    </CCard>
   );
 };
