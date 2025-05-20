@@ -330,6 +330,7 @@ export const HeaderSettings = ({
               <Tooltip
                 title="Выберите строки для удаления"
                 arrow
+                placement="right"
                 slotProps={TooltipPosition}
               >
                 <div className="relative">

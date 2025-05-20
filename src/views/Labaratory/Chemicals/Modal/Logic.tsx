@@ -11,17 +11,17 @@ export const ModalTableLogic = ({
   urunId,
   filterParams,
 }: {
-  urunId?: string;
+  urunId?: number | string;
   filterParams: IFilterParams;
-  setFormId: (val: string) => void;
+  setFormId: (val: number) => void;
 }) => {
   const { t } = useTranslationHook();
   const [bodyData, setBodyData]: any = useState({});
 
   const { data: formData, refetch } = useQuery(
-    ["GET_URUN_DATA_FORM", urunId],
+    ["GET_LAB_RECEETE_FORM", urunId],
     () => {
-      return axios.get(`${API_URL}/urun/${urunId}`);
+      return axios.get(`${API_URL}/labrecete/${urunId}`);
     },
     {
       enabled: !!urunId,
@@ -57,9 +57,9 @@ export const ModalTableLogic = ({
 
   const createForm = async (params: {}) => {
     try {
-      const { data } = await axios.post(`${API_URL}/urun/`, params);
+      const { data } = await axios.post(`${API_URL}/labrecete/`, params);
 
-      setFormId(data?.URUNID);
+      setFormId(data?.LABRECETEID);
       return data;
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
@@ -68,7 +68,7 @@ export const ModalTableLogic = ({
     }
   };
 
-  const updateForm = async (params: {}, id: string) => {
+  const updateForm = async (params: {}, id: number) => {
     try {
       const { data } = await axios.put(`${API_URL}/urun/${id}`, params);
       refetch();

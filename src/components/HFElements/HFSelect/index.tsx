@@ -153,18 +153,26 @@ const HFSelect = ({
               error
             >
               <div className="relative">
-                <SelectUI
-                  options={options}
-                  optionType={optionType}
-                  onChange={onChange}
-                  placeholder={placeholder}
-                  onFormChange={onFormChange}
-                  value={value}
-                  handleClick={handleClick}
-                  defaultValue={defaultValue}
-                  disabled={disabled}
-                  props={props}
-                />
+                {options.length ? (
+                  <SelectUI
+                    options={options}
+                    optionType={optionType}
+                    onChange={onChange}
+                    placeholder={placeholder}
+                    onFormChange={onFormChange}
+                    value={value}
+                    handleClick={handleClick}
+                    defaultValue={defaultValue}
+                    disabled={disabled}
+                    props={props}
+                  />
+                ) : (
+                  <input
+                    className="h-[30px] text-[14px] text-[var(--black)] rounded-[8px] px-2 w-full border border-[var(--border)]"
+                    value={value}
+                    readOnly
+                  ></input>
+                )}
                 {value && clear ? (
                   <button
                     onClick={() => onFormChange("")}

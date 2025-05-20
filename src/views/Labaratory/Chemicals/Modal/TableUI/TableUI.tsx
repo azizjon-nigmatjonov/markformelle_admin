@@ -36,7 +36,7 @@ export const TableUI = ({
             {headColumns.map((head: { id: string; title: string }) => (
               <div
                 key={head.id + head.title}
-                className={`${cls.cell} border-b border-[var(--border)]`}
+                className={`${cls.cell} font-medium border-b border-[var(--border)]`}
               >
                 <p>{item[head.id]}</p>
               </div>

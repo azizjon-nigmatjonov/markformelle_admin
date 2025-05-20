@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-const API_URL = import.meta.env.VITE_TEST_URL;
+import { API_URL } from "../../utils/env";
 interface IGetBirimList {
   enabled?: string;
 }

@@ -9,7 +9,7 @@ import {
   CTableBody,
 } from "./Details";
 import { HeaderSettings } from "./Details/TableSettings";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import TabbleActions from "./Details/Actions";
 import { t } from "i18next";
@@ -108,7 +108,6 @@ const CNewTable = ({
   const dispatch = useDispatch();
   const [effect, setEffect] = useState<number[]>([]);
   const { checkPermission } = usePermissions();
-  const tableRef: any = useRef(null);
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
   const [searchedElements, setSearchedElements] = useState({
     ...defaultSearch,
@@ -547,6 +546,7 @@ const CNewTable = ({
 
     if (status === "sellect_more_active") {
       setOpenSelect((prev: boolean) => !prev);
+      setSelectedItems([]);
     }
 
     if (status === "delete_multiple") {
@@ -566,9 +566,8 @@ const CNewTable = ({
       return;
     }
 
-    if (status === "delete" || status === "delete_multiple") {
+    if (status === "delete" || status === "delete_multiple")
       handleSortLogic({ value: "clear" });
-    }
 
     handleActions(el, status);
   };
@@ -596,6 +595,7 @@ const CNewTable = ({
     if (e.key === "Escape") {
       setSelectedItems([]);
       setOpenSelect(false);
+      setSelectedItems([]);
     }
 
     if (e.key === "Enter" && Object.values(searchedElements)?.[0]) {
@@ -627,6 +627,7 @@ const CNewTable = ({
     const handleKeyDown = (event: any) => {
       if (event.key === "Escape") {
         setOpenSelect(false);
+        setSelectedItems([]);
       }
     };
 
@@ -661,8 +662,7 @@ const CNewTable = ({
         )}
         <div
           id="table"
-          className={`flex h-full`}
-          ref={tableRef}
+          className="flex h-full overflow-scroll designed-scroll"
           style={{
             height: autoHeight
               ? autoHeight
@@ -682,11 +682,7 @@ const CNewTable = ({
             handleKeyDown={handleKeyDown}
           />
 
-          <div
-            className={`w-full overflow-x-scroll designed-scroll ${
-              sideFilter ? "" : "pl-5"
-            }`}
-          >
+          <div className={`w-full ${sideFilter ? "" : "pl-5"}`}>
             <CTableWrapper
               count={meta.pageCount}
               totalCount={meta.totalCount}

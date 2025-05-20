@@ -3,6 +3,7 @@ import { useTranslationHook } from "../../../hooks/useTranslation";
 import { IModalForm, ModalTypes } from "./interfaces";
 import { Validation } from "./Validation";
 import { useForm } from "react-hook-form";
+import HFTextField from "../../../components/HFElements/HFTextField";
 import { InputFieldUI } from "../../../components/UI/FieldUI";
 import { useEffect, useState } from "react";
 import { SelectOptionsTable } from "../../../components/UI/Options/Table";
@@ -12,7 +13,6 @@ import { CollapseUI } from "../../../components/CElements/CCollapse";
 import CNewTable from "../../../components/CElements/CNewTable";
 import { ModalTableLogic } from "./Logic";
 import { TableForm } from "./TableForm";
-import HFTextField from "../../../components/HFElements/HFTextField";
 import dayjs from "dayjs";
 
 interface ModalUIProps {

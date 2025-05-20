@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { StokeDeteyContantList } from "../../../../../constants/stokedetey";
-
 import { ImageViewer } from "../../../../../components/UI/ImageViewer";
-
 import { useTranslation } from "react-i18next";
 import { StepModal } from "./StepModal";
 import {

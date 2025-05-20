@@ -5159,6 +5159,10 @@ export const PantoneColors: any = {
     name: "princess-blue",
     hex: "00539c",
   },
+  "19-4111": {
+    name: "blue-velvet",
+    hex: "1F2C43",
+  },
   "18-3949": {
     name: "dazzling-blue",
     hex: "3850a0",

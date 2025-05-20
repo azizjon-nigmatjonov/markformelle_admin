@@ -28,72 +28,23 @@ export const LabChemicals = () => {
     const keys = Object.keys(obj);
     const newColumns: any = [
       {
-        title: "RECETE KODU",
-        id: "URUNID",
-      },
-      {
-        title: "RECETE AD",
-        id: "ADI",
-      },
-      {
-        title: "FIMRA KODU",
-        id: "MUTFAKDEPONO",
-      },
-      {
-        title: "PANTONE KODU",
-        id: "PANTONE",
-        render: () => {
-          const value = "TCX 16-5123";
+        title: "PANTONEKODU",
+        id: "PANTONEKODU",
+        width: 200,
+        render: (value: string) => {
           return (
             <div className="flex space-x-2 items-center">
-              <p>{value}</p>
+              <p className="min-w-[100px]">{value}</p>
               <div
                 className={`w-[70px] h-[25px] rounded-[8px]`}
                 style={{
                   backgroundColor:
-                    "#" + PantoneColors[value.substring(4, 11)]?.hex,
+                    "#" + PantoneColors[value?.substring(4, 11)]?.hex,
                 }}
               ></div>
             </div>
           );
         },
-      },
-      {
-        title: "FIRMA AD",
-        id: "UNITEADI",
-      },
-      {
-        title: "TALEP TARIHI",
-        id: "URUNTIPIADI",
-      },
-      {
-        title: "LAB RECETE GRUP",
-        id: "BOYATIPIADI",
-      },
-      {
-        title: "RENK GRUP",
-        id: "KULLANICIADI",
-      },
-      {
-        title: "SABS TIPI",
-        id: "INSERTTARIHI",
-      },
-      {
-        title: "ESKI LAB RECETE KODU",
-        id: "INSERKULLANICIADI",
-      },
-
-      {
-        title: "RECETE TURU",
-        id: "DEGISIMTARIHI",
-      },
-      {
-        title: "HAD ADI",
-        id: "SONALISSTOKDETAYID",
-      },
-      {
-        title: "ILK HAYDEDEN KULLANUCI",
-        id: "BARKOD",
       },
     ];
 
@@ -118,7 +69,7 @@ export const LabChemicals = () => {
       setOpen(true);
 
       setModalInitialData({
-        URUNID: el?.URUNID,
+        LABRECETEID: el?.LABRECETEID,
       });
     }
 
@@ -127,13 +78,13 @@ export const LabChemicals = () => {
     }
 
     if (status === "delete") {
-      deleteFn([el.URUNID]);
+      deleteFn([el.LABRECETEID]);
       setFilterParams({ page: 0, perPage: 50 });
     }
     if (status === "delete_multiple") {
       deleteFn(
-        el.map((item: { URUNID: string }) => {
-          return item.URUNID;
+        el.map((item: { LABRECETEID: string }) => {
+          return item.LABRECETEID;
         })
       );
       setFilterParams({ page: 0, perPage: 50 });
@@ -186,11 +137,13 @@ export const LabChemicals = () => {
       {open && (
         <CNewModal
           title={t(
-            modalInitialData.URUNID ? "updating_chemical" : "creating_chemical"
+            modalInitialData.LABRECETEID
+              ? "updating_chemical"
+              : "creating_chemical"
           )}
           handleActions={handleModalActions}
           defaultData={{
-            id: modalInitialData?.URUNID,
+            id: modalInitialData?.LABRECETEID,
           }}
           disabled="big"
         >
