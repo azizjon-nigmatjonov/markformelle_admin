@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { CollapseUI } from "../../../../components/CElements/CCollapse";
-import { IModalForm, ModalTypes } from "../interfaces";
+import { ModalTypes } from "../interfaces";
 import { useTranslationHook } from "../../../../hooks/useTranslation";
 import { InputFieldUI } from "../../../../components/UI/FieldUI";
 import { SelectOptionsTable } from "../../../../components/UI/Options/Table";

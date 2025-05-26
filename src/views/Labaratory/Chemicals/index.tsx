@@ -5,7 +5,6 @@ import { Header } from "../../../components/UI/Header";
 import CNewTable from "../../../components/CElements/CNewTable";
 import { IFilterParams } from "../../../interfaces";
 import { useTranslationHook } from "../../../hooks/useTranslation";
-import CNewModal from "../../../components/CElements/CNewModal";
 import { ModalUI } from "./Modal";
 import { ModalTypes } from "./interfaces";
 import { PantoneColors } from "../../../constants/pantone";
