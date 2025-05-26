@@ -17,16 +17,21 @@ export const ModalTableLogic = ({
 }) => {
   const { t } = useTranslationHook();
   const [bodyData, setBodyData]: any = useState({});
+  const [formData, setFormData]: any = useState({});
 
-  const { data: formData, refetch } = useQuery(
-    ["GET_LAB_RECEETE_FORM", urunId],
-    () => {
-      return axios.get(`${API_URL}/labrecete/${urunId}`);
-    },
-    {
-      enabled: !!urunId,
+  const refetch = () => {
+    axios.get(`${API_URL}/labrecete/${urunId}`).then((res: any) => {
+      setFormData(res?.data);
+    });
+  };
+
+  useEffect(() => {
+    if (urunId) {
+      refetch();
+    } else {
+      setFormData({});
     }
-  );
+  }, [urunId]);
 
   const getTableData = (filters?: IFilterParams) => {
     setBodyData({});
@@ -105,7 +110,7 @@ export const ModalTableLogic = ({
     createForm,
     deleteFn,
     testForm,
-    formData: formData?.data ?? {},
+    formData: formData ?? {},
   };
 };
 
@@ -155,13 +160,19 @@ export const DetailsFormLogic = ({
   return { updateForm, createForm, formData: formData?.data };
 };
 
-export const TablesLogic = () => {
-  const headColumnsTrail = [
-    {
-      title: "no",
-      id: "no",
+interface Props {
+  formId: number;
+}
+export const TablesLogic = ({ formId }: Props) => {
+  const { data: tableData } = useQuery(
+    ["GET_TABLE_DATA", formId],
+    () => {
+      return axios.get(`${API_URL}/labrecetecalisma/?LABRECETEID=14481`);
     },
-  ];
+    {
+      enabled: !!formId,
+    }
+  );
 
-  return { headColumnsTrail };
+  return { tableData };
 };

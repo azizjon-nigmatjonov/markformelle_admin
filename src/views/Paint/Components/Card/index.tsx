@@ -22,13 +22,13 @@ export const PaintPotCard = ({ element = {} }: Props) => {
 
   return (
     <div
-      className={`w-full h-full rounded-[12px] px-2 desktop:px-4 py-2 desktop:py-4 pb-1 desktop:pb-3 overflow-hidden relative ${element.status?.color}`}
+      className={`w-full h-full rounded-[12px] px-2 py-2 pb-1 desktop:pb-3 overflow-hidden relative ${element.status?.color}`}
       onClick={(e: any) => {
         e.stopPropagation();
         setOpen(true);
       }}
     >
-      <div className="flex">
+      <div className="grid grid-cols-2">
         <div className="flex flex-col justify-between">
           <CircularProgress
             strokeWidth={getFontSize({
@@ -87,25 +87,31 @@ export const PaintPotCard = ({ element = {} }: Props) => {
                 : element?.machine?.worked_date || "00:00"}
             </p>
           </CircularProgress>
-          <div>
+          <div className="pt-5">
             <p
               className="font-bold whitespace-nowrap"
               style={{
                 fontSize: getFontSize({
                   count: 6,
-                  percent: height > 1200 ? 16 : 9.5,
+                  percent: height > 1200 ? 14 : 8,
                   type: "machine",
                 }),
               }}
             >
               {GetCurrentDate({
-                type: "string",
-                date: element.machine?.date_start,
+                type: "usually",
+                date: element.machine?.date_start?.substring(
+                  0,
+                  element.machine?.date_start.length - 3
+                ),
               })}{" "}
               {`${element.machine?.date_start ? " - " : ""}`}
               {GetCurrentDate({
-                type: "string",
-                date: element.machine?.date_end,
+                type: "usually",
+                date: element.machine?.date_end?.substring(
+                  0,
+                  element.machine?.date_start.length - 3
+                ),
               })}
             </p>
           </div>
@@ -117,7 +123,7 @@ export const PaintPotCard = ({ element = {} }: Props) => {
             style={{
               fontSize: getFontSize({
                 count: 6,
-                percent: height > 1200 ? 24 : 13,
+                percent: height > 1200 ? 23 : 12,
                 type: "machine",
               }),
               lineHeight: getFontSize({
@@ -133,7 +139,7 @@ export const PaintPotCard = ({ element = {} }: Props) => {
                 style={{
                   fontSize: getFontSize({
                     count: 6,
-                    percent: height > 1200 ? 25 : 14,
+                    percent: height > 1200 ? 24 : 13,
                     type: "machine",
                   }),
                 }}
@@ -141,7 +147,7 @@ export const PaintPotCard = ({ element = {} }: Props) => {
                 {element.code_device}
               </p>
             </li>
-            <li className={`${height > 1200 ? "pt-4" : "pt-3"}`}>
+            <li className={`${height > 1200 ? "pt-3" : "pt-2"}`}>
               <p className="font-semibold whitespace-pre-line">
                 {element.machine?.pkol_knit
                   ? element.machine.pkol_knit + " кг"

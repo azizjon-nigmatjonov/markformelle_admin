@@ -9,6 +9,7 @@ import CNewModal from "../../../components/CElements/CNewModal";
 import { ModalUI } from "./Modal";
 import { ModalTypes } from "./interfaces";
 import { PantoneColors } from "../../../constants/pantone";
+import { useGetFirmList } from "../../../hooks/useFetchRequests/useFirmaList";
 
 export const LabChemicals = () => {
   const { t } = useTranslationHook();
@@ -90,18 +91,25 @@ export const LabChemicals = () => {
       setFilterParams({ page: 0, perPage: 50 });
     }
   };
-
+  const [showUI, setShowUI] = useState(false);
   const handleModalActions = (status: string, id: string) => {
     if (status === "close") {
       setOpen(false);
+      setShowUI(false);
       setModalInitialData({});
     }
     if (status === "delete") {
       setOpen(false);
+      setShowUI(false);
+      setModalInitialData({});
       deleteFn([id]);
     }
   };
-
+  const {
+    firmaData,
+    setFilterParams: setFilterParamsFirm,
+    filterParams: filterParamsFirm,
+  } = useGetFirmList({ enabled: "" });
   return (
     <>
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />
@@ -134,22 +142,17 @@ export const LabChemicals = () => {
         />
       </div>
 
-      {open && (
-        <CNewModal
-          title={t(
-            modalInitialData.LABRECETEID
-              ? "updating_chemical"
-              : "creating_chemical"
-          )}
-          handleActions={handleModalActions}
-          defaultData={{
-            id: modalInitialData?.LABRECETEID,
-          }}
-          disabled="big"
-        >
-          <ModalUI defaultData={modalInitialData} />
-        </CNewModal>
-      )}
+      <ModalUI
+        defaultData={modalInitialData}
+        modalInitialData={modalInitialData}
+        handleModalActions={handleModalActions}
+        open={open}
+        showUI={showUI}
+        firmaData={firmaData}
+        setShowUI={setShowUI}
+        filterParamsFirm={filterParamsFirm}
+        setFilterParamsFirm={setFilterParamsFirm}
+      />
     </>
   );
 };

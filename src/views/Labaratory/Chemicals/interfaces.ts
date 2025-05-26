@@ -4,9 +4,11 @@ export interface ModalTypes {
   }
 
   export interface IModalForm {
+    LABRECETEADI: string
+        
     LABRECETEKODU: string
     LABRECETEID: number | string
-    URUNRECETEADI: string
+
     FIRMAID: string
     PANTONEKODU: string
     DOVIZID: string

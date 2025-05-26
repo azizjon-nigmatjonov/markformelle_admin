@@ -22,6 +22,7 @@ interface Props {
   actions?: string[];
   disabled?: string;
   defaultData?: { id: string | number | undefined };
+  showUI?: boolean;
   handleActions?: (val: string, val2?: any) => void;
 }
 
@@ -34,6 +35,7 @@ const CNewModal: FC<Props> = ({
   handleActions = () => {},
   actions = [],
   disabled = "",
+  showUI = true,
 }) => {
   const [screen, setScreen] = useState(!disabled);
   const [position, setPosition] = useState<{ x: number; y: number } | null>(
@@ -106,7 +108,7 @@ const CNewModal: FC<Props> = ({
   const [openPopup, setOpenPopup] = useState(false);
 
   return (
-    <>
+    <div className={showUI ? "" : "opacity-0"}>
       <div
         ref={modalRef}
         className={`fixed rounded-[12px] z-[99] bg-white shadow-lg ${
@@ -280,7 +282,7 @@ const CNewModal: FC<Props> = ({
         }`}
         onClick={() => handleActions("close")}
       ></div>
-    </>
+    </div>
   );
 };
 

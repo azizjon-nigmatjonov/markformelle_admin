@@ -6,29 +6,48 @@ import { useTranslationHook } from "../../../../hooks/useTranslation";
 import { InputFieldUI } from "../../../../components/UI/FieldUI";
 import { SelectOptionsTable } from "../../../../components/UI/Options/Table";
 import { useGetUrunTypeList } from "../../../../hooks/useFetchRequests/useUrunType";
-import { ModalTableLogic } from "./Logic";
+import { ModalTableLogic, TablesLogic } from "./Logic";
 import dayjs from "dayjs";
 import { LabModalTables } from "./Tables";
-import { Alert } from "@mui/material";
 import { InputFields } from "./Components/InputFields";
-import { PantoneColors } from "../../../../constants/pantone";
 import { GetCurrentDate } from "../../../../utils/getDate";
+import { ColorMaterial } from "./Components/ColorMaterial";
+import CNewModal from "../../../../components/CElements/CNewModal";
 
 interface ModalUIProps {
   defaultData?: ModalTypes;
   URUNBIRIMID?: string;
   ADI?: string;
+  handleModalActions: (val: string, val2: string) => void;
+  modalInitialData: any;
+  open: boolean;
+  showUI: boolean;
+  firmaData: any;
+  setShowUI: (val: boolean) => void;
+  filterParamsFirm: any;
+  setFilterParamsFirm: (val: any) => void;
 }
 
-export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
+export const ModalUI = ({
+  open = false,
+  defaultData = {},
+  handleModalActions,
+  showUI = false,
+  setShowUI = () => {},
+  firmaData,
+  modalInitialData = [],
+  filterParamsFirm,
+  setFilterParamsFirm,
+}: ModalUIProps) => {
   const { t } = useTranslationHook();
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
   const [formId, setFormId] = useState<number>(0);
   const [disabled, setDisabled] = useState(true);
-
-  const { control, handleSubmit, setValue, getValues } = useForm<IModalForm>({
+  const { control, handleSubmit, setValue } = useForm<any>({
     mode: "onSubmit",
   });
+  const { tableData } = TablesLogic({ formId });
+  console.log("tableData", tableData);
 
   const { createForm, updateForm, formData } = ModalTableLogic({
     filterParams,
@@ -40,6 +59,10 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
     if (formId) setDisabled(false);
   }, [formId]);
 
+  useEffect(() => {
+    if (!open) setShowUI(false);
+  }, [open]);
+
   const {
     setFilterParams: setUrunTypeFilterParams,
     filterParams: urunTypeFilterParams,
@@ -48,6 +71,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
 
   const onSubmit = (data: any) => {
     let params: any = data;
+    console.log("params", params);
 
     if (formId) {
       params = { ...formData, ...params };
@@ -65,7 +89,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
   const setFormValues = (form: any) => {
     setValue("LABRECETEKODU", form.LABRECETEKODU);
     setValue("LABRECETEID", form.LABRECETEID);
-    setValue("URUNRECETEADI", form.ADI);
+    setValue("LABRECETEADI", form.ADI);
     setValue("FIRMAID", form.FIRMAID);
     setValue("PANTONEKODU", form.PANTONEKODU);
     setValue("KULLANICIADI", form.KULLANICIADI);
@@ -81,62 +105,74 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
   };
 
   useEffect(() => {
-    if (formData?.LABRECETEKODU) setFormValues(formData);
+    if (formData?.LABRECETEKODU) {
+      setFormValues(formData);
+    }
   }, [formData]);
+
+  useEffect(() => {
+    if (formData?.LABRECETEKODU && open && defaultData?.LABRECETEID) {
+      setTimeout(() => {
+        setShowUI(true);
+      }, 0);
+    }
+    if (!defaultData?.LABRECETEID && open) {
+      setShowUI(true);
+    }
+  }, [formData, defaultData, open]);
 
   useEffect(() => {
     if (defaultData?.LABRECETEID) {
       setFormId(defaultData.LABRECETEID);
     }
   }, [defaultData, disabled]);
-  console.log("formData", formData);
-  console.log("form", getValues());
-
-  return (
-    <>
+  const handleModal = (status: string, id: string) => {
+    handleModalActions(status, id);
+    if (status === "close") {
+      setFormId(0);
+    }
+    if (status === "delete") {
+      setFormId(0);
+    }
+  };
+  return open ? (
+    <CNewModal
+      title={t(
+        modalInitialData.LABRECETEID ? "updating_chemical" : "creating_chemical"
+      )}
+      handleActions={handleModal}
+      defaultData={{
+        id: modalInitialData?.LABRECETEID,
+      }}
+      showUI={showUI}
+      disabled="big"
+    >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-3 gap-x-5">
-          <InputFieldUI title={t("LABRECETEKODU")} disabled={disabled}>
-            <SelectOptionsTable
-              name="LABRECETEKODU"
-              placeholder={t("LABRECETEKODU")}
-              options={urunTypeData?.data}
-              required={true}
-              headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
-              filterParams={urunTypeFilterParams}
-              handleSelect={(obj: { ADI: string }) => {
-                console.log("ob", obj);
-                setValue("LABRECETEKODU", obj.ADI);
-              }}
-              handleSearch={(val: string) => {
-                setUrunTypeFilterParams({
-                  ...urunTypeFilterParams,
-                  q: val,
-                });
-              }}
-              control={control}
-              setFilterParams={setUrunTypeFilterParams}
-            />
-          </InputFieldUI>
-
-          <div className="w-full pr-2 space-x-2 flex items-center">
-            <div className="w-full">
-              <Alert severity={"info"} style={{ height: "30px" }}>
-                {t("add_unique_id")}
-              </Alert>
-            </div>
-
-            {formData?.PANTONEKODU && (
-              <div
-                className={`w-[120px] h-[30px] rounded-[8px]`}
-                style={{
-                  backgroundColor:
-                    "#" +
-                    PantoneColors[formData.PANTONEKODU.substring(4, 11)]?.hex,
+        <div className={`grid grid-cols-3 gap-x-5`}>
+          <div className="pr-1 mt-1">
+            <InputFieldUI title={t("LABRECETEKODU")} disabled={disabled}>
+              <SelectOptionsTable
+                name="LABRECETEKODU"
+                placeholder={t("LABRECETEKODU")}
+                options={urunTypeData?.data}
+                required={true}
+                headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
+                filterParams={urunTypeFilterParams}
+                handleSelect={(obj: { ADI: string }) => {
+                  setValue("LABRECETEKODU", obj.ADI);
                 }}
-              ></div>
-            )}
+                handleSearch={(val: string) => {
+                  setUrunTypeFilterParams({
+                    ...urunTypeFilterParams,
+                    q: val,
+                  });
+                }}
+                control={control}
+                setFilterParams={setUrunTypeFilterParams}
+              />
+            </InputFieldUI>
           </div>
+          <ColorMaterial PANTONEKODU={formData.PANTONEKODU} />
           <div className="flex justify-end">
             <div className="w-[200px]">
               <button
@@ -150,7 +186,7 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
           </div>
         </div>
         <CollapseUI title="" disabled={true}>
-          <div className="space-y-5 h-[800px] overflow-y-scroll designed-scroll">
+          <div className={`space-y-5`}>
             <InputFields
               control={control}
               setValue={setValue}
@@ -158,6 +194,9 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
               filterParams={filterParams}
               setFilterParams={setFilterParams}
               urunTypeData={urunTypeData}
+              firmaData={firmaData}
+              filterParamsFirm={filterParamsFirm}
+              setFilterParamsFirm={setFilterParamsFirm}
               urunTypeFilterParams={urunTypeFilterParams}
               setUrunTypeFilterParams={setUrunTypeFilterParams}
             />
@@ -166,6 +205,8 @@ export const ModalUI = ({ defaultData = {} }: ModalUIProps) => {
           </div>
         </CollapseUI>
       </form>
-    </>
+    </CNewModal>
+  ) : (
+    <></>
   );
 };

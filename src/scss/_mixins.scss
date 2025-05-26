@@ -60,17 +60,17 @@ $xl2: 24px;
 @mixin design-scroll() {
   &::-webkit-scrollbar {
     display: block;
-    width: 8px;
-    height: 8px;
-    border-radius: 8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 4px;
   }
   &::-webkit-scrollbar-track {
-    border-radius: 8px;
+    border-radius: 4px;
     border: 1px solid transparent;
   }
   &::-webkit-scrollbar-thumb {
     background: var(--border);
-    border-radius: 8px;
+    border-radius: 4px;
     cursor: pointer;
   }
 }

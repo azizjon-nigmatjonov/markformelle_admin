@@ -86,6 +86,7 @@ export const HeaderSettings = ({
   const [openDelete, setOpenDelete] = useState(false);
   const dispatch = useDispatch();
   const [allCheck, setAllCheck] = useState(true);
+
   const handleFilterSave = (id: any) => {
     let arr: any = pageColumns?.length ? [...pageColumns] : [];
 
@@ -231,6 +232,7 @@ export const HeaderSettings = ({
   ) {
     return "";
   }
+
   return (
     <div className="pb-[45px] bg-white border-b border-[var(--border)] rounded-t-[12px]">
       <div
@@ -456,7 +458,7 @@ export const HeaderSettings = ({
             <Tooltip
               title="Активные меню"
               arrow
-              placement="top"
+              placement="left"
               slotProps={TooltipPosition}
             >
               <div className="relative">

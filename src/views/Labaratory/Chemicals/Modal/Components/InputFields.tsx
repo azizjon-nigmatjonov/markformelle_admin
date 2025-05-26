@@ -1,9 +1,9 @@
 import HFTextField from "../../../../../components/HFElements/HFTextField";
 import { InputFieldUI } from "../../../../../components/UI/FieldUI";
 import { SelectOptionsTable } from "../../../../../components/UI/Options/Table";
-import { useGetFirmList } from "../../../../../hooks/useFetchRequests/useFirmaList";
 import HFSelect from "../../../../../components/HFElements/HFSelect";
 import { useTranslationHook } from "../../../../../hooks/useTranslation";
+import { useGetDovizList } from "../../../../../hooks/useFetchRequests/useDovizList";
 
 interface InputFieldsProps {
   control: any;
@@ -12,6 +12,9 @@ interface InputFieldsProps {
   filterParams: any;
   urunTypeData: any;
   urunTypeFilterParams: any;
+  firmaData: any;
+  filterParamsFirm: any;
+  setFilterParamsFirm: (val: any) => void;
   setFilterParams: (params: any) => void;
   setUrunTypeFilterParams: (params: any) => void;
 }
@@ -24,34 +27,24 @@ export const InputFields = ({
   disabled,
   urunTypeData,
   urunTypeFilterParams,
+  setFilterParamsFirm,
+  firmaData,
+  filterParamsFirm,
   setUrunTypeFilterParams,
 }: InputFieldsProps) => {
   const { t } = useTranslationHook();
-
-  const {
-    firmaData,
-    setFilterParams: setFilterParamsFirm,
-    filterParams: filterParamsFirm,
-  } = useGetFirmList({});
+  const { dovizData } = useGetDovizList({});
+  console.log("dovizData", dovizData);
 
   return (
     <div className="w-full grid grid-cols-3 gap-y-3 gap-x-5">
       <div className="space-y-2">
-        <InputFieldUI title={t("URUNRECETEADI")}>
+        <InputFieldUI title={t("LABRECETEADI")}>
           <HFTextField
-            name="URUNRECETEADI"
+            name="LABRECETEADI"
             control={control}
             setValue={setValue}
-            placeholder={t("URUNRECETEADI")}
-            disabled={disabled}
-          />
-        </InputFieldUI>
-        <InputFieldUI title={t("URUNID")}>
-          <HFTextField
-            name="URUNID"
-            control={control}
-            setValue={setValue}
-            placeholder={t("URUNID")}
+            placeholder={t("LABRECETEADI")}
             disabled={disabled}
           />
         </InputFieldUI>
@@ -64,50 +57,59 @@ export const InputFields = ({
             disabled={disabled}
           />
         </InputFieldUI>
-        <InputFieldUI title={t("DOVIZID")}>
-          <HFSelect
-            name="DOVIZID"
+        <InputFieldUI title={t("HAMSTOK")}>
+          <HFTextField
+            name="HAMSTOK"
             control={control}
             setValue={setValue}
-            placeholder={t("DOVIZID")}
+            placeholder={t("HAMSTOK")}
             disabled={disabled}
           />
         </InputFieldUI>
-        <InputFieldUI title={t("RECETETURAADI")}>
-          <HFSelect
-            name="RECETETURAADI"
+        <InputFieldUI title={t("FIRMARENKKODU")}>
+          <HFTextField
+            name="FIRMARENKKODU"
             control={control}
             setValue={setValue}
-            placeholder={t("RECETETURAADI")}
+            placeholder={t("FIRMARENKKODU")}
+            disabled={disabled}
+          />
+        </InputFieldUI>
+        <InputFieldUI title={t("ASKLAMA")}>
+          <HFSelect
+            name="ASKLAMA"
+            control={control}
+            setValue={setValue}
+            placeholder={t("ASKLAMA")}
+            disabled={disabled}
+          />
+        </InputFieldUI>
+        <InputFieldUI title={t("ESKIRECETEKODU")}>
+          <HFSelect
+            name="ESKIRECETEKODU"
+            control={control}
+            setValue={setValue}
+            placeholder={t("ESKIRECETEKODU")}
+            disabled={disabled}
+          />
+        </InputFieldUI>
+        <InputFieldUI title={t("REMKDERINGLIGI")}>
+          <HFSelect
+            name="REMKDERINGLIGI"
+            control={control}
+            setValue={setValue}
+            placeholder={t("REMKDERINGLIGI")}
             disabled={disabled}
           />
         </InputFieldUI>
       </div>
       <div className="space-y-2">
-        <InputFieldUI title={t("ACIKLAMA")}>
-          <HFTextField
-            name="ACIKLAMA"
-            control={control}
-            setValue={setValue}
-            placeholder={t("ACIKLAMA")}
-            disabled={disabled}
-          />
-        </InputFieldUI>
-        <InputFieldUI title={t("ESKILABRECETEKODU")}>
-          <HFTextField
-            name="ESKILABRECETEKODU"
-            control={control}
-            setValue={setValue}
-            placeholder={t("ESKILABRECETEKODU")}
-            disabled={disabled}
-          />
-        </InputFieldUI>
-        <InputFieldUI title={t("RENKDERINLIGIADI")}>
+        <InputFieldUI title={t("FIRMAKODU")}>
           <HFSelect
-            name="RENKDERINLIGIADI"
+            name="FIRMAKODU"
             control={control}
             setValue={setValue}
-            placeholder={t("RENKDERINLIGIADI")}
+            placeholder={t("FIRMAKODU")}
             disabled={disabled}
           />
         </InputFieldUI>
@@ -120,24 +122,42 @@ export const InputFields = ({
             disabled={disabled}
           />
         </InputFieldUI>
-        <InputFieldUI title={t("HAMSTOCK")}>
-          <SelectOptionsTable
-            name="HAMSTOCK"
-            placeholder={t("HAMSTOCK")}
-            options={firmaData}
-            required={true}
-            headColumns={[
-              { id: "FIRMAID", title: "FIRMAID" },
-              { id: "FIRMAADI", title: "FIRMAADI" },
-              { id: "KISAADI", title: "KISAADI" },
-            ]}
-            filterParams={filterParams}
-            handleSelect={(_: {}) => {}}
-            handleSearch={(val: string) => {
-              setFilterParamsFirm({ ...filterParamsFirm, q: val });
-            }}
+        <InputFieldUI title={t("DOVIZID")}>
+          <HFSelect
+            name="DOVIZID"
             control={control}
-            setFilterParams={setFilterParams}
+            setValue={setValue}
+            placeholder={t("DOVIZID")}
+            disabled={disabled}
+            options={[]}
+          />
+        </InputFieldUI>
+        <InputFieldUI title={t("RECETETURAADI")}>
+          <HFSelect
+            name="RECETETURAADI"
+            control={control}
+            setValue={setValue}
+            placeholder={t("RECETETURAADI")}
+            disabled={disabled}
+          />
+        </InputFieldUI>
+
+        <InputFieldUI title={t("ESKILABRECETEKODU")}>
+          <HFTextField
+            name="ESKILABRECETEKODU"
+            control={control}
+            setValue={setValue}
+            placeholder={t("ESKILABRECETEKODU")}
+            disabled={disabled}
+          />
+        </InputFieldUI>
+
+        <InputFieldUI title={t("KALITENO")}>
+          <HFSelect
+            name="KALITENO"
+            control={control}
+            setValue={setValue}
+            placeholder={t("KALITENO")}
             disabled={disabled}
           />
         </InputFieldUI>
@@ -225,6 +245,15 @@ export const InputFields = ({
             setValue={setValue}
             placeholder={t("KULLANICIADI")}
             disabled={true}
+          />
+        </InputFieldUI>
+        <InputFieldUI title={t("RENKDERINLIGIADI")}>
+          <HFSelect
+            name="RENKDERINLIGIADI"
+            control={control}
+            setValue={setValue}
+            placeholder={t("RENKDERINLIGIADI")}
+            disabled={disabled}
           />
         </InputFieldUI>
       </div>

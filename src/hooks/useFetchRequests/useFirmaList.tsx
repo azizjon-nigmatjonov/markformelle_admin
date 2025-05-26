@@ -23,7 +23,7 @@ export const useGetFirmList = ({ enabled = "" }: Params) => {
   };
 
   useEffect(() => {
-    if (enabled) {
+    if (enabled && enabled !== "") {
       if (filterParams?.[enabled]) {
         getFirmData(filterParams);
       } else {

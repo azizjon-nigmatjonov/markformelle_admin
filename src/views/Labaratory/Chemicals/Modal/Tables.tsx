@@ -133,9 +133,10 @@ export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
 
   return (
     <>
-      <div className="grid grid-cols-3 border rounded-[12px] border-[var(--border)] h-[700px]">
-        <div className="border-r border-[var(--border)]">
+      <div className="grid grid-cols-3 border rounded-[12px] border-[var(--border)] h-[400px]">
+        <div className="h-[347px]">
           <TableUI
+            title="material"
             headColumns={[
               {
                 title: "Ham Adi",
@@ -159,12 +160,13 @@ export const LabModalTables = ({ disabled }: { disabled: boolean }) => {
           />
         </div>
 
-        <div>
-          <TwoRowTable />
+        <div className="border-x border-[var(--border)] ">
+          <TwoRowTable title="trail" />
         </div>
 
-        <div className="border-l border-[var(--border)]">
+        <div className="h-[347px]">
           <TableUI
+            title="detail"
             handleRowClick={handleActionsTrial}
             headColumns={[
               {

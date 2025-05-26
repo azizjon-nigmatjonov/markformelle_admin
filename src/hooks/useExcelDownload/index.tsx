@@ -2,10 +2,10 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import { IconButton, Tooltip } from "@mui/material";
 import { ExcelIconOutlined } from "../../components/UI/IconGenerator/Svg/Machines";
-import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { Closer } from "../../components/UI/Closer";
 import { TooltipPosition } from "../../constants/toolPosition";
+import { useTranslationHook } from "../useTranslation";
 
 interface Props {
   data: any;
@@ -26,7 +26,7 @@ const ExcelDownload = ({
   label = "",
   defaultExcelFields = [],
 }: Props) => {
-  const { t } = useTranslation();
+  const { t } = useTranslationHook();
   const [open, setOpen] = useState(false);
 
   const downloadExcel = (status: string) => {
