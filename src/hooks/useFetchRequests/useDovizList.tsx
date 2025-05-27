@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 const API_URL = import.meta.env.VITE_TEST_URL;
 interface Params {
   enabled?: string;
@@ -22,6 +22,15 @@ export const useGetDovizList = ({ enabled = "" }: Params) => {
       });
   };
 
+  const Options = useMemo(() => {
+    return dovizData?.data?.map((item: { DOVIZID: string; CINSI: string }) => {
+      return {
+        label: item.DOVIZID,
+        value: item.DOVIZID,
+      };
+    });
+  }, [dovizData]);
+
   useEffect(() => {
     if (enabled) {
       if (filterParams?.[enabled]) {
@@ -34,5 +43,5 @@ export const useGetDovizList = ({ enabled = "" }: Params) => {
     }
   }, [filterParams]);
 
-  return { dovizData, setFilterParams, filterParams };
+  return { dovizData, setFilterParams, filterParams, Options };
 };

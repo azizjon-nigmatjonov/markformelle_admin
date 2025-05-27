@@ -114,7 +114,7 @@ export const ModalUI = ({
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-5 h-[700px] overflow-y-scroll designed-scroll pr-2">
+        <div className="space-y-5 overflow-y-scroll designed-scroll">
           <div className="grid grid-cols-3 gap-x-5 border-b border-[var(--border)] pb-5">
             <InputFieldUI title={t("LABRECETEKOD")} disabled={disabled}>
               <SelectOptionsTable
@@ -320,14 +320,16 @@ export const ModalUI = ({
               </div>
             </div>
           </div>
-          <LabModalTables
-            disabled={disabled}
-            changed={changed}
-            setChanged={setChanged}
-            askAction={askAction}
-            setOpenMainModal={setOpen}
-            setAskAction={setAskAction}
-          />
+          <div className="h-[700px]">
+            <LabModalTables
+              disabled={disabled}
+              changed={changed}
+              setChanged={setChanged}
+              askAction={askAction}
+              setOpenMainModal={setOpen}
+              setAskAction={setAskAction}
+            />
+          </div>
         </div>
       </form>
     </>

@@ -279,6 +279,7 @@ export const DragDrop = ({
           </Tooltip>
         </div>
       </div>
+
       <StepCard
         items={items}
         editStep={editStep}
@@ -294,6 +295,7 @@ export const DragDrop = ({
         deleteCardActive={deleteCardActive}
         setInitialModalData={setInitialModalData}
       />
+
       <ImageViewer url={imageView} closeViewer={() => setImageView("")} />
       <StepModal
         defaultData={initialModalData}

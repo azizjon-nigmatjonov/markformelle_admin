@@ -7,12 +7,12 @@ import { InputFieldUI } from "../../../../components/UI/FieldUI";
 import { SelectOptionsTable } from "../../../../components/UI/Options/Table";
 import { useGetUrunTypeList } from "../../../../hooks/useFetchRequests/useUrunType";
 import { ModalTableLogic, TablesLogic } from "./Logic";
-import dayjs from "dayjs";
 import { LabModalTables } from "./Tables";
 import { InputFields } from "./Components/InputFields";
 import { GetCurrentDate } from "../../../../utils/getDate";
 import { ColorMaterial } from "./Components/ColorMaterial";
 import CNewModal from "../../../../components/CElements/CNewModal";
+import dayjs from "dayjs";
 
 interface ModalUIProps {
   defaultData?: ModalTypes;
@@ -43,17 +43,17 @@ export const ModalUI = ({
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
   const [formId, setFormId] = useState<number>(0);
   const [disabled, setDisabled] = useState(true);
-  const { control, handleSubmit, setValue } = useForm<any>({
+  const { control, handleSubmit, setValue, getValues, reset } = useForm<any>({
     mode: "onSubmit",
   });
-  const { tableData } = TablesLogic({ formId });
-  console.log("tableData", tableData);
 
   const { createForm, updateForm, formData } = ModalTableLogic({
     filterParams,
     setFormId,
     urunId: defaultData?.LABRECETEID || formId,
   });
+
+  const { tableData } = TablesLogic({ formId: formData?.LABRECETEID });
 
   useEffect(() => {
     if (formId) setDisabled(false);
@@ -69,15 +69,49 @@ export const ModalUI = ({
     urunTypeData,
   } = useGetUrunTypeList({});
 
+  // {
+  //   "ADI": "T-SINIY-10",
+  //   "FIRMAID": "M0868",
+  //   "TALEPTARIHI": "2025-05-27T00:00:00",
+  //   "LABRECETEGRUPID": 2,
+  //   "LABRENKGRUPID": 14,
+  //   "USTASAMAID": 8,
+  //   "HAMID": 312,
+  //   "DOVIZID": "USD",
+  //   "ACIKLAMA": "Молочнный3",
+  //   "ESKILABRECETEKODU": "C-93 2411",
+  //   "PANTONEKODU": "TCX 19-4116",
+  //   "RECETETURUID": 3,
+  //   "NOTU": null,
+  //   "RENKDERINLIGIID": 0,
+  //   "IPTAL": false,
+  //   "ESKITIPRECETE": false,
+  //   "KALITEID": null,
+  //   "INSERTKULLANICIID": 1,
+  //   "INSERTTARIHI": "2025-05-27T20:30:27",
+  //   "KULLANICIID": 1,
+  //   "DEGISIMTARIHI": "2025-05-27T20:30:27"
+  //   }
+
   const onSubmit = (data: any) => {
     let params: any = data;
+    params.TALEPTARIHI = dayjs();
+    params.LABRECETEGRUPID = 2;
+    params.NOTU = null;
+    params.IPTAL = params?.IPTAL ? true : false;
+    params.ESKITIPRECETE = false;
+    params.ESKITIPRECETE = false;
+    params.INSERTKULLANICIID = 1;
+    params.INSERTTARIHI = dayjs();
+    params.KULLANICIID = 1;
+    params.DEGISIMTARIHI = dayjs();
     console.log("params", params);
 
     if (formId) {
       params = { ...formData, ...params };
       delete params.BOYATIPIADI;
 
-      updateForm(params, formId);
+      updateForm(formData, formId);
     } else {
       params.DEGISIMTARIHI = dayjs();
       delete params.UNITEADI;
@@ -87,16 +121,29 @@ export const ModalUI = ({
   };
 
   const setFormValues = (form: any) => {
+    setValue("RECETETURUID", form.RECETETURUID);
+    setValue("USTASAMAID", form.USTASAMAID);
+    setValue("USTASAMAADI", form.USTASAMAADI);
+    setValue("HAMID", form.HAMID);
+    setValue("HAMADI", form.HAMADI);
+    setValue("DOVIZID", form.DOVIZID);
+    setValue("ESKILABRECETEKODU", form.ESKILABRECETEKODU);
+    setValue("RENKDERINLIGIID", form.RENKDERINLIGIID);
+    setValue("RENKDERINLIGIADI", form.RENKDERINLIGIADI);
+    setValue("IPTAL", form.IPTAL);
+    setValue("FASON", form.FASON);
+
     setValue("LABRECETEKODU", form.LABRECETEKODU);
     setValue("LABRECETEID", form.LABRECETEID);
-    setValue("LABRECETEADI", form.ADI);
+    setValue("ACIKLAMA", form.ACIKLAMA);
+    setValue("ADI", form.ADI);
     setValue("FIRMAID", form.FIRMAID);
+    setValue("FIRMAADI", form.FIRMAADI);
     setValue("PANTONEKODU", form.PANTONEKODU);
     setValue("KULLANICIADI", form.KULLANICIADI);
-    setValue("DOVIZID", form.DOVIZID);
-    setValue("ACIKLAMA", form.ACIKLAMA);
+
+    setValue("USTASAMAADI", form.USTASAMAADI);
     setValue("ESKILABRECETEKODU", form.ESKILABRECETEKODU);
-    setValue("RENKDERINLIGIADI", form.RENKDERINLIGIADI);
     setValue("RECETETURAADI", form.RECETETURAADI);
     setValue(
       "TALEPTARIHI",
@@ -104,9 +151,22 @@ export const ModalUI = ({
     );
   };
 
+  const setInitialFormValues = () => {
+    setValue("FIRMAID", "M0868");
+    setValue(
+      "TALEPTARIHI",
+      GetCurrentDate({
+        date: GetCurrentDate({ type: "usually" }),
+        type: "usually",
+      })
+    );
+  };
+
   useEffect(() => {
     if (formData?.LABRECETEKODU) {
       setFormValues(formData);
+    } else {
+      setInitialFormValues();
     }
   }, [formData]);
 
@@ -116,25 +176,25 @@ export const ModalUI = ({
         setShowUI(true);
       }, 0);
     }
-    if (!defaultData?.LABRECETEID && open) {
-      setShowUI(true);
-    }
+    if (!defaultData?.LABRECETEID && open) setShowUI(true);
   }, [formData, defaultData, open]);
 
   useEffect(() => {
-    if (defaultData?.LABRECETEID) {
-      setFormId(defaultData.LABRECETEID);
-    }
+    if (defaultData?.LABRECETEID) setFormId(defaultData.LABRECETEID);
   }, [defaultData, disabled]);
+
   const handleModal = (status: string, id: string) => {
     handleModalActions(status, id);
     if (status === "close") {
       setFormId(0);
+      reset();
     }
     if (status === "delete") {
       setFormId(0);
+      reset();
     }
   };
+
   return open ? (
     <CNewModal
       title={t(
@@ -147,64 +207,65 @@ export const ModalUI = ({
       showUI={showUI}
       disabled="big"
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className={`grid grid-cols-3 gap-x-5`}>
-          <div className="pr-1 mt-1">
-            <InputFieldUI title={t("LABRECETEKODU")} disabled={disabled}>
-              <SelectOptionsTable
-                name="LABRECETEKODU"
-                placeholder={t("LABRECETEKODU")}
-                options={urunTypeData?.data}
-                required={true}
-                headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
-                filterParams={urunTypeFilterParams}
-                handleSelect={(obj: { ADI: string }) => {
-                  setValue("LABRECETEKODU", obj.ADI);
-                }}
-                handleSearch={(val: string) => {
-                  setUrunTypeFilterParams({
-                    ...urunTypeFilterParams,
-                    q: val,
-                  });
-                }}
-                control={control}
-                setFilterParams={setUrunTypeFilterParams}
-              />
-            </InputFieldUI>
-          </div>
-          <ColorMaterial PANTONEKODU={formData.PANTONEKODU} />
-          <div className="flex justify-end">
-            <div className="w-[200px]">
-              <button
-                className="custom-btn"
-                style={{ backgroundColor: disabled ? "var(--gray)" : "" }}
-                type={disabled ? "button" : "submit"}
-              >
-                {t(formId ? "update" : "create")}
-              </button>
+      <form onSubmit={handleSubmit(onSubmit)} className="mb-5">
+        <div className="pb-5">
+          <div
+            className={`grid grid-cols-3 gap-x-5 border-b border-[var(--border)] pb-5`}
+          >
+            <div>
+              <InputFieldUI title={t("LABRECETEKODU")} disabled={disabled}>
+                <SelectOptionsTable
+                  name="LABRECETEKODU"
+                  placeholder={t("LABRECETEKODU")}
+                  options={urunTypeData?.data}
+                  required={true}
+                  headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
+                  filterParams={urunTypeFilterParams}
+                  handleSelect={(obj: { ADI: string }) => {
+                    setValue("LABRECETEKODU", obj.ADI);
+                  }}
+                  handleSearch={(val: string) => {
+                    setUrunTypeFilterParams({
+                      ...urunTypeFilterParams,
+                      q: val,
+                    });
+                  }}
+                  control={control}
+                  setFilterParams={setUrunTypeFilterParams}
+                />
+              </InputFieldUI>
+            </div>
+            <ColorMaterial PANTONEKODU={formData.PANTONEKODU} />
+            <div className="flex justify-end">
+              <div className="w-[200px]">
+                <button
+                  className="custom-btn"
+                  style={{ backgroundColor: disabled ? "var(--gray)" : "" }}
+                  type={disabled ? "button" : "submit"}
+                >
+                  {t(formId ? "update" : "create")}
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        <CollapseUI title="" disabled={true}>
-          <div className={`space-y-5`}>
-            <InputFields
-              control={control}
-              setValue={setValue}
-              disabled={disabled}
-              filterParams={filterParams}
-              setFilterParams={setFilterParams}
-              urunTypeData={urunTypeData}
-              firmaData={firmaData}
-              filterParamsFirm={filterParamsFirm}
-              setFilterParamsFirm={setFilterParamsFirm}
-              urunTypeFilterParams={urunTypeFilterParams}
-              setUrunTypeFilterParams={setUrunTypeFilterParams}
-            />
 
-            <LabModalTables disabled={disabled} />
-          </div>
-        </CollapseUI>
+        <InputFields
+          control={control}
+          setValue={setValue}
+          filterParams={filterParams}
+          setFilterParams={setFilterParams}
+          firmaData={firmaData}
+          filterParamsFirm={filterParamsFirm}
+          setFilterParamsFirm={setFilterParamsFirm}
+          getValues={getValues}
+        />
       </form>
+      <LabModalTables
+        disabled={disabled}
+        tableData={tableData}
+        formId={formId}
+      />
     </CNewModal>
   ) : (
     <></>

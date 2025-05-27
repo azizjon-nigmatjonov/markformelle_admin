@@ -75,7 +75,7 @@ export const ModalTableLogic = ({
 
   const updateForm = async (params: {}, id: number) => {
     try {
-      const { data } = await axios.put(`${API_URL}/urun/${id}`, params);
+      const { data } = await axios.put(`${API_URL}/labrecete/${id}`, params);
       refetch();
       return data;
     } catch (error) {
@@ -167,12 +167,80 @@ export const TablesLogic = ({ formId }: Props) => {
   const { data: tableData } = useQuery(
     ["GET_TABLE_DATA", formId],
     () => {
-      return axios.get(`${API_URL}/labrecetecalisma/?LABRECETEID=14481`);
+      return axios.get(`${API_URL}/labrecetecalisma/?LABRECETEID=${formId}`);
     },
     {
       enabled: !!formId,
     }
   );
 
-  return { tableData };
+  return { tableData: tableData?.data ?? {} };
+};
+
+export const TrailTableLogic = ({
+  id,
+  idTable,
+}: {
+  id: number;
+  idTable: number;
+}) => {
+  const [trailTable, setTrailTable]: any = useState({ okey: [] });
+  const { data: tableData } = useQuery(
+    ["GET_TRAIL_TABLE_DATA", id],
+    () => {
+      return axios.get(`${API_URL}/labreceteatis/?LABRECETEID=${id}`);
+    },
+    {
+      enabled: !!id,
+    }
+  );
+
+  useEffect(() => {
+    const obj: any = { okey: [], okeysiz: [] };
+
+    tableData?.data?.data?.forEach(
+      (el: { LABRECETECALISMAID: number; OKEY: boolean }) => {
+        if (el.LABRECETECALISMAID === idTable) {
+          if (el.OKEY) {
+            obj.okey.push(el);
+          } else {
+            obj.okeysiz.push(el);
+          }
+        }
+      }
+    );
+
+    setTrailTable(obj);
+  }, [tableData, idTable]);
+
+  return { trailData: trailTable };
+};
+
+export const DetailTableLogic = ({
+  id,
+  idTable,
+}: {
+  id: number;
+  idTable: number;
+}) => {
+  const [data, setData] = useState([]);
+  const { data: tableData } = useQuery(
+    ["GET_DETAIL_DATA_TABLE", id],
+    () => {
+      return axios.get(`${API_URL}/labreceteurun/?LABRECETEID=${id}`);
+    },
+    {
+      enabled: !!id,
+    }
+  );
+
+  useEffect(() => {
+    setData(
+      tableData?.data?.data?.filter(
+        (el: { LABRECETEATISID: number }) => el.LABRECETEATISID === idTable
+      )
+    );
+  }, [tableData, idTable]);
+
+  return { detailData: data };
 };

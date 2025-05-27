@@ -673,7 +673,9 @@ const CNewTable = ({
 
           <div
             id="table"
-            className="flex h-full w-full overflow-scroll designed-scroll"
+            className={`flex h-full w-full overflow-scroll designed-scroll ${
+              sideFilter ? "" : "pl-5"
+            }`}
             style={{
               height: autoHeight
                 ? autoHeight
@@ -682,7 +684,7 @@ const CNewTable = ({
                 : "calc(100vh - 95px)",
             }}
           >
-            <div className={`w-full ${sideFilter ? "" : "pl-5"}`}>
+            <div className={`w-full`}>
               <CTableWrapper
                 count={meta.pageCount}
                 totalCount={meta.totalCount}

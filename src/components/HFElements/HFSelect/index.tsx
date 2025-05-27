@@ -153,7 +153,19 @@ const HFSelect = ({
               error
             >
               <div className="relative">
-                {options.length ? (
+                <SelectUI
+                  options={options}
+                  optionType={optionType}
+                  onChange={onChange}
+                  placeholder={placeholder}
+                  onFormChange={onFormChange}
+                  value={value}
+                  handleClick={handleClick}
+                  defaultValue={defaultValue}
+                  disabled={disabled}
+                  props={props}
+                />
+                {/* {options.length ? (
                   <SelectUI
                     options={options}
                     optionType={optionType}
@@ -182,7 +194,7 @@ const HFSelect = ({
                   </button>
                 ) : (
                   ""
-                )}
+                )} */}
               </div>
               {!disabledHelperText && error?.message ? error.message : " "}
             </FormHelperText>

@@ -17,6 +17,7 @@ export const LabChemicals = () => {
     page: 1,
     perPage: 50,
   });
+  const [showUI, setShowUI] = useState(false);
   const [modalInitialData, setModalInitialData] = useState<ModalTypes>({});
 
   const { bodyColumns, isLoading, bodyData, deleteFn } = TableData({
@@ -90,7 +91,7 @@ export const LabChemicals = () => {
       setFilterParams({ page: 0, perPage: 50 });
     }
   };
-  const [showUI, setShowUI] = useState(false);
+
   const handleModalActions = (status: string, id: string) => {
     if (status === "close") {
       setOpen(false);
@@ -109,6 +110,7 @@ export const LabChemicals = () => {
     setFilterParams: setFilterParamsFirm,
     filterParams: filterParamsFirm,
   } = useGetFirmList({ enabled: "" });
+
   return (
     <>
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />

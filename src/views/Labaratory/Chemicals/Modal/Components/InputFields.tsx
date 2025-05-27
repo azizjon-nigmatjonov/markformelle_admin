@@ -2,21 +2,25 @@ import HFTextField from "../../../../../components/HFElements/HFTextField";
 import { InputFieldUI } from "../../../../../components/UI/FieldUI";
 import { SelectOptionsTable } from "../../../../../components/UI/Options/Table";
 import HFSelect from "../../../../../components/HFElements/HFSelect";
-import { useTranslationHook } from "../../../../../hooks/useTranslation";
+import CCheckbox from "../../../../../components/CElements/CCheckbox";
+import { useLabRenkGroupList } from "../../../../../hooks/useFetchRequests/useLabRenkGroup";
+import { useHamStockList } from "../../../../../hooks/useFetchRequests/useHamStockList";
+import { useAsamaList } from "../../../../../hooks/useFetchRequests/useAsamaList";
 import { useGetDovizList } from "../../../../../hooks/useFetchRequests/useDovizList";
+import { useReceteTypeList } from "../../../../../hooks/useFetchRequests/useReceteTypeList";
+import { LiteOptionsTable } from "../../../../../components/UI/Options/LiteTable";
+import { useRenkDering } from "../../../../../hooks/useFetchRequests/useRenkDering";
+import { useKaliteList } from "../../../../../hooks/useFetchRequests/useKaliteList";
 
 interface InputFieldsProps {
   control: any;
   setValue: (name: any, value: any) => void;
-  disabled: boolean;
   filterParams: any;
-  urunTypeData: any;
-  urunTypeFilterParams: any;
   firmaData: any;
   filterParamsFirm: any;
   setFilterParamsFirm: (val: any) => void;
   setFilterParams: (params: any) => void;
-  setUrunTypeFilterParams: (params: any) => void;
+  getValues: () => any;
 }
 
 export const InputFields = ({
@@ -24,238 +28,219 @@ export const InputFields = ({
   filterParams,
   setFilterParams,
   setValue,
-  disabled,
-  urunTypeData,
-  urunTypeFilterParams,
   setFilterParamsFirm,
   firmaData,
   filterParamsFirm,
-  setUrunTypeFilterParams,
+  getValues,
 }: InputFieldsProps) => {
-  const { t } = useTranslationHook();
-  const { dovizData } = useGetDovizList({});
-  console.log("dovizData", dovizData);
+  const { Options: LabRenkOptions } = useLabRenkGroupList();
+  const { data: hamStockData } = useHamStockList();
+  const { data: asamaData } = useAsamaList();
+  const { Options: moneyOptions } = useGetDovizList({});
+  const { Options: receteTypeOptions } = useReceteTypeList();
+  const { Options: renkDeringOptions } = useRenkDering();
+  const { data: kaliteData } = useKaliteList();
 
   return (
-    <div className="w-full grid grid-cols-3 gap-y-3 gap-x-5">
+    <div className="w-full grid grid-cols-4 gap-y-3 gap-x-5">
       <div className="space-y-2">
-        <InputFieldUI title={t("LABRECETEADI")}>
+        <InputFieldUI title="LABRECETEADI">
           <HFTextField
-            name="LABRECETEADI"
+            name="ADI"
             control={control}
             setValue={setValue}
-            placeholder={t("LABRECETEADI")}
-            disabled={disabled}
+            placeholder="ADI"
           />
         </InputFieldUI>
-        <InputFieldUI title={t("TALEPTARIHI")}>
-          <HFTextField
-            name="TALEPTARIHI"
+        <InputFieldUI title="FIRMAID">
+          <LiteOptionsTable
+            name="FIRMAID"
+            placeholder="FIRMAID"
+            options={firmaData?.data}
+            required={true}
+            headColumns={[
+              { id: "FIRMAID", title: "FIRMAID" },
+              { id: "ADI", title: "FIRMAADI" },
+            ]}
+            handleSelect={(obj: { FIRMAID: string }) => {
+              setValue("FIRMAID", obj.FIRMAID);
+            }}
             control={control}
-            setValue={setValue}
-            placeholder={t("TALEPTARIHI")}
-            disabled={disabled}
           />
         </InputFieldUI>
-        <InputFieldUI title={t("HAMSTOK")}>
-          <HFTextField
-            name="HAMSTOK"
-            control={control}
-            setValue={setValue}
-            placeholder={t("HAMSTOK")}
-            disabled={disabled}
-          />
-        </InputFieldUI>
-        <InputFieldUI title={t("FIRMARENKKODU")}>
-          <HFTextField
-            name="FIRMARENKKODU"
-            control={control}
-            setValue={setValue}
-            placeholder={t("FIRMARENKKODU")}
-            disabled={disabled}
-          />
-        </InputFieldUI>
-        <InputFieldUI title={t("ASKLAMA")}>
+        <InputFieldUI title="LABRENKGRUPID">
           <HFSelect
-            name="ASKLAMA"
+            name="LABRENKGRUPID"
             control={control}
             setValue={setValue}
-            placeholder={t("ASKLAMA")}
-            disabled={disabled}
+            placeholder="LABRENKGRUPID"
+            options={LabRenkOptions}
           />
-        </InputFieldUI>
-        <InputFieldUI title={t("ESKIRECETEKODU")}>
-          <HFSelect
-            name="ESKIRECETEKODU"
+        </InputFieldUI>{" "}
+        <InputFieldUI title={"HAMSTOK"}>
+          <SelectOptionsTable
+            name="HAMADI"
+            placeholder={"HAMADI"}
+            options={hamStockData?.data}
+            required={true}
+            headColumns={[
+              { id: "HAMID", title: "HAMID" },
+              { id: "ADI", title: "ADI" },
+              { id: "HAMTIPIADI", title: "HAMTIPIADI" },
+            ]}
+            filterParams={filterParams}
+            handleSelect={(obj: { ADI: string; HAMID: number }) => {
+              setValue("HAMID", obj.HAMID);
+              setValue("HAMADI", obj.ADI);
+            }}
+            handleSearch={(val: string) => {
+              setFilterParamsFirm({ ...filterParamsFirm, q: val });
+            }}
             control={control}
-            setValue={setValue}
-            placeholder={t("ESKIRECETEKODU")}
-            disabled={disabled}
-          />
-        </InputFieldUI>
-        <InputFieldUI title={t("REMKDERINGLIGI")}>
-          <HFSelect
-            name="REMKDERINGLIGI"
-            control={control}
-            setValue={setValue}
-            placeholder={t("REMKDERINGLIGI")}
-            disabled={disabled}
+            setFilterParams={setFilterParams}
           />
         </InputFieldUI>
       </div>
       <div className="space-y-2">
-        <InputFieldUI title={t("FIRMAKODU")}>
+        <InputFieldUI title={"RECETETURU"}>
           <HFSelect
-            name="FIRMAKODU"
+            name="RECETETURUID"
             control={control}
             setValue={setValue}
-            placeholder={t("FIRMAKODU")}
-            disabled={disabled}
+            placeholder="RECETETURUID"
+            options={receteTypeOptions}
           />
         </InputFieldUI>
-        <InputFieldUI title={t("RENKGRUP")}>
-          <HFSelect
-            name="RENKGRUP"
+        <InputFieldUI title="ACIKLAMA">
+          <HFTextField
+            name="ACIKLAMA"
             control={control}
             setValue={setValue}
-            placeholder={t("RENKGRUP")}
-            disabled={disabled}
+            placeholder="ACIKLAMA"
           />
         </InputFieldUI>
-        <InputFieldUI title={t("DOVIZID")}>
+        <InputFieldUI title="USTASAMA">
+          <SelectOptionsTable
+            name="USTASAMAID"
+            placeholder={"USTASAMA"}
+            options={asamaData?.data}
+            required={true}
+            headColumns={[
+              { id: "ASAMAID", title: "ASAMAID" },
+              { id: "ADI", title: "ADI" },
+            ]}
+            filterParams={filterParams}
+            handleSelect={(obj: { ASAMAID: number; ADI: string }) => {
+              console.log("ob", obj);
+
+              setValue("USTASAMAID", obj.ASAMAID);
+              setValue("USTASAMAADI", obj.ADI);
+            }}
+            handleSearch={(val: string) => {
+              setFilterParamsFirm({ ...filterParamsFirm, q: val });
+            }}
+            control={control}
+            setFilterParams={setFilterParams}
+          />
+        </InputFieldUI>
+        <InputFieldUI title="DOVIZID">
           <HFSelect
             name="DOVIZID"
             control={control}
             setValue={setValue}
-            placeholder={t("DOVIZID")}
-            disabled={disabled}
-            options={[]}
-          />
-        </InputFieldUI>
-        <InputFieldUI title={t("RECETETURAADI")}>
-          <HFSelect
-            name="RECETETURAADI"
-            control={control}
-            setValue={setValue}
-            placeholder={t("RECETETURAADI")}
-            disabled={disabled}
-          />
-        </InputFieldUI>
+            handleClick={(obj) => {
+              console.log(obj);
 
-        <InputFieldUI title={t("ESKILABRECETEKODU")}>
-          <HFTextField
-            name="ESKILABRECETEKODU"
-            control={control}
-            setValue={setValue}
-            placeholder={t("ESKILABRECETEKODU")}
-            disabled={disabled}
-          />
-        </InputFieldUI>
-
-        <InputFieldUI title={t("KALITENO")}>
-          <HFSelect
-            name="KALITENO"
-            control={control}
-            setValue={setValue}
-            placeholder={t("KALITENO")}
-            disabled={disabled}
+              setValue("DOVIZID", obj.value);
+            }}
+            placeholder="DOVIZID"
+            options={moneyOptions}
           />
         </InputFieldUI>
       </div>
       <div className="space-y-2">
-        <InputFieldUI title={t("USTASAMA")}>
-          <SelectOptionsTable
-            name="USTASAMA"
-            placeholder={t("USTASAMA")}
-            options={firmaData}
-            required={true}
-            headColumns={[
-              { id: "FIRMAID", width: 200, title: "FIRMAID" },
-              { id: "FIRMAADI", title: "FIRMAADI" },
-              { id: "KISAADI", title: "KISAADI" },
-            ]}
-            filterParams={filterParams}
-            handleSelect={(_: {}) => {}}
-            handleSearch={(val: string) => {
-              setFilterParamsFirm({ ...filterParamsFirm, q: val });
-            }}
+        <InputFieldUI title="ESKILABRECETEKODU">
+          <HFTextField
+            name="ESKILABRECETEKODU"
             control={control}
-            setFilterParams={setFilterParams}
-            disabled={disabled}
+            setValue={setValue}
+            placeholder="ESKILABRECETEKODU"
           />
         </InputFieldUI>
-        <InputFieldUI title={t("PANTONEKODU")}>
-          <HFSelect
+        <InputFieldUI title="PANTONEKODU">
+          <HFTextField
             name="PANTONEKODU"
             control={control}
             setValue={setValue}
-            placeholder={t("PANTONEKODU")}
-            disabled={disabled}
-            options={[]}
+            placeholder="PANTONEKODU"
           />
         </InputFieldUI>
-        <InputFieldUI title={t("FIRMAID")}>
+        <InputFieldUI title="RENKDERINGLIGI">
+          <HFSelect
+            name="RENKDERINLIGIID"
+            control={control}
+            setValue={setValue}
+            placeholder="RENKDERINLIGIID"
+            options={renkDeringOptions}
+            handleClick={(obj) => {
+              setValue("RENKDERINLIGIID", obj.value);
+            }}
+          />
+        </InputFieldUI>
+      </div>
+      <div className="space-y-2">
+        <InputFieldUI title="KALITENO">
           <SelectOptionsTable
-            name="FIRMAID"
-            placeholder={t("FIRMAID")}
-            options={firmaData}
+            name="KALITEID"
+            placeholder="KALITEID"
+            options={kaliteData?.data}
             required={true}
             headColumns={[
-              { id: "FIRMAID", width: 200, title: "FIRMAID" },
-              { id: "FIRMAADI", title: "FIRMAADI" },
-              { id: "KISAADI", title: "KISAADI" },
+              { id: "KALITEID", title: "KALITEID" },
+              { id: "KALITEADI", title: "KALITEADI" },
             ]}
             filterParams={filterParams}
-            handleSelect={(_: {}) => {}}
+            handleSelect={(obj: { KALITEADI: string; KALITEID: string }) => {
+              setValue("KALITEADI", obj.KALITEADI);
+              setValue("KALITEID", obj.KALITEID);
+            }}
             handleSearch={(val: string) => {
               setFilterParamsFirm({ ...filterParamsFirm, q: val });
             }}
             control={control}
             setFilterParams={setFilterParams}
-            disabled={disabled}
           />
         </InputFieldUI>
-        <InputFieldUI title={t("URUNTIPIADI")}>
-          <SelectOptionsTable
-            name="URUNTIPIADI"
-            placeholder={t("URUNTIPIID")}
-            options={urunTypeData?.data}
-            required={true}
-            headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
-            filterParams={urunTypeFilterParams}
-            handleSelect={(obj: any) => {
-              setValue("URUNTIPIID", obj.URUNTIPIID);
-              setValue("URUNTIPIADI", obj.ADI);
-            }}
-            handleSearch={(val: string) => {
-              setUrunTypeFilterParams({
-                ...urunTypeFilterParams,
-                q: val,
-              });
-            }}
-            control={control}
-            setFilterParams={setUrunTypeFilterParams}
-            disabled={disabled}
-          />
-        </InputFieldUI>
-        <InputFieldUI title={t("KULLANICIADI")}>
+        <InputFieldUI title="TALEPTARIHI">
           <HFTextField
-            name="KULLANICIADI"
+            name="TALEPTARIHI"
             control={control}
             setValue={setValue}
-            placeholder={t("KULLANICIADI")}
-            disabled={true}
+            disabled
+            placeholder="TALEPTARIHI"
           />
         </InputFieldUI>
-        <InputFieldUI title={t("RENKDERINLIGIADI")}>
-          <HFSelect
-            name="RENKDERINLIGIADI"
-            control={control}
-            setValue={setValue}
-            placeholder={t("RENKDERINLIGIADI")}
-            disabled={disabled}
-          />
-        </InputFieldUI>
+        <div className="flex">
+          <div className="w-[48%]">
+            <CCheckbox
+              element={{ label: "FASON" }}
+              checked={getValues().FASON === 1 ? true : false}
+              handleCheck={(obj: { checked: boolean }) => {
+                setValue("FASON", obj.checked ? "1" : "0");
+              }}
+            />
+          </div>
+          <div className="w-[2%]"></div>
+          <div className="w-1/2">
+            <CCheckbox
+              element={{ label: "IPTAL" }}
+              checked={getValues().IPTAL === 1 ? true : false}
+              handleCheck={(obj: { checked: boolean }) => {
+                setValue("IPTAL", obj.checked ? "1" : "0");
+              }}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

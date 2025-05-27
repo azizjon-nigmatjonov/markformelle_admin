@@ -31,7 +31,7 @@ export const ColorMaterial = ({
         }}
       ></div>
 
-      <div className="absolute right-[0px] top-[-15px] h-[68px] w-full flex items-center justify-center overflow-hidden">
+      <div className="absolute right-[0px] top-[-15px] h-[63px] w-full flex items-center justify-center overflow-hidden">
         <div
           className="absolute left0 top-0 h-full z-[2] flex items-center justify-center"
           style={{

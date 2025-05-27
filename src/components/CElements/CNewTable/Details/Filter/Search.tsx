@@ -1,5 +1,6 @@
 import { Tooltip } from "@mui/material";
 import { CloseIcon, SearchIcon } from "../../../../UI/IconGenerator/Svg";
+import { TooltipPosition } from "../../../../../constants/toolPosition";
 
 interface Props {
   value: any;
@@ -18,18 +19,7 @@ export const SearchField = ({
     <Tooltip
       title="Нажмите «Enter» для поиска"
       arrow
-      slotProps={{
-        popper: {
-          modifiers: [
-            {
-              name: "offset",
-              options: {
-                offset: [0, 15],
-              },
-            },
-          ],
-        },
-      }}
+      slotProps={TooltipPosition}
     >
       <div
         className={`relative w-full h-[30px] flex items-center text-[12px] rounded-[8px]`}

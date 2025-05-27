@@ -1,10 +1,10 @@
 import { useTranslation } from "react-i18next";
-import { PlusIcon } from "../../../../../components/UI/IconGenerator/Svg";
+import { PlusIcon } from "../../IconGenerator/Svg";
 import cls from "./style.module.scss";
 interface Props {
   bodyColumns: any;
   headColumns: any;
-  title: string;
+
   idTable?: number | null;
   handleRowClick: (val: any, type: string) => void;
 }
@@ -13,29 +13,25 @@ export const TableUI = ({
   bodyColumns = [],
   headColumns = [],
   handleRowClick,
-  title = "table",
 }: Props) => {
   const { t } = useTranslation();
   return (
     <>
-      <div className="py-1 flex items-center justify-between px-2 border-b border-[var(--border)]">
-        <h2>{title}</h2>
-        <button className="flex space-x-1 items-center text-sm" type="button">
-          <PlusIcon fill="var(--black)" />
-          <span>{t("add")}</span>
-        </button>
-      </div>
       <div
-        className={`${cls.tableOne} ${
+        className={`${cls.table} ${
           idTable ? "" : cls.tableOneDetail
         } text-sm overflow-x-scroll designed-scroll h-full`}
       >
         <div className={`${cls.header} flex w-full`}>
-          <div className="flex font-medium text-[var(--main)]">
+          <div className="flex font-medium text-[var(--main)] w-full">
             {headColumns.map(
-              (head: { id: string; title: string }, index: number) => (
+              (
+                head: { id: string; title: string; width: number },
+                index: number
+              ) => (
                 <div
                   key={index}
+                  style={{ width: head?.width || "100%" }}
                   className={`${cls.cell} border-b border-[var(--border)]`}
                 >
                   <p>{head.title}</p>
@@ -55,11 +51,17 @@ export const TableUI = ({
             >
               {headColumns.map(
                 (
-                  head: { id: string; title: string; render?: any },
+                  head: {
+                    id: string;
+                    title: string;
+                    render?: any;
+                    width: number;
+                  },
                   index: number
                 ) => (
                   <div
                     key={index}
+                    style={{ width: head?.width || "100%" }}
                     className={`${cls.cell} ${
                       idTable === item.LABRECETECALISMAID ? "bg-blue-200" : ""
                     } font-medium border-b border-[var(--border)]`}
@@ -75,6 +77,16 @@ export const TableUI = ({
             </div>
           ))}
         </div>
+      </div>{" "}
+      <div className="h-[30px] border-t border-[var(00border)] flex items-center justify-between px-2">
+        <div></div>
+        <button
+          className="flex space-x-1 items-center text-sm text-[var(--main)]"
+          type="button"
+        >
+          <PlusIcon fill="var(--main)" />
+          <span>{t("add")}</span>
+        </button>
       </div>
     </>
   );
