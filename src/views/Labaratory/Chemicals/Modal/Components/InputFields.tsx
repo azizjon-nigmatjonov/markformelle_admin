@@ -1,45 +1,32 @@
 import HFTextField from "../../../../../components/HFElements/HFTextField";
 import { InputFieldUI } from "../../../../../components/UI/FieldUI";
-import { SelectOptionsTable } from "../../../../../components/UI/Options/Table";
 import HFSelect from "../../../../../components/HFElements/HFSelect";
 import CCheckbox from "../../../../../components/CElements/CCheckbox";
 import { useLabRenkGroupList } from "../../../../../hooks/useFetchRequests/useLabRenkGroup";
-import { useHamStockList } from "../../../../../hooks/useFetchRequests/useHamStockList";
-import { useAsamaList } from "../../../../../hooks/useFetchRequests/useAsamaList";
 import { useGetDovizList } from "../../../../../hooks/useFetchRequests/useDovizList";
 import { useReceteTypeList } from "../../../../../hooks/useFetchRequests/useReceteTypeList";
 import { LiteOptionsTable } from "../../../../../components/UI/Options/LiteTable";
 import { useRenkDering } from "../../../../../hooks/useFetchRequests/useRenkDering";
-import { useKaliteList } from "../../../../../hooks/useFetchRequests/useKaliteList";
+import { useState } from "react";
 
 interface InputFieldsProps {
   control: any;
   setValue: (name: any, value: any) => void;
-  filterParams: any;
-  firmaData: any;
-  filterParamsFirm: any;
-  setFilterParamsFirm: (val: any) => void;
-  setFilterParams: (params: any) => void;
   getValues: () => any;
+  formData: any;
 }
 
 export const InputFields = ({
   control,
-  filterParams,
-  setFilterParams,
   setValue,
-  setFilterParamsFirm,
-  firmaData,
-  filterParamsFirm,
   getValues,
+  formData,
 }: InputFieldsProps) => {
   const { Options: LabRenkOptions } = useLabRenkGroupList();
-  const { data: hamStockData } = useHamStockList();
-  const { data: asamaData } = useAsamaList();
   const { Options: moneyOptions } = useGetDovizList({});
   const { Options: receteTypeOptions } = useReceteTypeList();
   const { Options: renkDeringOptions } = useRenkDering();
-  const { data: kaliteData } = useKaliteList();
+  const [selectedHamID, setSelectedHamID]: any = useState(null);
 
   return (
     <div className="w-full grid grid-cols-4 gap-y-3 gap-x-5">
@@ -56,16 +43,17 @@ export const InputFields = ({
           <LiteOptionsTable
             name="FIRMAID"
             placeholder="FIRMAID"
-            options={firmaData?.data}
-            required={true}
+            link="firma"
             headColumns={[
-              { id: "FIRMAID", title: "FIRMAID" },
-              { id: "ADI", title: "FIRMAADI" },
+              { id: "FIRMAID", title: "FIRMAID", width: 80 },
+              { id: "ADI", title: "FIRMAADI", width: 180 },
             ]}
             handleSelect={(obj: { FIRMAID: string }) => {
               setValue("FIRMAID", obj.FIRMAID);
             }}
+            defaultValue={formData?.FIRMAID}
             control={control}
+            disabled={!!formData?.FIRMAID}
           />
         </InputFieldUI>
         <InputFieldUI title="LABRENKGRUPID">
@@ -76,28 +64,27 @@ export const InputFields = ({
             placeholder="LABRENKGRUPID"
             options={LabRenkOptions}
           />
-        </InputFieldUI>{" "}
+        </InputFieldUI>
         <InputFieldUI title={"HAMSTOK"}>
-          <SelectOptionsTable
-            name="HAMADI"
-            placeholder={"HAMADI"}
-            options={hamStockData?.data}
-            required={true}
+          <LiteOptionsTable
+            name="HAMID"
+            placeholder="HAMSTOK"
+            link="ham"
+            renderValue={(_: string, obj: any) => {
+              return obj.ADI || obj.HAMID;
+            }}
+            defaultValue={formData.HAMADI}
             headColumns={[
-              { id: "HAMID", title: "HAMID" },
-              { id: "ADI", title: "ADI" },
-              { id: "HAMTIPIADI", title: "HAMTIPIADI" },
+              { id: "HAMID", title: "HAMID", width: 70 },
+              { id: "ADI", title: "ADI", width: 160 },
+              { id: "HAMTIPIADI", title: "HAMTIPIADI", width: 90 },
             ]}
-            filterParams={filterParams}
             handleSelect={(obj: { ADI: string; HAMID: number }) => {
               setValue("HAMID", obj.HAMID);
               setValue("HAMADI", obj.ADI);
-            }}
-            handleSearch={(val: string) => {
-              setFilterParamsFirm({ ...filterParamsFirm, q: val });
+              setSelectedHamID(obj.HAMID);
             }}
             control={control}
-            setFilterParams={setFilterParams}
           />
         </InputFieldUI>
       </div>
@@ -109,6 +96,7 @@ export const InputFields = ({
             setValue={setValue}
             placeholder="RECETETURUID"
             options={receteTypeOptions}
+            disabled={!!formData?.RECETETURUID}
           />
         </InputFieldUI>
         <InputFieldUI title="ACIKLAMA">
@@ -120,27 +108,23 @@ export const InputFields = ({
           />
         </InputFieldUI>
         <InputFieldUI title="USTASAMA">
-          <SelectOptionsTable
-            name="USTASAMAID"
+          <LiteOptionsTable
+            name="ASAMAID"
             placeholder={"USTASAMA"}
-            options={asamaData?.data}
-            required={true}
+            link="asama"
+            renderValue={(_: string, obj: any) => {
+              return obj.ADI || obj.ASAMAID;
+            }}
+            defaultValue={formData?.USTASAMAADI}
             headColumns={[
-              { id: "ASAMAID", title: "ASAMAID" },
-              { id: "ADI", title: "ADI" },
+              { id: "ASAMAID", title: "ASAMAID", width: 80 },
+              { id: "ADI", title: "ADI", width: 150 },
             ]}
-            filterParams={filterParams}
             handleSelect={(obj: { ASAMAID: number; ADI: string }) => {
-              console.log("ob", obj);
-
               setValue("USTASAMAID", obj.ASAMAID);
               setValue("USTASAMAADI", obj.ADI);
             }}
-            handleSearch={(val: string) => {
-              setFilterParamsFirm({ ...filterParamsFirm, q: val });
-            }}
             control={control}
-            setFilterParams={setFilterParams}
           />
         </InputFieldUI>
         <InputFieldUI title="DOVIZID">
@@ -149,12 +133,11 @@ export const InputFields = ({
             control={control}
             setValue={setValue}
             handleClick={(obj) => {
-              console.log(obj);
-
               setValue("DOVIZID", obj.value);
             }}
             placeholder="DOVIZID"
             options={moneyOptions}
+            disabled={!!formData?.FIRMAID}
           />
         </InputFieldUI>
       </div>
@@ -189,26 +172,26 @@ export const InputFields = ({
         </InputFieldUI>
       </div>
       <div className="space-y-2">
-        <InputFieldUI title="KALITENO">
-          <SelectOptionsTable
+        <InputFieldUI title="KALITEID">
+          <LiteOptionsTable
             name="KALITEID"
             placeholder="KALITEID"
-            options={kaliteData?.data}
-            required={true}
+            link="kalite"
+            renderValue={(_: string, obj: any) => {
+              return obj.KALITEID;
+            }}
+            defaultSearch={selectedHamID ? `HAMID=${selectedHamID}` : ""}
+            defaultValue={formData?.KALITEID}
             headColumns={[
-              { id: "KALITEID", title: "KALITEID" },
-              { id: "KALITEADI", title: "KALITEADI" },
+              { id: "KALITEID", title: "KALITEID", width: 120 },
+              { id: "KALITEADI", title: "KALITEADI", width: 300 },
             ]}
-            filterParams={filterParams}
             handleSelect={(obj: { KALITEADI: string; KALITEID: string }) => {
               setValue("KALITEADI", obj.KALITEADI);
               setValue("KALITEID", obj.KALITEID);
             }}
-            handleSearch={(val: string) => {
-              setFilterParamsFirm({ ...filterParamsFirm, q: val });
-            }}
+            disabled={true}
             control={control}
-            setFilterParams={setFilterParams}
           />
         </InputFieldUI>
         <InputFieldUI title="TALEPTARIHI">

@@ -79,149 +79,151 @@ const SidebarSection = ({
   if (wideSidebar) {
     return (
       <div id="sidebarCollapse">
-        {Object.entries(list).map(([key, value]: [string, any]) => {
-          const visibleSidebarItems: any = value.filter(
-            (el: any) => el.sidebar
-          );
-          if (!visibleSidebarItems?.length) return "";
+        {Object.entries(list).map(
+          ([key, value]: [string, any], ind: number) => {
+            const visibleSidebarItems: any = value.filter(
+              (el: any) => el.sidebar
+            );
+            if (!visibleSidebarItems?.length) return "";
 
-          return (
-            <div key={key}>
-              <Accordion
-                expanded={expanded === key}
-                onChange={handleChange(key)}
-              >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1bh-content"
-                  id="panel1bh-header"
+            return (
+              <div key={key + ind}>
+                <Accordion
+                  expanded={expanded === key}
+                  onChange={handleChange(key)}
                 >
-                  <div className="w-[40px]">
-                    <IconGenerator
-                      icon={visibleSidebarItems[0]?.parent_icon}
-                      fill="var(--black)"
-                    />
-                  </div>
-                  <h2 className="font-semibold text-black text-[12px]">
-                    {t(key)}
-                  </h2>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <ul className="pl-2">
-                    {visibleSidebarItems?.map((item: any) => (
-                      <li key={item.id} className="">
-                        {item?.children?.length ? (
-                          <div>
-                            <Accordion
-                              expanded={expandedInner === item.id}
-                              onChange={handleChangeInner(item.id)}
-                            >
-                              <AccordionSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel1bh-content"
-                                id="panel1bh-header"
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1bh-content"
+                    id="panel1bh-header"
+                  >
+                    <div className="w-[40px]">
+                      <IconGenerator
+                        icon={visibleSidebarItems[0]?.parent_icon}
+                        fill="var(--black)"
+                      />
+                    </div>
+                    <h2 className="font-semibold text-black text-[12px]">
+                      {t(key)}
+                    </h2>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <ul className="pl-2">
+                      {visibleSidebarItems?.map((item: any, iIndex: number) => (
+                        <li key={item.id + iIndex}>
+                          {item?.children?.length ? (
+                            <div>
+                              <Accordion
+                                expanded={expandedInner === item.id}
+                                onChange={handleChangeInner(item.id)}
                               >
-                                <div className="flex items-center relative overflow-hidden h-full ml-2">
-                                  <div className="w-[45px] flex justify-center">
-                                    <IconGenerator
-                                      icon={item?.icon}
-                                      fill={
+                                <AccordionSummary
+                                  expandIcon={<ExpandMoreIcon />}
+                                  aria-controls="panel1bh-content"
+                                  id="panel1bh-header"
+                                >
+                                  <div className="flex items-center relative overflow-hidden h-full ml-2">
+                                    <div className="w-[45px] flex justify-center">
+                                      <IconGenerator
+                                        icon={item?.icon}
+                                        fill={
+                                          item.id === locationName
+                                            ? "var(--main)"
+                                            : "var(--gray)"
+                                        }
+                                      />
+                                    </div>
+
+                                    <p
+                                      className={`w-full ${
                                         item.id === locationName
-                                          ? "var(--main)"
-                                          : "var(--gray)"
-                                      }
-                                    />
+                                          ? "text-[var(--main)] font-medium"
+                                          : ""
+                                      }`}
+                                    >
+                                      {t(item.title)}
+                                    </p>
                                   </div>
-
-                                  <p
-                                    className={`w-full ${
-                                      item.id === locationName
-                                        ? "text-[var(--main)] font-medium"
-                                        : ""
-                                    }`}
-                                  >
-                                    {t(item.title)}
-                                  </p>
-                                </div>
-                              </AccordionSummary>
-                              <AccordionDetails>
-                                <ul className="ml-5">
-                                  {item.children.map(
-                                    (child: any, index: number) => (
-                                      <li key={index + child.path}>
-                                        <div
-                                          onClick={() =>
-                                            navigateTo("/" + child.path)
-                                          }
-                                          className="flex items-center justify-between h-[40px] relative overflow-hidden cursor-pointer text-[12px]"
-                                        >
-                                          <div className="w-[45px] flex justify-center">
-                                            <IconGenerator
-                                              icon={child?.icon}
-                                              fill={
-                                                child.child === locationName
-                                                  ? "var(--main)"
-                                                  : "var(--gray)"
-                                              }
-                                            />
-                                          </div>
-                                          <p
-                                            className={`w-full ${
-                                              child.path === locationName
-                                                ? "text-[var(--main)] font-medium"
-                                                : ""
-                                            }`}
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                  <ul className="ml-5">
+                                    {item.children.map(
+                                      (child: any, index: number) => (
+                                        <li key={index + child.path}>
+                                          <div
+                                            onClick={() =>
+                                              navigateTo("/" + child.path)
+                                            }
+                                            className="flex items-center justify-between h-[40px] relative overflow-hidden cursor-pointer text-[12px]"
                                           >
-                                            {t(child.title)}
-                                          </p>
-                                        </div>
-                                      </li>
-                                    )
-                                  )}
-                                </ul>
-                              </AccordionDetails>
-                            </Accordion>
-                          </div>
-                        ) : (
-                          <div
-                            onClick={() => navigateTo("/" + item.path)}
-                            className="flex items-center justify-between h-[40px] relative overflow-hidden cursor-pointer text-[12px]"
-                          >
-                            <div
-                              className={` ${
-                                item.id === locationName ? "active" : ""
-                              }`}
-                            ></div>
-
-                            <div className="w-[45px] flex justify-center">
-                              <IconGenerator
-                                icon={item?.icon}
-                                fill={
-                                  item.id === locationName
-                                    ? "var(--main)"
-                                    : "var(--gray)"
-                                }
-                              />
+                                            <div className="w-[45px] flex justify-center">
+                                              <IconGenerator
+                                                icon={child?.icon}
+                                                fill={
+                                                  child.child === locationName
+                                                    ? "var(--main)"
+                                                    : "var(--gray)"
+                                                }
+                                              />
+                                            </div>
+                                            <p
+                                              className={`w-full ${
+                                                child.path === locationName
+                                                  ? "text-[var(--main)] font-medium"
+                                                  : ""
+                                              }`}
+                                            >
+                                              {t(child.title)}
+                                            </p>
+                                          </div>
+                                        </li>
+                                      )
+                                    )}
+                                  </ul>
+                                </AccordionDetails>
+                              </Accordion>
                             </div>
-                            <p
-                              className={`w-full ${
-                                item.id === locationName
-                                  ? "text-[var(--main)] font-medium"
-                                  : ""
-                              }`}
+                          ) : (
+                            <div
+                              onClick={() => navigateTo("/" + item.path)}
+                              className="flex items-center justify-between h-[40px] relative overflow-hidden cursor-pointer text-[12px]"
                             >
-                              {t(item.title)}
-                            </p>
-                          </div>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </AccordionDetails>
-              </Accordion>
-            </div>
-          );
-        })}
+                              <div
+                                className={` ${
+                                  item.id === locationName ? "active" : ""
+                                }`}
+                              ></div>
+
+                              <div className="w-[45px] flex justify-center">
+                                <IconGenerator
+                                  icon={item?.icon}
+                                  fill={
+                                    item.id === locationName
+                                      ? "var(--main)"
+                                      : "var(--gray)"
+                                  }
+                                />
+                              </div>
+                              <p
+                                className={`w-full ${
+                                  item.id === locationName
+                                    ? "text-[var(--main)] font-medium"
+                                    : ""
+                                }`}
+                              >
+                                {t(item.title)}
+                              </p>
+                            </div>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </AccordionDetails>
+                </Accordion>
+              </div>
+            );
+          }
+        )}
       </div>
     );
   }

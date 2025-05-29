@@ -60,7 +60,7 @@ $xl2: 24px;
 @mixin design-scroll() {
   &::-webkit-scrollbar {
     display: block;
-    width: 10px;
+    width: 8px;
     height: 10px;
     border-radius: 4px;
   }

@@ -10,9 +10,11 @@ export const ModalTableLogic = ({
   setFormId,
   urunId,
   filterParams,
+  refetchTable,
 }: {
   urunId?: number | string;
   filterParams: IFilterParams;
+  refetchTable: () => void;
   setFormId: (val: number) => void;
 }) => {
   const { t } = useTranslationHook();
@@ -63,8 +65,9 @@ export const ModalTableLogic = ({
   const createForm = async (params: {}) => {
     try {
       const { data } = await axios.post(`${API_URL}/labrecete/`, params);
-
+      refetchTable();
       setFormId(data?.LABRECETEID);
+      toast.success(t("created!"));
       return data;
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
@@ -77,6 +80,8 @@ export const ModalTableLogic = ({
     try {
       const { data } = await axios.put(`${API_URL}/labrecete/${id}`, params);
       refetch();
+      refetchTable();
+      toast.success(t("updated!"));
       return data;
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
@@ -164,7 +169,7 @@ interface Props {
   formId: number;
 }
 export const TablesLogic = ({ formId }: Props) => {
-  const { data: tableData } = useQuery(
+  const { data: tableData, refetch } = useQuery(
     ["GET_TABLE_DATA", formId],
     () => {
       return axios.get(`${API_URL}/labrecetecalisma/?LABRECETEID=${formId}`);
@@ -174,7 +179,7 @@ export const TablesLogic = ({ formId }: Props) => {
     }
   );
 
-  return { tableData: tableData?.data ?? {} };
+  return { tableData: tableData?.data ?? {}, refetch };
 };
 
 export const TrailTableLogic = ({
@@ -185,7 +190,7 @@ export const TrailTableLogic = ({
   idTable: number;
 }) => {
   const [trailTable, setTrailTable]: any = useState({ okey: [] });
-  const { data: tableData } = useQuery(
+  const { data: tableData, refetch } = useQuery(
     ["GET_TRAIL_TABLE_DATA", id],
     () => {
       return axios.get(`${API_URL}/labreceteatis/?LABRECETEID=${id}`);
@@ -213,7 +218,7 @@ export const TrailTableLogic = ({
     setTrailTable(obj);
   }, [tableData, idTable]);
 
-  return { trailData: trailTable };
+  return { trailData: trailTable, refetch };
 };
 
 export const DetailTableLogic = ({
@@ -224,7 +229,7 @@ export const DetailTableLogic = ({
   idTable: number;
 }) => {
   const [data, setData] = useState([]);
-  const { data: tableData } = useQuery(
+  const { data: tableData, refetch } = useQuery(
     ["GET_DETAIL_DATA_TABLE", id],
     () => {
       return axios.get(`${API_URL}/labreceteurun/?LABRECETEID=${id}`);
@@ -242,5 +247,5 @@ export const DetailTableLogic = ({
     );
   }, [tableData, idTable]);
 
-  return { detailData: data };
+  return { detailData: data, refetch };
 };

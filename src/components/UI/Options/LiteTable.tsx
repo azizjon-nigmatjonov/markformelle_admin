@@ -8,6 +8,7 @@ import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 import { styled } from "@mui/material";
 import { useTranslationHook } from "../../../hooks/useTranslation";
 import { TableUI } from "./LiteTable/TableUI";
+import { useFetchType } from "../../../hooks/useFetchRequests/useFetchType";
 const PopupBody = styled("div")(
   ({ theme }) => `
   width: max-content;
@@ -23,15 +24,12 @@ const PopupBody = styled("div")(
       ? `0px 4px 8px rgb(0 0 0 / 0.7)`
       : `0px 4px 8px rgb(0 0 0 / 0.1)`
   };
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-weight: 500;
-  font-size: 0.875rem;
   z-index: 1;
 `
 );
 
 interface Props {
-  options: any;
+  link?: string;
   handleSelect: any;
   defaultValue?: undefined | string | number;
   name: string;
@@ -41,15 +39,15 @@ interface Props {
   control: any;
   placeholder?: string;
   readOnly?: boolean;
-  secondName?: string;
   focused?: boolean;
   disabled?: boolean;
-  handleSearch?: (val: string) => void;
   position?: string;
+  renderValue?: (val: string, obj: {}) => void;
+  defaultSearch?: string;
 }
 
 export const LiteOptionsTable = ({
-  options = [],
+  link = "",
   handleSelect = () => {},
   name = "",
   defaultValue = undefined,
@@ -59,11 +57,10 @@ export const LiteOptionsTable = ({
   control,
   placeholder = "",
   readOnly = false,
-  secondName = "",
   focused = false,
   disabled = false,
-  // position = "left",
-  handleSearch = () => {},
+  renderValue,
+  defaultSearch = "",
 }: Props) => {
   const { t } = useTranslationHook();
   const inputRef: any = useRef(null);
@@ -71,29 +68,47 @@ export const LiteOptionsTable = ({
   const [defaultData, setDefaultData]: any = useState({});
   const [search, setSearch] = useState("");
   const [anchor, setAnchor] = useState(null);
+  const [currentEl, setCurrentEl]: any = useState({});
+  const [options, setOptions] = useState([]);
+  const { data, setFilterParams, filterParams, isLoading, getList } =
+    useFetchType();
+
+  useEffect(() => {
+    setOptions(data?.data ?? []);
+  }, [data]);
 
   const handleActions = (el: any, _: string) => {
     setOpen(false);
     handleSelect(el);
+    setCurrentEl(el);
+  };
+
+  const handleSearch = (q: string) => {
+    setFilterParams({ ...filterParams, q });
   };
 
   useEffect(() => {
-    if (defaultValue) {
-      const selectName = secondName ? secondName : name;
+    if (defaultSearch)
+      setFilterParams({ ...filterParams, link, q: defaultSearch });
+  }, [defaultSearch]);
 
-      let obj: any = {};
-      for (let i = 0; i < options.length; i++) {
-        if (options[i][selectName] === defaultData) {
-          obj = options[i];
-        }
-      }
-
-      if (obj?.[selectName]) {
-        setDefaultData(obj);
-        handleSelect(obj);
-      }
-    }
-  }, [defaultValue, options, open]);
+  // useEffect(() => {
+  //   if (defaultValue) {
+  //     setFilterParams({ ...filterParams, q: `${name}=${defaultValue}`, link });
+  //     console.log("defaultValuedefaultValuedefaultValue", defaultValue);
+  //     // const selectName = name;
+  //     // let obj: any = {};
+  //     // for (let i = 0; i < options.length; i++) {
+  //     //   if (options[i][selectName] === defaultData) {
+  //     //     obj = options[i];
+  //     //   }
+  //     // }
+  //     // if (obj?.[selectName]) {
+  //     //   setDefaultData(obj);
+  //     //   handleSelect(obj);
+  //     // }
+  //   }
+  // }, [defaultValue]);
 
   useEffect(() => {
     if (!options.length && search) {
@@ -139,6 +154,7 @@ export const LiteOptionsTable = ({
             if (!disabled) {
               setOpen(true);
               setAnchor(event.currentTarget);
+              setFilterParams({ ...filterParams, link });
             }
           }}
         >
@@ -150,28 +166,41 @@ export const LiteOptionsTable = ({
         <Controller
           control={control}
           name={name}
-          render={({ field: { onChange, value }, fieldState: { error } }) => (
-            <div className={`relative ${open ? "z-[99]" : ""}`}>
-              <input
-                value={value ? value : defaultData[name] || search}
-                type="text"
-                className={`h-[30px] w-full px-1 bg-transparent ${
-                  error?.message
-                    ? "border-[var(--error)]"
-                    : "border-[var(--border)]"
-                } ${disabled ? "text-[var(--gray)]" : ""}`}
-                placeholder={t(placeholder)}
-                onChange={(e: any) => {
-                  handleSearch(`${name}=${e.target.value}`);
-                  onChange(e.target.value);
-                  setSearch(e.target.value);
-                }}
-                ref={inputRef}
-                readOnly={readOnly || disabled}
-                style={{ borderColor: error?.message ? "var(--error)" : "" }}
-              />
-            </div>
-          )}
+          render={({ field: { onChange, value }, fieldState: { error } }) => {
+            return (
+              <div className={`relative ${open ? "z-[99]" : ""}`}>
+                <input
+                  value={
+                    renderValue
+                      ? renderValue(
+                          name,
+                          currentEl?.[name]
+                            ? currentEl
+                            : { [name]: defaultValue }
+                        )
+                      : value
+                      ? value
+                      : defaultData[name] || search || defaultValue
+                  }
+                  type="text"
+                  className={`h-[30px] w-full px-1 bg-transparent ${
+                    error?.message
+                      ? "border-[var(--error)]"
+                      : "border-[var(--border)]"
+                  } ${disabled ? "text-[var(--gray)]" : ""}`}
+                  placeholder={t(placeholder)}
+                  onChange={(e: any) => {
+                    handleSearch(`${name}=${e.target.value}`);
+                    onChange(e.target.value);
+                    setSearch(e.target.value);
+                  }}
+                  ref={inputRef}
+                  readOnly={readOnly || disabled}
+                  style={{ borderColor: error?.message ? "var(--error)" : "" }}
+                />
+              </div>
+            );
+          }}
         ></Controller>
 
         {open && (
@@ -182,15 +211,16 @@ export const LiteOptionsTable = ({
             style={{
               padding: 0,
               zIndex: 99,
-              // transform: "translate(-50%)",
             }}
           >
             <PopupBody>
               <TableUI
-                idTable={null}
+                name={name}
+                idTable={currentEl?.[name]}
                 handleRowClick={handleActions}
                 headColumns={headColumns}
                 bodyColumns={options}
+                isLoading={isLoading}
               />
             </PopupBody>
           </BasePopup>

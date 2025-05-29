@@ -8,7 +8,6 @@ import { useTranslationHook } from "../../../hooks/useTranslation";
 import { ModalUI } from "./Modal";
 import { ModalTypes } from "./interfaces";
 import { PantoneColors } from "../../../constants/pantone";
-import { useGetFirmList } from "../../../hooks/useFetchRequests/useFirmaList";
 
 export const LabChemicals = () => {
   const { t } = useTranslationHook();
@@ -19,10 +18,11 @@ export const LabChemicals = () => {
   });
   const [showUI, setShowUI] = useState(false);
   const [modalInitialData, setModalInitialData] = useState<ModalTypes>({});
-
-  const { bodyColumns, isLoading, bodyData, deleteFn } = TableData({
-    filterParams,
-  });
+  const [askClose, setAskClose] = useState("");
+  const { bodyColumns, isLoading, bodyData, deleteFn, refetchTable } =
+    TableData({
+      filterParams,
+    });
 
   const newHeadColumns = useMemo(() => {
     const obj = { ...bodyColumns?.[0] };
@@ -74,13 +74,9 @@ export const LabChemicals = () => {
       });
     }
 
-    if (status === "delete_multiple") {
-      console.log(el);
-    }
-
     if (status === "delete") {
       deleteFn([el.LABRECETEID]);
-      setFilterParams({ page: 0, perPage: 50 });
+      setFilterParams({ page: 1, perPage: 50 });
     }
     if (status === "delete_multiple") {
       deleteFn(
@@ -88,34 +84,32 @@ export const LabChemicals = () => {
           return item.LABRECETEID;
         })
       );
-      setFilterParams({ page: 0, perPage: 50 });
+      setFilterParams({ page: 1, perPage: 50 });
     }
   };
 
   const handleModalActions = (status: string, id: string) => {
     if (status === "close") {
+      setAskClose("close");
       setOpen(false);
       setShowUI(false);
       setModalInitialData({});
     }
     if (status === "delete") {
+      setAskClose("close");
       setOpen(false);
       setShowUI(false);
       setModalInitialData({});
       deleteFn([id]);
     }
   };
-  const {
-    firmaData,
-    setFilterParams: setFilterParamsFirm,
-    filterParams: filterParamsFirm,
-  } = useGetFirmList({ enabled: "" });
 
   return (
     <>
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />
       <div className="p-2">
         <CNewTable
+          key={bodyData?.count}
           title={t("table_labaratory")}
           headColumns={newHeadColumns}
           bodyColumns={bodyColumns}
@@ -148,11 +142,11 @@ export const LabChemicals = () => {
         modalInitialData={modalInitialData}
         handleModalActions={handleModalActions}
         open={open}
+        askClose={askClose}
+        setAskClose={setAskClose}
         showUI={showUI}
-        firmaData={firmaData}
         setShowUI={setShowUI}
-        filterParamsFirm={filterParamsFirm}
-        setFilterParamsFirm={setFilterParamsFirm}
+        refetchTable={refetchTable}
       />
     </>
   );

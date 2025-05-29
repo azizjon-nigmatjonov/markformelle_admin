@@ -19,6 +19,7 @@ export const TableData = ({
 
   const getList = (filters: any) => {
     setIsLoading(true);
+    setBodyData({});
     axios
       .get(
         `${API_URL}/labrecete/?skip=${
@@ -32,19 +33,22 @@ export const TableData = ({
         setIsLoading(false);
       });
   };
+  const refetchTable = () => {
+    getList(filterParams);
+  };
 
   const deleteFn = async (id: string[]) => {
     try {
-      await axios.delete(`${API_URL}/urun/`, {
+      await axios.delete(`${API_URL}/labreceteatis/`, {
         method: "DELETE",
-        url: `${API_URL}/urun/`,
+        url: `${API_URL}/labreceteatis/`,
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         data: id,
       });
-      getList(filterParams);
+      refetchTable();
       toast.success(t("deleted!"));
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
@@ -77,16 +81,16 @@ export const TableData = ({
     setTimeout(() => {
       setHeadColumns(newColumns);
     }, 0);
-  }, [bodyData]);
+  }, [bodyData?.data]);
 
   return {
     headColumns,
-
     bodyColumns: bodyData?.data ?? [],
     isLoading,
     defaultData: {},
     bodyData,
     setBodyData,
     deleteFn,
+    refetchTable,
   };
 };

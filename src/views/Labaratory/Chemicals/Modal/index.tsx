@@ -13,19 +13,18 @@ import { GetCurrentDate } from "../../../../utils/getDate";
 import { ColorMaterial } from "./Components/ColorMaterial";
 import CNewModal from "../../../../components/CElements/CNewModal";
 import dayjs from "dayjs";
+import CModal from "../../../../components/CElements/CModal";
 
 interface ModalUIProps {
   defaultData?: ModalTypes;
-  URUNBIRIMID?: string;
-  ADI?: string;
   handleModalActions: (val: string, val2: string) => void;
   modalInitialData: any;
   open: boolean;
   showUI: boolean;
-  firmaData: any;
+  askClose: string;
   setShowUI: (val: boolean) => void;
-  filterParamsFirm: any;
-  setFilterParamsFirm: (val: any) => void;
+  refetchTable: () => void;
+  setAskClose: (val: string) => void;
 }
 
 export const ModalUI = ({
@@ -34,10 +33,10 @@ export const ModalUI = ({
   handleModalActions,
   showUI = false,
   setShowUI = () => {},
-  firmaData,
   modalInitialData = [],
-  filterParamsFirm,
-  setFilterParamsFirm,
+  refetchTable,
+  askClose = "",
+  setAskClose = () => {},
 }: ModalUIProps) => {
   const { t } = useTranslationHook();
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
@@ -51,9 +50,8 @@ export const ModalUI = ({
     filterParams,
     setFormId,
     urunId: defaultData?.LABRECETEID || formId,
+    refetchTable,
   });
-
-  const { tableData } = TablesLogic({ formId: formData?.LABRECETEID });
 
   useEffect(() => {
     if (formId) setDisabled(false);
@@ -69,55 +67,32 @@ export const ModalUI = ({
     urunTypeData,
   } = useGetUrunTypeList({});
 
-  // {
-  //   "ADI": "T-SINIY-10",
-  //   "FIRMAID": "M0868",
-  //   "TALEPTARIHI": "2025-05-27T00:00:00",
-  //   "LABRECETEGRUPID": 2,
-  //   "LABRENKGRUPID": 14,
-  //   "USTASAMAID": 8,
-  //   "HAMID": 312,
-  //   "DOVIZID": "USD",
-  //   "ACIKLAMA": "Молочнный3",
-  //   "ESKILABRECETEKODU": "C-93 2411",
-  //   "PANTONEKODU": "TCX 19-4116",
-  //   "RECETETURUID": 3,
-  //   "NOTU": null,
-  //   "RENKDERINLIGIID": 0,
-  //   "IPTAL": false,
-  //   "ESKITIPRECETE": false,
-  //   "KALITEID": null,
-  //   "INSERTKULLANICIID": 1,
-  //   "INSERTTARIHI": "2025-05-27T20:30:27",
-  //   "KULLANICIID": 1,
-  //   "DEGISIMTARIHI": "2025-05-27T20:30:27"
-  //   }
-
   const onSubmit = (data: any) => {
     let params: any = data;
-    params.TALEPTARIHI = dayjs();
-    params.LABRECETEGRUPID = 2;
-    params.NOTU = null;
     params.IPTAL = params?.IPTAL ? true : false;
-    params.ESKITIPRECETE = false;
-    params.ESKITIPRECETE = false;
-    params.INSERTKULLANICIID = 1;
-    params.INSERTTARIHI = dayjs();
-    params.KULLANICIID = 1;
-    params.DEGISIMTARIHI = dayjs();
-    console.log("params", params);
 
     if (formId) {
-      params = { ...formData, ...params };
-      delete params.BOYATIPIADI;
+      params.TALEPTARIHI = formData.TALEPTARIHI;
 
-      updateForm(formData, formId);
+      params = { ...formData, ...params };
+      console.log("params", params);
+
+      updateForm(params, formId);
     } else {
+      params.TALEPTARIHI = dayjs();
+      params.LABRECETEGRUPID = 2;
+      params.NOTU = null;
+      params.ESKITIPRECETE = false;
+      params.ESKITIPRECETE = false;
+      params.INSERTKULLANICIID = 1;
+      params.INSERTTARIHI = dayjs();
+      params.KULLANICIID = 1;
       params.DEGISIMTARIHI = dayjs();
-      delete params.UNITEADI;
 
       createForm(params);
     }
+
+    setAskClose("");
   };
 
   const setFormValues = (form: any) => {
@@ -127,11 +102,12 @@ export const ModalUI = ({
     setValue("HAMID", form.HAMID);
     setValue("HAMADI", form.HAMADI);
     setValue("DOVIZID", form.DOVIZID);
-    setValue("ESKILABRECETEKODU", form.ESKILABRECETEKODU);
+    setValue("ESKILAfBRECETEKODU", form.ESKILABRECETEKODU);
     setValue("RENKDERINLIGIID", form.RENKDERINLIGIID);
     setValue("RENKDERINLIGIADI", form.RENKDERINLIGIADI);
     setValue("IPTAL", form.IPTAL);
     setValue("FASON", form.FASON);
+    setValue("LABRENKGRUPID", form.LABRENKGRUPID);
 
     setValue("LABRECETEKODU", form.LABRECETEKODU);
     setValue("LABRECETEID", form.LABRECETEID);
@@ -153,13 +129,7 @@ export const ModalUI = ({
 
   const setInitialFormValues = () => {
     setValue("FIRMAID", "M0868");
-    setValue(
-      "TALEPTARIHI",
-      GetCurrentDate({
-        date: GetCurrentDate({ type: "usually" }),
-        type: "usually",
-      })
-    );
+    setValue("TALEPTARIHI", dayjs().format("DD.MM.YYYY HH:MM"));
   };
 
   useEffect(() => {
@@ -195,79 +165,112 @@ export const ModalUI = ({
     }
   };
 
-  return open ? (
-    <CNewModal
-      title={t(
-        modalInitialData.LABRECETEID ? "updating_chemical" : "creating_chemical"
-      )}
-      handleActions={handleModal}
-      defaultData={{
-        id: modalInitialData?.LABRECETEID,
-      }}
-      showUI={showUI}
-      disabled="big"
-    >
-      <form onSubmit={handleSubmit(onSubmit)} className="mb-5">
-        <div className="pb-5">
-          <div
-            className={`grid grid-cols-3 gap-x-5 border-b border-[var(--border)] pb-5`}
-          >
-            <div>
-              <InputFieldUI title={t("LABRECETEKODU")} disabled={disabled}>
-                <SelectOptionsTable
-                  name="LABRECETEKODU"
-                  placeholder={t("LABRECETEKODU")}
-                  options={urunTypeData?.data}
-                  required={true}
-                  headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
-                  filterParams={urunTypeFilterParams}
-                  handleSelect={(obj: { ADI: string }) => {
-                    setValue("LABRECETEKODU", obj.ADI);
-                  }}
-                  handleSearch={(val: string) => {
-                    setUrunTypeFilterParams({
-                      ...urunTypeFilterParams,
-                      q: val,
-                    });
-                  }}
-                  control={control}
-                  setFilterParams={setUrunTypeFilterParams}
-                />
-              </InputFieldUI>
-            </div>
-            <ColorMaterial PANTONEKODU={formData.PANTONEKODU} />
-            <div className="flex justify-end">
-              <div className="w-[200px]">
-                <button
-                  className="custom-btn"
-                  style={{ backgroundColor: disabled ? "var(--gray)" : "" }}
-                  type={disabled ? "button" : "submit"}
-                >
-                  {t(formId ? "update" : "create")}
-                </button>
+  return (
+    <>
+      {open ? (
+        <CNewModal
+          title={t(
+            modalInitialData.LABRECETEID
+              ? "updating_chemical"
+              : "creating_chemical"
+          )}
+          handleActions={handleModal}
+          defaultData={{
+            id: modalInitialData?.LABRECETEID,
+          }}
+          showUI={showUI}
+          disabled="big"
+        >
+          <form onSubmit={handleSubmit(onSubmit)} className="mb-5">
+            <div className="pb-5">
+              <div
+                className={`grid grid-cols-3 gap-x-5 border-b border-[var(--border)] pb-5`}
+              >
+                <div>
+                  <InputFieldUI title={t("LABRECETEKODU")} disabled={disabled}>
+                    <SelectOptionsTable
+                      name="LABRECETEKODU"
+                      placeholder={t("LABRECETEKODU")}
+                      options={urunTypeData?.data}
+                      required={true}
+                      headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
+                      filterParams={urunTypeFilterParams}
+                      handleSelect={(obj: { ADI: string }) => {
+                        setValue("LABRECETEKODU", obj.ADI);
+                      }}
+                      handleSearch={(val: string) => {
+                        setUrunTypeFilterParams({
+                          ...urunTypeFilterParams,
+                          q: val,
+                        });
+                      }}
+                      control={control}
+                      setFilterParams={setUrunTypeFilterParams}
+                    />
+                  </InputFieldUI>
+                </div>
+                <ColorMaterial PANTONEKODU={formData.PANTONEKODU} />
+                <div className="flex justify-end">
+                  <div className="w-[200px]">
+                    <button className="custom-btn" type="submit">
+                      {t(formId ? "update" : "create")}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <InputFields
-          control={control}
-          setValue={setValue}
-          filterParams={filterParams}
-          setFilterParams={setFilterParams}
-          firmaData={firmaData}
-          filterParamsFirm={filterParamsFirm}
-          setFilterParamsFirm={setFilterParamsFirm}
-          getValues={getValues}
-        />
-      </form>
-      <LabModalTables
-        disabled={disabled}
-        tableData={tableData}
-        formId={formId}
-      />
-    </CNewModal>
-  ) : (
-    <></>
+            <InputFields
+              control={control}
+              setValue={setValue}
+              getValues={getValues}
+              formData={formData}
+            />
+          </form>
+          <LabModalTables
+            disabled={disabled}
+            formId={formId}
+            formData={formData}
+          />
+        </CNewModal>
+      ) : (
+        <></>
+      )}
+
+      {/* <CModal
+        open={!!askClose}
+        handleClose={() => {
+          setAskClose("");
+        }}
+        footerActive={false}
+      >
+        <p className="text-[var(--black)] text-2xl font-medium">
+          Вы точно хотите удалить этот данных?
+        </p>
+
+        <p className="text-[var(--error)] text-lg mt-3">
+          Это изменение повлияет на производительность машины!
+        </p>
+
+        <div className="grid gap-2 grid-cols-2 mt-8">
+          <button
+            className="cancel-btn"
+            onClick={() => {
+              handleModalActions("close", "");
+            }}
+          >
+            {t("no")}
+          </button>
+          <button
+            className="custom-btn"
+            onClick={() => {
+              onSubmit(getValues());
+            }}
+          >
+            {t("yes")}
+          </button>
+        </div>
+      </CModal> */}
+    </>
   );
 };

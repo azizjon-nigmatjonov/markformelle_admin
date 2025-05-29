@@ -165,16 +165,23 @@ const CNewTable = ({
     }
   }, [defaultFilters]);
 
+  const [laading, setLoading] = useState(true);
+  useEffect(() => {
+    setLoading(isLoading);
+  }, [isLoading]);
   useEffect(() => {
     if (!bodyColumns?.length) return;
     const arr = bodyColumns;
     let result: any = [];
 
-    if (!sortData.length) {
-      setNewBodyColumns(bodyColumns);
-      return;
-    }
-
+    // if (!sortData.length) {
+    //   setNewBodyColumns(bodyColumns);
+    //   return;
+    // }
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 0);
     sortData?.forEach((sortObj: any) => {
       const { value, id, search }: any = { ...sortObj };
 
@@ -214,6 +221,7 @@ const CNewTable = ({
     });
 
     setNewBodyColumns(result.length ? result : arr);
+
     result = [];
   }, [bodyColumns, activeSort, sortData.length]);
 
@@ -229,10 +237,10 @@ const CNewTable = ({
     if (!newBodyColumns?.length) {
       return;
     }
-    if (isLoading) {
+    if (laading) {
       setBodySource([]);
     }
-    if (animation && isLoading) {
+    if (animation && laading) {
       setEffect([]);
     }
     if (!animation) {
@@ -266,7 +274,7 @@ const CNewTable = ({
     filterParams.perPage,
     filterParams.page,
     headColumns,
-    isLoading,
+    laading,
     animation,
   ]);
 
@@ -381,7 +389,6 @@ const CNewTable = ({
             if (item.value === "sort" && item.id === id) {
               item.search = search;
             }
-
             return { ...item };
           });
           setSortData(newSortData);
@@ -395,6 +402,8 @@ const CNewTable = ({
           DeleteFunction("sort");
         }
       }
+
+      // setCurrentFilter(null);
     }
 
     if (value === "add") {
@@ -689,7 +698,7 @@ const CNewTable = ({
                 count={meta.pageCount}
                 totalCount={meta.totalCount}
                 currentLimit={filterParams.perPage}
-                loader={isLoading}
+                loader={laading}
                 height={0}
                 passRouter={passRouter}
                 filterParams={filterParams}
