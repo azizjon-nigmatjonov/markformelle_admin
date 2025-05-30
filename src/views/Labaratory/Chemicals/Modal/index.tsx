@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { CollapseUI } from "../../../../components/CElements/CCollapse";
 import { ModalTypes } from "../interfaces";
 import { useTranslationHook } from "../../../../hooks/useTranslation";
 import { InputFieldUI } from "../../../../components/UI/FieldUI";
 import { SelectOptionsTable } from "../../../../components/UI/Options/Table";
 import { useGetUrunTypeList } from "../../../../hooks/useFetchRequests/useUrunType";
-import { ModalTableLogic, TablesLogic } from "./Logic";
+import { ModalTableLogic } from "./Logic";
 import { LabModalTables } from "./Tables";
 import { InputFields } from "./Components/InputFields";
 import { GetCurrentDate } from "../../../../utils/getDate";
 import { ColorMaterial } from "./Components/ColorMaterial";
 import CNewModal from "../../../../components/CElements/CNewModal";
 import dayjs from "dayjs";
-import CModal from "../../../../components/CElements/CModal";
 
 interface ModalUIProps {
   defaultData?: ModalTypes;
@@ -35,7 +33,7 @@ export const ModalUI = ({
   setShowUI = () => {},
   modalInitialData = [],
   refetchTable,
-  askClose = "",
+  // askClose = "",
   setAskClose = () => {},
 }: ModalUIProps) => {
   const { t } = useTranslationHook();
@@ -51,11 +49,16 @@ export const ModalUI = ({
     setFormId,
     urunId: defaultData?.LABRECETEID || formId,
     refetchTable,
+    handleModalActions,
   });
 
   useEffect(() => {
     if (formId) setDisabled(false);
   }, [formId]);
+
+  useEffect(() => {
+    setFilterParams({ page: 1, perPage: 100 });
+  }, []);
 
   useEffect(() => {
     if (!open) setShowUI(false);
@@ -75,7 +78,6 @@ export const ModalUI = ({
       params.TALEPTARIHI = formData.TALEPTARIHI;
 
       params = { ...formData, ...params };
-      console.log("params", params);
 
       updateForm(params, formId);
     } else {

@@ -6,7 +6,6 @@ import {
 } from "../../../../../components/UI/IconGenerator/Svg";
 import { useTranslation } from "react-i18next";
 import { PopoverDelete } from "./PopOver";
-import { areAllRowsSelectedOnPage, toggleRowGroupSelection } from "./Logic";
 import CheckIcon from "@mui/icons-material/Check";
 import {
   CheckMultipleIcon,

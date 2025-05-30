@@ -1,10 +1,8 @@
 import { useForm } from "react-hook-form";
 import HFInputMask from "../../../../../components/HFElements/HFInputMask";
 import { useTranslation } from "react-i18next";
-import { SelectOptionsTable } from "../../../../../components/UI/Options/Table";
 import { useGetDovizList } from "../../../../../hooks/useFetchRequests/useDovizList";
-import { IMaterialForm } from "../interface";
-import { useGetUrunList } from "../../../../../hooks/useFetchRequests/useUrunList";
+// import { IMaterialForm } from "../interface";
 import CLabel from "../../../../../components/CElements/CLabel";
 import HFSelect from "../../../../../components/HFElements/HFSelect";
 import { DetailFormLogic } from "./Logic";

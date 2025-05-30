@@ -1,6 +1,7 @@
 import { Paper } from "@mui/material";
 import "./style.scss";
 import TableLoader from "./TableLoader";
+import { OneSkeleton } from "../../CSkeleton/OneSkeleton";
 
 interface Props {
   loader: boolean;
@@ -24,6 +25,7 @@ export const CTableWrapper = ({
   wrapperStyle = {},
   children,
 }: Props) => {
+  if (loader) return <OneSkeleton height={window?.innerHeight} />;
   return (
     <Paper className="CTableContainer" style={wrapperStyle}>
       <div

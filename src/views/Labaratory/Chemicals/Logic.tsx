@@ -2,40 +2,41 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useTranslationHook } from "../../../hooks/useTranslation";
+import { useQuery } from "react-query";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const breadCrumbs = [{ label: "labaratory", link: "/labaratory/list" }];
 
 export const TableData = ({
-  filterParams,
+  filterParams = { page: 1, perPage: 50 },
 }: {
   filterParams: any;
   setOpen?: (val: boolean) => void;
 }) => {
   const { t } = useTranslationHook();
   const [headColumns, setHeadColumns] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [bodyData, setBodyData]: any = useState({});
 
-  const getList = (filters: any) => {
-    setIsLoading(true);
-    setBodyData({});
-    axios
-      .get(
+  const {
+    data: bodyData,
+    refetch: refetchTable,
+    isLoading,
+  }: any = useQuery(
+    ["GET_RECETE_LIST_TABLE", filterParams],
+    () => {
+      return axios.get(
         `${API_URL}/labrecete/?skip=${
-          filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
-        }&limit=${filters.perPage}${filters.q ? "&" + filters.q : ""}`
-      )
-      .then((res) => {
-        setBodyData(res.data);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-  const refetchTable = () => {
-    getList(filterParams);
-  };
+          filterParams.page < 2
+            ? 0
+            : (filterParams.page - 1) * filterParams.perPage
+        }&limit=${filterParams.perPage}${
+          filterParams.q ? "&" + filterParams.q : ""
+        }`
+      );
+    },
+    {
+      enabled: !!filterParams?.page,
+    }
+  );
 
   const deleteFn = async (id: string[]) => {
     try {
@@ -55,10 +56,6 @@ export const TableData = ({
       return null;
     }
   };
-
-  useEffect(() => {
-    getList(filterParams);
-  }, [filterParams]);
 
   useEffect(() => {
     const headColumns: any = [];
@@ -85,11 +82,10 @@ export const TableData = ({
 
   return {
     headColumns,
-    bodyColumns: bodyData?.data ?? [],
+    bodyColumns: bodyData?.data?.data ?? [],
     isLoading,
     defaultData: {},
-    bodyData,
-    setBodyData,
+    bodyData: bodyData?.data,
     deleteFn,
     refetchTable,
   };

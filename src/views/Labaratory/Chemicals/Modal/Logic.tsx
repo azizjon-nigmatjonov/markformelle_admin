@@ -11,11 +11,13 @@ export const ModalTableLogic = ({
   urunId,
   filterParams,
   refetchTable,
+  handleModalActions = () => {},
 }: {
   urunId?: number | string;
   filterParams: IFilterParams;
   refetchTable: () => void;
   setFormId: (val: number) => void;
+  handleModalActions?: (val: string, val2: string) => void;
 }) => {
   const { t } = useTranslationHook();
   const [bodyData, setBodyData]: any = useState({});
@@ -81,6 +83,7 @@ export const ModalTableLogic = ({
       const { data } = await axios.put(`${API_URL}/labrecete/${id}`, params);
       refetch();
       refetchTable();
+      handleModalActions("close", "");
       toast.success(t("updated!"));
       return data;
     } catch (error) {

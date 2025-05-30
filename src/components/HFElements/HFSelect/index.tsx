@@ -3,7 +3,6 @@ import { Controller } from "react-hook-form";
 import CLabel from "../../CElements/CLabel";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { CloseIcon } from "../../UI/IconGenerator/Svg";
 // import IconGenerator from "../IconPicker/IconGenerator";
 
 interface Props {

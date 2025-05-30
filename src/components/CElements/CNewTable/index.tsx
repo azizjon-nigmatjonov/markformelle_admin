@@ -165,7 +165,7 @@ const CNewTable = ({
     }
   }, [defaultFilters]);
 
-  const [laading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     setLoading(isLoading);
   }, [isLoading]);
@@ -237,10 +237,10 @@ const CNewTable = ({
     if (!newBodyColumns?.length) {
       return;
     }
-    if (laading) {
+    if (loading) {
       setBodySource([]);
     }
-    if (animation && laading) {
+    if (animation && loading) {
       setEffect([]);
     }
     if (!animation) {
@@ -274,7 +274,7 @@ const CNewTable = ({
     filterParams.perPage,
     filterParams.page,
     headColumns,
-    laading,
+    loading,
     animation,
   ]);
 
@@ -698,7 +698,7 @@ const CNewTable = ({
                 count={meta.pageCount}
                 totalCount={meta.totalCount}
                 currentLimit={filterParams.perPage}
-                loader={laading}
+                loader={loading}
                 height={0}
                 passRouter={passRouter}
                 filterParams={filterParams}

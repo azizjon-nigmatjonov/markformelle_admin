@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { PlusIcon } from "../IconGenerator/Svg";
 import CLabel from "../../CElements/CLabel";
-import CNewTable from "../../CElements/CNewTable";
 import { Controller } from "react-hook-form";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
@@ -65,13 +63,11 @@ export const LiteOptionsTable = ({
   const { t } = useTranslationHook();
   const inputRef: any = useRef(null);
   const [open, setOpen] = useState(false);
-  const [defaultData, setDefaultData]: any = useState({});
   const [search, setSearch] = useState("");
   const [anchor, setAnchor] = useState(null);
   const [currentEl, setCurrentEl]: any = useState({});
   const [options, setOptions] = useState([]);
-  const { data, setFilterParams, filterParams, isLoading, getList } =
-    useFetchType();
+  const { data, setFilterParams, filterParams, isLoading } = useFetchType();
 
   useEffect(() => {
     setOptions(data?.data ?? []);
@@ -180,7 +176,7 @@ export const LiteOptionsTable = ({
                         )
                       : value
                       ? value
-                      : defaultData[name] || search || defaultValue
+                      : search || defaultValue
                   }
                   type="text"
                   className={`h-[30px] w-full px-1 bg-transparent ${

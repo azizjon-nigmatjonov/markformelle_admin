@@ -1,10 +1,8 @@
 import { useForm } from "react-hook-form";
-import { IModalForm } from "../../interfaces";
+// import { IModalForm } from "../../interfaces";
 import HFInputMask from "../../../../../components/HFElements/HFInputMask";
 import { useTranslation } from "react-i18next";
 import HFSelect from "../../../../../components/HFElements/HFSelect";
-import HFTextField from "../../../../../components/HFElements/HFTextField";
-import { SelectOptionsTable } from "../../../../../components/UI/Options/Table";
 import CCheckbox from "../../../../../components/CElements/CCheckbox";
 
 import CLabel from "../../../../../components/CElements/CLabel";
