@@ -82,7 +82,6 @@ const CNewTable = ({
   limitList = [50, 100, 200],
   filterParams = { page: 1, perPage: 50 },
   handleFilterParams = () => {},
-  // doubleClick = true,
   handleActions = () => {},
   defaultExcelFields = [],
   disabled = false,
@@ -174,10 +173,6 @@ const CNewTable = ({
     const arr = bodyColumns;
     let result: any = [];
 
-    // if (!sortData.length) {
-    //   setNewBodyColumns(bodyColumns);
-    //   return;
-    // }
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
@@ -402,29 +397,11 @@ const CNewTable = ({
           DeleteFunction("sort");
         }
       }
-
-      // setCurrentFilter(null);
     }
 
     if (value === "add") {
       setSearchedElements({ ...searchedElements, [id]: "" });
     }
-
-    // if (value === "period") {
-    //   if (search?.length > 1) {
-    //     handleFilterParams({
-    //       ...filterParams,
-    //       DATE_FROM: convertToISO(search[0]),
-    //       DATE_TO: convertToISO(search[1]),
-    //     });
-    //   } else {
-    //     handleFilterParams({
-    //       ...filterParams,
-    //       DATE_FROM: "",
-    //       DATE_TO: "",
-    //     });
-    //   }
-    // }
 
     if (value === "clear") {
       setSearchedElements(defaultSearch);
@@ -644,7 +621,7 @@ const CNewTable = ({
   }, []);
 
   return (
-    <div className="relative cnewtable w-full rounded-t-[12px]">
+    <div className="relative cnewtable w-full rounded-t-[12px] border border-[var(--border)] border-b-0">
       <div className="h-full">
         {defaultFilters?.length || title ? (
           <HeaderSettings

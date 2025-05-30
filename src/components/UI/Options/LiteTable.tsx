@@ -88,24 +88,6 @@ export const LiteOptionsTable = ({
       setFilterParams({ ...filterParams, link, q: defaultSearch });
   }, [defaultSearch]);
 
-  // useEffect(() => {
-  //   if (defaultValue) {
-  //     setFilterParams({ ...filterParams, q: `${name}=${defaultValue}`, link });
-  //     console.log("defaultValuedefaultValuedefaultValue", defaultValue);
-  //     // const selectName = name;
-  //     // let obj: any = {};
-  //     // for (let i = 0; i < options.length; i++) {
-  //     //   if (options[i][selectName] === defaultData) {
-  //     //     obj = options[i];
-  //     //   }
-  //     // }
-  //     // if (obj?.[selectName]) {
-  //     //   setDefaultData(obj);
-  //     //   handleSelect(obj);
-  //     // }
-  //   }
-  // }, [defaultValue]);
-
   useEffect(() => {
     if (!options.length && search) {
       setOpen(false);

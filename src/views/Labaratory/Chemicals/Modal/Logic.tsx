@@ -84,7 +84,7 @@ export const ModalTableLogic = ({
       refetch();
       refetchTable();
       handleModalActions("close", "");
-      toast.success(t("updated!"));
+      toast.success(t("updated!" + " 😊"));
       return data;
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
