@@ -117,7 +117,7 @@ const CNewMiniModal: FC<Props> = ({
                 </div>
 
                 <div className="flex justify-end">
-                  <IconButton onClick={() => handleActions("close")}>
+                  <IconButton onClick={() => handleActions("Close")}>
                     <div className="hover:rotate-[90deg] duration-200">
                       <CloseIcon />
                     </div>
@@ -125,8 +125,21 @@ const CNewMiniModal: FC<Props> = ({
                 </div>
               </div>
             )}
-
-            <div className="p-3 relative z-[94]">{children}</div>
+            <div className="p-3 relative z-[94]">{children}</div>{" "}
+            {/* <div className="px-3 pb-2 pt-2 flex space-x-3 bg-[var(--primary50)]">
+              <div className="flex items-center justify-center text-sm font-medium space-x-1">
+                <div className="border border-[var(--success)] rounded-[8px] w-[20px] h-[20px] flex items-center justify-center">
+                  <CheckLine fill="var(--success)" />
+                </div>
+                <span>ALT + F8</span>
+              </div>
+              <div className="flex items-center justify-center text-sm font-medium space-x-1">
+                <div className="border border-[var(--error)] rounded-[8px] w-[20px] h-[20px] flex items-center justify-center">
+                  <CloseIcon fill="red" />
+                </div>
+                <span>ALT + X</span>
+              </div>
+            </div> */}
           </div>
         </Card>
       </div>
@@ -135,7 +148,7 @@ const CNewMiniModal: FC<Props> = ({
         className={`w-[130vw] h-[130vh] fixed top-[-20vh] left-[-30vw] z-[97] ${
           title ? "bg-[rgba(0,0,0,0.3)]" : ""
         }`}
-        onClick={() => handleActions("close")}
+        onClick={() => handleActions("Close")}
       ></div>
     </>
   );

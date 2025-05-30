@@ -10,6 +10,10 @@
       border: 1px solid var(--border);
       padding: 0 !important;
 
+      &.Mui-error {
+        border-color: var(--error);
+      }
+
       input {
         padding: 0 8px;
       }

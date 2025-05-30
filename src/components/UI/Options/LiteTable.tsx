@@ -68,6 +68,7 @@ export const LiteOptionsTable = ({
   const [currentEl, setCurrentEl]: any = useState({});
   const [options, setOptions] = useState([]);
   const { data, setFilterParams, filterParams, isLoading } = useFetchType();
+  // const [clear, setClear] = useState(false);
 
   useEffect(() => {
     setOptions(data?.data ?? []);
@@ -89,45 +90,21 @@ export const LiteOptionsTable = ({
   }, [defaultSearch]);
 
   useEffect(() => {
-    if (!options.length && search) {
-      setOpen(false);
-      setTimeout(() => {
-        setOpen(true);
-      }, 300);
-    }
-  }, [options, search]);
-
-  useEffect(() => {
     if (focused) {
       inputRef.current.focus();
     }
   }, [focused]);
 
-  useEffect(() => {
-    const handleKeyDown = (event: any) => {
-      if (!name) return;
-      if (event.key === "Escape") {
-        setOpen(false);
-      }
-      if (event.key === "F8") {
-        setOpen(!open);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
   return (
-    <div className="relative">
+    <div className="w-full">
       {label && <CLabel title={label} required={required} />}
       <div
-        className={`w-full relative flex items-center rounded-[8px] border border-[var(--border)] px-2 ${
+        className={`w-full relative flex items-center ${
           disabled ? "bg-[#fafafa]" : ""
         }`}
       >
         <div
-          className="cursor-pointer"
+          className="cursor-pointer absolute z-[99] left-2"
           onClick={(event: any) => {
             if (!disabled) {
               setOpen(true);
@@ -146,7 +123,7 @@ export const LiteOptionsTable = ({
           name={name}
           render={({ field: { onChange, value }, fieldState: { error } }) => {
             return (
-              <div className={`relative ${open ? "z-[99]" : ""}`}>
+              <div className={`relative w-full ${open ? "z-[99]" : ""}`}>
                 <input
                   value={
                     renderValue
@@ -161,20 +138,21 @@ export const LiteOptionsTable = ({
                       : search || defaultValue
                   }
                   type="text"
-                  className={`h-[30px] w-full px-1 bg-transparent ${
+                  className={`border rounded-[8px] pl-8 h-[30px] w-full px-1 bg-transparent ${
                     error?.message
                       ? "border-[var(--error)]"
                       : "border-[var(--border)]"
                   } ${disabled ? "text-[var(--gray)]" : ""}`}
                   placeholder={t(placeholder)}
                   onChange={(e: any) => {
-                    handleSearch(`${name}=${e.target.value}`);
+                    handleSearch(
+                      e.target.value ? `${name}=${e.target.value}` : ""
+                    );
                     onChange(e.target.value);
                     setSearch(e.target.value);
                   }}
                   ref={inputRef}
                   readOnly={readOnly || disabled}
-                  style={{ borderColor: error?.message ? "var(--error)" : "" }}
                 />
               </div>
             );

@@ -33,7 +33,7 @@ export const HFDatePicker = ({
         required: required ? "required_field" : false,
         ...rules,
       }}
-      render={({ field }) => (
+      render={({ field, fieldState: { error } }) => (
         <CustomDatepicker
           field={field}
           label={label}
@@ -41,6 +41,7 @@ export const HFDatePicker = ({
           required={required}
           placeholder={placeholder}
           format={format}
+          error={error}
           disabled={disabled}
         />
       )}

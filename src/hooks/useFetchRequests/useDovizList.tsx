@@ -1,5 +1,6 @@
 import axios from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import { useQuery } from "react-query";
 const API_URL = import.meta.env.VITE_TEST_URL;
 interface Params {
   enabled?: string;
@@ -9,39 +10,31 @@ export const useGetDovizList = ({ enabled = "" }: Params) => {
     page: 1,
     perPage: 100,
   });
-  const [dovizData, setDovizData] = useState<any>([]);
-  const getFirmData = (filters: any) => {
-    axios
-      .get(
-        `${API_URL}/doviz/?skip=${filters.page - 1}&limit=${filters.perPage}${
-          filters?.q ? "&" + filters.q : ""
-        }`
-      )
-      .then((res: any) => {
-        setDovizData(res?.data);
-      });
-  };
+
+  const { data: bodyData }: any = useQuery(
+    ["GET_DOVIZ_LIST__", filterParams],
+    () => {
+      return axios.get(
+        `${API_URL}/doviz/?skip=${filterParams.page - 1}&limit=${
+          filterParams.perPage
+        }${filterParams?.q ? "&" + filterParams.q : ""}`
+      );
+    },
+    {
+      enabled: enabled.length ? filterParams?.[enabled] : !!filterParams?.page,
+    }
+  );
 
   const Options = useMemo(() => {
-    return dovizData?.data?.map((item: { DOVIZID: string; CINSI: string }) => {
-      return {
-        label: item.DOVIZID,
-        value: item.DOVIZID,
-      };
-    });
-  }, [dovizData]);
-
-  useEffect(() => {
-    if (enabled) {
-      if (filterParams?.[enabled]) {
-        getFirmData(filterParams);
-      } else {
-        getFirmData({});
+    return bodyData?.data?.data?.map(
+      (item: { DOVIZID: string; CINSI: string }) => {
+        return {
+          label: item.DOVIZID,
+          value: item.DOVIZID,
+        };
       }
-    } else {
-      getFirmData(filterParams);
-    }
-  }, [filterParams]);
+    );
+  }, [bodyData]);
 
-  return { dovizData, setFilterParams, filterParams, Options };
+  return { dovizData: bodyData?.data, setFilterParams, filterParams, Options };
 };

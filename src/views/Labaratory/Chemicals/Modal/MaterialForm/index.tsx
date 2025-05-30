@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 import { HFDatePicker } from "../../../../../components/HFElements/HFDatePicker";
 import { useGetDovizList } from "../../../../../hooks/useFetchRequests/useDovizList";
 // import { IMaterialForm } from "../interface";
@@ -8,7 +7,10 @@ import dayjs from "dayjs";
 import { LiteOptionsTable } from "../../../../../components/UI/Options/LiteTable";
 import HFSelect from "../../../../../components/HFElements/HFSelect";
 import { MaterialFormLogic } from "./Logic";
-
+import { SubmitCancelButtons } from "../../../../../components/UI/FormButtons/SubmitCancel";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Validation } from "./Validation";
+const schema = Validation;
 interface Props {
   formId: number;
   onClose: () => void;
@@ -22,7 +24,6 @@ export const MaterialForm = ({
   formData = {},
   refetchMaterial,
 }: Props) => {
-  const { t } = useTranslation();
   const {
     createForm,
     formData: materialFormData,
@@ -33,8 +34,9 @@ export const MaterialForm = ({
     formId,
   });
 
-  const { control, handleSubmit, setValue } = useForm<any>({
+  const { control, handleSubmit, setValue, getValues } = useForm<any>({
     mode: "onSubmit",
+    resolver: yupResolver(schema),
   });
   const { Options: moneyOptions } = useGetDovizList({});
 
@@ -96,8 +98,8 @@ export const MaterialForm = ({
             }}
             defaultValue={materialFormData?.HAMADI}
             headColumns={[
-              { id: "HAMID", title: "HAMID", width: 70 },
-              { id: "ADI", title: "ADI", width: 160 },
+              { id: "HAMID", title: "HAMID", width: 60 },
+              { id: "ADI", title: "ADI", width: 150 },
               { id: "HAMTIPIADI", title: "HAMTIPIADI", width: 90 },
             ]}
             handleSelect={(obj: { ADI: string; HAMID: number }) => {
@@ -122,6 +124,7 @@ export const MaterialForm = ({
             handleSelect={(obj: { ASAMAID: number; ADI: string }) => {
               setValue("USTASAMAID", obj.ASAMAID);
               setValue("USTASAMAADI", obj.ADI);
+              setValue("ASAMAID", obj.ASAMAID);
             }}
             required={true}
             control={control}
@@ -137,9 +140,10 @@ export const MaterialForm = ({
             }}
             placeholder="DOVIZID"
             options={moneyOptions}
-          />{" "}
+          />
           <HFDatePicker
             control={control}
+            required
             name="CALISMATARIHI"
             label="CALISMATARIHI"
             placeholder="CALISMATARIHI"
@@ -154,19 +158,16 @@ export const MaterialForm = ({
             placeholder={t("BIRIMFIYAT")}
           /> */}
         </div>
-
-        <div className="flex space-x-2">
-          <button
-            onClick={() => onClose()}
-            className="cancel-btn"
-            type="button"
-          >
-            {t("cancel")}
-          </button>
-          <button className="custom-btn" type="submit">
-            {t(materialFormData?.LABRECETECALISMAID ? "update" : "save")}
-          </button>
-        </div>
+        <SubmitCancelButtons
+          uniqueID="lab_material_form"
+          type={!materialFormData?.LABRECETECALISMAID ? "create" : "update"}
+          handleActions={(val: string, uniqueID: string) => {
+            if (uniqueID === "modal_lab") {
+              if (val === "Close") onClose();
+              if (val === "Enter") onSubmit(getValues());
+            }
+          }}
+        />
       </form>
     </div>
   );

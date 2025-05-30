@@ -88,7 +88,6 @@ export const LabModalTables = ({
       );
     }
   };
-  console.log("ii", idTrailForm);
 
   const handleActionsTrial = (
     el: { index: number; LABRECETEATISID: number },
@@ -395,6 +394,8 @@ export const LabModalTables = ({
               disabled={disabled}
               setOpen={setOpen}
               formId={idTrailForm}
+              DetailHeader={DetailHeader}
+              detailData={detailData}
               labReceteId={formData?.LABRECETEID}
               materialId={idTable}
               refetchTable={refetchTrailTable}

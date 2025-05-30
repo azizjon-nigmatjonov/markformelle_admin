@@ -21,6 +21,7 @@ const CDatepicker = ({
   defaultValue,
   required,
   format,
+  error,
 }: Props) => {
   useEffect(() => {
     if (defaultValue) {
@@ -38,6 +39,7 @@ const CDatepicker = ({
           defaultValue={defaultValue}
           disabled={disabled}
           format={format}
+          error={error}
         />
       </LocalizationProvider>
     </div>

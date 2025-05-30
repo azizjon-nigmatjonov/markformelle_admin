@@ -36,6 +36,7 @@ const SelectUI = ({
   options,
   props,
   handleClick,
+  error,
 }: {
   value: any;
   defaultValue?: any;
@@ -46,6 +47,7 @@ const SelectUI = ({
   optionType?: string;
   options: any;
   props: any;
+  error?: any;
   handleClick: (val: any) => void;
 }) => {
   const { t } = useTranslation();
@@ -59,10 +61,11 @@ const SelectUI = ({
       displayEmpty
       disabled={disabled}
       id="1"
+      error={error}
       renderValue={
         value !== ""
           ? undefined
-          : () => <span style={{ color: "#909EAB" }}>{placeholder}</span>
+          : () => <span style={{ color: "var(--gray)" }}>{placeholder}</span>
       }
       onChange={(e) => {
         onChange(e.target.value);
@@ -163,6 +166,7 @@ const HFSelect = ({
                   defaultValue={defaultValue}
                   disabled={disabled}
                   props={props}
+                  error={error}
                 />
                 {/* {options.length ? (
                   <SelectUI
@@ -195,7 +199,6 @@ const HFSelect = ({
                   ""
                 )} */}
               </div>
-              {!disabledHelperText && error?.message ? error.message : " "}
             </FormHelperText>
           </FormControl>
         )}

@@ -10,6 +10,7 @@ import useCQuery from "../../hooks/useCQuery";
 import { Skeletons, SkeletonTable } from "./Components/Skeleton";
 import { useSelector } from "react-redux";
 const breadCrumbs = [{ label: "Дашборд ЧНИ", link: "/chni/dashboard" }];
+
 const ChniDashboard = () => {
   const [type, setType] = useState("grid");
   const [list, setList] = useState([...ChniMachines]);

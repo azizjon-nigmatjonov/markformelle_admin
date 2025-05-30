@@ -12,7 +12,10 @@ import { GetCurrentDate } from "../../../../utils/getDate";
 import { ColorMaterial } from "./Components/ColorMaterial";
 import CNewModal from "../../../../components/CElements/CNewModal";
 import dayjs from "dayjs";
-
+import { SubmitButton } from "../../../../components/UI/FormButtons/SubmitButton";
+import { Validation } from "./Validation";
+import { yupResolver } from "@hookform/resolvers/yup";
+const schema = Validation;
 interface ModalUIProps {
   defaultData?: ModalTypes;
   handleModalActions: (val: string, val2: string) => void;
@@ -42,6 +45,7 @@ export const ModalUI = ({
   const [disabled, setDisabled] = useState(true);
   const { control, handleSubmit, setValue, getValues, reset } = useForm<any>({
     mode: "onSubmit",
+    resolver: yupResolver(schema),
   });
 
   const { createForm, updateForm, formData } = ModalTableLogic({
@@ -76,7 +80,7 @@ export const ModalUI = ({
 
     if (formId) {
       params.TALEPTARIHI = formData.TALEPTARIHI;
-
+      params.DEGISIMTARIHI = dayjs();
       params = { ...formData, ...params };
 
       updateForm(params, formId);
@@ -172,9 +176,7 @@ export const ModalUI = ({
       {open ? (
         <CNewModal
           title={t(
-            modalInitialData.LABRECETEID
-              ? "updating_chemical"
-              : "creating_chemical"
+            modalInitialData.LABRECETEID ? "updating_lab" : "creating_lab"
           )}
           handleActions={handleModal}
           defaultData={{
@@ -214,9 +216,19 @@ export const ModalUI = ({
                 <ColorMaterial PANTONEKODU={formData.PANTONEKODU} />
                 <div className="flex justify-end">
                   <div className="w-[200px]">
-                    <button className="custom-btn" type="submit">
+                    <SubmitButton
+                      uniqueID="modal_lab"
+                      type={formId ? "update" : "create"}
+                      handleActions={(val: string, uniqueID: string) => {
+                        if (uniqueID === "modal_lab") {
+                          if (val === "Close") handleModalActions("close", "");
+                          if (val === "Enter") onSubmit(getValues());
+                        }
+                      }}
+                    />
+                    {/* <button className="custom-btn" type="submit">
                       {t(formId ? "update" : "create")}
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               </div>

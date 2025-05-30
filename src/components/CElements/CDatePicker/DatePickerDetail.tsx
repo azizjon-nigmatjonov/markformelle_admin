@@ -10,6 +10,7 @@ interface Props {
   field?: any;
   defaultValue?: any;
   format?: string;
+  error?: any;
 }
 
 const DatePickerDetail = ({
@@ -17,6 +18,7 @@ const DatePickerDetail = ({
   field,
   defaultValue,
   format = "DD.MM.YYYY hh:mm",
+  error,
 }: Props) => {
   const datePickerRef = useRef<any>();
   const [value, setValue] = useState<any>("");
@@ -50,7 +52,7 @@ const DatePickerDetail = ({
           });
         }}
         views={["day", "month", "year"]}
-        className="datePicker"
+        className={`datePicker ${error?.message ? "error" : ""}`}
         format={format}
       />
     </div>

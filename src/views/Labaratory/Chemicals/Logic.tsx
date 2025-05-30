@@ -21,7 +21,7 @@ export const TableData = ({
     refetch: refetchTable,
     isLoading,
   }: any = useQuery(
-    ["GET_RECETE_LIST_TABLE", filterParams],
+    ["GET_RECETE_LIST_TABLE", filterParams?.q, filterParams?.page],
     () => {
       return axios.get(
         `${API_URL}/labrecete/?skip=${
@@ -40,9 +40,9 @@ export const TableData = ({
 
   const deleteFn = async (id: string[]) => {
     try {
-      await axios.delete(`${API_URL}/labreceteatis/`, {
+      await axios.delete(`${API_URL}/labrecete/`, {
         method: "DELETE",
-        url: `${API_URL}/labreceteatis/`,
+        url: `${API_URL}/labrecete/`,
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",

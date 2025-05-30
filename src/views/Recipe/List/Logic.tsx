@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useTranslationHook } from "../../../hooks/useTranslation";
-import { StokeDeteyContantList } from "../../../constants/stokedetey";
+import { useQuery } from "react-query";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const breadCrumbs = [
@@ -17,26 +17,28 @@ export const TableData = ({
 }) => {
   const { t } = useTranslationHook();
   const [headColumns, setHeadColumns] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [bodyData, setBodyData]: any = useState({
-    data: StokeDeteyContantList,
-  });
 
-  const getList = (filters: any) => {
-    setIsLoading(true);
-    axios
-      .get(
+  const {
+    data: bodyData,
+    refetch: refetchTable,
+    isLoading,
+  }: any = useQuery(
+    ["GET_RECIPE_LIST_TABLE", filterParams],
+    () => {
+      return axios.get(
         `${API_URL}/labrecete/?skip=${
-          filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
-        }&limit=${filters.perPage}${filters.q ? "&" + filters.q : ""}`
-      )
-      .then((res) => {
-        setBodyData(res.data);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
+          filterParams.page < 2
+            ? 0
+            : (filterParams.page - 1) * filterParams.perPage
+        }&limit=${filterParams.perPage}${
+          filterParams.q ? "&" + filterParams.q : ""
+        }`
+      );
+    },
+    {
+      enabled: !!filterParams?.page,
+    }
+  );
 
   const deleteFn = async (id: string[]) => {
     try {
@@ -49,17 +51,13 @@ export const TableData = ({
         },
         data: id,
       });
-      getList(filterParams);
+      refetchTable();
       toast.success(t("deleted!"));
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
       return null;
     }
   };
-
-  useEffect(() => {
-    getList(filterParams);
-  }, [filterParams]);
 
   useEffect(() => {
     const headColumns: any = [];
@@ -87,11 +85,10 @@ export const TableData = ({
   return {
     headColumns,
 
-    bodyColumns: bodyData?.data ?? [],
+    bodyColumns: bodyData?.data?.data ?? [],
     isLoading,
     defaultData: {},
-    bodyData,
-    setBodyData,
+    bodyData: bodyData?.data,
     deleteFn,
   };
 };

@@ -1,34 +1,38 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { IFilterParams } from "../../interfaces";
+import { useQuery } from "react-query";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const useFetchType = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 20,
   });
-  const [data, setData]: any = useState({});
 
-  const getList = (filters: any) => {
-    if (!filters?.page || !filterParams?.link) return;
-    setIsLoading(true);
-    axios
-      .get(
-        `${API_URL}/${filterParams.link}/?skip=${filters.page - 1}&limit=${
-          filters.perPage
-        }${filters?.q ? "&" + filters.q : ""}`
-      )
-      .then((res: any) => {
-        setData(res?.data);
-      })
-      .finally(() => setIsLoading(false));
+  const {
+    data: bodyData,
+    refetch,
+    isLoading,
+  }: any = useQuery(
+    [`GET_FETCH_TYPE_${filterParams?.link}`, filterParams],
+    () => {
+      return axios.get(
+        `${API_URL}/${filterParams.link}/?skip=${filterParams.page - 1}&limit=${
+          filterParams.perPage
+        }${filterParams?.q ? "&" + filterParams.q : ""}`
+      );
+    },
+    {
+      enabled: !!filterParams?.link,
+    }
+  );
+
+  return {
+    data: bodyData?.data,
+    setFilterParams,
+    filterParams,
+    isLoading,
+    refetch,
   };
-
-  useEffect(() => {
-    getList(filterParams);
-  }, [filterParams]);
-
-  return { data, setFilterParams, filterParams, isLoading, getList };
 };

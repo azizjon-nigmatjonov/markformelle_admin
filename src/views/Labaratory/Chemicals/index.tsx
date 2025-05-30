@@ -93,6 +93,7 @@ export const LabChemicals = () => {
       setAskClose("close");
       setOpen(false);
       setShowUI(false);
+      refetchTable();
       setModalInitialData({});
     }
     if (status === "delete") {

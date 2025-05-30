@@ -67,7 +67,7 @@ export const ModalTableLogic = ({
   const createForm = async (params: {}) => {
     try {
       const { data } = await axios.post(`${API_URL}/labrecete/`, params);
-      refetchTable();
+
       setFormId(data?.LABRECETEID);
       toast.success(t("created!"));
       return data;
@@ -82,8 +82,7 @@ export const ModalTableLogic = ({
     try {
       const { data } = await axios.put(`${API_URL}/labrecete/${id}`, params);
       refetch();
-      refetchTable();
-      handleModalActions("close", "");
+
       toast.success(t("updated!" + " 😊"));
       return data;
     } catch (error) {

@@ -34,8 +34,6 @@ export const TwoRowTable = ({
   const [sellectedItemsSecondTable, setSellectedItemsSecondTable]: any =
     useState([]);
   const [openDelete, setOpenDelete] = useState(false);
-  console.log("idTable", idTable);
-
   const bodySource = useMemo(() => {
     return {
       okey:

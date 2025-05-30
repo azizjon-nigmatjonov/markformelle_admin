@@ -4,11 +4,13 @@ import { useTranslation } from "react-i18next";
 import { useGetDovizList } from "../../../../../hooks/useFetchRequests/useDovizList";
 // import { IMaterialForm } from "../interface";
 import CLabel from "../../../../../components/CElements/CLabel";
-import HFSelect from "../../../../../components/HFElements/HFSelect";
 import { DetailFormLogic } from "./Logic";
 import { LiteOptionsTable } from "../../../../../components/UI/Options/LiteTable";
 import dayjs from "dayjs";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
+import { SubmitCancelButtons } from "../../../../../components/UI/FormButtons/SubmitCancel";
+import { useFetchType } from "../../../../../hooks/useFetchRequests/useFetchType";
+import HFTextField from "../../../../../components/HFElements/HFTextField";
 
 interface Props {
   onClose: () => void;
@@ -34,7 +36,6 @@ export const DetailForm = ({
   const { control, handleSubmit, setValue, getValues } = useForm<any>({
     mode: "onSubmit",
   });
-  console.log("formData", formData);
   const { Options: moneyOptions } = useGetDovizList({});
 
   // {
@@ -53,15 +54,32 @@ export const DetailForm = ({
   //   "DEGISIMTARIHI": "2025-05-28T17:51:11.367Z"
   // }
 
+  //   {
+  //     "URUNID": "KM029",
+  //     "MIKTARYUZDE": 1,
+  //     "BIRIMFIYAT": 0.13347,
+  //     "DOVIZID": "USD",
+  //     "URUNBIRIMID": null,
+  //     "": 5.3,
+  //     "SIRA": 4,
+  //     "LABRECETEATISID": 23635,
+  //     "LABRECETEID": 14951,
+  //     "INSERTKULLANICIID": 1,
+  //     "DEGISIMTARIHI": "2025-05-30T15:41:24.047Z",
+  //     "KULLANICIID": 1,
+  //     "INSERTTARIHI": "2025-05-30T15:41:24.047Z",
+  //     "FIYATURUNBIRIMID": 2187
+  // }
+
   const onSubmit = (data: any) => {
     let params: any = data;
-    params.SIRA = 4;
+    // params.SIRA = 1;
     params.LABRECETEATISID = idTrail;
     params.LABRECETEID = materialID;
     params.MIKTARYUZDE = Number(params.MIKTARYUZDE);
     params.INSERTKULLANICIID = 1;
     params.DEGISIMTARIHI = dayjs();
-    params.URUNBIRIMID = +params.URUNBIRIMID;
+    params.URUNBIRIMID = Number(params.URUNBIRIMID);
 
     if (formId) {
       updateForm({ ...formData, ...params }, formId);
@@ -84,6 +102,32 @@ export const DetailForm = ({
     }
   }, [formData]);
 
+  const { setFilterParams, data: birimData, filterParams } = useFetchType();
+  const {
+    setFilterParams: setFilterParamsFiyat,
+    data: fiyatData,
+    filterParams: filterParamsFiyat,
+  } = useFetchType();
+
+  useEffect(() => {
+    const obj =
+      birimData?.data?.find(
+        (item: { DEFAULTBIRIM: null | number }) => item.DEFAULTBIRIM === 1
+      ) ?? {};
+    if (obj?.BIRIMID) {
+      setValue("URUNBIRIMID", obj.URUNBIRIMID);
+      setValue("FIYATCARPAN", obj.CARPAN);
+    }
+  }, [birimData]);
+
+  useEffect(() => {
+    const obj = fiyatData?.data?.[0] ?? {};
+    if (obj.ALISFIYATIDOVIZID) {
+      setValue("DOVIZID", obj.ALISFIYATIDOVIZID);
+      setValue("BIRIMFIYAT", obj.URETIMECIKISFIYATI);
+    }
+  }, [fiyatData]);
+
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 w-[400px]">
@@ -99,12 +143,21 @@ export const DetailForm = ({
               { id: "ADI", title: "URUNADI", innerId: "URUNID", width: 200 },
             ]}
             handleSelect={(obj: { URUNID: string }) => {
-              console.log("o", obj);
               setValue("URUNID", obj.URUNID);
+              setFilterParams({
+                ...filterParams,
+                q: `URUNID=${obj.URUNID}`,
+                link: "urunbirim",
+              });
+              setFilterParamsFiyat({
+                ...filterParamsFiyat,
+                q: `URUNID=${obj.URUNID}`,
+                link: "urunfiyat",
+              });
             }}
             control={control}
           />
-          <LiteOptionsTable
+          {/* <LiteOptionsTable
             name="URUNBIRIMID"
             label={t("URUNBIRIMID")}
             placeholder={t("URUNBIRIMID")}
@@ -122,31 +175,55 @@ export const DetailForm = ({
               { id: "CARPAN", width: 80, title: "CARPAN" },
             ]}
             handleSelect={(obj: { URUNBIRIMID: number; CARPAN: number }) => {
-              console.log("o", obj);
               setValue("URUNBIRIMID", obj.URUNBIRIMID);
               setValue("FIYATCARPAN", obj.CARPAN);
             }}
             control={control}
-          />
+          /> */}
 
           <HFInputMask
             control={control}
             name="MIKTARYUZDE"
-            label="MIKTARYUZDE"
+            label="MIKTARYUZDE %"
             type="number"
             required={true}
             placeholder="MIKTARYUZDE"
           />
 
-          <HFInputMask
+          <HFTextField
+            name="BIRIMFIYAT"
+            control={control}
+            disabled
+            setValue={setValue}
+            placeholder="BIRIMFIYAT"
+            label="BIRIMFIYAT"
+          />
+
+          <HFTextField
+            name="DOVIZID"
+            control={control}
+            disabled
+            setValue={setValue}
+            placeholder="DOVIZID"
+            label="DOVIZID"
+          />
+          <HFTextField
+            name="URUNBIRIMID"
+            control={control}
+            disabled
+            setValue={setValue}
+            placeholder="URUNBIRIMID"
+            label="URUNBIRIMID"
+          />
+          {/* <HFInputMask
             control={control}
             name="BIRIMFIYAT"
             label={t("BIRIMFIYAT")}
             type="number"
             required
             placeholder={t("BIRIMFIYAT")}
-          />
-          <HFSelect
+          /> */}
+          {/* <HFSelect
             name="DOVIZID"
             control={control}
             label="DOVIZID"
@@ -157,7 +234,7 @@ export const DetailForm = ({
             }}
             placeholder="DOVIZID"
             options={moneyOptions}
-          />
+          /> */}
         </div>
 
         <div>
@@ -170,8 +247,17 @@ export const DetailForm = ({
             onChange={(e: any) => setValue("NOTU", e.target.value)}
           ></textarea>
         </div>
-
-        <div className="flex space-x-2">
+        <SubmitCancelButtons
+          uniqueID="lab_detail_form"
+          type={formId ? "update" : "create"}
+          handleActions={(val: string, uniqueID: string) => {
+            if (uniqueID === "modal_lab") {
+              if (val === "Close") onClose();
+              if (val === "Enter") onSubmit(getValues());
+            }
+          }}
+        />
+        {/* <div className="flex space-x-2">
           <button
             onClick={() => onClose()}
             className="cancel-btn"
@@ -182,7 +268,7 @@ export const DetailForm = ({
           <button className="custom-btn" type="submit">
             {t(formId ? "update" : "save")}
           </button>
-        </div>
+        </div> */}
       </form>
     </div>
   );

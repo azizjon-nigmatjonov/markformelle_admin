@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CNewTable from "../../../../components/CElements/CNewTable";
 import { FetchTable } from "./Logic";
 import HFTextField from "../../../../components/HFElements/HFTextField";
@@ -41,20 +41,6 @@ export const TableUI = ({ defaultData = {} }: { defaultData: any }) => {
       },
     },
   ];
-
-  useEffect(() => {
-    const handleKeyDown = (event: any) => {
-      if (event.key === "Escape") {
-        setOpen(false);
-      }
-      if (event.key === "F8") {
-        setOpen(!open);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
 
   return (
     <div className="relative pb-10">

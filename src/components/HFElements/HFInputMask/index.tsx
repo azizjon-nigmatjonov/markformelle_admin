@@ -110,15 +110,6 @@ const HFInputMask = ({
               type={type}
               error={!!error?.message}
             />
-            {/* {error?.message && (
-              <p
-                className={`text-sm text-[var(--error)] absolute ${
-                  label ? "bottom-[-17px]" : "bottom-0"
-                }`}
-              >
-                {t(error.message)}
-              </p>
-            )} */}
           </>
         )}
       />

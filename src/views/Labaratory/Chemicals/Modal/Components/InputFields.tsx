@@ -31,7 +31,7 @@ export const InputFields = ({
   return (
     <div className="w-full grid grid-cols-4 gap-y-3 gap-x-5">
       <div className="space-y-2">
-        <InputFieldUI title="LABRECETEADI">
+        <InputFieldUI title="LABRECETEADI" required>
           <HFTextField
             name="ADI"
             control={control}
@@ -39,7 +39,7 @@ export const InputFields = ({
             placeholder="ADI"
           />
         </InputFieldUI>
-        <InputFieldUI title="FIRMAID">
+        <InputFieldUI title="FIRMAID" required>
           <LiteOptionsTable
             name="FIRMAID"
             placeholder="FIRMAID"
@@ -56,7 +56,7 @@ export const InputFields = ({
             disabled={!!formData?.FIRMAID}
           />
         </InputFieldUI>
-        <InputFieldUI title="LABRENKGRUPID">
+        <InputFieldUI title="LABRENKGRUPID" required>
           <HFSelect
             name="LABRENKGRUPID"
             control={control}
@@ -65,7 +65,7 @@ export const InputFields = ({
             options={LabRenkOptions}
           />
         </InputFieldUI>
-        <InputFieldUI title={"HAMSTOK"}>
+        <InputFieldUI title="HAMSTOK" required>
           <LiteOptionsTable
             name="HAMID"
             placeholder="HAMSTOK"
@@ -89,7 +89,7 @@ export const InputFields = ({
         </InputFieldUI>
       </div>
       <div className="space-y-2">
-        <InputFieldUI title={"RECETETURU"}>
+        <InputFieldUI title="RECETETURU" required>
           <HFSelect
             name="RECETETURUID"
             control={control}
@@ -99,7 +99,7 @@ export const InputFields = ({
             disabled={!!formData?.RECETETURUID}
           />
         </InputFieldUI>
-        <InputFieldUI title="ACIKLAMA">
+        <InputFieldUI title="ACIKLAMA" required>
           <HFTextField
             name="ACIKLAMA"
             control={control}
@@ -107,7 +107,7 @@ export const InputFields = ({
             placeholder="ACIKLAMA"
           />
         </InputFieldUI>
-        <InputFieldUI title="USTASAMA">
+        <InputFieldUI title="USTASAMA" required>
           <LiteOptionsTable
             name="ASAMAID"
             placeholder={"USTASAMA"}
@@ -127,7 +127,7 @@ export const InputFields = ({
             control={control}
           />
         </InputFieldUI>
-        <InputFieldUI title="DOVIZID">
+        <InputFieldUI title="DOVIZID" required>
           <HFSelect
             name="DOVIZID"
             control={control}
@@ -150,7 +150,7 @@ export const InputFields = ({
             placeholder="ESKILABRECETEKODU"
           />
         </InputFieldUI>
-        <InputFieldUI title="PANTONEKODU">
+        <InputFieldUI title="PANTONEKODU" required>
           <HFTextField
             name="PANTONEKODU"
             control={control}
@@ -158,13 +158,14 @@ export const InputFields = ({
             placeholder="PANTONEKODU"
           />
         </InputFieldUI>
-        <InputFieldUI title="RENKDERINGLIGI">
+        <InputFieldUI title="RENKDERINGLIGI" required>
           <HFSelect
             name="RENKDERINLIGIID"
             control={control}
             setValue={setValue}
             placeholder="RENKDERINLIGIID"
             options={renkDeringOptions}
+            defaultValue={getValues().RENKDERINLIGIID}
             handleClick={(obj) => {
               setValue("RENKDERINLIGIID", obj.value);
             }}

@@ -261,7 +261,7 @@ export const GetTranslations = ({
   const refetch = () => {
     setisLoading(true);
     axios
-      .get("http://10.40.14.193:8000/translation/?limit=1000&page=0")
+      .get(`${API_URL}/translation/?limit=1000&page=0`)
       .then((res: any) => {
         const data = res?.data;
         const newArr: any = [];

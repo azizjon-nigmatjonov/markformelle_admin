@@ -1,6 +1,7 @@
 import axios from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { IFilterParams } from "../../interfaces";
+import { useQuery } from "react-query";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const useLabRenkGroupList = () => {
@@ -8,32 +9,36 @@ export const useLabRenkGroupList = () => {
     page: 1,
     perPage: 100,
   });
-  const [data, setData]: any = useState({});
-  const getList = (filters: any) => {
-    if (!filters?.page) return;
-    axios
-      .get(
-        `${API_URL}/labrenkgrup/?skip=${filters.page - 1}&limit=${
-          filters.perPage
-        }${filters?.q ? "&" + filters.q : ""}`
-      )
-      .then((res: any) => {
-        setData(res?.data);
-      });
-  };
+
+  const { data: bodyData }: any = useQuery(
+    ["GET_LAB_RANK_GRUP_LIST", filterParams],
+    () => {
+      return axios.get(
+        `${API_URL}/labrenkgrup/?skip=${filterParams.page - 1}&limit=${
+          filterParams.perPage
+        }${filterParams?.q ? "&" + filterParams.q : ""}`
+      );
+    },
+    {
+      enabled: !!filterParams?.page,
+    }
+  );
 
   const Options = useMemo(() => {
-    return data?.data?.map((item: { ADI: string; LABRENKGRUPID: number }) => {
-      return {
-        label: item.ADI,
-        value: item.LABRENKGRUPID,
-      };
-    });
-  }, [data]);
+    return bodyData?.data?.data?.map(
+      (item: { ADI: string; LABRENKGRUPID: number }) => {
+        return {
+          label: item.ADI,
+          value: item.LABRENKGRUPID,
+        };
+      }
+    );
+  }, [bodyData]);
 
-  useEffect(() => {
-    getList(filterParams);
-  }, [filterParams]);
-
-  return { labRenkData: data, setFilterParams, filterParams, Options };
+  return {
+    labRenkData: bodyData?.data,
+    setFilterParams,
+    filterParams,
+    Options,
+  };
 };

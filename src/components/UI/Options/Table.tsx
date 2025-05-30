@@ -113,21 +113,6 @@ export const SelectOptionsTable = ({
     }
   }, [focused]);
 
-  useEffect(() => {
-    const handleKeyDown = (event: any) => {
-      if (!name) return;
-      if (event.key === "Escape") {
-        setOpen(false);
-      }
-      if (event.key === "F8") {
-        setOpen(!open);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
-
   return (
     <div className="relative">
       {label && <CLabel title={label} required={required} />}

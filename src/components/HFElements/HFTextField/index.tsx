@@ -54,7 +54,6 @@ const InputUI = ({
         onChange={(e) => onChange(e.target.value)}
         name={name}
         error={Boolean(error)}
-        helperText={error?.message}
         {...props}
         type={
           activatePassword && password
@@ -69,7 +68,7 @@ const InputUI = ({
           readOnly: readOnly,
         }}
         placeholder={t(placeholder)}
-        className={error ? "error" : ""}
+        className={errors[name]?.message ? "border border-red-500" : ""}
         disabled={disabled}
       />
       {activatePassword && (
@@ -79,12 +78,6 @@ const InputUI = ({
         >
           {!password ? <VisibilityOff /> : <Visibility />}
         </span>
-      )}
-
-      {errors[name]?.message && (
-        <p className="text-sm text-[var(--error)] absolute left-1 -bottom-5 whitespace-nowrap">
-          {errors[name].message}
-        </p>
       )}
     </>
   );
