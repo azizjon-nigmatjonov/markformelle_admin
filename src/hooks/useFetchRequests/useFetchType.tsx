@@ -36,3 +36,22 @@ export const useFetchType = () => {
     refetch,
   };
 };
+
+export const useFetchTypeSingle = () => {
+  const [filterParams, setFilterParams] = useState<Partial<any>>({ link: "" });
+  const { data: bodyData, isLoading }: any = useQuery(
+    [`GET_FETCH_TYPE_${filterParams.link}_SINGLE`, filterParams.link],
+    () => {
+      return axios.get(`${API_URL}/${filterParams.link}`);
+    },
+    {
+      enabled: !!filterParams?.link,
+    }
+  );
+  return {
+    data: bodyData?.data,
+    setFilterParams,
+    filterParams,
+    isLoading,
+  };
+};

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ModalTypes } from "../interfaces";
 import { useTranslationHook } from "../../../../hooks/useTranslation";
@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 import { SubmitButton } from "../../../../components/UI/FormButtons/SubmitButton";
 import { Validation } from "./Validation";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { LiteOptionsTable } from "../../../../components/UI/Options/LiteTable";
 const schema = Validation;
 interface ModalUIProps {
   defaultData?: ModalTypes;
@@ -40,6 +41,7 @@ export const ModalUI = ({
   setAskClose = () => {},
 }: ModalUIProps) => {
   const { t } = useTranslationHook();
+  const [uniqueID, setUniqueID] = useState("main_table_lab");
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
   const [formId, setFormId] = useState<number>(0);
   const [disabled, setDisabled] = useState(true);
@@ -67,12 +69,6 @@ export const ModalUI = ({
   useEffect(() => {
     if (!open) setShowUI(false);
   }, [open]);
-
-  const {
-    setFilterParams: setUrunTypeFilterParams,
-    filterParams: urunTypeFilterParams,
-    urunTypeData,
-  } = useGetUrunTypeList({});
 
   const onSubmit = (data: any) => {
     let params: any = data;
@@ -185,31 +181,38 @@ export const ModalUI = ({
           showUI={showUI}
           disabled="big"
         >
-          <form onSubmit={handleSubmit(onSubmit)} className="mb-5">
+          <form
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+              }
+            }}
+            onSubmit={handleSubmit(onSubmit)}
+            className="mb-5"
+          >
             <div className="pb-5">
               <div
                 className={`grid grid-cols-3 gap-x-5 border-b border-[var(--border)] pb-5`}
               >
                 <div>
                   <InputFieldUI title={t("LABRECETEKODU")} disabled={disabled}>
-                    <SelectOptionsTable
+                    <LiteOptionsTable
                       name="LABRECETEKODU"
                       placeholder={t("LABRECETEKODU")}
-                      options={urunTypeData?.data}
+                      link="labrecete"
                       required={true}
-                      headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
-                      filterParams={urunTypeFilterParams}
+                      renderValue={(_: string, obj: any) => {
+                        return obj.LABRECETEKODU;
+                      }}
+                      defaultValue={formData?.LABRECETEKODU}
+                      headColumns={[
+                        { id: "LABRECETEID", title: "LABRECETEID" },
+                        { title: "RECETETURAADI", id: "RECETETURAADI" },
+                      ]}
                       handleSelect={(obj: { ADI: string }) => {
                         setValue("LABRECETEKODU", obj.ADI);
                       }}
-                      handleSearch={(val: string) => {
-                        setUrunTypeFilterParams({
-                          ...urunTypeFilterParams,
-                          q: val,
-                        });
-                      }}
                       control={control}
-                      setFilterParams={setUrunTypeFilterParams}
                     />
                   </InputFieldUI>
                 </div>
@@ -217,12 +220,12 @@ export const ModalUI = ({
                 <div className="flex justify-end">
                   <div className="w-[200px]">
                     <SubmitButton
-                      uniqueID="modal_lab"
+                      uniqueID={uniqueID}
                       type={formId ? "update" : "create"}
                       handleActions={(val: string, uniqueID: string) => {
-                        if (uniqueID === "modal_lab") {
+                        if (uniqueID === "main_table_lab") {
                           if (val === "Close") handleModalActions("close", "");
-                          if (val === "Enter") onSubmit(getValues());
+                          if (val === "Enter") handleSubmit(onSubmit)();
                         }
                       }}
                     />
@@ -245,6 +248,7 @@ export const ModalUI = ({
             disabled={disabled}
             formId={formId}
             formData={formData}
+            setUniqueID={setUniqueID}
           />
         </CNewModal>
       ) : (

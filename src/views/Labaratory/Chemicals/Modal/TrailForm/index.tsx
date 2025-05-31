@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-// import { IModalForm } from "../../interfaces";
 import HFInputMask from "../../../../../components/HFElements/HFInputMask";
 import { useTranslation } from "react-i18next";
 import HFSelect from "../../../../../components/HFElements/HFSelect";
@@ -12,8 +11,11 @@ import { LiteOptionsTable } from "../../../../../components/UI/Options/LiteTable
 import { useEffect } from "react";
 import { SubmitCancelButtons } from "../../../../../components/UI/FormButtons/SubmitCancel";
 import { TableUI } from "../TableUI/TableUI";
-
+import { Validation } from "./Validation";
+import { yupResolver } from "@hookform/resolvers/yup";
+const schema = Validation;
 interface Props {
+  open: string;
   formId: number;
   labReceteId: any;
   materialId: number;
@@ -29,6 +31,7 @@ interface Props {
 }
 
 export const TrailForm = ({
+  open = "",
   formId,
   onClose,
   handleActionsDetails,
@@ -48,41 +51,20 @@ export const TrailForm = ({
     onClose,
     formId,
   });
-  const { control, handleSubmit, setValue, getValues } = useForm<any>({
+  const { control, handleSubmit, setValue } = useForm<any>({
     mode: "onSubmit",
+    resolver: yupResolver(schema),
   });
-
-  // {
-  //   "LABRECETECALISMAID": 17498,
-  //   "LABRECETEID": 14950,
-  //   "ATISTARIHI": "2025-05-28T00:00:00",
-  //   "RECETEASAMAID": 1,
-  //   "ATISNO": 3,
-  //   "ATISNOSTR": "3",
-  //   "GIDISTARIHI": "2025-05-28T00:00:00",
-  //   "OKEY": true,
-  //   "KRITIK": false,
-  //   "MIGRASYON": 1,
-  //   "ONAYKULLANICIID": 1,
-  //   "DURUMUSTR": "Okey",
-  //   "TARIHI": "2025-05-28T15:37:18.711Z",
-  //   "KARTELATARIHI": "2025-05-28T10:37:18.711Z",
-  //   "INSERTKULLANICIID": 1,
-  //   "INSERTTARIHI": "2025-05-28T10:37:18.711Z",
-  //   "KULLANICIID": 1,
-  //   "DEGISIMTARIHI": "2025-05-28T10:37:18.711Z"
-  // }
 
   const onSubmit = (data: any) => {
     let params: any = data;
     params.LABRECETECALISMAID = materialId;
     params.LABRECETEID = labReceteId;
     params.RECETEASAMAID = params.ASAMAID;
-    params.ATISNOSTR = params.ATISNO + "";
-    params.ATISNO = +params.ATISNO;
 
     params.DEGISIMTARIHI = dayjs();
-
+    params.ATISNO = Number(params.ATISNO);
+    params.ATISNOSTR = params.ATISNO + "";
     if (params.OKEY) {
       params.TARIHI = dayjs();
       params.DURUMUSTR = "Okey";
@@ -92,21 +74,8 @@ export const TrailForm = ({
 
     if (trailFormData?.LABRECETEATISID) {
       params = { ...trailFormData, ...params };
-      // delete params.LABRECETEATISID
 
-      // const newParams = {
-      //   LABRECETECALISMAID: materialId,
-      //   LABRECETEID: labReceteId,
-      //   ATISTARIHI: trailFormData.ATISTARIHI,
-      //   ATISNO: trailFormData.ATISNO,
-      //   ATISNOSTR: trailFormData.ATISNOSTR,
-      //   TARIHI: trailFormData.TARIHI,
-      //   BOYAMALIYETI: trailFormData,
-      //   KULLANICIID: 1,
-      //   DEGISIMTARIHI: "2025-05-29T16:13:49",
-      // };
-
-      updateForm(params, materialId);
+      updateForm(params, trailFormData?.LABRECETEATISID);
     } else {
       params.ATISTARIHI = dayjs();
       params.KULLANICIID = 1;
@@ -116,7 +85,6 @@ export const TrailForm = ({
       params.KARTELATARIHI = dayjs();
       params.INSERTKULLANICIID = 1;
       params.INSERTTARIHI = dayjs();
-      // params.MIGRASYON = params.MIGRASYON || 0;
 
       createForm(params);
     }
@@ -146,6 +114,7 @@ export const TrailForm = ({
           name="MIGRASYON"
           label={t("MIGRASYON")}
           placeholder={t("MIGRASYON")}
+          required
           options={[
             { label: "Soguk", value: 1 },
             { label: "Sicak", value: 2 },
@@ -195,85 +164,17 @@ export const TrailForm = ({
           disabled={!trailFormData?.LABRECETECALISMAID}
         />
       </div>
-      {/* <CNewTable
-        title="Details"
-        headColumns={[
-          {
-            title: "Sira",
-            id: "SIRA",
-          },
-
-          {
-            title: "Urun Adi",
-            id: "URUNADI",
-          },
-          {
-            title: "Miktar",
-            id: "MIKTAR",
-          },
-          {
-            title: "Hasep Birimi",
-            id: "HASEPBIRIMI",
-          },
-          {
-            title: "ILKKAYDEDM",
-            id: "ILKKAYDEDM",
-          },
-          {
-            title: "TARIH",
-            id: "ILKTARIHI",
-          },
-          {
-            title: "Birimi Fiyati",
-            id: "BIRIMFIYAT",
-          },
-          {
-            title: "Turlar",
-            id: "TURLAR",
-          },
-        ]}
-        defaultFilters={["actions"]}
-        idForTable="table_modal_details"
-        defaultActions={["delete", "edit"]}
-        bodyColumns={DetailsList}
-        handleActions={handleActionsDetails}
-        isLoading={false}
-        filterParams={filterParams}
-        handleFilterParams={setFilterParams}
-        disablePagination={true}
-        autoHeight="240px"
-        disabled={disabled}
-        extra={
-          <button
-            onClick={() => {
-              setOpen("detail");
-            }}
-            className="flex items-center"
-          >
-            <PlusIcon fill="var(--main)" />
-          </button>
-        }
-      /> */}
 
       <SubmitCancelButtons
-        uniqueID="lab_trail_form"
+        uniqueID={open}
         type={trailFormData?.LABRECETEATISID ? "update" : "create"}
         handleActions={(val: string, uniqueID: string) => {
-          if (uniqueID === "modal_lab") {
+          if (uniqueID === open) {
             if (val === "Close") onClose();
-            if (val === "Enter") onSubmit(getValues());
+            if (val === "Enter") handleSubmit(onSubmit)();
           }
         }}
       />
-
-      {/* <div className="flex space-x-2">
-        <button onClick={() => onClose()} className="cancel-btn" type="button">
-          {t("cancel")}
-        </button>
-        <button className="custom-btn" type="submit">
-          {t(trailFormData?.LABRECETEATISID ? "update" : "save")}
-        </button>
-      </div> */}
     </form>
   );
 };

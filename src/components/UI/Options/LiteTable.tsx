@@ -6,7 +6,10 @@ import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 import { styled } from "@mui/material";
 import { useTranslationHook } from "../../../hooks/useTranslation";
 import { TableUI } from "./LiteTable/TableUI";
-import { useFetchType } from "../../../hooks/useFetchRequests/useFetchType";
+import {
+  useFetchType,
+  useFetchTypeSingle,
+} from "../../../hooks/useFetchRequests/useFetchType";
 const PopupBody = styled("div")(
   ({ theme }) => `
   width: max-content;
@@ -48,7 +51,7 @@ export const LiteOptionsTable = ({
   link = "",
   handleSelect = () => {},
   name = "",
-  defaultValue = undefined,
+  defaultValue = "",
   label = "",
   required = false,
   headColumns = [],
@@ -68,7 +71,33 @@ export const LiteOptionsTable = ({
   const [currentEl, setCurrentEl]: any = useState({});
   const [options, setOptions] = useState([]);
   const { data, setFilterParams, filterParams, isLoading } = useFetchType();
-  // const [clear, setClear] = useState(false);
+  const {
+    setFilterParams: setFilterParamSingle,
+    filterParams: filterParamsSingle,
+    data: singleData,
+  } = useFetchTypeSingle();
+
+  const setCurrentValue = (el?: any) => {
+    let val: any = "";
+    if (renderValue) {
+      val = renderValue(name, el?.[name] ? el : { [name]: defaultValue });
+    } else {
+      val = el?.[name] || defaultValue;
+    }
+    setSearch(val);
+  };
+
+  useEffect(() => {
+    if (singleData?.[name]) {
+      setCurrentEl(singleData);
+      handleSelect(singleData);
+      setCurrentValue(singleData);
+    }
+  }, [singleData]);
+
+  useEffect(() => {
+    if (defaultValue) setCurrentValue();
+  }, [defaultValue]);
 
   useEffect(() => {
     setOptions(data?.data ?? []);
@@ -78,6 +107,7 @@ export const LiteOptionsTable = ({
     setOpen(false);
     handleSelect(el);
     setCurrentEl(el);
+    setCurrentValue(el);
   };
 
   const handleSearch = (q: string) => {
@@ -94,6 +124,15 @@ export const LiteOptionsTable = ({
       inputRef.current.focus();
     }
   }, [focused]);
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Enter" && !open) {
+      setFilterParamSingle({
+        ...filterParamsSingle,
+        link: link + "/" + search,
+      });
+    }
+  };
 
   return (
     <div className="w-full">
@@ -121,22 +160,24 @@ export const LiteOptionsTable = ({
         <Controller
           control={control}
           name={name}
-          render={({ field: { onChange, value }, fieldState: { error } }) => {
+          render={({ field: { onChange }, fieldState: { error } }) => {
             return (
               <div className={`relative w-full ${open ? "z-[99]" : ""}`}>
                 <input
-                  value={
-                    renderValue
-                      ? renderValue(
-                          name,
-                          currentEl?.[name]
-                            ? currentEl
-                            : { [name]: defaultValue }
-                        )
-                      : value
-                      ? value
-                      : search || defaultValue
-                  }
+                  // value={
+                  // renderValue
+                  //   ? renderValue(
+                  //       name,
+                  //       currentEl?.[name]
+                  //         ? currentEl
+                  //         : { [name]: defaultValue }
+                  //     )
+                  //     : value
+                  //     ? value
+                  //     : search || defaultValue
+                  // }
+                  onKeyDown={(e: any) => handleKeyDown(e)}
+                  value={search}
                   type="text"
                   className={`border rounded-[8px] pl-8 h-[30px] w-full px-1 bg-transparent ${
                     error?.message
@@ -145,9 +186,12 @@ export const LiteOptionsTable = ({
                   } ${disabled ? "text-[var(--gray)]" : ""}`}
                   placeholder={t(placeholder)}
                   onChange={(e: any) => {
-                    handleSearch(
-                      e.target.value ? `${name}=${e.target.value}` : ""
-                    );
+                    if (open)
+                      setTimeout(() => {
+                        handleSearch(
+                          e.target.value ? `${name}=${e.target.value}` : ""
+                        );
+                      }, 500);
                     onChange(e.target.value);
                     setSearch(e.target.value);
                   }}

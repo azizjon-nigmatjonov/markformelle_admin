@@ -12,6 +12,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Validation } from "./Validation";
 const schema = Validation;
 interface Props {
+  open: string;
   formId: number;
   onClose: () => void;
   formData: any;
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export const MaterialForm = ({
+  open,
   formId,
   onClose,
   formData = {},
@@ -34,7 +36,7 @@ export const MaterialForm = ({
     formId,
   });
 
-  const { control, handleSubmit, setValue, getValues } = useForm<any>({
+  const { control, handleSubmit, setValue } = useForm<any>({
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
@@ -75,6 +77,7 @@ export const MaterialForm = ({
       setValue("HAMADI", materialFormData.HAMADI);
       setValue("USTASAMAADI", materialFormData.USTASAMAADI);
       setValue("USTASAMAID", materialFormData.USTASAMAID);
+      setValue("ASAMAID", materialFormData.USTASAMAID);
       setValue("DOVIZID", materialFormData.DOVIZID);
       setValue(
         "CALISMATARIHI",
@@ -150,21 +153,14 @@ export const MaterialForm = ({
             format="DD.MM.YYYY"
             defaultValue={materialFormData?.CALISMATARIHI}
           />
-          {/* <HFInputMask
-            control={control}
-            name="BIRIMFIYAT"
-            label={t("BIRIMFIYAT")}
-            type="number"
-            placeholder={t("BIRIMFIYAT")}
-          /> */}
         </div>
         <SubmitCancelButtons
-          uniqueID="lab_material_form"
+          uniqueID={open}
           type={!materialFormData?.LABRECETECALISMAID ? "create" : "update"}
           handleActions={(val: string, uniqueID: string) => {
-            if (uniqueID === "modal_lab") {
+            if (uniqueID === open) {
               if (val === "Close") onClose();
-              if (val === "Enter") onSubmit(getValues());
+              if (val === "Enter") handleSubmit(onSubmit)();
             }
           }}
         />

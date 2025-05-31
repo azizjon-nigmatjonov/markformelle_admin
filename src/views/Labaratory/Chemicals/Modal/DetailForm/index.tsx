@@ -7,12 +7,15 @@ import CLabel from "../../../../../components/CElements/CLabel";
 import { DetailFormLogic } from "./Logic";
 import { LiteOptionsTable } from "../../../../../components/UI/Options/LiteTable";
 import dayjs from "dayjs";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { SubmitCancelButtons } from "../../../../../components/UI/FormButtons/SubmitCancel";
 import { useFetchType } from "../../../../../hooks/useFetchRequests/useFetchType";
 import HFTextField from "../../../../../components/HFElements/HFTextField";
-
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Validation } from "./Validation";
+const schema = Validation;
 interface Props {
+  open: string;
   onClose: () => void;
   formId: number;
   idTrail: number;
@@ -21,6 +24,7 @@ interface Props {
 }
 
 export const DetailForm = ({
+  open = "",
   onClose,
   refetchTable,
   formId,
@@ -35,6 +39,7 @@ export const DetailForm = ({
   });
   const { control, handleSubmit, setValue, getValues } = useForm<any>({
     mode: "onSubmit",
+    resolver: yupResolver(schema),
   });
   const { Options: moneyOptions } = useGetDovizList({});
 
@@ -137,7 +142,7 @@ export const DetailForm = ({
             label={t("URUNID")}
             placeholder={t("URUNID")}
             link="urun"
-            required={true}
+            required
             headColumns={[
               { id: "URUNID", width: 100, title: "URUNID" },
               { id: "ADI", title: "URUNADI", innerId: "URUNID", width: 200 },
@@ -157,36 +162,13 @@ export const DetailForm = ({
             }}
             control={control}
           />
-          {/* <LiteOptionsTable
-            name="URUNBIRIMID"
-            label={t("URUNBIRIMID")}
-            placeholder={t("URUNBIRIMID")}
-            link="urunbirim"
-            required={true}
-            headColumns={[
-              {
-                id: "BIRIMADI",
-                title: "BIRIMADI",
-                innerId: "BIRIMADI",
-                width: 80,
-              },
-              { id: "BIRIMID", width: 70, title: "BIRIMID" },
-              { id: "URUNBIRIMID", width: 90, title: "URUNBIRIMID" },
-              { id: "CARPAN", width: 80, title: "CARPAN" },
-            ]}
-            handleSelect={(obj: { URUNBIRIMID: number; CARPAN: number }) => {
-              setValue("URUNBIRIMID", obj.URUNBIRIMID);
-              setValue("FIYATCARPAN", obj.CARPAN);
-            }}
-            control={control}
-          /> */}
 
           <HFInputMask
             control={control}
             name="MIKTARYUZDE"
             label="MIKTARYUZDE %"
             type="number"
-            required={true}
+            required
             placeholder="MIKTARYUZDE"
           />
 
@@ -215,26 +197,6 @@ export const DetailForm = ({
             placeholder="URUNBIRIMID"
             label="URUNBIRIMID"
           />
-          {/* <HFInputMask
-            control={control}
-            name="BIRIMFIYAT"
-            label={t("BIRIMFIYAT")}
-            type="number"
-            required
-            placeholder={t("BIRIMFIYAT")}
-          /> */}
-          {/* <HFSelect
-            name="DOVIZID"
-            control={control}
-            label="DOVIZID"
-            required
-            setValue={setValue}
-            handleClick={(obj) => {
-              setValue("DOVIZID", obj.value);
-            }}
-            placeholder="DOVIZID"
-            options={moneyOptions}
-          /> */}
         </div>
 
         <div>
@@ -248,27 +210,15 @@ export const DetailForm = ({
           ></textarea>
         </div>
         <SubmitCancelButtons
-          uniqueID="lab_detail_form"
+          uniqueID={open}
           type={formId ? "update" : "create"}
           handleActions={(val: string, uniqueID: string) => {
-            if (uniqueID === "modal_lab") {
+            if (uniqueID === open) {
               if (val === "Close") onClose();
-              if (val === "Enter") onSubmit(getValues());
+              if (val === "Enter") handleSubmit(onSubmit)();
             }
           }}
         />
-        {/* <div className="flex space-x-2">
-          <button
-            onClick={() => onClose()}
-            className="cancel-btn"
-            type="button"
-          >
-            {t("cancel")}
-          </button>
-          <button className="custom-btn" type="submit">
-            {t(formId ? "update" : "save")}
-          </button>
-        </div> */}
       </form>
     </div>
   );

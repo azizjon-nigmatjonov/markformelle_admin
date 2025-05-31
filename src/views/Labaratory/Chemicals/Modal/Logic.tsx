@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useQuery } from "react-query";
 import { useTranslationHook } from "../../../../hooks/useTranslation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 import { IFilterParams } from "../../../../interfaces";
+import { GetCurrentDate } from "../../../../utils/getDate";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const ModalTableLogic = ({
@@ -250,4 +251,196 @@ export const DetailTableLogic = ({
   }, [tableData, idTable]);
 
   return { detailData: data, refetch };
+};
+
+export const TableHeadersLogic = () => {
+  const headColumns = useMemo(() => {
+    return [
+      {
+        title: "HAMADI",
+        id: "HAMADI",
+        width: 105,
+        render: (val: string) => {
+          return <p>{val}</p>;
+        },
+      },
+
+      {
+        title: "CALISMATARIHI",
+        id: "CALISMATARIHI",
+        width: 112,
+        render: (val: string) => {
+          return GetCurrentDate({ date: val, type: "usually" });
+        },
+      },
+      {
+        title: "TERMINTARIHI",
+        id: "TERMINTARIHI",
+        width: 110,
+        render: (val: string) => {
+          return GetCurrentDate({ date: val, type: "usually" });
+        },
+      },
+      {
+        title: "ID",
+        id: "HAMID",
+        width: 20,
+      },
+      {
+        title: "KULLANICIADI",
+        id: "KULLANICIADI",
+        width: 95,
+      },
+
+      {
+        title: "DEGISIMTARIHI",
+        id: "DEGISIMTARIHI",
+        width: 115,
+        render: (val: string) => {
+          return GetCurrentDate({ date: val, type: "usually" });
+        },
+      },
+      {
+        title: "BIRIMFIYAT",
+        id: "BIRIMFIYAT",
+        width: 75,
+      },
+      {
+        title: "DOVIZID",
+        id: "DOVIZID",
+        width: 60,
+      },
+      {
+        title: "USTASAMAID",
+        id: "USTASAMAID",
+        width: 90,
+      },
+      {
+        title: "USTASAMAADI",
+        id: "USTASAMAADI",
+        width: 120,
+      },
+      {
+        title: "ILKKAYDERTARIHI",
+        id: "ILKKAYDERTARIHI",
+        width: 115,
+        render: (val: string) => {
+          return GetCurrentDate({ date: val, type: "usually" });
+        },
+      },
+    ];
+  }, []);
+  const trailHeadColumns = useMemo(() => {
+    return [
+      {
+        title: "ATISNO",
+        id: "ATISNO",
+        width: 50,
+      },
+      {
+        title: "ATISTARIHI",
+        id: "ATISTARIHI",
+        width: 77,
+        render: (val: string) => {
+          return GetCurrentDate({ date: val, type: "usually" });
+        },
+      },
+      {
+        title: "MIKTAR",
+        id: "BOYAYUZDESI",
+        width: 63,
+        render: (val: number) => {
+          return val.toString().substring(0, 8);
+        },
+      },
+      {
+        title: "BIRIM",
+        id: "BIRIM",
+        width: 40,
+        render: () => {
+          return <p>%</p>;
+        },
+      },
+      {
+        title: "DEGISIMTARIHI",
+        id: "DEGISIMTARIHI",
+        width: 115,
+        render: (val: string) => {
+          return GetCurrentDate({ date: val, type: "usually" });
+        },
+      },
+      {
+        title: "TARIHI",
+        id: "TARIHI",
+        width: 120,
+        render: (val: string) => {
+          return GetCurrentDate({ date: val, type: "usually" });
+        },
+      },
+      {
+        title: "INSERTTARIHI",
+        id: "INSERTTARIHI",
+        width: 120,
+        render: (val: string) => {
+          return GetCurrentDate({ date: val, type: "usually" });
+        },
+      },
+    ];
+  }, []);
+  const detailHeadColumns = useMemo(() => {
+    return [
+      {
+        title: "Sira",
+        id: "SIRA",
+        width: 30,
+      },
+      {
+        title: "Urun Adi",
+        id: "URUNADI",
+        width: 155,
+        render: (val: string) => {
+          return val.substring(0, 19);
+        },
+      },
+
+      {
+        title: "Miktar",
+        id: "MIKTARYUZDE",
+        width: 50,
+        render: (val: string) => {
+          return val.toString().substring(0, 5);
+        },
+      },
+      {
+        title: "Hasep Birimi",
+        id: "HASEPBIRIMI",
+        width: 83,
+        render: () => "%",
+      },
+      {
+        title: "BIRIMFIYAT",
+        id: "BIRIMFIYAT",
+        width: 77,
+        render: (val: number) => val.toString().substring(0, 8),
+      },
+      {
+        title: "DEGISIMTARIHI",
+        id: "DEGISIMTARIHI",
+        width: 120,
+        render: (val: string) => {
+          return GetCurrentDate({ date: val, type: "usually" });
+        },
+      },
+      {
+        title: "INSERTTARIHI",
+        id: "INSERTTARIHI",
+        width: 120,
+        render: (val: string) => {
+          return GetCurrentDate({ date: val, type: "usually" });
+        },
+      },
+    ];
+  }, []);
+
+  return { headColumns, trailHeadColumns, detailHeadColumns };
 };

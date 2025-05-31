@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { PlusIcon } from "../../IconGenerator/Svg";
-import cls from "./style.module.scss";
 import { OneSkeleton } from "../../../CElements/CSkeleton/OneSkeleton";
+import cls from "./style.module.scss";
 interface Props {
   bodyColumns: any;
   headColumns: any;
@@ -36,7 +36,7 @@ export const TableUI = ({
                 <div
                   key={index}
                   style={{ width: head?.width || "100%" }}
-                  className={`${cls.cell} border-b border-[var(--border)]`}
+                  className={`${cls.cell} border-b border-[var(--border)] focus:border-[var(--primary)]`}
                 >
                   <p>{head.title}</p>
                 </div>

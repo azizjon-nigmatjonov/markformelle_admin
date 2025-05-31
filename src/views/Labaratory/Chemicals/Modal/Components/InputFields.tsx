@@ -56,7 +56,7 @@ export const InputFields = ({
             disabled={!!formData?.FIRMAID}
           />
         </InputFieldUI>
-        <InputFieldUI title="LABRENKGRUPID" required>
+        {/* <InputFieldUI title="LABRENKGRUPID" required>
           <HFSelect
             name="LABRENKGRUPID"
             control={control}
@@ -64,7 +64,7 @@ export const InputFields = ({
             placeholder="LABRENKGRUPID"
             options={LabRenkOptions}
           />
-        </InputFieldUI>
+        </InputFieldUI> */}
         <InputFieldUI title="HAMSTOK" required>
           <LiteOptionsTable
             name="HAMID"
@@ -159,7 +159,7 @@ export const InputFields = ({
           />
         </InputFieldUI>
         <InputFieldUI title="RENKDERINGLIGI" required>
-          <HFSelect
+          {/* <HFSelect
             name="RENKDERINLIGIID"
             control={control}
             setValue={setValue}
@@ -169,6 +169,20 @@ export const InputFields = ({
             handleClick={(obj) => {
               setValue("RENKDERINLIGIID", obj.value);
             }}
+          /> */}
+          <LiteOptionsTable
+            name="RENKDERINLIGIID"
+            placeholder="RENKDERINLIGIID"
+            link="renkderinligi"
+            headColumns={[
+              { id: "RENKDERINLIGIID", title: "RENKDERINLIGIID" },
+              { id: "ADI", title: "FIRMAADI" },
+            ]}
+            handleSelect={(obj: { RENKDERINLIGIID: number }) => {
+              setValue("RENKDERINLIGIID", obj.RENKDERINLIGIID);
+            }}
+            defaultValue={formData?.RENKDERINLIGIID}
+            control={control}
           />
         </InputFieldUI>
       </div>

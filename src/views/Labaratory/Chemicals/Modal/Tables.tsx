@@ -6,7 +6,12 @@ import { DetailForm } from "./DetailForm";
 import { TwoRowTable } from "./TableUI/TwoRowTable";
 import { TableUI } from "./TableUI/TableUI";
 import { GetCurrentDate } from "../../../../utils/getDate";
-import { DetailTableLogic, TablesLogic, TrailTableLogic } from "./Logic";
+import {
+  DetailTableLogic,
+  TableHeadersLogic,
+  TablesLogic,
+  TrailTableLogic,
+} from "./Logic";
 import { MaterialFormLogic } from "./MaterialForm/Logic";
 import { TrailFormLogic } from "./TrailForm/Logic";
 import { DetailFormLogic } from "./DetailForm/Logic";
@@ -15,10 +20,12 @@ export const LabModalTables = ({
   disabled,
   formId,
   formData = {},
+  setUniqueID,
 }: {
   disabled: boolean;
   formId: number;
   formData: any;
+  setUniqueID: (val: string) => void;
 }) => {
   const { tableData, refetch: refetchMaterial } = TablesLogic({
     formId: formData?.LABRECETEID,
@@ -31,6 +38,8 @@ export const LabModalTables = ({
   const [idDetailForm, setIdDetailForm]: any = useState(null);
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
   const [open, setOpen] = useState("");
+  const { headColumns, trailHeadColumns, detailHeadColumns } =
+    TableHeadersLogic();
   const { trailData, refetch: refetchTrailTable } = TrailTableLogic({
     id: formId,
     idTable: idTable,
@@ -46,6 +55,11 @@ export const LabModalTables = ({
   const { deleteFn: deleteDetailFn } = DetailFormLogic({
     refetchTable: refetchDetailTable,
   });
+
+  useEffect(() => {
+    if (open.length) setUniqueID(open);
+    else setUniqueID("main_table_lab");
+  }, [open]);
 
   useEffect(() => {
     if (tableData?.data?.length) {
@@ -140,196 +154,6 @@ export const LabModalTables = ({
     }
   };
 
-  const headColumns = useMemo(() => {
-    return [
-      {
-        title: "HAMADI",
-        id: "HAMADI",
-        width: 105,
-        render: (val: string) => {
-          return <p>{val}</p>;
-        },
-      },
-
-      {
-        title: "CALISMATARIHI",
-        id: "CALISMATARIHI",
-        width: 112,
-        render: (val: string) => {
-          return GetCurrentDate({ date: val, type: "usually" });
-        },
-      },
-      {
-        title: "TERMINTARIHI",
-        id: "TERMINTARIHI",
-        width: 110,
-        render: (val: string) => {
-          return GetCurrentDate({ date: val, type: "usually" });
-        },
-      },
-      {
-        title: "ID",
-        id: "HAMID",
-        width: 20,
-      },
-      {
-        title: "KULLANICIADI",
-        id: "KULLANICIADI",
-        width: 95,
-      },
-
-      {
-        title: "DEGISIMTARIHI",
-        id: "DEGISIMTARIHI",
-        width: 115,
-        render: (val: string) => {
-          return GetCurrentDate({ date: val, type: "usually" });
-        },
-      },
-      {
-        title: "BIRIMFIYAT",
-        id: "BIRIMFIYAT",
-        width: 75,
-      },
-      {
-        title: "DOVIZID",
-        id: "DOVIZID",
-        width: 60,
-      },
-      {
-        title: "USTASAMAID",
-        id: "USTASAMAID",
-        width: 90,
-      },
-      {
-        title: "USTASAMAADI",
-        id: "USTASAMAADI",
-        width: 120,
-      },
-      {
-        title: "ILKKAYDERTARIHI",
-        id: "ILKKAYDERTARIHI",
-        width: 115,
-        render: (val: string) => {
-          return GetCurrentDate({ date: val, type: "usually" });
-        },
-      },
-    ];
-  }, []);
-
-  const trailHeadColumns = useMemo(() => {
-    return [
-      {
-        title: "ATISNO",
-        id: "ATISNO",
-        width: 50,
-      },
-      {
-        title: "ATISTARIHI",
-        id: "ATISTARIHI",
-        width: 77,
-        render: (val: string) => {
-          return GetCurrentDate({ date: val, type: "usually" });
-        },
-      },
-      {
-        title: "MIKTAR",
-        id: "BOYAYUZDESI",
-        width: 63,
-        render: (val: number) => {
-          return val.toString().substring(0, 8);
-        },
-      },
-      {
-        title: "BIRIM",
-        id: "BIRIM",
-        width: 40,
-        render: () => {
-          return <p>%</p>;
-        },
-      },
-      {
-        title: "DEGISIMTARIHI",
-        id: "DEGISIMTARIHI",
-        width: 115,
-        render: (val: string) => {
-          return GetCurrentDate({ date: val, type: "usually" });
-        },
-      },
-      {
-        title: "TARIHI",
-        id: "TARIHI",
-        width: 120,
-        render: (val: string) => {
-          return GetCurrentDate({ date: val, type: "usually" });
-        },
-      },
-      {
-        title: "INSERTTARIHI",
-        id: "INSERTTARIHI",
-        width: 120,
-        render: (val: string) => {
-          return GetCurrentDate({ date: val, type: "usually" });
-        },
-      },
-    ];
-  }, []);
-
-  const DetailHeader = useMemo(() => {
-    return [
-      {
-        title: "Sira",
-        id: "SIRA",
-        width: 30,
-      },
-      {
-        title: "Urun Adi",
-        id: "URUNADI",
-        width: 155,
-        render: (val: string) => {
-          return val.substring(0, 19);
-        },
-      },
-
-      {
-        title: "Miktar",
-        id: "MIKTARYUZDE",
-        width: 50,
-        render: (val: string) => {
-          return val.toString().substring(0, 5);
-        },
-      },
-      {
-        title: "Hasep Birimi",
-        id: "HASEPBIRIMI",
-        width: 83,
-        render: () => "%",
-      },
-      {
-        title: "BIRIMFIYAT",
-        id: "BIRIMFIYAT",
-        width: 77,
-        render: (val: number) => val.toString().substring(0, 8),
-      },
-      {
-        title: "DEGISIMTARIHI",
-        id: "DEGISIMTARIHI",
-        width: 120,
-        render: (val: string) => {
-          return GetCurrentDate({ date: val, type: "usually" });
-        },
-      },
-      {
-        title: "INSERTTARIHI",
-        id: "INSERTTARIHI",
-        width: 120,
-        render: (val: string) => {
-          return GetCurrentDate({ date: val, type: "usually" });
-        },
-      },
-    ];
-  }, []);
-
   return (
     <>
       <div className="grid grid-cols-3 gap-x-2">
@@ -360,7 +184,7 @@ export const LabModalTables = ({
             title="detail"
             idTable={null}
             handleRowClick={handleActionsDetails}
-            headColumns={DetailHeader}
+            headColumns={detailHeadColumns}
             bodyColumns={detailData}
             disabled={disabled}
           />
@@ -383,6 +207,7 @@ export const LabModalTables = ({
               refetchMaterial={refetchMaterial}
               formData={formData}
               formId={idMaterial}
+              open={open}
             />
           )}
           {open === "trial" && (
@@ -394,10 +219,11 @@ export const LabModalTables = ({
               disabled={disabled}
               setOpen={setOpen}
               formId={idTrailForm}
-              DetailHeader={DetailHeader}
+              DetailHeader={detailHeadColumns}
               detailData={detailData}
               labReceteId={formData?.LABRECETEID}
               materialId={idTable}
+              open={open}
               refetchTable={refetchTrailTable}
             />
           )}
@@ -406,6 +232,7 @@ export const LabModalTables = ({
               onClose={() => setOpen("")}
               formId={idDetailForm}
               idTrail={idTrail}
+              open={open}
               materialID={formData?.LABRECETEID}
               refetchTable={refetchDetailTable}
             />

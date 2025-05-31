@@ -15,8 +15,8 @@ export const SubmitButton = ({
   const { isAltPressed, currentKey } = useKeyDownEvent();
 
   useEffect(() => {
-    if (currentKey) handleActions(currentKey, uniqueID);
-  }, [currentKey]);
+    if (currentKey && isAltPressed) handleActions(currentKey, uniqueID);
+  }, [currentKey, isAltPressed]);
 
   return (
     <button className="custom-btn relative" type="submit">
