@@ -42,18 +42,23 @@ export const TrailForm = ({
   detailData = [],
 }: Props) => {
   const { t } = useTranslation();
+
+  const { control, handleSubmit, setValue, reset } = useForm<any>({
+    mode: "onSubmit",
+    resolver: yupResolver(schema),
+  });
+  const closeFn = () => {
+    reset();
+    onClose();
+  };
   const {
     createForm,
     formData: trailFormData,
     updateForm,
   } = TrailFormLogic({
-    refetchTable,
-    onClose,
     formId,
-  });
-  const { control, handleSubmit, setValue } = useForm<any>({
-    mode: "onSubmit",
-    resolver: yupResolver(schema),
+    refetchTable,
+    onClose: closeFn,
   });
 
   const onSubmit = (data: any) => {
@@ -170,7 +175,10 @@ export const TrailForm = ({
         type={trailFormData?.LABRECETEATISID ? "update" : "create"}
         handleActions={(val: string, uniqueID: string) => {
           if (uniqueID === open) {
-            if (val === "Close") onClose();
+            if (val === "Close") {
+              onClose();
+              refetchTable();
+            }
             if (val === "Enter") handleSubmit(onSubmit)();
           }
         }}

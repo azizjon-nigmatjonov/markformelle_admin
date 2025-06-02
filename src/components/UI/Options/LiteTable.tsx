@@ -64,6 +64,7 @@ export const LiteOptionsTable = ({
   defaultSearch = "",
 }: Props) => {
   const { t } = useTranslationHook();
+  const [searchName, setSearchName] = useState(name);
   const inputRef: any = useRef(null);
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -96,6 +97,15 @@ export const LiteOptionsTable = ({
   }, [singleData]);
 
   useEffect(() => {
+    if (data?.data?.length && defaultSearch) {
+      const obj = data.data[0] ?? {};
+      setCurrentEl(obj);
+      handleSelect(obj);
+      setCurrentValue(obj);
+    }
+  }, [data, defaultSearch]);
+
+  useEffect(() => {
     if (defaultValue) setCurrentValue();
   }, [defaultValue]);
 
@@ -103,15 +113,21 @@ export const LiteOptionsTable = ({
     setOptions(data?.data ?? []);
   }, [data]);
 
-  const handleActions = (el: any, _: string) => {
-    setOpen(false);
-    handleSelect(el);
-    setCurrentEl(el);
-    setCurrentValue(el);
+  const handleActions = (el: any, type: string) => {
+    if (type === "active_col") {
+      setSearchName(el.id);
+    } else {
+      handleSelect(el);
+      setCurrentEl(el);
+      setCurrentValue(el);
+      setOpen(false);
+    }
   };
 
-  const handleSearch = (q: string) => {
-    setFilterParams({ ...filterParams, q });
+  const handleSearch = (value: string) => {
+    let fetchName = name;
+
+    console.log(Number("2s"));
   };
 
   useEffect(() => {
@@ -133,7 +149,6 @@ export const LiteOptionsTable = ({
       });
     }
   };
-
   return (
     <div className="w-full">
       {label && <CLabel title={label} required={required} />}
@@ -144,10 +159,10 @@ export const LiteOptionsTable = ({
       >
         <div
           className="cursor-pointer absolute z-[99] left-2"
-          onClick={(event: any) => {
+          onClick={() => {
             if (!disabled) {
               setOpen(true);
-              setAnchor(event.currentTarget);
+              setAnchor(inputRef.current);
               setFilterParams({ ...filterParams, link });
             }
           }}
@@ -164,18 +179,14 @@ export const LiteOptionsTable = ({
             return (
               <div className={`relative w-full ${open ? "z-[99]" : ""}`}>
                 <input
-                  // value={
-                  // renderValue
-                  //   ? renderValue(
-                  //       name,
-                  //       currentEl?.[name]
-                  //         ? currentEl
-                  //         : { [name]: defaultValue }
-                  //     )
-                  //     : value
-                  //     ? value
-                  //     : search || defaultValue
-                  // }
+                  // onFocus={(event: any) => {
+                  //   setOpen(true);
+                  //   setAnchor(event.currentTarget);
+                  // }}
+                  // onBlur={() => {
+                  //   dispatch(websiteActions.setLiteTableOpen(""));
+                  //   setAnchor(null);
+                  // }}
                   onKeyDown={(e: any) => handleKeyDown(e)}
                   value={search}
                   type="text"
@@ -186,12 +197,9 @@ export const LiteOptionsTable = ({
                   } ${disabled ? "text-[var(--gray)]" : ""}`}
                   placeholder={t(placeholder)}
                   onChange={(e: any) => {
-                    if (open)
-                      setTimeout(() => {
-                        handleSearch(
-                          e.target.value ? `${name}=${e.target.value}` : ""
-                        );
-                      }, 500);
+                    setTimeout(() => {
+                      handleSearch(e.target.value);
+                    }, 500);
                     onChange(e.target.value);
                     setSearch(e.target.value);
                   }}
@@ -203,7 +211,7 @@ export const LiteOptionsTable = ({
           }}
         ></Controller>
 
-        {open && (
+        {open && !disabled && (
           <BasePopup
             id={open ? "simple-popup" : undefined}
             open={open}
@@ -221,16 +229,21 @@ export const LiteOptionsTable = ({
                 headColumns={headColumns}
                 bodyColumns={options}
                 isLoading={isLoading}
+                searchName={searchName}
               />
             </PopupBody>
           </BasePopup>
         )}
+        {open}
       </div>
 
       {open && (
         <div
           className="fixed top-0 left-0 z-[90] w-full h-full"
-          onClick={() => setOpen(false)}
+          onClick={() => {
+            setOpen(false);
+            setAnchor(null);
+          }}
         ></div>
       )}
     </div>

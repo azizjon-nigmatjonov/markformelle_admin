@@ -2,11 +2,8 @@ import HFTextField from "../../../../../components/HFElements/HFTextField";
 import { InputFieldUI } from "../../../../../components/UI/FieldUI";
 import HFSelect from "../../../../../components/HFElements/HFSelect";
 import CCheckbox from "../../../../../components/CElements/CCheckbox";
-import { useLabRenkGroupList } from "../../../../../hooks/useFetchRequests/useLabRenkGroup";
 import { useGetDovizList } from "../../../../../hooks/useFetchRequests/useDovizList";
-import { useReceteTypeList } from "../../../../../hooks/useFetchRequests/useReceteTypeList";
 import { LiteOptionsTable } from "../../../../../components/UI/Options/LiteTable";
-import { useRenkDering } from "../../../../../hooks/useFetchRequests/useRenkDering";
 import { useState } from "react";
 
 interface InputFieldsProps {
@@ -22,10 +19,7 @@ export const InputFields = ({
   getValues,
   formData,
 }: InputFieldsProps) => {
-  const { Options: LabRenkOptions } = useLabRenkGroupList();
   const { Options: moneyOptions } = useGetDovizList({});
-  const { Options: receteTypeOptions } = useReceteTypeList();
-  const { Options: renkDeringOptions } = useRenkDering();
   const [selectedHamID, setSelectedHamID]: any = useState(null);
 
   return (
@@ -56,15 +50,38 @@ export const InputFields = ({
             disabled={!!formData?.FIRMAID}
           />
         </InputFieldUI>
-        {/* <InputFieldUI title="LABRENKGRUPID" required>
-          <HFSelect
+        <InputFieldUI title="LABRENKGRUPID" required>
+          <LiteOptionsTable
             name="LABRENKGRUPID"
-            control={control}
-            setValue={setValue}
             placeholder="LABRENKGRUPID"
-            options={LabRenkOptions}
+            link="labrenkgrup"
+            renderValue={(_: string, obj: any) => {
+              return obj.ADI || obj.LABRENKGRUPID;
+            }}
+            defaultValue={formData.LABRENKGRUPAD}
+            headColumns={[
+              { id: "ADI", title: "ADI" },
+              {
+                id: "HEXCODE",
+                title: "HEXCODE",
+                render: (val: string) => {
+                  return (
+                    <div
+                      className={`w-[70px] h-[25px] rounded-[8px] border`}
+                      style={{
+                        backgroundColor: val,
+                      }}
+                    ></div>
+                  );
+                },
+              },
+            ]}
+            handleSelect={(obj: { LABRENKGRUPID: number }) => {
+              setValue("LABRENKGRUPID", obj.LABRENKGRUPID);
+            }}
+            control={control}
           />
-        </InputFieldUI> */}
+        </InputFieldUI>
         <InputFieldUI title="HAMSTOK" required>
           <LiteOptionsTable
             name="HAMID"
@@ -75,9 +92,9 @@ export const InputFields = ({
             }}
             defaultValue={formData.HAMADI}
             headColumns={[
-              { id: "HAMID", title: "HAMID", width: 70 },
+              { id: "HAMID", title: "HAMID", width: 75 },
               { id: "ADI", title: "ADI", width: 160 },
-              { id: "HAMTIPIADI", title: "HAMTIPIADI", width: 90 },
+              { id: "HAMTIPIADI", title: "HAMTIPIADI", width: 130 },
             ]}
             handleSelect={(obj: { ADI: string; HAMID: number }) => {
               setValue("HAMID", obj.HAMID);
@@ -90,13 +107,23 @@ export const InputFields = ({
       </div>
       <div className="space-y-2">
         <InputFieldUI title="RECETETURU" required>
-          <HFSelect
+          <LiteOptionsTable
             name="RECETETURUID"
-            control={control}
-            setValue={setValue}
             placeholder="RECETETURUID"
-            options={receteTypeOptions}
+            link="receteturu"
+            renderValue={(_: string, obj: any) => {
+              return obj.ADI || obj.RECETETURUID;
+            }}
+            defaultValue={formData?.RECETETURAADI}
+            headColumns={[
+              { id: "RECETETURUID", title: "ID", width: 40 },
+              { id: "ADI", title: "ADI" },
+            ]}
+            handleSelect={(obj: { RECETETURUID: number }) => {
+              setValue("RECETETURUID", obj.RECETETURUID);
+            }}
             disabled={!!formData?.RECETETURUID}
+            control={control}
           />
         </InputFieldUI>
         <InputFieldUI title="ACIKLAMA" required>
@@ -159,21 +186,13 @@ export const InputFields = ({
           />
         </InputFieldUI>
         <InputFieldUI title="RENKDERINGLIGI" required>
-          {/* <HFSelect
-            name="RENKDERINLIGIID"
-            control={control}
-            setValue={setValue}
-            placeholder="RENKDERINLIGIID"
-            options={renkDeringOptions}
-            defaultValue={getValues().RENKDERINLIGIID}
-            handleClick={(obj) => {
-              setValue("RENKDERINLIGIID", obj.value);
-            }}
-          /> */}
           <LiteOptionsTable
             name="RENKDERINLIGIID"
             placeholder="RENKDERINLIGIID"
             link="renkderinligi"
+            renderValue={(_: string, obj: any) => {
+              return obj.ADI || obj.ASAMAID;
+            }}
             headColumns={[
               { id: "RENKDERINLIGIID", title: "RENKDERINLIGIID" },
               { id: "ADI", title: "FIRMAADI" },

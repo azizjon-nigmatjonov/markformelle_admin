@@ -13,6 +13,7 @@ import {
   UncheckMultipleIcon,
 } from "../../../../../components/UI/IconGenerator/Svg/Table";
 interface Props {
+  name: string;
   bodyColumns: any;
   headColumns: any;
   title: string;
@@ -21,6 +22,7 @@ interface Props {
   handleRowClick: (val: any, type: string, arr?: any) => void;
 }
 export const TableUI = ({
+  name,
   idTable,
   bodyColumns = [],
   headColumns = [],
@@ -103,12 +105,12 @@ export const TableUI = ({
             className="flex items-center"
             type="button"
             onClick={() => {
-              if (sellectedItems.length) setOpenDelete(true);
+              if (idTable) setOpenDelete(true);
             }}
           >
             <div className="w-[30px] h-[30px] items-center justify-center flex">
               <DeleteIcon
-                fill={sellectedItems?.length ? "var(--main)" : "var(--gray)"}
+                fill={!disabled ? "var(--main)" : "var(--gray)"}
                 width={18}
               />
             </div>
@@ -129,8 +131,10 @@ export const TableUI = ({
                     handleRowClick(
                       {},
                       "delete",
-                      bodySource.filter((body: { index: number }) =>
-                        sellectedItems.includes(body.index)
+                      bodySource.filter((body: any) =>
+                        sellectedItems?.length
+                          ? sellectedItems.includes(body.index)
+                          : idTable === body[name]
                       )
                     );
                   }
@@ -152,113 +156,117 @@ export const TableUI = ({
           </button>
         </div>
       </div>
-      <div
-        className={`${cls.tableOne} ${
-          idTable ? "" : cls.tableOneDetail
-        } text-sm overflow-x-scroll designed-scroll h-full`}
-        ref={headerScrollRef}
-      >
-        <div className={`${cls.header} px-2 flex w-full`}>
-          <div
-            className={`flex font-medium ${
-              disabled ? "text-[var(--gray)]" : "text-[var(--main)]"
-            }`}
+      <div className="overflow-x-scroll designed-scroll h-full">
+        <div>
+          <table
+            className={`text-sm h-full ${cls.table}`}
+            ref={headerScrollRef}
           >
-            {openSelect && (
-              <div
-                className={`pr-2 flex items-center border-b border-[var(--border)]`}
-              >
-                <div
-                  onClick={() => handleSelectAll()}
-                  className={`w-[18px] h-[18px] rounded-[4px] border border-[var(--main)] flex items-center justify-center cursor-pointer`}
-                >
-                  {areAllRowsSelectedOnPage(sellectedItems, bodySource) &&
-                  sellectedItems.length ? (
-                    <CheckIcon style={{ fill: "var(--main)", width: 14 }} />
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </div>
-            )}
-            {headColumns.map(
-              (
-                head: { id: string; title: string; width: number },
-                index: number
-              ) => (
-                <div
-                  key={index}
-                  style={{ minWidth: head?.width || "auto" }}
-                  className={`${cls.cell} border-b border-[var(--border)]`}
-                >
-                  <p>{head.title}</p>
-                </div>
-              )
-            )}
-          </div>
-        </div>
-
-        <div
-          className={`${cls.body} w-full`}
-          style={{ width: headerScrollRef?.current?.scrollWidth + "px" }}
-        >
-          {bodySource.map((item: any, index: number) => (
-            <div
-              key={index}
-              className={`${cls.row} px-2 ${
-                idTable === item.LABRECETECALISMAID
-                  ? "bg-blue-200 relative w-full"
-                  : ""
-              } flex w-full cursor-pointer relative`}
+            <thead
+              className={`w-full font-medium text-sm`}
+              style={{ height: "30px" }}
             >
-              {idTable === item.LABRECETECALISMAID && (
-                <div className="bg-[var(--primary)] left-0 top-0 h-full w-[2px] absolute"></div>
-              )}
-              {openSelect && (
-                <div
-                  className={`pr-2 flex items-center border-b border-[var(--border)]`}
+              <tr
+                className={` ${
+                  disabled ? "text-[var(--gray)]" : "text-[var(--main)]"
+                }`}
+              >
+                {openSelect && (
+                  <th
+                    className={`border-b border-[var(--border)] `}
+                    style={{ height: "30px" }}
+                  >
+                    <div
+                      onClick={() => handleSelectAll()}
+                      className={`w-[18px] h-[18px] rounded-[4px] border border-[var(--main)] flex items-center justify-center cursor-pointer`}
+                    >
+                      {areAllRowsSelectedOnPage(sellectedItems, bodySource) &&
+                      sellectedItems.length ? (
+                        <CheckIcon style={{ fill: "var(--main)", width: 14 }} />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </th>
+                )}
+                {headColumns.map(
+                  (
+                    head: { id: string; title: string; width: number },
+                    index: number
+                  ) => (
+                    <th
+                      key={index}
+                      className={`text-left border-b border-r border-[var(--border)] ${cls.cell}`}
+                    >
+                      <p>{head.title}</p>
+                    </th>
+                  )
+                )}
+              </tr>
+            </thead>
+
+            <tbody className={`w-full whitespace-nowrap`}>
+              {bodySource.map((item: any, rowIndex: number) => (
+                <tr
+                  key={rowIndex}
+                  className={`${cls.row} ${
+                    idTable === item[name] ? "bg-blue-200 relative w-full" : ""
+                  } w-full cursor-pointer relative`}
+                  style={{ height: "30px", minHeight: "30px !important" }}
                 >
-                  <div
-                    onClick={() => handleSelect(item)}
-                    className={`w-[18px] h-[18px] rounded-[4px] border border-[var(--main)] flex items-center justify-center cursor-pointer`}
-                  >
-                    {sellectedItems.includes(index + 1) && (
-                      <CheckIcon style={{ fill: "var(--main)", width: 14 }} />
-                    )}
-                  </div>
-                </div>
-              )}
-              {headColumns.map(
-                (
-                  head: {
-                    id: string;
-                    title: string;
-                    render?: any;
-                    width: number;
-                  },
-                  index: number
-                ) => (
-                  <div
-                    key={index}
-                    style={{ minWidth: head?.width || "auto" }}
-                    onClick={() =>
-                      handleRowClick({ ...item, index }, "view_single")
-                    }
-                    onDoubleClick={() =>
-                      handleRowClick({ ...item, index }, "view")
-                    }
-                    className={`${cls.cell} font-medium border-b border-[var(--border)]`}
-                  >
-                    <p>
-                      {head.render
-                        ? head.render(item[head?.id], item)
-                        : item[head.id]}
-                    </p>
-                  </div>
-                )
-              )}
-            </div>
-          ))}
+                  {openSelect && (
+                    <td
+                      className={`${cls.cell} border-r border-b border-[var(--border)] `}
+                      style={{ height: "30px" }}
+                    >
+                      <div
+                        onClick={() => handleSelect(item)}
+                        className={`w-[18px] h-[18px] rounded-[4px] border border-[var(--main)] flex items-center justify-center cursor-pointer`}
+                      >
+                        {sellectedItems.includes(rowIndex + 1) && (
+                          <CheckIcon
+                            style={{ fill: "var(--main)", width: 14 }}
+                          />
+                        )}
+                      </div>
+                    </td>
+                  )}
+                  {headColumns.map(
+                    (
+                      head: {
+                        id: string;
+                        title: string;
+                        render?: any;
+                        width: number;
+                      },
+                      index: number
+                    ) => (
+                      <td
+                        key={index}
+                        onClick={() =>
+                          handleRowClick({ ...item, index }, "view_single")
+                        }
+                        onDoubleClick={() =>
+                          handleRowClick({ ...item, index }, "view")
+                        }
+                        style={{ height: "30px" }}
+                        className={`${cls.cell} font-medium border-b border-[var(--border)]`}
+                      >
+                        {idTable === item[name] && index === 0 && (
+                          <div className="bg-[var(--primary)] left-0 top-0 h-full w-[2px] absolute"></div>
+                        )}
+                        <p className="h-[30px]">
+                          {head.render
+                            ? head.render(item[head?.id], item)
+                            : item[head.id]}
+                        </p>
+                      </td>
+                    )
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </>

@@ -119,11 +119,7 @@ export const TwoRowTable = ({
           >
             <div className="w-[30px] h-[30px] items-center justify-center flex">
               <DeleteIcon
-                fill={
-                  sellectedItems?.length || sellectedItemsSecondTable.length
-                    ? "var(--main)"
-                    : "var(--gray)"
-                }
+                fill={idTable ? "var(--main)" : "var(--gray)"}
                 width={18}
               />
             </div>
@@ -153,11 +149,15 @@ export const TwoRowTable = ({
                   setOpenDelete(false);
                   if (status) {
                     handleRowClick({}, "delete", [
-                      ...bodySource.okey.filter((body: { index: number }) =>
-                        sellectedItems.includes(body.index)
+                      ...bodySource.okey.filter((body: any) =>
+                        sellectedItems.length
+                          ? sellectedItems.includes(body.index)
+                          : idTable === body.LABRECETEATISID
                       ),
-                      ...bodySource.okeysiz.filter((body: { index: number }) =>
-                        sellectedItemsSecondTable.includes(body.index)
+                      ...bodySource.okeysiz.filter((body: any) =>
+                        sellectedItemsSecondTable.length
+                          ? sellectedItemsSecondTable.includes(body.index)
+                          : idTable === body.LABRECETEATISID
                       ),
                     ]);
                   }
@@ -172,7 +172,7 @@ export const TwoRowTable = ({
       <div
         className={`${cls.twoRowTable} text-sm overflow-x-scroll designed-scroll h-[400px]`}
       >
-        <div className={`${cls.header} px-2 flex`} ref={headerScrollRef}>
+        <div className={`${cls.header} flex`} ref={headerScrollRef}>
           <div
             className={`flex font-medium ${
               disabled ? "text-[var(--gray)]" : "text-[var(--main)]"
@@ -208,7 +208,7 @@ export const TwoRowTable = ({
           {bodySource?.okey?.map((item: any, index: number) => (
             <div
               key={index}
-              className={`${cls.row} px-2 relative ${
+              className={`${cls.row} relative ${
                 idTable === item.LABRECETEATISID
                   ? "bg-blue-200"
                   : "bg-green-200"

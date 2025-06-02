@@ -32,17 +32,20 @@ export const DetailForm = ({
   materialID,
 }: Props) => {
   const { t } = useTranslation();
-  const { createForm, formData, updateForm } = DetailFormLogic({
-    refetchTable,
-    formId,
-    onClose,
-  });
-  const { control, handleSubmit, setValue, getValues } = useForm<any>({
+
+  const { control, handleSubmit, setValue, getValues, reset } = useForm<any>({
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
-  const { Options: moneyOptions } = useGetDovizList({});
-
+  const closeFn = () => {
+    reset();
+    onClose();
+  };
+  const { createForm, formData, updateForm } = DetailFormLogic({
+    refetchTable,
+    formId,
+    onClose: closeFn,
+  });
   // {
   //   "LABRECETEATISID": 23622,
   //   "LABRECETEID": 14950,
@@ -214,7 +217,10 @@ export const DetailForm = ({
           type={formId ? "update" : "create"}
           handleActions={(val: string, uniqueID: string) => {
             if (uniqueID === open) {
-              if (val === "Close") onClose();
+              if (val === "Close") {
+                onClose();
+                refetchTable();
+              }
               if (val === "Enter") handleSubmit(onSubmit)();
             }
           }}

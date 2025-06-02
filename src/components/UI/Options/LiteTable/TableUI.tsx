@@ -2,16 +2,19 @@ import { useTranslation } from "react-i18next";
 import { PlusIcon } from "../../IconGenerator/Svg";
 import { OneSkeleton } from "../../../CElements/CSkeleton/OneSkeleton";
 import cls from "./style.module.scss";
+import CheckIcon from "@mui/icons-material/Check";
 interface Props {
   bodyColumns: any;
   headColumns: any;
   name: string;
   idTable?: number | null;
   isLoading: boolean;
+  searchName: string;
   handleRowClick: (val: any, type: string) => void;
 }
 export const TableUI = ({
   name = "",
+  searchName = "",
   idTable,
   bodyColumns = [],
   headColumns = [],
@@ -38,7 +41,21 @@ export const TableUI = ({
                   style={{ width: head?.width || "100%" }}
                   className={`${cls.cell} border-b border-[var(--border)] focus:border-[var(--primary)]`}
                 >
-                  <p>{head.title}</p>
+                  <p className="pr-1.5">{head.title}</p>
+                  <div
+                    onClick={() =>
+                      handleRowClick({ id: head.id }, "active_col")
+                    }
+                    className={`w-[15px] h-[15px] rounded-[4px] border border-[var(--main)] cursor-pointer`}
+                  >
+                    <div className="w-[15px] h-full flex items-center justify-center">
+                      {searchName === head.id ? (
+                        <CheckIcon style={{ fill: "var(--main)", width: 12 }} />
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </div>
                 </div>
               )
             )}

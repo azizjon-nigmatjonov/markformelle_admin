@@ -26,20 +26,24 @@ export const MaterialForm = ({
   formData = {},
   refetchMaterial,
 }: Props) => {
+  const { control, handleSubmit, setValue, reset } = useForm<any>({
+    mode: "onSubmit",
+    resolver: yupResolver(schema),
+  });
+  const closeFn = () => {
+    reset();
+    onClose();
+  };
   const {
     createForm,
     formData: materialFormData,
     updateForm,
   } = MaterialFormLogic({
     refetchMaterial,
-    onClose,
     formId,
+    onClose: closeFn,
   });
 
-  const { control, handleSubmit, setValue } = useForm<any>({
-    mode: "onSubmit",
-    resolver: yupResolver(schema),
-  });
   const { Options: moneyOptions } = useGetDovizList({});
 
   const onSubmit = (data: any) => {
@@ -159,7 +163,10 @@ export const MaterialForm = ({
           type={!materialFormData?.LABRECETECALISMAID ? "create" : "update"}
           handleActions={(val: string, uniqueID: string) => {
             if (uniqueID === open) {
-              if (val === "Close") onClose();
+              if (val === "Close") {
+                onClose();
+                refetchMaterial();
+              }
               if (val === "Enter") handleSubmit(onSubmit)();
             }
           }}

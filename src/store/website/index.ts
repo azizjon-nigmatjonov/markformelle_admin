@@ -4,6 +4,7 @@ const initialState = {
   routes: {},
   new_routes: [],
   alert: {},
+  liteTableOpen: "",
 };
 
 export const { actions: websiteActions, reducer: websiteReducer } = createSlice(
@@ -15,10 +16,13 @@ export const { actions: websiteActions, reducer: websiteReducer } = createSlice(
         state.routes = payload;
       },
       setNewRoutes: (state: any, { payload }) => {
-        state.new_routes = payload
+        state.new_routes = payload;
       },
       setAlertData: (state, { payload }) => {
         state.alert = payload;
+      },
+      setLiteTableOpen: (state, { payload }) => {
+        state.liteTableOpen = payload;
       },
     },
   }

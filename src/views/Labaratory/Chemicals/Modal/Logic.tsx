@@ -231,7 +231,7 @@ export const DetailTableLogic = ({
   id: number;
   idTable: number;
 }) => {
-  const [data, setData] = useState([]);
+  const [data, setData]: any = useState([]);
   const { data: tableData, refetch } = useQuery(
     ["GET_DETAIL_DATA_TABLE", id],
     () => {
@@ -282,9 +282,9 @@ export const TableHeadersLogic = () => {
         },
       },
       {
-        title: "ID",
+        title: "HAMID",
         id: "HAMID",
-        width: 20,
+        width: 40,
       },
       {
         title: "KULLANICIADI",

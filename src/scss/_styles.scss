@@ -668,6 +668,7 @@ ul {
 }
 
 #simple-popup {
+  top: -5px !important;
   & > div {
     padding: 0 !important;
   }

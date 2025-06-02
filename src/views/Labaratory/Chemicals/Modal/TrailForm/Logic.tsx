@@ -9,8 +9,8 @@ export const TrailFormLogic = ({
   onClose = () => {},
 }: {
   formId?: number;
-  refetchTable: () => void;
   onClose?: () => void;
+  refetchTable: () => void;
 }) => {
   const { t } = useTranslationHook();
 
@@ -27,8 +27,6 @@ export const TrailFormLogic = ({
   const createForm = async (params: {}) => {
     try {
       const { data } = await axios.post(`${API_URL}/labreceteatis/`, params);
-      refetchTable();
-      onClose();
       toast.success(t("created!"));
       return data;
     } catch (error) {
@@ -44,9 +42,9 @@ export const TrailFormLogic = ({
         `${API_URL}/labreceteatis/${id}`,
         params
       );
+      toast.success(t("updated!"));
       refetchTable();
       onClose();
-      toast.success(t("updated!"));
       return data;
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
@@ -65,8 +63,8 @@ export const TrailFormLogic = ({
         },
         data: id,
       });
-      toast.success(t("deleted!"));
       refetchTable();
+      toast.success(t("deleted!"));
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
       return null;

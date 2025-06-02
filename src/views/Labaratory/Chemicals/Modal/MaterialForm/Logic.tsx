@@ -27,13 +27,11 @@ export const MaterialFormLogic = ({
   const createForm = async (params: {}) => {
     try {
       const { data } = await axios.post(`${API_URL}/labrecetecalisma/`, params);
-      refetchMaterial();
-      onClose();
       toast.success(t("created!"));
       return data;
     } catch (error) {
       toast.error(`error!`);
-
+      refetchMaterial();
       return null;
     }
   };
@@ -73,5 +71,10 @@ export const MaterialFormLogic = ({
     }
   };
 
-  return { createForm, deleteFn, updateForm, formData: formData?.data };
+  return {
+    createForm,
+    deleteFn,
+    updateForm,
+    formData: formId ? formData?.data : {},
+  };
 };

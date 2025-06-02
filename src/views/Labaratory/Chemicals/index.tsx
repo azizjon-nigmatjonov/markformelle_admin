@@ -88,19 +88,27 @@ export const LabChemicals = () => {
     }
   };
 
+  const askCloseFn = (type: string) => {
+    if (type === "no") {
+      setAskClose("");
+    } else if (type === "submit") {
+      setAskClose("");
+    } else {
+      setAskClose(type);
+      setOpen(false);
+      setShowUI(false);
+      setShowUI(false);
+      setModalInitialData({});
+      refetchTable();
+    }
+  };
+
   const handleModalActions = (status: string, id: string) => {
     if (status === "close") {
-      setAskClose("close");
-      setOpen(false);
-      setShowUI(false);
-      refetchTable();
-      setModalInitialData({});
+      // setAskClose("close");
+      askCloseFn("");
     }
     if (status === "delete") {
-      setAskClose("close");
-      setOpen(false);
-      setShowUI(false);
-      setModalInitialData({});
       deleteFn([id]);
     }
   };
@@ -144,7 +152,7 @@ export const LabChemicals = () => {
         handleModalActions={handleModalActions}
         open={open}
         askClose={askClose}
-        setAskClose={setAskClose}
+        setAskClose={askCloseFn}
         showUI={showUI}
         setShowUI={setShowUI}
         refetchTable={refetchTable}

@@ -16,6 +16,7 @@ import { SubmitButton } from "../../../../components/UI/FormButtons/SubmitButton
 import { Validation } from "./Validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LiteOptionsTable } from "../../../../components/UI/Options/LiteTable";
+import CModal from "../../../../components/CElements/CModal";
 const schema = Validation;
 interface ModalUIProps {
   defaultData?: ModalTypes;
@@ -37,7 +38,7 @@ export const ModalUI = ({
   setShowUI = () => {},
   modalInitialData = [],
   refetchTable,
-  // askClose = "",
+  askClose = "",
   setAskClose = () => {},
 }: ModalUIProps) => {
   const { t } = useTranslationHook();
@@ -59,7 +60,11 @@ export const ModalUI = ({
   });
 
   useEffect(() => {
-    if (formId) setDisabled(false);
+    if (formId) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
   }, [formId]);
 
   useEffect(() => {
@@ -93,8 +98,6 @@ export const ModalUI = ({
 
       createForm(params);
     }
-
-    setAskClose("");
   };
 
   const setFormValues = (form: any) => {
@@ -110,6 +113,7 @@ export const ModalUI = ({
     setValue("IPTAL", form.IPTAL);
     setValue("FASON", form.FASON);
     setValue("LABRENKGRUPID", form.LABRENKGRUPID);
+    setValue("LABRENKGRUPAD", form.LABRENKGRUPAD);
 
     setValue("LABRECETEKODU", form.LABRECETEKODU);
     setValue("LABRECETEID", form.LABRECETEID);
@@ -158,12 +162,12 @@ export const ModalUI = ({
   const handleModal = (status: string, id: string) => {
     handleModalActions(status, id);
     if (status === "close") {
-      setFormId(0);
       reset();
+      setFormId(0);
     }
     if (status === "delete") {
-      setFormId(0);
       reset();
+      setFormId(0);
     }
   };
 
@@ -206,11 +210,19 @@ export const ModalUI = ({
                       }}
                       defaultValue={formData?.LABRECETEKODU}
                       headColumns={[
-                        { id: "LABRECETEID", title: "LABRECETEID" },
-                        { title: "RECETETURAADI", id: "RECETETURAADI" },
+                        { id: "LABRECETEID", title: "LABRECETEID", width: 110 },
+                        {
+                          title: "LABRECETEKODU",
+                          id: "LABRECETEKODU",
+                          width: 150,
+                        },
                       ]}
-                      handleSelect={(obj: { ADI: string }) => {
+                      handleSelect={(obj: {
+                        ADI: string;
+                        LABRECETEID: number;
+                      }) => {
                         setValue("LABRECETEKODU", obj.ADI);
+                        setFormId(obj.LABRECETEID);
                       }}
                       control={control}
                     />
@@ -263,7 +275,7 @@ export const ModalUI = ({
         footerActive={false}
       >
         <p className="text-[var(--black)] text-2xl font-medium">
-          Вы точно хотите удалить этот данных?
+          Вы точно хотите сохранить изменения?
         </p>
 
         <p className="text-[var(--error)] text-lg mt-3">
@@ -274,7 +286,7 @@ export const ModalUI = ({
           <button
             className="cancel-btn"
             onClick={() => {
-              handleModalActions("close", "");
+              setAskClose("");
             }}
           >
             {t("no")}
@@ -282,8 +294,10 @@ export const ModalUI = ({
           <button
             className="custom-btn"
             onClick={() => {
-              onSubmit(getValues());
+              setAskClose("submit");
+              handleSubmit(onSubmit)();
             }}
+            type="button"
           >
             {t("yes")}
           </button>

@@ -5,7 +5,6 @@ import { TrailForm } from "./TrailForm";
 import { DetailForm } from "./DetailForm";
 import { TwoRowTable } from "./TableUI/TwoRowTable";
 import { TableUI } from "./TableUI/TableUI";
-import { GetCurrentDate } from "../../../../utils/getDate";
 import {
   DetailTableLogic,
   TableHeadersLogic,
@@ -30,7 +29,6 @@ export const LabModalTables = ({
   const { tableData, refetch: refetchMaterial } = TablesLogic({
     formId: formData?.LABRECETEID,
   });
-
   const [idTable, setIdTable]: any = useState(null);
   const [idMaterial, setIdMaterial]: any = useState(null);
   const [idTrail, setIdTrail]: any = useState(null);
@@ -48,12 +46,17 @@ export const LabModalTables = ({
     id: formId,
     idTable: idTrail,
   });
-  const { deleteFn } = MaterialFormLogic({ refetchMaterial });
+  const refetchAll = () => {
+    refetchMaterial();
+    refetchTrailTable();
+    refetchDetailTable();
+  };
+  const { deleteFn } = MaterialFormLogic({ refetchMaterial: refetchAll });
   const { deleteFn: deleteTrailFn } = TrailFormLogic({
-    refetchTable: refetchTrailTable,
+    refetchTable: refetchAll,
   });
   const { deleteFn: deleteDetailFn } = DetailFormLogic({
-    refetchTable: refetchDetailTable,
+    refetchTable: refetchAll,
   });
 
   useEffect(() => {
@@ -73,6 +76,12 @@ export const LabModalTables = ({
     }
   }, [trailData]);
 
+  useEffect(() => {
+    if (detailData?.length) {
+      setIdDetailForm(detailData[0].LABRECETEURUNID);
+    }
+  }, [detailData]);
+
   const handleActionsMaterial = (
     el: { index: number; LABRECETECALISMAID: number },
     type: string,
@@ -81,7 +90,6 @@ export const LabModalTables = ({
     if (type === "view_single") {
       setIdTable(el.LABRECETECALISMAID);
       setIdMaterial(el.LABRECETECALISMAID);
-      setIdTrail(null);
     }
 
     if (type === "view") {
@@ -139,6 +147,9 @@ export const LabModalTables = ({
       setOpen("detail");
       setIdDetailForm(null);
     }
+    if (type === "view_single") {
+      setIdDetailForm(el.LABRECETEURUNID);
+    }
 
     if (type === "view") {
       setIdDetailForm(el.LABRECETEURUNID);
@@ -165,16 +176,17 @@ export const LabModalTables = ({
             bodyColumns={tableData?.data}
             handleRowClick={handleActionsMaterial}
             disabled={disabled}
+            name="LABRECETECALISMAID"
           />
         </div>
 
-        <div className="rounded-[12px] border border-[var(--border)] ">
+        <div className="rounded-[12px] border border-[var(--border)]">
           <TwoRowTable
             title="trail"
             headColumns={trailHeadColumns}
             bodyColumns={trailData}
             handleRowClick={handleActionsTrial}
-            disabled={disabled}
+            disabled={tableData?.data ? false : true}
             idTable={idTrail}
           />
         </div>
@@ -182,11 +194,12 @@ export const LabModalTables = ({
         <div className="border rounded-[12px] border-[var(--border)] pb-11">
           <TableUI
             title="detail"
-            idTable={null}
+            idTable={idDetailForm}
             handleRowClick={handleActionsDetails}
             headColumns={detailHeadColumns}
             bodyColumns={detailData}
-            disabled={disabled}
+            name="LABRECETEURUNID"
+            disabled={!trailData?.okey?.length && !trailData?.okeysiz?.length}
           />
         </div>
       </div>
@@ -199,12 +212,20 @@ export const LabModalTables = ({
               ? "Add trial"
               : "Add details"
           }
-          handleActions={() => setOpen("")}
+          handleActions={() => {
+            setOpen("");
+            refetchAll();
+          }}
         >
           {open === "material" && (
             <MaterialForm
-              onClose={() => setOpen("")}
-              refetchMaterial={refetchMaterial}
+              onClose={() => {
+                setOpen("");
+              }}
+              refetchMaterial={() => {
+                refetchAll();
+                setIdMaterial(null);
+              }}
               formData={formData}
               formId={idMaterial}
               open={open}
@@ -224,7 +245,7 @@ export const LabModalTables = ({
               labReceteId={formData?.LABRECETEID}
               materialId={idTable}
               open={open}
-              refetchTable={refetchTrailTable}
+              refetchTable={refetchAll}
             />
           )}
           {open === "detail" && (
@@ -234,7 +255,7 @@ export const LabModalTables = ({
               idTrail={idTrail}
               open={open}
               materialID={formData?.LABRECETEID}
-              refetchTable={refetchDetailTable}
+              refetchTable={refetchAll}
             />
           )}
         </CNewMiniModal>
