@@ -1,18 +1,18 @@
 import { useForm } from "react-hook-form";
 import HFInputMask from "../../../../../components/HFElements/HFInputMask";
 import { useTranslation } from "react-i18next";
-import HFSelect from "../../../../../components/HFElements/HFSelect";
 import CCheckbox from "../../../../../components/CElements/CCheckbox";
 
 import CLabel from "../../../../../components/CElements/CLabel";
 import { TrailFormLogic } from "./Logic";
 import dayjs from "dayjs";
 import { LiteOptionsTable } from "../../../../../components/UI/Options/LiteTable";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SubmitCancelButtons } from "../../../../../components/UI/FormButtons/SubmitCancel";
 import { TableUI } from "../TableUI/TableUI";
 import { Validation } from "./Validation";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Alert } from "@mui/material";
 const schema = Validation;
 interface Props {
   open: string;
@@ -21,13 +21,15 @@ interface Props {
   materialId: number;
   onClose: () => void;
   filterParams: { page: number; perPage: number };
-  handleActionsDetails: (val: any, val2: string) => void;
+  handleActionsDetails: (val: any, val2: string, arr?: any) => void;
   setFilterParams: (val: any) => void;
   disabled: boolean;
   setOpen: (val: string) => void;
-  refetchTable: () => void;
+  refetchTable: (id?: number) => void;
   DetailHeader: any;
+  idDetailForm: any;
   detailData: any;
+  materialData: any;
 }
 
 export const TrailForm = ({
@@ -35,29 +37,39 @@ export const TrailForm = ({
   formId,
   onClose,
   handleActionsDetails,
+  materialData = {},
   DetailHeader = [],
   refetchTable,
   materialId,
   labReceteId,
-  detailData = [],
+  idDetailForm,
+  detailData,
 }: Props) => {
   const { t } = useTranslation();
-
+  const [clear, setClear] = useState(true);
   const { control, handleSubmit, setValue, reset } = useForm<any>({
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
+
   const closeFn = () => {
     reset();
     onClose();
   };
+
   const {
     createForm,
     formData: trailFormData,
     updateForm,
   } = TrailFormLogic({
     formId,
-    refetchTable,
+    refetchTable: (id?: number) => {
+      refetchTable(id);
+      setClear(false);
+      setTimeout(() => {
+        setClear(true);
+      }, 100);
+    },
     onClose: closeFn,
   });
 
@@ -84,7 +96,7 @@ export const TrailForm = ({
     } else {
       params.ATISTARIHI = dayjs();
       params.KULLANICIID = 1;
-      params.GIDISTARIHI = dayjs();
+      params.GIDISTARIHI = dayjs().startOf("day").format("YYYY-MM-DDTHH:mm:ss");
       params.KRITIK = false;
       params.ONAYKULLANICIID = 1;
       params.KARTELATARIHI = dayjs();
@@ -93,7 +105,6 @@ export const TrailForm = ({
 
       createForm(params);
     }
-    console.log(params);
   };
 
   useEffect(() => {
@@ -101,88 +112,131 @@ export const TrailForm = ({
       setValue("ASAMAID", trailFormData.RECETEASAMAID);
       setValue("ATISNO", trailFormData.ATISNO);
       setValue("MIGRASYON", trailFormData.MIGRASYON);
+      setValue("NOTU", trailFormData.NOTU || "");
     }
   }, [trailFormData]);
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 w-[400px]">
-      <div className="grid grid-cols-1 gap-y-2">
-        <HFInputMask
-          control={control}
-          name="ATISNO"
-          label={t("ATISNO")}
-          type="number"
-          required={true}
-          placeholder={t("ATISNO")}
-        />
-        <HFSelect
-          control={control}
-          name="MIGRASYON"
-          label={t("MIGRASYON")}
-          placeholder={t("MIGRASYON")}
-          required
-          options={[
-            { label: "Soguk", value: 1 },
-            { label: "Sicak", value: 2 },
-          ]}
-        />
-        <LiteOptionsTable
-          name="ASAMAID"
-          label="ASAMAID"
-          placeholder="RECETEASAMAID"
-          link="asama"
-          renderValue={(_: string, obj: any) => {
-            return obj.ADI || obj.ASAMAID;
-          }}
-          defaultValue={trailFormData?.RECETEASAMAID}
-          headColumns={[
-            { id: "ASAMAID", title: "ASAMAID", width: 80 },
-            { id: "ADI", title: "ADI", width: 150 },
-          ]}
-          handleSelect={(obj: { ASAMAID: number; ADI: string }) => {
-            setValue("ASAMAID", obj.ASAMAID);
-          }}
-          required={true}
-          control={control}
-        />
-
-        <div>
-          <CLabel title={t("OKEY")} />
-          <CCheckbox
-            checked={trailFormData?.OKEY}
-            handleCheck={(obj: { checked: boolean }) => {
-              setValue("OKEY", obj.checked);
-            }}
-            element={{
-              label: "OKEY",
-            }}
-          />
-        </div>
-      </div>
-
-      <div className="border rounded-[12px] border-[var(--border)] pb-11">
-        <TableUI
-          title="detail"
-          idTable={null}
-          handleRowClick={handleActionsDetails}
-          headColumns={DetailHeader}
-          bodyColumns={detailData}
-          disabled={!trailFormData?.LABRECETECALISMAID}
-        />
-      </div>
-
-      <SubmitCancelButtons
-        uniqueID={open}
-        type={trailFormData?.LABRECETEATISID ? "update" : "create"}
-        handleActions={(val: string, uniqueID: string) => {
-          if (uniqueID === open) {
-            if (val === "Close") {
-              onClose();
-              refetchTable();
-            }
-            if (val === "Enter") handleSubmit(onSubmit)();
+    clear && (
+      <form
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
           }
         }}
-      />
-    </form>
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-5 w-[440px]"
+      >
+        <Alert severity="info">{materialData?.HAMADI}</Alert>
+        <div className="grid grid-cols-1 gap-y-2">
+          <LiteOptionsTable
+            name="ASAMAID"
+            label="ASAMAID"
+            placeholder="RECETEASAMAID"
+            link="asama"
+            renderValue={(_: string, obj: any) => {
+              return obj.ADI || obj.ASAMAID;
+            }}
+            defaultValue={trailFormData?.RECETEASAMAID}
+            headColumns={[
+              { id: "ASAMAID", title: "ASAMAID", width: 80 },
+              { id: "ADI", title: "ADI", width: 150 },
+            ]}
+            handleSelect={(obj: { ASAMAID: number; ADI: string }) => {
+              setValue("ASAMAID", obj.ASAMAID);
+            }}
+            required={true}
+            focused
+            control={control}
+          />
+          <LiteOptionsTable
+            name="MIGRASYON"
+            label="MIGRASYON"
+            placeholder="MIGRASYON"
+            renderValue={(_: string, obj: any) => {
+              return obj?.label || obj?.MIGRASYON;
+            }}
+            defaultValue={trailFormData?.RECETEASAMAID}
+            headColumns={[
+              { id: "MIGRASYON", title: "ID", width: 80 },
+              { id: "label", title: "title", width: 150 },
+            ]}
+            handleSelect={(obj: { MIGRASYON: number }) => {
+              setValue("MIGRASYON", obj.MIGRASYON);
+            }}
+            staticOptions={[
+              { label: "Soguk", MIGRASYON: 1 },
+              { label: "Sicak", MIGRASYON: 2 },
+            ]}
+            required={true}
+            control={control}
+          />
+          {/* <HFSelect
+            control={control}
+            name="MIGRASYON"
+            label={t("MIGRASYON")}
+            placeholder={t("MIGRASYON")}
+            required
+            options={[
+              { label: "Soguk", value: 1 },
+              { label: "Sicak", value: 2 },
+            ]}
+          /> */}
+          <HFInputMask
+            control={control}
+            name="ATISNO"
+            label={t("ATISNO")}
+            type="number"
+            required={true}
+            placeholder={t("ATISNO")}
+          />
+          <div>
+            <CLabel title={t("OKEY")} />
+            <CCheckbox
+              checked={trailFormData?.OKEY}
+              handleCheck={(obj: { checked: boolean }) => {
+                setValue("OKEY", obj.checked);
+              }}
+              element={{
+                label: "OKEY",
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="border rounded-[12px] border-[var(--border)] pb-11 h-[300px]">
+          <TableUI
+            title="labreceteurun"
+            name="LABRECETEURUNID"
+            idTable={idDetailForm}
+            handleRowClick={(val: any, type: string, arr?: any) =>
+              handleActionsDetails(
+                val,
+                type === "delete" || type === "view_single"
+                  ? type
+                  : type + "inner",
+                arr
+              )
+            }
+            headColumns={DetailHeader}
+            bodyColumns={detailData}
+            disabled={!trailFormData?.LABRECETECALISMAID}
+          />
+        </div>
+
+        <SubmitCancelButtons
+          uniqueID={open}
+          type={trailFormData?.LABRECETEATISID ? "update" : "create"}
+          handleActions={(val: string, uniqueID: string) => {
+            if (uniqueID === "trail") {
+              if (val === "Close") {
+                onClose();
+              }
+              if (val === "Enter") handleSubmit(onSubmit)();
+            }
+          }}
+        />
+      </form>
+    )
   );
 };

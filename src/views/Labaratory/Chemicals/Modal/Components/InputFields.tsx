@@ -1,8 +1,6 @@
 import HFTextField from "../../../../../components/HFElements/HFTextField";
 import { InputFieldUI } from "../../../../../components/UI/FieldUI";
-import HFSelect from "../../../../../components/HFElements/HFSelect";
 import CCheckbox from "../../../../../components/CElements/CCheckbox";
-import { useGetDovizList } from "../../../../../hooks/useFetchRequests/useDovizList";
 import { LiteOptionsTable } from "../../../../../components/UI/Options/LiteTable";
 import { useState } from "react";
 
@@ -19,7 +17,6 @@ export const InputFields = ({
   getValues,
   formData,
 }: InputFieldsProps) => {
-  const { Options: moneyOptions } = useGetDovizList({});
   const [selectedHamID, setSelectedHamID]: any = useState(null);
 
   return (
@@ -31,6 +28,7 @@ export const InputFields = ({
             control={control}
             setValue={setValue}
             placeholder="ADI"
+            focused={formData?.LABRECETEKODU ? false : true}
           />
         </InputFieldUI>
         <InputFieldUI title="FIRMAID" required>
@@ -42,6 +40,10 @@ export const InputFields = ({
               { id: "FIRMAID", title: "FIRMAID", width: 80 },
               { id: "ADI", title: "FIRMAADI", width: 180 },
             ]}
+            renderValue={(_: string, obj: any) => {
+              return obj.FIRMAID + (obj.ADI ? " - " + obj.ADI : "");
+            }}
+            staticSearchID="FIRMAID"
             handleSelect={(obj: { FIRMAID: string }) => {
               setValue("FIRMAID", obj.FIRMAID);
             }}
@@ -58,6 +60,7 @@ export const InputFields = ({
             renderValue={(_: string, obj: any) => {
               return obj.ADI || obj.LABRENKGRUPID;
             }}
+            staticSearchID="ADI"
             defaultValue={formData.LABRENKGRUPAD}
             headColumns={[
               { id: "ADI", title: "ADI" },
@@ -76,9 +79,9 @@ export const InputFields = ({
                 },
               },
             ]}
-            handleSelect={(obj: { LABRENKGRUPID: number }) => {
-              setValue("LABRENKGRUPID", obj.LABRENKGRUPID);
-            }}
+            handleSelect={(obj: { LABRENKGRUPID: number }) =>
+              setValue("LABRENKGRUPID", obj.LABRENKGRUPID)
+            }
             control={control}
           />
         </InputFieldUI>
@@ -88,7 +91,9 @@ export const InputFields = ({
             placeholder="HAMSTOK"
             link="ham"
             renderValue={(_: string, obj: any) => {
-              return obj.ADI || obj.HAMID;
+              return obj.ADI && obj.HAMID
+                ? obj.HAMID + " - " + obj.ADI
+                : obj.ADI || obj.HAMID;
             }}
             defaultValue={formData.HAMADI}
             headColumns={[
@@ -140,7 +145,7 @@ export const InputFields = ({
             placeholder={"USTASAMA"}
             link="asama"
             renderValue={(_: string, obj: any) => {
-              return obj.ADI || obj.ASAMAID;
+              return obj.ADI ? obj.ASAMAID + " - " + obj.ADI : obj.ASAMAID;
             }}
             defaultValue={formData?.USTASAMAADI}
             headColumns={[
@@ -155,6 +160,26 @@ export const InputFields = ({
           />
         </InputFieldUI>
         <InputFieldUI title="DOVIZID" required>
+          <LiteOptionsTable
+            name="DOVIZID"
+            placeholder={"DOVIZID"}
+            renderValue={(_: string, obj: any) => {
+              return obj.DOVIZID || obj.CINSI;
+            }}
+            link="doviz"
+            defaultValue={formData?.USTASAMAADI}
+            headColumns={[
+              { id: "CINSI", title: "CINSI", width: 80 },
+              { id: "DOVIZID", title: "DOVIZID", width: 100 },
+            ]}
+            handleSelect={(obj: { DOVIZID: string }) => {
+              setValue("DOVIZID", obj.DOVIZID);
+            }}
+            disabled={!!formData?.FIRMAID}
+            control={control}
+          />
+        </InputFieldUI>
+        {/* <InputFieldUI title="DOVIZID" required>
           <HFSelect
             name="DOVIZID"
             control={control}
@@ -166,7 +191,7 @@ export const InputFields = ({
             options={moneyOptions}
             disabled={!!formData?.FIRMAID}
           />
-        </InputFieldUI>
+        </InputFieldUI> */}
       </div>
       <div className="space-y-2">
         <InputFieldUI title="ESKILABRECETEKODU">
@@ -191,7 +216,7 @@ export const InputFields = ({
             placeholder="RENKDERINLIGIID"
             link="renkderinligi"
             renderValue={(_: string, obj: any) => {
-              return obj.ADI || obj.ASAMAID;
+              return obj.ADI || obj.RENKDERINLIGIID;
             }}
             headColumns={[
               { id: "RENKDERINLIGIID", title: "RENKDERINLIGIID" },
@@ -200,7 +225,7 @@ export const InputFields = ({
             handleSelect={(obj: { RENKDERINLIGIID: number }) => {
               setValue("RENKDERINLIGIID", obj.RENKDERINLIGIID);
             }}
-            defaultValue={formData?.RENKDERINLIGIID}
+            defaultValue={formData?.RENKDERINLIGIADI}
             control={control}
           />
         </InputFieldUI>
@@ -248,14 +273,16 @@ export const InputFields = ({
             />
           </div>
           <div className="w-[2%]"></div>
-          <div className="w-1/2">
-            <CCheckbox
-              element={{ label: "IPTAL" }}
-              checked={getValues().IPTAL === 1 ? true : false}
-              handleCheck={(obj: { checked: boolean }) => {
-                setValue("IPTAL", obj.checked ? "1" : "0");
-              }}
-            />
+          <div className="w-[48%] overflow-hidden">
+            <div>
+              <CCheckbox
+                element={{ label: "IPTAL" }}
+                checked={getValues().IPTAL === 1 ? true : false}
+                handleCheck={(obj: { checked: boolean }) => {
+                  setValue("IPTAL", obj.checked ? "1" : "0");
+                }}
+              />
+            </div>
           </div>
         </div>
       </div>

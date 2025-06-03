@@ -28,6 +28,8 @@ export const DetailFormLogic = ({
     try {
       const { data } = await axios.post(`${API_URL}/labreceteurun/`, params);
       toast.success(t("created!"));
+      refetchTable();
+      onClose();
       return data;
     } catch (error) {
       toast.error(`error!`);

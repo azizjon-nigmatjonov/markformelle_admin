@@ -1,8 +1,6 @@
 import { useForm } from "react-hook-form";
 import HFInputMask from "../../../../../components/HFElements/HFInputMask";
 import { useTranslation } from "react-i18next";
-import { useGetDovizList } from "../../../../../hooks/useFetchRequests/useDovizList";
-// import { IMaterialForm } from "../interface";
 import CLabel from "../../../../../components/CElements/CLabel";
 import { DetailFormLogic } from "./Logic";
 import { LiteOptionsTable } from "../../../../../components/UI/Options/LiteTable";
@@ -46,42 +44,9 @@ export const DetailForm = ({
     formId,
     onClose: closeFn,
   });
-  // {
-  //   "LABRECETEATISID": 23622,
-  //   "LABRECETEID": 14950,
-  //   "SIRA": 4,
-  //   "URUNID": "BY283",
-  //   "MIKTARYUZDE": 0.001,
-  //   "BIRIMFIYAT": 7.661,
-  //   "URUNBIRIMID": 2188,
-  //   "FIYATURUNBIRIMID": 2187,
-  //   "FIYATCARPAN": 1000,
-  //   "INSERTKULLANICIID": 1,
-  //   "INSERTTARIHI": "2025-05-28T17:51:11.367Z",
-  //   "KULLANICIID": 1,
-  //   "DEGISIMTARIHI": "2025-05-28T17:51:11.367Z"
-  // }
-
-  //   {
-  //     "URUNID": "KM029",
-  //     "MIKTARYUZDE": 1,
-  //     "BIRIMFIYAT": 0.13347,
-  //     "DOVIZID": "USD",
-  //     "URUNBIRIMID": null,
-  //     "": 5.3,
-  //     "SIRA": 4,
-  //     "LABRECETEATISID": 23635,
-  //     "LABRECETEID": 14951,
-  //     "INSERTKULLANICIID": 1,
-  //     "DEGISIMTARIHI": "2025-05-30T15:41:24.047Z",
-  //     "KULLANICIID": 1,
-  //     "INSERTTARIHI": "2025-05-30T15:41:24.047Z",
-  //     "FIYATURUNBIRIMID": 2187
-  // }
 
   const onSubmit = (data: any) => {
     let params: any = data;
-    // params.SIRA = 1;
     params.LABRECETEATISID = idTrail;
     params.LABRECETEID = materialID;
     params.MIKTARYUZDE = Number(params.MIKTARYUZDE);
@@ -130,7 +95,7 @@ export const DetailForm = ({
 
   useEffect(() => {
     const obj = fiyatData?.data?.[0] ?? {};
-    if (obj.ALISFIYATIDOVIZID) {
+    if (obj?.ALISFIYATIDOVIZID) {
       setValue("DOVIZID", obj.ALISFIYATIDOVIZID);
       setValue("BIRIMFIYAT", obj.URETIMECIKISFIYATI);
     }
@@ -138,7 +103,15 @@ export const DetailForm = ({
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 w-[400px]">
+      <form
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+          }
+        }}
+        onSubmit={handleSubmit(onSubmit)}
+        className="space-y-3 w-[400px]"
+      >
         <div className="grid grid-cols-1 gap-x-3 gap-y-2">
           <LiteOptionsTable
             name="URUNID"
@@ -146,10 +119,15 @@ export const DetailForm = ({
             placeholder={t("URUNID")}
             link="urun"
             required
+            focused
             headColumns={[
               { id: "URUNID", width: 100, title: "URUNID" },
               { id: "ADI", title: "URUNADI", innerId: "URUNID", width: 200 },
             ]}
+            renderValue={(_: string, obj: any) => {
+              return obj.URUNID || obj.ADI;
+            }}
+            staticSearchID="URUNID"
             handleSelect={(obj: { URUNID: string }) => {
               setValue("URUNID", obj.URUNID);
               setFilterParams({
@@ -163,6 +141,7 @@ export const DetailForm = ({
                 link: "urunfiyat",
               });
             }}
+            defaultValue={formData?.URUNID}
             control={control}
           />
 
@@ -219,7 +198,6 @@ export const DetailForm = ({
             if (uniqueID === open) {
               if (val === "Close") {
                 onClose();
-                refetchTable();
               }
               if (val === "Enter") handleSubmit(onSubmit)();
             }

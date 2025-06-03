@@ -2,7 +2,8 @@ import { useTranslation } from "react-i18next";
 import { PlusIcon } from "../../IconGenerator/Svg";
 import { OneSkeleton } from "../../../CElements/CSkeleton/OneSkeleton";
 import cls from "./style.module.scss";
-import CheckIcon from "@mui/icons-material/Check";
+// import CheckIcon from "@mui/icons-material/Check";
+import { useEffect, useRef, useState } from "react";
 interface Props {
   bodyColumns: any;
   headColumns: any;
@@ -14,7 +15,7 @@ interface Props {
 }
 export const TableUI = ({
   name = "",
-  searchName = "",
+  // searchName = "",
   idTable,
   bodyColumns = [],
   headColumns = [],
@@ -22,6 +23,51 @@ export const TableUI = ({
   isLoading = false,
 }: Props) => {
   const { t } = useTranslation();
+  const [focusedIndex, setFocusedIndex] = useState<number>(0);
+
+  const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!bodyColumns?.length) return;
+
+      if (e.key === "ArrowDown") {
+        setFocusedIndex((prev: number) =>
+          Math.min(prev + 1, bodyColumns.length - 1)
+        );
+      } else if (e.key === "ArrowUp") {
+        setFocusedIndex((prev: number) => Math.max(prev - 1, 0));
+      } else if (e.key === "Enter" && focusedIndex !== -1) {
+        handleRowClick(
+          { ...bodyColumns[focusedIndex], index: focusedIndex },
+          "view_single"
+        );
+        const form = (e.target as HTMLElement).closest("form");
+        if (form) {
+          const elements = Array.from(form.elements) as HTMLElement[];
+          const active = document.activeElement;
+          const currentIndex = elements.indexOf(active as HTMLElement);
+
+          const next = elements[currentIndex + 1];
+          if (next && typeof next.focus === "function") {
+            next.focus();
+          }
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [bodyColumns, focusedIndex]);
+
+  useEffect(() => {
+    if (rowRefs.current[focusedIndex]) {
+      rowRefs.current[focusedIndex]?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [focusedIndex]);
   return (
     <>
       <div
@@ -42,7 +88,7 @@ export const TableUI = ({
                   className={`${cls.cell} border-b border-[var(--border)] focus:border-[var(--primary)]`}
                 >
                   <p className="pr-1.5">{head.title}</p>
-                  <div
+                  {/* <div
                     onClick={() =>
                       handleRowClick({ id: head.id }, "active_col")
                     }
@@ -55,7 +101,7 @@ export const TableUI = ({
                         ""
                       )}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               )
             )}
@@ -66,14 +112,17 @@ export const TableUI = ({
           {isLoading ? (
             <OneSkeleton rounded={8} />
           ) : bodyColumns?.length ? (
-            bodyColumns.map((item: any, index: number) => (
+            bodyColumns.map((item: any, rowInd: number) => (
               <div
-                key={index}
+                key={rowInd}
                 className={`${cls.row} flex w-full cursor-pointer`}
-                onClick={() =>
-                  handleRowClick({ ...item, index }, "view_single")
+                onClick={() => {
+                  handleRowClick({ ...item, rowInd }, "view_single");
+                }}
+                ref={(el) => (rowRefs.current[rowInd] = el)}
+                onDoubleClick={() =>
+                  handleRowClick({ ...item, rowInd }, "view")
                 }
-                onDoubleClick={() => handleRowClick({ ...item, index }, "view")}
               >
                 {headColumns.map(
                   (
@@ -89,7 +138,9 @@ export const TableUI = ({
                       key={index}
                       style={{ width: head?.width || "100%" }}
                       className={`${cls.cell} ${
-                        idTable === item?.[name] ? "bg-blue-200 relative" : ""
+                        idTable === item?.[name] || focusedIndex === rowInd
+                          ? "bg-blue-200 relative"
+                          : ""
                       } font-medium border-b border-[var(--border)]`}
                     >
                       {idTable === item?.[name] && index === 0 ? (

@@ -16,7 +16,7 @@ interface Props {
   formId: number;
   onClose: () => void;
   formData: any;
-  refetchMaterial: () => void;
+  refetchMaterial: (el: any) => void;
 }
 
 export const MaterialForm = ({
@@ -26,22 +26,21 @@ export const MaterialForm = ({
   formData = {},
   refetchMaterial,
 }: Props) => {
-  const { control, handleSubmit, setValue, reset } = useForm<any>({
+  const { control, handleSubmit, setValue } = useForm<any>({
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
-  const closeFn = () => {
-    reset();
-    onClose();
-  };
+
   const {
     createForm,
     formData: materialFormData,
     updateForm,
   } = MaterialFormLogic({
-    refetchMaterial,
+    refetchMaterial: (el?: any) => {
+      refetchMaterial(el);
+    },
     formId,
-    onClose: closeFn,
+    onClose: onClose,
   });
 
   const { Options: moneyOptions } = useGetDovizList({});
@@ -52,20 +51,18 @@ export const MaterialForm = ({
     params.LABRECETEID = formData.LABRECETEID;
     params.FIRMAID = formData.FIRMAID;
 
-    params.TERMINTARIHI = dayjs();
+    params.TERMINTARIHI = dayjs().startOf("day").format("YYYY-MM-DDTHH:mm:ss");
     params.INSERTKULLANICIID = 1;
     const parsedDate = dayjs(params.CALISMATARIHI, "DD.MM.YYYY");
 
     const isoWithMicroseconds =
       parsedDate.format("YYYY-MM-DDTHH:mm:ss") + ".000000";
 
-    console.log(isoWithMicroseconds);
     params.CALISMATARIHI = isoWithMicroseconds;
     params.DEGISIMTARIHI = dayjs();
 
     if (materialFormData?.LABRECETECALISMAID) {
       params = { ...materialFormData, ...params };
-      console.log(params.CALISMATARIHI);
 
       updateForm(params, formId);
     } else {
@@ -91,87 +88,93 @@ export const MaterialForm = ({
   }, [materialFormData]);
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 w-[400px]">
-        <div className="grid grid-cols-1 gap-y-2">
-          <LiteOptionsTable
-            name="HAMID"
-            label="HAMSTOK"
-            required={true}
-            placeholder="HAMSTOK"
-            link="ham"
-            renderValue={(_: string, obj: any) => {
-              return obj.ADI || obj.HAMID;
-            }}
-            defaultValue={materialFormData?.HAMADI}
-            headColumns={[
-              { id: "HAMID", title: "HAMID", width: 60 },
-              { id: "ADI", title: "ADI", width: 150 },
-              { id: "HAMTIPIADI", title: "HAMTIPIADI", width: 90 },
-            ]}
-            handleSelect={(obj: { ADI: string; HAMID: number }) => {
-              setValue("HAMID", obj.HAMID);
-              setValue("HAMADI", obj.ADI);
-            }}
-            control={control}
-          />
-          <LiteOptionsTable
-            name="ASAMAID"
-            label="USTASAMA"
-            placeholder="USTASAMA"
-            link="asama"
-            renderValue={(_: string, obj: any) => {
-              return obj.ADI || obj.ASAMAID;
-            }}
-            defaultValue={materialFormData?.USTASAMAADI}
-            headColumns={[
-              { id: "ASAMAID", title: "ASAMAID", width: 80 },
-              { id: "ADI", title: "ADI", width: 150 },
-            ]}
-            handleSelect={(obj: { ASAMAID: number; ADI: string }) => {
-              setValue("USTASAMAID", obj.ASAMAID);
-              setValue("USTASAMAADI", obj.ADI);
-              setValue("ASAMAID", obj.ASAMAID);
-            }}
-            required={true}
-            control={control}
-          />
-          <HFSelect
-            label="DOVIZID"
-            required={true}
-            name="DOVIZID"
-            control={control}
-            setValue={setValue}
-            handleClick={(obj) => {
-              setValue("DOVIZID", obj.value);
-            }}
-            placeholder="DOVIZID"
-            options={moneyOptions}
-          />
-          <HFDatePicker
-            control={control}
-            required
-            name="CALISMATARIHI"
-            label="CALISMATARIHI"
-            placeholder="CALISMATARIHI"
-            format="DD.MM.YYYY"
-            defaultValue={materialFormData?.CALISMATARIHI}
-          />
-        </div>
-        <SubmitCancelButtons
-          uniqueID={open}
-          type={!materialFormData?.LABRECETECALISMAID ? "create" : "update"}
-          handleActions={(val: string, uniqueID: string) => {
-            if (uniqueID === open) {
-              if (val === "Close") {
-                onClose();
-                refetchMaterial();
-              }
-              if (val === "Enter") handleSubmit(onSubmit)();
-            }
+    <form
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+        }
+      }}
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-5 w-[400px]"
+    >
+      <div className="grid grid-cols-1 gap-y-2">
+        <LiteOptionsTable
+          name="HAMID"
+          label="HAMSTOK"
+          required={true}
+          placeholder="HAMSTOK"
+          link="ham"
+          renderValue={(_: string, obj: any) => {
+            return obj.ADI ? obj.HAMID + " - " + obj.ADI : obj.HAMADI;
           }}
+          defaultValue={materialFormData?.HAMADI}
+          headColumns={[
+            { id: "HAMID", title: "HAMID", width: 60 },
+            { id: "ADI", title: "ADI", width: 150 },
+            { id: "HAMTIPIADI", title: "HAMTIPIADI", width: 90 },
+          ]}
+          handleSelect={(obj: { ADI: string; HAMID: number }) => {
+            setValue("HAMID", obj.HAMID);
+            setValue("HAMADI", obj.ADI);
+          }}
+          focused
+          control={control}
         />
-      </form>
-    </div>
+        <LiteOptionsTable
+          name="ASAMAID"
+          label="USTASAMA"
+          placeholder="USTASAMA"
+          link="asama"
+          renderValue={(_: string, obj: any) => {
+            return obj.ADI || obj.ASAMAID;
+          }}
+          defaultValue={materialFormData?.USTASAMAADI}
+          headColumns={[
+            { id: "ASAMAID", title: "ASAMAID", width: 80 },
+            { id: "ADI", title: "ADI", width: 150 },
+          ]}
+          handleSelect={(obj: { ASAMAID: number; ADI: string }) => {
+            setValue("USTASAMAID", obj.ASAMAID);
+            setValue("USTASAMAADI", obj.ADI);
+            setValue("ASAMAID", obj.ASAMAID);
+          }}
+          required={true}
+          control={control}
+        />
+        <HFSelect
+          label="DOVIZID"
+          required={true}
+          name="DOVIZID"
+          control={control}
+          setValue={setValue}
+          handleClick={(obj) => {
+            setValue("DOVIZID", obj.value);
+          }}
+          placeholder="DOVIZID"
+          options={moneyOptions}
+        />
+        <HFDatePicker
+          control={control}
+          required
+          name="CALISMATARIHI"
+          label="CALISMATARIHI"
+          placeholder="CALISMATARIHI"
+          format="DD.MM.YYYY"
+          defaultValue={materialFormData?.CALISMATARIHI}
+        />
+      </div>
+      <SubmitCancelButtons
+        uniqueID={open}
+        type={!materialFormData?.LABRECETECALISMAID ? "create" : "update"}
+        handleActions={(val: string, uniqueID: string) => {
+          if (uniqueID === open) {
+            if (val === "Close") {
+              onClose();
+            }
+            if (val === "Enter") handleSubmit(onSubmit)();
+          }
+        }}
+      />
+    </form>
   );
 };

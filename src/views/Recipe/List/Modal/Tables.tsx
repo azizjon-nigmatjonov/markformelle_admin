@@ -43,14 +43,14 @@ export const LabModalTables = ({
           title={
             open === "material"
               ? "Add material"
-              : open === "trial"
-              ? "Add trial"
+              : open === "trail"
+              ? "Add trail"
               : "Add details"
           }
           handleActions={() => setOpen("")}
         >
           {open === "material" && <MaterialForm onClose={() => setOpen("")} />}
-          {open === "trial" && (
+          {open === "trail" && (
             <TrailForm
               onClose={() => setOpen("")}
               handleActionsDetails={handleActionsDetails}

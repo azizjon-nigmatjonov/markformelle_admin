@@ -6,10 +6,7 @@ import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 import { styled } from "@mui/material";
 import { useTranslationHook } from "../../../hooks/useTranslation";
 import { TableUI } from "./LiteTable/TableUI";
-import {
-  useFetchType,
-  useFetchTypeSingle,
-} from "../../../hooks/useFetchRequests/useFetchType";
+import { useFetchType } from "../../../hooks/useFetchRequests/useFetchType";
 const PopupBody = styled("div")(
   ({ theme }) => `
   width: max-content;
@@ -45,6 +42,8 @@ interface Props {
   position?: string;
   renderValue?: (val: string, obj: {}) => void;
   defaultSearch?: string;
+  staticSearchID?: string;
+  staticOptions?: any;
 }
 
 export const LiteOptionsTable = ({
@@ -60,11 +59,13 @@ export const LiteOptionsTable = ({
   readOnly = false,
   focused = false,
   disabled = false,
-  renderValue,
+  renderValue = () => {},
   defaultSearch = "",
+  staticSearchID = "",
+  staticOptions = [],
 }: Props) => {
   const { t } = useTranslationHook();
-  const [searchName, setSearchName] = useState(name);
+  const [searchName, setSearchName] = useState(staticSearchID || name);
   const inputRef: any = useRef(null);
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -72,14 +73,15 @@ export const LiteOptionsTable = ({
   const [currentEl, setCurrentEl]: any = useState({});
   const [options, setOptions] = useState([]);
   const { data, setFilterParams, filterParams, isLoading } = useFetchType();
-  const {
-    setFilterParams: setFilterParamSingle,
-    filterParams: filterParamsSingle,
-    data: singleData,
-  } = useFetchTypeSingle();
+  // const {
+  //   setFilterParams: setFilterParamSingle,
+  //   filterParams: filterParamsSingle,
+  //   data: singleData,
+  // } = useFetchTypeSingle();
 
   const setCurrentValue = (el?: any) => {
     let val: any = "";
+
     if (renderValue) {
       val = renderValue(name, el?.[name] ? el : { [name]: defaultValue });
     } else {
@@ -88,13 +90,13 @@ export const LiteOptionsTable = ({
     setSearch(val);
   };
 
-  useEffect(() => {
-    if (singleData?.[name]) {
-      setCurrentEl(singleData);
-      handleSelect(singleData);
-      setCurrentValue(singleData);
-    }
-  }, [singleData]);
+  // useEffect(() => {
+  //   if (singleData?.[name]) {
+  //     setCurrentEl(singleData);
+  //     handleSelect(singleData);
+  //     setCurrentValue(singleData);
+  //   }
+  // }, [singleData]);
 
   useEffect(() => {
     if (data?.data?.length && defaultSearch) {
@@ -110,7 +112,11 @@ export const LiteOptionsTable = ({
   }, [defaultValue]);
 
   useEffect(() => {
-    setOptions(data?.data ?? []);
+    if (data?.data) {
+      setOptions(data.data);
+    } else {
+      setOptions(staticOptions);
+    }
   }, [data]);
 
   const handleActions = (el: any, type: string) => {
@@ -121,13 +127,41 @@ export const LiteOptionsTable = ({
       setCurrentEl(el);
       setCurrentValue(el);
       setOpen(false);
+      inputRef.current.focus();
     }
   };
 
   const handleSearch = (value: string) => {
     let fetchName = name;
-
-    console.log(Number("2s"));
+    if (staticSearchID) {
+      setOpen(true);
+      setAnchor(inputRef.current);
+      setFilterParams({
+        ...filterParams,
+        link,
+        q: value ? `${staticSearchID}=${value}` : undefined,
+      });
+      return;
+    }
+    const colNames = headColumns.map((i: { id: string }) => i.id);
+    if (isNaN(Number(value))) {
+      fetchName = colNames.find((i: string) =>
+        i.toLocaleLowerCase().includes("adi")
+      );
+    } else {
+      fetchName = colNames.find((i: string) =>
+        i.toLocaleLowerCase().includes("id")
+      );
+    }
+    setOpen(true);
+    setAnchor(inputRef.current);
+    setFilterParams({
+      ...filterParams,
+      link,
+      q: value ? `${fetchName || name}=${value}` : undefined,
+    });
+    setSearchName(fetchName || name);
+    return fetchName;
   };
 
   useEffect(() => {
@@ -135,20 +169,16 @@ export const LiteOptionsTable = ({
       setFilterParams({ ...filterParams, link, q: defaultSearch });
   }, [defaultSearch]);
 
-  useEffect(() => {
-    if (focused) {
-      inputRef.current.focus();
-    }
-  }, [focused]);
+  // const handleKeyDown = (e: KeyboardEvent) => {
+  //   if (e.key === "Enter" && (!options.length || !open)) {
+  //     setFilterParamSingle({
+  //       ...filterParamsSingle,
+  //       link: link + "/" + search,
+  //     });
+  //     setOpen(false);
+  //   }
+  // };
 
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "Enter" && !open) {
-      setFilterParamSingle({
-        ...filterParamsSingle,
-        link: link + "/" + search,
-      });
-    }
-  };
   return (
     <div className="w-full">
       {label && <CLabel title={label} required={required} />}
@@ -179,17 +209,13 @@ export const LiteOptionsTable = ({
             return (
               <div className={`relative w-full ${open ? "z-[99]" : ""}`}>
                 <input
-                  // onFocus={(event: any) => {
-                  //   setOpen(true);
-                  //   setAnchor(event.currentTarget);
-                  // }}
-                  // onBlur={() => {
-                  //   dispatch(websiteActions.setLiteTableOpen(""));
-                  //   setAnchor(null);
-                  // }}
-                  onKeyDown={(e: any) => handleKeyDown(e)}
+                  // onKeyDown={(e: any) => handleKeyDown(e)}
                   value={search}
                   type="text"
+                  onBlur={() => {
+                    setOpen(false);
+                  }}
+                  autoFocus={focused}
                   className={`border rounded-[8px] pl-8 h-[30px] w-full px-1 bg-transparent ${
                     error?.message
                       ? "border-[var(--error)]"

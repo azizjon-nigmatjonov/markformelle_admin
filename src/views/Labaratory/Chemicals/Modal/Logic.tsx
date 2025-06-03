@@ -11,8 +11,6 @@ export const ModalTableLogic = ({
   setFormId,
   urunId,
   filterParams,
-  refetchTable,
-  handleModalActions = () => {},
 }: {
   urunId?: number | string;
   filterParams: IFilterParams;
@@ -330,12 +328,13 @@ export const TableHeadersLogic = () => {
       },
     ];
   }, []);
+
   const trailHeadColumns = useMemo(() => {
     return [
       {
         title: "ATISNO",
         id: "ATISNO",
-        width: 50,
+        width: 55,
       },
       {
         title: "ATISTARIHI",
@@ -356,7 +355,7 @@ export const TableHeadersLogic = () => {
       {
         title: "BIRIM",
         id: "BIRIM",
-        width: 40,
+        width: 50,
         render: () => {
           return <p>%</p>;
         },
@@ -390,12 +389,20 @@ export const TableHeadersLogic = () => {
   const detailHeadColumns = useMemo(() => {
     return [
       {
-        title: "Sira",
+        title: "SIRA",
         id: "SIRA",
         width: 30,
       },
       {
-        title: "Urun Adi",
+        title: "URUNID",
+        id: "URUNID",
+        width: 155,
+        render: (val: string) => {
+          return val.substring(0, 19);
+        },
+      },
+      {
+        title: "URUNADI",
         id: "URUNADI",
         width: 155,
         render: (val: string) => {
@@ -404,7 +411,7 @@ export const TableHeadersLogic = () => {
       },
 
       {
-        title: "Miktar",
+        title: "MIKTARYUZDE",
         id: "MIKTARYUZDE",
         width: 50,
         render: (val: string) => {
@@ -412,7 +419,7 @@ export const TableHeadersLogic = () => {
         },
       },
       {
-        title: "Hasep Birimi",
+        title: "HASEPBIRIMI",
         id: "HASEPBIRIMI",
         width: 83,
         render: () => "%",

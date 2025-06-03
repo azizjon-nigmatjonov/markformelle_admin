@@ -67,9 +67,9 @@ export const TableUI = ({
 
   return (
     <>
-      <div className="py-1 flex items-center justify-between px-2 border-b border-[var(--border)]">
+      <div className="py-1 flex items-center justify-between px-2 border-b border-[var(--border)] text-sm">
         <h2
-          className={`${
+          className={`font-medium ${
             disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
           }`}
         >
@@ -85,10 +85,10 @@ export const TableUI = ({
           >
             <div className="w-[30px] h-[30px] items-center justify-center flex">
               {openSelect ? (
-                <UncheckMultipleIcon width={20} fill="var(--main)" />
+                <UncheckMultipleIcon width={18} fill="var(--main)" />
               ) : (
                 <CheckMultipleIcon
-                  width={20}
+                  width={18}
                   fill={disabled ? "var(--gray)" : "var(--main)"}
                 />
               )}
@@ -111,7 +111,7 @@ export const TableUI = ({
             <div className="w-[30px] h-[30px] items-center justify-center flex">
               <DeleteIcon
                 fill={!disabled ? "var(--main)" : "var(--gray)"}
-                width={18}
+                width={16}
               />
             </div>
             <p

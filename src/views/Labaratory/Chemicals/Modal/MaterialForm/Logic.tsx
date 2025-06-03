@@ -9,7 +9,7 @@ export const MaterialFormLogic = ({
   onClose = () => {},
 }: {
   formId?: number;
-  refetchMaterial: () => void;
+  refetchMaterial: (el?: any) => void;
   onClose?: () => void;
 }) => {
   const { t } = useTranslationHook();
@@ -28,10 +28,11 @@ export const MaterialFormLogic = ({
     try {
       const { data } = await axios.post(`${API_URL}/labrecetecalisma/`, params);
       toast.success(t("created!"));
+      refetchMaterial(data);
       return data;
     } catch (error) {
       toast.error(`error!`);
-      refetchMaterial();
+
       return null;
     }
   };
@@ -42,7 +43,7 @@ export const MaterialFormLogic = ({
         `${API_URL}/labrecetecalisma/${id}`,
         params
       );
-      refetchMaterial();
+
       onClose();
       toast.success(t("updated!"));
       return data;
@@ -63,8 +64,10 @@ export const MaterialFormLogic = ({
         },
         data: id,
       });
+
       toast.success(t("deleted!"));
       refetchMaterial();
+      onClose();
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
       return null;

@@ -22,6 +22,7 @@ import {
   CheckMultipleIcon,
   UncheckMultipleIcon,
 } from "../../../../../components/UI/IconGenerator/Svg/Table";
+// import { DragAndDropDataLogic } from "./Logic";
 
 interface Props {
   changed: string;
@@ -39,6 +40,7 @@ export const DragDrop = ({
   setOpenMainModal,
 }: Props) => {
   const { t } = useTranslation();
+  // const {} = DragAndDropDataLogic({ id: '', })
   const [editStep, setEditStep] = useState(false);
   const [deleteStep, setDeleteStep] = useState(false);
   const [initialModalData, setInitialModalData] = useState({});
@@ -68,6 +70,8 @@ export const DragDrop = ({
   const SetInitialData = () => {
     const objects: any = {};
     let lastId = "";
+    console.log("StokeDeteyContantList", StokeDeteyContantList);
+
     for (let i = 0; i < StokeDeteyContantList.length; i++) {
       const obj = StokeDeteyContantList[i];
       if (obj.RECETEASAMAID) lastId = "" + obj.RECETEASAMAID;

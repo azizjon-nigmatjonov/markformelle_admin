@@ -1,10 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { ModalTypes } from "../interfaces";
 import { useTranslationHook } from "../../../../hooks/useTranslation";
 import { InputFieldUI } from "../../../../components/UI/FieldUI";
-import { SelectOptionsTable } from "../../../../components/UI/Options/Table";
-import { useGetUrunTypeList } from "../../../../hooks/useFetchRequests/useUrunType";
 import { ModalTableLogic } from "./Logic";
 import { LabModalTables } from "./Tables";
 import { InputFields } from "./Components/InputFields";
@@ -16,7 +14,6 @@ import { SubmitButton } from "../../../../components/UI/FormButtons/SubmitButton
 import { Validation } from "./Validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LiteOptionsTable } from "../../../../components/UI/Options/LiteTable";
-import CModal from "../../../../components/CElements/CModal";
 const schema = Validation;
 interface ModalUIProps {
   defaultData?: ModalTypes;
@@ -38,9 +35,9 @@ export const ModalUI = ({
   setShowUI = () => {},
   modalInitialData = [],
   refetchTable,
-  askClose = "",
-  setAskClose = () => {},
-}: ModalUIProps) => {
+}: // askClose = "",
+// setAskClose = () => {},
+ModalUIProps) => {
   const { t } = useTranslationHook();
   const [uniqueID, setUniqueID] = useState("main_table_lab");
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
@@ -86,7 +83,8 @@ export const ModalUI = ({
 
       updateForm(params, formId);
     } else {
-      params.TALEPTARIHI = dayjs();
+      params.TALEPTARIHI = dayjs().startOf("day").format("YYYY-MM-DDTHH:mm:ss");
+
       params.LABRECETEGRUPID = 2;
       params.NOTU = null;
       params.ESKITIPRECETE = false;
@@ -241,9 +239,6 @@ export const ModalUI = ({
                         }
                       }}
                     />
-                    {/* <button className="custom-btn" type="submit">
-                      {t(formId ? "update" : "create")}
-                    </button> */}
                   </div>
                 </div>
               </div>

@@ -6,15 +6,15 @@ const API_URL = import.meta.env.VITE_TEST_URL;
 export const TrailFormLogic = ({
   refetchTable,
   formId,
-  onClose = () => {},
-}: {
+}: // onClose = () => {},
+{
   formId?: number;
   onClose?: () => void;
-  refetchTable: () => void;
+  refetchTable: (val?: number) => void;
 }) => {
   const { t } = useTranslationHook();
 
-  const { data: formData } = useQuery(
+  const { data: formData, refetch } = useQuery(
     ["GET_TRAIL_FORM_", formId],
     () => {
       return axios.get(`${API_URL}/labreceteatis/${formId}`);
@@ -27,7 +27,10 @@ export const TrailFormLogic = ({
   const createForm = async (params: {}) => {
     try {
       const { data } = await axios.post(`${API_URL}/labreceteatis/`, params);
+
       toast.success(t("created!"));
+      refetch();
+      refetchTable(data?.LABRECETEATISID);
       return data;
     } catch (error) {
       toast.error(`error!`);
@@ -42,9 +45,10 @@ export const TrailFormLogic = ({
         `${API_URL}/labreceteatis/${id}`,
         params
       );
+      refetch();
       toast.success(t("updated!"));
       refetchTable();
-      onClose();
+
       return data;
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);

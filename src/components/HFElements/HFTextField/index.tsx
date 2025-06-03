@@ -1,4 +1,3 @@
-import { TextField } from "@mui/material";
 import { Controller } from "react-hook-form";
 import CLabel from "../../CElements/CLabel";
 import "../style.scss";
@@ -7,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const InputUI = ({
-  value,
+  value = "",
   name,
   error,
   props,
@@ -20,6 +19,7 @@ const InputUI = ({
   disabled,
   errors = {},
   placeholder,
+  focused = false,
   setPassword = () => {},
   onKeydown = () => {},
 }: {
@@ -35,6 +35,7 @@ const InputUI = ({
   readOnly?: boolean;
   defaultValue?: any;
   onChange: any;
+  focused: boolean;
   placeholder: string;
   onKeydown?: (val: number) => void;
   setPassword: (val: any) => void;
@@ -45,16 +46,39 @@ const InputUI = ({
       onChange(defaultValue);
     }
   }, [defaultValue]);
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Enter") {
+      const form = (e.target as HTMLElement).closest("form");
+      if (form) {
+        const elements = Array.from(form.elements) as HTMLElement[];
+        const active = document.activeElement;
+        const currentIndex = elements.indexOf(active as HTMLElement);
+
+        const next = elements[currentIndex + 1];
+        if (next && typeof next.focus === "function") {
+          next.focus();
+        }
+      }
+    }
+  };
 
   return (
-    <>
-      <TextField
-        size="small"
-        value={value}
+    <div>
+      <input
+        className={`input-design ${
+          errors[name]?.message || error ? "error" : ""
+        }`}
+        style={{ width: "100%" }}
+        value={value || ""}
         onChange={(e) => onChange(e.target.value)}
-        name={name}
-        error={Boolean(error)}
-        {...props}
+        autoFocus={focused}
+        placeholder={t(placeholder)}
+        disabled={disabled}
+        onKeyDown={(e: any) => {
+          onKeydown(e.keyCode);
+          handleKeyDown(e);
+        }}
+        readOnly={readOnly}
         type={
           activatePassword && password
             ? "password"
@@ -62,15 +86,9 @@ const InputUI = ({
             ? "text"
             : type
         }
-        onKeyDown={(e: { keyCode: number }) => onKeydown(e.keyCode)}
-        autoComplete="off"
-        InputProps={{
-          readOnly: readOnly,
-        }}
-        placeholder={t(placeholder)}
-        className={errors[name]?.message ? "border border-red-500" : ""}
-        disabled={disabled}
+        {...props}
       />
+
       {activatePassword && (
         <span
           className="visibility"
@@ -79,7 +97,7 @@ const InputUI = ({
           {!password ? <VisibilityOff /> : <Visibility />}
         </span>
       )}
-    </>
+    </div>
   );
 };
 interface Props {
@@ -98,6 +116,7 @@ interface Props {
   errors?: any;
   readOnly?: boolean;
   autoComplete?: string;
+  focused?: boolean;
   onKeydown?: (val: number) => void;
   handleChange?: (name: string, value: any) => void;
 }
@@ -106,6 +125,7 @@ const HFTextField = ({
   control,
   name = "",
   required = false,
+  focused = false,
   rules = {},
   label,
   disabled = false,
@@ -140,7 +160,7 @@ const HFTextField = ({
         }}
         render={({ field: { onChange, value }, fieldState: { error } }) => (
           <InputUI
-            value={value}
+            value={value || ""}
             name={name}
             error={error}
             props={props}
@@ -151,6 +171,7 @@ const HFTextField = ({
               onChange(value);
               handleChange(name, value);
             }}
+            focused={focused}
             onKeydown={onKeydown}
             readOnly={readOnly}
             disabled={disabled}

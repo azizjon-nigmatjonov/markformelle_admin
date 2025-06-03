@@ -82,6 +82,7 @@ export const SideFilter = ({
   handleClick,
   sideFilter,
   handleSortLogic,
+  addFilter = () => {},
   searchDebounce = () => {},
   headColumns = [],
   searchedElements = {},
@@ -91,6 +92,7 @@ export const SideFilter = ({
   handleClick: () => void;
   sideFilter: boolean;
   searchDebounce: (val: any, val2: any) => void;
+  addFilter: (val: any) => void;
   handleSortLogic: (val: any) => void;
   headColumns: any;
   searchedElements: any;
@@ -100,6 +102,7 @@ export const SideFilter = ({
 }) => {
   const [newHeadColumns, setNewHeadColumns] = useState<any>([]);
   const { t } = useTranslationHook();
+
   useEffect(() => {
     const arr: any = [];
     headColumns.forEach((item: any) => {
@@ -169,7 +172,7 @@ export const SideFilter = ({
           <div className="sticky bottom-0 h-[50px] bg-white left-0 w-full mt-3">
             <SelectFilter
               handleClick={(val: any) =>
-                handleSortLogic({
+                addFilter({
                   value: "add",
                   id: val.value,
                   title: val.label,

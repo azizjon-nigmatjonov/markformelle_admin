@@ -26,7 +26,7 @@ export const TableData = ({
     ["GET_RECIPE_LIST_TABLE", filterParams],
     () => {
       return axios.get(
-        `${API_URL}/labrecete/?skip=${
+        `${API_URL}/recete/?skip=${
           filterParams.page < 2
             ? 0
             : (filterParams.page - 1) * filterParams.perPage

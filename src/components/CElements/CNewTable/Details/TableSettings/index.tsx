@@ -123,7 +123,7 @@ export const HeaderSettings = ({
     const obj = allColumns?.[0] ?? {};
     const keys = Object.keys(obj);
 
-    if (keys.length === arr.length) {
+    if (keys.length <= arr.length) {
       setAllCheck(true);
     }
     dispatch(tableStoreActions.setColumns({ pageName, payload: [...arr] }));

@@ -49,6 +49,22 @@ export const MaskInputUI = ({
     }
   }, [defaultValue, onChange]);
 
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Enter") {
+      const form = (e.target as HTMLElement).closest("form");
+      if (form) {
+        const elements = Array.from(form.elements) as HTMLElement[];
+        const active = document.activeElement;
+        const currentIndex = elements.indexOf(active as HTMLElement);
+
+        const next = elements[currentIndex + 1];
+        if (next && typeof next.focus === "function") {
+          next.focus();
+        }
+      }
+    }
+  };
+
   return (
     <ReactInputMask
       onChange={(e) => {
@@ -56,6 +72,7 @@ export const MaskInputUI = ({
         onChange(val);
         handleChange(val);
       }}
+      onKeyDown={(e: any) => handleKeyDown(e)}
       type={type}
       inputRef={maskRef}
       mask={mask}

@@ -15,7 +15,7 @@ export const SubmitCancelButtons = ({
   const { isAltPressed, currentKey } = useKeyDownEvent();
 
   useEffect(() => {
-    if (currentKey) handleActions(currentKey, uniqueID);
+    if (currentKey && isAltPressed) handleActions(currentKey, uniqueID);
   }, [currentKey]);
 
   return (

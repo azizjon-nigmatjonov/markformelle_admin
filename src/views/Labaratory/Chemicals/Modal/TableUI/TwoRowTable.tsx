@@ -75,9 +75,9 @@ export const TwoRowTable = ({
 
   return (
     <div>
-      <div className="py-1 flex items-center justify-between px-2 border-b border-[var(--border)]">
+      <div className="py-1 flex items-center justify-between px-2 border-b border-[var(--border)] text-sm">
         <h2
-          className={`${
+          className={`font-medium ${
             disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
           }`}
         >
@@ -93,10 +93,10 @@ export const TwoRowTable = ({
           >
             <div className="w-[30px] h-[30px] items-center justify-center flex">
               {openSelect ? (
-                <UncheckMultipleIcon width={20} fill="var(--main)" />
+                <UncheckMultipleIcon width={18} fill="var(--main)" />
               ) : (
                 <CheckMultipleIcon
-                  width={20}
+                  width={18}
                   fill={disabled ? "var(--gray)" : "var(--main)"}
                 />
               )}
@@ -113,14 +113,13 @@ export const TwoRowTable = ({
             className="flex items-center"
             type="button"
             onClick={() => {
-              if (sellectedItems.length || sellectedItemsSecondTable.length)
-                setOpenDelete(true);
+              if (idTable) setOpenDelete(true);
             }}
           >
             <div className="w-[30px] h-[30px] items-center justify-center flex">
               <DeleteIcon
                 fill={idTable ? "var(--main)" : "var(--gray)"}
-                width={18}
+                width={16}
               />
             </div>
             <p
@@ -192,7 +191,7 @@ export const TwoRowTable = ({
                 <div
                   key={head.id + head.title}
                   style={{ width: head?.width || "auto" }}
-                  className={`${cls.cell} border-b border-[var(--border)]`}
+                  className={`${cls.cell} border-b border-l border-[var(--border)]`}
                 >
                   <p>{head.title}</p>
                 </div>
@@ -243,9 +242,9 @@ export const TwoRowTable = ({
                     style={{ width: head?.width || "auto" }}
                     className={`${
                       cls.cell
-                    } font-medium border-b border-green-300 ${
+                    } font-medium border-b border-l border-green-300 ${
                       idTable === item.LABRECETEATISID
-                        ? "bg-blue-200"
+                        ? "bg-blue-200 border-blue-300"
                         : "bg-green-200"
                     } cursor-pointer`}
                     onClick={() =>
@@ -255,7 +254,7 @@ export const TwoRowTable = ({
                       handleRowClick({ ...item, index }, "view")
                     }
                   >
-                    <p>
+                    <p style={{ width: head?.width || "auto" }}>
                       {head.render
                         ? head.render(item[head?.id], item)
                         : item[head.id]}
@@ -275,7 +274,7 @@ export const TwoRowTable = ({
           {bodySource?.okeysiz?.map((item: any, index: number) => (
             <div
               key={index}
-              className={`${cls.row} px-2 relative ${
+              className={`${cls.row} relative ${
                 idTable === item.LABRECETEATISID
                   ? "bg-blue-200"
                   : "bg-yellow-100"
@@ -316,11 +315,11 @@ export const TwoRowTable = ({
                     }
                     className={`${cls.cell} ${
                       idTable === item.LABRECETEATISID
-                        ? "bg-blue-200"
+                        ? "bg-blue-200 border-blue-300"
                         : "bg-yellow-100"
-                    } font-medium border-b border-yellow-300 `}
+                    } font-medium border-b border-l border-yellow-300`}
                   >
-                    <p>
+                    <p style={{ width: head?.width || "auto" }}>
                       {head.render
                         ? head.render(item[head?.id], item)
                         : item[head.id]}

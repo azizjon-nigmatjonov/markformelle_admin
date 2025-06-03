@@ -22,19 +22,39 @@ const CCheckbox = ({
     setValue(checked);
   }, [checked]);
 
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Enter") {
+      const form = (e.target as HTMLElement).closest("form");
+      if (form) {
+        const elements = Array.from(form.elements) as HTMLElement[];
+        const active = document.activeElement;
+        const currentIndex = elements.indexOf(active as HTMLElement);
+
+        const next = elements[currentIndex + 1];
+        if (next && typeof next.focus === "function") {
+          next.focus();
+        }
+      }
+    }
+    if (e.code === "Space") {
+      handleCheck({ ...element, checked: !value });
+      setValue(!value);
+    }
+  };
+
   return (
     <div
       onClick={() => {
         if (!disabled) {
-          setValue(!value);
           handleCheck({ ...element, checked: !value });
+          setValue(!value);
         }
       }}
-      className={`flex items-center rounded-[8px] border-[var(--border)] w-full whitespace-nowrap ${
+      className={`flex items-center rounded-[8px] border-[var(--border)] w-full whitespace-nowrap relative ${
         element?.label ? "border gap-2 px-[12px] h-[30px]" : ""
       } ${disabled ? "cursor-not-allowed " : "cursor-pointer "}`}
     >
-      <div className="w-[18px] h-[18px]">
+      <div className="w-[18px] h-[18px] relative z-[2]">
         <div
           className={`w-[18px] h-[18px] rounded-[4px] border ${
             value ? "border-[var(--main)]" : "border-[var(--gray30)]"
@@ -43,7 +63,13 @@ const CCheckbox = ({
           {value ? <CheckLine fill="var(--main)" /> : ""}
         </div>
       </div>
-      {element?.label && <p className="text-sm">{t(element.label)}</p>}
+      <input
+        readOnly
+        className="focus:border w-full absolute left-0 top-0 pl-12 h-full rounded-[8px]"
+        onKeyDown={(e: any) => handleKeyDown(e)}
+        type="text"
+        value={t(element?.label || "")}
+      />
     </div>
   );
 };

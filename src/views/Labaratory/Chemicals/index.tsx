@@ -104,13 +104,9 @@ export const LabChemicals = () => {
   };
 
   const handleModalActions = (status: string, id: string) => {
-    if (status === "close") {
-      // setAskClose("close");
-      askCloseFn("");
-    }
-    if (status === "delete") {
-      deleteFn([id]);
-    }
+    if (status === "close") askCloseFn("");
+
+    if (status === "delete") deleteFn([id]);
   };
 
   return (
@@ -118,7 +114,6 @@ export const LabChemicals = () => {
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />
       <div className="p-2">
         <CNewTable
-          key={bodyData?.count}
           title={t("table_labaratory")}
           headColumns={newHeadColumns}
           bodyColumns={bodyColumns}
@@ -136,7 +131,7 @@ export const LabChemicals = () => {
             "filter",
             "sellect_more",
           ]}
-          defaultSearch={{ DATE: "", PANTONE: "", MATERIAL: "" }}
+          defaultSearch={{ DATE: "" }}
           meta={{
             totalCount: bodyData?.count,
             pageCount: bodyData?.count

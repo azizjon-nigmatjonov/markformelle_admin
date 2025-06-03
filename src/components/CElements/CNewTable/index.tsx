@@ -155,7 +155,7 @@ const CNewTable = ({
       }
     }
 
-    handleFilterParams({ ...filterParams, page: 0, q: str });
+    handleFilterParams({ ...filterParams, page: 1, q: str });
   };
 
   useEffect(() => {
@@ -399,14 +399,14 @@ const CNewTable = ({
       }
     }
 
-    if (value === "add") {
-      setSearchedElements({ ...searchedElements, [id]: "" });
-    }
+    // if (value === "add") {
+    //   setSearchedElements({ ...searchedElements, [id]: "" });
+    // }
 
-    if (value === "clear") {
-      setSearchedElements(defaultSearch);
-      SetFiltersFn(defaultSearch);
-    }
+    // if (value === "clear") {
+    //   setSearchedElements(defaultSearch);
+    //   SetFiltersFn(defaultSearch);
+    // }
 
     setActiveSort((prev) => !prev);
   };
@@ -557,8 +557,18 @@ const CNewTable = ({
     handleActions(el, status);
   };
 
+  const addFilter = (obj: any) => {
+    const { id, value } = obj;
+    if (value === "add") {
+      setSearchedElements({ ...searchedElements, [id]: "" });
+    }
+
+    console.log("oo", obj);
+  };
+
   const searchDebounce = useDebounce((search: string, id: any) => {
     const obj: any = { ...searchedElements };
+
     if (search) {
       obj[id] = search;
     } else {
@@ -569,9 +579,9 @@ const CNewTable = ({
       }
     }
 
-    if (search === "close" || !search) {
-      SetFiltersFn(obj);
-    }
+    // if (search === "close" || !search) {
+    //   SetFiltersFn(obj);
+    // }
 
     setSearchedElements(obj);
   }, 0);
@@ -583,7 +593,7 @@ const CNewTable = ({
       setSelectedItems([]);
     }
 
-    if (e.key === "Enter" && Object.values(searchedElements)?.[0]) {
+    if (e.key === "Enter" && Object.values(searchedElements)?.length) {
       SetFiltersFn(searchedElements);
     }
   };
@@ -655,6 +665,7 @@ const CNewTable = ({
             headColumns={newHeadColumns}
             defaultSearch={defaultSearch}
             handleKeyDown={handleKeyDown}
+            addFilter={addFilter}
           />
 
           <div

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { MaterialForm } from "./MaterialForm";
 import CNewMiniModal from "../../../../components/CElements/CNewMiniModal";
 import { TrailForm } from "./TrailForm";
@@ -30,6 +30,7 @@ export const LabModalTables = ({
     formId: formData?.LABRECETEID,
   });
   const [idTable, setIdTable]: any = useState(null);
+  const [materialData, setMaterialData] = useState({});
   const [idMaterial, setIdMaterial]: any = useState(null);
   const [idTrail, setIdTrail]: any = useState(null);
   const [idTrailForm, setIdTrailForm]: any = useState(null);
@@ -56,7 +57,7 @@ export const LabModalTables = ({
     refetchTable: refetchAll,
   });
   const { deleteFn: deleteDetailFn } = DetailFormLogic({
-    refetchTable: refetchAll,
+    refetchTable: refetchDetailTable,
   });
 
   useEffect(() => {
@@ -67,12 +68,17 @@ export const LabModalTables = ({
   useEffect(() => {
     if (tableData?.data?.length) {
       setIdTable(tableData.data[0].LABRECETECALISMAID);
+      setMaterialData(tableData.data[0]);
     }
   }, [tableData]);
 
   useEffect(() => {
     if (trailData?.okey?.length) {
       setIdTrail(trailData.okey[0].LABRECETEATISID);
+    } else if (trailData?.okeysiz?.length) {
+      setIdTrail(trailData.okeysiz[0].LABRECETEATISID);
+    } else {
+      setIdTrail(null);
     }
   }, [trailData]);
 
@@ -90,10 +96,12 @@ export const LabModalTables = ({
     if (type === "view_single") {
       setIdTable(el.LABRECETECALISMAID);
       setIdMaterial(el.LABRECETECALISMAID);
+      setMaterialData(el);
     }
 
     if (type === "view") {
       setOpen("material");
+      setMaterialData(el);
       setIdMaterial(el.LABRECETECALISMAID);
     }
 
@@ -117,16 +125,18 @@ export const LabModalTables = ({
     arr?: any
   ) => {
     if (type === "modal") {
-      setOpen("trial");
+      setOpen("trail");
       setIdTrailForm(null);
     }
 
     if (type === "view_single") {
       setIdTrail(el.LABRECETEATISID);
     }
+
     if (type === "view") {
+      setIdTrail(el.LABRECETEATISID);
       setIdTrailForm(el.LABRECETEATISID);
-      setOpen("trial");
+      setOpen("trail");
     }
 
     if (type === "delete") {
@@ -143,6 +153,17 @@ export const LabModalTables = ({
     type: string,
     arr?: any
   ) => {
+    if (type.includes("inner")) {
+      if (type === "modalinner") {
+        setOpen("traildetail");
+        setIdDetailForm(null);
+      }
+
+      if (type === "viewinner") {
+        setIdDetailForm(el.LABRECETEURUNID);
+        setOpen("traildetail");
+      }
+    }
     if (type === "modal") {
       setOpen("detail");
       setIdDetailForm(null);
@@ -170,7 +191,7 @@ export const LabModalTables = ({
       <div className="grid grid-cols-3 gap-x-2">
         <div className="border rounded-[12px] border-[var(--border)] pb-11">
           <TableUI
-            title="material"
+            title="labrecetecalisma"
             headColumns={headColumns}
             idTable={idTable}
             bodyColumns={tableData?.data}
@@ -182,7 +203,7 @@ export const LabModalTables = ({
 
         <div className="rounded-[12px] border border-[var(--border)]">
           <TwoRowTable
-            title="trail"
+            title="labreceteatis"
             headColumns={trailHeadColumns}
             bodyColumns={trailData}
             handleRowClick={handleActionsTrial}
@@ -193,7 +214,7 @@ export const LabModalTables = ({
 
         <div className="border rounded-[12px] border-[var(--border)] pb-11">
           <TableUI
-            title="detail"
+            title="labreceteurun"
             idTable={idDetailForm}
             handleRowClick={handleActionsDetails}
             headColumns={detailHeadColumns}
@@ -203,36 +224,33 @@ export const LabModalTables = ({
           />
         </div>
       </div>
-      {open.length ? (
+
+      {open === "trail" || open === "material" || open === "traildetail" ? (
         <CNewMiniModal
-          title={
-            open === "material"
-              ? "Add material"
-              : open === "trial"
-              ? "Add trial"
-              : "Add details"
-          }
+          title={open === "material" ? "labrecetecalisma" : "labreceteatis"}
           handleActions={() => {
             setOpen("");
-            refetchAll();
           }}
         >
           {open === "material" && (
             <MaterialForm
               onClose={() => {
                 setOpen("");
-              }}
-              refetchMaterial={() => {
                 refetchAll();
-                setIdMaterial(null);
+              }}
+              refetchMaterial={(el: any) => {
+                refetchMaterial();
+                setMaterialData(el);
+                setOpen("trail");
               }}
               formData={formData}
               formId={idMaterial}
               open={open}
             />
           )}
-          {open === "trial" && (
+          {open === "trail" || open === "traildetail" ? (
             <TrailForm
+              materialData={materialData}
               onClose={() => setOpen("")}
               handleActionsDetails={handleActionsDetails}
               filterParams={filterParams}
@@ -240,24 +258,40 @@ export const LabModalTables = ({
               disabled={disabled}
               setOpen={setOpen}
               formId={idTrailForm}
-              DetailHeader={detailHeadColumns}
               detailData={detailData}
+              DetailHeader={detailHeadColumns}
               labReceteId={formData?.LABRECETEID}
               materialId={idTable}
               open={open}
-              refetchTable={refetchAll}
+              idDetailForm={idDetailForm}
+              refetchTable={() => {
+                refetchTrailTable();
+              }}
             />
+          ) : (
+            ""
           )}
-          {open === "detail" && (
-            <DetailForm
-              onClose={() => setOpen("")}
-              formId={idDetailForm}
-              idTrail={idTrail}
-              open={open}
-              materialID={formData?.LABRECETEID}
-              refetchTable={refetchAll}
-            />
-          )}
+        </CNewMiniModal>
+      ) : (
+        ""
+      )}
+      {open === "detail" || open === "traildetail" ? (
+        <CNewMiniModal
+          title={"labreceteurun"}
+          handleActions={() => {
+            setOpen(open === "traildetail" ? "trail" : "");
+          }}
+        >
+          <DetailForm
+            onClose={() => setOpen(open === "traildetail" ? "trail" : "")}
+            formId={idDetailForm}
+            idTrail={idTrail}
+            open={open}
+            materialID={formData?.LABRECETEID}
+            refetchTable={() => {
+              refetchDetailTable();
+            }}
+          />
         </CNewMiniModal>
       ) : (
         ""
