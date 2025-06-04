@@ -19,7 +19,6 @@ import { usePermissions } from "../../../hooks/usePermissions";
 import CPagination from "./Details/Pagination";
 import { TableSettingsData } from "./Logic";
 import { tableStoreActions } from "../../../store/table";
-import useDebounce from "../../../hooks/useDebounce";
 import { SideFilter, TableFilter } from "./Details/Filter";
 import CheckIcon from "@mui/icons-material/Check";
 import { GetCurrentDate } from "../../../utils/getDate";
@@ -169,8 +168,11 @@ const CNewTable = ({
     setLoading(isLoading);
   }, [isLoading]);
   useEffect(() => {
-    if (!bodyColumns?.length) return;
-    const arr = bodyColumns;
+    if (!bodyColumns?.length) {
+      setNewBodyColumns([]);
+      return;
+    }
+    const arr = JSON.parse(JSON.stringify(bodyColumns));
     let result: any = [];
 
     setLoading(true);
@@ -230,6 +232,7 @@ const CNewTable = ({
 
   useEffect(() => {
     if (!newBodyColumns?.length) {
+      setBodySource([]);
       return;
     }
     if (loading) {
@@ -399,15 +402,6 @@ const CNewTable = ({
       }
     }
 
-    // if (value === "add") {
-    //   setSearchedElements({ ...searchedElements, [id]: "" });
-    // }
-
-    // if (value === "clear") {
-    //   setSearchedElements(defaultSearch);
-    //   SetFiltersFn(defaultSearch);
-    // }
-
     setActiveSort((prev) => !prev);
   };
 
@@ -449,6 +443,7 @@ const CNewTable = ({
     });
     if (title) setNewHeadColumns(data);
   }, [pageColumns, items, title, selectedItems]);
+
   const handleDragStart = (index: any) => {
     setDraggingIndex(index);
 
@@ -557,36 +552,20 @@ const CNewTable = ({
     handleActions(el, status);
   };
 
-  const addFilter = (obj: any) => {
+  const addAndRemoveFilter = (obj: any) => {
     const { id, value } = obj;
     if (value === "add") {
       setSearchedElements({ ...searchedElements, [id]: "" });
     }
 
-    console.log("oo", obj);
+    if (value === "close") {
+      const obj: any = { ...searchedElements };
+      delete obj[id];
+      setSearchedElements(obj);
+    }
   };
 
-  const searchDebounce = useDebounce((search: string, id: any) => {
-    const obj: any = { ...searchedElements };
-
-    if (search) {
-      obj[id] = search;
-    } else {
-      if (id in defaultSearch) {
-        obj[id] = "";
-      } else {
-        delete obj[id];
-      }
-    }
-
-    // if (search === "close" || !search) {
-    //   SetFiltersFn(obj);
-    // }
-
-    setSearchedElements(obj);
-  }, 0);
-
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown = (e: KeyboardEvent, search: string, id: any) => {
     if (e.key === "Escape") {
       setSelectedItems([]);
       setOpenSelect(false);
@@ -594,8 +573,29 @@ const CNewTable = ({
     }
 
     if (e.key === "Enter" && Object.values(searchedElements)?.length) {
-      SetFiltersFn(searchedElements);
+      const obj = { ...searchedElements };
+
+      if (search) {
+        obj[id] = search;
+      } else {
+        obj[id] = "";
+      }
+      SetFiltersFn(obj);
+      setSearchedElements(obj);
     }
+  };
+
+  const searchDebounce = (search: string, id: any) => {
+    const obj = { ...searchedElements };
+
+    if (search) {
+      obj[id] = search;
+    } else {
+      obj[id] = "";
+      SetFiltersFn(obj);
+    }
+
+    setSearchedElements(obj);
   };
 
   const handleSelectAll = () => {
@@ -665,7 +665,7 @@ const CNewTable = ({
             headColumns={newHeadColumns}
             defaultSearch={defaultSearch}
             handleKeyDown={handleKeyDown}
-            addFilter={addFilter}
+            addAndRemoveFilter={addAndRemoveFilter}
           />
 
           <div
@@ -681,319 +681,329 @@ const CNewTable = ({
                 : "calc(100vh - 95px)",
             }}
           >
-            <div className={`w-full`}>
-              <CTableWrapper
-                count={meta.pageCount}
-                totalCount={meta.totalCount}
-                currentLimit={filterParams.perPage}
-                loader={loading}
-                height={0}
-                passRouter={passRouter}
-                filterParams={filterParams}
-                disablePagination={disablePagination}
-                dataLength={newBodyColumns?.length}
-              >
-                <CTableHead>
-                  <CTableRow>
-                    <td
-                      style={{ width: openSelect ? "40px" : 0 }}
-                      className="sticky bg-white h-[41px] flex items-center border-b justify-center duration-100"
-                    >
-                      {openSelect && (
-                        <div
-                          onClick={() => handleSelectAll()}
-                          className={`w-[18px] h-[18px] rounded-[4px] border border-[var(--main)] flex items-center justify-center cursor-pointer`}
-                        >
-                          {areAllRowsSelectedOnPage(
-                            selectedItems,
-                            bodySource
-                          ) && (
-                            <CheckIcon
-                              style={{ fill: "var(--main)", width: 14 }}
-                            />
-                          )}
-                        </div>
-                      )}
-                    </td>
-                    {newHeadColumns?.map((column: any, index: number) => (
-                      <CTableHeadCell
-                        id={column?.id}
-                        key={column?.innerId || column?.id + index}
-                        style={{
-                          minWidth: tableSize?.[pageName]?.[column?.id]
-                            ? tableSize?.[pageName]?.[column?.id]
-                            : column?.width
-                            ? column.width
-                            : "auto",
-                          width: tableSize?.[pageName]?.[column?.id]
-                            ? tableSize?.[pageName]?.[column?.id]
-                            : column?.width
-                            ? column.width
-                            : "auto",
-                          position: tableSettings?.[pageName]?.find(
-                            (item: any) => item?.id === column?.id
-                          )?.isStiky
-                            ? "sticky"
-                            : "relative",
-                          left: tableSettings?.[pageName]?.find(
-                            (item: any) => item?.id === column?.id
-                          )?.isStiky
-                            ? calculateWidth(column?.id, index)
-                            : "0",
-                          backgroundColor: "#fff",
-                          zIndex: tableSettings?.[pageName]?.find(
-                            (item: any) => item?.id === column?.id
-                          )?.isStiky
-                            ? "1"
-                            : "",
-                        }}
+            <div className="w-full">
+              {!loading && !bodySource?.length ? (
+                <div className="flex justify-center items-center h-full">
+                  <img
+                    className="w-[300px]"
+                    src="/images/no-data.png"
+                    alt="no data"
+                  />
+                </div>
+              ) : (
+                <CTableWrapper
+                  count={meta.pageCount}
+                  totalCount={meta.totalCount}
+                  currentLimit={filterParams.perPage}
+                  loader={loading}
+                  height={0}
+                  passRouter={passRouter}
+                  filterParams={filterParams}
+                  disablePagination={disablePagination}
+                  dataLength={newBodyColumns?.length}
+                >
+                  <CTableHead>
+                    <CTableRow>
+                      <td
+                        style={{ width: openSelect ? "40px" : 0 }}
+                        className="sticky bg-white h-[41px] flex items-center border-b justify-center duration-100"
                       >
-                        <div
-                          draggable={true}
-                          onDragStart={() => handleDragStart(index)}
-                          onDragOver={(e) => {
-                            e.preventDefault();
-                            handleDragOver(index);
-                          }}
-                          onDragLeave={handleDragLeave}
-                          onDrop={() => handleDrop(index)}
-                          className={`w-full group flex items-center min-h-[40px] px-2 flex-nowrap cursor-pointer hover:bg-[var(--border)] ${
-                            column?.id === "index"
-                              ? "justify-center"
-                              : "justify-between"
-                          } ${draggingIndex === index ? "drag-and-drop" : ""} ${
-                            hoveredIndex === index &&
-                            hoveredIndex > draggingIndex
-                              ? "drag-hovered right"
-                              : hoveredIndex === index &&
-                                hoveredIndex < draggingIndex
-                              ? "drag-hovered left"
-                              : ""
-                          }`}
+                        {openSelect && (
+                          <div
+                            onClick={() => handleSelectAll()}
+                            className={`w-[18px] h-[18px] rounded-[4px] border border-[var(--main)] flex items-center justify-center cursor-pointer`}
+                          >
+                            {areAllRowsSelectedOnPage(
+                              selectedItems,
+                              bodySource
+                            ) && (
+                              <CheckIcon
+                                style={{ fill: "var(--main)", width: 14 }}
+                              />
+                            )}
+                          </div>
+                        )}
+                      </td>
+                      {newHeadColumns?.map((column: any, index: number) => (
+                        <CTableHeadCell
+                          id={column?.id}
+                          key={column?.innerId || column?.id + index}
                           style={{
-                            color: sortData?.find(
-                              (item: any) => item.id === column.id
-                            )
-                              ? "var(--primary)"
-                              : draggingIndex === index
-                              ? "var(--primary)"
+                            minWidth: tableSize?.[pageName]?.[column?.id]
+                              ? tableSize?.[pageName]?.[column?.id]
+                              : column?.width
+                              ? column.width
+                              : "auto",
+                            width: tableSize?.[pageName]?.[column?.id]
+                              ? tableSize?.[pageName]?.[column?.id]
+                              : column?.width
+                              ? column.width
+                              : "auto",
+                            position: tableSettings?.[pageName]?.find(
+                              (item: any) => item?.id === column?.id
+                            )?.isStiky
+                              ? "sticky"
+                              : "relative",
+                            left: tableSettings?.[pageName]?.find(
+                              (item: any) => item?.id === column?.id
+                            )?.isStiky
+                              ? calculateWidth(column?.id, index)
+                              : "0",
+                            backgroundColor: "#fff",
+                            zIndex: tableSettings?.[pageName]?.find(
+                              (item: any) => item?.id === column?.id
+                            )?.isStiky
+                              ? "1"
                               : "",
-                            textAlign: !column?.filter ? "left" : "left",
-                            backgroundColor:
-                              currentFilter === index ? "var(--primary50)" : "",
                           }}
                         >
                           <div
-                            className={`w-full min-h-[40px] flex items-center whitespace-nowrap cursor-move ${
-                              disabled ? "text-[var(--gray)]" : ""
+                            draggable={true}
+                            onDragStart={() => handleDragStart(index)}
+                            onDragOver={(e) => {
+                              e.preventDefault();
+                              handleDragOver(index);
+                            }}
+                            onDragLeave={handleDragLeave}
+                            onDrop={() => handleDrop(index)}
+                            className={`w-full group flex items-center min-h-[40px] px-2 flex-nowrap cursor-pointer hover:bg-[var(--border)] ${
+                              column?.id === "index"
+                                ? "justify-center"
+                                : "justify-between"
+                            } ${
+                              draggingIndex === index ? "drag-and-drop" : ""
+                            } ${
+                              hoveredIndex === index &&
+                              hoveredIndex > draggingIndex
+                                ? "drag-hovered right"
+                                : hoveredIndex === index &&
+                                  hoveredIndex < draggingIndex
+                                ? "drag-hovered left"
+                                : ""
                             }`}
-                          >
-                            {column.renderHead
-                              ? Array.isArray(column.renderHead)
-                                ? column.renderHead(
-                                    column.renderHead.map(
-                                      (data: any) => column[data]
-                                    )
-                                  )
-                                : column.renderHead()
-                              : column.id === "index"
-                              ? "№"
-                              : t(column?.title) === ""
-                              ? column?.title
-                              : t(column?.title)}
-                          </div>
-
-                          {column.id !== "multiple" &&
-                          column.id !== "index" &&
-                          !column.id.includes("actions") ? (
-                            <TableFilter
-                              colId={column?.id ?? currentFilter}
-                              sortData={sortData}
-                              searchedElements={searchedElements}
-                              handleSortLogic={(val: any) =>
-                                handleSortLogic({
-                                  ...val,
-                                  title: column?.title,
-                                })
-                              }
-                              filter={currentFilter === index}
-                              searchDebounce={(val: any, val2: any) =>
-                                searchDebounce(val, val2, column?.title)
-                              }
-                              disabled={disabled}
-                              handleClick={() => setCurrentFilter(index)}
-                              closeFilter={() => setCurrentFilter(null)}
-                            />
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                      </CTableHeadCell>
-                    ))}
-                  </CTableRow>
-                </CTableHead>
-
-                <CTableBody
-                  loader={false}
-                  columnscount={newHeadColumns?.length}
-                  rowsCount={filterParams.perPage}
-                  dataLength={newBodyColumns?.length}
-                >
-                  {bodySource?.length ? (
-                    bodySource?.map((item: any, rowIndex: any) => (
-                      <TableRow
-                        key={item.index}
-                        className={`group ${
-                          effect.includes(rowIndex) ? "effect" : ""
-                        } ${
-                          clickable && !item.empty && checkPermission("view")
-                            ? "clickable"
-                            : ""
-                        } ${
-                          currentIndex === rowIndex
-                            ? "bg-[var(--primary50)]"
-                            : ""
-                        } ${
-                          selectedItems.includes(rowIndex) || item?.checked
-                            ? "sellected"
-                            : ""
-                        }`}
-                        onClick={() => {
-                          if (openSelect) {
-                            tableActions(item, "sellect_more");
-                          }
-                        }}
-                      >
-                        <td
-                          className="h-[35px] border-b border-[var(--border)] w-full flex justify-center items-center"
-                          style={{ padding: "0px !importaint" }}
-                        >
-                          {openSelect && (
-                            <div
-                              onClick={() => tableActions(item, "sellect_more")}
-                              className={`w-[18px] h-[18px] check rounded-[4px] border flex items-center justify-center cursor-pointer ${
-                                selectedItems.includes(item.index - 1)
-                                  ? "border-[var(--black)]"
-                                  : "border-[var(--gray)]"
-                              }`}
-                            >
-                              {selectedItems.includes(item.index - 1) && (
-                                <CheckIcon
-                                  style={{ color: "black", width: 14 }}
-                                />
-                              )}
-                            </div>
-                          )}
-                        </td>
-                        {newHeadColumns.map((column: any, colIndex: number) => (
-                          <CTableCell
-                            key={colIndex + column?.id || colIndex}
-                            className={`overflow-ellipsis`}
                             style={{
-                              minWidth: "max-content",
-                              padding: "0px",
-                              position: tableSettings?.[pageName]?.find(
-                                (item: any) => item?.id === column?.id
-                              )?.isStiky
-                                ? "sticky"
-                                : "relative",
-                              left: tableSettings?.[pageName]?.find(
-                                (item: any) => item?.id === column?.id
-                              )?.isStiky
-                                ? calculateWidth(column?.id, colIndex)
-                                : "0",
-                              backgroundColor: "#fff",
-                              zIndex: tableSettings?.[pageName]?.find(
-                                (item: any) => item?.id === column?.id
-                              )?.isStiky
-                                ? "1"
+                              color: sortData?.find(
+                                (item: any) => item.id === column.id
+                              )
+                                ? "var(--primary)"
+                                : draggingIndex === index
+                                ? "var(--primary)"
                                 : "",
+                              textAlign: !column?.filter ? "left" : "left",
+                              backgroundColor:
+                                currentFilter === index
+                                  ? "var(--primary50)"
+                                  : "",
                             }}
                           >
                             <div
-                              style={{
-                                textAlign: column?.textAlign || "left",
-                              }}
-                              className={`relative h-full flex items-center text-[13px] ${
-                                hoveredIndex === colIndex &&
-                                hoveredIndex > draggingIndex
-                                  ? "drag-hovered right"
-                                  : hoveredIndex === colIndex &&
-                                    hoveredIndex < draggingIndex
-                                  ? "drag-hovered left"
-                                  : ""
+                              className={`w-full min-h-[40px] flex items-center whitespace-nowrap cursor-move ${
+                                disabled ? "text-[var(--gray)]" : ""
                               }`}
                             >
-                              {column?.id !== "actions" &&
-                              !item.empty &&
-                              getBodyCol(column, item) ? (
-                                <div
-                                  onDoubleClick={() => {
-                                    if (
-                                      column?.click !== "custom" &&
-                                      column?.id !== "actions"
-                                    ) {
-                                      tableActions(item, "view");
-                                    }
-                                  }}
-                                  onClick={() => {
-                                    tableActions(item, "view_single");
-                                  }}
-                                  className="w-full whitespace-nowrap"
-                                >
-                                  <>{getBodyCol(column, item)}</>
-                                </div>
-                              ) : (
-                                ""
-                              )}
-                              {defaultFilters.includes("actions") &&
-                              colIndex === 0 ? (
-                                <div className="relative flex items-center">
-                                  <TabbleActions
-                                    element={item}
-                                    rowIndex={rowIndex}
-                                    currentIndex={currentIndex}
-                                    setCurrentIndex={setCurrentIndex}
-                                    handleActions={tableActions}
-                                    actions={defaultActions}
-                                    checkPermission={checkPermission}
-                                    selectedItems={selectedItems}
-                                  />
+                              {column.renderHead
+                                ? Array.isArray(column.renderHead)
+                                  ? column.renderHead(
+                                      column.renderHead.map(
+                                        (data: any) => column[data]
+                                      )
+                                    )
+                                  : column.renderHead()
+                                : column.id === "index"
+                                ? "№"
+                                : t(column?.title) === ""
+                                ? column?.title
+                                : t(column?.title)}
+                            </div>
 
-                                  {currentIndex === rowIndex && (
+                            {column.id !== "multiple" &&
+                            column.id !== "index" &&
+                            !column.id.includes("actions") ? (
+                              <TableFilter
+                                colId={column?.id ?? currentFilter}
+                                sortData={sortData}
+                                searchedElements={searchedElements}
+                                handleSortLogic={(val: any) =>
+                                  handleSortLogic({
+                                    ...val,
+                                    title: column?.title,
+                                  })
+                                }
+                                filter={currentFilter === index}
+                                searchDebounce={(val: any, val2: any) =>
+                                  searchDebounce(val, val2)
+                                }
+                                disabled={disabled}
+                                handleClick={() => setCurrentFilter(index)}
+                                closeFilter={() => setCurrentFilter(null)}
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </CTableHeadCell>
+                      ))}
+                    </CTableRow>
+                  </CTableHead>
+
+                  <CTableBody
+                    loader={false}
+                    columnscount={newHeadColumns?.length}
+                    rowsCount={filterParams.perPage}
+                    dataLength={newBodyColumns?.length}
+                  >
+                    {bodySource?.length ? (
+                      bodySource?.map((item: any, rowIndex: any) => (
+                        <TableRow
+                          key={item.index}
+                          className={`group ${
+                            effect.includes(rowIndex) ? "effect" : ""
+                          } ${
+                            clickable && !item.empty && checkPermission("view")
+                              ? "clickable"
+                              : ""
+                          } ${
+                            currentIndex === rowIndex
+                              ? "bg-[var(--primary50)]"
+                              : ""
+                          } ${
+                            selectedItems.includes(rowIndex) || item?.checked
+                              ? "sellected"
+                              : ""
+                          }`}
+                          onClick={() => {
+                            if (openSelect) {
+                              tableActions(item, "sellect_more");
+                            }
+                          }}
+                        >
+                          <td
+                            className="h-[35px] border-b border-[var(--border)] w-full flex justify-center items-center"
+                            style={{ padding: "0px !importaint" }}
+                          >
+                            {openSelect && (
+                              <div
+                                onClick={() =>
+                                  tableActions(item, "sellect_more")
+                                }
+                                className={`w-[18px] h-[18px] check rounded-[4px] border flex items-center justify-center cursor-pointer ${
+                                  selectedItems.includes(item.index - 1)
+                                    ? "border-[var(--black)]"
+                                    : "border-[var(--gray)]"
+                                }`}
+                              >
+                                {selectedItems.includes(item.index - 1) && (
+                                  <CheckIcon
+                                    style={{ color: "black", width: 14 }}
+                                  />
+                                )}
+                              </div>
+                            )}
+                          </td>
+                          {newHeadColumns.map(
+                            (column: any, colIndex: number) => (
+                              <CTableCell
+                                key={colIndex + column?.id || colIndex}
+                                className={`overflow-ellipsis`}
+                                style={{
+                                  minWidth: "max-content",
+                                  padding: "0px",
+                                  position: tableSettings?.[pageName]?.find(
+                                    (item: any) => item?.id === column?.id
+                                  )?.isStiky
+                                    ? "sticky"
+                                    : "relative",
+                                  left: tableSettings?.[pageName]?.find(
+                                    (item: any) => item?.id === column?.id
+                                  )?.isStiky
+                                    ? calculateWidth(column?.id, colIndex)
+                                    : "0",
+                                  backgroundColor: "#fff",
+                                  zIndex: tableSettings?.[pageName]?.find(
+                                    (item: any) => item?.id === column?.id
+                                  )?.isStiky
+                                    ? "1"
+                                    : "",
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    textAlign: column?.textAlign || "left",
+                                  }}
+                                  className={`relative h-full flex items-center text-[13px] ${
+                                    hoveredIndex === colIndex &&
+                                    hoveredIndex > draggingIndex
+                                      ? "drag-hovered right"
+                                      : hoveredIndex === colIndex &&
+                                        hoveredIndex < draggingIndex
+                                      ? "drag-hovered left"
+                                      : ""
+                                  }`}
+                                >
+                                  {column?.id !== "actions" &&
+                                  !item.empty &&
+                                  getBodyCol(column, item) ? (
                                     <div
-                                      className="w-[200vw] h-[200vh] fixed left-[-50vw] top-[-50vw] z-[97]"
-                                      onClick={() => {
-                                        setCurrentIndex(null);
+                                      onDoubleClick={() => {
+                                        if (
+                                          column?.click !== "custom" &&
+                                          column?.id !== "actions"
+                                        ) {
+                                          tableActions(item, "view");
+                                        }
                                       }}
-                                    ></div>
+                                      onClick={() => {
+                                        tableActions(item, "view_single");
+                                      }}
+                                      className="w-full whitespace-nowrap"
+                                    >
+                                      <>{getBodyCol(column, item)}</>
+                                    </div>
+                                  ) : (
+                                    ""
+                                  )}
+                                  {defaultFilters.includes("actions") &&
+                                  colIndex === 0 ? (
+                                    <div className="relative flex items-center">
+                                      <TabbleActions
+                                        element={item}
+                                        rowIndex={rowIndex}
+                                        currentIndex={currentIndex}
+                                        setCurrentIndex={setCurrentIndex}
+                                        handleActions={tableActions}
+                                        actions={defaultActions}
+                                        checkPermission={checkPermission}
+                                        selectedItems={selectedItems}
+                                      />
+
+                                      {currentIndex === rowIndex && (
+                                        <div
+                                          className="w-[200vw] h-[200vh] fixed left-[-50vw] top-[-50vw] z-[97]"
+                                          onClick={() => {
+                                            setCurrentIndex(null);
+                                          }}
+                                        ></div>
+                                      )}
+                                    </div>
+                                  ) : (
+                                    ""
                                   )}
                                 </div>
-                              ) : (
-                                ""
-                              )}
-                            </div>
-                          </CTableCell>
-                        ))}
-                      </TableRow>
-                    ))
-                  ) : (
-                    <tr></tr>
-                  )}
-                </CTableBody>
-              </CTableWrapper>
+                              </CTableCell>
+                            )
+                          )}
+                        </TableRow>
+                      ))
+                    ) : (
+                      <tr></tr>
+                    )}
+                  </CTableBody>
+                </CTableWrapper>
+              )}
             </div>
           </div>
         </div>
-        {/* {!bodyColumns?.length ? (
-          <img
-            className="w-[120px] absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
-            src="/images/no-data.png"
-            alt="empty"
-          />
-        ) : (
-          ""
-        )} */}
+
         {!disablePagination ? (
           <CPagination
             filterParams={filterParams}

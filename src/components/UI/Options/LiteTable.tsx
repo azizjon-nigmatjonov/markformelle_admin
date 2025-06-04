@@ -7,6 +7,7 @@ import { styled } from "@mui/material";
 import { useTranslationHook } from "../../../hooks/useTranslation";
 import { TableUI } from "./LiteTable/TableUI";
 import { useFetchType } from "../../../hooks/useFetchRequests/useFetchType";
+import { useKeyDownEvent } from "../../../hooks/useKeyDownEvent";
 const PopupBody = styled("div")(
   ({ theme }) => `
   width: max-content;
@@ -73,11 +74,23 @@ export const LiteOptionsTable = ({
   const [currentEl, setCurrentEl]: any = useState({});
   const [options, setOptions] = useState([]);
   const { data, setFilterParams, filterParams, isLoading } = useFetchType();
-  // const {
-  //   setFilterParams: setFilterParamSingle,
-  //   filterParams: filterParamsSingle,
-  //   data: singleData,
-  // } = useFetchTypeSingle();
+  const { isAltPressed, currentKey, pressedKey } = useKeyDownEvent();
+  const [isFocus, setIsFocus] = useState(false);
+
+  useEffect(() => {
+    if (isFocus) {
+      if (currentKey === "Open") {
+        setOpen(true);
+        setAnchor(inputRef.current);
+        setFilterParams({ ...filterParams, link });
+      }
+    }
+    console.log("pressedKey", pressedKey);
+
+    if (pressedKey === "Escape" && open) {
+      setOpen(false);
+    }
+  }, [isFocus, isAltPressed, currentKey, pressedKey]);
 
   const setCurrentValue = (el?: any) => {
     let val: any = "";
@@ -89,14 +102,6 @@ export const LiteOptionsTable = ({
     }
     setSearch(val);
   };
-
-  // useEffect(() => {
-  //   if (singleData?.[name]) {
-  //     setCurrentEl(singleData);
-  //     handleSelect(singleData);
-  //     setCurrentValue(singleData);
-  //   }
-  // }, [singleData]);
 
   useEffect(() => {
     if (data?.data?.length && defaultSearch) {
@@ -119,6 +124,23 @@ export const LiteOptionsTable = ({
     }
   }, [data]);
 
+  const findForm = () => {
+    const active = inputRef.current;
+
+    if (!active) return;
+
+    const form = active.closest("form");
+    if (form) {
+      const elements = Array.from(form.elements) as HTMLElement[];
+      const currentIndex = elements.indexOf(active);
+
+      const next = elements[currentIndex + 1];
+      if (next && typeof next.focus === "function") {
+        next.focus();
+      }
+    }
+  };
+
   const handleActions = (el: any, type: string) => {
     if (type === "active_col") {
       setSearchName(el.id);
@@ -128,6 +150,9 @@ export const LiteOptionsTable = ({
       setCurrentValue(el);
       setOpen(false);
       inputRef.current.focus();
+      setTimeout(() => {
+        findForm();
+      }, 0);
     }
   };
 
@@ -153,6 +178,7 @@ export const LiteOptionsTable = ({
         i.toLocaleLowerCase().includes("id")
       );
     }
+
     setOpen(true);
     setAnchor(inputRef.current);
     setFilterParams({
@@ -169,16 +195,6 @@ export const LiteOptionsTable = ({
       setFilterParams({ ...filterParams, link, q: defaultSearch });
   }, [defaultSearch]);
 
-  // const handleKeyDown = (e: KeyboardEvent) => {
-  //   if (e.key === "Enter" && (!options.length || !open)) {
-  //     setFilterParamSingle({
-  //       ...filterParamsSingle,
-  //       link: link + "/" + search,
-  //     });
-  //     setOpen(false);
-  //   }
-  // };
-
   return (
     <div className="w-full">
       {label && <CLabel title={label} required={required} />}
@@ -188,12 +204,14 @@ export const LiteOptionsTable = ({
         }`}
       >
         <div
-          className="cursor-pointer absolute z-[99] left-2"
+          className="cursor-pointer absolute z-[100] left-2"
           onClick={() => {
             if (!disabled) {
-              setOpen(true);
-              setAnchor(inputRef.current);
-              setFilterParams({ ...filterParams, link });
+              if (!open) {
+                setAnchor(inputRef.current);
+                setFilterParams({ ...filterParams, link });
+              }
+              setOpen(!open);
             }
           }}
         >
@@ -205,15 +223,18 @@ export const LiteOptionsTable = ({
         <Controller
           control={control}
           name={name}
-          render={({ field: { onChange }, fieldState: { error } }) => {
+          render={({ field: { onChange, value }, fieldState: { error } }) => {
             return (
               <div className={`relative w-full ${open ? "z-[99]" : ""}`}>
                 <input
-                  // onKeyDown={(e: any) => handleKeyDown(e)}
-                  value={search}
+                  value={search || value}
                   type="text"
                   onBlur={() => {
                     setOpen(false);
+                    setIsFocus(false);
+                  }}
+                  onFocus={() => {
+                    setIsFocus(true);
                   }}
                   autoFocus={focused}
                   className={`border rounded-[8px] pl-8 h-[30px] w-full px-1 bg-transparent ${

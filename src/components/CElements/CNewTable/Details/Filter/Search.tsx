@@ -1,45 +1,53 @@
 import { Tooltip } from "@mui/material";
 import { CloseIcon, SearchIcon } from "../../../../UI/IconGenerator/Svg";
-import { TooltipPosition } from "../../../../../constants/toolPosition";
 
 interface Props {
-  value: any;
   searchDebounce: (val: any, val2: any) => void;
   colId: any;
-  handleKeyDown?: (val: {}) => void;
+  currentValue: any;
+  setCurrentValue: (val: any) => void;
+  handleKeyDown?: (val: any, val2: any, val3: any) => void;
 }
 
 export const SearchField = ({
-  value,
   searchDebounce = () => {},
   colId,
+  setCurrentValue,
+  currentValue,
   handleKeyDown = () => {},
 }: Props) => {
   return (
-    <Tooltip
-      title="Нажмите «Enter» для поиска"
-      arrow
-      slotProps={TooltipPosition}
-    >
+    <Tooltip title="Нажмите Enter для поиска" placement="right">
       <div
-        className={`relative w-full h-[30px] flex items-center text-[12px] rounded-[8px]`}
+        className={`relative w-full h-[30px] flex items-center text-[14px] rounded-[8px]`}
       >
         <div className="absolute top-1/2 left-2 -translate-y-1/2">
-          <SearchIcon fill="var(--main)" width={16} />
+          <SearchIcon fill="var(--gray)" width={16} />
         </div>
         <input
           type="text"
-          placeholder=""
+          placeholder="Поиск"
           onChange={(e: any) => {
-            searchDebounce(e.target.value, colId);
+            setCurrentValue(e.target.value);
+            if (!e.target.value) searchDebounce("", colId);
           }}
-          onKeyDown={(e: {}) => handleKeyDown(e)}
-          value={value}
+          value={currentValue}
+          onKeyDown={(e: any) => {
+            if (e.key === "Enter") {
+              setTimeout(() => {
+                handleKeyDown(e, currentValue, colId);
+              }, 0);
+            }
+          }}
+          // value={value}
           className="h-[30px] w-full border border-[var(--border)] rounded-[8px] text-[var(--black)]"
           style={{ padding: "0 24px" }}
         />
         <div
-          onClick={() => searchDebounce("", colId)}
+          onClick={() => {
+            searchDebounce("", colId);
+            setCurrentValue("");
+          }}
           className="absolute top-1/2 right-2 -translate-y-1/2 cursor-pointer"
         >
           <CloseIcon />

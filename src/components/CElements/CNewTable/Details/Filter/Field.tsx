@@ -1,5 +1,5 @@
+import { useEffect, useState } from "react";
 import { CloseIcon } from "../../../../UI/IconGenerator/Svg";
-import { CPeriodPicker } from "../../../CPeriodPicker";
 import { SearchField } from "./Search";
 
 interface Props {
@@ -10,7 +10,8 @@ interface Props {
   title?: string;
   id?: string;
   close?: any;
-  handleKeyDown?: (val: {}) => void;
+  addAndRemoveFilter?: (val: any) => void;
+  handleKeyDown?: (val: any, val2: any, val3: any) => void;
 }
 
 const Closer = ({ closeField = () => {}, title, close = false }: Props) => {
@@ -32,26 +33,36 @@ export const Field = ({
   obj = {},
   searchDebounce = () => {},
   handleKeyDown = () => {},
+  addAndRemoveFilter = () => {},
 }: Props) => {
+  const [currentValue, setCurrentValue] = useState("");
+
+  useEffect(() => {
+    if (obj.value && !currentValue.length) {
+      setCurrentValue(obj.value);
+    }
+  }, [obj.value]);
   return (
     <div className="px-2">
       <Closer
-        closeField={() => searchDebounce("", obj.id)}
+        closeField={() => addAndRemoveFilter({ id: obj.id, value: "close" })}
         title={obj.title}
         id={obj?.id}
         close={obj?.close}
       />
+      <SearchField
+        searchDebounce={searchDebounce}
+        colId={obj?.id}
+        currentValue={currentValue}
+        handleKeyDown={handleKeyDown}
+        setCurrentValue={setCurrentValue}
+      />
 
-      {obj.id === "DATE" ? (
+      {/* {obj.id === "DATE" ? (
         <CPeriodPicker />
       ) : (
-        <SearchField
-          searchDebounce={searchDebounce}
-          colId={obj?.id}
-          value={obj.value}
-          handleKeyDown={handleKeyDown}
-        />
-      )}
+       
+      )} */}
     </div>
   );
 };

@@ -51,7 +51,7 @@ ModalUIProps) => {
   const { createForm, updateForm, formData } = ModalTableLogic({
     filterParams,
     setFormId,
-    urunId: defaultData?.LABRECETEID || formId,
+    urunId: formId || defaultData?.LABRECETEID,
     refetchTable,
     handleModalActions,
   });

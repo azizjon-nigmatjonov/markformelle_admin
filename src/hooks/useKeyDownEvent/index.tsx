@@ -2,30 +2,39 @@ import { useEffect, useState } from "react";
 export const useKeyDownEvent = () => {
   const [isAltPressed, setIsAltPressed] = useState(false);
   const [currentKey, setCurrentKey] = useState("");
+  const [pressedKey, setPressedKey] = useState("");
   const keys: any = {
     F8: "Enter",
     x: "Close",
+    F2: "Open",
+    Escape: "Escape",
   };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key in keys && e.altKey) {
+      // console.log("ee", e.key);
+
+      if (e.key in keys) {
+        setPressedKey(keys[e.key]);
+      }
+      if (e.key in keys && e.ctrlKey) {
         e.preventDefault();
         setCurrentKey(keys[e.key]);
       }
 
-      if (e.key === "Alt") {
+      if (e.key === "Control") {
         e.preventDefault();
         setIsAltPressed(true);
       }
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
-      if (e.key === "Alt") {
+      if (e.key === "Control") {
         e.preventDefault();
         setIsAltPressed(false);
         setCurrentKey("");
       }
+      setPressedKey("");
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -37,5 +46,5 @@ export const useKeyDownEvent = () => {
     };
   }, []);
 
-  return { isAltPressed, currentKey };
+  return { isAltPressed, currentKey, pressedKey };
 };

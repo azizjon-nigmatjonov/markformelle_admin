@@ -1,11 +1,8 @@
 import { useForm } from "react-hook-form";
 import { HFDatePicker } from "../../../../../components/HFElements/HFDatePicker";
-import { useGetDovizList } from "../../../../../hooks/useFetchRequests/useDovizList";
-// import { IMaterialForm } from "../interface";
 import { useEffect } from "react";
 import dayjs from "dayjs";
 import { LiteOptionsTable } from "../../../../../components/UI/Options/LiteTable";
-import HFSelect from "../../../../../components/HFElements/HFSelect";
 import { MaterialFormLogic } from "./Logic";
 import { SubmitCancelButtons } from "../../../../../components/UI/FormButtons/SubmitCancel";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -42,8 +39,6 @@ export const MaterialForm = ({
     formId,
     onClose: onClose,
   });
-
-  const { Options: moneyOptions } = useGetDovizList({});
 
   const onSubmit = (data: any) => {
     let params: any = data;
@@ -105,7 +100,9 @@ export const MaterialForm = ({
           placeholder="HAMSTOK"
           link="ham"
           renderValue={(_: string, obj: any) => {
-            return obj.ADI ? obj.HAMID + " - " + obj.ADI : obj.HAMADI;
+            return obj.ADI && obj.HAMID
+              ? obj.HAMID + " - " + obj.ADI
+              : obj.ADI || obj.HAMID;
           }}
           defaultValue={materialFormData?.HAMADI}
           headColumns={[
@@ -141,18 +138,26 @@ export const MaterialForm = ({
           required={true}
           control={control}
         />
-        <HFSelect
-          label="DOVIZID"
-          required={true}
+
+        <LiteOptionsTable
           name="DOVIZID"
-          control={control}
-          setValue={setValue}
-          handleClick={(obj) => {
-            setValue("DOVIZID", obj.value);
+          label="DOVIZID"
+          placeholder={"DOVIZID"}
+          renderValue={(_: string, obj: any) => {
+            return obj.DOVIZID || obj.CINSI;
           }}
-          placeholder="DOVIZID"
-          options={moneyOptions}
+          link="doviz"
+          defaultValue={materialFormData?.DOVIZID}
+          headColumns={[
+            { id: "CINSI", title: "CINSI", width: 60 },
+            { id: "DOVIZID", title: "DOVIZID", width: 80 },
+          ]}
+          handleSelect={(obj: { DOVIZID: string }) => {
+            setValue("DOVIZID", obj.DOVIZID);
+          }}
+          control={control}
         />
+
         <HFDatePicker
           control={control}
           required

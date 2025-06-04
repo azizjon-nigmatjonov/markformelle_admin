@@ -66,7 +66,7 @@ export const TableUI = ({
   };
 
   return (
-    <>
+    <div className="border rounded-[12px] border-[var(--border)]">
       <div className="py-1 flex items-center justify-between px-2 border-b border-[var(--border)] text-sm">
         <h2
           className={`font-medium ${
@@ -156,7 +156,7 @@ export const TableUI = ({
           </button>
         </div>
       </div>
-      <div className="overflow-x-scroll designed-scroll h-full">
+      <div className="overflow-scroll designed-scroll h-[340px]">
         <div>
           <table
             className={`text-sm h-full ${cls.table}`}
@@ -269,6 +269,6 @@ export const TableUI = ({
           </table>
         </div>
       </div>
-    </>
+    </div>
   );
 };

@@ -27,7 +27,7 @@ export const LabModalTables = ({
   setUniqueID: (val: string) => void;
 }) => {
   const { tableData, refetch: refetchMaterial } = TablesLogic({
-    formId: formData?.LABRECETEID,
+    formId: formId || formData?.LABRECETEID,
   });
   const [idTable, setIdTable]: any = useState(null);
   const [materialData, setMaterialData] = useState({});
@@ -94,6 +94,8 @@ export const LabModalTables = ({
     arr?: any
   ) => {
     if (type === "view_single") {
+      console.log("el.LABRECETECALISMAID", el.LABRECETECALISMAID);
+
       setIdTable(el.LABRECETECALISMAID);
       setIdMaterial(el.LABRECETECALISMAID);
       setMaterialData(el);
@@ -131,6 +133,7 @@ export const LabModalTables = ({
 
     if (type === "view_single") {
       setIdTrail(el.LABRECETEATISID);
+      setIdTrailForm(el.LABRECETEATISID);
     }
 
     if (type === "view") {
@@ -189,7 +192,7 @@ export const LabModalTables = ({
   return (
     <>
       <div className="grid grid-cols-3 gap-x-2">
-        <div className="border rounded-[12px] border-[var(--border)] pb-11">
+        <div>
           <TableUI
             title="labrecetecalisma"
             headColumns={headColumns}
@@ -201,7 +204,7 @@ export const LabModalTables = ({
           />
         </div>
 
-        <div className="rounded-[12px] border border-[var(--border)]">
+        <div>
           <TwoRowTable
             title="labreceteatis"
             headColumns={trailHeadColumns}
@@ -212,7 +215,7 @@ export const LabModalTables = ({
           />
         </div>
 
-        <div className="border rounded-[12px] border-[var(--border)] pb-11">
+        <div>
           <TableUI
             title="labreceteurun"
             idTable={idDetailForm}

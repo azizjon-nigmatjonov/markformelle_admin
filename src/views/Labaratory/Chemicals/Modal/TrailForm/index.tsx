@@ -51,6 +51,7 @@ export const TrailForm = ({
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
+  const [newFormId, setNewFormId]: any = useState(formId);
 
   const closeFn = () => {
     reset();
@@ -62,9 +63,10 @@ export const TrailForm = ({
     formData: trailFormData,
     updateForm,
   } = TrailFormLogic({
-    formId,
+    formId: newFormId,
     refetchTable: (id?: number) => {
       refetchTable(id);
+      setNewFormId(id);
       setClear(false);
       setTimeout(() => {
         setClear(true);
@@ -75,8 +77,7 @@ export const TrailForm = ({
 
   const onSubmit = (data: any) => {
     let params: any = data;
-    params.LABRECETECALISMAID = materialId;
-    params.LABRECETEID = labReceteId;
+
     params.RECETEASAMAID = params.ASAMAID;
 
     params.DEGISIMTARIHI = dayjs();
@@ -94,6 +95,8 @@ export const TrailForm = ({
 
       updateForm(params, trailFormData?.LABRECETEATISID);
     } else {
+      params.LABRECETEID = labReceteId;
+      params.LABRECETECALISMAID = materialId;
       params.ATISTARIHI = dayjs();
       params.KULLANICIID = 1;
       params.GIDISTARIHI = dayjs().startOf("day").format("YYYY-MM-DDTHH:mm:ss");
@@ -137,7 +140,7 @@ export const TrailForm = ({
             renderValue={(_: string, obj: any) => {
               return obj.ADI || obj.ASAMAID;
             }}
-            defaultValue={trailFormData?.RECETEASAMAID}
+            defaultValue={trailFormData?.RECETEASAMAADI}
             headColumns={[
               { id: "ASAMAID", title: "ASAMAID", width: 80 },
               { id: "ADI", title: "ADI", width: 150 },
@@ -156,7 +159,7 @@ export const TrailForm = ({
             renderValue={(_: string, obj: any) => {
               return obj?.label || obj?.MIGRASYON;
             }}
-            defaultValue={trailFormData?.RECETEASAMAID}
+            defaultValue={trailFormData?.MIGRASYON}
             headColumns={[
               { id: "MIGRASYON", title: "ID", width: 80 },
               { id: "label", title: "title", width: 150 },
@@ -171,17 +174,7 @@ export const TrailForm = ({
             required={true}
             control={control}
           />
-          {/* <HFSelect
-            control={control}
-            name="MIGRASYON"
-            label={t("MIGRASYON")}
-            placeholder={t("MIGRASYON")}
-            required
-            options={[
-              { label: "Soguk", value: 1 },
-              { label: "Sicak", value: 2 },
-            ]}
-          /> */}
+
           <HFInputMask
             control={control}
             name="ATISNO"

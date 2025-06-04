@@ -25,6 +25,7 @@ export const LabChemicals = () => {
     });
 
   const newHeadColumns = useMemo(() => {
+    if (!bodyColumns?.length) return [];
     const obj = { ...bodyColumns?.[0] };
     const keys = Object.keys(obj);
     const newColumns: any = [
@@ -34,7 +35,7 @@ export const LabChemicals = () => {
         width: 200,
         render: (value: string) => {
           return (
-            <div className="flex space-x-2 items-center">
+            <div className="flex space-x-2 items-center justify-between">
               <p className="min-w-[100px]">{value}</p>
               <div
                 className={`w-[70px] h-[25px] rounded-[8px]`}
@@ -47,14 +48,47 @@ export const LabChemicals = () => {
           );
         },
       },
+      {
+        title: "LABRECETEKODU",
+        id: "LABRECETEKODU",
+      },
+
+      {
+        title: "ESKILABRECETEKODU",
+        id: "ESKILABRECETEKODU",
+      },
+      {
+        title: "ACIKLAMA",
+        id: "ACIKLAMA",
+      },
+      {
+        title: "ADI",
+        id: "ADI",
+      },
+      {
+        title: "LABRENKGRUPAD",
+        id: "LABRENKGRUPAD",
+      },
+      {
+        title: "RECETETURAADI",
+        id: "RECETETURAADI",
+      },
+      {
+        title: "RENKDERINLIGIADI",
+        id: "RENKDERINLIGIADI",
+      },
+      {
+        title: "USTASAMAADI",
+        id: "USTASAMAADI",
+      },
     ];
 
     keys.forEach((key: string) => {
-      if (!newColumns.find((item: { id: string }) => item.id === key)) {
-        newColumns.push({
-          title: key,
-          id: key,
-        });
+      const found = newColumns.find((item: any) => item.id === key);
+      if (found?.id) {
+        // newColumns.push(found);
+      } else {
+        newColumns.push({ title: key, id: key });
       }
     });
 
@@ -131,7 +165,11 @@ export const LabChemicals = () => {
             "filter",
             "sellect_more",
           ]}
-          defaultSearch={{ DATE: "" }}
+          defaultSearch={{
+            LABRECETEKODU: "",
+            ESKILABREETEKODU: "",
+            PANTONEKODU: "",
+          }}
           meta={{
             totalCount: bodyData?.count,
             pageCount: bodyData?.count

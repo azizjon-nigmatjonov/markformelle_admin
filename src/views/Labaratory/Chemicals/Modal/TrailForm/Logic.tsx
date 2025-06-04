@@ -20,7 +20,7 @@ export const TrailFormLogic = ({
       return axios.get(`${API_URL}/labreceteatis/${formId}`);
     },
     {
-      enabled: !!formId,
+      enabled: formId ? true : false,
     }
   );
 
@@ -45,9 +45,9 @@ export const TrailFormLogic = ({
         `${API_URL}/labreceteatis/${id}`,
         params
       );
-      refetch();
       toast.success(t("updated!"));
-      refetchTable();
+      refetch();
+      refetchTable(data?.LABRECETEATISID);
 
       return data;
     } catch (error) {

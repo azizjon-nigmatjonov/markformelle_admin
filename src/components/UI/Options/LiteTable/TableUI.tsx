@@ -1,8 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { PlusIcon } from "../../IconGenerator/Svg";
-import { OneSkeleton } from "../../../CElements/CSkeleton/OneSkeleton";
 import cls from "./style.module.scss";
-// import CheckIcon from "@mui/icons-material/Check";
+import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useRef, useState } from "react";
 interface Props {
   bodyColumns: any;
@@ -11,6 +10,7 @@ interface Props {
   idTable?: number | null;
   isLoading: boolean;
   searchName: string;
+
   handleRowClick: (val: any, type: string) => void;
 }
 export const TableUI = ({
@@ -42,17 +42,6 @@ export const TableUI = ({
           { ...bodyColumns[focusedIndex], index: focusedIndex },
           "view_single"
         );
-        const form = (e.target as HTMLElement).closest("form");
-        if (form) {
-          const elements = Array.from(form.elements) as HTMLElement[];
-          const active = document.activeElement;
-          const currentIndex = elements.indexOf(active as HTMLElement);
-
-          const next = elements[currentIndex + 1];
-          if (next && typeof next.focus === "function") {
-            next.focus();
-          }
-        }
       }
     };
 
@@ -88,20 +77,6 @@ export const TableUI = ({
                   className={`${cls.cell} border-b border-[var(--border)] focus:border-[var(--primary)]`}
                 >
                   <p className="pr-1.5">{head.title}</p>
-                  {/* <div
-                    onClick={() =>
-                      handleRowClick({ id: head.id }, "active_col")
-                    }
-                    className={`w-[15px] h-[15px] rounded-[4px] border border-[var(--main)] cursor-pointer`}
-                  >
-                    <div className="w-[15px] h-full flex items-center justify-center">
-                      {searchName === head.id ? (
-                        <CheckIcon style={{ fill: "var(--main)", width: 12 }} />
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  </div> */}
                 </div>
               )
             )}
@@ -110,13 +85,18 @@ export const TableUI = ({
 
         <div className={`${cls.body} w-full`}>
           {isLoading ? (
-            <OneSkeleton rounded={8} />
+            <div className="flex justify-center items-center">
+              <CircularProgress />
+            </div>
           ) : bodyColumns?.length ? (
             bodyColumns.map((item: any, rowInd: number) => (
               <div
                 key={rowInd}
                 className={`${cls.row} flex w-full cursor-pointer`}
                 onClick={() => {
+                  handleRowClick({ ...item, rowInd }, "view_single");
+                }}
+                onMouseDown={() => {
                   handleRowClick({ ...item, rowInd }, "view_single");
                 }}
                 ref={(el) => (rowRefs.current[rowInd] = el)}
@@ -138,8 +118,10 @@ export const TableUI = ({
                       key={index}
                       style={{ width: head?.width || "100%" }}
                       className={`${cls.cell} ${
-                        idTable === item?.[name] || focusedIndex === rowInd
+                        idTable === item?.[name]
                           ? "bg-blue-200 relative"
+                          : focusedIndex === rowInd
+                          ? "bg-blue-100"
                           : ""
                       } font-medium border-b border-[var(--border)]`}
                     >

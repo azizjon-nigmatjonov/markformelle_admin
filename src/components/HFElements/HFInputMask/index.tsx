@@ -50,7 +50,7 @@ export const MaskInputUI = ({
   }, [defaultValue, onChange]);
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && (value || defaultValue)) {
       const form = (e.target as HTMLElement).closest("form");
       if (form) {
         const elements = Array.from(form.elements) as HTMLElement[];

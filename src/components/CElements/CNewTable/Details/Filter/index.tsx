@@ -2,7 +2,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { TableSortFilter } from "../Sort";
 import { CloseIcon } from "../../../../UI/IconGenerator/Svg";
 import { Field } from "./Field";
-import { SearchField } from "./Search";
 import { useEffect, useState } from "react";
 import { SelectFilter } from "./Select";
 import { useTranslationHook } from "../../../../../hooks/useTranslation";
@@ -24,9 +23,9 @@ export const TableFilter = ({
   handleSortLogic,
   colId,
   closeFilter = () => {},
-  searchDebounce = () => {},
+  // searchDebounce = () => {},
   handleClick = () => {},
-  searchedElements = {},
+  // searchedElements = {},
   sortData,
   disabled = false,
 }: Props) => {
@@ -61,11 +60,11 @@ export const TableFilter = ({
             handleSortLogic={handleSortLogic}
           />
 
-          <SearchField
+          {/* <SearchField
             searchDebounce={searchDebounce}
             colId={colId}
             value={searchedElements?.[colId] ?? ""}
-          />
+          /> */}
         </div>
       )}
       {filter && (
@@ -82,7 +81,7 @@ export const SideFilter = ({
   handleClick,
   sideFilter,
   handleSortLogic,
-  addFilter = () => {},
+  addAndRemoveFilter = () => {},
   searchDebounce = () => {},
   headColumns = [],
   searchedElements = {},
@@ -92,13 +91,13 @@ export const SideFilter = ({
   handleClick: () => void;
   sideFilter: boolean;
   searchDebounce: (val: any, val2: any) => void;
-  addFilter: (val: any) => void;
+  addAndRemoveFilter: (val: any) => void;
   handleSortLogic: (val: any) => void;
   headColumns: any;
   searchedElements: any;
   defaultSearch: any;
 
-  handleKeyDown: (val: any) => void;
+  handleKeyDown: (val: any, val2: any, val3: any) => void;
 }) => {
   const [newHeadColumns, setNewHeadColumns] = useState<any>([]);
   const { t } = useTranslationHook();
@@ -115,6 +114,7 @@ export const SideFilter = ({
     });
     setNewHeadColumns(arr);
   }, [headColumns, searchedElements]);
+  // console.log("searchedElements", searchedElements);
 
   return (
     <div
@@ -148,6 +148,17 @@ export const SideFilter = ({
           ) : (
             ""
           )}
+          {/* <Field
+            obj={{
+              title: t("test"),
+              id: "test",
+              value: "",
+              close: false,
+            }}
+            addAndRemoveFilter={addAndRemoveFilter}
+            handleKeyDown={handleKeyDown}
+            searchDebounce={searchDebounce}
+          /> */}
           {Object.keys(searchedElements).length ? (
             <div className="border-t border-[var(--border)] mt-4">
               {Object.entries(searchedElements).map(([key, val]: any) => (
@@ -159,6 +170,7 @@ export const SideFilter = ({
                       value: val,
                       close: !(key in defaultSearch),
                     }}
+                    addAndRemoveFilter={addAndRemoveFilter}
                     handleKeyDown={handleKeyDown}
                     searchDebounce={searchDebounce}
                   />
@@ -172,7 +184,7 @@ export const SideFilter = ({
           <div className="sticky bottom-0 h-[50px] bg-white left-0 w-full mt-3">
             <SelectFilter
               handleClick={(val: any) =>
-                addFilter({
+                addAndRemoveFilter({
                   value: "add",
                   id: val.value,
                   title: val.label,

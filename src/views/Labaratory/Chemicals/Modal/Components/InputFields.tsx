@@ -169,8 +169,8 @@ export const InputFields = ({
             link="doviz"
             defaultValue={formData?.USTASAMAADI}
             headColumns={[
-              { id: "CINSI", title: "CINSI", width: 80 },
-              { id: "DOVIZID", title: "DOVIZID", width: 100 },
+              { id: "CINSI", title: "CINSI", width: 60 },
+              { id: "DOVIZID", title: "DOVIZID", width: 80 },
             ]}
             handleSelect={(obj: { DOVIZID: string }) => {
               setValue("DOVIZID", obj.DOVIZID);

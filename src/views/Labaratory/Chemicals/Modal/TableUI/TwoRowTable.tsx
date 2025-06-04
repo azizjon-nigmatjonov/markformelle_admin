@@ -74,7 +74,7 @@ export const TwoRowTable = ({
   };
 
   return (
-    <div>
+    <div className="rounded-[12px] border border-[var(--border)]">
       <div className="py-1 flex items-center justify-between px-2 border-b border-[var(--border)] text-sm">
         <h2
           className={`font-medium ${
@@ -169,7 +169,7 @@ export const TwoRowTable = ({
         </div>
       </div>
       <div
-        className={`${cls.twoRowTable} text-sm overflow-x-scroll designed-scroll h-[400px]`}
+        className={`${cls.twoRowTable} text-sm overflow-x-scroll overflow-y-hidden designed-scroll h-[340px]`}
       >
         <div className={`${cls.header} flex`} ref={headerScrollRef}>
           <div
@@ -268,7 +268,7 @@ export const TwoRowTable = ({
         <div className="h-[6px] w-full"></div>
 
         <div
-          className={`${cls.body} bg-yellow-100 w-full h-[44%]`}
+          className={`${cls.body} bg-yellow-100 w-full h-[43%] overflow-y-scroll remove-scroll`}
           style={{ width: headerScrollRef?.current?.scrollWidth + "px" }}
         >
           {bodySource?.okeysiz?.map((item: any, index: number) => (
