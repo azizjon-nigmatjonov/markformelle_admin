@@ -13,9 +13,10 @@ import HFSelect from "../../../../components/HFElements/HFSelect";
 import { LabModalTables } from "./Tables";
 import { Alert } from "@mui/material";
 import CCheckbox from "../../../../components/CElements/CCheckbox";
+import { LiteOptionsTable } from "../../../../components/UI/Options/LiteTable";
 
 interface ModalUIProps {
-  defaultData?: ModalTypes;
+  defaultData?: any;
   URUNBIRIMID?: string;
   ADI?: string;
   changed: string;
@@ -35,13 +36,13 @@ export const ModalUI = ({
 }: ModalUIProps) => {
   const { t } = useTranslationHook();
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
-  const [formId, setFormId] = useState<string>("");
+  const [formId, setFormId] = useState<string>(defaultData?.RECETEID || "");
   const [disabled, setDisabled] = useState(true);
 
   const { createForm, updateForm, formData } = ModalTableLogic({
     filterParams,
     setFormId,
-    urunId: defaultData?.URUNID || formId,
+    urunId: formId,
   });
 
   useEffect(() => {
@@ -102,20 +103,20 @@ export const ModalUI = ({
   };
 
   useEffect(() => {
-    if (formData?.URUNID) setFormValues(formData);
+    if (formData?.RECETEID) setFormValues(formData);
   }, [formData]);
 
   useEffect(() => {
-    if (defaultData?.URUNID) {
-      setFormId(defaultData.URUNID);
+    if (defaultData?.RECETEID) {
+      setFormId(defaultData.RECETEID);
     }
   }, [defaultData, disabled]);
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-5 overflow-y-scroll designed-scroll">
-          <div className="grid grid-cols-3 gap-x-5 border-b border-[var(--border)] pb-5">
+        <div className="space-y-3">
+          <div className="grid grid-cols-3 gap-x-3 border-b border-[var(--border)] pb-3">
             <InputFieldUI title={t("LABRECETEKOD")} disabled={disabled}>
               <SelectOptionsTable
                 name="LABRECETEKOD"
@@ -153,8 +154,8 @@ export const ModalUI = ({
               </div>
             </div>
           </div>
-          <div className="flex justify-between space-x-4">
-            <div className="w-full grid grid-cols-3 gap-y-3 gap-x-5">
+          <div className="flex justify-between space-x-3">
+            <div className="w-full grid grid-cols-3 gap-y-2 gap-x-3">
               <div className="space-y-2">
                 <InputFieldUI title={t("URUNRECETEADI")}>
                   <HFTextField
@@ -167,23 +168,18 @@ export const ModalUI = ({
                 </InputFieldUI>
 
                 <InputFieldUI title={t("USTASAMA")}>
-                  <SelectOptionsTable
+                  <LiteOptionsTable
                     name="USTASAMA"
                     placeholder={t("USTASAMA")}
-                    options={firmaData}
+                    link="asama"
                     required={true}
                     headColumns={[
                       { id: "FIRMAID", width: 200, title: "FIRMAID" },
                       { id: "FIRMAADI", title: "FIRMAADI" },
                       { id: "KISAADI", title: "KISAADI" },
                     ]}
-                    filterParams={filterParams}
                     handleSelect={(_: {}) => {}}
-                    handleSearch={(val: string) => {
-                      setFilterParamsFirm({ ...filterParamsFirm, q: val });
-                    }}
                     control={control}
-                    setFilterParams={setFilterParams}
                     disabled={disabled}
                   />
                 </InputFieldUI>
@@ -320,8 +316,9 @@ export const ModalUI = ({
               </div>
             </div>
           </div>
-          <div className="h-[700px]">
+          <div className="h-[500px] overflow-y-scroll designed-scroll">
             <LabModalTables
+              formId={formId}
               disabled={disabled}
               changed={changed}
               setChanged={setChanged}

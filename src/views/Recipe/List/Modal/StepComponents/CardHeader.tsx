@@ -8,7 +8,7 @@ interface Props {
 export const CardHeader = ({ headerScrollRef, headColumns = [] }: Props) => {
   const { t } = useTranslation();
   return (
-    <div className="grid grid-cols-3 text-[var(--main)] sticky top-0 bg-white z-[90] font-medium">
+    <div className="grid grid-cols-3 border-t border-[var(--border)] text-[var(--main)] sticky top-0 bg-white z-[90] font-medium">
       <div
         className="header col-span-2 mr-5 pl-4 overflow-x-scroll remove-scroll"
         ref={headerScrollRef}

@@ -304,7 +304,7 @@ export const HeaderSettings = ({
                           }`
                     }`}
                   >
-                    {t(openSelect ? "unsellect" : "sellect_columns")}
+                    {t(openSelect ? "close_sellect" : "sellect_columns")}
                   </p>
                 </IconButton>
               </Tooltip>

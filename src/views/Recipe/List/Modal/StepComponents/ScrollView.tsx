@@ -24,7 +24,9 @@ interface Props {
   maxScroll: number;
   deleteStep: boolean;
   checkedList: any;
+  focusedIndex: number;
   handleCheck: (val: any) => void;
+  handleKeyDown: (val: any, val2: number) => void;
 }
 
 const ScrollView = ({
@@ -49,6 +51,8 @@ const ScrollView = ({
   maxScroll,
   deleteStep = false,
   handleCheck = () => {},
+  focusedIndex,
+  handleKeyDown,
 }: Props) => {
   const ScrollBody = useRef<HTMLDivElement>(null);
 
@@ -113,6 +117,8 @@ const ScrollView = ({
             handleDragLeaveStep={handleDragLeaveStep}
             handleAdd={handleAdd}
             deleteStep={deleteStep}
+            focusedIndex={focusedIndex}
+            handleKeyDown={handleKeyDown}
             handleCheck={handleCheck}
           />
         </div>

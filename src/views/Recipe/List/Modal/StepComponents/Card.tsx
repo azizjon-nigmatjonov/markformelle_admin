@@ -77,12 +77,13 @@ export const StepCard = ({
   };
 
   const handleDrop = (index: number) => {
-    const newItems = items;
-    const [movedItem] = newItems.splice(draggingIndex, 1);
+    const newItems = JSON.parse(JSON.stringify(items));
+
+    const [movedItem] = newItems?.splice(draggingIndex, 1);
     newItems.splice(index, 0, movedItem);
 
     setTimeout(() => {
-      checkChanges(newItems);
+      // checkChanges(newItems);
       setItems(newItems);
       setDraggingIndex(null);
       setHoveredIndex(null);
@@ -143,6 +144,30 @@ export const StepCard = ({
     setInitialModalData({ outerIndex, type: "card_add" });
   };
 
+  const [focusedIndex, setFocusedIndex] = useState<number>(0);
+  const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const handleKeyDown = (event: any, SIRA: number) => {
+    console.log("111");
+
+    if (event.key === "ArrowUp") {
+      console.log("Arrow Up pressed");
+      setFocusedIndex((prev) => prev - 1);
+    } else if (event.key === "ArrowDown") {
+      console.log("Arrow Down pressed");
+      setFocusedIndex((prev) => prev + 1);
+    }
+  };
+
+  useEffect(() => {
+    if (rowRefs.current[focusedIndex]) {
+      rowRefs.current[focusedIndex]?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [focusedIndex]);
+
   return (
     <div>
       <CardHeader headColumns={newColumns} headerScrollRef={headerScrollRef} />
@@ -164,13 +189,13 @@ export const StepCard = ({
             if (!editStep) return;
             handleDrop(outerIndex);
           }}
-          className={`w-full grid grid-cols-3 rounded-[12px] py-3 h-full text-indigo-700 font-medium relative mb-5 shadow-md ${
+          className={`w-full grid grid-cols-4 rounded-[12px] py-3 h-full text-indigo-700 font-medium relative mb-5 shadow-md ${
             hoveredIndex === outerIndex && !hoveredIndexStep
               ? "hovered-card"
               : ""
           } ${row.bg}`}
         >
-          <div className="col-span-2">
+          <div className="col-span-3">
             <ScrollView
               rows={row?.rows ?? []}
               editStep={editStep}
@@ -194,6 +219,8 @@ export const StepCard = ({
               headerScrollRef={headerScrollRef}
               checkedList={checkedList}
               handleCheck={handleCheck}
+              focusedIndex={focusedIndex}
+              handleKeyDown={handleKeyDown}
             />
           </div>
           <div className="relative">

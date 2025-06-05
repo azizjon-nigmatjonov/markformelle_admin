@@ -6,6 +6,7 @@ import { DetailForm } from "./DetailForm";
 import "./style.scss";
 import { DragDrop } from "./StepComponents/DragDrop";
 export const LabModalTables = ({
+  formId,
   disabled,
   setChanged = () => {},
   changed,
@@ -13,6 +14,7 @@ export const LabModalTables = ({
   setAskAction = () => {},
   setOpenMainModal,
 }: {
+  formId: string;
   disabled: boolean;
   changed: string;
   askAction: string;
@@ -30,8 +32,9 @@ export const LabModalTables = ({
   };
 
   return (
-    <div className="pb-40 pt-3 border-t border-[var(--border)]">
+    <div className="border-t border-[var(--border)]">
       <DragDrop
+        formId={formId}
         changed={changed}
         setChanged={setChanged}
         askAction={askAction}

@@ -24,7 +24,6 @@ export const TableUI = ({
 }: Props) => {
   const { t } = useTranslation();
   const [focusedIndex, setFocusedIndex] = useState<number>(0);
-
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {

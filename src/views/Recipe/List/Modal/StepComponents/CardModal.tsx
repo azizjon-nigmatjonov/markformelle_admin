@@ -49,10 +49,7 @@ export const CardModal = ({
   }, [defaultData]);
 
   return (
-    <CNewMiniModal
-      handleActions={() => setDefaultData({})}
-      title="recipe_modal"
-    >
+    <CNewMiniModal handleActions={() => setDefaultData({})} title="add_card">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-[580px] grid grid-cols-2 gap-3"

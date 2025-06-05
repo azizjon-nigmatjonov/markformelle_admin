@@ -43,10 +43,7 @@ export const StepModal = ({
   }, [defaultData]);
 
   return (
-    <CNewMiniModal
-      handleActions={() => setDefaultData({})}
-      title="recipe_modal"
-    >
+    <CNewMiniModal handleActions={() => setDefaultData({})} title="add">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-[400px] grid grid-cols-1 gap-y-2"

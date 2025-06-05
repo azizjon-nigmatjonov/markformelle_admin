@@ -4,7 +4,6 @@ import { IconButton, Tooltip } from "@mui/material";
 import { ExcelIconOutlined } from "../../components/UI/IconGenerator/Svg/Machines";
 import { useState } from "react";
 import { Closer } from "../../components/UI/Closer";
-import { TooltipPosition } from "../../constants/toolPosition";
 import { useTranslationHook } from "../useTranslation";
 
 interface Props {
@@ -82,11 +81,7 @@ const ExcelDownload = ({
   };
   return (
     <div className="relative">
-      <Tooltip
-        title="Загрузить данные в Excel"
-        arrow
-        slotProps={TooltipPosition}
-      >
+      <Tooltip title="Загрузить данные в Excel" placement="bottom">
         <IconButton
           onClick={() => {
             if (type === "directly") {
@@ -101,7 +96,7 @@ const ExcelDownload = ({
             />
           </div>
           <div className="whitespace-nowrap ml-1 text-[var(--black)]">
-            {label}
+            <span>{label}</span>
           </div>
         </IconButton>
       </Tooltip>

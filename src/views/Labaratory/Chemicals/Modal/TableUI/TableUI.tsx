@@ -12,6 +12,27 @@ import {
   CheckMultipleIcon,
   UncheckMultipleIcon,
 } from "../../../../../components/UI/IconGenerator/Svg/Table";
+import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
+import { styled } from "@mui/material";
+
+const PopupBody = styled("div")(
+  ({ theme }) => `
+  width: max-content;
+  padding: 12px 16px;
+  margin: 8px;
+  border-radius: 8px;
+  border: 1px solid ${
+    theme.palette.mode === "dark" ? "var(--gray30)" : "var(--gray30)"
+  };
+  background-color: ${theme.palette.mode === "dark" ? "var(--gray30)" : "#fff"};
+  box-shadow: ${
+    theme.palette.mode === "dark"
+      ? `0px 4px 8px rgb(0 0 0 / 0.7)`
+      : `0px 4px 8px rgb(0 0 0 / 0.1)`
+  };
+  z-index: 1;
+`
+);
 interface Props {
   name: string;
   bodyColumns: any;
@@ -65,6 +86,13 @@ export const TableUI = ({
     } else {
       setSellectedItems([...sellectedItems, el.index]);
     }
+  };
+
+  const [anchor, setAnchor] = useState(null);
+
+  const handleRightClick = (event: any) => {
+    event.preventDefault(); // Prevents the default context menu
+    setAnchor(event.current)
   };
 
   return (
@@ -218,6 +246,7 @@ export const TableUI = ({
                     idTable === item[name] ? "bg-blue-200 relative w-full" : ""
                   } w-full cursor-pointer relative`}
                   style={{ height: "30px", minHeight: "30px !important" }}
+                  onContextMenu={handleRightClick}
                 >
                   {openSelect && (
                     <td
@@ -274,6 +303,17 @@ export const TableUI = ({
           </table>
         </div>
       </div>
+      <BasePopup
+        id={anchor ? "simple-popup" : undefined}
+        open={!!anchor}
+        anchor={anchor}
+        style={{
+          padding: 0,
+          zIndex: 99,
+        }}
+      >
+        <PopupBody>ask something</PopupBody>
+      </BasePopup>
     </div>
   );
 };

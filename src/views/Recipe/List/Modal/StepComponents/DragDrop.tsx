@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { StokeDeteyContantList } from "../../../../../constants/stokedetey";
+// import { StokeDeteyContantList } from "../../../../../constants/stokedetey";
 import { ImageViewer } from "../../../../../components/UI/ImageViewer";
 import { useTranslation } from "react-i18next";
 import { StepModal } from "./StepModal";
@@ -22,9 +22,10 @@ import {
   CheckMultipleIcon,
   UncheckMultipleIcon,
 } from "../../../../../components/UI/IconGenerator/Svg/Table";
-// import { DragAndDropDataLogic } from "./Logic";
-
+import { DragAndDropDataLogic } from "./Logic";
+const API_URL = import.meta.env.VITE_TEST_URL;
 interface Props {
+  formId: string;
   changed: string;
   setChanged: (val: string) => void;
   askAction: string;
@@ -33,6 +34,7 @@ interface Props {
 }
 
 export const DragDrop = ({
+  formId,
   setChanged = () => {},
   changed,
   askAction,
@@ -40,12 +42,10 @@ export const DragDrop = ({
   setOpenMainModal,
 }: Props) => {
   const { t } = useTranslation();
-  // const {} = DragAndDropDataLogic({ id: '', })
   const [editStep, setEditStep] = useState(false);
   const [deleteStep, setDeleteStep] = useState(false);
   const [initialModalData, setInitialModalData] = useState({});
   const [saveData, setSaveData] = useState(false);
-
   const [imageView, setImageView] = useState("");
   const [items, setItems]: any = useState([]);
   const [headColumns, setHeadColumns]: any = useState([]);
@@ -55,9 +55,9 @@ export const DragDrop = ({
   const [checkedList, setCheckedList]: any = useState([]);
   const [deleteCard, setDeleteCard] = useState(null);
   const [deleteCardActive, setDeleteCardActive] = useState(false);
+  const { tableData } = DragAndDropDataLogic({ id: formId });
 
   const onSubmit = () => {
-    console.log("save");
     setEditStep(false);
     setSaveData(false);
     setAskClear(false);
@@ -67,28 +67,35 @@ export const DragDrop = ({
     playSound("/notif.wav");
   };
 
-  const SetInitialData = () => {
+  const SetInitialData = (data: any) => {
+    data = data ?? [];
     const objects: any = {};
     let lastId = "";
-    console.log("StokeDeteyContantList", StokeDeteyContantList);
 
-    for (let i = 0; i < StokeDeteyContantList.length; i++) {
-      const obj = StokeDeteyContantList[i];
+    for (let i = 0; i < data.length; i++) {
+      const obj = data[i];
       if (obj.RECETEASAMAID) lastId = "" + obj.RECETEASAMAID;
 
       if (lastId in objects && !obj.RECETEASAMAID) {
         objects[lastId].rows.push(obj);
       } else {
         objects[obj.RECETEASAMAID] = {
-          rows: [obj],
+          rows: [],
+          RECETEGRAFIKID: obj.RECETEGRAFIKID,
           id: obj.RECETEASAMAID,
-          image: "/images/test/test1.png",
-          bg: i === 0 ? "bg-blue-100" : i < 2 ? "bg-lime-100" : "bg-indigo-100",
+          image: `${API_URL}/recetegrafik/image/${obj.RECETEGRAFIKID}`,
+          bg: "bg-indigo-100",
+          ...obj,
         };
       }
     }
+
     setOldValues(Object.values(JSON.parse(JSON.stringify(objects))));
-    setItems(Object.values(objects));
+    setItems(
+      Object.values(objects)?.length
+        ? Object.values(objects).sort((a: any, b: any) => a.SIRA - b.SIRA)
+        : []
+    );
     setHeadColumns([
       { title: "RECETEDETAYID", id: "RECETEDETAYID" },
       { title: "SIRA", id: "SIRA" },
@@ -103,8 +110,8 @@ export const DragDrop = ({
     ]);
   };
   useEffect(() => {
-    SetInitialData();
-  }, []);
+    if (tableData?.data) SetInitialData(tableData.data);
+  }, [tableData]);
 
   const clearChanges = () => {
     if (editStep && changed) {
@@ -136,15 +143,16 @@ export const DragDrop = ({
   }, [items, editStep]);
 
   const Fields = useMemo(() => {
+    if (!tableData?.data) return [];
     const arr: any = [];
-    const obj: any = StokeDeteyContantList[0];
+    const obj: any = tableData.data[0];
     delete obj.status;
     delete obj.index;
     for (let key in obj) {
       arr.push(key);
     }
     return arr;
-  }, []);
+  }, [tableData]);
 
   const handleDelete = () => {
     if (checkedList.length) {
@@ -167,7 +175,7 @@ export const DragDrop = ({
 
   return (
     <div className="cdraganddrop text-sm">
-      <div className="flex justify-end items-center mb-1 pb-2 border-b">
+      <div className="flex justify-end items-center">
         <div className="flex space-x-8 items-center font-medium">
           <div>
             <ExcelDownload
@@ -351,7 +359,7 @@ export const DragDrop = ({
                 clearChanges();
                 setAskClear(false);
                 setEditStep(false);
-                SetInitialData();
+                SetInitialData([]);
                 setChanged("");
               } else {
                 onSubmit();
@@ -387,7 +395,7 @@ export const DragDrop = ({
               clearChanges();
               setAskClear(false);
               setEditStep(false);
-              SetInitialData();
+              SetInitialData([]);
               setAskAction("");
               setChanged("");
               setOpenMainModal(false);

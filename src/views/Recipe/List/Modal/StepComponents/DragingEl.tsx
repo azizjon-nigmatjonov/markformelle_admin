@@ -21,6 +21,8 @@ interface Props {
   handleAdd: (ind: number, outInd: number, item: any) => void;
   deleteStep: boolean;
   handleCheck: (val: any) => void;
+  focusedIndex: number;
+  handleKeyDown: (val: any, val2: number) => void;
 }
 
 export const DragingEl = ({
@@ -39,31 +41,35 @@ export const DragingEl = ({
   handleAdd,
   deleteStep,
   handleCheck = () => {},
+  focusedIndex,
+  handleKeyDown,
 }: Props) => {
   const { t } = useTranslation();
 
+  const timeoutRef = useRef<number | null>(null);
+  const [hoverAdd, setHoverAdd] = useState(999);
+
+  const handleMouseEnter = (ind: number) => {
+    timeoutRef.current = window.setTimeout(() => {
+      setHoverAdd(ind);
+    }, 100);
+  };
+
+  const handleMouseLeave = () => {
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    setHoverAdd(999);
+  };
   return (
     <div>
-      {rows.map((item: any, innerIndex: number) => {
-        const timeoutRef = useRef<number | null>(null);
-        const [hoverAdd, setHoverAdd] = useState(999);
-        const handleMouseEnter = (ind: number) => {
-          timeoutRef.current = window.setTimeout(() => {
-            setHoverAdd(ind);
-          }, 100);
-        };
-
-        const handleMouseLeave = () => {
-          if (timeoutRef.current !== null) {
-            clearTimeout(timeoutRef.current);
-            timeoutRef.current = null;
-          }
-          setHoverAdd(999);
-        };
+      {rows?.map((item: any, innerIndex: number) => {
         return (
           <div key={innerIndex + outerIndex} className="py-[3px]">
             <div className="w-full">
               <div
+                tabIndex={0}
                 className={`relative cursor-pointer row flex items-center w-full ${
                   item.RECETEALTASAMAID ? "chip" : ""
                 } ${draggingIndexStep === innerIndex ? "dragging" : ""} ${
@@ -97,6 +103,10 @@ export const DragingEl = ({
                 onDrop={() => {
                   if (!editStep) return;
                   handleDropSteps(innerIndex, outerIndex);
+                }}
+                onKeyDown={(e) => {
+                  console.log("222");
+                  handleKeyDown(e, item.SIRA);
                 }}
               >
                 {deleteStep && (
@@ -142,7 +152,9 @@ export const DragingEl = ({
                   </div>
                 ) : (
                   <div
-                    className="flex"
+                    className={`flex ${
+                      focusedIndex === item.SIRA ? "bg-red-500" : ""
+                    }`}
                     onDoubleClick={() => {
                       handleAdd(innerIndex, outerIndex, item);
                     }}

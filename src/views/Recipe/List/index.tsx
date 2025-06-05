@@ -7,7 +7,7 @@ import { IFilterParams } from "../../../interfaces";
 import { useTranslationHook } from "../../../hooks/useTranslation";
 import CNewModal from "../../../components/CElements/CNewModal";
 import { ModalUI } from "./Modal";
-import { ModalTypes } from "./interfaces";
+// import { ModalTypes } from "./interfaces";
 import { playSound } from "../../../utils/playAudio";
 
 export const RecipeList = () => {
@@ -19,7 +19,7 @@ export const RecipeList = () => {
     page: 1,
     perPage: 50,
   });
-  const [modalInitialData, setModalInitialData] = useState<ModalTypes>({});
+  const [modalInitialData, setModalInitialData] = useState<any>({});
 
   const { bodyColumns, isLoading, bodyData, deleteFn } = TableData({
     filterParams,
@@ -50,12 +50,12 @@ export const RecipeList = () => {
     if (status === "modal") {
       setOpen(true);
     }
-
+    console.log("el", el, status);
     if (status === "view" || status === "edit") {
       setOpen(true);
 
       setModalInitialData({
-        URUNID: el?.URUNID,
+        RECETEID: el?.RECETEID,
       });
     }
 
@@ -64,13 +64,13 @@ export const RecipeList = () => {
     }
 
     if (status === "delete") {
-      deleteFn([el.URUNID]);
+      deleteFn([el.RECETEID]);
       setFilterParams({ page: 0, perPage: 50 });
     }
     if (status === "delete_multiple") {
       deleteFn(
-        el.map((item: { URUNID: string }) => {
-          return item.URUNID;
+        el.map((item: { RECETEID: string }) => {
+          return item.RECETEID;
         })
       );
       setFilterParams({ page: 0, perPage: 50 });
@@ -92,6 +92,7 @@ export const RecipeList = () => {
       deleteFn([id]);
     }
   };
+  console.log("modalInitialData", modalInitialData);
 
   return (
     <>
@@ -128,11 +129,11 @@ export const RecipeList = () => {
       {open || changed ? (
         <CNewModal
           title={t(
-            modalInitialData.URUNID ? "updating_recipe" : "creating_recipe"
+            modalInitialData.RECETEID ? "updating_recipe" : "creating_recipe"
           )}
           handleActions={handleModalActions}
           defaultData={{
-            id: modalInitialData?.URUNID,
+            id: modalInitialData?.RECETEID,
           }}
           disabled="big"
         >
