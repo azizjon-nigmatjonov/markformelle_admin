@@ -94,8 +94,6 @@ export const LabModalTables = ({
     arr?: any
   ) => {
     if (type === "view_single") {
-      console.log("el.LABRECETECALISMAID", el.LABRECETECALISMAID);
-
       setIdTable(el.LABRECETECALISMAID);
       setIdMaterial(el.LABRECETECALISMAID);
       setMaterialData(el);
@@ -189,6 +187,20 @@ export const LabModalTables = ({
     }
   };
 
+  const [search, setSearch] = useState("");
+  const [bodyData, setBodyData] = useState([]);
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Enter") {
+      const arr = bodyData?.filter((el: any) =>
+        el.HAMADI.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+      );
+
+      setBodyData(search ? arr : tableData?.data ?? []);
+    }
+  };
+  useEffect(() => {
+    setBodyData(tableData?.data ?? []);
+  }, [tableData]);
   return (
     <>
       <div className="grid grid-cols-3 gap-x-2">
@@ -197,10 +209,29 @@ export const LabModalTables = ({
             title="labrecetecalisma"
             headColumns={headColumns}
             idTable={idTable}
-            bodyColumns={tableData?.data}
+            bodyColumns={bodyData}
             handleRowClick={handleActionsMaterial}
             disabled={disabled}
             name="LABRECETECALISMAID"
+            extra={
+              <div>
+                <input
+                  className="input-design text-[var(--black)] font-normal w-full"
+                  placeholder="Поиск"
+                  onKeyDown={(e: any) => {
+                    handleKeyDown(e);
+                  }}
+                  value={search}
+                  onChange={(e) => {
+                    setSearch(e.target.value);
+                    if (e.target.value === "") {
+                      setBodyData(tableData?.data ?? []);
+                    }
+                  }}
+                  style={{ height: "20px" }}
+                />
+              </div>
+            }
           />
         </div>
 

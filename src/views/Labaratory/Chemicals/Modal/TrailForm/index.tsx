@@ -47,11 +47,13 @@ export const TrailForm = ({
 }: Props) => {
   const { t } = useTranslation();
   const [clear, setClear] = useState(true);
-  const { control, handleSubmit, setValue, reset } = useForm<any>({
+  const { control, handleSubmit, setValue, reset, watch } = useForm<any>({
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
+  const openDisable = watch("ASAMAID") && watch("MIGRASYON") && watch("ATISNO");
   const [newFormId, setNewFormId]: any = useState(formId);
+  const [openInnerModal, setOpenInnerModal] = useState(false);
 
   const closeFn = () => {
     reset();
@@ -71,6 +73,7 @@ export const TrailForm = ({
       setTimeout(() => {
         setClear(true);
       }, 100);
+      if (openInnerModal) handleActionsDetails({}, "modalinner", []);
     },
     onClose: closeFn,
   });
@@ -201,19 +204,24 @@ export const TrailForm = ({
           <TableUI
             title="labreceteurun"
             name="LABRECETEURUNID"
-            idTable={idDetailForm}
-            handleRowClick={(val: any, type: string, arr?: any) =>
-              handleActionsDetails(
-                val,
-                type === "delete" || type === "view_single"
-                  ? type
-                  : type + "inner",
-                arr
-              )
-            }
+            idTable={trailFormData?.LABRECETEATISID ? idDetailForm : null}
+            handleRowClick={(val: any, type: string, arr?: any) => {
+              if (openDisable && !trailFormData?.LABRECETECALISMAID) {
+                handleSubmit(onSubmit)();
+                setOpenInnerModal(true);
+              } else {
+                handleActionsDetails(
+                  val,
+                  type === "delete" || type === "view_single"
+                    ? type
+                    : type + "inner",
+                  arr
+                );
+              }
+            }}
             headColumns={DetailHeader}
-            bodyColumns={detailData}
-            disabled={!trailFormData?.LABRECETECALISMAID}
+            bodyColumns={trailFormData?.LABRECETEATISID ? detailData : []}
+            disabled={!openDisable}
           />
         </div>
 

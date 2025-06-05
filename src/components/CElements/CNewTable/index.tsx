@@ -705,24 +705,23 @@ const CNewTable = ({
                   <CTableHead>
                     <CTableRow>
                       <td
-                        style={{ width: openSelect ? "40px" : 0 }}
-                        className="sticky bg-white h-[41px] flex items-center border-b justify-center duration-100"
+                        className={`sticky bg-white h-[41px] ${
+                          openSelect ? "flex" : "hidden"
+                        } items-center border-b justify-center duration-100 w-[40px]`}
                       >
-                        {openSelect && (
-                          <div
-                            onClick={() => handleSelectAll()}
-                            className={`w-[18px] h-[18px] rounded-[4px] border border-[var(--main)] flex items-center justify-center cursor-pointer`}
-                          >
-                            {areAllRowsSelectedOnPage(
-                              selectedItems,
-                              bodySource
-                            ) && (
-                              <CheckIcon
-                                style={{ fill: "var(--main)", width: 14 }}
-                              />
-                            )}
-                          </div>
-                        )}
+                        <div
+                          onClick={() => handleSelectAll()}
+                          className={`w-[18px] h-[18px] rounded-[4px] border border-[var(--main)] flex items-center justify-center cursor-pointer`}
+                        >
+                          {areAllRowsSelectedOnPage(
+                            selectedItems,
+                            bodySource
+                          ) && (
+                            <CheckIcon
+                              style={{ fill: "var(--main)", width: 14 }}
+                            />
+                          )}
+                        </div>
                       </td>
                       {newHeadColumns?.map((column: any, index: number) => (
                         <CTableHeadCell
@@ -878,27 +877,25 @@ const CNewTable = ({
                           }}
                         >
                           <td
-                            className="h-[35px] border-b border-[var(--border)] w-full flex justify-center items-center"
+                            className={`h-[35px] border-b border-[var(--border)] w-full ${
+                              openSelect ? "flex" : "hidden"
+                            } justify-center items-center`}
                             style={{ padding: "0px !importaint" }}
                           >
-                            {openSelect && (
-                              <div
-                                onClick={() =>
-                                  tableActions(item, "sellect_more")
-                                }
-                                className={`w-[18px] h-[18px] check rounded-[4px] border flex items-center justify-center cursor-pointer ${
-                                  selectedItems.includes(item.index - 1)
-                                    ? "border-[var(--black)]"
-                                    : "border-[var(--gray)]"
-                                }`}
-                              >
-                                {selectedItems.includes(item.index - 1) && (
-                                  <CheckIcon
-                                    style={{ color: "black", width: 14 }}
-                                  />
-                                )}
-                              </div>
-                            )}
+                            <div
+                              onClick={() => tableActions(item, "sellect_more")}
+                              className={`w-[18px] h-[18px] check rounded-[4px] border flex items-center justify-center cursor-pointer ${
+                                selectedItems.includes(item.index - 1)
+                                  ? "border-[var(--black)]"
+                                  : "border-[var(--gray)]"
+                              }`}
+                            >
+                              {selectedItems.includes(item.index - 1) && (
+                                <CheckIcon
+                                  style={{ color: "black", width: 14 }}
+                                />
+                              )}
+                            </div>
                           </td>
                           {newHeadColumns.map(
                             (column: any, colIndex: number) => (

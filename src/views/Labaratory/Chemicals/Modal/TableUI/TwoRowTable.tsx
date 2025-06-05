@@ -169,7 +169,7 @@ export const TwoRowTable = ({
         </div>
       </div>
       <div
-        className={`${cls.twoRowTable} text-sm overflow-x-scroll overflow-y-hidden designed-scroll h-[340px]`}
+        className={`${cls.twoRowTable} text-sm overflow-x-scroll overflow-y-hidden designed-scroll  h-[300px] deskop:h-[340px]]`}
       >
         <div className={`${cls.header} flex`} ref={headerScrollRef}>
           <div

@@ -170,17 +170,29 @@ interface Props {
   formId: number;
 }
 export const TablesLogic = ({ formId }: Props) => {
+  const [filterParams, setFilterParams]: any = useState({
+    page: 1,
+  });
   const { data: tableData, refetch } = useQuery(
-    ["GET_TABLE_DATA", formId],
+    ["GET_TABLE_DATA", formId, filterParams],
     () => {
-      return axios.get(`${API_URL}/labrecetecalisma/?LABRECETEID=${formId}`);
+      return axios.get(
+        `${API_URL}/labrecetecalisma/?LABRECETEID=${formId}${
+          filterParams?.q ? `&q=${filterParams.q}` : ""
+        }`
+      );
     },
     {
       enabled: !!formId,
     }
   );
 
-  return { tableData: tableData?.data ?? {}, refetch };
+  return {
+    tableData: tableData?.data ?? {},
+    refetch,
+    setFilterParams,
+    filterParams,
+  };
 };
 
 export const TrailTableLogic = ({

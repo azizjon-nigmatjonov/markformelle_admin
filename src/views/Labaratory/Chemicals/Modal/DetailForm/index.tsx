@@ -90,6 +90,7 @@ export const DetailForm = ({
     if (obj?.BIRIMID) {
       setValue("URUNBIRIMID", obj.URUNBIRIMID);
       setValue("FIYATCARPAN", obj.CARPAN);
+      setValue("BIRIMID", obj.BIRIMID);
     }
   }, [birimData]);
 
@@ -154,31 +155,33 @@ export const DetailForm = ({
             placeholder="MIKTARYUZDE"
           />
 
-          <HFTextField
-            name="BIRIMFIYAT"
-            control={control}
-            disabled
-            setValue={setValue}
-            placeholder="BIRIMFIYAT"
-            label="BIRIMFIYAT"
-          />
+          <div className="grid grid-cols-3 gap-x-2">
+            <HFTextField
+              name="BIRIMFIYAT"
+              control={control}
+              disabled
+              setValue={setValue}
+              placeholder="BIRIMFIYAT"
+              label="BIRIMFIYAT"
+            />
 
-          <HFTextField
-            name="DOVIZID"
-            control={control}
-            disabled
-            setValue={setValue}
-            placeholder="DOVIZID"
-            label="DOVIZID"
-          />
-          <HFTextField
-            name="URUNBIRIMID"
-            control={control}
-            disabled
-            setValue={setValue}
-            placeholder="URUNBIRIMID"
-            label="URUNBIRIMID"
-          />
+            <HFTextField
+              name="DOVIZID"
+              control={control}
+              disabled
+              setValue={setValue}
+              placeholder="DOVIZID"
+              label="DOVIZID"
+            />
+            <HFTextField
+              name="BIRIMID"
+              control={control}
+              disabled
+              setValue={setValue}
+              placeholder="URUNBIRIMID"
+              label="URUNBIRIMID"
+            />
+          </div>
         </div>
 
         <div>

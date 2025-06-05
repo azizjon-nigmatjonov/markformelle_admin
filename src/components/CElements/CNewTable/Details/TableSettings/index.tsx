@@ -259,22 +259,7 @@ export const HeaderSettings = ({
           )}
           <div className="space-x-4 flex items-center">
             {defaultFilters.includes("add") && (
-              <Tooltip
-                title="Нажмите, чтобы добавить строку"
-                arrow
-                slotProps={{
-                  popper: {
-                    modifiers: [
-                      {
-                        name: "offset",
-                        options: {
-                          offset: [0, 15],
-                        },
-                      },
-                    ],
-                  },
-                }}
-              >
+              <Tooltip title="Нажмите, чтобы добавить строку" placement="top">
                 <IconButton
                   onClick={() => tableActions({}, "modal")}
                   disabled={disabled}
@@ -293,11 +278,7 @@ export const HeaderSettings = ({
               </Tooltip>
             )}
             {defaultFilters.includes("sellect_more") && (
-              <Tooltip
-                title="Нажмите, чтобы выбрать строки"
-                arrow
-                slotProps={TooltipPosition}
-              >
+              <Tooltip title="Нажмите, чтобы выбрать строки" placement="top">
                 <IconButton
                   onClick={() => tableActions({}, "sellect_more_active")}
                   disabled={disabled}
@@ -329,12 +310,7 @@ export const HeaderSettings = ({
               </Tooltip>
             )}
             {defaultFilters.includes("delete") && (
-              <Tooltip
-                title="Выберите строки для удаления"
-                arrow
-                placement="right"
-                slotProps={TooltipPosition}
-              >
+              <Tooltip title="Выберите строки для удаления" placement="top">
                 <div className="relative">
                   <IconButton
                     onClick={() => {
@@ -377,22 +353,7 @@ export const HeaderSettings = ({
 
         <div className="flex items-center space-x-2 h-full">
           {defaultFilters.includes("add") && (
-            <Tooltip
-              title="Нажмите, чтобы перейти к переводам"
-              arrow
-              slotProps={{
-                popper: {
-                  modifiers: [
-                    {
-                      name: "offset",
-                      options: {
-                        offset: [0, 15],
-                      },
-                    },
-                  ],
-                },
-              }}
-            >
+            <Tooltip title="Нажмите, чтобы перейти к переводам" placement="top">
               <IconButton
                 onClick={() => tableActions({}, "translation")}
                 disabled={disabled}
@@ -413,7 +374,7 @@ export const HeaderSettings = ({
             </Tooltip>
           )}
           {defaultFilters.includes("filter") && (
-            <Tooltip title="Активный фильтр" arrow slotProps={TooltipPosition}>
+            <Tooltip title="Активный фильтр" placement="top">
               <IconButton
                 onClick={() => tableActions({}, "sidefilter")}
                 disabled={disabled}

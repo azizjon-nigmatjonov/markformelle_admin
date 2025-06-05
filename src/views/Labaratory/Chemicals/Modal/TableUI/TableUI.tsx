@@ -19,6 +19,7 @@ interface Props {
   title: string;
   idTable?: number | null;
   disabled: boolean;
+  extra?: any;
   handleRowClick: (val: any, type: string, arr?: any) => void;
 }
 export const TableUI = ({
@@ -29,6 +30,7 @@ export const TableUI = ({
   handleRowClick,
   disabled = false,
   title = "table",
+  extra,
 }: Props) => {
   const { t } = useTranslation();
   const headerScrollRef: any = useRef(null);
@@ -156,7 +158,7 @@ export const TableUI = ({
           </button>
         </div>
       </div>
-      <div className="overflow-scroll designed-scroll h-[340px]">
+      <div className="overflow-scroll designed-scroll h-[300px] deskop:h-[340px]">
         <div>
           <table
             className={`text-sm h-full ${cls.table}`}
@@ -198,7 +200,10 @@ export const TableUI = ({
                       key={index}
                       className={`text-left border-b border-r border-[var(--border)] ${cls.cell}`}
                     >
-                      <p>{head.title}</p>
+                      <div className="flex space-x-2 items-center">
+                        <p>{head.title}</p>
+                        {index === 0 ? extra : ""}
+                      </div>
                     </th>
                   )
                 )}

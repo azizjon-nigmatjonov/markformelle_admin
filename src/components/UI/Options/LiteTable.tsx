@@ -85,10 +85,11 @@ export const LiteOptionsTable = ({
         setFilterParams({ ...filterParams, link });
       }
     }
-    console.log("pressedKey", pressedKey);
 
     if (pressedKey === "Escape" && open) {
       setOpen(false);
+      setAnchor(null);
+      setIsFocus(false);
     }
   }, [isFocus, isAltPressed, currentKey, pressedKey]);
 
@@ -196,7 +197,7 @@ export const LiteOptionsTable = ({
   }, [defaultSearch]);
 
   return (
-    <div className="w-full">
+    <div className="w-full relative">
       {label && <CLabel title={label} required={required} />}
       <div
         className={`w-full relative flex items-center ${
@@ -204,7 +205,7 @@ export const LiteOptionsTable = ({
         }`}
       >
         <div
-          className="cursor-pointer absolute z-[100] left-2"
+          className="cursor-pointer absolute z-[99] left-2"
           onClick={() => {
             if (!disabled) {
               if (!open) {
