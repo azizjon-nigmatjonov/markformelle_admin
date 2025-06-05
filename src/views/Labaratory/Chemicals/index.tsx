@@ -123,23 +123,21 @@ export const LabChemicals = () => {
   };
 
   const askCloseFn = (type: string) => {
-    if (type === "no") {
+    if (type === "close") {
       setAskClose("");
-    } else if (type === "submit") {
-      setAskClose("");
-    } else {
-      setAskClose(type);
       setOpen(false);
       setShowUI(false);
       setShowUI(false);
       setModalInitialData({});
+    } else if (type === "submit") {
+      setAskClose("");
       refetchTable();
+    } else {
+      setAskClose(type);
     }
   };
 
   const handleModalActions = (status: string, id: string) => {
-    if (status === "close") askCloseFn("");
-
     if (status === "delete") deleteFn([id]);
   };
 

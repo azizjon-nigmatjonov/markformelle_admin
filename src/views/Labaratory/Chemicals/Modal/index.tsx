@@ -14,6 +14,7 @@ import { SubmitButton } from "../../../../components/UI/FormButtons/SubmitButton
 import { Validation } from "./Validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LiteOptionsTable } from "../../../../components/UI/Options/LiteTable";
+import CModal from "../../../../components/CElements/CModal";
 const schema = Validation;
 interface ModalUIProps {
   defaultData?: ModalTypes;
@@ -34,10 +35,10 @@ export const ModalUI = ({
   showUI = false,
   setShowUI = () => {},
   modalInitialData = [],
+  askClose,
+  setAskClose,
   refetchTable,
-}: // askClose = "",
-// setAskClose = () => {},
-ModalUIProps) => {
+}: ModalUIProps) => {
   const { t } = useTranslationHook();
   const [uniqueID, setUniqueID] = useState("main_table_lab");
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
@@ -48,12 +49,46 @@ ModalUIProps) => {
     resolver: yupResolver(schema),
   });
 
+  const handleModalActionsFn = (status: string, id: string) => {
+    if (status === "delete") {
+      handleModalActions(status, id);
+      reset();
+      setFormId(0);
+      setAskClose("close");
+      localStorage.removeItem("lab_form_initial_values");
+    }
+    if (status === "close") {
+      let formInitialValues: any =
+        localStorage.getItem("lab_form_initial_values") ?? "{}";
+      formInitialValues = JSON.parse(formInitialValues);
+
+      const formValues = getValues();
+      let changes = false;
+
+      for (let key in formInitialValues) {
+        if (formInitialValues[key] !== formValues[key]) {
+          changes = true;
+          break;
+        }
+      }
+
+      if (changes) {
+        setAskClose("changes");
+      } else {
+        reset();
+        setFormId(0);
+        setAskClose("close");
+        localStorage.removeItem("lab_form_initial_values");
+      }
+    }
+  };
+
   const { createForm, updateForm, formData } = ModalTableLogic({
     filterParams,
     setFormId,
     urunId: formId || defaultData?.LABRECETEID,
     refetchTable,
-    handleModalActions,
+    handleModalActions: handleModalActionsFn,
   });
 
   useEffect(() => {
@@ -96,6 +131,13 @@ ModalUIProps) => {
 
       createForm(params);
     }
+    localStorage.removeItem("lab_form_initial_values");
+    setTimeout(() => {
+      localStorage.setItem(
+        "lab_form_initial_values",
+        JSON.stringify(getValues())
+      );
+    }, 700);
   };
 
   const setFormValues = (form: any) => {
@@ -158,15 +200,7 @@ ModalUIProps) => {
   }, [defaultData, disabled]);
 
   const handleModal = (status: string, id: string) => {
-    handleModalActions(status, id);
-    if (status === "close") {
-      reset();
-      setFormId(0);
-    }
-    if (status === "delete") {
-      reset();
-      setFormId(0);
-    }
+    handleModalActionsFn(status, id);
   };
 
   return (
@@ -234,7 +268,8 @@ ModalUIProps) => {
                       type={formId ? "update" : "create"}
                       handleActions={(val: string, uniqueID: string) => {
                         if (uniqueID === "main_table_lab") {
-                          if (val === "Close") handleModalActions("close", "");
+                          if (val === "Close")
+                            handleModalActionsFn("close", "");
                           if (val === "Enter") handleSubmit(onSubmit)();
                         }
                       }}
@@ -262,26 +297,28 @@ ModalUIProps) => {
         <></>
       )}
 
-      {/* <CModal
+      <CModal
         open={!!askClose}
         handleClose={() => {
-          setAskClose("");
+          setAskClose("close");
         }}
         footerActive={false}
       >
         <p className="text-[var(--black)] text-2xl font-medium">
-          Вы точно хотите сохранить изменения?
+          У вас есть изменения!
         </p>
 
-        <p className="text-[var(--error)] text-lg mt-3">
-          Это изменение повлияет на производительность машины!
+        <p className="text-[var(--error)] text-2xl font-medium">
+          Вы хотите сохранить изменения?
         </p>
 
         <div className="grid gap-2 grid-cols-2 mt-8">
           <button
             className="cancel-btn"
             onClick={() => {
-              setAskClose("");
+              setAskClose("close");
+              reset();
+              setFormId(0);
             }}
           >
             {t("no")}
@@ -297,7 +334,7 @@ ModalUIProps) => {
             {t("yes")}
           </button>
         </div>
-      </CModal> */}
+      </CModal>
     </>
   );
 };

@@ -199,7 +199,7 @@ export const LabModalTables = ({
     }
   };
   useEffect(() => {
-    setBodyData(tableData?.data ?? []);
+    if (tableData?.data?.length) setBodyData(tableData.data);
   }, [tableData]);
   return (
     <>
@@ -214,7 +214,7 @@ export const LabModalTables = ({
             disabled={disabled}
             name="LABRECETECALISMAID"
             extra={
-              <div>
+              <div className="w-full">
                 <input
                   className="input-design text-[var(--black)] font-normal w-full"
                   placeholder="Поиск"
