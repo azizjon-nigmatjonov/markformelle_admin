@@ -677,3 +677,12 @@ ul {
 .opacityAfter {
   opacity: 0;
 }
+
+.MuiDivider-root {
+  &.active {
+    &::after,
+    &::before {
+      border-color: var(--primary) !important;
+    }
+  }
+}

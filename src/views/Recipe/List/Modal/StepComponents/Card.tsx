@@ -16,11 +16,13 @@ interface Props {
   setImageView: (val: string) => void;
   setInitialModalData: (val: any) => void;
   checkedList: any;
+  tableData: any;
   handleCheck: (val: any) => void;
   setDeleteCard: (val: any) => void;
 }
 
 export const StepCard = ({
+  tableData,
   oldValues = [],
   items = [],
   headColumns = [],
@@ -147,15 +149,18 @@ export const StepCard = ({
   const [focusedIndex, setFocusedIndex] = useState<number>(0);
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const handleKeyDown = (event: any, SIRA: number) => {
-    console.log("111");
-
+  const handleKeyDown = (event: any) => {
     if (event.key === "ArrowUp") {
-      console.log("Arrow Up pressed");
-      setFocusedIndex((prev) => prev - 1);
+      setFocusedIndex(focusedIndex < 1 ? 0 : focusedIndex - 1);
     } else if (event.key === "ArrowDown") {
-      console.log("Arrow Down pressed");
-      setFocusedIndex((prev) => prev + 1);
+      setFocusedIndex(
+        focusedIndex >=
+          items?.[items.length - 1]?.rows[
+            items?.[items.length - 1]?.rows.length - 1
+          ].index
+          ? focusedIndex
+          : focusedIndex + 1
+      );
     }
   };
 

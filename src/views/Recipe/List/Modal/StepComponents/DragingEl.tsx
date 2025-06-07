@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import AddIcon from "@mui/icons-material/Add";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { CheckLine } from "../../../../../components/UI/IconGenerator/Svg";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Props {
   rows: any[];
@@ -22,7 +22,7 @@ interface Props {
   deleteStep: boolean;
   handleCheck: (val: any) => void;
   focusedIndex: number;
-  handleKeyDown: (val: any, val2: number) => void;
+  handleKeyDown: (val: any) => void;
 }
 
 export const DragingEl = ({
@@ -62,6 +62,12 @@ export const DragingEl = ({
     }
     setHoverAdd(999);
   };
+  const stepRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (stepRef.current) {
+      stepRef.current.focus();
+    }
+  }, []);
   return (
     <div>
       {rows?.map((item: any, innerIndex: number) => {
@@ -70,6 +76,7 @@ export const DragingEl = ({
             <div className="w-full">
               <div
                 tabIndex={0}
+                ref={outerIndex === 0 ? stepRef : null}
                 className={`relative cursor-pointer row flex items-center w-full ${
                   item.RECETEALTASAMAID ? "chip" : ""
                 } ${draggingIndexStep === innerIndex ? "dragging" : ""} ${
@@ -105,8 +112,7 @@ export const DragingEl = ({
                   handleDropSteps(innerIndex, outerIndex);
                 }}
                 onKeyDown={(e) => {
-                  console.log("222");
-                  handleKeyDown(e, item.SIRA);
+                  handleKeyDown(e);
                 }}
               >
                 {deleteStep && (
@@ -125,8 +131,10 @@ export const DragingEl = ({
                   </div>
                 )}
                 {item.RECETEALTASAMAID ? (
-                  <div className="w-full">
-                    <Divider>
+                  <div className={`w-full`}>
+                    <Divider
+                      className={focusedIndex === item.index ? "active" : ""}
+                    >
                       <Chip
                         label={
                           item?.new ? (
@@ -144,7 +152,10 @@ export const DragingEl = ({
                         style={{
                           position: "relative",
                           zIndex: 2,
-                          backgroundColor: "var(--border)",
+                          backgroundColor:
+                            focusedIndex === item.index
+                              ? "#EFF8FF"
+                              : "var(--border)",
                         }}
                         size="small"
                       />
@@ -152,8 +163,8 @@ export const DragingEl = ({
                   </div>
                 ) : (
                   <div
-                    className={`flex ${
-                      focusedIndex === item.SIRA ? "bg-red-500" : ""
+                    className={`flex rounded-[8px] ${
+                      focusedIndex === item.index ? "bg-blue-200" : ""
                     }`}
                     onDoubleClick={() => {
                       handleAdd(innerIndex, outerIndex, item);

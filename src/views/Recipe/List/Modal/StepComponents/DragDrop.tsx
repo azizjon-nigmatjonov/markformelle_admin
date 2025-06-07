@@ -68,24 +68,27 @@ export const DragDrop = ({
   };
 
   const SetInitialData = (data: any) => {
-    data = data ?? [];
+    data = data.sort((a: any, b: any) => a.SIRA - b.SIRA) ?? [];
     const objects: any = {};
     let lastId = "";
-
+    let ind = 0;
     for (let i = 0; i < data.length; i++) {
       const obj = data[i];
       if (obj.RECETEASAMAID) lastId = "" + obj.RECETEASAMAID;
 
       if (lastId in objects && !obj.RECETEASAMAID) {
+        obj.index = ind;
+        ind += 1;
         objects[lastId].rows.push(obj);
       } else {
         objects[obj.RECETEASAMAID] = {
           rows: [],
           RECETEGRAFIKID: obj.RECETEGRAFIKID,
           id: obj.RECETEASAMAID,
+          SIRA: obj.SIRA,
           image: `${API_URL}/recetegrafik/image/${obj.RECETEGRAFIKID}`,
           bg: "bg-indigo-100",
-          ...obj,
+          main: obj,
         };
       }
     }
@@ -294,6 +297,7 @@ export const DragDrop = ({
 
       <StepCard
         items={items}
+        tableData={tableData}
         editStep={editStep}
         setItems={setItems}
         oldValues={oldValues}
