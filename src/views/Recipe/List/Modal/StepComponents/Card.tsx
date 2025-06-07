@@ -16,13 +16,11 @@ interface Props {
   setImageView: (val: string) => void;
   setInitialModalData: (val: any) => void;
   checkedList: any;
-  tableData: any;
   handleCheck: (val: any) => void;
   setDeleteCard: (val: any) => void;
 }
 
 export const StepCard = ({
-  tableData,
   oldValues = [],
   items = [],
   headColumns = [],

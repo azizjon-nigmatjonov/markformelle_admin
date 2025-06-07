@@ -297,7 +297,6 @@ export const DragDrop = ({
 
       <StepCard
         items={items}
-        tableData={tableData}
         editStep={editStep}
         setItems={setItems}
         oldValues={oldValues}

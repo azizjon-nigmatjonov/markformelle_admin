@@ -92,7 +92,6 @@ export const RecipeList = () => {
       deleteFn([id]);
     }
   };
-  console.log("modalInitialData", modalInitialData);
 
   return (
     <>
