@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import HFTextField from "../../../../components/HFElements/HFTextField";
-import { IModalForm, ModalTypes } from "../interfaces";
+// import { IModalForm } from "../interfaces";
 import { useTranslationHook } from "../../../../hooks/useTranslation";
 import { InputFieldUI } from "../../../../components/UI/FieldUI";
-import { SelectOptionsTable } from "../../../../components/UI/Options/Table";
-import { useGetUrunTypeList } from "../../../../hooks/useFetchRequests/useUrunType";
 import { ModalTableLogic } from "./Logic";
 import dayjs from "dayjs";
-import { useGetFirmList } from "../../../../hooks/useFetchRequests/useFirmaList";
-import HFSelect from "../../../../components/HFElements/HFSelect";
 import { LabModalTables } from "./Tables";
 import { Alert } from "@mui/material";
 import CCheckbox from "../../../../components/CElements/CCheckbox";
 import { LiteOptionsTable } from "../../../../components/UI/Options/LiteTable";
+import { PantoneColors } from "../../../../constants/pantone";
 
 interface ModalUIProps {
   defaultData?: any;
@@ -49,19 +46,7 @@ export const ModalUI = ({
     if (formId) setDisabled(false);
   }, [formId]);
 
-  const {
-    firmaData,
-    setFilterParams: setFilterParamsFirm,
-    filterParams: filterParamsFirm,
-  } = useGetFirmList({});
-
-  const {
-    setFilterParams: setUrunTypeFilterParams,
-    filterParams: urunTypeFilterParams,
-    urunTypeData,
-  } = useGetUrunTypeList({});
-
-  const { control, handleSubmit, setValue } = useForm<IModalForm>({
+  const { control, handleSubmit, setValue } = useForm<any>({
     mode: "onSubmit",
   });
 
@@ -115,25 +100,22 @@ export const ModalUI = ({
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-3">
-          <div className="grid grid-cols-3 gap-x-3 border-b border-[var(--border)] pb-3">
+        <div className="space-y-2">
+          <div className="grid grid-cols-3 gap-x-3 border-b border-[var(--border)] pb-2">
             <InputFieldUI title={t("LABRECETEKOD")} disabled={disabled}>
-              <SelectOptionsTable
-                name="LABRECETEKOD"
-                placeholder={t("LABRECETEKOD")}
-                options={urunTypeData?.data}
+              <LiteOptionsTable
+                name="URUNTIPIID"
+                placeholder="URUNTIPIID"
+                link="uruntipi"
                 required={true}
-                headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
-                filterParams={urunTypeFilterParams}
-                handleSelect={(_: {}) => {}}
-                handleSearch={(val: string) => {
-                  setUrunTypeFilterParams({
-                    ...urunTypeFilterParams,
-                    q: val,
-                  });
+                headColumns={[
+                  { id: "ADI", title: "ADI", width: 120 },
+                  { id: "URUNTIPIID", title: "URUNTIPIID", width: 100 },
+                ]}
+                handleSelect={(obj: { URUNTIPIID: number }) => {
+                  setValue("URUNTIPIID", obj.URUNTIPIID);
                 }}
                 control={control}
-                setFilterParams={setUrunTypeFilterParams}
               />
             </InputFieldUI>
 
@@ -155,8 +137,8 @@ export const ModalUI = ({
             </div>
           </div>
           <div className="flex justify-between space-x-3">
-            <div className="w-full grid grid-cols-3 gap-y-2 gap-x-3">
-              <div className="space-y-2">
+            <div className="w-full grid grid-cols-3 gap-x-3">
+              <div className="space-y-1">
                 <InputFieldUI title={t("URUNRECETEADI")}>
                   <HFTextField
                     name="URUNRECETEADI"
@@ -169,27 +151,49 @@ export const ModalUI = ({
 
                 <InputFieldUI title={t("USTASAMA")}>
                   <LiteOptionsTable
-                    name="USTASAMA"
-                    placeholder={t("USTASAMA")}
+                    name="ASAMAID"
+                    placeholder="USTASAMA"
                     link="asama"
                     required={true}
                     headColumns={[
-                      { id: "FIRMAID", width: 200, title: "FIRMAID" },
-                      { id: "FIRMAADI", title: "FIRMAADI" },
-                      { id: "KISAADI", title: "KISAADI" },
+                      { id: "ASAMAID", title: "ASAMAID", width: 100 },
+                      { id: "ADI", title: "ADI", width: 120 },
                     ]}
-                    handleSelect={(_: {}) => {}}
+                    renderValue={(_: string, obj: any) => {
+                      return obj.ASAMAID
+                        ? obj.ASAMAID
+                          ? " - " + obj.ADI
+                          : ""
+                        : "";
+                    }}
+                    handleSelect={(obj: { ASAMAID: number }) => {
+                      setValue("ASAMAID", obj.ASAMAID);
+                    }}
                     control={control}
                     disabled={disabled}
                   />
                 </InputFieldUI>
 
                 <InputFieldUI title={t("RECETETURU")}>
-                  <HFSelect
-                    name="RECETETURU"
+                  <LiteOptionsTable
+                    name="RECETETURUID"
+                    placeholder="RECETETURU"
+                    link="receteturu"
+                    required={true}
+                    headColumns={[
+                      { id: "RECETETURUID", title: "RECETETURUID", width: 100 },
+                      { id: "ADI", title: "ADI", width: 120 },
+                    ]}
+                    renderValue={(_: string, obj: any) => {
+                      return (
+                        obj.RECETETURUID +
+                        (obj.RECETETURUID ? " - " + obj.ADI : "")
+                      );
+                    }}
+                    handleSelect={(obj: { RECETETURUID: number }) => {
+                      setValue("RECETETURUID", obj.RECETETURUID);
+                    }}
                     control={control}
-                    setValue={setValue}
-                    placeholder={t("RECETETURU")}
                     disabled={disabled}
                   />
                 </InputFieldUI>
@@ -198,118 +202,197 @@ export const ModalUI = ({
                     name="ASHKLAMA"
                     control={control}
                     setValue={setValue}
-                    placeholder={t("ASHKLAMA")}
+                    placeholder="ASHKLAMA"
                     disabled={disabled}
                   />
                 </InputFieldUI>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <InputFieldUI title={t("RENKDIENLIGI")}>
-                  <HFSelect
-                    name="RENKDIENLIGI"
+                  <LiteOptionsTable
+                    name="RENKDERINLIGIID"
+                    placeholder="RENKDIENLIGI"
+                    link="renkderinligi"
+                    required={true}
+                    headColumns={[
+                      {
+                        id: "RENKDERINLIGIID",
+                        title: "RENKDERINLIGIID",
+                        width: 120,
+                      },
+                      { id: "ADI", title: "ADI", width: 120 },
+                    ]}
+                    renderValue={(_: string, obj: any) => {
+                      return obj.ADI;
+                    }}
+                    handleSelect={(obj: { RENKDERINLIGIID: number }) => {
+                      setValue("RENKDERINLIGIID", obj.RENKDERINLIGIID);
+                    }}
                     control={control}
-                    setValue={setValue}
-                    placeholder={t("RENKDIENLIGI")}
                     disabled={disabled}
                   />
                 </InputFieldUI>
                 <InputFieldUI title={t("RECETEGRUP")}>
-                  <HFSelect
-                    name="RECETEGRUP"
+                  <LiteOptionsTable
+                    name="LABRECETEGRUPID"
+                    placeholder="LABRECETEGRUPID"
+                    link="labrecetegrup"
+                    required={true}
+                    headColumns={[
+                      {
+                        id: "LABRECETEGRUPID",
+                        title: "LABRECETEGRUPID",
+                        width: 120,
+                      },
+                      { id: "ADI", title: "ADI", width: 120 },
+                    ]}
+                    renderValue={(_: string, obj: any) => {
+                      return obj.ADI;
+                    }}
+                    handleSelect={(obj: { LABRECETEGRUPID: number }) => {
+                      setValue("LABRECETEGRUPID", obj.LABRECETEGRUPID);
+                    }}
                     control={control}
-                    setValue={setValue}
-                    placeholder={t("RECETEGRUP")}
                     disabled={disabled}
                   />
                 </InputFieldUI>
                 <InputFieldUI title={t("RENKGRUP")}>
-                  <HFSelect
-                    name="RENKGRUP"
+                  <LiteOptionsTable
+                    name="LABRENKGRUPID"
+                    placeholder="RENKGRUP"
+                    link="labrenkgrup"
+                    required={true}
+                    headColumns={[
+                      {
+                        id: "LABRENKGRUPID",
+                        title: "LABRENKGRUPID",
+                        width: 120,
+                      },
+                      { id: "ADI", title: "ADI", width: 100 },
+                    ]}
+                    renderValue={(_: string, obj: any) => {
+                      return obj.ADI;
+                    }}
+                    handleSelect={(obj: { LABRENKGRUPID: number }) => {
+                      setValue("LABRENKGRUPID", obj.LABRENKGRUPID);
+                    }}
                     control={control}
-                    setValue={setValue}
-                    placeholder={t("RENKGRUP")}
                     disabled={disabled}
                   />
                 </InputFieldUI>
                 <InputFieldUI title={t("HAMSTOCK")}>
-                  <SelectOptionsTable
-                    name="HAMSTOCK"
-                    placeholder={t("HAMSTOCK")}
-                    options={firmaData}
+                  <LiteOptionsTable
+                    name="HAMID"
+                    placeholder="HAMID"
+                    link="ham"
                     required={true}
                     headColumns={[
-                      { id: "FIRMAID", title: "FIRMAID" },
-                      { id: "FIRMAADI", title: "FIRMAADI" },
-                      { id: "KISAADI", title: "KISAADI" },
+                      {
+                        id: "HAMID",
+                        title: "HAMID",
+                        width: 80,
+                      },
+                      { id: "ADI", title: "ADI", width: 150 },
                     ]}
-                    filterParams={filterParams}
-                    handleSelect={(_: {}) => {}}
-                    handleSearch={(val: string) => {
-                      setFilterParamsFirm({ ...filterParamsFirm, q: val });
+                    renderValue={(_: string, obj: any) => {
+                      return obj.ADI;
+                    }}
+                    handleSelect={(obj: { HAMID: number }) => {
+                      setValue("HAMID", obj.HAMID);
                     }}
                     control={control}
-                    setFilterParams={setFilterParams}
                     disabled={disabled}
                   />
                 </InputFieldUI>
               </div>
-              <div className="space-y-2">
-                <InputFieldUI title={t("RECETETIPI")}>
+              <div className="space-y-1">
+                <InputFieldUI title="RECETETIPI">
                   <div className="flex space-x-2">
                     <CCheckbox element={{ label: "Normal" }} />
                     <CCheckbox element={{ label: "Numure" }} />
                   </div>
                 </InputFieldUI>
-                <InputFieldUI title={t("PANTONEKODU")}>
-                  <HFSelect
-                    name="PANTONEKODU"
-                    control={control}
-                    setValue={setValue}
-                    placeholder={t("PANTONEKODU")}
-                    disabled={disabled}
-                  />
-                </InputFieldUI>
-                <InputFieldUI title={t("FIRMAID")}>
-                  <SelectOptionsTable
-                    name="FIRMAID"
-                    placeholder={t("FIRMAID")}
-                    options={firmaData}
+                <InputFieldUI title="PANTONEKODU">
+                  <LiteOptionsTable
+                    name="code"
+                    placeholder="HAMID"
+                    staticOptions={Object.entries(PantoneColors).map(
+                      ([key, obj]: any) => {
+                        return {
+                          code: key,
+                          ...obj,
+                        };
+                      }
+                    )}
                     required={true}
                     headColumns={[
-                      { id: "FIRMAID", width: 200, title: "FIRMAID" },
-                      { id: "FIRMAADI", title: "FIRMAADI" },
-                      { id: "KISAADI", title: "KISAADI" },
+                      {
+                        id: "code",
+                        title: "code",
+                        width: 120,
+                      },
+                      {
+                        id: "name",
+                        title: "name",
+                        width: 120,
+                      },
+                      { id: "hex", title: "hex", width: 80 },
                     ]}
-                    filterParams={filterParams}
-                    handleSelect={(_: {}) => {}}
-                    handleSearch={(val: string) => {
-                      setFilterParamsFirm({ ...filterParamsFirm, q: val });
+                    renderValue={(_: string, obj: any) => {
+                      return obj.code;
+                    }}
+                    handleSelect={(obj: { hex: string }) => {
+                      setValue("hex", obj.hex);
                     }}
                     control={control}
-                    setFilterParams={setFilterParams}
                     disabled={disabled}
                   />
                 </InputFieldUI>
-                <InputFieldUI title={t("URUNTIPIADI")}>
-                  <SelectOptionsTable
-                    name="URUNTIPIADI"
-                    placeholder={t("URUNTIPIID")}
-                    options={urunTypeData?.data}
+                <InputFieldUI title="FIRMAID">
+                  <LiteOptionsTable
+                    name="FIRMAID"
+                    placeholder="FIRMAID"
+                    link="firma"
                     required={true}
-                    headColumns={[{ id: "ADI", title: "ADI", width: 200 }]}
-                    filterParams={urunTypeFilterParams}
-                    handleSelect={(obj: any) => {
-                      setValue("URUNTIPIID", obj.URUNTIPIID);
-                      setValue("URUNTIPIADI", obj.ADI);
+                    headColumns={[
+                      {
+                        id: "FIRMAID",
+                        title: "FIRMAID",
+                        width: 80,
+                      },
+                      { id: "ADI", title: "ADI", width: 160 },
+                    ]}
+                    renderValue={(_: string, obj: any) => {
+                      return obj.FIRMAID + " - " + obj.ADI;
                     }}
-                    handleSearch={(val: string) => {
-                      setUrunTypeFilterParams({
-                        ...urunTypeFilterParams,
-                        q: val,
-                      });
+                    handleSelect={(obj: { FIRMAID: string }) => {
+                      setValue("FIRMAID", obj.FIRMAID);
                     }}
                     control={control}
-                    setFilterParams={setUrunTypeFilterParams}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+                <InputFieldUI title="URUNTIPIADI">
+                  <LiteOptionsTable
+                    name="URUNTIPIID"
+                    placeholder="URUNTIPIID"
+                    link="uruntipi"
+                    required={true}
+                    headColumns={[
+                      {
+                        id: "URUNTIPIID",
+                        title: "URUNTIPIID",
+                        width: 80,
+                      },
+                      { id: "ADI", title: "ADI", width: 120 },
+                    ]}
+                    renderValue={(_: string, obj: any) => {
+                      return obj.URUNTIPIID + "" + " - " + obj.ADI;
+                    }}
+                    handleSelect={(obj: { URUNTIPIID: string }) => {
+                      setValue("URUNTIPIID", obj.URUNTIPIID);
+                    }}
+                    control={control}
                     disabled={disabled}
                   />
                 </InputFieldUI>

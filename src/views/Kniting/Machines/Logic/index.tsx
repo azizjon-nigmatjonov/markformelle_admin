@@ -81,7 +81,7 @@ export const CheckDataReason = (machine: any) => {
     case "перезаправка":
       return "reload";
     default:
-      return "stopped";
+      return "fixing";
   }
 };
 
@@ -189,6 +189,8 @@ export const CheckData = (machine: any) => {
       return "fixing";
     case "ремонт машины":
       return "fixing";
+    case "ожидание причины останова.":
+      return "fixing";
     case "замена иглы":
       return "reload";
     case "замена пряжи":
@@ -199,10 +201,16 @@ export const CheckData = (machine: any) => {
       return "no_yarn";
     case "нет плана":
       return "no_plan";
+
     case "перезаправка":
       return "reload";
-    default:
+    case "sp other parts":
+      return "fixing";
+
+    case "остановлена меньше 30 мин.":
       return "stopped";
+    default:
+      return "fixing";
   }
 };
 
@@ -393,6 +401,18 @@ export const CountBtns = ({
         checked={checked.includes("working")}
         handleCheck={() => filterCheckbox("working")}
       />
+      {/* <CCheckButton
+        color="#fb6060"
+        element={{
+          label: (
+            <p className="text-sm mobile:text-[10px] desktop:text-sm font-[600]">
+              Остановлена <span className="font-bold">{counts?.stopped}</span>
+            </p>
+          ),
+        }}
+        checked={checked.includes("stopped")}
+        handleCheck={() => filterCheckbox("stopped")}
+      /> */}
       <CCheckButton
         color="#8099f1"
         element={{
@@ -455,7 +475,6 @@ export const CountBtns = ({
         checked={checked.includes("reload_yarn")}
         handleCheck={() => filterCheckbox("reload_yarn")}
       />
-
       <CCheckButton
         color="#fb6060"
         element={{
@@ -468,7 +487,6 @@ export const CountBtns = ({
         checked={checked.includes("reload")}
         handleCheck={() => filterCheckbox("reload")}
       />
-
       <CCheckButton
         color="#fb6060"
         element={{
@@ -481,7 +499,6 @@ export const CountBtns = ({
         checked={checked.includes("cleaning")}
         handleCheck={() => filterCheckbox("cleaning")}
       />
-
       <CCheckButton
         color="#fb6060"
         element={{

@@ -3,29 +3,11 @@ import CLabel from "../../CElements/CLabel";
 import { Controller } from "react-hook-form";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
-import { styled } from "@mui/material";
 import { useTranslationHook } from "../../../hooks/useTranslation";
 import { TableUI } from "./LiteTable/TableUI";
 import { useFetchType } from "../../../hooks/useFetchRequests/useFetchType";
 import { useKeyDownEvent } from "../../../hooks/useKeyDownEvent";
-const PopupBody = styled("div")(
-  ({ theme }) => `
-  width: max-content;
-  padding: 12px 16px;
-  margin: 8px;
-  border-radius: 8px;
-  border: 1px solid ${
-    theme.palette.mode === "dark" ? "var(--gray30)" : "var(--gray30)"
-  };
-  background-color: ${theme.palette.mode === "dark" ? "var(--gray30)" : "#fff"};
-  box-shadow: ${
-    theme.palette.mode === "dark"
-      ? `0px 4px 8px rgb(0 0 0 / 0.7)`
-      : `0px 4px 8px rgb(0 0 0 / 0.1)`
-  };
-  z-index: 1;
-`
-);
+import { PopupUI } from "../PopupUI";
 
 interface Props {
   link?: string;
@@ -45,6 +27,7 @@ interface Props {
   defaultSearch?: string;
   staticSearchID?: string;
   staticOptions?: any;
+  popupUI?: any;
 }
 
 export const LiteOptionsTable = ({
@@ -64,6 +47,7 @@ export const LiteOptionsTable = ({
   defaultSearch = "",
   staticSearchID = "",
   staticOptions = [],
+  popupUI = null,
 }: Props) => {
   const { t } = useTranslationHook();
   const [searchName, setSearchName] = useState(staticSearchID || name);
@@ -76,6 +60,13 @@ export const LiteOptionsTable = ({
   const { data, setFilterParams, filterParams, isLoading } = useFetchType();
   const { isAltPressed, currentKey, pressedKey } = useKeyDownEvent();
   const [isFocus, setIsFocus] = useState(false);
+  const [openPopup, setOpenPopup] = useState(false);
+
+  useEffect(() => {
+    if (popupUI && open) {
+      setOpenPopup(true);
+    }
+  }, [popupUI, open]);
 
   useEffect(() => {
     if (isFocus) {
@@ -159,6 +150,15 @@ export const LiteOptionsTable = ({
 
   const handleSearch = (value: string) => {
     let fetchName = name;
+
+    if (staticOptions.length && !data?.data?.length) {
+      if (staticSearchID) fetchName = staticSearchID;
+      const newArr = staticOptions.filter((item: any) =>
+        item[fetchName].includes(value)
+      );
+      setOptions(newArr);
+    }
+
     if (staticSearchID) {
       setOpen(true);
       setAnchor(inputRef.current);
@@ -269,7 +269,7 @@ export const LiteOptionsTable = ({
               zIndex: 99,
             }}
           >
-            <PopupBody>
+            <div className="bg-white border border-[var(--border)] rounded-[8px] shadow-2xl">
               <TableUI
                 name={name}
                 idTable={currentEl?.[name]}
@@ -279,10 +279,15 @@ export const LiteOptionsTable = ({
                 isLoading={isLoading}
                 searchName={searchName}
               />
-            </PopupBody>
+            </div>
           </BasePopup>
         )}
-        {open}
+
+        {openPopup && (
+          <PopupUI open={openPopup} anchor={anchor}>
+            <div className="p-2">{popupUI}</div>
+          </PopupUI>
+        )}
       </div>
 
       {open && (

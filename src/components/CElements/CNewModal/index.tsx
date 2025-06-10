@@ -271,7 +271,7 @@ const CNewModal: FC<Props> = ({
               </div>
             )}
 
-            <div className="p-4 relative z-[94]">{children}</div>
+            <div className="px-3 py-2 relative z-[94]">{children}</div>
           </div>
         </Card>
       </div>

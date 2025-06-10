@@ -9,14 +9,18 @@ interface Props {
   title?: string;
   padding?: string;
   children?: ReactNode;
+  type?: string;
   handleActions?: (val: string, val2?: any) => void;
+  defaultPosition?: { x: number; y: number };
 }
 
 const CNewMiniModal: FC<Props> = ({
   title = "",
   padding = "14px",
   children,
+  type,
   handleActions = () => {},
+  defaultPosition = { x: 0, y: 0 },
 }) => {
   const { t } = useTranslation();
   const [position, setPosition] = useState<{ x: number; y: number } | null>(
@@ -89,14 +93,15 @@ const CNewMiniModal: FC<Props> = ({
         style={{
           left: position ? `${position.x}px` : "50%",
           top: position ? `${position.y}px` : "50%",
-          transform: position ? "none" : "translate(-50%, -50%)",
+          transform:
+            position?.x || position?.y ? "none" : "translate(-50%, -50%)",
           transition: isDragging ? "none" : "width 0.3s, height 0.3s",
         }}
       >
         <Card className={`${cls.card}`} style={{ padding }}>
           <div>
             {title && (
-              <div className="grid grid-cols-3 px-3 py-2 items-center top-0 bg-white z-[91] border-b border-[var(--border)]">
+              <div className="grid grid-cols-3 px-3 py-1 items-center top-0 bg-white z-[91] border-b border-[var(--border)]">
                 <h2>{t(title)}</h2>
 
                 <div className="flex justify-center">
@@ -125,7 +130,7 @@ const CNewMiniModal: FC<Props> = ({
                 </div>
               </div>
             )}
-            <div className="p-3 relative z-[94]">{children}</div>{" "}
+            <div className="px-2 py-2 relative z-[94]">{children}</div>{" "}
             {/* <div className="px-3 pb-2 pt-2 flex space-x-3 bg-[var(--primary50)]">
               <div className="flex items-center justify-center text-sm font-medium space-x-1">
                 <div className="border border-[var(--success)] rounded-[8px] w-[20px] h-[20px] flex items-center justify-center">
@@ -144,12 +149,14 @@ const CNewMiniModal: FC<Props> = ({
         </Card>
       </div>
 
-      <div
-        className={`w-[130vw] h-[130vh] fixed top-[-20vh] left-[-30vw] z-[97] ${
-          title ? "bg-[rgba(0,0,0,0.3)]" : ""
-        }`}
-        onClick={() => handleActions("Close")}
-      ></div>
+      {type !== "inner" && (
+        <div
+          className={`w-[130vw] h-[130vh] fixed top-[-20vh] left-[-30vw] z-[97] ${
+            title ? "bg-[rgba(0,0,0,0.3)]" : ""
+          }`}
+          onClick={() => handleActions("Close")}
+        ></div>
+      )}
     </>
   );
 };

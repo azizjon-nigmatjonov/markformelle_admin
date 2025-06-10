@@ -41,7 +41,7 @@ export const StepCard = ({
   const [hoveredIndexStep, setHoveredIndexStep] = useState<number | null | any>(
     null
   );
-
+  const [focusedIndex, setFocusedIndex] = useState<number>(0);
   const headerScrollRef: any = useRef(null);
   const [currentScroll, setCurrentScroll] = useState(0);
   const [maxScroll, setMaxScroll] = useState(0);
@@ -144,7 +144,6 @@ export const StepCard = ({
     setInitialModalData({ outerIndex, type: "card_add" });
   };
 
-  const [focusedIndex, setFocusedIndex] = useState<number>(0);
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const handleKeyDown = (event: any) => {

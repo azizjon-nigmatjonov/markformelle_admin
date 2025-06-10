@@ -1,28 +1,19 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 // import { StokeDeteyContantList } from "../../../../../constants/stokedetey";
 import { ImageViewer } from "../../../../../components/UI/ImageViewer";
 import { useTranslation } from "react-i18next";
 import { StepModal } from "./StepModal";
-import {
-  CheckLine,
-  CloseIcon,
-  DeleteIcon,
-  EditIcon,
-  SaveIcon,
-} from "../../../../../components/UI/IconGenerator/Svg";
+
 import { StepCard } from "./Card";
 import CModal from "../../../../../components/CElements/CModal";
 import toast from "react-hot-toast";
 import { playSound } from "../../../../../utils/playAudio";
 import { CardModal } from "./CardModal";
-import ExcelDownload from "../../../../../hooks/useExcelDownload";
-import { Tooltip } from "@mui/material";
-import { TooltipPosition } from "../../../../../constants/toolPosition";
-import {
-  CheckMultipleIcon,
-  UncheckMultipleIcon,
-} from "../../../../../components/UI/IconGenerator/Svg/Table";
+
 import { DragAndDropDataLogic } from "./Logic";
+import { DragHeader } from "./Components/DragHeader";
+import CNewMiniModal from "../../../../../components/CElements/CNewMiniModal";
+import { CardEditModal } from "./Components/CardEditModal";
 const API_URL = import.meta.env.VITE_TEST_URL;
 interface Props {
   formId: string;
@@ -134,37 +125,6 @@ export const DragDrop = ({
     setCheckedList([]);
   };
 
-  const ExcelData = useMemo(() => {
-    const arr: any = [];
-
-    for (let i = 0; i < items?.length; i++) {
-      const rows = items[i].rows;
-      arr.push(...rows);
-    }
-
-    return arr;
-  }, [items, editStep]);
-
-  const Fields = useMemo(() => {
-    if (!tableData?.data) return [];
-    const arr: any = [];
-    const obj: any = tableData.data[0];
-    delete obj.status;
-    delete obj.index;
-    for (let key in obj) {
-      arr.push(key);
-    }
-    return arr;
-  }, [tableData]);
-
-  const handleDelete = () => {
-    if (checkedList.length) {
-      setAskDelete(true);
-    } else {
-      setDeleteStep((prev) => !prev);
-    }
-  };
-
   const handleCheck = (el: any) => {
     let arr = JSON.parse(JSON.stringify(checkedList));
     if (arr.includes(el.RECETEDETAYID)) {
@@ -176,125 +136,35 @@ export const DragDrop = ({
     setCheckedList(arr);
   };
 
+  const [currentModal, setCurrentModal] = useState("");
+
+  const handleActions = (type: string) => {
+    switch (type) {
+      case "Enter":
+        setCurrentModal("card");
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="cdraganddrop text-sm">
-      <div className="flex justify-end items-center">
-        <div className="flex space-x-8 items-center font-medium">
-          <div>
-            <ExcelDownload
-              title={"excel_steps"}
-              data={ExcelData}
-              allColumns={ExcelData}
-              defaultExcelFields={Fields}
-              disabled={false}
-              type="directly"
-              label={
-                <span className="text-sm uppercase">{t("download_excel")}</span>
-              }
-            />
-          </div>
-          <Tooltip
-            title={t("delete_sellected_elements")}
-            arrow
-            slotProps={TooltipPosition}
-          >
-            <button
-              onClick={() => handleDelete()}
-              type="button"
-              className={`flex items-center space-x-2 ${
-                checkedList.length ? "text-[var(--error)]" : ""
-              }`}
-            >
-              {checkedList.length ? (
-                <DeleteIcon fill="var(--error)" />
-              ) : deleteStep ? (
-                <UncheckMultipleIcon width={23} fill="var(--main)" />
-              ) : (
-                <CheckMultipleIcon width={23} fill="var(--main)" />
-              )}
-
-              <span className="text-[var(--black)]">
-                {t(
-                  checkedList.length
-                    ? "delete_elements"
-                    : deleteStep
-                    ? "cancel_select"
-                    : "select_delete"
-                )}
-              </span>
-            </button>
-          </Tooltip>
-
-          <Tooltip title={t("delete_card")} arrow slotProps={TooltipPosition}>
-            <button
-              onClick={() => setDeleteCardActive(!deleteCardActive)}
-              type="button"
-              className={`flex items-center space-x-2`}
-            >
-              <div
-                onClick={() => {}}
-                className={`w-[17px] h-[17px] border-[1.5px] border-[var(--main)] rounded-[4px] hover:cursor-pointer flex items-center justify-center`}
-              >
-                <div className="w-[18px]">
-                  {deleteCardActive && <CheckLine fill="var(--main)" />}
-                </div>
-              </div>
-              <span className="text-[var(--black)]">{t("delete_card")}</span>
-            </button>
-          </Tooltip>
-
-          <Tooltip
-            title={t(editStep ? "cancel_changes" : "edit")}
-            arrow
-            slotProps={TooltipPosition}
-          >
-            <button
-              onClick={() => clearChanges()}
-              type="button"
-              className={`flex items-center space-x-2`}
-            >
-              {editStep ? (
-                <CloseIcon width={22} fill="black" />
-              ) : (
-                <EditIcon width={18} fill="var(--main)" />
-              )}
-              <span className="text-[var(--black)]">
-                {t(
-                  changed
-                    ? "cancel_changes"
-                    : editStep
-                    ? "cancel_order"
-                    : "edit_order"
-                )}
-              </span>
-            </button>
-          </Tooltip>
-
-          <Tooltip
-            title="Сохранить изменения"
-            arrow
-            slotProps={TooltipPosition}
-          >
-            <button
-              onClick={() => {
-                if (editStep && changed) setSaveData(true);
-              }}
-              disabled={!editStep && !changed}
-              type="button"
-              className={`flex items-center space-x-2 ${
-                editStep && changed ? "text-[var(--main)]" : "disabled"
-              }`}
-            >
-              <SaveIcon
-                width={24}
-                fill={editStep && changed ? "var(--main)" : "var(--gray)"}
-              />
-              <span className="text-[var(--black)]">{t("save")}</span>
-            </button>
-          </Tooltip>
-        </div>
-      </div>
-
+      <DragHeader
+        items={items}
+        changed={changed}
+        editStep={editStep}
+        tableData={tableData}
+        checkedList={checkedList}
+        deleteStep={deleteStep}
+        deleteCardActive={deleteCardActive}
+        setAskDelete={setAskDelete}
+        setDeleteStep={setDeleteStep}
+        clearChanges={clearChanges}
+        setSaveData={setSaveData}
+        handleActions={handleActions}
+        setDeleteCardActive={setDeleteCardActive}
+      />
       <StepCard
         items={items}
         editStep={editStep}
@@ -500,6 +370,20 @@ export const DragDrop = ({
           </button>
         </div>
       </CModal>
+
+      {currentModal === "card" && (
+        <CNewMiniModal
+          title="Recete Girisi"
+          handleActions={() => setCurrentModal("")}
+        >
+          <CardEditModal
+            currentModal={currentModal}
+            handleActions={() => {
+              setCurrentModal("");
+            }}
+          />
+        </CNewMiniModal>
+      )}
     </div>
   );
 };

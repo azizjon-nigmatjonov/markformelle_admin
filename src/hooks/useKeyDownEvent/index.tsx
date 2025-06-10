@@ -8,6 +8,7 @@ export const useKeyDownEvent = () => {
     x: "Close",
     F2: "Open",
     Escape: "Escape",
+    Enter: "Enter",
   };
 
   useEffect(() => {
