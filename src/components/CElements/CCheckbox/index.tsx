@@ -65,7 +65,7 @@ const CCheckbox = ({
       </div>
       <input
         readOnly
-        className="focus:border w-full absolute left-0 top-0 pl-12 h-full rounded-[8px]"
+        className="focus:border w-full absolute left-0 top-0 pl-12 h-full rounded-[8px] cursor-pointer"
         onKeyDown={(e: any) => handleKeyDown(e)}
         type="text"
         value={t(element?.label || "")}

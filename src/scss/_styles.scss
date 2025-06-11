@@ -678,11 +678,34 @@ ul {
   opacity: 0;
 }
 
+@keyframes widhWider {
+  0% {
+    width: 100px;
+
+  }
+  100% {
+    width: 200px;
+  }
+}
+
 .MuiDivider-root {
+  transition: all 0.3s ease-in-out;
+  .wider  {
+    transition: all 0.3s ease-in-out;
+    animation: widhWider 0.3s ease-in-out;
+    width: 200px;
+  }
+  &::after,
+  &::before {
+    border-width: 2px !important;
+    background-color: #bfdbfe !important;
+  } transition: all 0.3s ease-in-out;
   &.active {
+   
     &::after,
     &::before {
-      border-color: var(--primary) !important;
+      border-color: #60a5fa !important;
     }
   }
 }
+

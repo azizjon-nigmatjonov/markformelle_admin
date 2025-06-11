@@ -4,6 +4,9 @@ import AddIcon from "@mui/icons-material/Add";
 import { CardHeader } from "./CardHeader";
 import { DeleteIcon } from "../../../../../components/UI/IconGenerator/Svg";
 import { Button } from "@mui/material";
+import { MaterialForm } from "../MaterialForm";
+import { TrailForm } from "../TrailForm";
+import { DetailForm } from "../DetailForm";
 interface Props {
   items: any;
   oldValues: any;
@@ -18,9 +21,13 @@ interface Props {
   checkedList: any;
   handleCheck: (val: any) => void;
   setDeleteCard: (val: any) => void;
+  open: string[];
+  setOpen: (val: any) => void;
 }
 
 export const StepCard = ({
+  open,
+  setOpen,
   oldValues = [],
   items = [],
   headColumns = [],
@@ -41,7 +48,9 @@ export const StepCard = ({
   const [hoveredIndexStep, setHoveredIndexStep] = useState<number | null | any>(
     null
   );
+  const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
   const [focusedIndex, setFocusedIndex] = useState<number>(0);
+  const [isFocused, setIsFocused] = useState(false);
   const headerScrollRef: any = useRef(null);
   const [currentScroll, setCurrentScroll] = useState(0);
   const [maxScroll, setMaxScroll] = useState(0);
@@ -147,6 +156,12 @@ export const StepCard = ({
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const handleKeyDown = (event: any) => {
+    console.log("2222");
+
+    setIsFocused(true);
+    setTimeout(() => {
+      setIsFocused(false);
+    }, 5000);
     if (event.key === "ArrowUp") {
       setFocusedIndex(focusedIndex < 1 ? 0 : focusedIndex - 1);
     } else if (event.key === "ArrowDown") {
@@ -203,7 +218,11 @@ export const StepCard = ({
               editStep={editStep}
               handleDragStartStep={handleDragStartStep}
               handleDragOverStep={handleDragOverStep}
-              setInitialModalData={setInitialModalData}
+              setInitialModalData={(obj: any) => {
+                setOpen(["card", "material"]);
+                setInitialModalData(obj);
+              }}
+              isFocused={isFocused}
               handleDropSteps={handleDropSteps}
               hoveredIndexStep={hoveredIndexStep}
               hoveredIndex={hoveredIndex}
@@ -248,7 +267,7 @@ export const StepCard = ({
               )}
             </div>
           </div>
-          {!editStep && (
+          {/* {!editStep && (
             <div
               onClick={() => handleAddCard(outerIndex)}
               className="bottom-[-16px] left-0 w-full h-[18px] group absolute flex items-center justify-around"
@@ -263,9 +282,26 @@ export const StepCard = ({
               </button>
               <div className="hidden group-hover:flex bg-[var(--primary)] h-[4px] w-[46.86%] mt-1.5 rounded-full"></div>
             </div>
-          )}
+          )} */}
         </div>
       ))}
+
+      {open.includes("material") && (
+        <MaterialForm onClose={() => setOpen(["card"])} />
+      )}
+      {open.includes("trail") && (
+        <TrailForm
+          onClose={() => setOpen(["card"])}
+          handleActionsDetails={() => {
+            setOpen(["card", "detail"]);
+          }}
+          filterParams={filterParams}
+          setFilterParams={setFilterParams}
+          disabled={false}
+          setOpen={setOpen}
+        />
+      )}
+      {open.includes("detail") && <DetailForm onClose={() => setOpen("")} />}
     </div>
   );
 };

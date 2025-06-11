@@ -23,6 +23,7 @@ interface Props {
   handleCheck: (val: any) => void;
   focusedIndex: number;
   handleKeyDown: (val: any) => void;
+  isFocused: boolean;
 }
 
 export const DragingEl = ({
@@ -43,6 +44,7 @@ export const DragingEl = ({
   handleCheck = () => {},
   focusedIndex,
   handleKeyDown,
+  isFocused,
 }: Props) => {
   const { t } = useTranslation();
 
@@ -68,16 +70,17 @@ export const DragingEl = ({
       stepRef.current.focus();
     }
   }, []);
+
   return (
     <div>
-      {rows?.map((item: any, innerIndex: number) => {
+      {rows?.map((item: { [key: string]: any }, innerIndex: number) => {
         return (
           <div key={innerIndex + outerIndex} className="py-[3px]">
             <div className="w-full">
               <div
                 tabIndex={0}
                 ref={outerIndex === 0 ? stepRef : null}
-                className={`relative cursor-pointer row flex items-center w-full ${
+                className={`relative outline-none cursor-pointer row flex items-center w-full ${
                   item.RECETEALTASAMAID ? "chip" : ""
                 } ${draggingIndexStep === innerIndex ? "dragging" : ""} ${
                   hoveredIndexStep &&
@@ -144,18 +147,27 @@ export const DragingEl = ({
                               placeholder={t("add") + " RECETEALTASAMAID"}
                             />
                           ) : (
-                            <p className="p-2">
+                            <p
+                              className={`px-2 py-1 duration-300 bg-blue-200 rounded-full w-[100px] ${
+                                focusedIndex === item.index
+                                  ? "wider bg-blue-400"
+                                  : ""
+                              }`}
+                            >
                               <span>{item.RECETEALTASAMAID}</span> Istek
                             </p>
                           )
                         }
                         style={{
+                          // width:
+                          //   focusedIndex === item.index ? "200px" : "100px",
                           position: "relative",
+                          backgroundColor: "transparent",
                           zIndex: 2,
-                          backgroundColor:
-                            focusedIndex === item.index
-                              ? "#EFF8FF"
-                              : "var(--border)",
+                          // backgroundColor:
+                          //   focusedIndex === item.index
+                          //     ? "var(--primary90)"
+                          //     : "var(--primary90)",
                         }}
                         size="small"
                       />
@@ -170,20 +182,46 @@ export const DragingEl = ({
                       handleAdd(innerIndex, outerIndex, item);
                     }}
                   >
-                    {headColumns.map((column: any, index: number) => (
-                      <div key={index} className="cell flex items-center">
-                        {editStep && index === 0 && <DragIndicatorIcon />}
-
-                        <p>{item[column.id]}</p>
-                      </div>
-                    ))}
+                    {headColumns.map(
+                      (
+                        column: {
+                          id: string;
+                          width: number;
+                          render: (val: string) => string;
+                        },
+                        index: number
+                      ) => (
+                        <div
+                          key={index}
+                          style={{ minWidth: column?.width }}
+                          className="cell flex items-center"
+                        >
+                          {editStep && index === 0 && <DragIndicatorIcon />}
+                          {column?.render ? (
+                            column?.render(item[column.id])
+                          ) : (
+                            <p style={{ minWidth: column?.width }}>
+                              {item[column.id]}
+                            </p>
+                          )}
+                        </div>
+                      )
+                    )}
                   </div>
                 )}
                 {!deleteStep && !editStep && (
                   <div
                     className="absolute left-[-15px] bottom-[-6px] w-full h-[17px] z-[2]"
-                    onMouseEnter={() => handleMouseEnter(innerIndex)}
-                    onMouseLeave={() => handleMouseLeave()}
+                    onMouseEnter={() => {
+                      if (isFocused) {
+                        handleMouseEnter(999);
+                      }
+                      handleMouseEnter(innerIndex);
+                    }}
+                    onMouseLeave={() => {
+                      if (isFocused) return;
+                      handleMouseLeave();
+                    }}
                     onDoubleClick={() => {
                       if (!editStep) return;
                       setInitialModalData({
@@ -193,16 +231,16 @@ export const DragingEl = ({
                       });
                     }}
                   >
-                    {hoverAdd === innerIndex && (
+                    {/* {hoverAdd === innerIndex && !isFocused && (
                       <div
                         className="absolute left-[0px] w-[20px] h-[20px] bottom-[-5px]"
                         onClick={() => handleAdd(innerIndex, outerIndex, item)}
                       ></div>
-                    )}
+                    )} */}
                   </div>
                 )}
 
-                {hoverAdd === innerIndex && (
+                {/* {hoverAdd === innerIndex && (
                   <div className="w-full absolute left-0 bottom-0">
                     <div
                       className={`h-[3px] w-full absolute left-0 bg-[var(--primary)] z-[1] ${
@@ -222,7 +260,7 @@ export const DragingEl = ({
                       <AddIcon style={{ color: "white", fontSize: "24px" }} />
                     </button>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
           </div>

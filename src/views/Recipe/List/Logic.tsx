@@ -32,7 +32,7 @@ export const TableData = ({
             : (filterParams.page - 1) * filterParams.perPage
         }&limit=${filterParams.perPage}${
           filterParams.q ? "&" + filterParams.q : ""
-        }`
+        }&SABLON=${false}`
       );
     },
     {
@@ -42,9 +42,9 @@ export const TableData = ({
 
   const deleteFn = async (id: string[]) => {
     try {
-      await axios.delete(`${API_URL}/urun/`, {
+      await axios.delete(`${API_URL}/recete/`, {
         method: "DELETE",
-        url: `${API_URL}/urun/`,
+        url: `${API_URL}/recete/`,
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",

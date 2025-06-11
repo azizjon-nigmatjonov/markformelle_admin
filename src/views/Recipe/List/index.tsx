@@ -7,12 +7,11 @@ import { IFilterParams } from "../../../interfaces";
 import { useTranslationHook } from "../../../hooks/useTranslation";
 import CNewModal from "../../../components/CElements/CNewModal";
 import { ModalUI } from "./Modal";
-// import { ModalTypes } from "./interfaces";
 import { playSound } from "../../../utils/playAudio";
 
 export const RecipeList = () => {
   const { t } = useTranslationHook();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<string[]>([]);
   const [changed, setChanged] = useState("");
   const [askAction, setAskAction] = useState("");
   const [filterParams, setFilterParams] = useState<IFilterParams>({
@@ -48,11 +47,11 @@ export const RecipeList = () => {
 
   const handleActions = (el: any, status: string) => {
     if (status === "modal") {
-      setOpen(true);
+      setOpen(["card"]);
     }
-    console.log("el", el, status);
+
     if (status === "view" || status === "edit") {
-      setOpen(true);
+      setOpen(["card"]);
 
       setModalInitialData({
         RECETEID: el?.RECETEID,
@@ -79,16 +78,16 @@ export const RecipeList = () => {
 
   const handleModalActions = (status: string, id: string) => {
     if (status === "close") {
-      if (!changed) {
+      if (!changed && open.length === 1) {
         setModalInitialData({});
-        setOpen(false);
+        setOpen([]);
       } else {
         playSound("/error-m.mp3");
         setAskAction(changed);
       }
     }
     if (status === "delete") {
-      setOpen(false);
+      setOpen([]);
       deleteFn([id]);
     }
   };
@@ -125,7 +124,7 @@ export const RecipeList = () => {
         />
       </div>
 
-      {open || changed ? (
+      {open.length || changed ? (
         <CNewModal
           title={t(
             modalInitialData.RECETEID ? "updating_recipe" : "creating_recipe"
@@ -141,6 +140,7 @@ export const RecipeList = () => {
             changed={changed}
             setChanged={setChanged}
             askAction={askAction}
+            open={open}
             setOpen={setOpen}
             setAskAction={setAskAction}
           />
@@ -151,3 +151,41 @@ export const RecipeList = () => {
     </>
   );
 };
+
+// {
+//   "ADI": "test",
+//   "FIRMAID": "M0864",
+//   "USTASAMAID": 0,
+//   "RECETETIPI": 0,
+//   "RECETETURUID": 3,
+//   "CALISMATARIHI": "2025-06-11T11:30:32.379Z",
+//   "RENKOKEY": false,
+//   "RECETEKAPATMA": false,
+//   "LABRECETEGRUPID": 2,
+//   "LABRENKGRUPID": 30,
+//   "RENKDERINLIGIID": 2,
+//   "BEKLEMESURESI": null,
+//   "RECETEGRAFIKID": null,
+//   "LABRECETEID": 11055,
+//   "LABRECETEATISID": 13230,
+//   "MIGRASYON": 1,
+//   "SABLON": false,
+//   "ORTAKRECETE": false,
+//   "ILAVE": true,
+//   "SOKUMUZERIBOYA": false,
+//   "RECETEDETAYVAR": true,
+//   "NOTU": null,
+//   "ESKIRECETEKODU": "string",
+//   "BANYOSAYISI": null,
+//   "TOPLAMSICAKLIKDEGISIMI": null,
+//   "SABLONRECETEID": null,
+//   "ILKBOYANANPARTIKAYITID": null,
+//   "OZELDURUMLINKISLEMI": false,
+//   "MAKINAPLANLAMAGRUPID": null,
+//   "GRUPPROSESNO": null,
+//   "STANDARTSURE": null,
+//   "INSERTKULLANICIID": 1,
+//   "INSERTTARIHI": "2025-06-11T11:30:32.379Z",
+//   "KULLANICIID": 1,
+//   "DEGISIMTARIHI": "2025-06-11T11:30:32.379Z"
+// }

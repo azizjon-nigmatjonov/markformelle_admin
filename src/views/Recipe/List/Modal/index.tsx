@@ -1,35 +1,36 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import HFTextField from "../../../../components/HFElements/HFTextField";
-// import { IModalForm } from "../interfaces";
 import { useTranslationHook } from "../../../../hooks/useTranslation";
 import { InputFieldUI } from "../../../../components/UI/FieldUI";
 import { ModalTableLogic } from "./Logic";
 import dayjs from "dayjs";
-import { LabModalTables } from "./Tables";
 import { Alert } from "@mui/material";
 import CCheckbox from "../../../../components/CElements/CCheckbox";
 import { LiteOptionsTable } from "../../../../components/UI/Options/LiteTable";
-import { PantoneColors } from "../../../../constants/pantone";
+import { DragDrop } from "./StepComponents/DragDrop";
+import { LabModalTables } from "./Tables";
 
 interface ModalUIProps {
   defaultData?: any;
+  open: string[];
   URUNBIRIMID?: string;
   ADI?: string;
   changed: string;
   setChanged: (val: string) => void;
   askAction: string;
   setAskAction: (val: string) => void;
-  setOpen: (val: boolean) => void;
+  setOpen: (val: string[]) => void;
 }
 
 export const ModalUI = ({
+  open,
   askAction,
   setAskAction = () => {},
   defaultData = {},
   setChanged = () => {},
   changed = "",
-  setOpen,
+  setOpen = () => {},
 }: ModalUIProps) => {
   const { t } = useTranslationHook();
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
@@ -55,7 +56,6 @@ export const ModalUI = ({
 
     if (formId) {
       params = { ...formData, ...params };
-      delete params.BOYATIPIADI;
 
       updateForm(params, formId);
     } else {
@@ -67,24 +67,19 @@ export const ModalUI = ({
   };
 
   const setFormValues = (form: any) => {
-    setValue("URUNID", form.URUNID);
-    setValue("UNITEID", form.UNITEID);
-    setValue("UNITEADI", form.UNITEADI);
+    setValue("RECETEID", form.RECETEID);
     setValue("ADI", form.ADI);
-    setValue("BARKOD", form.BARKOD);
+    setValue("FIRMAID", form.FIRMAID);
+    setValue("CALISMATARIHI", dayjs(form.CALISMATARIHI).format("YYYY-MM-DD"));
+    setValue("FIRMAADI", form.FIRMAADI);
+    setValue("RECETETURUADI", form.RECETETURUADI);
 
-    setValue("MUTFAKDEPONO", form.MUTFAKDEPONO);
-
-    setValue("BOYATIPIID", form.BOYATIPIID);
-    setValue("BOYATIPIADI", form.BOYATIPIADI);
-
-    setValue("URUNTIPIID", form.URUNTIPIID);
-    setValue("URUNTIPIADI", form.URUNTIPIADI);
-    setValue("KULLANICIADI", form.KULLANICIADI);
-
-    setValue("NOTU", form.NOTU);
-    setValue("KAPALI", form.KAPALI);
-    setValue("ENVANTEREDAHIL", form.ENVANTEREDAHIL);
+    setValue("RECETEKODE", form.RECETEKODE);
+    setValue("ASAMAID", form.ASAMAID);
+    setValue("RECETETURUID", form.RECETETURUID);
+    setValue("ASHKLAMA", form.ASHKLAMA);
+    setValue("RENKDERINLIGIID", form.RENKDERINLIGIID);
+    setValue("LABRECETEGRUPID", form.LABRECETEGRUPID);
   };
 
   useEffect(() => {
@@ -97,16 +92,18 @@ export const ModalUI = ({
     }
   }, [defaultData, disabled]);
 
+  console.log("formData", formData);
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-2">
-          <div className="grid grid-cols-3 gap-x-3 border-b border-[var(--border)] pb-2">
-            <InputFieldUI title={t("LABRECETEKOD")} disabled={disabled}>
+          <div className="grid grid-cols-3 gap-x-3">
+            <InputFieldUI title={t("Recete Kodu")} disabled={disabled}>
               <LiteOptionsTable
-                name="URUNTIPIID"
+                name="RECETEID"
                 placeholder="URUNTIPIID"
-                link="uruntipi"
+                link="recete"
                 required={true}
                 headColumns={[
                   { id: "ADI", title: "ADI", width: 120 },
@@ -138,22 +135,21 @@ export const ModalUI = ({
           </div>
           <div className="flex justify-between space-x-3">
             <div className="w-full grid grid-cols-3 gap-x-3">
-              <div className="space-y-1">
-                <InputFieldUI title={t("URUNRECETEADI")}>
+              <div className="space-y-2">
+                <InputFieldUI title="Recete Adi">
                   <HFTextField
-                    name="URUNRECETEADI"
+                    name="ADI"
                     control={control}
                     setValue={setValue}
                     placeholder={t("URUNRECETEADI")}
                     disabled={disabled}
                   />
                 </InputFieldUI>
-
-                <InputFieldUI title={t("USTASAMA")}>
+                <InputFieldUI title={t("Firma Kodu")}>
                   <LiteOptionsTable
-                    name="ASAMAID"
-                    placeholder="USTASAMA"
-                    link="asama"
+                    name="FIRMAID"
+                    placeholder="Firma kodu"
+                    link="firm"
                     required={true}
                     headColumns={[
                       { id: "ASAMAID", title: "ASAMAID", width: 100 },
@@ -173,46 +169,35 @@ export const ModalUI = ({
                     disabled={disabled}
                   />
                 </InputFieldUI>
-
-                <InputFieldUI title={t("RECETETURU")}>
+                <InputFieldUI title="Ust Asama">
                   <LiteOptionsTable
-                    name="RECETETURUID"
-                    placeholder="RECETETURU"
-                    link="receteturu"
-                    required={true}
+                    name="ASAMAID"
+                    placeholder="Ust Asama"
+                    link="asama"
                     headColumns={[
-                      { id: "RECETETURUID", title: "RECETETURUID", width: 100 },
+                      { id: "ASAMAID", title: "ID", width: 50 },
                       { id: "ADI", title: "ADI", width: 120 },
                     ]}
                     renderValue={(_: string, obj: any) => {
-                      return (
-                        obj.RECETETURUID +
-                        (obj.RECETETURUID ? " - " + obj.ADI : "")
-                      );
+                      return obj.ASAMAID + (obj.ADI ? " - " + obj.ADI : "");
                     }}
-                    handleSelect={(obj: { RECETETURUID: number }) => {
-                      setValue("RECETETURUID", obj.RECETETURUID);
+                    handleSelect={(obj: {
+                      RECETETURUID: number;
+                      ASAMAID: number;
+                    }) => {
+                      setValue("ASAMAID", obj.ASAMAID);
                     }}
+                    required={true}
                     control={control}
                     disabled={disabled}
+                    defaultValue={formData?.ASAMAADI}
                   />
                 </InputFieldUI>
-                <InputFieldUI title={t("ASHKLAMA")}>
-                  <HFTextField
-                    name="ASHKLAMA"
-                    control={control}
-                    setValue={setValue}
-                    placeholder="ASHKLAMA"
-                    disabled={disabled}
-                  />
-                </InputFieldUI>
-              </div>
-              <div className="space-y-1">
-                <InputFieldUI title={t("RENKDIENLIGI")}>
+                <InputFieldUI title="Grafik Kodu">
                   <LiteOptionsTable
                     name="RENKDERINLIGIID"
-                    placeholder="RENKDIENLIGI"
-                    link="renkderinligi"
+                    placeholder="Grafik Kodu"
+                    link="recetegrafik"
                     required={true}
                     headColumns={[
                       {
@@ -232,6 +217,8 @@ export const ModalUI = ({
                     disabled={disabled}
                   />
                 </InputFieldUI>
+              </div>
+              <div className="space-y-2">
                 <InputFieldUI title={t("RECETEGRUP")}>
                   <LiteOptionsTable
                     name="LABRECETEGRUPID"
@@ -280,11 +267,11 @@ export const ModalUI = ({
                     disabled={disabled}
                   />
                 </InputFieldUI>
-                <InputFieldUI title={t("HAMSTOCK")}>
+                <InputFieldUI title={t("Recete Turu")}>
                   <LiteOptionsTable
-                    name="HAMID"
-                    placeholder="HAMID"
-                    link="ham"
+                    name="RECETETURUADI"
+                    placeholder="Recete Turu"
+                    link="receteturu"
                     required={true}
                     headColumns={[
                       {
@@ -299,74 +286,6 @@ export const ModalUI = ({
                     }}
                     handleSelect={(obj: { HAMID: number }) => {
                       setValue("HAMID", obj.HAMID);
-                    }}
-                    control={control}
-                    disabled={disabled}
-                  />
-                </InputFieldUI>
-              </div>
-              <div className="space-y-1">
-                <InputFieldUI title="RECETETIPI">
-                  <div className="flex space-x-2">
-                    <CCheckbox element={{ label: "Normal" }} />
-                    <CCheckbox element={{ label: "Numure" }} />
-                  </div>
-                </InputFieldUI>
-                <InputFieldUI title="PANTONEKODU">
-                  <LiteOptionsTable
-                    name="code"
-                    placeholder="HAMID"
-                    staticOptions={Object.entries(PantoneColors).map(
-                      ([key, obj]: any) => {
-                        return {
-                          code: key,
-                          ...obj,
-                        };
-                      }
-                    )}
-                    required={true}
-                    headColumns={[
-                      {
-                        id: "code",
-                        title: "code",
-                        width: 120,
-                      },
-                      {
-                        id: "name",
-                        title: "name",
-                        width: 120,
-                      },
-                      { id: "hex", title: "hex", width: 80 },
-                    ]}
-                    renderValue={(_: string, obj: any) => {
-                      return obj.code;
-                    }}
-                    handleSelect={(obj: { hex: string }) => {
-                      setValue("hex", obj.hex);
-                    }}
-                    control={control}
-                    disabled={disabled}
-                  />
-                </InputFieldUI>
-                <InputFieldUI title="FIRMAID">
-                  <LiteOptionsTable
-                    name="FIRMAID"
-                    placeholder="FIRMAID"
-                    link="firma"
-                    required={true}
-                    headColumns={[
-                      {
-                        id: "FIRMAID",
-                        title: "FIRMAID",
-                        width: 80,
-                      },
-                      { id: "ADI", title: "ADI", width: 160 },
-                    ]}
-                    renderValue={(_: string, obj: any) => {
-                      return obj.FIRMAID + " - " + obj.ADI;
-                    }}
-                    handleSelect={(obj: { FIRMAID: string }) => {
-                      setValue("FIRMAID", obj.FIRMAID);
                     }}
                     control={control}
                     disabled={disabled}
@@ -397,17 +316,62 @@ export const ModalUI = ({
                   />
                 </InputFieldUI>
               </div>
+              <div className="space-y-2">
+                <InputFieldUI title="Firma">
+                  <LiteOptionsTable
+                    name="FIRMAADI"
+                    placeholder="FIRMAADI"
+                    link="ham"
+                    required={true}
+                    headColumns={[
+                      {
+                        id: "HAMID",
+                        title: "HAMID",
+                        width: 80,
+                      },
+                      { id: "ADI", title: "ADI", width: 150 },
+                    ]}
+                    renderValue={(_: string, obj: any) => {
+                      return obj.ADI;
+                    }}
+                    handleSelect={(obj: { ADI: string }) => {
+                      setValue("FIRMAADI", obj.ADI);
+                    }}
+                    defaultValue={formData?.FIRMAADI}
+                    control={control}
+                    disabled={disabled}
+                  />
+                </InputFieldUI>
+                <InputFieldUI title="Recete tipi">
+                  <div className="flex space-x-2">
+                    <CCheckbox element={{ label: "Normal" }} />
+                    <CCheckbox element={{ label: "Numure" }} />
+                  </div>
+                </InputFieldUI>
+                <InputFieldUI title="Renk okeyi">
+                  <CCheckbox element={{ label: "Numure" }} />
+                </InputFieldUI>
+                <InputFieldUI title="Calisma Tarihi">
+                  <HFTextField
+                    name="CALISMATARIHI"
+                    control={control}
+                    setValue={setValue}
+                    placeholder="CALISMATARIHI"
+                    disabled={true}
+                  />
+                </InputFieldUI>
+              </div>
             </div>
           </div>
           <div className="h-[500px] overflow-y-scroll designed-scroll">
             <LabModalTables
               formId={formId}
-              disabled={disabled}
               changed={changed}
               setChanged={setChanged}
               askAction={askAction}
-              setOpenMainModal={setOpen}
+              setOpen={setOpen}
               setAskAction={setAskAction}
+              open={open}
             />
           </div>
         </div>

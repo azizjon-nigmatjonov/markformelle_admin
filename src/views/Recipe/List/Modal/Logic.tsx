@@ -16,48 +16,22 @@ export const ModalTableLogic = ({
   setFormId: (val: string) => void;
 }) => {
   const { t } = useTranslationHook();
-  const [bodyData, setBodyData]: any = useState({});
 
   const { data: formData, refetch } = useQuery(
     ["GET_URUN_DATA_FORM", urunId],
     () => {
-      return axios.get(`${API_URL}/urun/${urunId}`);
+      return axios.get(`${API_URL}/recete/${urunId}`);
     },
     {
       enabled: !!urunId,
     }
   );
 
-  const getTableData = (filters?: IFilterParams) => {
-    setBodyData({});
-    if (!filters?.page)
-      filters = {
-        page: 1,
-        perPage: 100,
-      };
-
-    axios
-      .get(
-        `${API_URL}/urunbirim/?URUNID=${urunId}&skip=${
-          filters.page - 1
-        }&limit=${filters.perPage}${filters?.q ? "&" + filters.q : ""}`
-      )
-      .then((res) => {
-        setBodyData(res.data);
-      });
-  };
-
-  useEffect(() => {
-    if (urunId) {
-      getTableData(filterParams);
-    }
-  }, [urunId, filterParams]);
-
   const testForm = (_: string) => {};
 
   const createForm = async (params: {}) => {
     try {
-      const { data } = await axios.post(`${API_URL}/urun/`, params);
+      const { data } = await axios.post(`${API_URL}/recete/`, params);
 
       setFormId(data?.URUNID);
       return data;
@@ -70,7 +44,7 @@ export const ModalTableLogic = ({
 
   const updateForm = async (params: {}, id: string) => {
     try {
-      const { data } = await axios.put(`${API_URL}/urun/${id}`, params);
+      const { data } = await axios.put(`${API_URL}/recete/${id}`, params);
       refetch();
       return data;
     } catch (error) {
@@ -91,7 +65,6 @@ export const ModalTableLogic = ({
         data: id,
       });
       toast.success(t("deleted_successfully"));
-      getTableData();
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
       return null;
@@ -99,8 +72,6 @@ export const ModalTableLogic = ({
   };
 
   return {
-    tableData: bodyData ?? {},
-    refetch: getTableData,
     updateForm,
     createForm,
     deleteFn,
@@ -120,9 +91,9 @@ export const DetailsFormLogic = ({
 }) => {
   const { t } = useTranslationHook();
   const { data: formData } = useQuery(
-    ["GET_URUNBIRIM_FORM", formId],
+    ["GET_FORM_RECETE_", formId],
     () => {
-      return axios.get(`${API_URL}/urunbirim/${formId}`);
+      return axios.get(`${API_URL}/recete/${formId}`);
     },
     {
       enabled: !!formId,
@@ -131,7 +102,7 @@ export const DetailsFormLogic = ({
 
   const createForm = async (params: {}) => {
     try {
-      await axios.post(`${API_URL}/urunbirim/`, params);
+      await axios.post(`${API_URL}/recete/`, params);
       toast.success(t("created_successfully"));
       setOpen(false);
       refetch();
@@ -142,7 +113,7 @@ export const DetailsFormLogic = ({
 
   const updateForm = async (params: {}, id: string | number) => {
     try {
-      await axios.put(`${API_URL}/urunbirim/${id}`, params);
+      await axios.put(`${API_URL}/recete/${id}`, params);
       toast.success(t("updated_successfully"));
       setOpen(false);
       refetch();

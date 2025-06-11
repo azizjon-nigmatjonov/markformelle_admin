@@ -14,23 +14,26 @@ import { DragAndDropDataLogic } from "./Logic";
 import { DragHeader } from "./Components/DragHeader";
 import CNewMiniModal from "../../../../../components/CElements/CNewMiniModal";
 import { CardEditModal } from "./Components/CardEditModal";
+import dayjs from "dayjs";
 const API_URL = import.meta.env.VITE_TEST_URL;
 interface Props {
+  open: string[];
   formId: string;
   changed: string;
   setChanged: (val: string) => void;
   askAction: string;
   setAskAction: (val: string) => void;
-  setOpenMainModal: (val: boolean) => void;
+  setOpen: (val: string[]) => void;
 }
 
 export const DragDrop = ({
+  open,
   formId,
   setChanged = () => {},
   changed,
   askAction,
   setAskAction = () => {},
-  setOpenMainModal,
+  setOpen = () => {},
 }: Props) => {
   const { t } = useTranslation();
   const [editStep, setEditStep] = useState(false);
@@ -91,18 +94,40 @@ export const DragDrop = ({
         : []
     );
     setHeadColumns([
-      { title: "RECETEDETAYID", id: "RECETEDETAYID" },
-      { title: "SIRA", id: "SIRA" },
-      { title: "URUNID", id: "URUNID" },
-      { title: "URUNBIRIMID", id: "URUNBIRIMID" },
-      { title: "RECETEGRAFIKID", id: "RECETEGRAFIKID" },
-      { title: "MIKTAR", id: "MIKTAR" },
-      { title: "INSERTKULLANICIID", id: "INSERTKULLANICIID" },
-      { title: "INSERTTARIHI", id: "INSERTTARIHI" },
-      { title: "KULLANICIID", id: "KULLANICIID" },
-      { title: "DEGISIMTARIHI", id: "DEGISIMTARIHI" },
+      { title: "RECETEDETAYID", id: "RECETEDETAYID", width: 120 },
+      { title: "SIRA", id: "SIRA", width: 50 },
+      { title: "URUNID", id: "URUNID", width: 80 },
+      { title: "URUNBIRIMID", id: "URUNBIRIMID", width: 100 },
+      // { title: "RECETEGRAFIKID", id: "RECETEGRAFIKID", width: 120 },
+      { title: "INSERTKULLANICIID", id: "INSERTKULLANICIID", width: 140 },
+      {
+        title: "INSERTTARIHI",
+        id: "INSERTTARIHI",
+        width: 150,
+        render: (val: string) => {
+          return dayjs(val).format("DD.MM.YYYY HH:mm");
+        },
+      },
+      { title: "KULLANICIID", id: "KULLANICIID", width: 100 },
+      {
+        title: "DEGISIMTARIHI",
+        id: "DEGISIMTARIHI",
+        width: 120,
+        render: (val: string) => {
+          return dayjs(val).format("DD.MM.YYYY HH:mm");
+        },
+      },
+      {
+        title: "MIKTAR",
+        id: "MIKTAR",
+        width: 100,
+        render: (val: string) => {
+          return val + " " + "kg";
+        },
+      },
     ]);
   };
+
   useEffect(() => {
     if (tableData?.data) SetInitialData(tableData.data);
   }, [tableData]);
@@ -136,12 +161,10 @@ export const DragDrop = ({
     setCheckedList(arr);
   };
 
-  const [currentModal, setCurrentModal] = useState("");
-
   const handleActions = (type: string) => {
     switch (type) {
       case "Enter":
-        setCurrentModal("card");
+        setOpen(["card", "step"]);
         break;
       default:
         break;
@@ -166,6 +189,8 @@ export const DragDrop = ({
         setDeleteCardActive={setDeleteCardActive}
       />
       <StepCard
+        open={open}
+        setOpen={setOpen}
         items={items}
         editStep={editStep}
         setItems={setItems}
@@ -271,7 +296,7 @@ export const DragDrop = ({
               SetInitialData([]);
               setAskAction("");
               setChanged("");
-              setOpenMainModal(false);
+              setOpen([]);
               toast.custom("Все изменения очистили!");
             }}
           >
@@ -281,7 +306,7 @@ export const DragDrop = ({
             className="custom-btn"
             onClick={() => {
               onSubmit();
-              setOpenMainModal(false);
+              setOpen([]);
             }}
           >
             {t("save")}
@@ -371,15 +396,16 @@ export const DragDrop = ({
         </div>
       </CModal>
 
-      {currentModal === "card" && (
+      {open.includes("step") && (
         <CNewMiniModal
           title="Recete Girisi"
-          handleActions={() => setCurrentModal("")}
+          handleActions={() => setOpen(["card"])}
         >
           <CardEditModal
-            currentModal={currentModal}
+            setOpen={setOpen}
+            open={open}
             handleActions={() => {
-              setCurrentModal("");
+              setOpen(["card"]);
             }}
           />
         </CNewMiniModal>
