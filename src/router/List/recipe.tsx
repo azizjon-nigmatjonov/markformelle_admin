@@ -1,9 +1,11 @@
 import { RecipeList } from "../../views/Recipe/List";
+import { MenuItem } from "../../interfaces/menu";
 
-export const recipeSection = [
+export const recipeSection: MenuItem[] = [
   {
+    id: "recipe/list",
     parent: "recipe",
-    link: "list",
+    path: "list",
     sidebar: true,
     title: "recipe",
     parent_icon: (

@@ -1,18 +1,14 @@
 import axios from "axios";
 import { useQuery } from "react-query";
 import { useTranslationHook } from "../../../../hooks/useTranslation";
-import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { IFilterParams } from "../../../../interfaces";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const ModalTableLogic = ({
   setFormId,
   urunId,
-  filterParams,
 }: {
   urunId?: string;
-  filterParams: IFilterParams;
   setFormId: (val: string) => void;
 }) => {
   const { t } = useTranslationHook();

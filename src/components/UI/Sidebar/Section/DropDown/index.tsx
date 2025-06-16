@@ -1,16 +1,24 @@
 import IconGenerator from "../../../../../components/UI/IconGenerator";
 import { SectionBtns } from "../Btns";
 import { useLocation } from "react-router-dom";
+import { MenuItem } from "../../../../../interfaces/menu";
+import { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 interface Props {
-  title: any;
-  value: any;
-  handleNavigate: (link: any) => void;
+  title: string;
+  value: MenuItem[];
+  active: string;
+  handleNavigate: (link: MenuItem) => void;
 }
 
-export const DropDown = ({ value, handleNavigate = () => {} }: Props) => {
-  const location = useLocation();
-  // const { t } = useTranslation();
+export const DropDown = ({
+  title,
+  value,
+  active,
+  handleNavigate = () => {},
+}: Props) => {
+  const { t } = useTranslation();
 
   return (
     <div className="mt-[-40px]">
@@ -18,40 +26,36 @@ export const DropDown = ({ value, handleNavigate = () => {} }: Props) => {
         <div className="relative">
           <div className="absolute left-[-4px] top-[15px] w-[15px] h-[15px] rotate-[45deg] bg-transparent border border-[var(--border)] z-[33]"></div>
           <div className="relative z-[99] bg-white card-shadow min-w-[200px] rounded-[12px] border border-[var(--gray20)] pt-2">
-            {/* <h3 className="px-3 py-2">{t(title)}</h3> */}
+            <h3 className="px-3 py-2 text-[var(--black)]">{t(title)}</h3>
             <div className="show">
-              {Object.values(value as keyof typeof value)?.map(
-                (el: any, i, arr) => {
-                  const isLastItem = i === arr.length - 1;
+              {value.map((el: MenuItem, index: number, arr: MenuItem[]) => {
+                const isLastItem = index === arr.length - 1;
 
-                  if (el.title && el.title.trim() !== "") {
-                    return (
-                      el.sidebar && (
-                        <div
-                          key={i}
-                          className={`${
-                            el?.children?.length ? "pb-2 pr-3" : ""
-                          } relative overflow-hidden`}
-                        >
-                          <SectionBtns
-                            index={i}
-                            handleNavigate={handleNavigate}
-                            clearFilter={() => {}}
-                            el={el}
-                            active={location.pathname
-                              .substring(1)
-                              .startsWith(el.path)}
-                            children={el.children}
-                            isLastItem={isLastItem}
-                          />
-                        </div>
-                      )
-                    );
-                  } else {
-                    return null;
-                  }
+                if (el.title && el.title.trim() !== "") {
+                  return (
+                    el.sidebar && (
+                      <div
+                        key={index}
+                        className={`${
+                          el?.children?.length ? "pb-2 pr-3" : ""
+                        } relative overflow-hidden`}
+                      >
+                        <SectionBtns
+                          index={index}
+                          handleNavigate={handleNavigate}
+                          clearFilter={() => {}}
+                          el={el}
+                          active={active}
+                          children={el.children}
+                          isLastItem={isLastItem}
+                        />
+                      </div>
+                    )
+                  );
+                } else {
+                  return <div key={index}></div>;
                 }
-              )}
+              })}
             </div>
           </div>
         </div>
@@ -68,16 +72,26 @@ export const OneDropdown = ({
   handleNavigate = () => {},
 }: {
   title: string;
-  icon: string;
+  icon: string | ReactNode;
   path: string;
   clearFilter: () => void;
-  handleNavigate: (link: any) => void;
+  handleNavigate: (link: MenuItem) => void;
 }) => {
+  const location = useLocation();
+
   return (
     <div className="absolute left-[40px] group-hover:block hidden bg-white whitespace-nowrap common-shadow rounded-[12px] z-[99] p-2">
       <div className="overflow-hidden">
         <button
-          onClick={() => handleNavigate(path)}
+          onClick={() =>
+            handleNavigate({
+              id: path,
+              path,
+              title,
+              icon,
+              sidebar: true,
+            } as MenuItem)
+          }
           className={`menu_link2 flex items-center steps`}
         >
           <p

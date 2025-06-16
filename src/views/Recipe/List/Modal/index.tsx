@@ -8,7 +8,6 @@ import dayjs from "dayjs";
 import { Alert } from "@mui/material";
 import CCheckbox from "../../../../components/CElements/CCheckbox";
 import { LiteOptionsTable } from "../../../../components/UI/Options/LiteTable";
-import { DragDrop } from "./StepComponents/DragDrop";
 import { LabModalTables } from "./Tables";
 
 interface ModalUIProps {
@@ -33,12 +32,10 @@ export const ModalUI = ({
   setOpen = () => {},
 }: ModalUIProps) => {
   const { t } = useTranslationHook();
-  const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
   const [formId, setFormId] = useState<string>(defaultData?.RECETEID || "");
   const [disabled, setDisabled] = useState(true);
 
   const { createForm, updateForm, formData } = ModalTableLogic({
-    filterParams,
     setFormId,
     urunId: formId,
   });

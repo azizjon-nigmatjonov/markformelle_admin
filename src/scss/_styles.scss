@@ -709,3 +709,39 @@ ul {
   }
 }
 
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+  
+  &::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, #60a5fa 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(0, 0);
+    opacity: 0;
+    animation: ripple .4s forwards;
+    z-index: 1;
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(10, 10);
+    opacity: 1;
+    background-image: radial-gradient(circle, #60a5fa 100%, transparent 100%);
+  }
+}

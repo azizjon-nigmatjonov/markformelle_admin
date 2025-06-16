@@ -6,11 +6,11 @@ import MainLayout from "../layouts/MainLayout";
 import { routeList } from "./List";
 import ErrorBoundary from "../utils/ErrorBoundary";
 import { routeParents } from "../constants/routeParents";
-
 const defaults = { ...routeParents };
 
 interface Path {
   parent: string;
+  parent_link?: string;
   link: string;
   childLink?: string;
   title: string;
@@ -48,6 +48,7 @@ const Router = () => {
 
   const getPath = ({
     parent = "",
+    parent_link = "",
     link,
     childLink,
     title,
@@ -73,6 +74,7 @@ const Router = () => {
       single_page,
       auth,
       children,
+      parent_link,
     };
 
     const found = Permissions?.find((item: any) => item.id === path);
@@ -116,6 +118,7 @@ const Router = () => {
           <Route
             path={getPath({
               parent: route.parent,
+              parent_link: route.parent_link,
               link: route.link,
               sidebar: route.sidebar,
               title: route.title,

@@ -11,7 +11,7 @@ interface Props {
   children?: any;
   handleNavigate: (val: any) => void;
   clearFilter?: () => void;
-  active: boolean;
+  active: string | boolean;
 }
 
 const Btn = ({
@@ -99,12 +99,12 @@ export const SectionBtns = ({
               />
             </div>
           </div>
-          {open ? (
+          {open || el.id === active ? (
             <div className="pl-5">
-              {children.map((item: any, i: number) => (
+              {children.map((item: any, innerIndex: number) => (
                 <Btn
-                  key={i}
-                  index={i}
+                  key={innerIndex}
+                  index={innerIndex}
                   handleNavigate={handleNavigate}
                   clearFilter={clearFilter}
                   el={item}

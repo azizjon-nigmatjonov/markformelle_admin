@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import cls from "./style.module.scss";
 import SidebarSection from "./Section";
 import UserInfo from "../Header/UserInfo";
@@ -24,9 +24,9 @@ export const Sidebar = () => {
     }
   }, []);
 
-  const handleNavigate = (obj: any) => {
+  const handleNavigate = useCallback((obj: any) => {
     navigateTo(obj.path);
-  };
+  }, []);
 
   useEffect(() => {
     if (!collapsed) {

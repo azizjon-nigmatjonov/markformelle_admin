@@ -176,7 +176,9 @@ export const DragingEl = ({
                 ) : (
                   <div
                     className={`flex rounded-[8px] ${
-                      focusedIndex === item.index ? "bg-blue-200" : ""
+                      focusedIndex === item.index
+                        ? "bg-blue-20 ripple-effect"
+                        : ""
                     }`}
                     onDoubleClick={() => {
                       handleAdd(innerIndex, outerIndex, item);
@@ -194,7 +196,7 @@ export const DragingEl = ({
                         <div
                           key={index}
                           style={{ minWidth: column?.width }}
-                          className="cell flex items-center"
+                          className="cell flex items-center relative z-[2]"
                         >
                           {editStep && index === 0 && <DragIndicatorIcon />}
                           {column?.render ? (
@@ -231,16 +233,16 @@ export const DragingEl = ({
                       });
                     }}
                   >
-                    {/* {hoverAdd === innerIndex && !isFocused && (
+                    {hoverAdd === innerIndex && !isFocused && (
                       <div
                         className="absolute left-[0px] w-[20px] h-[20px] bottom-[-5px]"
                         onClick={() => handleAdd(innerIndex, outerIndex, item)}
                       ></div>
-                    )} */}
+                    )}
                   </div>
                 )}
 
-                {/* {hoverAdd === innerIndex && (
+                {hoverAdd === innerIndex && (
                   <div className="w-full absolute left-0 bottom-0">
                     <div
                       className={`h-[3px] w-full absolute left-0 bg-[var(--primary)] z-[1] ${
@@ -260,7 +262,7 @@ export const DragingEl = ({
                       <AddIcon style={{ color: "white", fontSize: "24px" }} />
                     </button>
                   </div>
-                )} */}
+                )}
               </div>
             </div>
           </div>

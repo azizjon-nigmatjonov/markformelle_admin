@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import ScrollView from "./ScrollView";
-import AddIcon from "@mui/icons-material/Add";
 import { CardHeader } from "./CardHeader";
 import { DeleteIcon } from "../../../../../components/UI/IconGenerator/Svg";
 import { Button } from "@mui/material";
 import { MaterialForm } from "../MaterialForm";
 import { TrailForm } from "../TrailForm";
 import { DetailForm } from "../DetailForm";
+import AddIcon from "@mui/icons-material/Add";
 interface Props {
   items: any;
   oldValues: any;
@@ -267,7 +267,7 @@ export const StepCard = ({
               )}
             </div>
           </div>
-          {/* {!editStep && (
+          {!editStep && (
             <div
               onClick={() => handleAddCard(outerIndex)}
               className="bottom-[-16px] left-0 w-full h-[18px] group absolute flex items-center justify-around"
@@ -282,7 +282,7 @@ export const StepCard = ({
               </button>
               <div className="hidden group-hover:flex bg-[var(--primary)] h-[4px] w-[46.86%] mt-1.5 rounded-full"></div>
             </div>
-          )} */}
+          )}
         </div>
       ))}
 

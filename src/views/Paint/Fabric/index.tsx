@@ -108,6 +108,7 @@ const PaintSection = () => {
             formatToISO(obj.machine.date_start),
             "day"
           );
+          console.log(obj.machine.code_device, obj.machine.worked_date);
 
           obj.machine.time_bigger = Math.round(
             obj.machine.worked_minutes / obj.machine.process_time

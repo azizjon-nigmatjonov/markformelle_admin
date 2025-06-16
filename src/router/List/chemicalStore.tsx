@@ -141,6 +141,7 @@ export const chemicalStore = [
   },
   {
     parent: "chemical_store",
+    parent_link: "chemical_store/list",
     link: "chemicals",
     sidebar: false,
     element: <EritmaPage />,
@@ -148,6 +149,7 @@ export const chemicalStore = [
   },
   {
     parent: "chemical_store",
+    parent_link: "chemical_store/list",
     link: "mixtures",
     sidebar: false,
     element: <MixturesPage />,
@@ -155,6 +157,7 @@ export const chemicalStore = [
   },
   {
     parent: "chemical_store",
+    parent_link: "chemical_store/list",
     link: "mixture_create",
     sidebar: false,
     element: <CreateMixture />,
@@ -162,6 +165,7 @@ export const chemicalStore = [
   },
   {
     parent: "chemical_store",
+    parent_link: "chemical_store/documents",
     link: "transfers",
     sidebar: false,
     element: <Transfers />,
@@ -169,6 +173,7 @@ export const chemicalStore = [
   },
   {
     parent: "chemical_store",
+    parent_link: "chemical_store/documents",
     link: "buying",
     sidebar: false,
     element: <BuyingChemicals />,
@@ -176,6 +181,7 @@ export const chemicalStore = [
   },
   {
     parent: "chemical_store",
+    parent_link: "chemical_store/reports",
     link: "chemical_stock",
     sidebar: false,
     element: <ChemicalsStock />,
