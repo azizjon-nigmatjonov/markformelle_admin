@@ -1,8 +1,4 @@
-import { useSelector } from "react-redux";
+// This file can be removed as selectors are now handled directly in the Sidebar component
+// for better performance and memoization
 
-export const getWebsiteData = () => {
-  const userInfo = useSelector((state: any) => state.auth.user);
-  const routes = useSelector((state: any) => state.website.routes);
-
-  return { userInfo: userInfo ?? {}, routes: routes ?? [] };
-};
+export {};

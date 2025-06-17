@@ -9,14 +9,7 @@ export const settingList = [
     sidebar: false,
     title: "Системные настройки",
     icon: "settings",
-    parent_icon: (
-      <img
-        width={20}
-        src="/images/settings.png"
-        alt="settings"
-        loading="lazy"
-      />
-    ),
+    parent_icon: "/images/settings.png",
     element: <WebsiteSettings />,
     auth: true,
     permissions: ["view_page"],
@@ -27,14 +20,7 @@ export const settingList = [
     sidebar: false,
     title: "Языковые настройки",
     icon: "globus",
-    parent_icon: (
-      <img
-        width={20}
-        src="/images/settings.png"
-        alt="settings"
-        loading="lazy"
-      />
-    ),
+    parent_icon: "/images/settings.png",
     element: <LanguagesPage />,
     auth: true,
     permissions: ["view_page", "add", "edit"],

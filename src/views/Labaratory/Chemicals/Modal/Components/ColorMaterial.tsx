@@ -47,9 +47,9 @@ export const ColorMaterial = ({
 
         <div className="flex justify-between w-full px-2 mt-[-5px]">
           <div>
-            {Array.from(new Array(Math.floor(200 / 12))).map((ind: any) => (
+            {Array.from(new Array(Math.floor(200 / 12))).map((_, index) => (
               <div
-                key={ind}
+                key={`left-${index}`}
                 className="w-[8px] h-[8px] ml-[-5px] rotate-[45deg]"
                 style={{
                   backgroundColor:
@@ -59,9 +59,9 @@ export const ColorMaterial = ({
             ))}
           </div>
           <div>
-            {Array.from(new Array(Math.floor(200 / 12))).map((ind: any) => (
+            {Array.from(new Array(Math.floor(200 / 12))).map((_, index) => (
               <div
-                key={ind}
+                key={`right-${index}`}
                 className="w-[8px] h-[8px] mr-[-5px] rotate-[45deg]"
                 style={{
                   backgroundColor:

@@ -6,14 +6,11 @@ export const recipeSection: MenuItem[] = [
     id: "recipe/list",
     parent: "recipe",
     path: "list",
-    sidebar: true,
+    parent_link: "recipe",
     title: "recipe",
-    parent_icon: (
-      <img width={20} src="/images/recipe.png" alt="recipe" loading="lazy" />
-    ),
-    icon: (
-      <img width={18} src="/images/recipe.png" alt="recipe" loading="lazy" />
-    ),
+    parent_icon: "/images/recipe.png",
+    icon: "/images/recipe.png",
+    sidebar: true,
     element: <RecipeList />,
     auth: true,
     permissions: ["view_page", "edit"],

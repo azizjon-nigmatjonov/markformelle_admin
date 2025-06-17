@@ -50,7 +50,6 @@ export const StepCard = ({
   );
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
   const [focusedIndex, setFocusedIndex] = useState<number>(0);
-  const [isFocused, setIsFocused] = useState(false);
   const headerScrollRef: any = useRef(null);
   const [currentScroll, setCurrentScroll] = useState(0);
   const [maxScroll, setMaxScroll] = useState(0);
@@ -156,12 +155,11 @@ export const StepCard = ({
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const handleKeyDown = (event: any) => {
-    console.log("2222");
+    if (!event.ctrlKey && event.code === "Enter") {
+      setOpen(["card", "step"]);
+    }
+    if (editStep) return;
 
-    setIsFocused(true);
-    setTimeout(() => {
-      setIsFocused(false);
-    }, 5000);
     if (event.key === "ArrowUp") {
       setFocusedIndex(focusedIndex < 1 ? 0 : focusedIndex - 1);
     } else if (event.key === "ArrowDown") {
@@ -185,6 +183,14 @@ export const StepCard = ({
     }
   }, [focusedIndex]);
 
+  useEffect(() => {
+    if (editStep) {
+      setFocusedIndex(999);
+    } else {
+      setFocusedIndex(0);
+    }
+  }, [editStep]);
+
   return (
     <div>
       <CardHeader headColumns={newColumns} headerScrollRef={headerScrollRef} />
@@ -206,11 +212,12 @@ export const StepCard = ({
             if (!editStep) return;
             handleDrop(outerIndex);
           }}
-          className={`w-full grid grid-cols-4 rounded-[12px] py-3 h-full text-indigo-700 font-medium relative mb-5 shadow-md ${
+          className={`w-full grid grid-cols-4 rounded-[12px] py-3 h-full text-indigo-800 font-medium relative mb-5 shadow-md ${
             hoveredIndex === outerIndex && !hoveredIndexStep
               ? "hovered-card"
               : ""
-          } ${row.bg}`}
+          }`}
+          style={{ backgroundColor: row.bg + "aa" }}
         >
           <div className="col-span-3">
             <ScrollView
@@ -222,7 +229,6 @@ export const StepCard = ({
                 setOpen(["card", "material"]);
                 setInitialModalData(obj);
               }}
-              isFocused={isFocused}
               handleDropSteps={handleDropSteps}
               hoveredIndexStep={hoveredIndexStep}
               hoveredIndex={hoveredIndex}
@@ -267,7 +273,7 @@ export const StepCard = ({
               )}
             </div>
           </div>
-          {!editStep && (
+          {editStep && (
             <div
               onClick={() => handleAddCard(outerIndex)}
               className="bottom-[-16px] left-0 w-full h-[18px] group absolute flex items-center justify-around"

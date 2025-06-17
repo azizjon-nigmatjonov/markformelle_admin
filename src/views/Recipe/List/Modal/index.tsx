@@ -5,10 +5,12 @@ import { useTranslationHook } from "../../../../hooks/useTranslation";
 import { InputFieldUI } from "../../../../components/UI/FieldUI";
 import { ModalTableLogic } from "./Logic";
 import dayjs from "dayjs";
-import { Alert } from "@mui/material";
+import { Alert, Card } from "@mui/material";
 import CCheckbox from "../../../../components/CElements/CCheckbox";
 import { LiteOptionsTable } from "../../../../components/UI/Options/LiteTable";
 import { LabModalTables } from "./Tables";
+import { CardEditModal } from "./StepComponents/Components/CardEditModal";
+import CNewMiniModal from "../../../../components/CElements/CNewMiniModal";
 
 interface ModalUIProps {
   defaultData?: any;
@@ -89,11 +91,16 @@ export const ModalUI = ({
     }
   }, [defaultData, disabled]);
 
-  console.log("formData", formData);
-
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+          }
+        }}
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className="space-y-2">
           <div className="grid grid-cols-3 gap-x-3">
             <InputFieldUI title={t("Recete Kodu")} disabled={disabled}>
@@ -373,6 +380,21 @@ export const ModalUI = ({
           </div>
         </div>
       </form>
+
+      {open.includes("step") && (
+        <CNewMiniModal
+          title="Recete Girisi"
+          handleActions={() => setOpen(["card"])}
+        >
+          <CardEditModal
+            open={open}
+            setOpen={setOpen}
+            handleActions={() => {
+              setOpen(["card"]);
+            }}
+          />
+        </CNewMiniModal>
+      )}
     </>
   );
 };

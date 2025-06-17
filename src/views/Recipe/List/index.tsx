@@ -1,3 +1,4 @@
+import { ModalUI } from "./Modal";
 import { useMemo, useState } from "react";
 import { breadCrumbs, TableData } from "./Logic";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
@@ -6,7 +7,6 @@ import CNewTable from "../../../components/CElements/CNewTable";
 import { IFilterParams } from "../../../interfaces";
 import { useTranslationHook } from "../../../hooks/useTranslation";
 import CNewModal from "../../../components/CElements/CNewModal";
-import { ModalUI } from "./Modal";
 import { playSound } from "../../../utils/playAudio";
 
 export const RecipeList = () => {

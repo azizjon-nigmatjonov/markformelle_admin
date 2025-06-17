@@ -26,7 +26,6 @@ interface Props {
   setDeleteStep: (val: any) => void;
   clearChanges: () => void;
   setSaveData: (val: boolean) => void;
-  handleActions: (val: string) => void;
   setDeleteCardActive: (val: boolean) => void;
 }
 
@@ -43,14 +42,13 @@ export const DragHeader = ({
   setDeleteCardActive,
   setSaveData,
   clearChanges,
-  handleActions,
 }: Props) => {
   const { t } = useTranslation();
-  const { isAltPressed, currentKey } = useKeyDownEvent();
+  // const { isAltPressed, currentKey } = useKeyDownEvent();
 
-  useEffect(() => {
-    if (currentKey && isAltPressed) handleActions(currentKey);
-  }, [currentKey, isAltPressed]);
+  // useEffect(() => {
+  //   if (currentKey && isAltPressed) handleActions(currentKey);
+  // }, [currentKey, isAltPressed]);
 
   const ExcelData = useMemo(() => {
     const arr: any = [];
@@ -85,7 +83,7 @@ export const DragHeader = ({
 
   return (
     <div className="flex justify-between items-center">
-      <div>
+      {/* <div>
         {isAltPressed && (
           <div className="flex space-x-8 text-sm font-medium">
             <div className="flex space-x-1">
@@ -94,7 +92,7 @@ export const DragHeader = ({
             </div>
           </div>
         )}
-      </div>
+      </div> */}
       <div className="flex space-x-8 items-center font-medium">
         <div>
           <ExcelDownload
@@ -170,34 +168,30 @@ export const DragHeader = ({
               <EditIcon width={18} fill="var(--main)" />
             )}
             <span className="text-[var(--black)]">
-              {t(
-                changed
-                  ? "cancel_changes"
-                  : editStep
-                  ? "cancel_order"
-                  : "edit_order"
-              )}
+              {t(changed ? "cancel_changes" : editStep ? "cancel" : "edit")}
             </span>
           </button>
         </Tooltip>
 
         <Tooltip title="Сохранить изменения" placement="bottom">
-          <button
-            onClick={() => {
-              if (editStep && changed) setSaveData(true);
-            }}
-            disabled={!editStep && !changed}
-            type="button"
-            className={`flex items-center space-x-2 ${
-              editStep && changed ? "text-[var(--main)]" : "disabled"
-            }`}
-          >
-            <SaveIcon
-              width={24}
-              fill={editStep && changed ? "var(--main)" : "var(--gray)"}
-            />
-            <span className="text-[var(--black)]">{t("save")}</span>
-          </button>
+          <div>
+            <button
+              onClick={() => {
+                if (editStep && changed) setSaveData(true);
+              }}
+              disabled={!editStep && !changed}
+              type="button"
+              className={`flex items-center space-x-2 ${
+                editStep && changed ? "text-[var(--main)]" : "disabled"
+              }`}
+            >
+              <SaveIcon
+                width={24}
+                fill={editStep && changed ? "var(--main)" : "var(--gray)"}
+              />
+              <span className="text-[var(--black)]">{t("save")}</span>
+            </button>
+          </div>
         </Tooltip>
       </div>
     </div>

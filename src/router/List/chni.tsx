@@ -6,10 +6,8 @@ export const chniSection = [
     link: "dashboard",
     sidebar: true,
     title: "dashboard_chni",
-    parent_icon: (
-      <img width={20} src="/images/socks.png" alt="socks" loading="lazy" />
-    ),
-    icon: <img width={18} src="/images/socks.png" alt="socks" loading="lazy" />,
+    parent_icon: "/images/socks.png",
+    icon: "/images/socks.png",
     element: <ChniDashboard />,
     auth: true,
     permissions: ["view_page", "edit"],

@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, useCallback } from "react";
 import { GetTranslations, HandleTable } from "./Logic";
 import { IFilterParams } from "../../../interfaces";
 import CNewTable from "../../../components/CElements/CNewTable";
@@ -24,7 +24,10 @@ const LanguagesPage = () => {
   const [count, setCount] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const storedTranslation = useSelector(
-    (state: any) => state.translation.translation
+    (state: any) => state?.translation?.translation || []
+  );
+  const openHeader = useSelector(
+    (state: any) => state?.sidebar?.openHeader || false
   );
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     edit: false,
@@ -57,7 +60,7 @@ const LanguagesPage = () => {
   const {
     AddNewColumn,
     GetTitle,
-    WriteValue,
+
     onSubmit,
     onUpdate,
     handleDelete,
@@ -65,16 +68,183 @@ const LanguagesPage = () => {
     refetch,
   });
 
-  const handleValue = (value: any, ID: number, key: string, index: number) => {
-    WriteValue({
-      listTable,
-      setListTable,
-      value,
-      ID,
-      key,
-      index,
-    });
-  };
+  const handleValue = useCallback(
+    (value: any, ID: number, key: string, index: number) => {
+      const keyTochoose = ID ? "ID" : "index";
+      const valueToChoose = ID ? ID : index;
+      const itemIndex = listTable.findIndex(
+        (item: any) => item[keyTochoose] === valueToChoose
+      );
+
+      if (itemIndex === -1) return;
+
+      const item = listTable[itemIndex];
+      if (!item.KEYWORD?.trim()) item.status = "new";
+      item[key] = value;
+      if (item?.status !== "new") item.status = "update";
+    },
+    [listTable]
+  );
+
+  const renderKeywordColumn = useCallback(
+    ([key, ID, errors, index]: any) => {
+      return (
+        <div className="flex items-center w-full font-medium">
+          <div className="w-full flex">
+            {filterParams.edit || !key || errors?.includes("KEYWORD") ? (
+              <input
+                className={`input-design font-medium ${
+                  errors?.includes("KEYWORD") ? "error" : ""
+                }`}
+                onChange={(e) => {
+                  handleValue(e.target.value, ID, "KEYWORD", index);
+                }}
+                style={{ height: "28px" }}
+                ref={inputRef}
+                defaultValue={key}
+              />
+            ) : (
+              key
+            )}
+          </div>
+        </div>
+      );
+    },
+    [filterParams.edit, handleValue]
+  );
+
+  const renderRuColumn = useCallback(
+    ([val, ID, errors, index]: any) => {
+      return (
+        <div className="px-8 flex items-center w-full">
+          {filterParams.edit || errors?.includes("RU") ? (
+            <input
+              className={`input-design font-medium ${
+                errors?.includes("RU") ? "error" : ""
+              }`}
+              onChange={(e) => {
+                handleValue(e.target.value, ID, "RU", index);
+              }}
+              style={{ height: "28px" }}
+              defaultValue={val}
+            />
+          ) : (
+            val
+          )}
+        </div>
+      );
+    },
+    [filterParams.edit, handleValue]
+  );
+
+  const renderUzColumn = useCallback(
+    ([val, ID, errors, index]: any) => {
+      return (
+        <div className="px-8 flex items-center w-full">
+          {filterParams.edit || errors?.includes("UZ") ? (
+            <input
+              className={`input-design font-medium ${
+                errors?.includes("UZ") ? "error" : ""
+              }`}
+              style={{ height: "28px" }}
+              onChange={(e) => {
+                handleValue(e.target.value, ID, "UZ", index);
+              }}
+              defaultValue={val}
+            />
+          ) : (
+            val
+          )}
+        </div>
+      );
+    },
+    [filterParams.edit, handleValue]
+  );
+
+  const renderEnColumn = useCallback(
+    ([val, ID, errors, index]: any) => {
+      return (
+        <div className="px-8 flex items-center w-full">
+          {filterParams.edit || errors?.includes("EN") ? (
+            <input
+              className={`input-design font-medium ${
+                errors?.includes("EN") ? "error" : ""
+              }`}
+              style={{ height: "28px" }}
+              onChange={(e) => {
+                handleValue(e.target.value, ID, "EN", index);
+              }}
+              defaultValue={val}
+            />
+          ) : (
+            val
+          )}
+        </div>
+      );
+    },
+    [filterParams.edit, handleValue]
+  );
+
+  const renderTuColumn = useCallback(
+    ([val, ID, errors, index]: any) => {
+      return (
+        <div className="px-8 flex items-center w-full">
+          {filterParams.edit || errors?.includes("TU") ? (
+            <input
+              className={`input-design font-medium ${
+                errors?.includes("TU") ? "error" : ""
+              }`}
+              style={{ height: "28px" }}
+              onChange={(e) => {
+                handleValue(e.target.value, ID, "TU", index);
+              }}
+              defaultValue={val}
+            />
+          ) : (
+            val
+          )}
+        </div>
+      );
+    },
+    [filterParams.edit, handleValue]
+  );
+
+  const headColumns = useMemo(() => {
+    const list: any = [
+      {
+        renderHead: () => <GetTitle val="key" />,
+        id: ["KEYWORD", "ID", "errors", "index"],
+        render: renderKeywordColumn,
+      },
+      {
+        renderHead: () => <GetTitle val="ru" />,
+        id: ["RU", "ID", "errors", "index"],
+        render: renderRuColumn,
+      },
+      {
+        renderHead: () => <GetTitle val="uz" />,
+        id: ["UZ", "ID", "errors", "index"],
+        render: renderUzColumn,
+      },
+      {
+        renderHead: () => <GetTitle val="en" />,
+        id: ["EN", "ID", "errors", "index"],
+        render: renderEnColumn,
+      },
+      {
+        renderHead: () => <GetTitle val="tu" />,
+        id: ["TU", "ID", "errors", "index"],
+        render: renderTuColumn,
+      },
+    ];
+    return list;
+  }, [
+    renderKeywordColumn,
+    renderRuColumn,
+    renderUzColumn,
+    renderEnColumn,
+    renderTuColumn,
+  ]);
 
   const handleSubmit = () => {
     let error = false;
@@ -126,139 +296,12 @@ const LanguagesPage = () => {
     setListTable(newArr);
   };
 
-  const headColumns = useMemo(() => {
-    const list: any = [
-      {
-        renderHead: () => <GetTitle val="key" />,
-        id: ["KEYWORD", "ID", "errors", "index"],
-        render: ([key, ID, errors, index]: any) => {
-          return (
-            <div className="flex items-center w-full font-medium">
-              <div className="w-full flex">
-                {filterParams.edit || !key || errors?.includes("KEYWORD") ? (
-                  <input
-                    className={`input-design font-medium ${
-                      errors?.includes("KEYWORD") ? "error" : ""
-                    }`}
-                    onChange={(e) => {
-                      handleValue(e.target.value, ID, "KEYWORD", index);
-                    }}
-                    style={{ height: "28px" }}
-                    ref={inputRef}
-                    defaultValue={key}
-                  />
-                ) : (
-                  key
-                )}
-              </div>
-            </div>
-          );
-        },
-      },
-      {
-        renderHead: () => <GetTitle val="ru" />,
-        id: ["RU", "ID", "errors", "index"],
-
-        render: ([val, ID, errors, index]: any) => {
-          return (
-            <div className="px-8 flex items-center w-full">
-              {filterParams.edit || errors?.includes("RU") ? (
-                <input
-                  className={`input-design font-medium ${
-                    errors?.includes("RU") ? "error" : ""
-                  }`}
-                  onChange={(e) => {
-                    handleValue(e.target.value, ID, "RU", index);
-                  }}
-                  style={{ height: "28px" }}
-                  defaultValue={val}
-                />
-              ) : (
-                val
-              )}
-            </div>
-          );
-        },
-      },
-      {
-        renderHead: () => <GetTitle val="uz" />,
-        id: ["UZ", "ID", "errors", "index"],
-
-        render: ([val, ID, errors, index]: any) => {
-          return (
-            <div className="px-8 flex items-center w-full">
-              {filterParams.edit || errors?.includes("UZ") ? (
-                <input
-                  className={`input-design font-medium ${
-                    errors?.includes("UZ") ? "error" : ""
-                  }`}
-                  style={{ height: "28px" }}
-                  onChange={(e) => {
-                    handleValue(e.target.value, ID, "UZ", index);
-                  }}
-                  defaultValue={val}
-                />
-              ) : (
-                val
-              )}
-            </div>
-          );
-        },
-      },
-
-      {
-        renderHead: () => <GetTitle val="en" />,
-        id: ["EN", "ID", "errors", "index"],
-
-        render: ([val, ID, errors, index]: any) => {
-          return (
-            <div className="px-8 flex items-center w-full">
-              {filterParams.edit || errors?.includes("EN") ? (
-                <input
-                  className={`input-design font-medium ${
-                    errors?.includes("EN") ? "error" : ""
-                  }`}
-                  style={{ height: "28px" }}
-                  onChange={(e) => {
-                    handleValue(e.target.value, ID, "EN", index);
-                  }}
-                  defaultValue={val}
-                />
-              ) : (
-                val
-              )}
-            </div>
-          );
-        },
-      },
-      {
-        renderHead: () => <GetTitle val="tu" />,
-        id: ["TU", "ID", "errors", "index"],
-
-        render: ([val, ID, errors, index]: any) => {
-          return (
-            <div className="px-8 flex items-center w-full">
-              {filterParams.edit || errors?.includes("TU") ? (
-                <input
-                  className={`input-design font-medium ${
-                    errors?.includes("TU") ? "error" : ""
-                  }`}
-                  style={{ height: "28px" }}
-                  onChange={(e) => {
-                    handleValue(e.target.value, ID, "TU", index);
-                  }}
-                  defaultValue={val}
-                />
-              ) : (
-                val
-              )}
-            </div>
-          );
-        },
-      },
-    ];
-    return list;
-  }, [listTable, filterParams.edit]);
+  const memoizedBodyColumns = useMemo(() => {
+    if (!listTable?.length) return [];
+    return [...listTable].sort(
+      (a: { ID: number }, b: { ID: number }) => b.ID - a.ID
+    );
+  }, [listTable]);
 
   const handleActions = (el: any, type: string) => {
     if (type === "delete") {
@@ -318,7 +361,6 @@ const LanguagesPage = () => {
     }
   };
 
-  const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   return (
     <>
       <div className="p-2">
@@ -335,9 +377,7 @@ const LanguagesPage = () => {
             "sellect_more",
           ]}
           defaultActions={["delete", "is_sellect_more"]}
-          bodyColumns={listTable?.sort(
-            (a: { ID: number }, b: { ID: number }) => b.ID - a.ID
-          )}
+          bodyColumns={memoizedBodyColumns}
           disablePagination={true}
           filterParams={filterParams}
           isResizeble={false}

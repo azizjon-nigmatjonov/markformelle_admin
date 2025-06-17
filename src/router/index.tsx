@@ -61,30 +61,37 @@ const Router = () => {
     children,
   }: Path) => {
     const path = `${parent}/${link}${childLink ? `/${childLink}` : ""}`;
-    const obj = {
+
+    // Create a serializable version of the route object
+    const serializableObj = {
       path: path,
       sidebar,
       id: path,
       title,
-      icon,
+      icon: typeof icon === "string" ? icon : "",
       permissions: custom_permissions,
       parent,
       link,
-      parent_icon,
+      parent_icon: typeof parent_icon === "string" ? parent_icon : "",
       single_page,
       auth,
-      children,
+      children: children?.map((child: any) => ({
+        ...child,
+        icon: typeof child.icon === "string" ? child.icon : "",
+        parent_icon:
+          typeof child.parent_icon === "string" ? child.parent_icon : "",
+      })),
       parent_link,
     };
 
     const found = Permissions?.find((item: any) => item.id === path);
 
-    if (!listNew.includes(obj.id)) {
+    if (!listNew.includes(serializableObj.id)) {
       setNewRoutes((prev: any) => ({
         ...prev,
-        [parent]: [...prev[parent], obj],
+        [parent]: [...prev[parent], serializableObj],
       }));
-      setListNew((prev) => [...prev, obj.id]);
+      setListNew((prev) => [...prev, serializableObj.id]);
     }
 
     if (
@@ -93,12 +100,12 @@ const Router = () => {
       userInfo?.roles?.includes("superadmin") ||
       1
     ) {
-      if (!list.includes(obj.id)) {
+      if (!list.includes(serializableObj.id)) {
         setRoutes((prev: any) => ({
           ...prev,
-          [parent]: [...prev[parent], obj],
+          [parent]: [...prev[parent], serializableObj],
         }));
-        setList((prev) => [...prev, obj.id]);
+        setList((prev) => [...prev, serializableObj.id]);
       }
       return path;
     }

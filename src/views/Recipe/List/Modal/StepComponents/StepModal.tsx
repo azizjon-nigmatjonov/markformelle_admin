@@ -7,6 +7,7 @@ import CLabel from "../../../../../components/CElements/CLabel";
 import { useTranslation } from "react-i18next";
 import HFTextField from "../../../../../components/HFElements/HFTextField";
 import { useEffect } from "react";
+import { LiteOptionsTable } from "../../../../../components/UI/Options/LiteTable";
 
 interface Props {
   defaultData: {
@@ -55,25 +56,21 @@ export const StepModal = ({
           disabled
           defaultValue={defaultData?.RECETEID}
         />
-        <SelectOptionsTable
-          name="RECETEASAMAKODU"
+        <LiteOptionsTable
+          name="ASAMAID"
           label="Recete asama kodu"
           placeholder="Recete asama kodu"
-          options={[]}
+          link="asama"
           required={true}
           headColumns={[
-            { id: "BARKOD", width: 200, title: "BARKOD" },
-            { id: "ADI", title: "URUNADI", innerId: "URUNID" },
+            { id: "ASAMAID", width: 200, title: "ASAMAID" },
+            { id: "ADI", title: "ADI" },
           ]}
-          filterParams={{}}
-          handleSelect={(_: {}) => {}}
-          handleSearch={(_: string) => {
-            {
-            }
+          handleSelect={(obj: { ASAMAID: string }) => {
+            setValue("ASAMAID", obj.ASAMAID);
           }}
           focused
           control={control}
-          setFilterParams={() => {}}
         />
         <SelectOptionsTable
           name="RECETEASAMASABLONKODU"

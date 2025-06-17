@@ -1,5 +1,4 @@
 import Drawer from "@mui/material/Drawer";
-import { getWebsiteData } from "../../Sidebar/Logic";
 import { useTranslation } from "react-i18next";
 import IconGenerator from "../../IconGenerator";
 import usePageRouter from "../../../../hooks/useObjectRouter";
@@ -7,6 +6,7 @@ import { useEffect, useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import { AccordionDetails, AccordionSummary } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useSelector } from "react-redux";
 import "./style.scss";
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const HeaderDrawer = ({ open = false, setOpen }: Props) => {
-  const { routes } = getWebsiteData();
+  const routes = useSelector((state: any) => state.website.routes);
   const { t } = useTranslation();
   const { navigateTo } = usePageRouter();
   const [expanded, setExpanded] = useState<string | false>(false);

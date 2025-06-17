@@ -39,19 +39,16 @@ const ExcelReader = ({
 
   return (
     <div className="relative">
-      <IconButton disabled={disabled}>
-        <div
-          className="h-[30px] w-[30px] rounded-[8px] flex items-center justify-center relative z-[1]"
-          onClick={() => document?.getElementById("fileInput")?.click()}
-        >
-          {loading ? (
-            <CircularProgress size={14} />
-          ) : (
-            <UploadOutlinedIcon
-              fill={disabled ? "var(--gray)" : "var(--main)"}
-            />
-          )}
-        </div>
+      <IconButton
+        disabled={disabled}
+        onClick={() => document?.getElementById("fileInput")?.click()}
+        className="h-[30px] w-[30px] rounded-[8px] flex items-center justify-center"
+      >
+        {loading ? (
+          <CircularProgress size={14} />
+        ) : (
+          <UploadOutlinedIcon fill={disabled ? "var(--gray)" : "var(--main)"} />
+        )}
       </IconButton>
 
       <input
@@ -59,7 +56,7 @@ const ExcelReader = ({
         id="fileInput"
         accept=".xlsx, .xls"
         onChange={handleFileUpload}
-        style={{ display: "none" }} // Completely hides the input
+        style={{ display: "none" }}
       />
     </div>
   );

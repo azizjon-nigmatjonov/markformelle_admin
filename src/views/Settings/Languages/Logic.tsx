@@ -11,7 +11,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { translateActions } from "../../../store/translation/translate.slice";
-// import { allTranslations } from "../../../constants/allTranslations";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
 const defObj: any = {
@@ -135,39 +134,6 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
     );
   };
 
-  const WriteValue = ({
-    listTable = [],
-    setListTable,
-    value,
-    ID,
-    key,
-    index,
-  }: {
-    listTable: any;
-    setListTable: (val: any) => void;
-    ID: number;
-    value: any;
-    key: string;
-    index: number;
-  }) => {
-    const keyTochoose = ID ? "ID" : "index";
-    const valueToChoose = ID ? ID : index;
-    const newObj: any =
-      listTable?.find((el: any) => el[keyTochoose] === valueToChoose) ?? {};
-    if (!newObj.KEYWORD.trim()) newObj.status = "new";
-
-    newObj[key] = value;
-
-    if (newObj?.status !== "new") newObj.status = "update";
-    const arr = listTable?.map((item: any) => {
-      if (item[keyTochoose] === valueToChoose) {
-        return { ...newObj };
-      } else return { ...item };
-    });
-
-    setListTable(arr);
-  };
-
   const onSubmit = (data: any) => {
     axios
       .post(
@@ -237,7 +203,6 @@ export const HandleTable = ({ refetch }: { refetch: () => void }) => {
   return {
     AddNewColumn,
     GetTitle,
-    WriteValue,
     DeleteColumn,
     onSubmit,
     onUpdate,
@@ -266,15 +231,6 @@ export const GetTranslations = ({
         const data = res?.data;
         const newArr: any = [];
         if (!data?.data?.length) return;
-        // let no_translations: any = localStorage.getItem("no_translations");
-
-        // for (let key in allTranslations) {
-        //   if (
-        //     !data.data.find((item: { KEYWORD: string }) => item.KEYWORD === key)
-        //   ) {
-        //     newArr.push({ ...defObj, KEYWORD: key, status: "new" });
-        //   }
-        // }
 
         storedTranslation?.forEach((el: any) => {
           if (

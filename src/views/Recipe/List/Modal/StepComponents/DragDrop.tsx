@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo, memo } from "react";
 // import { StokeDeteyContantList } from "../../../../../constants/stokedetey";
 import { ImageViewer } from "../../../../../components/UI/ImageViewer";
 import { useTranslation } from "react-i18next";
 import { StepModal } from "./StepModal";
 
 import { StepCard } from "./Card";
-import CModal from "../../../../../components/CElements/CModal";
 import toast from "react-hot-toast";
 import { playSound } from "../../../../../utils/playAudio";
 import { CardModal } from "./CardModal";
@@ -14,6 +13,7 @@ import { DragAndDropDataLogic } from "./Logic";
 import { DragHeader } from "./Components/DragHeader";
 import CNewMiniModal from "../../../../../components/CElements/CNewMiniModal";
 import { CardEditModal } from "./Components/CardEditModal";
+import ConfirmationModal from "../../../../../components/CElements/CConfirmationModal";
 import dayjs from "dayjs";
 const API_URL = import.meta.env.VITE_TEST_URL;
 interface Props {
@@ -26,390 +26,377 @@ interface Props {
   setOpen: (val: string[]) => void;
 }
 
-export const DragDrop = ({
-  open,
-  formId,
-  setChanged = () => {},
-  changed,
-  askAction,
-  setAskAction = () => {},
-  setOpen = () => {},
-}: Props) => {
-  const { t } = useTranslation();
-  const [editStep, setEditStep] = useState(false);
-  const [deleteStep, setDeleteStep] = useState(false);
-  const [initialModalData, setInitialModalData] = useState({});
-  const [saveData, setSaveData] = useState(false);
-  const [imageView, setImageView] = useState("");
-  const [items, setItems]: any = useState([]);
-  const [headColumns, setHeadColumns]: any = useState([]);
-  const [oldValues, setOldValues] = useState([]);
-  const [askClear, setAskClear] = useState(false);
-  const [askDelete, setAskDelete] = useState(false);
-  const [checkedList, setCheckedList]: any = useState([]);
-  const [deleteCard, setDeleteCard] = useState(null);
-  const [deleteCardActive, setDeleteCardActive] = useState(false);
-  const { tableData } = DragAndDropDataLogic({ id: formId });
+// Custom hook for data processing
+const useDataProcessor = (tableData: any) => {
+  const [items, setItems] = useState<any[]>([]);
+  const [oldValues, setOldValues] = useState<any[]>([]);
+  const [headColumns, setHeadColumns] = useState<any[]>([]);
 
-  const onSubmit = () => {
-    setEditStep(false);
-    setSaveData(false);
-    setAskClear(false);
-    setChanged("");
-    setAskAction("");
-    toast.success("Изменения успешно сохранены!");
-    playSound("/notif.wav");
-  };
+  const processData = useCallback((data: any) => {
+    if (!data?.length) {
+      setItems([]);
+      setOldValues([]);
+      return;
+    }
 
-  const SetInitialData = (data: any) => {
-    data = data.sort((a: any, b: any) => a.SIRA - b.SIRA) ?? [];
+    const sortedData = data.sort((a: any, b: any) => a.SIRA - b.SIRA);
     const objects: any = {};
     let lastId = "";
-    let ind = 0;
-    for (let i = 0; i < data.length; i++) {
-      const obj = data[i];
-      if (obj.RECETEASAMAID) lastId = "" + obj.RECETEASAMAID;
 
-      if (lastId in objects && !obj.RECETEASAMAID) {
-        obj.index = ind;
-        ind += 1;
-        objects[lastId].rows.push(obj);
-      } else {
-        objects[obj.RECETEASAMAID] = {
-          rows: [],
+    // Define background colors for different states
+    const bgColors = {
+      default: "#e0e7ff", // Light indigo
+      hover: "#c7d2fe", // Slightly darker indigo
+      active: "#a5b4fc", // Even darker indigo
+    };
+
+    for (let i = 0; i < sortedData.length; i++) {
+      const obj = sortedData[i];
+      obj.index = i;
+      obj.bg = bgColors.default; // Set default background color
+
+      if (obj.RECETEASAMAID) {
+        lastId = "" + obj.RECETEASAMAID;
+        objects[lastId] = {
+          rows: [obj],
           RECETEGRAFIKID: obj.RECETEGRAFIKID,
           id: obj.RECETEASAMAID,
           SIRA: obj.SIRA,
           image: `${API_URL}/recetegrafik/image/${obj.RECETEGRAFIKID}`,
-          bg: "bg-indigo-100",
+          bg: bgColors.default,
           main: obj,
         };
+      } else if (lastId && lastId in objects) {
+        objects[lastId].rows.push(obj);
       }
     }
 
-    setOldValues(Object.values(JSON.parse(JSON.stringify(objects))));
-    setItems(
-      Object.values(objects)?.length
-        ? Object.values(objects).sort((a: any, b: any) => a.SIRA - b.SIRA)
-        : []
+    const processedItems = Object.values(objects).sort(
+      (a: any, b: any) => a.SIRA - b.SIRA
     );
-    setHeadColumns([
+    setOldValues(Object.values(JSON.parse(JSON.stringify(objects))));
+    setItems(processedItems);
+  }, []);
+
+  const columns = useMemo(
+    () => [
       { title: "RECETEDETAYID", id: "RECETEDETAYID", width: 120 },
       { title: "SIRA", id: "SIRA", width: 50 },
       { title: "URUNID", id: "URUNID", width: 80 },
       { title: "URUNBIRIMID", id: "URUNBIRIMID", width: 100 },
-      // { title: "RECETEGRAFIKID", id: "RECETEGRAFIKID", width: 120 },
       { title: "INSERTKULLANICIID", id: "INSERTKULLANICIID", width: 140 },
       {
         title: "INSERTTARIHI",
         id: "INSERTTARIHI",
         width: 150,
-        render: (val: string) => {
-          return dayjs(val).format("DD.MM.YYYY HH:mm");
-        },
+        render: (val: string) => dayjs(val).format("DD.MM.YYYY HH:mm"),
       },
       { title: "KULLANICIID", id: "KULLANICIID", width: 100 },
       {
         title: "DEGISIMTARIHI",
         id: "DEGISIMTARIHI",
         width: 120,
-        render: (val: string) => {
-          return dayjs(val).format("DD.MM.YYYY HH:mm");
-        },
+        render: (val: string) => dayjs(val).format("DD.MM.YYYY HH:mm"),
       },
       {
         title: "MIKTAR",
         id: "MIKTAR",
         width: 100,
-        render: (val: string) => {
-          return val + " " + "kg";
-        },
+        render: (val: string) => `${val} kg`,
       },
-    ]);
-  };
+    ],
+    []
+  );
 
   useEffect(() => {
-    if (tableData?.data) SetInitialData(tableData.data);
-  }, [tableData]);
-
-  const clearChanges = () => {
-    if (editStep && changed) {
-      setAskClear(true);
-    } else {
-      setEditStep((prev) => !prev);
+    if (tableData?.data) {
+      processData(tableData.data);
+      setHeadColumns(columns);
     }
-  };
+  }, [tableData, processData, columns]);
 
-  const clearSelect = () => {
-    items.map((item: { rows: any }) => {
-      return item.rows.map((row: any) => {
-        row.checked = false;
-        return row;
-      });
-    });
-    setCheckedList([]);
-  };
-
-  const handleCheck = (el: any) => {
-    let arr = JSON.parse(JSON.stringify(checkedList));
-    if (arr.includes(el.RECETEDETAYID)) {
-      arr = arr.filter((i: number) => i !== el.RECETEDETAYID);
-    } else {
-      arr.push(el.RECETEDETAYID);
-    }
-    arr.length ? setChanged("delete") : setChanged("");
-    setCheckedList(arr);
-  };
-
-  const handleActions = (type: string) => {
-    switch (type) {
-      case "Enter":
-        setOpen(["card", "step"]);
-        break;
-      default:
-        break;
-    }
-  };
-
-  return (
-    <div className="cdraganddrop text-sm">
-      <DragHeader
-        items={items}
-        changed={changed}
-        editStep={editStep}
-        tableData={tableData}
-        checkedList={checkedList}
-        deleteStep={deleteStep}
-        deleteCardActive={deleteCardActive}
-        setAskDelete={setAskDelete}
-        setDeleteStep={setDeleteStep}
-        clearChanges={clearChanges}
-        setSaveData={setSaveData}
-        handleActions={handleActions}
-        setDeleteCardActive={setDeleteCardActive}
-      />
-      <StepCard
-        open={open}
-        setOpen={setOpen}
-        items={items}
-        editStep={editStep}
-        setItems={setItems}
-        oldValues={oldValues}
-        deleteStep={deleteStep}
-        setChanged={setChanged}
-        setImageView={setImageView}
-        headColumns={headColumns}
-        checkedList={checkedList}
-        handleCheck={handleCheck}
-        setDeleteCard={setDeleteCard}
-        deleteCardActive={deleteCardActive}
-        setInitialModalData={setInitialModalData}
-      />
-
-      <ImageViewer url={imageView} closeViewer={() => setImageView("")} />
-      <StepModal
-        defaultData={initialModalData}
-        setDefaultData={setInitialModalData}
-      />
-      <CardModal
-        defaultData={initialModalData}
-        setDefaultData={setInitialModalData}
-      />
-      <CModal
-        open={saveData || askClear}
-        handleClose={() => {
-          setSaveData(false);
-          setAskClear(false);
-        }}
-        footerActive={false}
-      >
-        {askClear ? (
-          <>
-            <p className="text-[var(--error)] text-2xl font-medium">
-              Вы точно хотите <br /> отменить изменения?!
-            </p>
-          </>
-        ) : (
-          <>
-            <p className="text-[var(--black)] text-2xl font-medium">
-              Вы точно хотите <br /> сохранить изменения?!
-            </p>
-            <p className="text-[var(--error)] text-lg mt-3">
-              Это изменение повлияет на производительность машины!
-            </p>
-          </>
-        )}
-
-        <div className="grid gap-2 grid-cols-2 mt-8">
-          <button
-            className="cancel-btn"
-            onClick={() => {
-              setSaveData(false);
-              setAskClear(false);
-            }}
-          >
-            {t("no")}
-          </button>
-          <button
-            className="custom-btn"
-            onClick={() => {
-              if (askClear) {
-                clearChanges();
-                setAskClear(false);
-                setEditStep(false);
-                SetInitialData([]);
-                setChanged("");
-              } else {
-                onSubmit();
-              }
-            }}
-          >
-            {t("yes")}
-          </button>
-        </div>
-      </CModal>
-
-      <CModal
-        open={askAction === "order"}
-        handleClose={() => {
-          setSaveData(false);
-          setAskClear(false);
-          setAskAction("");
-        }}
-        footerActive={false}
-      >
-        <p className="text-[var(--black)] text-2xl font-medium">
-          Хотите сохранить изменения или нет?
-        </p>
-
-        <p className="text-[var(--error)] text-lg mt-3">
-          Это изменение повлияет на производительность машины!
-        </p>
-
-        <div className="grid gap-2 grid-cols-2 mt-8">
-          <button
-            className="cancel-btn"
-            onClick={() => {
-              clearChanges();
-              setAskClear(false);
-              setEditStep(false);
-              SetInitialData([]);
-              setAskAction("");
-              setChanged("");
-              setOpen([]);
-              toast.custom("Все изменения очистили!");
-            }}
-          >
-            {t("cancel_changes")}
-          </button>
-          <button
-            className="custom-btn"
-            onClick={() => {
-              onSubmit();
-              setOpen([]);
-            }}
-          >
-            {t("save")}
-          </button>
-        </div>
-      </CModal>
-
-      <CModal
-        open={askDelete || askAction === "delete"}
-        handleClose={() => {
-          setAskDelete(false);
-        }}
-        footerActive={false}
-      >
-        <p className="text-[var(--black)] text-2xl font-medium">
-          Вы точно хотите удалить этот данных?
-        </p>
-
-        <p className="text-[var(--error)] text-lg mt-3">
-          Это изменение повлияет на производительность машины!
-        </p>
-
-        <div className="grid gap-2 grid-cols-2 mt-8">
-          <button
-            className="cancel-btn"
-            onClick={() => {
-              setDeleteStep(false);
-              setAskDelete(false);
-              setAskAction("");
-              setChanged("");
-              clearSelect();
-            }}
-          >
-            {t("no")}
-          </button>
-          <button
-            className="custom-btn"
-            onClick={() => {
-              toast.success(t("deleted!"));
-              playSound("/notif.wav");
-              setDeleteStep(false);
-              setAskDelete(false);
-              setAskAction("");
-              setChanged("");
-              clearSelect();
-            }}
-          >
-            {t("yes")}
-          </button>
-        </div>
-      </CModal>
-
-      <CModal
-        open={!!deleteCard}
-        handleClose={() => {
-          setDeleteCard(null);
-        }}
-        footerActive={false}
-      >
-        <p className="text-[var(--black)] text-2xl font-medium">
-          Вы точно хотите удалить этот данных?
-        </p>
-
-        <p className="text-[var(--error)] text-lg mt-3">
-          Это изменение повлияет на производительность машины!
-        </p>
-
-        <div className="grid gap-2 grid-cols-2 mt-8">
-          <button
-            className="cancel-btn"
-            onClick={() => {
-              setDeleteCard(null);
-            }}
-          >
-            {t("no")}
-          </button>
-          <button
-            className="custom-btn"
-            onClick={() => {
-              toast.success(t("deleted!"));
-              playSound("/notif.wav");
-              setDeleteCard(null);
-            }}
-          >
-            {t("yes")}
-          </button>
-        </div>
-      </CModal>
-
-      {open.includes("step") && (
-        <CNewMiniModal
-          title="Recete Girisi"
-          handleActions={() => setOpen(["card"])}
-        >
-          <CardEditModal
-            setOpen={setOpen}
-            open={open}
-            handleActions={() => {
-              setOpen(["card"]);
-            }}
-          />
-        </CNewMiniModal>
-      )}
-    </div>
-  );
+  return { items, setItems, oldValues, headColumns };
 };
+
+// Custom hook for modal state management
+const useModalState = () => {
+  const [editStep, setEditStep] = useState(false);
+  const [deleteStep, setDeleteStep] = useState(false);
+  const [saveData, setSaveData] = useState(false);
+  const [askClear, setAskClear] = useState(false);
+  const [askDelete, setAskDelete] = useState(false);
+  const [deleteCard, setDeleteCard] = useState<any>(null);
+  const [deleteCardActive, setDeleteCardActive] = useState(false);
+  const [initialModalData, setInitialModalData] = useState<any>({});
+  const [imageView, setImageView] = useState("");
+
+  const resetModals = useCallback(() => {
+    setEditStep(false);
+    setDeleteStep(false);
+    setSaveData(false);
+    setAskClear(false);
+    setAskDelete(false);
+    setDeleteCard(null);
+    setDeleteCardActive(false);
+  }, []);
+
+  return {
+    editStep,
+    setEditStep,
+    deleteStep,
+    setDeleteStep,
+    saveData,
+    setSaveData,
+    askClear,
+    setAskClear,
+    askDelete,
+    setAskDelete,
+    deleteCard,
+    setDeleteCard,
+    deleteCardActive,
+    setDeleteCardActive,
+    initialModalData,
+    setInitialModalData,
+    imageView,
+    setImageView,
+    resetModals,
+  };
+};
+
+export const DragDrop = memo(
+  ({
+    open,
+    formId,
+    setChanged = () => {},
+    changed,
+    askAction,
+    setAskAction = () => {},
+    setOpen = () => {},
+  }: Props) => {
+    const { t } = useTranslation();
+    const [checkedList, setCheckedList] = useState<any[]>([]);
+
+    const { tableData } = DragAndDropDataLogic({ id: formId });
+    const { items, setItems, oldValues, headColumns } =
+      useDataProcessor(tableData);
+
+    const {
+      editStep,
+      setEditStep,
+      deleteStep,
+      setDeleteStep,
+      saveData,
+      setSaveData,
+      askClear,
+      setAskClear,
+      askDelete,
+      setAskDelete,
+      deleteCard,
+      setDeleteCard,
+      deleteCardActive,
+      setDeleteCardActive,
+      initialModalData,
+      setInitialModalData,
+      imageView,
+      setImageView,
+      resetModals,
+    } = useModalState();
+
+    const onSubmit = useCallback(() => {
+      resetModals();
+      setChanged("");
+      setAskAction("");
+      toast.success("Изменения успешно сохранены!");
+      playSound("/notif.wav");
+    }, [resetModals, setChanged, setAskAction]);
+
+    const clearChanges = useCallback(() => {
+      if (editStep && changed) {
+        setAskClear(true);
+      } else {
+        setEditStep((prev) => !prev);
+      }
+    }, [editStep, changed, setAskClear, setEditStep]);
+
+    const clearSelect = useCallback(() => {
+      const updatedItems = items.map((item: { rows: any }) => ({
+        ...item,
+        rows: item.rows.map((row: any) => ({ ...row, checked: false })),
+      }));
+      setItems(updatedItems);
+      setCheckedList([]);
+    }, [items, setItems]);
+
+    const handleCheck = useCallback(
+      (el: any) => {
+        setCheckedList((prev) => {
+          const newList = prev.includes(el.RECETEDETAYID)
+            ? prev.filter((i: any) => i !== el.RECETEDETAYID)
+            : [...prev, el.RECETEDETAYID];
+
+          setChanged(newList.length ? "delete" : "");
+          return newList;
+        });
+      },
+      [setChanged]
+    );
+
+    const handleSaveConfirm = useCallback(() => {
+      onSubmit();
+      setOpen([]);
+    }, [onSubmit, setOpen]);
+
+    const handleClearConfirm = useCallback(() => {
+      clearChanges();
+      setAskClear(false);
+      setEditStep(false);
+      setChanged("");
+    }, [clearChanges, setAskClear, setEditStep, setChanged]);
+
+    const handleDeleteConfirm = useCallback(() => {
+      toast.success(t("deleted!"));
+      playSound("/notif.wav");
+      setDeleteStep(false);
+      setAskDelete(false);
+      setAskAction("");
+      setChanged("");
+      clearSelect();
+    }, [t, setDeleteStep, setAskDelete, setAskAction, setChanged, clearSelect]);
+
+    const handleCardDeleteConfirm = useCallback(() => {
+      toast.success(t("deleted!"));
+      playSound("/notif.wav");
+      setDeleteCard(null);
+    }, [t]);
+
+    const handleCancelChanges = useCallback(() => {
+      clearChanges();
+      setAskClear(false);
+      setEditStep(false);
+      setAskAction("");
+      setChanged("");
+      setOpen([]);
+      toast.custom("Все изменения очистили!");
+    }, [
+      clearChanges,
+      setAskClear,
+      setEditStep,
+      setAskAction,
+      setChanged,
+      setOpen,
+    ]);
+
+    return (
+      <div className="cdraganddrop text-sm">
+        <DragHeader
+          items={items}
+          changed={changed}
+          editStep={editStep}
+          tableData={tableData}
+          checkedList={checkedList}
+          deleteStep={deleteStep}
+          deleteCardActive={deleteCardActive}
+          setAskDelete={setAskDelete}
+          setDeleteStep={setDeleteStep}
+          clearChanges={clearChanges}
+          setSaveData={setSaveData}
+          setDeleteCardActive={setDeleteCardActive}
+        />
+        <StepCard
+          open={open}
+          setOpen={setOpen}
+          items={items}
+          editStep={editStep}
+          setItems={setItems}
+          oldValues={oldValues}
+          deleteStep={deleteStep}
+          setChanged={setChanged}
+          setImageView={setImageView}
+          headColumns={headColumns}
+          checkedList={checkedList}
+          handleCheck={handleCheck}
+          setDeleteCard={setDeleteCard}
+          deleteCardActive={deleteCardActive}
+          setInitialModalData={setInitialModalData}
+        />
+
+        <ImageViewer url={imageView} closeViewer={() => setImageView("")} />
+        <StepModal
+          defaultData={initialModalData}
+          setDefaultData={setInitialModalData}
+        />
+        <CardModal
+          defaultData={initialModalData}
+          setDefaultData={setInitialModalData}
+        />
+        <ConfirmationModal
+          open={saveData || askClear}
+          onClose={() => {
+            setSaveData(false);
+            setAskClear(false);
+          }}
+          title={
+            askClear
+              ? "Вы точно хотите отменить изменения?!"
+              : "Вы точно хотите сохранить изменения?!"
+          }
+          message={
+            !askClear
+              ? "Это изменение повлияет на производительность машины!"
+              : undefined
+          }
+          onConfirm={askClear ? handleClearConfirm : onSubmit}
+          onCancel={() => {
+            setSaveData(false);
+            setAskClear(false);
+          }}
+        />
+
+        <ConfirmationModal
+          open={askAction === "order"}
+          onClose={() => {
+            setAskAction("");
+          }}
+          title="Хотите сохранить изменения или нет?"
+          message="Это изменение повлияет на производительность машины!"
+          onConfirm={handleSaveConfirm}
+          onCancel={handleCancelChanges}
+          confirmText="save"
+          cancelText="cancel_changes"
+        />
+
+        <ConfirmationModal
+          open={askDelete || askAction === "delete"}
+          onClose={() => {
+            setAskDelete(false);
+          }}
+          title="Вы точно хотите удалить этот данных?"
+          message="Это изменение повлияет на производительность машины!"
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => {
+            setDeleteStep(false);
+            setAskDelete(false);
+            setAskAction("");
+            setChanged("");
+            clearSelect();
+          }}
+        />
+
+        <ConfirmationModal
+          open={!!deleteCard}
+          onClose={() => {
+            setDeleteCard(null);
+          }}
+          title="Вы точно хотите удалить этот данных?"
+          message="Это изменение повлияет на производительность машины!"
+          onConfirm={handleCardDeleteConfirm}
+          onCancel={() => {
+            setDeleteCard(null);
+          }}
+        />
+      </div>
+    );
+  }
+);
+
+DragDrop.displayName = "DragDrop";

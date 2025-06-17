@@ -23,7 +23,6 @@ interface Props {
   handleCheck: (val: any) => void;
   focusedIndex: number;
   handleKeyDown: (val: any) => void;
-  isFocused: boolean;
 }
 
 export const DragingEl = ({
@@ -44,7 +43,6 @@ export const DragingEl = ({
   handleCheck = () => {},
   focusedIndex,
   handleKeyDown,
-  isFocused,
 }: Props) => {
   const { t } = useTranslation();
 
@@ -69,7 +67,7 @@ export const DragingEl = ({
     if (stepRef.current) {
       stepRef.current.focus();
     }
-  }, []);
+  }, [editStep]);
 
   return (
     <div>
@@ -133,7 +131,21 @@ export const DragingEl = ({
                     </div>
                   </div>
                 )}
-                {item.RECETEALTASAMAID ? (
+                {item.RECETEASAMAID ? (
+                  <div
+                    className={`duration-300 rounded-[8px] w-full  ${
+                      focusedIndex === item.index ? "ripple-effect" : ""
+                    }`}
+                    style={{
+                      backgroundColor:
+                        focusedIndex === item.index ? "" : item.bg,
+                    }}
+                  >
+                    <p className="text-center p-2 rounded-[8px] relative z-[2]">
+                      {item.RECETEASAMAADI}
+                    </p>
+                  </div>
+                ) : item.RECETEALTASAMAID ? (
                   <div className={`w-full`}>
                     <Divider
                       className={focusedIndex === item.index ? "active" : ""}
@@ -150,7 +162,7 @@ export const DragingEl = ({
                             <p
                               className={`px-2 py-1 duration-300 bg-blue-200 rounded-full w-[100px] ${
                                 focusedIndex === item.index
-                                  ? "wider bg-blue-400"
+                                  ? "wider bg-blue-300"
                                   : ""
                               }`}
                             >
@@ -159,15 +171,9 @@ export const DragingEl = ({
                           )
                         }
                         style={{
-                          // width:
-                          //   focusedIndex === item.index ? "200px" : "100px",
                           position: "relative",
                           backgroundColor: "transparent",
                           zIndex: 2,
-                          // backgroundColor:
-                          //   focusedIndex === item.index
-                          //     ? "var(--primary90)"
-                          //     : "var(--primary90)",
                         }}
                         size="small"
                       />
@@ -176,9 +182,7 @@ export const DragingEl = ({
                 ) : (
                   <div
                     className={`flex rounded-[8px] ${
-                      focusedIndex === item.index
-                        ? "bg-blue-20 ripple-effect"
-                        : ""
+                      focusedIndex === item.index ? "ripple-effect" : ""
                     }`}
                     onDoubleClick={() => {
                       handleAdd(innerIndex, outerIndex, item);
@@ -211,17 +215,18 @@ export const DragingEl = ({
                     )}
                   </div>
                 )}
-                {!deleteStep && !editStep && (
+                {!deleteStep && (
                   <div
                     className="absolute left-[-15px] bottom-[-6px] w-full h-[17px] z-[2]"
                     onMouseEnter={() => {
-                      if (isFocused) {
-                        handleMouseEnter(999);
+                      if (editStep) {
+                        handleMouseEnter(innerIndex);
+                        return;
                       }
-                      handleMouseEnter(innerIndex);
+                      handleMouseEnter(999);
                     }}
                     onMouseLeave={() => {
-                      if (isFocused) return;
+                      if (!editStep) return;
                       handleMouseLeave();
                     }}
                     onDoubleClick={() => {
@@ -233,7 +238,7 @@ export const DragingEl = ({
                       });
                     }}
                   >
-                    {hoverAdd === innerIndex && !isFocused && (
+                    {hoverAdd === innerIndex && (
                       <div
                         className="absolute left-[0px] w-[20px] h-[20px] bottom-[-5px]"
                         onClick={() => handleAdd(innerIndex, outerIndex, item)}
