@@ -53,9 +53,14 @@ const Btn = memo(
   }: BtnProps) => {
     const { t } = useTranslation();
 
-    const handleClick = useCallback(() => {
-      handleNavigate(el);
-    }, [handleNavigate, el]);
+    const handleClick = useCallback(
+      (el: MenuItem) => {
+        console.log("22222");
+
+        handleNavigate(el);
+      },
+      [handleNavigate, el]
+    );
 
     const handleClearFilter = useCallback(
       (e: React.MouseEvent) => {
@@ -81,20 +86,19 @@ const Btn = memo(
     );
 
     return (
-      <button
-        key={el.id}
-        onClick={handleClick}
+      <div
+        onClick={() => handleClick(el)}
         className={`${stepsClass} menu_link2 flex items-center steps ${
           active ? "active" : ""
         }`}
       >
-        <div onClick={handleClearFilter} className={menuLinkClass}>
+        <div className={menuLinkClass}>
           <div className="w-[24px]">
             <IconGenerator icon={el.icon} fill={getIconFill(active)} />
           </div>
           <span>{t(el.title)}</span>
         </div>
-      </button>
+      </div>
     );
   }
 );
@@ -154,7 +158,7 @@ export const SectionBtns = memo(
               className="flex items-center cursor-pointer"
               onClick={handleToggle}
             >
-              <div onClick={handleClearFilter} className={menuLinkClass}>
+              <div className={menuLinkClass}>
                 <IconGenerator
                   icon={el.icon}
                   fill={getIconFill(isActiveItem(active, el.id))}
