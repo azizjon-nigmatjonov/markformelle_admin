@@ -87,7 +87,12 @@ const Btn = memo(
 
     return (
       <div
-        onClick={() => handleClick(el)}
+        onClick={(e) => {
+          handleClick(el);
+          setTimeout(() => {
+            handleClearFilter(e);
+          }, 0);
+        }}
         className={`${stepsClass} menu_link2 flex items-center steps ${
           active ? "active" : ""
         }`}
@@ -156,7 +161,12 @@ export const SectionBtns = memo(
           <div className={`relative ${isLastItem ? "mb-5" : ""}`}>
             <div
               className="flex items-center cursor-pointer"
-              onClick={handleToggle}
+              onClick={(e) => {
+                handleToggle();
+                setTimeout(() => {
+                  handleClearFilter(e);
+                }, 0);
+              }}
             >
               <div className={menuLinkClass}>
                 <IconGenerator

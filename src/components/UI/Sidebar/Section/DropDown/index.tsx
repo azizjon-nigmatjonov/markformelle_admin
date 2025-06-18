@@ -38,10 +38,6 @@ export const DropDown = memo(
       [handleNavigate]
     );
 
-    const clearFilterCallback = useCallback(() => {
-      // Empty function as per original code
-    }, []);
-
     return (
       <div className="mt-[-40px]">
         <div className="absolute left-[45px] group-hover:block hidden min-w-[250px] z-[99]">
@@ -64,7 +60,6 @@ export const DropDown = memo(
                         <SectionBtns
                           index={index}
                           handleNavigate={handleNavigateCallback}
-                          clearFilter={clearFilterCallback}
                           el={el}
                           active={active || false}
                           children={el.children}
