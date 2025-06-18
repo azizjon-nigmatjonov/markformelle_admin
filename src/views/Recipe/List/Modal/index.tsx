@@ -11,6 +11,7 @@ import { LiteOptionsTable } from "../../../../components/UI/Options/LiteTable";
 import { LabModalTables } from "./Tables";
 import { CardEditModal } from "./StepComponents/Components/CardEditModal";
 import CNewMiniModal from "../../../../components/CElements/CNewMiniModal";
+import { DragAndDropDataLogic } from "./StepComponents/Logic";
 
 interface ModalUIProps {
   defaultData?: any;
@@ -36,7 +37,10 @@ export const ModalUI = ({
   const { t } = useTranslationHook();
   const [formId, setFormId] = useState<string>(defaultData?.RECETEID || "");
   const [disabled, setDisabled] = useState(true);
-
+  const [currentSellect, setCurrentSellect] = useState<any>({});
+  const { tableData, refetch: refetchTable } = DragAndDropDataLogic({
+    id: formId,
+  });
   const { createForm, updateForm, formData } = ModalTableLogic({
     setFormId,
     urunId: formId,
@@ -376,6 +380,8 @@ export const ModalUI = ({
               setOpen={setOpen}
               setAskAction={setAskAction}
               open={open}
+              setCurrentSellect={setCurrentSellect}
+              tableData={tableData}
             />
           </div>
         </div>
@@ -388,10 +394,9 @@ export const ModalUI = ({
         >
           <CardEditModal
             open={open}
-            setOpen={setOpen}
-            handleActions={() => {
-              setOpen(["card"]);
-            }}
+            handleActions={() => setOpen(["card"])}
+            formData={currentSellect}
+            refetchTable={refetchTable}
           />
         </CNewMiniModal>
       )}

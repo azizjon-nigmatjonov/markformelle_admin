@@ -26,7 +26,7 @@ interface Props {
   checkedList: string[] | number[];
   focusedIndex: number;
   handleCheck: (val: any) => void;
-  handleKeyDown: (val: any) => void;
+  handleKeyDown: (val: any, index: number) => void;
 }
 
 const ScrollView = ({

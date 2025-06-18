@@ -118,9 +118,9 @@ export const DragHeader = ({
             {checkedList.length ? (
               <DeleteIcon fill="var(--error)" />
             ) : deleteStep ? (
-              <UncheckMultipleIcon width={23} fill="var(--main)" />
+              <UncheckMultipleIcon width={20} fill="var(--main)" />
             ) : (
-              <CheckMultipleIcon width={23} fill="var(--main)" />
+              <CheckMultipleIcon width={20} fill="var(--main)" />
             )}
 
             <span className="text-[var(--black)]">
@@ -143,9 +143,9 @@ export const DragHeader = ({
           >
             <div
               onClick={() => {}}
-              className={`w-[17px] h-[17px] border-[1.5px] border-[var(--main)] rounded-[4px] hover:cursor-pointer flex items-center justify-center`}
+              className={`w-[15px] h-[15px] border-[1.5px] border-[var(--main)] rounded-[4px] hover:cursor-pointer flex items-center justify-center`}
             >
-              <div className="w-[18px]">
+              <div className="w-[15px]">
                 {deleteCardActive && <CheckLine fill="var(--main)" />}
               </div>
             </div>
@@ -163,9 +163,9 @@ export const DragHeader = ({
             className={`flex items-center space-x-2`}
           >
             {editStep ? (
-              <CloseIcon width={22} fill="black" />
+              <CloseIcon width={19} fill="black" />
             ) : (
-              <EditIcon width={18} fill="var(--main)" />
+              <EditIcon width={15} fill="var(--main)" />
             )}
             <span className="text-[var(--black)]">
               {t(changed ? "cancel_changes" : editStep ? "cancel" : "edit")}
@@ -186,7 +186,7 @@ export const DragHeader = ({
               }`}
             >
               <SaveIcon
-                width={24}
+                width={20}
                 fill={editStep && changed ? "var(--main)" : "var(--gray)"}
               />
               <span className="text-[var(--black)]">{t("save")}</span>

@@ -22,7 +22,7 @@ interface Props {
   deleteStep: boolean;
   handleCheck: (val: any) => void;
   focusedIndex: number;
-  handleKeyDown: (val: any) => void;
+  handleKeyDown: (val: any, index: number) => void;
 }
 
 export const DragingEl = ({
@@ -113,7 +113,7 @@ export const DragingEl = ({
                   handleDropSteps(innerIndex, outerIndex);
                 }}
                 onKeyDown={(e) => {
-                  handleKeyDown(e);
+                  handleKeyDown(e, outerIndex);
                 }}
               >
                 {deleteStep && (

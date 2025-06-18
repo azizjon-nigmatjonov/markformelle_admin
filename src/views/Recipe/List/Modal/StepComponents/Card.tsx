@@ -7,6 +7,7 @@ import { MaterialForm } from "../MaterialForm";
 import { TrailForm } from "../TrailForm";
 import { DetailForm } from "../DetailForm";
 import AddIcon from "@mui/icons-material/Add";
+import { useKeyDownEvent } from "../../../../../hooks/useKeyDownEvent";
 interface Props {
   items: any;
   oldValues: any;
@@ -17,12 +18,12 @@ interface Props {
   deleteStep: boolean;
   setChanged: (val: string) => void;
   setImageView: (val: string) => void;
-  setInitialModalData: (val: any) => void;
   checkedList: any;
   handleCheck: (val: any) => void;
   setDeleteCard: (val: any) => void;
   open: string[];
   setOpen: (val: any) => void;
+  setCurrentSellect: (val: any) => void;
 }
 
 export const StepCard = ({
@@ -40,7 +41,7 @@ export const StepCard = ({
   checkedList = [],
   handleCheck = () => {},
   setDeleteCard = () => {},
-  setInitialModalData = () => {},
+  setCurrentSellect = () => {},
 }: Props) => {
   const [draggingIndex, setDraggingIndex]: any = useState(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -55,6 +56,14 @@ export const StepCard = ({
   const [maxScroll, setMaxScroll] = useState(0);
   const scrollInterval = useRef<NodeJS.Timeout | null>(null);
   const [newColumns, setNewColumns] = useState([]);
+  const { isAltPressed, currentKey } = useKeyDownEvent();
+
+  useEffect(() => {
+    if (isAltPressed && currentKey === "Insert") {
+      setOpen(["card", "step"]);
+      setCurrentSellect({});
+    }
+  }, [isAltPressed, currentKey]);
 
   useEffect(() => {
     setNewColumns(headColumns);
@@ -145,19 +154,22 @@ export const StepCard = ({
     outerIndex: number,
     item: { RECETEALTASAMAID: string }
   ) => {
-    setInitialModalData({ ...item, index, outerIndex });
+    setCurrentSellect({ ...item, index, outerIndex });
   };
 
   const handleAddCard = (outerIndex: number) => {
-    setInitialModalData({ outerIndex, type: "card_add" });
+    setCurrentSellect({ outerIndex, type: "card_add" });
   };
 
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const handleKeyDown = (event: any) => {
+  const handleKeyDown = (event: any, outerIndex: number) => {
     if (!event.ctrlKey && event.code === "Enter") {
       setOpen(["card", "step"]);
+      const currItem = items[outerIndex].rows[focusedIndex];
+      setCurrentSellect(currItem);
     }
+
     if (editStep) return;
 
     if (event.key === "ArrowUp") {
@@ -178,7 +190,7 @@ export const StepCard = ({
     if (rowRefs.current[focusedIndex]) {
       rowRefs.current[focusedIndex]?.scrollIntoView({
         behavior: "smooth",
-        block: "nearest",
+        block: "center",
       });
     }
   }, [focusedIndex]);
@@ -227,7 +239,8 @@ export const StepCard = ({
               handleDragOverStep={handleDragOverStep}
               setInitialModalData={(obj: any) => {
                 setOpen(["card", "material"]);
-                setInitialModalData(obj);
+                // setInitialModalData(obj);
+                setCurrentSellect(obj);
               }}
               handleDropSteps={handleDropSteps}
               hoveredIndexStep={hoveredIndexStep}
@@ -247,7 +260,9 @@ export const StepCard = ({
               checkedList={checkedList}
               handleCheck={handleCheck}
               focusedIndex={focusedIndex}
-              handleKeyDown={handleKeyDown}
+              handleKeyDown={(val: any, index: number) => {
+                handleKeyDown(val, outerIndex);
+              }}
             />
           </div>
           <div className="relative">

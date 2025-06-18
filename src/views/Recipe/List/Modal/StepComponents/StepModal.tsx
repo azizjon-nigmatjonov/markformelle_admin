@@ -25,7 +25,7 @@ export const StepModal = ({
   if (!defaultData?.index && defaultData.index !== 0) return <></>;
   const { t } = useTranslation();
 
-  const { control, handleSubmit, setValue, getValues } = useForm<IStepForm>({
+  const { control, handleSubmit, setValue, getValues } = useForm<any>({
     mode: "onSubmit",
   });
 

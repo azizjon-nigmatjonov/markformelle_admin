@@ -4,7 +4,7 @@ export const useTranslationHook = () => {
   const { t } = useTranslation();
 
   const tr = (key: any) => {
-    if (!key) return "-";
+    if (!key) return "";
     if (t(key)) return t(key);
 
     return key;

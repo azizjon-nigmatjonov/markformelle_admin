@@ -152,7 +152,7 @@ const CNewMiniModal: FC<Props> = ({
           className={`w-[130vw] h-[130vh] fixed top-[-20vh] left-[-30vw] z-[97] ${
             title ? "bg-[rgba(0,0,0,0.3)]" : ""
           }`}
-          // onClick={() => handleActions("Close")}
+          onClick={() => handleActions("Close")}
         ></div>
       )}
     </>

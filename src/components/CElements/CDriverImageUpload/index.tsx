@@ -16,7 +16,7 @@ interface Props {
   onChange?: any;
 }
 
-export const CDriverImageUpload = ({
+export const CImageUploader = ({
   control,
   isDelete = false,
   defaultValue = "",

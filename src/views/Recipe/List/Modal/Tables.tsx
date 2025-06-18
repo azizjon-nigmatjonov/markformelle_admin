@@ -8,14 +8,18 @@ export const LabModalTables = ({
   setAskAction = () => {},
   setOpen,
   open,
+  setCurrentSellect,
+  tableData,
 }: {
   open: string[];
   setOpen: (val: string[]) => void;
   formId: string;
   changed: string;
   askAction: string;
+  tableData: any;
   setAskAction: (val: string) => void;
   setChanged: (val: string) => void;
+  setCurrentSellect: (val: any) => void;
 }) => {
   return (
     <div className="border-t border-[var(--border)]">
@@ -27,6 +31,8 @@ export const LabModalTables = ({
         askAction={askAction}
         setAskAction={setAskAction}
         setOpen={setOpen}
+        tableData={tableData}
+        setCurrentSellect={setCurrentSellect}
       />
     </div>
   );

@@ -3,26 +3,110 @@ import { LiteOptionsTable } from "../../../../../../components/UI/Options/LiteTa
 import type { TableItem } from "../../../../../../components/UI/Options/LiteTable";
 import { SubmitCancelButtons } from "../../../../../../components/UI/FormButtons/SubmitCancel";
 import HFTextField from "../../../../../../components/HFElements/HFTextField";
-import { Divider } from "@mui/material";
-import { API_URL } from "../../../../../../utils/env";
 import { ImageViewer } from "../../../../../../components/UI/ImageViewer";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { CImageUploader } from "../../../../../../components/CElements/CDriverImageUpload";
+import { API_URL } from "../../../../../../utils/env";
+import dayjs from "dayjs";
+import { FormLogic } from "./FormLogic";
+import HFInputMask from "../../../../../../components/HFElements/HFInputMask";
+import CImageViewer from "../../../../../../components/CElements/CImageViewer";
 
 interface Props {
   handleActions: () => void;
   open: string[];
-  setOpen: (val: string[]) => void;
+  formData: any;
+  refetchTable: () => void;
 }
 
-export const CardEditModal = ({ handleActions, open, setOpen }: Props) => {
+export const CardEditModal = ({
+  handleActions,
+  open,
+  formData = {},
+  refetchTable,
+}: Props) => {
+  const [group, setGroup] = useState<string>("");
   const [imageView, setImageView] = useState("");
-  const { control, handleSubmit, setValue } = useForm<any>({
+  const { control, handleSubmit, setValue, reset } = useForm<any>({
     mode: "onSubmit",
   });
+  const { updateForm } = FormLogic({ refetchTable });
+
+  const changeGroup = (newGroup: string) => {
+    if (!group) {
+      console.log("aaa");
+
+      setGroup(newGroup);
+    }
+  };
+  console.log("formData", formData);
 
   const onSubmit = (data: any) => {
-    console.log(data);
+    let params = data;
+
+    if (formData.SIRA) {
+      params = { ...formData };
+      params.DEGISIMTARIHI = dayjs();
+      updateForm(params, formData.RECETEDETAYID);
+    }
+
+    // {
+    //   "RECETEDETAYID": 0,
+    //   "SIRA": 0,
+    //   "RECETEID": "string",
+    //   "RECETEASAMAID": 0,
+    //   "SURE": 0,
+    //   "RECETEALTASAMAID": 0,
+    //   "URUNID": "string",
+    //   "URUNBIRIMID": 0,
+    //   "RECETEGRAFIKID": "string",
+    //   "MIKTAR": 0,
+    //   "BANYO": 0,
+    //   "ATISRENKSIRA": 0,
+    //   "ATISRENKCOLOR": 0,
+    //   "ATISRENKKODU": "string",
+    //   "ATISRENKADI": "string",
+    //   "ACIKLAMA": "string",
+    //   "INSERTKULLANICIID": 1,
+    //   "INSERTTARIHI": "2025-06-18T06:04:37.484Z",
+    //   "KULLANICIID": 1,
+    //   "DEGISIMTARIHI": "2025-06-18T06:04:37.484Z"
+    // }
+    if (group === "group1") {
+      console.log("group1", data);
+    }
+    if (group === "group2") {
+      console.log("group2", data);
+    }
+    if (group === "group3") {
+      console.log("group3", data);
+    }
   };
+
+  useEffect(() => {
+    if (!formData.SIRA) {
+      reset();
+    }
+    if (formData.RECETEASAMAID) {
+      setGroup("group1");
+    } else if (formData.RECETEALTASAMAID) {
+      setGroup("group2");
+    } else {
+      setGroup("group3");
+    }
+  }, [formData]);
+
+  const disabledFirstGroup = useMemo(() => {
+    return group ? (group === "group1" ? false : true) : false;
+  }, [group]);
+
+  const disabledSecondGroup = useMemo(() => {
+    return group ? (group === "group2" ? false : true) : false;
+  }, [group]);
+
+  const disabledThirdGroup = useMemo(() => {
+    return group ? (group === "group3" ? false : true) : false;
+  }, [group]);
 
   return (
     <>
@@ -31,14 +115,13 @@ export const CardEditModal = ({ handleActions, open, setOpen }: Props) => {
           if (e.key === "Enter") e.preventDefault();
         }}
         onSubmit={handleSubmit(onSubmit)}
-        className="w-[500px]"
+        className="w-[400px]"
+        key={group}
       >
         <div className="space-y-3">
           <LiteOptionsTable
             label="Recete asama kodu"
             name="RECETEASAMAID"
-            placeholder="RECETEASAMAID"
-            focused
             required
             link="receteasama"
             headColumns={[
@@ -46,139 +129,127 @@ export const CardEditModal = ({ handleActions, open, setOpen }: Props) => {
               { id: "ADI", title: "FIRMAADI", width: 300 },
             ]}
             renderValue={(_: string, obj: any) => {
-              return obj.RECETEASAMAID
+              return obj.RECETEASAMAID && obj.ADI
                 ? obj.RECETEASAMAID + " - " + obj.ADI
-                : obj.ADI;
+                : obj.RECETEASAMAID;
             }}
+            defaultValue={formData?.RECETEASAMAID}
             handleSelect={(obj: TableItem) => {
-              if (obj.RECETEASAMAID) {
-                setValue("RECETEASAMAID", obj.RECETEASAMAID);
-                setOpen(["card", "step", "review"]);
-              }
+              setValue("RECETEASAMAID", obj.RECETEASAMAID);
+              changeGroup("group1");
             }}
+            disabled={disabledFirstGroup}
             control={control}
           />
           <LiteOptionsTable
             label="Grafik kodu"
             name="RECETEGRAFIKID"
-            placeholder="Grafik kodu"
             required
             link="recetegrafik"
             headColumns={[
-              {
-                id: "RECETEGRAFIKID",
-                title: "image",
-                render: (val: string) => {
-                  return (
-                    <img
-                      onClick={() =>
-                        setImageView(`${API_URL}/recetegrafik/image/${val}`)
-                      }
-                      loading="lazy"
-                      width={80}
-                      src={`${API_URL}/recetegrafik/image/${val}`}
-                    />
-                  );
-                },
-              },
-              { id: "RECETEGRAFIKID", title: "RECETEGRAFIKID" },
-              { id: "ADI", title: "FIRMAADI" },
+              { id: "RECETEGRAFIKID", title: "RECETEGRAFIKID", width: 120 },
+              { id: "ADI", title: "ADI", width: 160 },
             ]}
             renderValue={(_: string, obj: any) => {
               return obj.RECETEGRAFIKID;
             }}
+            defaultValue={formData?.RECETEGRAFIKID}
             handleSelect={(obj: TableItem) => {
-              if (obj.RECETEGRAFIKID) {
-                setValue("RECETEGRAFIKID", obj.RECETEGRAFIKID);
-              }
+              setValue("RECETEGRAFIKID", obj.RECETEGRAFIKID);
+              changeGroup("group1");
             }}
+            // disabled={disabledFirstGroup}
             control={control}
           />
-          <Divider />
-          <LiteOptionsTable
-            label="Recete asama sablon kodu"
-            name="RECETEASAMAID"
-            placeholder="Recete asama sablon kodu"
-            required
-            link="recetegrafik"
-            headColumns={[
-              { id: "RECETEASAMAID", title: "ID", width: 50 },
-              { id: "ADI", title: "FIRMAADI", width: 300 },
-            ]}
-            renderValue={(_: string, obj: any) => {
-              return obj.RECETEASAMAID
-                ? obj.RECETEASAMAID + " - " + obj.ADI
-                : obj.ADI;
-            }}
-            handleSelect={(obj: TableItem) => {
-              if (obj.RECETEASAMAID) {
-                setValue("RECETEASAMAID", obj.RECETEASAMAID);
-              }
-            }}
-            control={control}
+          <CImageViewer
+            url={`${API_URL}/recetegrafik/image/${formData.RECETEGRAFIKID}`}
           />
-          <Divider />
+          <div className="pt-5">
+            <div className="h-[1px] bg-[var(--gray40)] w-full"></div>
+          </div>
           <LiteOptionsTable
             label="Alt asama kodu"
-            name="RECETEASAMAID"
-            placeholder="Alt asama kodu"
+            name="RECETEALTASAMAID"
             required
-            link="asama"
+            link="recetealtasama"
             headColumns={[
-              { id: "RECETEASAMAID", title: "ID", width: 50 },
-              { id: "ADI", title: "FIRMAADI", width: 300 },
+              { id: "RECETEALTASAMAID", title: "ID", width: 50 },
+              { id: "ADI", title: "ADI", width: 220 },
             ]}
             renderValue={(_: string, obj: any) => {
-              return obj.RECETEASAMAID
-                ? obj.RECETEASAMAID + " - " + obj.ADI
-                : obj.ADI;
+              return obj.RECETEALTASAMAID && obj.ADI
+                ? obj.RECETEALTASAMAID + " - " + obj.ADI
+                : obj.RECETEALTASAMAID;
             }}
+            defaultValue={
+              formData.RECETEALTASAMAID
+                ? formData.RECETEALTASAMAID + " - " + formData.RECETEALTASAMAADI
+                : ""
+            }
             handleSelect={(obj: TableItem) => {
-              if (obj.RECETEASAMAID) {
-                setValue("RECETEASAMAID", obj.RECETEASAMAID);
-              }
+              setValue("RECETEALTASAMAID", obj.RECETEALTASAMAID);
+              changeGroup("group2");
             }}
+            disabled={disabledSecondGroup}
             control={control}
           />
-          <LiteOptionsTable
-            label="Urun kodu"
-            name="URUNID"
-            placeholder="Urun kodu"
-            required
-            link="urun"
-            headColumns={[
-              { id: "RECETEASAMAID", title: "ID", width: 50 },
-              { id: "ADI", title: "FIRMAADI", width: 300 },
-            ]}
-            renderValue={(_: string, obj: any) => {
-              return obj.RECETEASAMAID
-                ? obj.RECETEASAMAID + " - " + obj.ADI
-                : obj.ADI;
-            }}
-            handleSelect={(obj: TableItem) => {
-              if (obj.RECETEASAMAID) {
-                setValue("RECETEASAMAID", obj.RECETEASAMAID);
-              }
-            }}
-            control={control}
-          />
-          <HFTextField
-            label="Urun birimi"
-            name="BIRIMID"
-            control={control}
-            placeholder="Urun Birimi"
-          />
-          <HFTextField
+          <div className="pt-5">
+            <div className="h-[1px] bg-[var(--gray40)] w-full"></div>
+          </div>
+
+          <div className="grid grid-cols-7 gap-x-2">
+            <div className="col-span-6">
+              <LiteOptionsTable
+                label="Urun kodu"
+                name="URUNID"
+                required
+                link="urun"
+                headColumns={[
+                  { id: "URUNID", title: "URUNID", width: 70 },
+                  { id: "ADI", title: "ADI", width: 180 },
+                ]}
+                renderValue={(_: string, obj: any) => {
+                  return obj.URUNID && obj.ADI
+                    ? obj.URUNID + " - " + obj.ADI
+                    : obj.URUNID;
+                }}
+                defaultValue={
+                  formData.URUNID
+                    ? formData.URUNID + " - " + formData.URUNADI
+                    : undefined
+                }
+                handleSelect={(obj: TableItem) => {
+                  setValue("URUNID", obj.URUNID);
+                  changeGroup("group3");
+                }}
+                disabled={disabledThirdGroup}
+                control={control}
+              />
+            </div>
+            <HFTextField
+              label="Birim"
+              name="BIRIMID"
+              required
+              control={control}
+              defaultValue={formData.URUNBIRIMADI}
+              disabled={disabledThirdGroup}
+            />
+          </div>
+          <HFInputMask
             label="Gr/Kg"
             name="kg"
+            required
             control={control}
-            placeholder="Gr/Kg"
+            defaultValue={formData.MIKTAR}
+            disabled={disabledThirdGroup}
           />
-          <HFTextField
+          <HFInputMask
             label="Gr/Lt"
             name="lt"
+            required
             control={control}
-            placeholder="Gr/Lt"
+            defaultValue={formData.BANYO}
+            disabled={disabledThirdGroup}
           />
           <SubmitCancelButtons
             uniqueID={
@@ -197,15 +268,6 @@ export const CardEditModal = ({ handleActions, open, setOpen }: Props) => {
         </div>
       </form>
       <ImageViewer url={imageView} closeViewer={() => setImageView("")} />
-      {/* {open.includes("review") && (
-        <CNewMiniModal
-          title="Recete asama tanitimi"
-          type="inner"
-          handleActions={() => setOpen(["card", "step"])}
-        >
-          <ReviewForm />
-        </CNewMiniModal>
-      )} */}
     </>
   );
 };

@@ -3,12 +3,12 @@ import CLabel from "../../CElements/CLabel";
 import { Controller } from "react-hook-form";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
-import { useTranslationHook } from "../../../hooks/useTranslation";
 import { TableUI } from "./LiteTable/TableUI";
 import { useFetchType } from "../../../hooks/useFetchRequests/useFetchType";
 import { useKeyDownEvent } from "../../../hooks/useKeyDownEvent";
 import { PopupUI } from "../PopupUI";
 import debounce from "lodash/debounce";
+import { useTranslation } from "react-i18next";
 
 interface Column {
   id: string;
@@ -80,7 +80,7 @@ const SearchInput = memo(
     setIsFocus: (value: boolean) => void;
     setOpen: (value: boolean) => void;
   }) => {
-    const { t } = useTranslationHook();
+    const { t } = useTranslation();
     const debouncedSearch = useMemo(
       () => debounce(handleSearch, 300),
       [handleSearch]
@@ -98,6 +98,25 @@ const SearchInput = memo(
               onBlur={() => {
                 setOpen(false);
                 setIsFocus(false);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  setTimeout(() => {
+                    const active = inputRef.current;
+                    if (!active) return;
+                    const form = active.closest("form");
+                    if (form) {
+                      const elements = Array.from(
+                        form.elements
+                      ) as HTMLElement[];
+                      const currentIndex = elements.indexOf(active);
+                      const next = elements[currentIndex + 1];
+                      if (next && typeof next.focus === "function") {
+                        next.focus();
+                      }
+                    }
+                  }, 0);
+                }
               }}
               onFocus={() => setIsFocus(true)}
               autoFocus={focused}
@@ -155,7 +174,7 @@ const TablePopup = memo(
           zIndex: 99,
         }}
       >
-        <div className="bg-white border border-[var(--border)] rounded-[8px] shadow-2xl">
+        <div className="bg-white border border-[var(--gray30)] rounded-[8px] shadow-2xl">
           <TableUI
             name={name}
             idTable={currentEl?.[name]}
@@ -205,7 +224,6 @@ export const LiteOptionsTable = memo(
     const [isFocus, setIsFocus] = useState(false);
     const [openPopup, setOpenPopup] = useState(false);
 
-    // Memoized handlers
     const handleSearch = useCallback(
       (value: string) => {
         let fetchName = name;
@@ -285,25 +303,11 @@ export const LiteOptionsTable = memo(
           setCurrentValue(el as T);
           setOpen(false);
           inputRef.current?.focus();
-          setTimeout(() => {
-            const active = inputRef.current;
-            if (!active) return;
-            const form = active.closest("form");
-            if (form) {
-              const elements = Array.from(form.elements) as HTMLElement[];
-              const currentIndex = elements.indexOf(active);
-              const next = elements[currentIndex + 1];
-              if (next && typeof next.focus === "function") {
-                next.focus();
-              }
-            }
-          }, 0);
         }
       },
       [handleSelect, setCurrentValue]
     );
 
-    // Effects
     useEffect(() => {
       if (popupUI && open) {
         setOpenPopup(true);
@@ -365,7 +369,9 @@ export const LiteOptionsTable = memo(
 
     return (
       <div className="w-full relative">
-        {label && <CLabel title={label} required={required} />}
+        {label && (
+          <CLabel title={label} required={required} disabled={disabled} />
+        )}
         <div
           className={`w-full relative flex items-center ${
             disabled ? "bg-[#fafafa]" : ""

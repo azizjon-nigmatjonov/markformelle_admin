@@ -8,5 +8,4 @@ ssh-keygen -R 10.40.15.10
 
 echo "Deploying files to server..."
 scp -r dist/* ladmin@10.40.15.10:/var/www/mfdashboard/
-// 11-future 
 echo "Done!"

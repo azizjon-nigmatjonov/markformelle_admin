@@ -1,18 +1,13 @@
 import { useEffect, useState, useCallback, useMemo, memo } from "react";
-// import { StokeDeteyContantList } from "../../../../../constants/stokedetey";
 import { ImageViewer } from "../../../../../components/UI/ImageViewer";
 import { useTranslation } from "react-i18next";
 import { StepModal } from "./StepModal";
-
 import { StepCard } from "./Card";
 import toast from "react-hot-toast";
 import { playSound } from "../../../../../utils/playAudio";
 import { CardModal } from "./CardModal";
-
 import { DragAndDropDataLogic } from "./Logic";
 import { DragHeader } from "./Components/DragHeader";
-import CNewMiniModal from "../../../../../components/CElements/CNewMiniModal";
-import { CardEditModal } from "./Components/CardEditModal";
 import ConfirmationModal from "../../../../../components/CElements/CConfirmationModal";
 import dayjs from "dayjs";
 const API_URL = import.meta.env.VITE_TEST_URL;
@@ -24,6 +19,8 @@ interface Props {
   askAction: string;
   setAskAction: (val: string) => void;
   setOpen: (val: string[]) => void;
+  tableData: any;
+  setCurrentSellect: (val: any) => void;
 }
 
 // Custom hook for data processing
@@ -167,16 +164,17 @@ export const DragDrop = memo(
   ({
     open,
     formId,
+    tableData,
     setChanged = () => {},
     changed,
     askAction,
     setAskAction = () => {},
     setOpen = () => {},
+    setCurrentSellect,
   }: Props) => {
     const { t } = useTranslation();
     const [checkedList, setCheckedList] = useState<any[]>([]);
 
-    const { tableData } = DragAndDropDataLogic({ id: formId });
     const { items, setItems, oldValues, headColumns } =
       useDataProcessor(tableData);
 
@@ -317,7 +315,7 @@ export const DragDrop = memo(
           handleCheck={handleCheck}
           setDeleteCard={setDeleteCard}
           deleteCardActive={deleteCardActive}
-          setInitialModalData={setInitialModalData}
+          setCurrentSellect={setCurrentSellect}
         />
 
         <ImageViewer url={imageView} closeViewer={() => setImageView("")} />
