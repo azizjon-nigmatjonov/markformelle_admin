@@ -30,10 +30,6 @@ const KnittingMachines = () => {
     perPage: 10,
     title: "Вязальные машины",
   });
-  console.log(
-    "bodyData",
-    bodyData?.map((item: any) => item.reason)
-  );
 
   useEffect(() => {
     setHeightWindow(window?.screen?.height);

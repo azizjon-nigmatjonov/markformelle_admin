@@ -13,6 +13,7 @@ export interface MenuItem {
   auth?: boolean;
   permissions?: string[];
   element?: ReactNode;
+  link?: string;
 }
 
 export interface MenuSection {
