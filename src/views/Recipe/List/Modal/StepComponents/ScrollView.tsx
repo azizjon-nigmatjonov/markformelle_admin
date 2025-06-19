@@ -27,6 +27,8 @@ interface Props {
   focusedIndex: number;
   handleCheck: (val: any) => void;
   handleKeyDown: (val: any, index: number) => void;
+  stepRef: any;
+  setFocusedIndex: (val: number) => void;
 }
 
 const ScrollView = ({
@@ -53,6 +55,8 @@ const ScrollView = ({
   handleCheck = () => {},
   focusedIndex,
   handleKeyDown,
+  stepRef,
+  setFocusedIndex,
 }: Props) => {
   const ScrollBody = useRef<HTMLDivElement>(null);
 
@@ -120,6 +124,8 @@ const ScrollView = ({
             focusedIndex={focusedIndex}
             handleKeyDown={handleKeyDown}
             handleCheck={handleCheck}
+            stepRef={stepRef}
+            setFocusedIndex={setFocusedIndex}
           />
         </div>
       </div>

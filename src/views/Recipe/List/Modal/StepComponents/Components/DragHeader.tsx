@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import ExcelDownload from "../../../../../../hooks/useExcelDownload";
 import { Tooltip } from "@mui/material";
 import { useTranslation } from "react-i18next";
@@ -13,7 +13,6 @@ import {
   CheckMultipleIcon,
   UncheckMultipleIcon,
 } from "../../../../../../components/UI/IconGenerator/Svg/Table";
-import { useKeyDownEvent } from "../../../../../../hooks/useKeyDownEvent";
 interface Props {
   items: any;
   changed: string;
@@ -62,9 +61,9 @@ export const DragHeader = ({
   }, [items, editStep]);
 
   const Fields = useMemo(() => {
-    if (!tableData?.data) return [];
+    if (!tableData?.data?.data) return [];
     const arr: any = [];
-    const obj: any = tableData.data[0];
+    const obj: any = tableData.data.data[0];
     delete obj.status;
     delete obj.index;
     for (let key in obj) {
@@ -83,16 +82,6 @@ export const DragHeader = ({
 
   return (
     <div className="flex justify-between items-center">
-      {/* <div>
-        {isAltPressed && (
-          <div className="flex space-x-8 text-sm font-medium">
-            <div className="flex space-x-1">
-              <EditIcon width={14} fill="var(--main)" />
-              <span>Ctr + Enter</span>
-            </div>
-          </div>
-        )}
-      </div> */}
       <div className="flex space-x-8 items-center font-medium">
         <div>
           <ExcelDownload
@@ -135,7 +124,7 @@ export const DragHeader = ({
           </button>
         </Tooltip>
 
-        <Tooltip title={t("delete_card")} placement="bottom">
+        {/* <Tooltip title={t("delete_card")} placement="bottom">
           <button
             onClick={() => setDeleteCardActive(!deleteCardActive)}
             type="button"
@@ -151,7 +140,7 @@ export const DragHeader = ({
             </div>
             <span className="text-[var(--black)]">{t("delete_card")}</span>
           </button>
-        </Tooltip>
+        </Tooltip> */}
 
         <Tooltip
           title={t(editStep ? "cancel_changes" : "edit")}

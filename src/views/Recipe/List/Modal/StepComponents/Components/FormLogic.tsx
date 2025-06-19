@@ -31,5 +31,19 @@ export const FormLogic = ({ refetchTable }: { refetchTable: () => void }) => {
     }
   };
 
-  return { updateForm, createForm };
+  const deleteForm = async (id: number[]) => {
+    try {
+      const { data } = await axios.delete(`${API_URL}/recetedetay/`, {
+        data: id,
+      });
+      refetchTable();
+      toast.success(t("deleted!"));
+      return data;
+    } catch (error) {
+      toast.error(`Error deleting element:, ${error}`);
+      return null;
+    }
+  };
+
+  return { updateForm, createForm, deleteForm };
 };

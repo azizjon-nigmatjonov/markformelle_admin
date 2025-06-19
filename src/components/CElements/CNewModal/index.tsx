@@ -6,8 +6,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { DeleteIcon, EditIcon } from "../../UI/IconGenerator/Svg";
 import CloseIcon from "@mui/icons-material/Close";
-import RemoveIcon from "@mui/icons-material/Remove";
 import { PopoverDelete } from "../CNewTable/Details/Actions/EditDelete/PopOver";
+import { useModalManager } from "../../../hooks/useModalManager";
 
 interface Props {
   title?: string;
@@ -22,8 +22,8 @@ interface Props {
   actions?: string[];
   disabled?: string;
   defaultData?: { id: string | number | undefined };
-  showUI?: boolean;
   handleActions?: (val: string, val2?: any) => void;
+  modalId?: string; // Optional prop for custom modal ID
 }
 
 const CNewModal: FC<Props> = ({
@@ -31,11 +31,11 @@ const CNewModal: FC<Props> = ({
   padding = "14px",
   children,
   action = "add",
-  defaultData = {},
+  defaultData = { id: "" },
   handleActions = () => {},
   actions = [],
   disabled = "",
-  showUI = true,
+  modalId,
 }) => {
   const [screen, setScreen] = useState(!disabled);
   const [position, setPosition] = useState<{ x: number; y: number } | null>(
@@ -44,6 +44,18 @@ const CNewModal: FC<Props> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const modalRef = useRef<HTMLDivElement>(null);
+
+  // Generate unique modal ID if not provided
+  const uniqueModalId = useRef(
+    modalId || `modal-${Date.now()}-${Math.random()}`
+  ).current;
+
+  // Handle modal close
+  const handleClose = () => {
+    handleActions("close");
+  };
+
+  const {} = useModalManager(uniqueModalId, handleClose);
 
   useEffect(() => {
     if (!position && modalRef.current) {
@@ -108,10 +120,10 @@ const CNewModal: FC<Props> = ({
   const [openPopup, setOpenPopup] = useState(false);
 
   return (
-    <div className={showUI ? "" : "opacity-0"}>
+    <>
       <div
         ref={modalRef}
-        className={`fixed rounded-[12px] z-[99] bg-white shadow-lg ${
+        className={`fixed rounded-[12px] bg-white shadow-lg z-[99] ${
           isDragging ? "cursor-grabbing" : ""
         }`}
         style={{
@@ -134,7 +146,7 @@ const CNewModal: FC<Props> = ({
             {title && (
               <div className="flex items-center justify-between p-3 top-0 bg-white z-[91] border-b border-[var(--border)]">
                 <div className="flex items-center space-x-3">
-                  <IconButton onClick={() => handleActions("close")}>
+                  <IconButton onClick={handleClose}>
                     <div className="w-[30px] h-[30px] items-center justify-center flex bg-[var(--main80)] rounded-full">
                       <ArrowBackIcon
                         style={{ color: "var(--main)", width: 18 }}
@@ -202,12 +214,7 @@ const CNewModal: FC<Props> = ({
                       },
                     }}
                   >
-                    <IconButton
-                      onMouseDown={handleDragStart}
-                      className={`transition-colors ${
-                        isDragging ? "bg-[var(--main80)]" : ""
-                      }`}
-                    >
+                    <IconButton onMouseDown={handleDragStart}>
                       <div
                         className={`flex items-center justify-center rounded-full w-[30px] h-[30px] ${
                           isDragging ? "border border-[var(--main)]" : ""
@@ -217,56 +224,42 @@ const CNewModal: FC<Props> = ({
                       </div>
                     </IconButton>
                   </Tooltip>
-                </div>
 
-                <div className="flex items-center space-x-4">
-                  {action === "edit" && (
-                    <button className="text-[14px] border border-[var(--border)] px-2 py-1 rounded-[8px]">
-                      {t("save")}
-                    </button>
-                  )}
-                  <div>
-                    <IconButton onClick={() => handleActions("close")}>
-                      <div className="w-[30px] h-[30px] items-center justify-center flex hover:bg-[var(--primary50)]">
-                        <RemoveIcon className="text-[var(--main)]" />
-                      </div>
-                    </IconButton>
-                    <Tooltip
-                      title="Изменить размер"
-                      arrow
-                      slotProps={{
-                        popper: {
-                          modifiers: [
-                            {
-                              name: "offset",
-                              options: {
-                                offset: [0, 15],
-                              },
+                  <Tooltip
+                    title="Свернуть модальное окно"
+                    arrow
+                    slotProps={{
+                      popper: {
+                        modifiers: [
+                          {
+                            name: "offset",
+                            options: {
+                              offset: [0, 15],
                             },
-                          ],
-                        },
-                      }}
-                    >
-                      <IconButton onClick={() => handleScreen()}>
-                        <div className="w-[30px] h-[30px] items-center justify-center flex group hover:bg-[var(--primary50)]">
-                          {!screen ? (
-                            <div className="relative w-[18px] h-[18px]">
-                              <div className="w-[12px] h-[12px] border border-[var(--main)] absolute top-[2px] right-[1px]"></div>
-                              <div className="w-[12px] h-[12px] border border-[var(--main)] absolute left-[2px] bottom-[1px] bg-white group-hover:bg-[var(--primary50)]"></div>
-                            </div>
-                          ) : (
-                            <div className="w-[15px] h-[15px] border border-[var(--main)]"></div>
-                          )}
-                        </div>
-                      </IconButton>
-                    </Tooltip>
-
-                    <IconButton onClick={() => handleActions("close")}>
-                      <div className="w-[30px] h-[30px] items-center justify-center flex group hover:bg-[var(--primary50)] hover:rotate-[90deg] duration-200">
-                        <CloseIcon className="text-[var(--main)]" />
+                          },
+                        ],
+                      },
+                    }}
+                  >
+                    <IconButton onClick={() => handleScreen()}>
+                      <div className="w-[30px] h-[30px] items-center justify-center flex group hover:bg-[var(--primary50)]">
+                        {!screen ? (
+                          <div className="relative w-[18px] h-[18px]">
+                            <div className="w-[12px] h-[12px] border border-[var(--main)] absolute top-[2px] right-[1px]"></div>
+                            <div className="w-[12px] h-[12px] border border-[var(--main)] absolute left-[2px] bottom-[1px] bg-white group-hover:bg-[var(--primary50)]"></div>
+                          </div>
+                        ) : (
+                          <div className="w-[15px] h-[15px] border border-[var(--main)]"></div>
+                        )}
                       </div>
                     </IconButton>
-                  </div>
+                  </Tooltip>
+
+                  <IconButton onClick={handleClose}>
+                    <div className="w-[30px] h-[30px] items-center justify-center flex group hover:bg-[var(--primary50)] hover:rotate-[90deg] duration-200">
+                      <CloseIcon className="text-[var(--main)]" />
+                    </div>
+                  </IconButton>
                 </div>
               </div>
             )}
@@ -280,9 +273,9 @@ const CNewModal: FC<Props> = ({
         className={`w-full h-full fixed top-0 left-0 z-[97] ${
           title ? "bg-[rgba(0,0,0,0.3)]" : ""
         }`}
-        onClick={() => handleActions("close")}
+        onClick={handleClose}
       ></div>
-    </div>
+    </>
   );
 };
 

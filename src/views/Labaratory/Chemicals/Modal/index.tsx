@@ -21,9 +21,7 @@ interface ModalUIProps {
   handleModalActions: (val: string, val2: string) => void;
   modalInitialData: any;
   open: boolean;
-  showUI: boolean;
   askClose: string;
-  setShowUI: (val: boolean) => void;
   refetchTable: () => void;
   setAskClose: (val: string) => void;
 }
@@ -32,8 +30,6 @@ export const ModalUI = ({
   open = false,
   defaultData = {},
   handleModalActions,
-  showUI = false,
-  setShowUI = () => {},
   modalInitialData = [],
   askClose,
   setAskClose,
@@ -102,10 +98,6 @@ export const ModalUI = ({
   useEffect(() => {
     setFilterParams({ page: 1, perPage: 100 });
   }, []);
-
-  useEffect(() => {
-    if (!open) setShowUI(false);
-  }, [open]);
 
   const onSubmit = (data: any) => {
     let params: any = data;
@@ -187,15 +179,6 @@ export const ModalUI = ({
   }, [formData]);
 
   useEffect(() => {
-    if (formData?.LABRECETEKODU && open && defaultData?.LABRECETEID) {
-      setTimeout(() => {
-        setShowUI(true);
-      }, 0);
-    }
-    if (!defaultData?.LABRECETEID && open) setShowUI(true);
-  }, [formData, defaultData, open]);
-
-  useEffect(() => {
     if (defaultData?.LABRECETEID) setFormId(defaultData.LABRECETEID);
   }, [defaultData, disabled]);
 
@@ -214,7 +197,6 @@ export const ModalUI = ({
           defaultData={{
             id: modalInitialData?.LABRECETEID,
           }}
-          showUI={showUI}
           disabled="big"
         >
           <form

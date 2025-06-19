@@ -8,6 +8,7 @@ import { IFilterParams } from "../../../interfaces";
 import { useTranslationHook } from "../../../hooks/useTranslation";
 import CNewModal from "../../../components/CElements/CNewModal";
 import { playSound } from "../../../utils/playAudio";
+import dayjs from "dayjs";
 
 export const RecipeList = () => {
   const { t } = useTranslationHook();
@@ -25,7 +26,16 @@ export const RecipeList = () => {
   });
 
   const newHeadColumns = useMemo(() => {
-    const headColumns: any = [];
+    const headColumns: any = [
+      {
+        CALISMATARIHI: "CALISMATARIHI",
+        title: "CALISMATARIHI",
+        width: 100,
+        renderValue: (val: string) => {
+          return dayjs(val).format("DD.MM.YYYY");
+        },
+      },
+    ];
     const arr: any = bodyData?.data ?? [];
 
     const obj = { ...arr?.[0] };

@@ -23,6 +23,8 @@ interface Props {
   handleCheck: (val: any) => void;
   focusedIndex: number;
   handleKeyDown: (val: any, index: number) => void;
+  stepRef: any;
+  setFocusedIndex: (val: number) => void;
 }
 
 export const DragingEl = ({
@@ -43,6 +45,8 @@ export const DragingEl = ({
   handleCheck = () => {},
   focusedIndex,
   handleKeyDown,
+  stepRef,
+  setFocusedIndex,
 }: Props) => {
   const { t } = useTranslation();
 
@@ -62,12 +66,6 @@ export const DragingEl = ({
     }
     setHoverAdd(999);
   };
-  const stepRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (stepRef.current) {
-      stepRef.current.focus();
-    }
-  }, [editStep]);
 
   return (
     <div>
@@ -77,7 +75,11 @@ export const DragingEl = ({
             <div className="w-full">
               <div
                 tabIndex={0}
-                ref={outerIndex === 0 ? stepRef : null}
+                ref={(el) => {
+                  if (el) {
+                    stepRef.current[item.index] = el;
+                  }
+                }}
                 className={`relative outline-none cursor-pointer row flex items-center w-full ${
                   item.RECETEALTASAMAID ? "chip" : ""
                 } ${draggingIndexStep === innerIndex ? "dragging" : ""} ${
@@ -107,6 +109,9 @@ export const DragingEl = ({
                     outerIndex,
                   });
                 }}
+                onClick={() => {
+                  setFocusedIndex(item.index);
+                }}
                 onDragLeave={handleDragLeaveStep}
                 onDrop={() => {
                   if (!editStep) return;
@@ -122,7 +127,7 @@ export const DragingEl = ({
                       item.checked = !item?.checked;
                       handleCheck(item);
                     }}
-                    className={`w-[18px] h-[18px] border border-[var(--main)] rounded-[4px] ml-2 hover:cursor-pointer flex items-center justify-center ${
+                    className={`w-[18px] mr-2 h-[18px] border border-[var(--main)] rounded-[4px] ml-2 hover:cursor-pointer flex items-center justify-center ${
                       item.checked ? "bg-[var(--main)]" : ""
                     }`}
                   >
@@ -146,7 +151,7 @@ export const DragingEl = ({
                     </p>
                   </div>
                 ) : item.RECETEALTASAMAID ? (
-                  <div className={`w-full`}>
+                  <div className={`w-full `}>
                     <Divider
                       className={focusedIndex === item.index ? "active" : ""}
                     >

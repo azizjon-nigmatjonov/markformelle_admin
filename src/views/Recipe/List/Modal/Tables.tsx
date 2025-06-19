@@ -1,7 +1,6 @@
 import "./style.scss";
 import { DragDrop } from "./StepComponents/DragDrop";
 export const LabModalTables = ({
-  formId,
   setChanged = () => {},
   changed,
   askAction,
@@ -10,22 +9,22 @@ export const LabModalTables = ({
   open,
   setCurrentSellect,
   tableData,
+  refetchTable,
 }: {
   open: string[];
   setOpen: (val: string[]) => void;
-  formId: string;
   changed: string;
   askAction: string;
   tableData: any;
   setAskAction: (val: string) => void;
   setChanged: (val: string) => void;
   setCurrentSellect: (val: any) => void;
+  refetchTable: () => void;
 }) => {
   return (
     <div className="border-t border-[var(--border)]">
       <DragDrop
         open={open}
-        formId={formId}
         changed={changed}
         setChanged={setChanged}
         askAction={askAction}
@@ -33,6 +32,7 @@ export const LabModalTables = ({
         setOpen={setOpen}
         tableData={tableData}
         setCurrentSellect={setCurrentSellect}
+        refetchTable={refetchTable}
       />
     </div>
   );

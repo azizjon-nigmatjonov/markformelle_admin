@@ -57,11 +57,21 @@ export const StepCard = ({
   const scrollInterval = useRef<NodeJS.Timeout | null>(null);
   const [newColumns, setNewColumns] = useState([]);
   const { isAltPressed, currentKey } = useKeyDownEvent();
+  const stepRef = useRef<HTMLDivElement[]>([]);
+  // make the ref dynamic and focus the current focused index ref
+  useEffect(() => {
+    if (stepRef.current) {
+      stepRef.current[focusedIndex]?.focus();
+    }
+  }, [open]);
 
   useEffect(() => {
     if (isAltPressed && currentKey === "Insert") {
-      setOpen(["card", "step"]);
-      setCurrentSellect({});
+      setOpen(["card", "insert_step"]);
+
+      const currEl = items.map((item: any) => item.rows).flat();
+      const index = currEl.findIndex((el: any) => el.index === focusedIndex);
+      setCurrentSellect(currEl[index]);
     }
   }, [isAltPressed, currentKey]);
 
@@ -234,6 +244,7 @@ export const StepCard = ({
           <div className="col-span-3">
             <ScrollView
               rows={row?.rows ?? []}
+              stepRef={stepRef}
               editStep={editStep}
               handleDragStartStep={handleDragStartStep}
               handleDragOverStep={handleDragOverStep}
@@ -260,9 +271,10 @@ export const StepCard = ({
               checkedList={checkedList}
               handleCheck={handleCheck}
               focusedIndex={focusedIndex}
-              handleKeyDown={(val: any, index: number) => {
+              handleKeyDown={(val: any) => {
                 handleKeyDown(val, outerIndex);
               }}
+              setFocusedIndex={setFocusedIndex}
             />
           </div>
           <div className="relative">

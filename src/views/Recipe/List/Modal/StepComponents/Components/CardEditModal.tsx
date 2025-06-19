@@ -1,22 +1,19 @@
 import { useForm } from "react-hook-form";
-import { LiteOptionsTable } from "../../../../../../components/UI/Options/LiteTable";
-import type { TableItem } from "../../../../../../components/UI/Options/LiteTable";
 import { SubmitCancelButtons } from "../../../../../../components/UI/FormButtons/SubmitCancel";
-import HFTextField from "../../../../../../components/HFElements/HFTextField";
 import { ImageViewer } from "../../../../../../components/UI/ImageViewer";
-import { useEffect, useMemo, useState } from "react";
-import { CImageUploader } from "../../../../../../components/CElements/CDriverImageUpload";
-import { API_URL } from "../../../../../../utils/env";
-import dayjs from "dayjs";
+import { useState } from "react";
 import { FormLogic } from "./FormLogic";
-import HFInputMask from "../../../../../../components/HFElements/HFInputMask";
-import CImageViewer from "../../../../../../components/CElements/CImageViewer";
-
+import { FormFirst } from "./Forms/First";
+import { FormSecond } from "./Forms/Second";
+import { FormThird } from "./Forms/Third";
+import dayjs from "dayjs";
 interface Props {
   handleActions: () => void;
   open: string[];
   formData: any;
   refetchTable: () => void;
+  receteId: string;
+  type: string;
 }
 
 export const CardEditModal = ({
@@ -24,89 +21,95 @@ export const CardEditModal = ({
   open,
   formData = {},
   refetchTable,
+  receteId,
+  type,
 }: Props) => {
   const [group, setGroup] = useState<string>("");
   const [imageView, setImageView] = useState("");
+
   const { control, handleSubmit, setValue, reset } = useForm<any>({
     mode: "onSubmit",
   });
-  const { updateForm } = FormLogic({ refetchTable });
+  const { updateForm, createForm } = FormLogic({
+    refetchTable: () => {
+      refetchTable();
+      reset();
+    },
+  });
+
+  const onSubmit = (data: any) => {
+    let params = data;
+    console.log("111");
+    params.DEGISIMTARIHI = dayjs();
+    if (type === "update") {
+      params = { ...formData, ...params };
+      updateForm(params, formData.RECETEDETAYID);
+    } else {
+      params.INSERTKULLANICIID = 1;
+      params.INSERTTARIHI = dayjs();
+      params.KULLANICIID = 1;
+      params.RECETEID = receteId;
+      params.SIRA = formData.SIRA;
+      if (group === "group1") {
+        params = {
+          ...params,
+          SIRA: 5,
+          RECETEASAMAID: params.RECETEASAMAID,
+          SURE: null,
+          RECETEALTASAMAID: null,
+          URUNID: null,
+          URUNBIRIMID: null,
+          RECETEGRAFIKID: params.RECETEGRAFIKID,
+          MIKTAR: 0,
+          BANYO: 0,
+          ATISRENKSIRA: null,
+          ATISRENKCOLOR: null,
+          ATISRENKKODU: null,
+          ATISRENKADI: null,
+          ACIKLAMA: null,
+        };
+      }
+      if (group === "group2") {
+        params = {
+          ...params,
+
+          RECETEASAMAID: null,
+          SURE: null,
+          RECETEALTASAMAID: params.RECETEALTASAMAID,
+          URUNID: null,
+          URUNBIRIMID: null,
+          RECETEGRAFIKID: null,
+          MIKTAR: params.MIKTAR,
+          BANYO: 0,
+          ATISRENKSIRA: null,
+          ATISRENKCOLOR: null,
+          ATISRENKKODU: null,
+          ATISRENKADI: null,
+          ACIKLAMA: null,
+        };
+      }
+      if (group === "group3") {
+        params = {
+          ...params,
+
+          URUNID: params.URUNID,
+          URUNBIRIMID: params.URUNBIRIMID,
+
+          MIKTAR: params.MIKTAR,
+          BANYO: Number(params.BANYO),
+        };
+      }
+
+      createForm(params);
+    }
+  };
 
   const changeGroup = (newGroup: string) => {
     if (!group) {
-      console.log("aaa");
-
       setGroup(newGroup);
     }
   };
   console.log("formData", formData);
-
-  const onSubmit = (data: any) => {
-    let params = data;
-
-    if (formData.SIRA) {
-      params = { ...formData };
-      params.DEGISIMTARIHI = dayjs();
-      updateForm(params, formData.RECETEDETAYID);
-    }
-
-    // {
-    //   "RECETEDETAYID": 0,
-    //   "SIRA": 0,
-    //   "RECETEID": "string",
-    //   "RECETEASAMAID": 0,
-    //   "SURE": 0,
-    //   "RECETEALTASAMAID": 0,
-    //   "URUNID": "string",
-    //   "URUNBIRIMID": 0,
-    //   "RECETEGRAFIKID": "string",
-    //   "MIKTAR": 0,
-    //   "BANYO": 0,
-    //   "ATISRENKSIRA": 0,
-    //   "ATISRENKCOLOR": 0,
-    //   "ATISRENKKODU": "string",
-    //   "ATISRENKADI": "string",
-    //   "ACIKLAMA": "string",
-    //   "INSERTKULLANICIID": 1,
-    //   "INSERTTARIHI": "2025-06-18T06:04:37.484Z",
-    //   "KULLANICIID": 1,
-    //   "DEGISIMTARIHI": "2025-06-18T06:04:37.484Z"
-    // }
-    if (group === "group1") {
-      console.log("group1", data);
-    }
-    if (group === "group2") {
-      console.log("group2", data);
-    }
-    if (group === "group3") {
-      console.log("group3", data);
-    }
-  };
-
-  useEffect(() => {
-    if (!formData.SIRA) {
-      reset();
-    }
-    if (formData.RECETEASAMAID) {
-      setGroup("group1");
-    } else if (formData.RECETEALTASAMAID) {
-      setGroup("group2");
-    } else {
-      setGroup("group3");
-    }
-  }, [formData]);
-
-  const disabledFirstGroup = useMemo(() => {
-    return group ? (group === "group1" ? false : true) : false;
-  }, [group]);
-
-  const disabledSecondGroup = useMemo(() => {
-    return group ? (group === "group2" ? false : true) : false;
-  }, [group]);
-
-  const disabledThirdGroup = useMemo(() => {
-    return group ? (group === "group3" ? false : true) : false;
-  }, [group]);
 
   return (
     <>
@@ -116,152 +119,56 @@ export const CardEditModal = ({
         }}
         onSubmit={handleSubmit(onSubmit)}
         className="w-[400px]"
-        key={group}
       >
         <div className="space-y-3">
-          <LiteOptionsTable
-            label="Recete asama kodu"
-            name="RECETEASAMAID"
-            required
-            link="receteasama"
-            headColumns={[
-              { id: "RECETEASAMAID", title: "ID", width: 50 },
-              { id: "ADI", title: "FIRMAADI", width: 300 },
-            ]}
-            renderValue={(_: string, obj: any) => {
-              return obj.RECETEASAMAID && obj.ADI
-                ? obj.RECETEASAMAID + " - " + obj.ADI
-                : obj.RECETEASAMAID;
-            }}
-            defaultValue={formData?.RECETEASAMAID}
-            handleSelect={(obj: TableItem) => {
-              setValue("RECETEASAMAID", obj.RECETEASAMAID);
-              changeGroup("group1");
-            }}
-            disabled={disabledFirstGroup}
+          <FormFirst
             control={control}
-          />
-          <LiteOptionsTable
-            label="Grafik kodu"
-            name="RECETEGRAFIKID"
-            required
-            link="recetegrafik"
-            headColumns={[
-              { id: "RECETEGRAFIKID", title: "RECETEGRAFIKID", width: 120 },
-              { id: "ADI", title: "ADI", width: 160 },
-            ]}
-            renderValue={(_: string, obj: any) => {
-              return obj.RECETEGRAFIKID;
-            }}
-            defaultValue={formData?.RECETEGRAFIKID}
-            handleSelect={(obj: TableItem) => {
-              setValue("RECETEGRAFIKID", obj.RECETEGRAFIKID);
-              changeGroup("group1");
-            }}
-            // disabled={disabledFirstGroup}
-            control={control}
-          />
-          <CImageViewer
-            url={`${API_URL}/recetegrafik/image/${formData.RECETEGRAFIKID}`}
-          />
-          <div className="pt-5">
-            <div className="h-[1px] bg-[var(--gray40)] w-full"></div>
-          </div>
-          <LiteOptionsTable
-            label="Alt asama kodu"
-            name="RECETEALTASAMAID"
-            required
-            link="recetealtasama"
-            headColumns={[
-              { id: "RECETEALTASAMAID", title: "ID", width: 50 },
-              { id: "ADI", title: "ADI", width: 220 },
-            ]}
-            renderValue={(_: string, obj: any) => {
-              return obj.RECETEALTASAMAID && obj.ADI
-                ? obj.RECETEALTASAMAID + " - " + obj.ADI
-                : obj.RECETEALTASAMAID;
-            }}
-            defaultValue={
-              formData.RECETEALTASAMAID
-                ? formData.RECETEALTASAMAID + " - " + formData.RECETEALTASAMAADI
-                : ""
+            setValue={setValue}
+            changeGroup={changeGroup}
+            formData={type === "create" ? {} : formData}
+            disabledFirstGroup={
+              group ? (group === "group1" ? false : true) : false
             }
-            handleSelect={(obj: TableItem) => {
-              setValue("RECETEALTASAMAID", obj.RECETEALTASAMAID);
-              changeGroup("group2");
-            }}
-            disabled={disabledSecondGroup}
-            control={control}
           />
           <div className="pt-5">
             <div className="h-[1px] bg-[var(--gray40)] w-full"></div>
           </div>
-
-          <div className="grid grid-cols-7 gap-x-2">
-            <div className="col-span-6">
-              <LiteOptionsTable
-                label="Urun kodu"
-                name="URUNID"
-                required
-                link="urun"
-                headColumns={[
-                  { id: "URUNID", title: "URUNID", width: 70 },
-                  { id: "ADI", title: "ADI", width: 180 },
-                ]}
-                renderValue={(_: string, obj: any) => {
-                  return obj.URUNID && obj.ADI
-                    ? obj.URUNID + " - " + obj.ADI
-                    : obj.URUNID;
-                }}
-                defaultValue={
-                  formData.URUNID
-                    ? formData.URUNID + " - " + formData.URUNADI
-                    : undefined
-                }
-                handleSelect={(obj: TableItem) => {
-                  setValue("URUNID", obj.URUNID);
-                  changeGroup("group3");
-                }}
-                disabled={disabledThirdGroup}
-                control={control}
-              />
-            </div>
-            <HFTextField
-              label="Birim"
-              name="BIRIMID"
-              required
-              control={control}
-              defaultValue={formData.URUNBIRIMADI}
-              disabled={disabledThirdGroup}
-            />
-          </div>
-          <HFInputMask
-            label="Gr/Kg"
-            name="kg"
-            required
+          <FormSecond
             control={control}
-            defaultValue={formData.MIKTAR}
-            disabled={disabledThirdGroup}
+            setValue={setValue}
+            changeGroup={changeGroup}
+            formData={type === "create" ? {} : formData}
+            disabledSecondGroup={
+              group ? (group === "group2" ? false : true) : false
+            }
           />
-          <HFInputMask
-            label="Gr/Lt"
-            name="lt"
-            required
+          <div className="pt-5">
+            <div className="h-[1px] bg-[var(--gray40)] w-full"></div>
+          </div>
+          <FormThird
             control={control}
-            defaultValue={formData.BANYO}
-            disabled={disabledThirdGroup}
+            setValue={setValue}
+            changeGroup={changeGroup}
+            formData={type === "create" ? {} : formData}
+            disabledThirdGroup={
+              group ? (group === "group3" ? false : true) : false
+            }
           />
           <SubmitCancelButtons
             uniqueID={
               open.includes("step") && !open.includes("review") ? "step" : ""
             }
-            type="update"
+            type={type}
             handleActions={(val: string, uniqueID: string) => {
               if (uniqueID === "step") {
                 if (val === "Close") {
                   handleActions();
                 }
-                if (val === "Enter") handleSubmit(onSubmit)();
+                if (val === "Enter") {
+                  if (group === "group1") {
+                    handleSubmit(onSubmit)();
+                  }
+                }
               }
             }}
           />

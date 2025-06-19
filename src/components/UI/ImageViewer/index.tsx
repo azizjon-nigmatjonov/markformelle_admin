@@ -1,35 +1,48 @@
 import CancelIcon from "@mui/icons-material/Cancel";
-import { Closer } from "../Closer";
+import { useModalManager } from "../../../hooks/useModalManager";
+import { useRef } from "react";
 
 interface Props {
   url: string;
   closeViewer: () => void;
+  modalId?: string; // Optional prop for custom modal ID
 }
 
-export const ImageViewer = ({ url, closeViewer = () => {} }: Props) => {
+export const ImageViewer = ({
+  url,
+  closeViewer = () => {},
+  modalId,
+}: Props) => {
   if (!url) return "";
+
+  const uniqueModalId = useRef(
+    modalId || `image-viewer-${Date.now()}-${Math.random()}`
+  ).current;
+
+  const {} = useModalManager(uniqueModalId, closeViewer);
 
   return (
     <>
-      <div className="fixed top-[-30vh] left-[-50vw] w-[130vw] h-[130vh] z-[99] flex items-center justify-center">
-        <div className="relative min-h-[60vh] h-[50vh] w-full">
+      <div className="fixed z-[99] top-[-30vh] left-[-50vw] w-[130vw] h-[130vh] flex items-center justify-center">
+        <div className="relative h-[60vh] w-[80vw] h-[50vh]z-[99]">
           <img
             src={url}
             alt="image viewer photo"
-            className="object-cover min-w-[80vw] fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[99]"
+            className="w-full h-full cursor-pointer"
           />
 
           <button
             onClick={() => closeViewer()}
-            className="absolute right-5 top-20 z-[99]"
+            className="absolute -right-20 -top-20"
           >
             <CancelIcon style={{ color: "var(--gray20)", fontSize: 34 }} />
           </button>
         </div>
       </div>
-      <div className="relative z-[100]">
-        <Closer handleClose={() => closeViewer()} />
-      </div>
+      {/* <div
+        className="fixed top-0 left-0 w-[100vw] h-[100vh] bg-black bg-opacity-50 z-[98]"
+        onClick={() => closeViewer()}
+      ></div> */}
     </>
   );
 };

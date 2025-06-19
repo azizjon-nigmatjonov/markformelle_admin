@@ -123,7 +123,7 @@ export const DetailForm = ({
             focused
             headColumns={[
               { id: "URUNID", width: 100, title: "URUNID" },
-              { id: "ADI", title: "URUNADI", innerId: "URUNID", width: 200 },
+              { id: "ADI", title: "URUNADI", width: 200 },
             ]}
             renderValue={(_: string, obj: any) => {
               return obj.URUNID || obj.ADI;

@@ -6,14 +6,13 @@ import { StepCard } from "./Card";
 import toast from "react-hot-toast";
 import { playSound } from "../../../../../utils/playAudio";
 import { CardModal } from "./CardModal";
-import { DragAndDropDataLogic } from "./Logic";
 import { DragHeader } from "./Components/DragHeader";
 import ConfirmationModal from "../../../../../components/CElements/CConfirmationModal";
 import dayjs from "dayjs";
+import { FormLogic } from "./Components/FormLogic";
 const API_URL = import.meta.env.VITE_TEST_URL;
 interface Props {
   open: string[];
-  formId: string;
   changed: string;
   setChanged: (val: string) => void;
   askAction: string;
@@ -21,6 +20,7 @@ interface Props {
   setOpen: (val: string[]) => void;
   tableData: any;
   setCurrentSellect: (val: any) => void;
+  refetchTable: () => void;
 }
 
 // Custom hook for data processing
@@ -52,7 +52,7 @@ const useDataProcessor = (tableData: any) => {
       obj.index = i;
       obj.bg = bgColors.default; // Set default background color
 
-      if (obj.RECETEASAMAID) {
+      if (obj.RECETEASAMAID && !objects[obj.RECETEASAMAID]) {
         lastId = "" + obj.RECETEASAMAID;
         objects[lastId] = {
           rows: [obj],
@@ -63,8 +63,15 @@ const useDataProcessor = (tableData: any) => {
           bg: bgColors.default,
           main: obj,
         };
-      } else if (lastId && lastId in objects) {
-        objects[lastId].rows.push(obj);
+      } else {
+        if (
+          objects[lastId].rows.every(
+            (el: any) => el.RECETEASAMAID !== obj.RECETEASAMAID
+          ) ||
+          !obj.RECETEASAMAID
+        ) {
+          objects[lastId].rows.push(obj);
+        }
       }
     }
 
@@ -78,7 +85,7 @@ const useDataProcessor = (tableData: any) => {
   const columns = useMemo(
     () => [
       { title: "RECETEDETAYID", id: "RECETEDETAYID", width: 120 },
-      { title: "SIRA", id: "SIRA", width: 50 },
+
       { title: "URUNID", id: "URUNID", width: 80 },
       { title: "URUNBIRIMID", id: "URUNBIRIMID", width: 100 },
       { title: "INSERTKULLANICIID", id: "INSERTKULLANICIID", width: 140 },
@@ -101,6 +108,7 @@ const useDataProcessor = (tableData: any) => {
         width: 100,
         render: (val: string) => `${val} kg`,
       },
+      { title: "SIRA", id: "SIRA", width: 50 },
     ],
     []
   );
@@ -163,7 +171,6 @@ const useModalState = () => {
 export const DragDrop = memo(
   ({
     open,
-    formId,
     tableData,
     setChanged = () => {},
     changed,
@@ -171,12 +178,34 @@ export const DragDrop = memo(
     setAskAction = () => {},
     setOpen = () => {},
     setCurrentSellect,
+    refetchTable,
   }: Props) => {
     const { t } = useTranslation();
-    const [checkedList, setCheckedList] = useState<any[]>([]);
+    const [checkedList, setCheckedList] = useState<number[]>([]);
 
     const { items, setItems, oldValues, headColumns } =
       useDataProcessor(tableData);
+    const clearSelect = useCallback(() => {
+      const updatedItems = items.map((item: { rows: any }) => ({
+        ...item,
+        rows: item.rows.map((row: any) => ({ ...row, checked: false })),
+      }));
+      setItems(updatedItems);
+      setCheckedList([]);
+    }, [items, setItems]);
+
+    const { deleteForm } = FormLogic({
+      refetchTable: () => {
+        refetchTable();
+        toast.success(t("deleted!"));
+        playSound("/notif.wav");
+        setDeleteStep(false);
+        setAskDelete(false);
+        setAskAction("");
+        setChanged("");
+        clearSelect();
+      },
+    });
 
     const {
       editStep,
@@ -216,15 +245,6 @@ export const DragDrop = memo(
       }
     }, [editStep, changed, setAskClear, setEditStep]);
 
-    const clearSelect = useCallback(() => {
-      const updatedItems = items.map((item: { rows: any }) => ({
-        ...item,
-        rows: item.rows.map((row: any) => ({ ...row, checked: false })),
-      }));
-      setItems(updatedItems);
-      setCheckedList([]);
-    }, [items, setItems]);
-
     const handleCheck = useCallback(
       (el: any) => {
         setCheckedList((prev) => {
@@ -252,14 +272,8 @@ export const DragDrop = memo(
     }, [clearChanges, setAskClear, setEditStep, setChanged]);
 
     const handleDeleteConfirm = useCallback(() => {
-      toast.success(t("deleted!"));
-      playSound("/notif.wav");
-      setDeleteStep(false);
-      setAskDelete(false);
-      setAskAction("");
-      setChanged("");
-      clearSelect();
-    }, [t, setDeleteStep, setAskDelete, setAskAction, setChanged, clearSelect]);
+      deleteForm(checkedList);
+    }, [deleteForm, checkedList]);
 
     const handleCardDeleteConfirm = useCallback(() => {
       toast.success(t("deleted!"));

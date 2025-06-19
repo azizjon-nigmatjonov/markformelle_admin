@@ -122,6 +122,11 @@ ul {
     &:focus {
       outline: 1px solid var(--primary);
     }
+
+    &:disabled {
+      background-color: var(--border);
+      color: var(--black);
+    }
   }
 }
 

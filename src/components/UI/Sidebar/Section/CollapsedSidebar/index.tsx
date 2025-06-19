@@ -13,7 +13,6 @@ interface CollapsedSidebarProps {
   handleNavigate: (val: MenuItem) => void;
   clearFilter: () => void;
   collapsed: boolean;
-  t: (key: string) => string;
 }
 
 export const CollapsedSidebar = memo(
@@ -26,7 +25,6 @@ export const CollapsedSidebar = memo(
     handleNavigate,
     clearFilter,
     collapsed,
-    t,
   }: CollapsedSidebarProps) => {
     const menuEntries = useMemo(
       () =>

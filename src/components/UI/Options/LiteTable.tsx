@@ -19,7 +19,7 @@ interface Column {
 
 interface BaseTableItem {
   [key: string]: any;
-  id?: string;
+  id?: string | number;
 }
 
 export interface TableItem extends BaseTableItem {
@@ -206,7 +206,7 @@ export const LiteOptionsTable = memo(
     readOnly = false,
     focused = false,
     disabled = false,
-    renderValue = (val: string, obj: T) => val,
+    renderValue = (val: string) => val,
     defaultSearch = "",
     staticSearchID = "",
     staticOptions = [],
@@ -296,7 +296,7 @@ export const LiteOptionsTable = memo(
     const handleActions = useCallback(
       (el: BaseTableItem, type: string) => {
         if (type === "active_col") {
-          setSearchName(el.id || "");
+          setSearchName(el.id ? el.id + "" : "");
         } else {
           handleSelect(el as T);
           setCurrentEl(el as T);

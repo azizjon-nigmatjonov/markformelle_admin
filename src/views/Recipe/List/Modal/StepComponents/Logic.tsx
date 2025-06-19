@@ -5,7 +5,7 @@ export const DragAndDropDataLogic = ({ id }: { id: string }) => {
   const { data: tableData, refetch } = useQuery(
     ["GET_DRAG_AND_DROP_DATA", id],
     () => {
-      return axios.get(`${API_URL}/recetedetay/?RECETEID=M0868-C21062.1`);
+      return axios.get(`${API_URL}/recetedetay/?RECETEID=${id}`);
     },
     {
       enabled: !!id,
