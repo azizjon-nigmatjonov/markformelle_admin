@@ -27,7 +27,6 @@ export const FormThird = ({
     enabled: "q",
   });
 
-  console.log("birimData", birimData);
   useEffect(() => {
     if (birimData?.data?.length > 0) {
       const found: any = birimData?.data?.find(
@@ -39,6 +38,16 @@ export const FormThird = ({
       // setValue("URUNBIRIMID", found?.BIRIMID);
     }
   }, [birimData]);
+
+  useEffect(() => {
+    if (formData.RECETEID) {
+      setValue("URUNID", formData.URUNID);
+      setValue("URUNADI", formData.URUNADI);
+      setValue("URUNBIRIMID", formData.URUNBIRIMID);
+      setValue("MIKTAR", formData.MIKTAR);
+      setValue("BANYO", formData.BANYO);
+    }
+  }, [formData]);
 
   return (
     <div className="space-y-2">

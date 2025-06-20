@@ -1,5 +1,5 @@
 import { TableRow } from "@mui/material";
-import React, { useCallback, useRef } from "react";
+import React, { useRef } from "react";
 
 import {
   CTableHeadCell,
@@ -67,11 +67,6 @@ interface MemoizedTableRowProps {
   item: any;
   rowIndex: number;
   newHeadColumns: any[];
-  handleKeyDownRow: (
-    event: React.KeyboardEvent<HTMLTableRowElement>,
-    index: number
-  ) => void;
-  currentRow: number;
   effect: number[];
   clickable: boolean;
   checkPermission: (permission: string) => boolean;
@@ -143,7 +138,7 @@ const CNewTable = ({
     filterParams,
     handleFilterParams,
   });
-  const [currentRow, setCurrentRow] = useState<number>(1);
+  // const [currentRow, setCurrentRow] = useState<number>(1);
   const storedColumns = useSelector((state: any) => state.table.columns);
   const order = useSelector((state: any) => state.table.order);
   const [newBodyColumns, setNewBodyColumns] = useState([]);
@@ -169,67 +164,67 @@ const CNewTable = ({
   const [items, setItems]: any = useState([...headColumns]);
   const [currentFilter, setCurrentFilter]: any = useState(null);
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
-  const rowRefs = useRef<HTMLTableRowElement[]>([]);
+  // const rowRefs = useRef<HTMLTableRowElement[]>([]);
   const [openSelect, setOpenSelect] = useState(false);
 
   const [bodySource, setBodySource] = useState<any[]>([]);
 
-  const handleKeyDownRow = useCallback(
-    (event: React.KeyboardEvent<HTMLTableRowElement>, index: number) => {
-      console.log("index", index);
+  // const handleKeyDownRow = useCallback(
+  //   (event: React.KeyboardEvent<HTMLTableRowElement>, index: number) => {
+  //     console.log("index", index);
 
-      if (!event.ctrlKey && event.code === "Enter") {
-        const currentItem = bodySource.find(
-          (item: { index: number }) => item.index === currentRow
-        );
-        if (currentItem) {
-          handleActions(currentItem, "view");
-        }
-      } else {
-        if (event.key === "ArrowUp") {
-          event.preventDefault();
-          const newIndex = Math.max(1, currentRow - 1);
-          setCurrentRow(newIndex);
-        } else if (event.key === "ArrowDown") {
-          event.preventDefault();
-          const maxIndex =
-            bodySource.length > 0 ? bodySource[bodySource.length - 1].index : 1;
-          const newIndex = Math.min(maxIndex, currentRow + 1);
-          setCurrentRow(newIndex);
-        } else if (event.key === "Home") {
-          event.preventDefault();
-          setCurrentRow(1);
-        } else if (event.key === "End") {
-          event.preventDefault();
-          const maxIndex =
-            bodySource.length > 0 ? bodySource[bodySource.length - 1].index : 1;
-          setCurrentRow(maxIndex);
-        } else if (event.key === "PageUp") {
-          event.preventDefault();
-          const newIndex = Math.max(1, currentRow - 10);
-          setCurrentRow(newIndex);
-        } else if (event.key === "PageDown") {
-          event.preventDefault();
-          const maxIndex =
-            bodySource.length > 0 ? bodySource[bodySource.length - 1].index : 1;
-          const newIndex = Math.min(maxIndex, currentRow + 10);
-          setCurrentRow(newIndex);
-        }
-      }
-    },
-    [currentRow, bodySource, handleActions]
-  );
+  //     if (!event.ctrlKey && event.code === "Enter") {
+  //       const currentItem = bodySource.find(
+  //         (item: { index: number }) => item.index === currentRow
+  //       );
+  //       if (currentItem) {
+  //         handleActions(currentItem, "view");
+  //       }
+  //     } else {
+  //       if (event.key === "ArrowUp") {
+  //         event.preventDefault();
+  //         const newIndex = Math.max(1, currentRow - 1);
+  //         setCurrentRow(newIndex);
+  //       } else if (event.key === "ArrowDown") {
+  //         event.preventDefault();
+  //         const maxIndex =
+  //           bodySource.length > 0 ? bodySource[bodySource.length - 1].index : 1;
+  //         const newIndex = Math.min(maxIndex, currentRow + 1);
+  //         setCurrentRow(newIndex);
+  //       } else if (event.key === "Home") {
+  //         event.preventDefault();
+  //         setCurrentRow(1);
+  //       } else if (event.key === "End") {
+  //         event.preventDefault();
+  //         const maxIndex =
+  //           bodySource.length > 0 ? bodySource[bodySource.length - 1].index : 1;
+  //         setCurrentRow(maxIndex);
+  //       } else if (event.key === "PageUp") {
+  //         event.preventDefault();
+  //         const newIndex = Math.max(1, currentRow - 10);
+  //         setCurrentRow(newIndex);
+  //       } else if (event.key === "PageDown") {
+  //         event.preventDefault();
+  //         const maxIndex =
+  //           bodySource.length > 0 ? bodySource[bodySource.length - 1].index : 1;
+  //         const newIndex = Math.min(maxIndex, currentRow + 10);
+  //         setCurrentRow(newIndex);
+  //       }
+  //     }
+  //   },
+  //   [currentRow, bodySource, handleActions]
+  // );
 
-  useEffect(() => {
-    if (rowRefs.current[currentRow]) {
-      rowRefs.current[currentRow]?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
-      });
+  // useEffect(() => {
+  //   if (rowRefs.current[currentRow]) {
+  //     rowRefs.current[currentRow]?.scrollIntoView({
+  //       behavior: "smooth",
+  //       block: "center",
+  //     });
 
-      rowRefs.current[currentRow]?.focus();
-    }
-  }, [currentRow]);
+  //     rowRefs.current[currentRow]?.focus();
+  //   }
+  // }, [currentRow]);
 
   const SetFiltersFn = (obj: any) => {
     const newObj: any = JSON.parse(JSON.stringify(obj));
@@ -633,8 +628,9 @@ const CNewTable = ({
       return;
     }
 
-    if (status === "delete" || status === "delete_multiple")
+    if (status === "delete" || status === "delete_multiple") {
       handleSortLogic({ value: "clear" });
+    }
 
     handleActions(el, status);
   };
@@ -727,7 +723,6 @@ const CNewTable = ({
   const MemoizedTableRow = React.memo(
     function MemoizedTableRow({
       item,
-      handleKeyDownRow,
       rowIndex,
       newHeadColumns,
       effect,
@@ -746,35 +741,29 @@ const CNewTable = ({
       defaultFilters,
       defaultActions,
       setCurrentIndex,
-      currentRow,
     }: MemoizedTableRowProps) {
       return (
         <TableRow
           key={item.index}
-          ref={(el) => {
-            if (el) {
-              rowRefs.current[item.index] = el;
-            }
-          }}
+          // ref={(el) => {
+          //   if (el) {
+          //     rowRefs.current[item.index] = el;
+          //   }
+          // }}
           className={`group ${effect.includes(rowIndex) ? "effect" : ""} ${
             clickable && !item.empty && checkPermission("view")
               ? "clickable"
               : ""
           } ${currentIndex === rowIndex ? "bg-[var(--primary50)]" : ""} ${
-            currentRow === item.index ? "bg-red-500" : ""
-          }  ${
             selectedItems.includes(rowIndex) || item?.checked ? "sellected" : ""
           }`}
           onClick={() => {
             if (openSelect) {
               tableActions(item, "sellect_more");
-            } else {
-              // Set current row for keyboard navigation
-              setCurrentRow(item.index);
             }
           }}
           tabIndex={0}
-          onKeyDown={(e: any) => handleKeyDownRow(e, item.index)}
+          // onKeyDown={(e: any) => handleKeyDownRow(e, item.index)}
         >
           <td
             className={`h-[35px] border-b border-[var(--border)] w-full ${
@@ -1176,8 +1165,7 @@ const CNewTable = ({
                           defaultFilters={defaultFilters}
                           defaultActions={defaultActions}
                           setCurrentIndex={setCurrentIndex}
-                          handleKeyDownRow={handleKeyDownRow}
-                          currentRow={currentRow}
+                          // handleKeyDownRow={handleKeyDownRow}
                         />
                       ))
                     ) : (

@@ -1,9 +1,7 @@
-import { Chip, Divider } from "@mui/material";
-import { useTranslation } from "react-i18next";
 import AddIcon from "@mui/icons-material/Add";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { CheckLine } from "../../../../../components/UI/IconGenerator/Svg";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 interface Props {
   rows: any[];
@@ -48,11 +46,8 @@ export const DragingEl = ({
   stepRef,
   setFocusedIndex,
 }: Props) => {
-  const { t } = useTranslation();
-
   const timeoutRef = useRef<number | null>(null);
   const [hoverAdd, setHoverAdd] = useState(999);
-
   const handleMouseEnter = (ind: number) => {
     timeoutRef.current = window.setTimeout(() => {
       setHoverAdd(ind);
@@ -102,7 +97,6 @@ export const DragingEl = ({
                   handleDragOverStep(innerIndex, outerIndex);
                 }}
                 onDoubleClick={() => {
-                  if (!editStep) return;
                   setInitialModalData({
                     ...item,
                     index: innerIndex,
@@ -146,43 +140,59 @@ export const DragingEl = ({
                         focusedIndex === item.index ? "" : item.bg,
                     }}
                   >
-                    <p className="text-center p-2 rounded-[8px] relative z-[2]">
-                      {item.RECETEASAMAADI}
-                    </p>
+                    <div className="text-center p-2 rounded-[8px] relative z-[2] h-full">
+                      <p>{item.RECETEASAMAADI}</p>
+                      <p
+                        className="absolute top-0 left-0 text-center h-full items-center justify-center flex px-2"
+                        style={{
+                          minWidth: headColumns[0]?.width,
+                        }}
+                      >
+                        {item.SIRA}
+                      </p>
+                    </div>
                   </div>
                 ) : item.RECETEALTASAMAID ? (
-                  <div className={`w-full `}>
-                    <Divider
-                      className={focusedIndex === item.index ? "active" : ""}
-                    >
-                      <Chip
-                        label={
-                          item?.new ? (
-                            <input
-                              type="text"
-                              className="rounded-[8px] p-2 text-base font-medium"
-                              placeholder={t("add") + " RECETEALTASAMAID"}
-                            />
-                          ) : (
-                            <p
-                              className={`px-2 py-1 duration-300 bg-blue-200 rounded-full w-[100px] ${
-                                focusedIndex === item.index
-                                  ? "wider bg-blue-300"
-                                  : ""
-                              }`}
-                            >
-                              <span>{item.RECETEALTASAMAID}</span> Istek
-                            </p>
-                          )
-                        }
-                        style={{
-                          position: "relative",
-                          backgroundColor: "transparent",
-                          zIndex: 2,
-                        }}
-                        size="small"
-                      />
-                    </Divider>
+                  <div className={`w-full relative flex`}>
+                    <div className="flex items-center">
+                      <div className="pr-2">
+                        <p
+                          className={`text-center py-1 rounded-full duration-200 w-[45px] relative bg-blue-200 z-[2] h-full ${
+                            focusedIndex === item.index ? "bg-blue-300" : ""
+                          }`}
+                        >
+                          {item.SIRA}
+                        </p>
+                      </div>
+                      <div
+                        className={`bg-blue-300 duration-200 w-full h-[2px] ${
+                          focusedIndex === item.index ? "bg-blue-400" : ""
+                        }`}
+                      ></div>
+                    </div>
+                    <div className="flex items-center w-full">
+                      <div
+                        className={`bg-blue-300 duration-200 w-full h-[2px] ${
+                          focusedIndex === item.index ? "bg-blue-400" : ""
+                        }`}
+                      ></div>
+                      <div className="px-2">
+                        <p
+                          className={`text-center py-1 rounded-full duration-200 w-[100px] relative bg-blue-200 z-[2] h-full ${
+                            focusedIndex === item.index
+                              ? "bg-blue-300 w-[160px]"
+                              : ""
+                          }`}
+                        >
+                          {item.RECETEALTASAMAADI}
+                        </p>
+                      </div>
+                      <div
+                        className={`bg-blue-300 duration-200 w-full h-[2px] ${
+                          focusedIndex === item.index ? "bg-blue-400" : ""
+                        }`}
+                      ></div>
+                    </div>
                   </div>
                 ) : (
                   <div
@@ -233,14 +243,6 @@ export const DragingEl = ({
                     onMouseLeave={() => {
                       if (!editStep) return;
                       handleMouseLeave();
-                    }}
-                    onDoubleClick={() => {
-                      if (!editStep) return;
-                      setInitialModalData({
-                        ...item,
-                        index: innerIndex,
-                        outerIndex,
-                      });
                     }}
                   >
                     {hoverAdd === innerIndex && (

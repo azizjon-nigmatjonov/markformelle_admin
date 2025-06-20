@@ -249,8 +249,8 @@ export const StepCard = ({
               handleDragStartStep={handleDragStartStep}
               handleDragOverStep={handleDragOverStep}
               setInitialModalData={(obj: any) => {
-                setOpen(["card", "material"]);
-                // setInitialModalData(obj);
+                setOpen(["card", "step"]);
+
                 setCurrentSellect(obj);
               }}
               handleDropSteps={handleDropSteps}

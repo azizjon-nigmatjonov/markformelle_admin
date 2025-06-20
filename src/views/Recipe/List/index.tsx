@@ -1,4 +1,4 @@
-import { ModalUI } from "./Modal";
+import { ModalUIRecipe } from "./Modal";
 import { useMemo, useState } from "react";
 import { breadCrumbs, TableData } from "./Logic";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
@@ -124,7 +124,7 @@ export const RecipeList = () => {
             "filter",
             "sellect_more",
           ]}
-          defaultSearch={{ DATE: "" }}
+          defaultSearch={{ RECETEID: "" }}
           meta={{
             totalCount: bodyData?.count,
             pageCount: bodyData?.count
@@ -145,7 +145,7 @@ export const RecipeList = () => {
           }}
           disabled="big"
         >
-          <ModalUI
+          <ModalUIRecipe
             defaultData={modalInitialData}
             changed={changed}
             setChanged={setChanged}

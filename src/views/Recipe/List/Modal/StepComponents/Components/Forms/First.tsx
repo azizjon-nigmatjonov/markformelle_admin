@@ -1,10 +1,11 @@
-import { Control, useForm } from "react-hook-form";
+import { Control } from "react-hook-form";
 import {
   LiteOptionsTable,
   TableItem,
 } from "../../../../../../../components/UI/Options/LiteTable";
 import CImageViewer from "../../../../../../../components/CElements/CImageViewer";
 import { API_URL } from "../../../../../../../utils/env";
+import { useState } from "react";
 
 interface Props {
   changeGroup: (group: string) => void;
@@ -21,6 +22,8 @@ export const FormFirst = ({
   control,
   setValue,
 }: Props) => {
+  const [CurrentReceteAsamaId, setCurrentReceteAsamaId] = useState<number>(0);
+
   return (
     <div className="space-y-2">
       <LiteOptionsTable
@@ -37,9 +40,12 @@ export const FormFirst = ({
             ? obj.RECETEASAMAID + " - " + obj.ADI
             : obj.RECETEASAMAID;
         }}
-        defaultValue={formData?.RECETEASAMAID}
+        // defaultValue={
+        //   formData?.RECETEASAMAID + " - " + formData?.RECETEASAMAADI
+        // }
         handleSelect={(obj: TableItem) => {
           setValue("RECETEASAMAID", obj.RECETEASAMAID);
+          setCurrentReceteAsamaId(obj.RECETEASAMAID || 0);
           changeGroup("group1");
         }}
         disabled={disabledFirstGroup}
@@ -60,7 +66,7 @@ export const FormFirst = ({
         defaultValue={formData?.RECETEGRAFIKID}
         handleSelect={(obj: TableItem) => {
           setValue("RECETEGRAFIKID", obj.RECETEGRAFIKID);
-          changeGroup("group1");
+          // changeGroup("group1");
         }}
         disabled={disabledFirstGroup}
         control={control}

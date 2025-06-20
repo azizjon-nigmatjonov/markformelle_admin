@@ -1,11 +1,9 @@
 import { useEffect, useState, useCallback, useMemo, memo } from "react";
 import { ImageViewer } from "../../../../../components/UI/ImageViewer";
 import { useTranslation } from "react-i18next";
-import { StepModal } from "./StepModal";
 import { StepCard } from "./Card";
 import toast from "react-hot-toast";
 import { playSound } from "../../../../../utils/playAudio";
-import { CardModal } from "./CardModal";
 import { DragHeader } from "./Components/DragHeader";
 import ConfirmationModal from "../../../../../components/CElements/CConfirmationModal";
 import dayjs from "dayjs";
@@ -40,17 +38,16 @@ const useDataProcessor = (tableData: any) => {
     const objects: any = {};
     let lastId = "";
 
-    // Define background colors for different states
     const bgColors = {
-      default: "#e0e7ff", // Light indigo
-      hover: "#c7d2fe", // Slightly darker indigo
-      active: "#a5b4fc", // Even darker indigo
+      default: "#e0e7ff",
+      hover: "#c7d2fe",
+      active: "#a5b4fc",
     };
 
     for (let i = 0; i < sortedData.length; i++) {
       const obj = sortedData[i];
       obj.index = i;
-      obj.bg = bgColors.default; // Set default background color
+      obj.bg = bgColors.default;
 
       if (obj.RECETEASAMAID && !objects[obj.RECETEASAMAID]) {
         lastId = "" + obj.RECETEASAMAID;
@@ -65,12 +62,12 @@ const useDataProcessor = (tableData: any) => {
         };
       } else {
         if (
-          objects[lastId].rows.every(
+          objects[lastId]?.rows?.every(
             (el: any) => el.RECETEASAMAID !== obj.RECETEASAMAID
           ) ||
           !obj.RECETEASAMAID
         ) {
-          objects[lastId].rows.push(obj);
+          objects[lastId]?.rows?.push(obj);
         }
       }
     }
@@ -82,11 +79,38 @@ const useDataProcessor = (tableData: any) => {
     setItems(processedItems);
   }, []);
 
+  // 1. SIRA, 2. URUNID, 3. URUNADI, 4. GR/KG, 5. GR/LT, 6. INSERTKULLANICIID, 6. INSERTTARIHI, 7. KULLANICIID, 8. DEGISIMTARIHI, 9. MIKTAR 10. RECETEDETAYID
+
   const columns = useMemo(
     () => [
+      {
+        title: "SIRA",
+        id: "SIRA",
+        width: 45,
+        render: (val: string) => {
+          return <div className="text-center w-full">{val}</div>;
+        },
+      },
+      {
+        title: "URUNID",
+        id: "URUNID",
+        width: 80,
+      },
+      {
+        title: "URUNADI",
+        id: "URUNADI",
+        width: 180,
+        render: (val: string) => (
+          <div>
+            {val.substring(0, 20)}
+            {val.length > 20 ? "..." : ""}
+          </div>
+        ),
+      },
+      { title: "GR/KG", id: "MIKTAR", width: 60 },
+      { title: "GR/LT", id: "BANYO", width: 60 },
       { title: "RECETEDETAYID", id: "RECETEDETAYID", width: 120 },
 
-      { title: "URUNID", id: "URUNID", width: 80 },
       { title: "URUNBIRIMID", id: "URUNBIRIMID", width: 100 },
       { title: "INSERTKULLANICIID", id: "INSERTKULLANICIID", width: 140 },
       {
@@ -102,13 +126,6 @@ const useDataProcessor = (tableData: any) => {
         width: 120,
         render: (val: string) => dayjs(val).format("DD.MM.YYYY HH:mm"),
       },
-      {
-        title: "MIKTAR",
-        id: "MIKTAR",
-        width: 100,
-        render: (val: string) => `${val} kg`,
-      },
-      { title: "SIRA", id: "SIRA", width: 50 },
     ],
     []
   );
@@ -132,7 +149,6 @@ const useModalState = () => {
   const [askDelete, setAskDelete] = useState(false);
   const [deleteCard, setDeleteCard] = useState<any>(null);
   const [deleteCardActive, setDeleteCardActive] = useState(false);
-  const [initialModalData, setInitialModalData] = useState<any>({});
   const [imageView, setImageView] = useState("");
 
   const resetModals = useCallback(() => {
@@ -160,8 +176,6 @@ const useModalState = () => {
     setDeleteCard,
     deleteCardActive,
     setDeleteCardActive,
-    initialModalData,
-    setInitialModalData,
     imageView,
     setImageView,
     resetModals,
@@ -222,8 +236,6 @@ export const DragDrop = memo(
       setDeleteCard,
       deleteCardActive,
       setDeleteCardActive,
-      initialModalData,
-      setInitialModalData,
       imageView,
       setImageView,
       resetModals,
@@ -333,14 +345,7 @@ export const DragDrop = memo(
         />
 
         <ImageViewer url={imageView} closeViewer={() => setImageView("")} />
-        <StepModal
-          defaultData={initialModalData}
-          setDefaultData={setInitialModalData}
-        />
-        <CardModal
-          defaultData={initialModalData}
-          setDefaultData={setInitialModalData}
-        />
+
         <ConfirmationModal
           open={saveData || askClear}
           onClose={() => {

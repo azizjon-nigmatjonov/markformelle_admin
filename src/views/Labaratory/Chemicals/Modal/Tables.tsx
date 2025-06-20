@@ -14,6 +14,12 @@ import {
 import { MaterialFormLogic } from "./MaterialForm/Logic";
 import { TrailFormLogic } from "./TrailForm/Logic";
 import { DetailFormLogic } from "./DetailForm/Logic";
+import { PopupUI } from "../../../../components/UI/PopupUI";
+import { AskTemplate } from "./TableUI/AskTemplate";
+import { useFetchTypeSingle } from "../../../../hooks/useFetchRequests/useFetchType";
+import CNewModal from "../../../../components/CElements/CNewModal";
+import { ModalUIRecipe } from "../../../Recipe/List/Modal";
+import { TemplateForm } from "./TableUI/TemplateForm";
 
 export const LabModalTables = ({
   disabled,
@@ -26,6 +32,7 @@ export const LabModalTables = ({
   formData: any;
   setUniqueID: (val: string) => void;
 }) => {
+  const [openModal, setOpenModal] = useState<string[]>([""]);
   const { tableData, refetch: refetchMaterial } = TablesLogic({
     formId: formId || formData?.LABRECETEID,
   });
@@ -37,12 +44,20 @@ export const LabModalTables = ({
   const [idDetailForm, setIdDetailForm]: any = useState(null);
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
   const [open, setOpen] = useState("");
+  const [atisNo, setAtisNo]: any = useState(null);
+  const [openPopUp, setOpenPoUp] = useState(null);
+  const [openNewModal, setOpenNewModal] = useState<string>("");
   const { headColumns, trailHeadColumns, detailHeadColumns } =
     TableHeadersLogic();
   const { trailData, refetch: refetchTrailTable } = TrailTableLogic({
     id: formId,
     idTable: idTable,
   });
+  const {
+    data: templateData,
+    setFilterParams: setTemplateFilterParams,
+    filterParams: templateFilterParams,
+  } = useFetchTypeSingle();
   const { detailData, refetch: refetchDetailTable } = DetailTableLogic({
     id: formId,
     idTable: idTrail,
@@ -201,6 +216,19 @@ export const LabModalTables = ({
   useEffect(() => {
     if (tableData?.data?.length) setBodyData(tableData.data);
   }, [tableData]);
+
+  useEffect(() => {
+    console.log("templateData", templateData, templateFilterParams);
+
+    if (templateFilterParams?.link) {
+      if (templateData?.RECETEID) {
+        setOpenNewModal("template_ready");
+      } else {
+        setOpenNewModal("template_not_ready");
+      }
+    }
+  }, [templateData, templateFilterParams?.link]);
+
   return (
     <>
       <div className="grid grid-cols-3 gap-x-2">
@@ -243,6 +271,10 @@ export const LabModalTables = ({
             handleRowClick={handleActionsTrial}
             disabled={tableData?.data ? false : true}
             idTable={idTrail}
+            handleRightClick={(e: any, atisNo: number) => {
+              setOpenPoUp(e.target);
+              setAtisNo(atisNo);
+            }}
           />
         </div>
 
@@ -329,6 +361,58 @@ export const LabModalTables = ({
         </CNewMiniModal>
       ) : (
         ""
+      )}
+
+      {openPopUp && (
+        <PopupUI
+          open={!!openPopUp}
+          anchor={openPopUp}
+          placement="bottom"
+          onClose={() => setOpenPoUp(null)}
+        >
+          <AskTemplate
+            handleActions={(val: string) => {
+              if (val === "fetch_template") {
+                setTemplateFilterParams({
+                  link: `recete/${formData?.LABRECETEKODU + "." + atisNo}`,
+                });
+              }
+              setOpenPoUp(null);
+            }}
+          />
+        </PopupUI>
+      )}
+
+      {openNewModal === "template_ready" && (
+        <CNewModal
+          title="creating_recipe"
+          handleActions={() => {}}
+          defaultData={{
+            id: templateData?.RECETEID,
+          }}
+          innerModal={true}
+          disabled="big"
+        >
+          <ModalUIRecipe
+            defaultData={templateData}
+            changed={""}
+            setChanged={() => {}}
+            askAction={""}
+            open={openModal}
+            setOpen={setOpenModal}
+            setAskAction={() => {}}
+          />
+        </CNewModal>
+      )}
+
+      {openNewModal === "template_not_ready" && (
+        <CNewMiniModal title="Sablon Recete Secimi">
+          <TemplateForm
+            handleActions={() => {
+              setOpenNewModal("");
+            }}
+          />
+        </CNewMiniModal>
       )}
     </>
   );

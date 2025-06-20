@@ -23,7 +23,7 @@ export const ImageViewer = ({
 
   return (
     <>
-      <div className="fixed z-[99] top-[-30vh] left-[-50vw] w-[130vw] h-[130vh] flex items-center justify-center">
+      <div className="fixed z-[99] top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[100vw] h-[100vh] flex items-center justify-center">
         <div className="relative h-[60vh] w-[80vw] h-[50vh]z-[99]">
           <img
             src={url}
@@ -39,10 +39,10 @@ export const ImageViewer = ({
           </button>
         </div>
       </div>
-      {/* <div
-        className="fixed top-0 left-0 w-[100vw] h-[100vh] bg-black bg-opacity-50 z-[98]"
+      <div
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vh] z-[98]"
         onClick={() => closeViewer()}
-      ></div> */}
+      ></div>
     </>
   );
 };

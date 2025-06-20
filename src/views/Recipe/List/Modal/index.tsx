@@ -26,7 +26,7 @@ interface ModalUIProps {
   setOpen: (val: string[]) => void;
 }
 
-export const ModalUI = ({
+export const ModalUIRecipe = ({
   open,
   askAction,
   setAskAction = () => {},
@@ -56,45 +56,6 @@ export const ModalUI = ({
   });
 
   const onSubmit = (data: any) => {
-    // {
-    //   "RECETEID": "string",
-    //   "ADI": "string",
-    //   "FIRMAID": "string",
-    //   "USTASAMAID": 0,
-    //   "RECETETIPI": 0,
-    //   "RECETETURUID": 0,
-    //   "CALISMATARIHI": "2025-06-19T10:17:23.770Z",
-    //   "RENKOKEY": false,
-    //   "RECETEKAPATMA": false,
-    //   "LABRECETEGRUPID": 0,
-    //   "LABRENKGRUPID": 0,
-    //   "RENKDERINLIGIID": 0,
-    //   "BEKLEMESURESI": "string",
-    //   "RECETEGRAFIKID": "string",
-    //   "LABRECETEID": 0,
-    //   "LABRECETEATISID": 0,
-    //   "MIGRASYON": 0,
-    //   "SABLON": false,
-    //   "ORTAKRECETE": false,
-    //   "ILAVE": true,
-    //   "SOKUMUZERIBOYA": true,
-    //   "RECETEDETAYVAR": false,
-    //   "NOTU": "string",
-    //   "ESKIRECETEKODU": "string",
-    //   "BANYOSAYISI": 0,
-    //   "TOPLAMSICAKLIKDEGISIMI": 0,
-    //   "SABLONRECETEID": "string",
-    //   "ILKBOYANANPARTIKAYITID": 0,
-    //   "OZELDURUMLINKISLEMI": false,
-    //   "MAKINAPLANLAMAGRUPID": "string",
-    //   "GRUPPROSESNO": "string",
-    //   "STANDARTSURE": 0,
-    //   "INSERTKULLANICIID": 1,
-    //   "INSERTTARIHI": "2025-06-19T10:17:23.770Z",
-    //   "KULLANICIID": 1,
-    //   "DEGISIMTARIHI": "2025-06-19T10:17:23.770Z"
-    // }
-
     let params: any = data;
 
     if (formId) {
@@ -106,7 +67,6 @@ export const ModalUI = ({
       params.CALISMATARIHI = convertToISO(dayjs().format("DD.MM.YYYY"));
       params.RECETETIPI = 0;
       params.RECETEKAPATMA = false;
-
       params.MIGRASYON = 0;
       params.SABLON = false;
       params.ORTAKRECETE = false;
@@ -120,7 +80,6 @@ export const ModalUI = ({
       params.DEGISIMTARIHI = dayjs();
       params.USTASAMAID = 8;
       params.RECETEID = "Test Azizilloxon";
-      // params.MAKINAPLANLAMAGRUPID = "01";
 
       delete params.UNITEADI;
 
@@ -129,10 +88,12 @@ export const ModalUI = ({
   };
 
   const setFormValues = (form: any) => {
+    setValue("RENKOKEY", form.RENKOKEY);
+    setValue("CALISMATARIHI", dayjs(form.CALISMATARIHI).format("YYYY-MM-DD"));
     setValue("RECETEID", form.RECETEID);
     setValue("ADI", form.ADI);
     setValue("FIRMAID", form.FIRMAID);
-    setValue("CALISMATARIHI", dayjs(form.CALISMATARIHI).format("YYYY-MM-DD"));
+
     setValue("FIRMAADI", form.FIRMAADI);
     setValue("RECETETURUADI", form.RECETETURUADI);
 
@@ -440,7 +401,7 @@ export const ModalUI = ({
               </div>
             </div>
           </div>
-          <div className="h-[500px] overflow-y-scroll designed-scroll">
+          <div className="h-[500px] overflow-y-scroll designed-scroll w-full">
             <LabModalTables
               changed={changed}
               setChanged={setChanged}
@@ -465,9 +426,10 @@ export const ModalUI = ({
             type={open.includes("insert_step") ? "create" : "update"}
             open={open}
             handleActions={() => setOpen(["card"])}
-            formData={currentSellect}
+            formData={open.includes("insert_step") ? {} : currentSellect}
             refetchTable={refetchTable}
             receteId={formId}
+            setOpen={setOpen}
           />
         </CNewMiniModal>
       ) : (

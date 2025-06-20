@@ -32,7 +32,7 @@ export const TableData = ({
             : (filterParams.page - 1) * filterParams.perPage
         }&limit=${filterParams.perPage}${
           filterParams.q ? "&" + filterParams.q : ""
-        }&SABLON=${false}`
+        }&SABLON=${true}`
       );
     },
     {

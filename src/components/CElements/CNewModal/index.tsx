@@ -24,6 +24,7 @@ interface Props {
   defaultData?: { id: string | number | undefined };
   handleActions?: (val: string, val2?: any) => void;
   modalId?: string; // Optional prop for custom modal ID
+  innerModal?: boolean;
 }
 
 const CNewModal: FC<Props> = ({
@@ -36,6 +37,7 @@ const CNewModal: FC<Props> = ({
   actions = [],
   disabled = "",
   modalId,
+  innerModal = false,
 }) => {
   const [screen, setScreen] = useState(!disabled);
   const [position, setPosition] = useState<{ x: number; y: number } | null>(
@@ -269,12 +271,14 @@ const CNewModal: FC<Props> = ({
         </Card>
       </div>
 
-      <div
-        className={`w-full h-full fixed top-0 left-0 z-[97] ${
-          title ? "bg-[rgba(0,0,0,0.3)]" : ""
-        }`}
-        onClick={handleClose}
-      ></div>
+      {!innerModal && (
+        <div
+          className={`w-full h-full fixed top-0 left-0 z-[97] ${
+            title ? "bg-[rgba(0,0,0,0.3)]" : ""
+          }`}
+          onClick={handleClose}
+        ></div>
+      )}
     </>
   );
 };

@@ -3,7 +3,6 @@ import ExcelDownload from "../../../../../../hooks/useExcelDownload";
 import { Tooltip } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import {
-  CheckLine,
   CloseIcon,
   DeleteIcon,
   EditIcon,
@@ -37,17 +36,10 @@ export const DragHeader = ({
   checkedList = [],
   setDeleteStep,
   deleteStep,
-  deleteCardActive,
-  setDeleteCardActive,
   setSaveData,
   clearChanges,
 }: Props) => {
   const { t } = useTranslation();
-  // const { isAltPressed, currentKey } = useKeyDownEvent();
-
-  // useEffect(() => {
-  //   if (currentKey && isAltPressed) handleActions(currentKey);
-  // }, [currentKey, isAltPressed]);
 
   const ExcelData = useMemo(() => {
     const arr: any = [];

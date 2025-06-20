@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { SubmitCancelButtons } from "../../../../../../components/UI/FormButtons/SubmitCancel";
 import { ImageViewer } from "../../../../../../components/UI/ImageViewer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormLogic } from "./FormLogic";
 import { FormFirst } from "./Forms/First";
 import { FormSecond } from "./Forms/Second";
@@ -14,6 +14,7 @@ interface Props {
   refetchTable: () => void;
   receteId: string;
   type: string;
+  setOpen: (val: string[]) => void;
 }
 
 export const CardEditModal = ({
@@ -23,6 +24,7 @@ export const CardEditModal = ({
   refetchTable,
   receteId,
   type,
+  setOpen,
 }: Props) => {
   const [group, setGroup] = useState<string>("");
   const [imageView, setImageView] = useState("");
@@ -34,12 +36,14 @@ export const CardEditModal = ({
     refetchTable: () => {
       refetchTable();
       reset();
+      setOpen(["card"]);
     },
   });
 
   const onSubmit = (data: any) => {
     let params = data;
-    console.log("111");
+    console.log("group", group);
+
     params.DEGISIMTARIHI = dayjs();
     if (type === "update") {
       params = { ...formData, ...params };
@@ -72,14 +76,14 @@ export const CardEditModal = ({
       if (group === "group2") {
         params = {
           ...params,
-
+          SIRA: 6,
           RECETEASAMAID: null,
           SURE: null,
           RECETEALTASAMAID: params.RECETEALTASAMAID,
           URUNID: null,
           URUNBIRIMID: null,
           RECETEGRAFIKID: null,
-          MIKTAR: params.MIKTAR,
+          MIKTAR: params.MIKTAR || 0,
           BANYO: 0,
           ATISRENKSIRA: null,
           ATISRENKCOLOR: null,
@@ -91,7 +95,7 @@ export const CardEditModal = ({
       if (group === "group3") {
         params = {
           ...params,
-
+          SIRA: 7,
           URUNID: params.URUNID,
           URUNBIRIMID: params.URUNBIRIMID,
 
@@ -109,7 +113,20 @@ export const CardEditModal = ({
       setGroup(newGroup);
     }
   };
-  console.log("formData", formData);
+
+  useEffect(() => {
+    if (type === "update") {
+      if (formData.RECETEASAMAID) {
+        setGroup("group1");
+      }
+      if (formData.RECETEALTASAMAID) {
+        setGroup("group2");
+      }
+      if (formData.URUNID) {
+        setGroup("group3");
+      }
+    }
+  }, [formData]);
 
   return (
     <>
@@ -165,9 +182,7 @@ export const CardEditModal = ({
                   handleActions();
                 }
                 if (val === "Enter") {
-                  if (group === "group1") {
-                    handleSubmit(onSubmit)();
-                  }
+                  handleSubmit(onSubmit)();
                 }
               }
             }}

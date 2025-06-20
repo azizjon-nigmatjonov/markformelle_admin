@@ -22,7 +22,7 @@ export const LabModalTables = ({
   refetchTable: () => void;
 }) => {
   return (
-    <div className="border-t border-[var(--border)]">
+    <div className="border-t border-[var(--border)] w-full">
       <DragDrop
         open={open}
         changed={changed}

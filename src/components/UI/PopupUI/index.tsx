@@ -19,6 +19,7 @@ interface Props {
   anchor: any;
   placement?: Placement;
   children: React.ReactNode;
+  onClose?: () => void;
 }
 
 export const PopupUI = ({
@@ -26,21 +27,29 @@ export const PopupUI = ({
   anchor = null,
   placement = "right",
   children,
+  onClose = () => {},
 }: Props) => {
   return (
-    <BasePopup
-      id={open ? "simple-popup" : undefined}
-      open={open}
-      anchor={anchor}
-      placement={placement}
-      style={{
-        padding: 0,
-        zIndex: 99,
-      }}
-    >
-      <div className="bg-white border border-[var(--border)] rounded-[8px] shadow-2xl">
-        {children}
-      </div>
-    </BasePopup>
+    <>
+      <BasePopup
+        id={open ? "simple-popup" : undefined}
+        open={open}
+        anchor={anchor}
+        placement={placement}
+        style={{
+          padding: 0,
+          zIndex: 99,
+        }}
+      >
+        <div className="bg-white border border-[var(--border)] rounded-[8px] shadow-2xl">
+          {children}
+        </div>
+      </BasePopup>
+
+      <div
+        className="fixed top-0 left-0 w-[100vw] h-[100vh] z-[98]"
+        onClick={() => onClose()}
+      ></div>
+    </>
   );
 };
