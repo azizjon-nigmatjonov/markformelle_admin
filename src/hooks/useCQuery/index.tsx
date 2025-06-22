@@ -16,7 +16,7 @@ export const customRequest = async (arg: any, endpoint: any) => {
       throw Error();
     }
   } catch (error: any) {
-    toast.error(error.data.error?.message ?? "Network Error to fetch data");
+    toast.error(error?.data?.error?.message ?? "Network Error to fetch data");
     throw Error("Network Error");
   }
 };

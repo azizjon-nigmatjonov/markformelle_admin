@@ -6,7 +6,7 @@ import { useGetBirimTypeList } from "../../../../../hooks/useFetchRequests/useBr
 import CLabel from "../../../../../components/CElements/CLabel";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
-import { CDriverImageUpload } from "../../../../../components/CElements/CDriverImageUpload";
+import { CImageUploader } from "../../../../../components/CElements/CDriverImageUpload";
 
 interface Props {
   defaultData: {
@@ -49,10 +49,7 @@ export const CardModal = ({
   }, [defaultData]);
 
   return (
-    <CNewMiniModal
-      handleActions={() => setDefaultData({})}
-      title="recipe_modal"
-    >
+    <CNewMiniModal handleActions={() => setDefaultData({})} title="add_card">
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="w-[580px] grid grid-cols-2 gap-3"
@@ -137,11 +134,7 @@ export const CardModal = ({
             control={control}
             setFilterParams={() => {}}
           />
-          <CDriverImageUpload
-            name="image"
-            control={control}
-            label="upload_image"
-          />
+          <CImageUploader name="image" control={control} label="upload_image" />
         </div>
         <div className="space-y-2">
           <SelectOptionsTable

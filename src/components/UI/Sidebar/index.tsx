@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
+import React from "react";
 import cls from "./style.module.scss";
 import SidebarSection from "./Section";
 import UserInfo from "../Header/UserInfo";
-import { getWebsiteData } from "./Logic";
 import { FoldButton } from "./FoldButton";
 import { useDispatch, useSelector } from "react-redux";
 import { sidebarActions } from "../../../store/sidebar";
@@ -10,12 +10,38 @@ import usePageRouter from "../../../hooks/useObjectRouter";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 
-export const Sidebar = () => {
-  const { userInfo, routes } = getWebsiteData();
+const SidebarComponent = () => {
+  // Memoize selectors to prevent unnecessary re-renders
+  const userInfo = useSelector((state: any) => state.auth.user);
+  const routes = useSelector((state: any) => state.website.routes);
   const collapsed = useSelector((state: any) => state.sidebar.collapsed);
   const wideSidebar = useSelector((state: any) => state.sidebar.wideSidebar);
+
   const dispatch = useDispatch();
   const { navigateTo } = usePageRouter();
+
+  // Memoize website data to prevent recalculation on every render
+  const websiteData = useMemo(
+    () => ({
+      userInfo: userInfo ?? {},
+      routes: routes ?? [],
+    }),
+    [userInfo, routes]
+  );
+
+  // Memoize sidebar width calculation
+  const sidebarWidth = useMemo(() => {
+    if (wideSidebar) return "240px";
+    if (collapsed) return "45px";
+    return "0";
+  }, [wideSidebar, collapsed]);
+
+  // Memoize overflow style
+  const sidebarOverflow = useMemo(() => {
+    if (wideSidebar) return "";
+    if (collapsed) return "";
+    return "hidden";
+  }, [wideSidebar, collapsed]);
 
   useEffect(() => {
     if (!sessionStorage.getItem("has_route")) {
@@ -24,22 +50,39 @@ export const Sidebar = () => {
     }
   }, []);
 
-  const handleNavigate = (obj: any) => {
-    navigateTo(obj.path);
-  };
+  const handleNavigate = useCallback(
+    (obj: any) => {
+      console.log("111");
+
+      navigateTo(obj.path);
+    },
+    [navigateTo]
+  );
+
+  const handleWideSidebarToggle = useCallback(() => {
+    dispatch(sidebarActions.setWideSidebar(!wideSidebar));
+  }, [dispatch, wideSidebar]);
+
+  const handleCollapseToggle = useCallback(() => {
+    if (wideSidebar) {
+      dispatch(sidebarActions.setWideSidebar(false));
+    } else {
+      dispatch(sidebarActions.setCollapsed(!collapsed));
+    }
+  }, [dispatch, wideSidebar, collapsed]);
 
   useEffect(() => {
     if (!collapsed) {
       dispatch(sidebarActions.setWideSidebar(false));
     }
-  }, [collapsed]);
+  }, [collapsed, dispatch]);
 
   return (
     <div
       className={`${cls.sidebar} duration-300`}
       style={{
-        width: wideSidebar ? "240px" : collapsed ? "45px" : "0",
-        overflow: wideSidebar ? "" : collapsed ? "" : "hidden",
+        width: sidebarWidth,
+        overflow: sidebarOverflow,
       }}
     >
       <div>
@@ -61,9 +104,7 @@ export const Sidebar = () => {
             />
           </div>
           <button
-            onClick={() =>
-              dispatch(sidebarActions.setWideSidebar(!wideSidebar))
-            }
+            onClick={handleWideSidebarToggle}
             className={`duration-300 absolute ${
               wideSidebar ? "right-2 top-0" : "right-2 top-12"
             } w-[25px] h-[25px] desktop:w-[30px] desktop:h-[30px] flex justify-center items-center rounded-[8px] bg-[var(--main80)] mx-auto my-2`}
@@ -77,7 +118,7 @@ export const Sidebar = () => {
             </div>
           </button>
           <SidebarSection
-            list={routes}
+            list={websiteData.routes}
             collapsed={collapsed}
             wideSidebar={wideSidebar}
             handleNavigate={handleNavigate}
@@ -90,7 +131,7 @@ export const Sidebar = () => {
           }`}
         >
           <UserInfo
-            userInfo={userInfo}
+            userInfo={websiteData.userInfo}
             wideSidebar={wideSidebar}
             collapsed={collapsed}
             handleNavigate={handleNavigate}
@@ -101,14 +142,12 @@ export const Sidebar = () => {
       <FoldButton
         collapsed={collapsed}
         wideSidebar={wideSidebar}
-        setCollapsed={() => {
-          if (wideSidebar) {
-            dispatch(sidebarActions.setWideSidebar(false));
-          } else {
-            dispatch(sidebarActions.setCollapsed(!collapsed));
-          }
-        }}
+        setCollapsed={handleCollapseToggle}
       />
     </div>
   );
 };
+
+// Memoize the component to prevent unnecessary re-renders
+export const Sidebar = React.memo(SidebarComponent);
+Sidebar.displayName = "Sidebar";

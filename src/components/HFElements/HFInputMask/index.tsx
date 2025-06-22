@@ -16,6 +16,7 @@ interface Props {
   errors?: Record<string, any>;
   handleChange?: (val?: string) => void;
   type?: string;
+  disabled?: boolean;
 }
 
 interface MaskInputUIProps {
@@ -29,6 +30,7 @@ interface MaskInputUIProps {
   maskRef?: React.Ref<HTMLInputElement>;
   type?: string;
   error?: boolean;
+  disabled?: boolean;
 }
 
 export const MaskInputUI = ({
@@ -42,6 +44,7 @@ export const MaskInputUI = ({
   maskRef,
   type = "text",
   error = false,
+  disabled = false,
 }: MaskInputUIProps) => {
   useEffect(() => {
     if (defaultValue) {
@@ -81,6 +84,7 @@ export const MaskInputUI = ({
       placeholder={placeholder}
       required={required}
       style={{ borderColor: error ? "red" : "" }}
+      disabled={disabled}
     />
   );
 };
@@ -95,6 +99,7 @@ const HFInputMask = ({
   setValue = () => {},
   defaultValue = "",
   type = "text",
+  disabled,
   handleChange = () => {},
 }: Props) => {
   const { t } = useTranslation();
@@ -107,7 +112,9 @@ const HFInputMask = ({
 
   return (
     <div id="hfInputMask" className="relative w-full">
-      {label && <CLabel title={label} required={required} />}
+      {label && (
+        <CLabel title={label} required={required} disabled={disabled} />
+      )}
       <Controller
         control={control}
         name={name}
@@ -121,6 +128,7 @@ const HFInputMask = ({
               onChange={onChange}
               mask={mask}
               value={value || ""}
+              disabled={disabled}
               placeholder={t(placeholder)}
               handleChange={handleChange}
               defaultValue={defaultValue}

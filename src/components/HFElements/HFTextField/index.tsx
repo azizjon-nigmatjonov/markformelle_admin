@@ -151,7 +151,9 @@ const HFTextField = ({
 
   return (
     <div className="HFInput relative">
-      {label && <CLabel title={label} required={required} />}
+      {label && (
+        <CLabel title={label} required={required} disabled={disabled} />
+      )}
       <Controller
         control={control}
         name={name}

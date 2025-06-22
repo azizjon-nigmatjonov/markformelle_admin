@@ -64,7 +64,7 @@ export const useCMutation = ({ key, method, endpoint }: UseCMutateParams) => {
 
       onError: (error: any) => {
         toast.error(
-          error.data.error?.message ?? "An unexpected error occurred."
+          error?.data?.error?.message ?? "An unexpected error occurred."
         );
       },
     }

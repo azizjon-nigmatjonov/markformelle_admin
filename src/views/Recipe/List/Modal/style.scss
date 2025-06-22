@@ -121,17 +121,18 @@
             }
         }
         .cell {
-            min-width: 170px;
+            // min-width: 220px;
 
             &:first-child {
                 border-top-left-radius: 8px;
                 border-bottom-left-radius: 8px;
-                min-width: 150px;
+                min-width: 115px;
                 // min-width: 200px;
             }
             &:last-child {
                 border-top-right-radius: 8px;
-                border-bottom-right-radius: 8px;
+                border-bottom-right-radius: 8px; 
+
             }
         }
     }

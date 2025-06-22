@@ -1,30 +1,48 @@
 import CancelIcon from "@mui/icons-material/Cancel";
-import { Closer } from "../Closer";
+import { useModalManager } from "../../../hooks/useModalManager";
+import { useRef } from "react";
 
 interface Props {
   url: string;
   closeViewer: () => void;
+  modalId?: string; // Optional prop for custom modal ID
 }
 
-export const ImageViewer = ({ url, closeViewer = () => {} }: Props) => {
+export const ImageViewer = ({
+  url,
+  closeViewer = () => {},
+  modalId,
+}: Props) => {
   if (!url) return "";
 
+  const uniqueModalId = useRef(
+    modalId || `image-viewer-${Date.now()}-${Math.random()}`
+  ).current;
+
+  const {} = useModalManager(uniqueModalId, closeViewer);
+
   return (
-    <div className="fixed top-[-30vh] left-[-30vw] w-[130vw] h-[130vh] bg-[var(--black100)] z-[999] flex items-center justify-center">
-      <img
-        src={url}
-        alt="image viewer photo"
-        className="min-h-[50vh] object-cover max-h-[90vh] fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[99]"
-      />
+    <>
+      <div className="fixed z-[99] top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[100vw] h-[100vh] flex items-center justify-center">
+        <div className="relative h-[60vh] w-[80vw] h-[50vh]z-[99]">
+          <img
+            src={url}
+            alt="image viewer photo"
+            className="w-full h-full cursor-pointer"
+          />
 
-      <button
+          <button
+            onClick={() => closeViewer()}
+            className="absolute -right-20 -top-20"
+          >
+            <CancelIcon style={{ color: "var(--gray20)", fontSize: 34 }} />
+          </button>
+        </div>
+      </div>
+      <div
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vh] z-[98]"
         onClick={() => closeViewer()}
-        className="fixed right-10 top-10 z-[99]"
-      >
-        <CancelIcon style={{ color: "var(--gray20)", fontSize: 34 }} />
-      </button>
-
-      <Closer handleClose={() => closeViewer()} />
-    </div>
+      ></div>
+    </>
   );
 };

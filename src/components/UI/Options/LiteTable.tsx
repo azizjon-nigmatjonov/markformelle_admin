@@ -1,299 +1,446 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo, memo } from "react";
 import CLabel from "../../CElements/CLabel";
 import { Controller } from "react-hook-form";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
-import { styled } from "@mui/material";
-import { useTranslationHook } from "../../../hooks/useTranslation";
 import { TableUI } from "./LiteTable/TableUI";
 import { useFetchType } from "../../../hooks/useFetchRequests/useFetchType";
 import { useKeyDownEvent } from "../../../hooks/useKeyDownEvent";
-const PopupBody = styled("div")(
-  ({ theme }) => `
-  width: max-content;
-  padding: 12px 16px;
-  margin: 8px;
-  border-radius: 8px;
-  border: 1px solid ${
-    theme.palette.mode === "dark" ? "var(--gray30)" : "var(--gray30)"
-  };
-  background-color: ${theme.palette.mode === "dark" ? "var(--gray30)" : "#fff"};
-  box-shadow: ${
-    theme.palette.mode === "dark"
-      ? `0px 4px 8px rgb(0 0 0 / 0.7)`
-      : `0px 4px 8px rgb(0 0 0 / 0.1)`
-  };
-  z-index: 1;
-`
-);
+import { PopupUI } from "../PopupUI";
+import debounce from "lodash/debounce";
+import { useTranslation } from "react-i18next";
 
-interface Props {
+interface Column {
+  id: string;
+  title: string;
+  width?: number;
+  render?: (value: any, item: any) => React.ReactNode;
+}
+
+interface BaseTableItem {
+  [key: string]: any;
+  id?: string | number;
+}
+
+export interface TableItem extends BaseTableItem {
+  RECETEASAMAID?: number;
+  RECETEGRAFIKID?: string;
+  ADI?: string;
+}
+
+interface LiteTableOptionsProps<T extends BaseTableItem = TableItem> {
   link?: string;
-  handleSelect: any;
-  defaultValue?: undefined | string | number;
+  handleSelect: (val: any) => void;
+  defaultValue?: string | number;
   name: string;
   label?: string;
   required?: boolean;
-  headColumns: any;
+  headColumns: Column[];
   control: any;
   placeholder?: string;
   readOnly?: boolean;
   focused?: boolean;
   disabled?: boolean;
   position?: string;
-  renderValue?: (val: string, obj: {}) => void;
+  renderValue?: (val: string, obj: T) => string;
   defaultSearch?: string;
   staticSearchID?: string;
-  staticOptions?: any;
+  staticOptions?: T[];
+  popupUI?: React.ReactNode;
 }
 
-export const LiteOptionsTable = ({
-  link = "",
-  handleSelect = () => {},
-  name = "",
-  defaultValue = "",
-  label = "",
-  required = false,
-  headColumns = [],
-  control,
-  placeholder = "",
-  readOnly = false,
-  focused = false,
-  disabled = false,
-  renderValue = () => {},
-  defaultSearch = "",
-  staticSearchID = "",
-  staticOptions = [],
-}: Props) => {
-  const { t } = useTranslationHook();
-  const [searchName, setSearchName] = useState(staticSearchID || name);
-  const inputRef: any = useRef(null);
-  const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState("");
-  const [anchor, setAnchor] = useState(null);
-  const [currentEl, setCurrentEl]: any = useState({});
-  const [options, setOptions] = useState([]);
-  const { data, setFilterParams, filterParams, isLoading } = useFetchType();
-  const { isAltPressed, currentKey, pressedKey } = useKeyDownEvent();
-  const [isFocus, setIsFocus] = useState(false);
+// Search Input Component
+const SearchInput = memo(
+  ({
+    control,
+    name,
+    search,
+    setSearch,
+    handleSearch,
+    placeholder,
+    readOnly,
+    disabled,
+    focused,
+    inputRef,
+    open,
+    setIsFocus,
+    setOpen,
+  }: {
+    control: any;
+    name: string;
+    search: string;
+    setSearch: (value: string) => void;
+    handleSearch: (value: string) => void;
+    placeholder: string;
+    readOnly: boolean;
+    disabled: boolean;
+    focused: boolean;
+    inputRef: React.RefObject<HTMLInputElement>;
+    open: boolean;
+    setIsFocus: (value: boolean) => void;
+    setOpen: (value: boolean) => void;
+  }) => {
+    const { t } = useTranslation();
+    const debouncedSearch = useMemo(
+      () => debounce(handleSearch, 300),
+      [handleSearch]
+    );
 
-  useEffect(() => {
-    if (isFocus) {
-      if (currentKey === "Open") {
-        setOpen(true);
-        setAnchor(inputRef.current);
-        setFilterParams({ ...filterParams, link });
-      }
-    }
+    return (
+      <Controller
+        control={control}
+        name={name}
+        render={({ field: { onChange, value }, fieldState: { error } }) => (
+          <div className={`relative w-full ${open ? "z-[99]" : ""}`}>
+            <input
+              value={search || value || ""}
+              type="text"
+              onBlur={() => {
+                setOpen(false);
+                setIsFocus(false);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  setTimeout(() => {
+                    const active = inputRef.current;
+                    if (!active) return;
+                    const form = active.closest("form");
+                    if (form) {
+                      const elements = Array.from(
+                        form.elements
+                      ) as HTMLElement[];
+                      const currentIndex = elements.indexOf(active);
+                      const next = elements[currentIndex + 1];
+                      if (next && typeof next.focus === "function") {
+                        next.focus();
+                      }
+                    }
+                  }, 0);
+                }
+              }}
+              onFocus={() => setIsFocus(true)}
+              autoFocus={focused}
+              className={`border rounded-[8px] pl-8 h-[30px] w-full px-1 bg-transparent ${
+                error?.message
+                  ? "border-[var(--error)]"
+                  : "border-[var(--border)]"
+              } ${disabled ? "text-[var(--gray)]" : ""}`}
+              placeholder={t(placeholder)}
+              onChange={(e) => {
+                debouncedSearch(e.target.value);
+                onChange(e.target.value);
+                setSearch(e.target.value);
+              }}
+              ref={inputRef}
+              readOnly={readOnly || disabled}
+            />
+          </div>
+        )}
+      />
+    );
+  }
+);
 
-    if (pressedKey === "Escape" && open) {
-      setOpen(false);
-      setAnchor(null);
-      setIsFocus(false);
-    }
-  }, [isFocus, isAltPressed, currentKey, pressedKey]);
-
-  const setCurrentValue = (el?: any) => {
-    let val: any = "";
-
-    if (renderValue) {
-      val = renderValue(name, el?.[name] ? el : { [name]: defaultValue });
-    } else {
-      val = el?.[name] || defaultValue;
-    }
-    setSearch(val);
-  };
-
-  useEffect(() => {
-    if (data?.data?.length && defaultSearch) {
-      const obj = data.data[0] ?? {};
-      setCurrentEl(obj);
-      handleSelect(obj);
-      setCurrentValue(obj);
-    }
-  }, [data, defaultSearch]);
-
-  useEffect(() => {
-    if (defaultValue) setCurrentValue();
-  }, [defaultValue]);
-
-  useEffect(() => {
-    if (data?.data) {
-      setOptions(data.data);
-    } else {
-      setOptions(staticOptions);
-    }
-  }, [data]);
-
-  const findForm = () => {
-    const active = inputRef.current;
-
-    if (!active) return;
-
-    const form = active.closest("form");
-    if (form) {
-      const elements = Array.from(form.elements) as HTMLElement[];
-      const currentIndex = elements.indexOf(active);
-
-      const next = elements[currentIndex + 1];
-      if (next && typeof next.focus === "function") {
-        next.focus();
-      }
-    }
-  };
-
-  const handleActions = (el: any, type: string) => {
-    if (type === "active_col") {
-      setSearchName(el.id);
-    } else {
-      handleSelect(el);
-      setCurrentEl(el);
-      setCurrentValue(el);
-      setOpen(false);
-      inputRef.current.focus();
-      setTimeout(() => {
-        findForm();
-      }, 0);
-    }
-  };
-
-  const handleSearch = (value: string) => {
-    let fetchName = name;
-    if (staticSearchID) {
-      setOpen(true);
-      setAnchor(inputRef.current);
-      setFilterParams({
-        ...filterParams,
-        link,
-        q: value ? `${staticSearchID}=${value}` : undefined,
-      });
-      return;
-    }
-    const colNames = headColumns.map((i: { id: string }) => i.id);
-    if (isNaN(Number(value))) {
-      fetchName = colNames.find((i: string) =>
-        i.toLocaleLowerCase().includes("adi")
-      );
-    } else {
-      fetchName = colNames.find((i: string) =>
-        i.toLocaleLowerCase().includes("id")
-      );
-    }
-
-    setOpen(true);
-    setAnchor(inputRef.current);
-    setFilterParams({
-      ...filterParams,
-      link,
-      q: value ? `${fetchName || name}=${value}` : undefined,
-    });
-    setSearchName(fetchName || name);
-    return fetchName;
-  };
-
-  useEffect(() => {
-    if (defaultSearch)
-      setFilterParams({ ...filterParams, link, q: defaultSearch });
-  }, [defaultSearch]);
-
-  return (
-    <div className="w-full relative">
-      {label && <CLabel title={label} required={required} />}
-      <div
-        className={`w-full relative flex items-center ${
-          disabled ? "bg-[#fafafa]" : ""
-        }`}
+// Table Popup Component
+const TablePopup = memo(
+  <T extends BaseTableItem>({
+    open,
+    anchor,
+    options,
+    headColumns,
+    isLoading,
+    searchName,
+    handleActions,
+    name,
+    currentEl,
+  }: {
+    open: boolean;
+    anchor: HTMLElement | null;
+    options: T[];
+    headColumns: Column[];
+    isLoading: boolean;
+    searchName: string;
+    handleActions: (el: T, type: string) => void;
+    name: string;
+    currentEl: T;
+  }) => {
+    return (
+      <BasePopup
+        id={open ? "simple-popup" : undefined}
+        open={open}
+        anchor={anchor}
+        style={{
+          padding: 0,
+          zIndex: 99,
+        }}
       >
-        <div
-          className="cursor-pointer absolute z-[99] left-2"
-          onClick={() => {
-            if (!disabled) {
-              if (!open) {
-                setAnchor(inputRef.current);
-                setFilterParams({ ...filterParams, link });
-              }
-              setOpen(!open);
+        <div className="bg-white border border-[var(--gray30)] rounded-[8px] shadow-2xl">
+          <TableUI
+            name={name}
+            idTable={currentEl?.[name]}
+            handleRowClick={(el: BaseTableItem, type: string) =>
+              handleActions(el as T, type)
             }
-          }}
-        >
-          <ManageSearchIcon
-            style={{ color: disabled ? "var(--gray)" : "var(--black)" }}
+            headColumns={headColumns}
+            bodyColumns={options}
+            isLoading={isLoading}
+            searchName={searchName}
           />
         </div>
+      </BasePopup>
+    );
+  }
+);
 
-        <Controller
-          control={control}
-          name={name}
-          render={({ field: { onChange, value }, fieldState: { error } }) => {
-            return (
-              <div className={`relative w-full ${open ? "z-[99]" : ""}`}>
-                <input
-                  value={search || value}
-                  type="text"
-                  onBlur={() => {
-                    setOpen(false);
-                    setIsFocus(false);
-                  }}
-                  onFocus={() => {
-                    setIsFocus(true);
-                  }}
-                  autoFocus={focused}
-                  className={`border rounded-[8px] pl-8 h-[30px] w-full px-1 bg-transparent ${
-                    error?.message
-                      ? "border-[var(--error)]"
-                      : "border-[var(--border)]"
-                  } ${disabled ? "text-[var(--gray)]" : ""}`}
-                  placeholder={t(placeholder)}
-                  onChange={(e: any) => {
-                    setTimeout(() => {
-                      handleSearch(e.target.value);
-                    }, 500);
-                    onChange(e.target.value);
-                    setSearch(e.target.value);
-                  }}
-                  ref={inputRef}
-                  readOnly={readOnly || disabled}
-                />
-              </div>
-            );
-          }}
-        ></Controller>
+export const LiteOptionsTable = memo(
+  <T extends BaseTableItem = TableItem>({
+    link = "",
+    handleSelect = () => {},
+    name = "",
+    defaultValue = "",
+    label = "",
+    required = false,
+    headColumns = [],
+    control,
+    placeholder = "",
+    readOnly = false,
+    focused = false,
+    disabled = false,
+    renderValue = (val: string) => val,
+    defaultSearch = "",
+    staticSearchID = "",
+    staticOptions = [],
+    popupUI = null,
+  }: LiteTableOptionsProps<T>) => {
+    const [searchName, setSearchName] = useState(staticSearchID || name);
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [open, setOpen] = useState(false);
+    const [search, setSearch] = useState("");
+    const [anchor, setAnchor] = useState<HTMLElement | null>(null);
+    const [currentEl, setCurrentEl] = useState<T>({} as T);
+    const [options, setOptions] = useState<T[]>([]);
+    const { data, setFilterParams, filterParams, isLoading } = useFetchType();
+    const { isAltPressed, currentKey, pressedKey } = useKeyDownEvent();
+    const [isFocus, setIsFocus] = useState(false);
+    const [openPopup, setOpenPopup] = useState(false);
 
-        {open && !disabled && (
-          <BasePopup
-            id={open ? "simple-popup" : undefined}
-            open={open}
-            anchor={anchor}
-            style={{
-              padding: 0,
-              zIndex: 99,
+    const handleSearch = useCallback(
+      (value: string) => {
+        let fetchName = name;
+
+        if (staticOptions.length && !data?.data?.length) {
+          if (staticSearchID) fetchName = staticSearchID;
+          const newArr = staticOptions.filter((item) =>
+            item[fetchName]?.toString().includes(value)
+          );
+          setOptions(newArr);
+        }
+
+        if (staticSearchID) {
+          setOpen(true);
+          setAnchor(inputRef.current);
+          setFilterParams({
+            ...filterParams,
+            link,
+            q: value ? `${staticSearchID}=${value}` : undefined,
+          });
+          return;
+        }
+
+        const colNames = headColumns.map((i) => i.id);
+        if (isNaN(Number(value))) {
+          fetchName =
+            colNames.find((i) => i.toLocaleLowerCase().includes("adi")) || name;
+        } else {
+          fetchName =
+            colNames.find((i) => i.toLocaleLowerCase().includes("id")) || name;
+        }
+
+        setOpen(true);
+        setAnchor(inputRef.current);
+        setFilterParams({
+          ...filterParams,
+          link,
+          q: value ? `${fetchName}=${value}` : undefined,
+        });
+        setSearchName(fetchName);
+      },
+      [
+        staticOptions,
+        staticSearchID,
+        headColumns,
+        name,
+        link,
+        filterParams,
+        data?.data?.length,
+      ]
+    );
+
+    const setCurrentValue = useCallback(
+      (el?: T) => {
+        let val = "";
+
+        if (renderValue) {
+          val = renderValue(
+            name,
+            el?.[name] ? el : ({ [name]: defaultValue } as T)
+          );
+        } else {
+          val = el?.[name] || defaultValue;
+        }
+        setSearch(val);
+      },
+      [name, defaultValue, renderValue]
+    );
+
+    const handleActions = useCallback(
+      (el: BaseTableItem, type: string) => {
+        if (type === "active_col") {
+          setSearchName(el.id ? el.id + "" : "");
+        } else {
+          handleSelect(el as T);
+          setCurrentEl(el as T);
+          setCurrentValue(el as T);
+          setOpen(false);
+          inputRef.current?.focus();
+        }
+      },
+      [handleSelect, setCurrentValue]
+    );
+
+    useEffect(() => {
+      if (popupUI && open) {
+        setOpenPopup(true);
+      }
+    }, [popupUI, open]);
+
+    useEffect(() => {
+      if (isFocus) {
+        if (currentKey === "Open") {
+          setOpen(true);
+          setAnchor(inputRef.current);
+          setFilterParams({ ...filterParams, link });
+        }
+      }
+
+      if (pressedKey === "Escape" && open) {
+        setOpen(false);
+        setAnchor(null);
+        setIsFocus(false);
+      }
+    }, [
+      isFocus,
+      isAltPressed,
+      currentKey,
+      pressedKey,
+      open,
+      filterParams,
+      link,
+    ]);
+
+    useEffect(() => {
+      if (data?.data) {
+        setOptions(data.data);
+      } else if (staticOptions.length) {
+        setOptions(staticOptions);
+      }
+    }, [data?.data, staticOptions]);
+
+    useEffect(() => {
+      if (defaultSearch && !search) {
+        setFilterParams((prev) => ({ ...prev, link, q: defaultSearch }));
+      }
+    }, [defaultSearch, link, setFilterParams, search]);
+
+    useEffect(() => {
+      if (defaultValue && !search) {
+        setCurrentValue();
+      }
+    }, [defaultValue, setCurrentValue, search]);
+
+    useEffect(() => {
+      if (data?.data?.length && defaultSearch && !search) {
+        const obj = data.data[0] ?? {};
+        setCurrentEl(obj);
+        handleSelect(obj);
+        setCurrentValue(obj);
+      }
+    }, [data?.data, defaultSearch, handleSelect, setCurrentValue, search]);
+
+    return (
+      <div className="w-full relative">
+        {label && (
+          <CLabel title={label} required={required} disabled={disabled} />
+        )}
+        <div
+          className={`w-full relative flex items-center ${
+            disabled ? "bg-[#fafafa]" : ""
+          }`}
+        >
+          <div
+            className="cursor-pointer absolute z-[99] left-2"
+            onClick={() => {
+              if (!disabled) {
+                if (!open) {
+                  setAnchor(inputRef.current);
+                  setFilterParams({ ...filterParams, link });
+                }
+                setOpen(!open);
+              }
             }}
           >
-            <PopupBody>
-              <TableUI
-                name={name}
-                idTable={currentEl?.[name]}
-                handleRowClick={handleActions}
-                headColumns={headColumns}
-                bodyColumns={options}
-                isLoading={isLoading}
-                searchName={searchName}
-              />
-            </PopupBody>
-          </BasePopup>
-        )}
-        {open}
-      </div>
+            <ManageSearchIcon
+              style={{ color: disabled ? "var(--gray)" : "var(--black)" }}
+            />
+          </div>
 
-      {open && (
-        <div
-          className="fixed top-0 left-0 z-[90] w-full h-full"
-          onClick={() => {
-            setOpen(false);
-            setAnchor(null);
-          }}
-        ></div>
-      )}
-    </div>
-  );
-};
+          <SearchInput
+            control={control}
+            name={name}
+            search={search}
+            setSearch={setSearch}
+            handleSearch={handleSearch}
+            placeholder={placeholder}
+            readOnly={readOnly}
+            disabled={disabled}
+            focused={focused}
+            inputRef={inputRef}
+            open={open}
+            setIsFocus={setIsFocus}
+            setOpen={setOpen}
+          />
+
+          <TablePopup
+            open={open}
+            anchor={anchor}
+            options={options}
+            headColumns={headColumns}
+            isLoading={isLoading}
+            searchName={searchName}
+            handleActions={handleActions}
+            name={name}
+            currentEl={currentEl}
+          />
+
+          {openPopup && (
+            <PopupUI open={openPopup} anchor={anchor}>
+              <div className="p-2">{popupUI}</div>
+            </PopupUI>
+          )}
+        </div>
+
+        {open && (
+          <div
+            className="fixed top-0 left-0 z-[90] w-full h-full"
+            onClick={() => {
+              setOpen(false);
+              setAnchor(null);
+            }}
+          />
+        )}
+      </div>
+    );
+  }
+);
+
+LiteOptionsTable.displayName = "LiteOptionsTable";

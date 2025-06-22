@@ -1,3 +1,4 @@
+import { ModalUIRecipe } from "./Modal";
 import { useMemo, useState } from "react";
 import { breadCrumbs, TableData } from "./Logic";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
@@ -6,27 +7,35 @@ import CNewTable from "../../../components/CElements/CNewTable";
 import { IFilterParams } from "../../../interfaces";
 import { useTranslationHook } from "../../../hooks/useTranslation";
 import CNewModal from "../../../components/CElements/CNewModal";
-import { ModalUI } from "./Modal";
-import { ModalTypes } from "./interfaces";
 import { playSound } from "../../../utils/playAudio";
+import dayjs from "dayjs";
 
 export const RecipeList = () => {
   const { t } = useTranslationHook();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<string[]>([]);
   const [changed, setChanged] = useState("");
   const [askAction, setAskAction] = useState("");
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
   });
-  const [modalInitialData, setModalInitialData] = useState<ModalTypes>({});
+  const [modalInitialData, setModalInitialData] = useState<any>({});
 
   const { bodyColumns, isLoading, bodyData, deleteFn } = TableData({
     filterParams,
   });
 
   const newHeadColumns = useMemo(() => {
-    const headColumns: any = [];
+    const headColumns: any = [
+      {
+        CALISMATARIHI: "CALISMATARIHI",
+        title: "CALISMATARIHI",
+        width: 100,
+        renderValue: (val: string) => {
+          return dayjs(val).format("DD.MM.YYYY");
+        },
+      },
+    ];
     const arr: any = bodyData?.data ?? [];
 
     const obj = { ...arr?.[0] };
@@ -48,14 +57,14 @@ export const RecipeList = () => {
 
   const handleActions = (el: any, status: string) => {
     if (status === "modal") {
-      setOpen(true);
+      setOpen(["card"]);
     }
 
     if (status === "view" || status === "edit") {
-      setOpen(true);
+      setOpen(["card"]);
 
       setModalInitialData({
-        URUNID: el?.URUNID,
+        RECETEID: el?.RECETEID,
       });
     }
 
@@ -64,13 +73,13 @@ export const RecipeList = () => {
     }
 
     if (status === "delete") {
-      deleteFn([el.URUNID]);
+      deleteFn([el.RECETEID]);
       setFilterParams({ page: 0, perPage: 50 });
     }
     if (status === "delete_multiple") {
       deleteFn(
-        el.map((item: { URUNID: string }) => {
-          return item.URUNID;
+        el.map((item: { RECETEID: string }) => {
+          return item.RECETEID;
         })
       );
       setFilterParams({ page: 0, perPage: 50 });
@@ -79,16 +88,16 @@ export const RecipeList = () => {
 
   const handleModalActions = (status: string, id: string) => {
     if (status === "close") {
-      if (!changed) {
+      if (!changed && open.length === 1) {
         setModalInitialData({});
-        setOpen(false);
+        setOpen([]);
       } else {
         playSound("/error-m.mp3");
         setAskAction(changed);
       }
     }
     if (status === "delete") {
-      setOpen(false);
+      setOpen([]);
       deleteFn([id]);
     }
   };
@@ -115,7 +124,7 @@ export const RecipeList = () => {
             "filter",
             "sellect_more",
           ]}
-          defaultSearch={{ DATE: "" }}
+          defaultSearch={{ RECETEID: "" }}
           meta={{
             totalCount: bodyData?.count,
             pageCount: bodyData?.count
@@ -125,22 +134,23 @@ export const RecipeList = () => {
         />
       </div>
 
-      {open || changed ? (
+      {open.length || changed ? (
         <CNewModal
           title={t(
-            modalInitialData.URUNID ? "updating_recipe" : "creating_recipe"
+            modalInitialData.RECETEID ? "updating_recipe" : "creating_recipe"
           )}
           handleActions={handleModalActions}
           defaultData={{
-            id: modalInitialData?.URUNID,
+            id: modalInitialData?.RECETEID,
           }}
           disabled="big"
         >
-          <ModalUI
+          <ModalUIRecipe
             defaultData={modalInitialData}
             changed={changed}
             setChanged={setChanged}
             askAction={askAction}
+            open={open}
             setOpen={setOpen}
             setAskAction={setAskAction}
           />

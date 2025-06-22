@@ -1,9 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import ScrollView from "./ScrollView";
-import AddIcon from "@mui/icons-material/Add";
 import { CardHeader } from "./CardHeader";
 import { DeleteIcon } from "../../../../../components/UI/IconGenerator/Svg";
 import { Button } from "@mui/material";
+import { MaterialForm } from "../MaterialForm";
+import { TrailForm } from "../TrailForm";
+import { DetailForm } from "../DetailForm";
+import AddIcon from "@mui/icons-material/Add";
+import { useKeyDownEvent } from "../../../../../hooks/useKeyDownEvent";
 interface Props {
   items: any;
   oldValues: any;
@@ -14,13 +18,17 @@ interface Props {
   deleteStep: boolean;
   setChanged: (val: string) => void;
   setImageView: (val: string) => void;
-  setInitialModalData: (val: any) => void;
   checkedList: any;
   handleCheck: (val: any) => void;
   setDeleteCard: (val: any) => void;
+  open: string[];
+  setOpen: (val: any) => void;
+  setCurrentSellect: (val: any) => void;
 }
 
 export const StepCard = ({
+  open,
+  setOpen,
   oldValues = [],
   items = [],
   headColumns = [],
@@ -33,7 +41,7 @@ export const StepCard = ({
   checkedList = [],
   handleCheck = () => {},
   setDeleteCard = () => {},
-  setInitialModalData = () => {},
+  setCurrentSellect = () => {},
 }: Props) => {
   const [draggingIndex, setDraggingIndex]: any = useState(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -41,12 +49,31 @@ export const StepCard = ({
   const [hoveredIndexStep, setHoveredIndexStep] = useState<number | null | any>(
     null
   );
-
+  const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
+  const [focusedIndex, setFocusedIndex] = useState<number>(0);
   const headerScrollRef: any = useRef(null);
   const [currentScroll, setCurrentScroll] = useState(0);
   const [maxScroll, setMaxScroll] = useState(0);
   const scrollInterval = useRef<NodeJS.Timeout | null>(null);
   const [newColumns, setNewColumns] = useState([]);
+  const { isAltPressed, currentKey } = useKeyDownEvent();
+  const stepRef = useRef<HTMLDivElement[]>([]);
+  // make the ref dynamic and focus the current focused index ref
+  useEffect(() => {
+    if (stepRef.current) {
+      stepRef.current[focusedIndex]?.focus();
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (isAltPressed && currentKey === "Insert") {
+      setOpen(["card", "insert_step"]);
+
+      const currEl = items.map((item: any) => item.rows).flat();
+      const index = currEl.findIndex((el: any) => el.index === focusedIndex);
+      setCurrentSellect(currEl[index]);
+    }
+  }, [isAltPressed, currentKey]);
 
   useEffect(() => {
     setNewColumns(headColumns);
@@ -77,12 +104,13 @@ export const StepCard = ({
   };
 
   const handleDrop = (index: number) => {
-    const newItems = items;
-    const [movedItem] = newItems.splice(draggingIndex, 1);
+    const newItems = JSON.parse(JSON.stringify(items));
+
+    const [movedItem] = newItems?.splice(draggingIndex, 1);
     newItems.splice(index, 0, movedItem);
 
     setTimeout(() => {
-      checkChanges(newItems);
+      // checkChanges(newItems);
       setItems(newItems);
       setDraggingIndex(null);
       setHoveredIndex(null);
@@ -136,12 +164,54 @@ export const StepCard = ({
     outerIndex: number,
     item: { RECETEALTASAMAID: string }
   ) => {
-    setInitialModalData({ ...item, index, outerIndex });
+    setCurrentSellect({ ...item, index, outerIndex });
   };
 
   const handleAddCard = (outerIndex: number) => {
-    setInitialModalData({ outerIndex, type: "card_add" });
+    setCurrentSellect({ outerIndex, type: "card_add" });
   };
+
+  const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const handleKeyDown = (event: any, outerIndex: number) => {
+    if (!event.ctrlKey && event.code === "Enter") {
+      setOpen(["card", "step"]);
+      const currItem = items[outerIndex].rows[focusedIndex];
+      setCurrentSellect(currItem);
+    }
+
+    if (editStep) return;
+
+    if (event.key === "ArrowUp") {
+      setFocusedIndex(focusedIndex < 1 ? 0 : focusedIndex - 1);
+    } else if (event.key === "ArrowDown") {
+      setFocusedIndex(
+        focusedIndex >=
+          items?.[items.length - 1]?.rows[
+            items?.[items.length - 1]?.rows.length - 1
+          ].index
+          ? focusedIndex
+          : focusedIndex + 1
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (rowRefs.current[focusedIndex]) {
+      rowRefs.current[focusedIndex]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [focusedIndex]);
+
+  useEffect(() => {
+    if (editStep) {
+      setFocusedIndex(999);
+    } else {
+      setFocusedIndex(0);
+    }
+  }, [editStep]);
 
   return (
     <div>
@@ -164,19 +234,25 @@ export const StepCard = ({
             if (!editStep) return;
             handleDrop(outerIndex);
           }}
-          className={`w-full grid grid-cols-3 rounded-[12px] py-3 h-full text-indigo-700 font-medium relative mb-5 shadow-md ${
+          className={`w-full grid grid-cols-4 rounded-[12px] py-3 h-full text-indigo-800 font-medium relative mb-5 shadow-md ${
             hoveredIndex === outerIndex && !hoveredIndexStep
               ? "hovered-card"
               : ""
-          } ${row.bg}`}
+          }`}
+          style={{ backgroundColor: row.bg + "aa" }}
         >
-          <div className="col-span-2">
+          <div className="col-span-3">
             <ScrollView
               rows={row?.rows ?? []}
+              stepRef={stepRef}
               editStep={editStep}
               handleDragStartStep={handleDragStartStep}
               handleDragOverStep={handleDragOverStep}
-              setInitialModalData={setInitialModalData}
+              setInitialModalData={(obj: any) => {
+                setOpen(["card", "step"]);
+
+                setCurrentSellect(obj);
+              }}
               handleDropSteps={handleDropSteps}
               hoveredIndexStep={hoveredIndexStep}
               hoveredIndex={hoveredIndex}
@@ -194,6 +270,11 @@ export const StepCard = ({
               headerScrollRef={headerScrollRef}
               checkedList={checkedList}
               handleCheck={handleCheck}
+              focusedIndex={focusedIndex}
+              handleKeyDown={(val: any) => {
+                handleKeyDown(val, outerIndex);
+              }}
+              setFocusedIndex={setFocusedIndex}
             />
           </div>
           <div className="relative">
@@ -219,7 +300,7 @@ export const StepCard = ({
               )}
             </div>
           </div>
-          {!editStep && (
+          {editStep && (
             <div
               onClick={() => handleAddCard(outerIndex)}
               className="bottom-[-16px] left-0 w-full h-[18px] group absolute flex items-center justify-around"
@@ -237,6 +318,23 @@ export const StepCard = ({
           )}
         </div>
       ))}
+
+      {open.includes("material") && (
+        <MaterialForm onClose={() => setOpen(["card"])} />
+      )}
+      {open.includes("trail") && (
+        <TrailForm
+          onClose={() => setOpen(["card"])}
+          handleActionsDetails={() => {
+            setOpen(["card", "detail"]);
+          }}
+          filterParams={filterParams}
+          setFilterParams={setFilterParams}
+          disabled={false}
+          setOpen={setOpen}
+        />
+      )}
+      {open.includes("detail") && <DetailForm onClose={() => setOpen("")} />}
     </div>
   );
 };

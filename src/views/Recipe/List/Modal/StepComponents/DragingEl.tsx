@@ -1,5 +1,3 @@
-import { Chip, Divider } from "@mui/material";
-import { useTranslation } from "react-i18next";
 import AddIcon from "@mui/icons-material/Add";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { CheckLine } from "../../../../../components/UI/IconGenerator/Svg";
@@ -21,6 +19,10 @@ interface Props {
   handleAdd: (ind: number, outInd: number, item: any) => void;
   deleteStep: boolean;
   handleCheck: (val: any) => void;
+  focusedIndex: number;
+  handleKeyDown: (val: any, index: number) => void;
+  stepRef: any;
+  setFocusedIndex: (val: number) => void;
 }
 
 export const DragingEl = ({
@@ -39,32 +41,41 @@ export const DragingEl = ({
   handleAdd,
   deleteStep,
   handleCheck = () => {},
+  focusedIndex,
+  handleKeyDown,
+  stepRef,
+  setFocusedIndex,
 }: Props) => {
-  const { t } = useTranslation();
+  const timeoutRef = useRef<number | null>(null);
+  const [hoverAdd, setHoverAdd] = useState(999);
+  const handleMouseEnter = (ind: number) => {
+    timeoutRef.current = window.setTimeout(() => {
+      setHoverAdd(ind);
+    }, 100);
+  };
+
+  const handleMouseLeave = () => {
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    setHoverAdd(999);
+  };
 
   return (
     <div>
-      {rows.map((item: any, innerIndex: number) => {
-        const timeoutRef = useRef<number | null>(null);
-        const [hoverAdd, setHoverAdd] = useState(999);
-        const handleMouseEnter = (ind: number) => {
-          timeoutRef.current = window.setTimeout(() => {
-            setHoverAdd(ind);
-          }, 100);
-        };
-
-        const handleMouseLeave = () => {
-          if (timeoutRef.current !== null) {
-            clearTimeout(timeoutRef.current);
-            timeoutRef.current = null;
-          }
-          setHoverAdd(999);
-        };
+      {rows?.map((item: { [key: string]: any }, innerIndex: number) => {
         return (
           <div key={innerIndex + outerIndex} className="py-[3px]">
             <div className="w-full">
               <div
-                className={`relative cursor-pointer row flex items-center w-full ${
+                tabIndex={0}
+                ref={(el) => {
+                  if (el) {
+                    stepRef.current[item.index] = el;
+                  }
+                }}
+                className={`relative outline-none cursor-pointer row flex items-center w-full ${
                   item.RECETEALTASAMAID ? "chip" : ""
                 } ${draggingIndexStep === innerIndex ? "dragging" : ""} ${
                   hoveredIndexStep &&
@@ -86,17 +97,22 @@ export const DragingEl = ({
                   handleDragOverStep(innerIndex, outerIndex);
                 }}
                 onDoubleClick={() => {
-                  if (!editStep) return;
                   setInitialModalData({
                     ...item,
                     index: innerIndex,
                     outerIndex,
                   });
                 }}
+                onClick={() => {
+                  setFocusedIndex(item.index);
+                }}
                 onDragLeave={handleDragLeaveStep}
                 onDrop={() => {
                   if (!editStep) return;
                   handleDropSteps(innerIndex, outerIndex);
+                }}
+                onKeyDown={(e) => {
+                  handleKeyDown(e, outerIndex);
                 }}
               >
                 {deleteStep && (
@@ -105,7 +121,7 @@ export const DragingEl = ({
                       item.checked = !item?.checked;
                       handleCheck(item);
                     }}
-                    className={`w-[18px] h-[18px] border border-[var(--main)] rounded-[4px] ml-2 hover:cursor-pointer flex items-center justify-center ${
+                    className={`w-[18px] mr-2 h-[18px] border border-[var(--main)] rounded-[4px] ml-2 hover:cursor-pointer flex items-center justify-center ${
                       item.checked ? "bg-[var(--main)]" : ""
                     }`}
                   >
@@ -114,60 +130,119 @@ export const DragingEl = ({
                     </div>
                   </div>
                 )}
-                {item.RECETEALTASAMAID ? (
-                  <div className="w-full">
-                    <Divider>
-                      <Chip
-                        label={
-                          item?.new ? (
-                            <input
-                              type="text"
-                              className="rounded-[8px] p-2 text-base font-medium"
-                              placeholder={t("add") + " RECETEALTASAMAID"}
-                            />
-                          ) : (
-                            <p className="p-2">
-                              <span>{item.RECETEALTASAMAID}</span> Istek
-                            </p>
-                          )
-                        }
+                {item.RECETEASAMAID ? (
+                  <div
+                    className={`duration-300 rounded-[8px] w-full  ${
+                      focusedIndex === item.index ? "ripple-effect" : ""
+                    }`}
+                    style={{
+                      backgroundColor:
+                        focusedIndex === item.index ? "" : item.bg,
+                    }}
+                  >
+                    <div className="text-center p-2 rounded-[8px] relative z-[2] h-full">
+                      <p>{item.RECETEASAMAADI}</p>
+                      <p
+                        className="absolute top-0 left-0 text-center h-full items-center justify-center flex px-2"
                         style={{
-                          position: "relative",
-                          zIndex: 2,
-                          backgroundColor: "var(--border)",
+                          minWidth: headColumns[0]?.width,
                         }}
-                        size="small"
-                      />
-                    </Divider>
+                      >
+                        {item.SIRA}
+                      </p>
+                    </div>
+                  </div>
+                ) : item.RECETEALTASAMAID ? (
+                  <div className={`w-full relative flex`}>
+                    <div className="flex items-center">
+                      <div className="pr-2">
+                        <p
+                          className={`text-center py-1 rounded-full duration-200 w-[45px] relative bg-blue-200 z-[2] h-full ${
+                            focusedIndex === item.index ? "bg-blue-300" : ""
+                          }`}
+                        >
+                          {item.SIRA}
+                        </p>
+                      </div>
+                      <div
+                        className={`bg-blue-300 duration-200 w-full h-[2px] ${
+                          focusedIndex === item.index ? "bg-blue-400" : ""
+                        }`}
+                      ></div>
+                    </div>
+                    <div className="flex items-center w-full">
+                      <div
+                        className={`bg-blue-300 duration-200 w-full h-[2px] ${
+                          focusedIndex === item.index ? "bg-blue-400" : ""
+                        }`}
+                      ></div>
+                      <div className="px-2">
+                        <p
+                          className={`text-center py-1 rounded-full duration-200 w-[100px] relative bg-blue-200 z-[2] h-full ${
+                            focusedIndex === item.index
+                              ? "bg-blue-300 w-[160px]"
+                              : ""
+                          }`}
+                        >
+                          {item.RECETEALTASAMAADI}
+                        </p>
+                      </div>
+                      <div
+                        className={`bg-blue-300 duration-200 w-full h-[2px] ${
+                          focusedIndex === item.index ? "bg-blue-400" : ""
+                        }`}
+                      ></div>
+                    </div>
                   </div>
                 ) : (
                   <div
-                    className="flex"
+                    className={`flex rounded-[8px] ${
+                      focusedIndex === item.index ? "ripple-effect" : ""
+                    }`}
                     onDoubleClick={() => {
                       handleAdd(innerIndex, outerIndex, item);
                     }}
                   >
-                    {headColumns.map((column: any, index: number) => (
-                      <div key={index} className="cell flex items-center">
-                        {editStep && index === 0 && <DragIndicatorIcon />}
-
-                        <p>{item[column.id]}</p>
-                      </div>
-                    ))}
+                    {headColumns.map(
+                      (
+                        column: {
+                          id: string;
+                          width: number;
+                          render: (val: string) => string;
+                        },
+                        index: number
+                      ) => (
+                        <div
+                          key={index}
+                          style={{ minWidth: column?.width }}
+                          className="cell flex items-center relative z-[2]"
+                        >
+                          {editStep && index === 0 && <DragIndicatorIcon />}
+                          {column?.render ? (
+                            column?.render(item[column.id])
+                          ) : (
+                            <p style={{ minWidth: column?.width }}>
+                              {item[column.id]}
+                            </p>
+                          )}
+                        </div>
+                      )
+                    )}
                   </div>
                 )}
-                {!deleteStep && !editStep && (
+                {!deleteStep && (
                   <div
                     className="absolute left-[-15px] bottom-[-6px] w-full h-[17px] z-[2]"
-                    onMouseEnter={() => handleMouseEnter(innerIndex)}
-                    onMouseLeave={() => handleMouseLeave()}
-                    onDoubleClick={() => {
+                    onMouseEnter={() => {
+                      if (editStep) {
+                        handleMouseEnter(innerIndex);
+                        return;
+                      }
+                      handleMouseEnter(999);
+                    }}
+                    onMouseLeave={() => {
                       if (!editStep) return;
-                      setInitialModalData({
-                        ...item,
-                        index: innerIndex,
-                        outerIndex,
-                      });
+                      handleMouseLeave();
                     }}
                   >
                     {hoverAdd === innerIndex && (

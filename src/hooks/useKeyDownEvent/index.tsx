@@ -8,12 +8,12 @@ export const useKeyDownEvent = () => {
     x: "Close",
     F2: "Open",
     Escape: "Escape",
+    Enter: "Enter",
+    Insert: "Insert",
   };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // console.log("ee", e.key);
-
       if (e.key in keys) {
         setPressedKey(keys[e.key]);
       }

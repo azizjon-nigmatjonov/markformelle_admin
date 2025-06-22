@@ -16,7 +16,6 @@ export const LabChemicals = () => {
     page: 1,
     perPage: 50,
   });
-  const [showUI, setShowUI] = useState(false);
   const [modalInitialData, setModalInitialData] = useState<ModalTypes>({});
   const [askClose, setAskClose] = useState("");
   const { bodyColumns, isLoading, bodyData, deleteFn, refetchTable } =
@@ -123,23 +122,19 @@ export const LabChemicals = () => {
   };
 
   const askCloseFn = (type: string) => {
-    if (type === "no") {
+    if (type === "close") {
       setAskClose("");
+      setOpen(false);
+      setModalInitialData({});
     } else if (type === "submit") {
       setAskClose("");
+      refetchTable();
     } else {
       setAskClose(type);
-      setOpen(false);
-      setShowUI(false);
-      setShowUI(false);
-      setModalInitialData({});
-      refetchTable();
     }
   };
 
   const handleModalActions = (status: string, id: string) => {
-    if (status === "close") askCloseFn("");
-
     if (status === "delete") deleteFn([id]);
   };
 
@@ -186,8 +181,6 @@ export const LabChemicals = () => {
         open={open}
         askClose={askClose}
         setAskClose={askCloseFn}
-        showUI={showUI}
-        setShowUI={setShowUI}
         refetchTable={refetchTable}
       />
     </>

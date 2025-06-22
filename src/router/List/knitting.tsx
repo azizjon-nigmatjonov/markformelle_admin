@@ -9,22 +9,8 @@ export const knittingList = [
     link: "machines",
     sidebar: true,
     title: "knittingavto",
-    parent_icon: (
-      <img
-        width={18}
-        src="/images/kniting.webp"
-        alt="knitting parent"
-        loading="lazy"
-      />
-    ),
-    icon: (
-      <img
-        width={18}
-        src="/images/kniting.webp"
-        alt="knitting"
-        loading="lazy"
-      />
-    ),
+    parent_icon: "/images/kniting.webp",
+    icon: "/images/kniting.webp",
     element: <KnittingMachines />,
     permissions: ["view_page", "edit"],
     auth: false,
@@ -34,7 +20,7 @@ export const knittingList = [
     link: "accessories",
     sidebar: true,
     title: "kniting_accessories",
-    icon: <img width={22} src="/images/rope.png" alt="rope" loading="lazy" />,
+    icon: "/images/rope.png",
     element: <KnittingMachines />,
     permissions: ["view_page"],
     auth: true,
@@ -44,9 +30,7 @@ export const knittingList = [
     link: "rolls-kk",
     sidebar: true,
     title: "rolls_for_kk",
-    icon: (
-      <img width={20} src="/images/roll-kk.png" alt="roll kk" loading="lazy" />
-    ),
+    icon: "/images/roll-kk.png",
     element: <RollsKK />,
     permissions: ["view_page"],
     auth: true,
@@ -56,9 +40,7 @@ export const knittingList = [
     link: "cells-after-kk",
     sidebar: true,
     title: "Клетки после КК",
-    icon: (
-      <img width={24} src="/images/box.webp" alt="box cell" loading="lazy" />
-    ),
+    icon: "/images/box.webp",
     element: <CellsAfterKK />,
     permissions: ["view_page"],
     auth: true,
@@ -68,14 +50,7 @@ export const knittingList = [
     link: "loaders",
     sidebar: true,
     title: "Дашборд грузчиков 614",
-    icon: (
-      <img
-        width={24}
-        src="/images/fork-loader.webp"
-        alt="loader"
-        loading="lazy"
-      />
-    ),
+    icon: "/images/fork-loader.webp",
     element: <KnittingProcess />,
     permissions: ["view_page"],
     auth: true,

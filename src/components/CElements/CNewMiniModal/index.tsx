@@ -4,19 +4,24 @@ import { FC, ReactNode, useState, useRef, useEffect } from "react";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { CloseIcon } from "../../UI/IconGenerator/Svg";
 import { useTranslation } from "react-i18next";
+import { useModalManager } from "../../../hooks/useModalManager";
 
 interface Props {
   title?: string;
   padding?: string;
   children?: ReactNode;
+  type?: string;
   handleActions?: (val: string, val2?: any) => void;
+  modalId?: string; // Optional prop for custom modal ID
 }
 
 const CNewMiniModal: FC<Props> = ({
   title = "",
   padding = "14px",
   children,
+  type,
   handleActions = () => {},
+  modalId,
 }) => {
   const { t } = useTranslation();
   const [position, setPosition] = useState<{ x: number; y: number } | null>(
@@ -25,6 +30,19 @@ const CNewMiniModal: FC<Props> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const modalRef = useRef<HTMLDivElement>(null);
+
+  // Generate unique modal ID if not provided
+  const uniqueModalId = useRef(
+    modalId || `mini-modal-${Date.now()}-${Math.random()}`
+  ).current;
+
+  // Handle modal close
+  const handleClose = () => {
+    handleActions("Close");
+  };
+
+  // Use modal manager for escape key handling and z-index management
+  const {} = useModalManager(uniqueModalId, handleClose);
 
   useEffect(() => {
     if (!position && modalRef.current) {
@@ -83,21 +101,22 @@ const CNewMiniModal: FC<Props> = ({
     <>
       <div
         ref={modalRef}
-        className={`fixed rounded-[12px] z-[99] bg-white shadow-2xl border border-[var(--gray30)] ${
+        className={`fixed z-[99] rounded-[12px] bg-white shadow-2xl border border-[var(--gray30)] ${
           isDragging ? "cursor-grabbing" : ""
         }`}
         style={{
           left: position ? `${position.x}px` : "50%",
           top: position ? `${position.y}px` : "50%",
-          transform: position ? "none" : "translate(-50%, -50%)",
+          transform:
+            position?.x || position?.y ? "none" : "translate(-50%, -50%)",
           transition: isDragging ? "none" : "width 0.3s, height 0.3s",
         }}
       >
         <Card className={`${cls.card}`} style={{ padding }}>
           <div>
             {title && (
-              <div className="grid grid-cols-3 px-3 py-2 items-center top-0 bg-white z-[91] border-b border-[var(--border)]">
-                <h2>{t(title)}</h2>
+              <div className="grid grid-cols-3 px-3 py-1 items-center top-0 bg-white z-[91] border-b border-[var(--border)]">
+                <h2 className="font-medium">{t(title)}</h2>
 
                 <div className="flex justify-center">
                   <IconButton
@@ -117,7 +136,7 @@ const CNewMiniModal: FC<Props> = ({
                 </div>
 
                 <div className="flex justify-end">
-                  <IconButton onClick={() => handleActions("Close")}>
+                  <IconButton onClick={handleClose}>
                     <div className="hover:rotate-[90deg] duration-200">
                       <CloseIcon />
                     </div>
@@ -125,31 +144,19 @@ const CNewMiniModal: FC<Props> = ({
                 </div>
               </div>
             )}
-            <div className="p-3 relative z-[94]">{children}</div>{" "}
-            {/* <div className="px-3 pb-2 pt-2 flex space-x-3 bg-[var(--primary50)]">
-              <div className="flex items-center justify-center text-sm font-medium space-x-1">
-                <div className="border border-[var(--success)] rounded-[8px] w-[20px] h-[20px] flex items-center justify-center">
-                  <CheckLine fill="var(--success)" />
-                </div>
-                <span>ALT + F8</span>
-              </div>
-              <div className="flex items-center justify-center text-sm font-medium space-x-1">
-                <div className="border border-[var(--error)] rounded-[8px] w-[20px] h-[20px] flex items-center justify-center">
-                  <CloseIcon fill="red" />
-                </div>
-                <span>ALT + X</span>
-              </div>
-            </div> */}
+            <div className="px-3 py-2 relative z-[94]">{children}</div>{" "}
           </div>
         </Card>
       </div>
 
-      <div
-        className={`w-[130vw] h-[130vh] fixed top-[-20vh] left-[-30vw] z-[97] ${
-          title ? "bg-[rgba(0,0,0,0.3)]" : ""
-        }`}
-        onClick={() => handleActions("Close")}
-      ></div>
+      {type !== "inner" && (
+        <div
+          className={`w-[130vw] h-[130vh] fixed top-[-20vh] left-[-30vw] z-[98] ${
+            title ? "bg-[rgba(0,0,0,0.3)]" : ""
+          }`}
+          onClick={handleClose}
+        ></div>
+      )}
     </>
   );
 };

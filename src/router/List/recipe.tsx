@@ -4,16 +4,12 @@ export const recipeSection = [
   {
     parent: "recipe",
     link: "list",
-    sidebar: true,
     title: "recipe",
-    parent_icon: (
-      <img width={20} src="/images/recipe.png" alt="recipe" loading="lazy" />
-    ),
-    icon: (
-      <img width={18} src="/images/recipe.png" alt="recipe" loading="lazy" />
-    ),
+    parent_icon: "/images/recipe.png",
+    icon: "/images/recipe.png",
+    sidebar: true,
     element: <RecipeList />,
-    auth: true,
+    auth: false,
     permissions: ["view_page", "edit"],
   },
 ];

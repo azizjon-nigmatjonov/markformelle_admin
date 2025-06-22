@@ -18,13 +18,17 @@ interface Props {
   handleAdd: (ind: number, outInd: number, item: any) => void;
   setMaxScroll: (val: number) => void;
   setCurrentScroll: (val: number) => void;
-  headerScrollRef: any;
+  headerScrollRef: React.RefObject<HTMLDivElement>;
   currentScroll: number;
   scrollInterval: any;
   maxScroll: number;
   deleteStep: boolean;
-  checkedList: any;
+  checkedList: string[] | number[];
+  focusedIndex: number;
   handleCheck: (val: any) => void;
+  handleKeyDown: (val: any, index: number) => void;
+  stepRef: any;
+  setFocusedIndex: (val: number) => void;
 }
 
 const ScrollView = ({
@@ -49,6 +53,10 @@ const ScrollView = ({
   maxScroll,
   deleteStep = false,
   handleCheck = () => {},
+  focusedIndex,
+  handleKeyDown,
+  stepRef,
+  setFocusedIndex,
 }: Props) => {
   const ScrollBody = useRef<HTMLDivElement>(null);
 
@@ -113,7 +121,11 @@ const ScrollView = ({
             handleDragLeaveStep={handleDragLeaveStep}
             handleAdd={handleAdd}
             deleteStep={deleteStep}
+            focusedIndex={focusedIndex}
+            handleKeyDown={handleKeyDown}
             handleCheck={handleCheck}
+            stepRef={stepRef}
+            setFocusedIndex={setFocusedIndex}
           />
         </div>
       </div>

@@ -2,7 +2,7 @@ import HFTextField from "../../../../../components/HFElements/HFTextField";
 import { InputFieldUI } from "../../../../../components/UI/FieldUI";
 import CCheckbox from "../../../../../components/CElements/CCheckbox";
 import { LiteOptionsTable } from "../../../../../components/UI/Options/LiteTable";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface InputFieldsProps {
   control: any;
@@ -18,7 +18,14 @@ export const InputFields = ({
   formData,
 }: InputFieldsProps) => {
   const [selectedHamID, setSelectedHamID]: any = useState(null);
-
+  useEffect(() => {
+    setTimeout(() => {
+      localStorage.setItem(
+        "lab_form_initial_values",
+        JSON.stringify(getValues())
+      );
+    }, 700);
+  }, []);
   return (
     <div className="w-full grid grid-cols-4 gap-y-3 gap-x-5">
       <div className="space-y-2">

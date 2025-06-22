@@ -4,8 +4,14 @@ export const Closer = ({
   styles,
 }: {
   handleClose: () => void;
-  classes?: string
-  styles?: any
+  classes?: string;
+  styles?: any;
 }) => {
-    return <div onClick={() => handleClose()} className={`w-[100vw]  h-[100vh] fixed top-0 left-0 z-[90] ${classes}`} style={{ ...styles }}></div>
-}
+  return (
+    <div
+      onClick={() => handleClose()}
+      className={`w-[100vw]  h-[100vh] fixed top-0 left-0 z-[98] ${classes}`}
+      style={{ ...styles }}
+    ></div>
+  );
+};

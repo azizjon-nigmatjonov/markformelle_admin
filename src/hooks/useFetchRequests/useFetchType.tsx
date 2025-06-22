@@ -8,7 +8,7 @@ import { useErrCapture } from "./useErrCapture";
 export const useFetchType = () => {
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
-    perPage: 20,
+    perPage: 100,
   });
 
   const {
