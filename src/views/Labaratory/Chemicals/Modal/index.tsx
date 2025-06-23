@@ -213,7 +213,7 @@ export const ModalUI = ({
                 className={`grid grid-cols-3 gap-x-5 border-b border-[var(--border)] pb-5`}
               >
                 <div>
-                  <InputFieldUI title={t("LABRECETEKODU")} disabled={disabled}>
+                  <InputFieldUI title="LABRECETEKODU" disabled={disabled}>
                     <LiteOptionsTable
                       name="LABRECETEKODU"
                       placeholder={t("LABRECETEKODU")}

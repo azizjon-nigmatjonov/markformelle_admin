@@ -5,7 +5,6 @@ import {
 } from "../../../../../../../components/UI/Options/LiteTable";
 import CImageViewer from "../../../../../../../components/CElements/CImageViewer";
 import { API_URL } from "../../../../../../../utils/env";
-import { useState } from "react";
 
 interface Props {
   changeGroup: (group: string) => void;
@@ -22,7 +21,7 @@ export const FormFirst = ({
   control,
   setValue,
 }: Props) => {
-  const [CurrentReceteAsamaId, setCurrentReceteAsamaId] = useState<number>(0);
+  // const [CurrentReceteAsamaId, setCurrentReceteAsamaId] = useState<number>(0);
 
   return (
     <div className="space-y-2">
@@ -45,7 +44,7 @@ export const FormFirst = ({
         // }
         handleSelect={(obj: TableItem) => {
           setValue("RECETEASAMAID", obj.RECETEASAMAID);
-          setCurrentReceteAsamaId(obj.RECETEASAMAID || 0);
+          // setCurrentReceteAsamaId(obj.RECETEASAMAID || 0);
           changeGroup("group1");
         }}
         disabled={disabledFirstGroup}

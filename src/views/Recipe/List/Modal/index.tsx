@@ -79,7 +79,7 @@ export const ModalUIRecipe = ({
       params.KULLANICIID = 1;
       params.DEGISIMTARIHI = dayjs();
       params.USTASAMAID = 8;
-      params.RECETEID = "Test Azizilloxon";
+      params.RECETEID = "Test Azizjon";
 
       delete params.UNITEADI;
 

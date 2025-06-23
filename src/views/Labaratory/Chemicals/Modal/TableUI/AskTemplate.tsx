@@ -1,8 +1,3 @@
-import { useEffect, useState } from "react";
-import { useFetchTypeSingle } from "../../../../../hooks/useFetchRequests/useFetchType";
-import CNewModal from "../../../../../components/CElements/CNewModal";
-import { ModalUIRecipe } from "../../../../Recipe/List/Modal";
-
 export const AskTemplate = ({
   handleActions,
 }: {

@@ -218,8 +218,6 @@ export const LabModalTables = ({
   }, [tableData]);
 
   useEffect(() => {
-    console.log("templateData", templateData, templateFilterParams);
-
     if (templateFilterParams?.link) {
       if (templateData?.RECETEID) {
         setOpenNewModal("template_ready");
@@ -408,6 +406,7 @@ export const LabModalTables = ({
       {openNewModal === "template_not_ready" && (
         <CNewMiniModal title="Sablon Recete Secimi">
           <TemplateForm
+            formData={formData}
             handleActions={() => {
               setOpenNewModal("");
             }}
