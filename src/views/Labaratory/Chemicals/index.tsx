@@ -145,6 +145,7 @@ export const LabChemicals = () => {
       deleteFn([id]);
     } else if (status === "close") {
       setOpen(false);
+      setModalInitialData({});
     }
   };
 

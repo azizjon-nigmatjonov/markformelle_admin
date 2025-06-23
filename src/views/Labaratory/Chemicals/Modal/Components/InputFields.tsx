@@ -34,14 +34,12 @@ export const InputFields = ({
             name="ADI"
             control={control}
             setValue={setValue}
-            placeholder="ADI"
             focused={formData?.LABRECETEKODU ? false : true}
           />
         </InputFieldUI>
         <InputFieldUI title="FIRMAID" required>
           <LiteOptionsTable
             name="FIRMAID"
-            placeholder="FIRMAID"
             link="firma"
             headColumns={[
               { id: "FIRMAID", title: "FIRMAID", width: 80 },
@@ -62,7 +60,6 @@ export const InputFields = ({
         <InputFieldUI title="LABRENKGRUPID" required>
           <LiteOptionsTable
             name="LABRENKGRUPID"
-            placeholder="LABRENKGRUPID"
             link="labrenkgrup"
             renderValue={(_: string, obj: any) => {
               return obj.ADI || obj.LABRENKGRUPID;
@@ -95,7 +92,6 @@ export const InputFields = ({
         <InputFieldUI title="HAMSTOK" required>
           <LiteOptionsTable
             name="HAMID"
-            placeholder="HAMSTOK"
             link="ham"
             renderValue={(_: string, obj: any) => {
               return obj.ADI && obj.HAMID
@@ -121,7 +117,6 @@ export const InputFields = ({
         <InputFieldUI title="RECETETURU" required>
           <LiteOptionsTable
             name="RECETETURUID"
-            placeholder="RECETETURUID"
             link="receteturu"
             renderValue={(_: string, obj: any) => {
               return obj.ADI || obj.RECETETURUID;
@@ -139,17 +134,11 @@ export const InputFields = ({
           />
         </InputFieldUI>
         <InputFieldUI title="ACIKLAMA" required>
-          <HFTextField
-            name="ACIKLAMA"
-            control={control}
-            setValue={setValue}
-            placeholder="ACIKLAMA"
-          />
+          <HFTextField name="ACIKLAMA" control={control} setValue={setValue} />
         </InputFieldUI>
         <InputFieldUI title="USTASAMA" required>
           <LiteOptionsTable
             name="ASAMAID"
-            placeholder={"USTASAMA"}
             link="asama"
             renderValue={(_: string, obj: any) => {
               return obj.ADI ? obj.ASAMAID + " - " + obj.ADI : obj.ASAMAID;
@@ -169,12 +158,11 @@ export const InputFields = ({
         <InputFieldUI title="DOVIZID" required>
           <LiteOptionsTable
             name="DOVIZID"
-            placeholder={"DOVIZID"}
             renderValue={(_: string, obj: any) => {
               return obj.DOVIZID || obj.CINSI;
             }}
             link="doviz"
-            defaultValue={formData?.USTASAMAADI}
+            defaultValue={formData?.USTASAMAADI || "USD"}
             headColumns={[
               { id: "CINSI", title: "CINSI", width: 60 },
               { id: "DOVIZID", title: "DOVIZID", width: 80 },
@@ -186,19 +174,6 @@ export const InputFields = ({
             control={control}
           />
         </InputFieldUI>
-        {/* <InputFieldUI title="DOVIZID" required>
-          <HFSelect
-            name="DOVIZID"
-            control={control}
-            setValue={setValue}
-            handleClick={(obj) => {
-              setValue("DOVIZID", obj.value);
-            }}
-            placeholder="DOVIZID"
-            options={moneyOptions}
-            disabled={!!formData?.FIRMAID}
-          />
-        </InputFieldUI> */}
       </div>
       <div className="space-y-2">
         <InputFieldUI title="ESKILABRECETEKODU">
@@ -206,7 +181,6 @@ export const InputFields = ({
             name="ESKILABRECETEKODU"
             control={control}
             setValue={setValue}
-            placeholder="ESKILABRECETEKODU"
           />
         </InputFieldUI>
         <InputFieldUI title="PANTONEKODU" required>
@@ -214,13 +188,11 @@ export const InputFields = ({
             name="PANTONEKODU"
             control={control}
             setValue={setValue}
-            placeholder="PANTONEKODU"
           />
         </InputFieldUI>
         <InputFieldUI title="RENKDERINGLIGI" required>
           <LiteOptionsTable
             name="RENKDERINLIGIID"
-            placeholder="RENKDERINLIGIID"
             link="renkderinligi"
             renderValue={(_: string, obj: any) => {
               return obj.ADI || obj.RENKDERINLIGIID;
@@ -241,7 +213,6 @@ export const InputFields = ({
         <InputFieldUI title="KALITEID">
           <LiteOptionsTable
             name="KALITEID"
-            placeholder="KALITEID"
             link="kalite"
             renderValue={(_: string, obj: any) => {
               return obj.KALITEID;
@@ -266,7 +237,6 @@ export const InputFields = ({
             control={control}
             setValue={setValue}
             disabled
-            placeholder="TALEPTARIHI"
           />
         </InputFieldUI>
         <div className="flex">

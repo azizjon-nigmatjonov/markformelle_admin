@@ -17,7 +17,10 @@ interface Props {
   bodyColumns: any;
   headColumns: any;
   idTable: number | null;
-  handleRightClick: (e: any, atisNo: number) => void;
+  handleRightClick: (
+    e: any,
+    atisNo: { ATISNO: number; LABRECETEATISID: number }
+  ) => void;
   handleRowClick: (val: any, type: string, arr?: any) => void;
 }
 export const TwoRowTable = ({
@@ -218,7 +221,7 @@ export const TwoRowTable = ({
                 } flex relative`}
                 onContextMenu={(e) => {
                   e.preventDefault();
-                  handleRightClick(e, item.ATISNO);
+                  handleRightClick(e, item);
                 }}
               >
                 {idTable === item.LABRECETEATISID && (
@@ -284,7 +287,7 @@ export const TwoRowTable = ({
                 key={index}
                 onContextMenu={(e) => {
                   e.preventDefault();
-                  handleRightClick(e, item.ATISNO);
+                  handleRightClick(e, item);
                 }}
                 className={`${cls.row} relative ${
                   idTable === item.LABRECETEATISID

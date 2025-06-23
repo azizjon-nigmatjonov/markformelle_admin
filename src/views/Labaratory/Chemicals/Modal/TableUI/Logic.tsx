@@ -39,12 +39,27 @@ export const TemplateLogic = ({
 }) => {
   const { t } = useTranslation();
 
+  // const copyRecipe = async (params: {}) => {
+  //   try {
+  //     const { data } = await axios.post(`${API_URL}/recete/copy`, params);
+  //     console.log("data", data);
+  //     toast.success(t("get_list"));
+
+  //     getDetey();
+  //   } catch (error) {
+  //     toast.success(t("error"));
+  //   }
+  // };
+
   const copyRecipe = async (params: {}) => {
     try {
-      const { data } = await axios.post(`${API_URL}/recete/copy`, params);
-      console.log("data", data);
-      toast.success(t("get_list"));
+      const { data } = await axios.post(
+        `${API_URL}/labrecete/lab-sablon-to-uretim`,
+        params
+      );
 
+      toast.success(t("get_list"));
+      getList();
       getDetey();
     } catch (error) {
       toast.success(t("error"));
@@ -55,17 +70,18 @@ export const TemplateLogic = ({
     LABRECETEKODU: string;
     newReceteId: string;
     RECETEID: string;
+    atisId: number;
+    KULLANICIID: number;
   }) => {
     try {
-      const { data } = await axios.post(`${API_URL}/recete/`, params);
-
       copyRecipe({
-        target_recete_id: params.RECETEID,
-        source_recete_id: params.newReceteId,
+        labrecete_atis_id: params.atisId,
+        sablon_recete_id: params.newReceteId,
+        kullanici_id: params.KULLANICIID,
       });
-      getList();
+
       toast.success(t("created!"));
-      return data;
+      // return data;
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
 

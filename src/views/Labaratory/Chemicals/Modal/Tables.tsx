@@ -43,7 +43,10 @@ export const LabModalTables = ({
   const [idDetailForm, setIdDetailForm]: any = useState(null);
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
   const [open, setOpen] = useState("");
-  const [atisNo, setAtisNo]: any = useState(null);
+  const [atisNo, setAtisNo]: any = useState({
+    ATISNO: null,
+    LABRECETEATISID: null,
+  });
   const [openPopUp, setOpenPoUp] = useState(null);
   const [openNewModal, setOpenNewModal] = useState<string>("");
   const { headColumns, trailHeadColumns, detailHeadColumns } =
@@ -215,7 +218,6 @@ export const LabModalTables = ({
   useEffect(() => {
     if (tableData?.data?.length) setBodyData(tableData.data);
   }, [tableData]);
-
   return (
     <>
       <div className="grid grid-cols-3 gap-x-2">
@@ -258,9 +260,15 @@ export const LabModalTables = ({
             handleRowClick={handleActionsTrial}
             disabled={tableData?.data ? false : true}
             idTable={idTrail}
-            handleRightClick={(e: any, atisNo: number) => {
+            handleRightClick={(
+              e: any,
+              el: { ATISNO: number; LABRECETEATISID: number }
+            ) => {
               setOpenPoUp(e.target);
-              setAtisNo(atisNo);
+              setAtisNo({
+                ATISNO: el.ATISNO,
+                LABRECETEATISID: el.LABRECETEATISID,
+              });
             }}
           />
         </div>
@@ -360,7 +368,9 @@ export const LabModalTables = ({
           <AskTemplate
             handleActions={(val: string) => {
               if (val === "fetch_template") {
-                getList(`recete/${formData?.LABRECETEKODU + "." + atisNo}`);
+                getList(
+                  `recete/${formData?.LABRECETEKODU + "." + atisNo?.ATISNO}`
+                );
               }
               setOpenPoUp(null);
             }}
@@ -398,8 +408,9 @@ export const LabModalTables = ({
           <TemplateForm
             formData={{
               ...formData,
-              LABRECETEKODU: formData?.LABRECETEKODU + "." + atisNo,
+              LABRECETEKODU: formData?.LABRECETEKODU + "." + atisNo?.ATISNO,
             }}
+            atisId={atisNo?.LABRECETEATISID}
             getList={(val: string) => {
               getList(val);
             }}

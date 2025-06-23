@@ -11,11 +11,13 @@ export const TemplateForm = ({
   formData,
   getList,
   getDetey,
+  atisId,
 }: {
   handleActions: () => void;
   formData: any;
   getList: (link: string) => void;
   getDetey: () => void;
+  atisId: number;
 }) => {
   const { control, handleSubmit, setValue } = useForm<any>({
     mode: "onSubmit",
@@ -26,10 +28,13 @@ export const TemplateForm = ({
     },
     getDetey,
   });
+  console.log("formData", formData);
+
   const onSubmit = (data: any) => {
     const params: any = {};
     params.RECETEID = formData.LABRECETEKODU;
     params.newReceteId = data.RECETEID;
+    params.atisId = atisId;
     params.ADI = formData.ADI;
 
     params.RECETETURUADI = formData.RECETETURUADI;

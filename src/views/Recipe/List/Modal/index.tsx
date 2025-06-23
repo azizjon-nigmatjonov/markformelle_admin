@@ -341,7 +341,7 @@ export const ModalUIRecipe = ({
                   </InputFieldUI>
                 </div>
                 <div className="space-y-2">
-                  <InputFieldUI title={t("RENKDERINLIGIID")}>
+                  <InputFieldUI title="RENKDERINLIGIID">
                     <LiteOptionsTable
                       name="RENKDERINLIGIID"
                       link="renkderinligi"
