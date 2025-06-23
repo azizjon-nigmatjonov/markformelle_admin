@@ -23,6 +23,7 @@ export const FormFirst = ({
   setValue,
 }: Props) => {
   const [CurrentReceteAsamaId, setCurrentReceteAsamaId] = useState<number>(0);
+  console.log("CurrentReceteAsamaId", CurrentReceteAsamaId);
 
   return (
     <div className="space-y-2">

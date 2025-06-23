@@ -1,8 +1,3 @@
-import { useEffect, useState } from "react";
-import { useFetchTypeSingle } from "../../../../../hooks/useFetchRequests/useFetchType";
-import CNewModal from "../../../../../components/CElements/CNewModal";
-import { ModalUIRecipe } from "../../../../Recipe/List/Modal";
-
 export const AskTemplate = ({
   handleActions,
 }: {
@@ -12,18 +7,18 @@ export const AskTemplate = ({
     <>
       <div>
         <ul>
-          <li className="border-b px-2 py-1">
+          <li className="border-b px-3 py-2">
             <button>Bu Atisin Kapyasini Olustur</button>
           </li>
           <li
             onClick={() => {
               handleActions("fetch_template");
             }}
-            className="border-b px-2 py-1"
+            className="border-b px-3 py-2"
           >
             <button>Sablondan Uretim Recetesi Olustur</button>
           </li>
-          <li className="px-2 py-1">
+          <li className="px-3 py-2">
             <button>Uretim Recetesi Olustur</button>
           </li>
         </ul>

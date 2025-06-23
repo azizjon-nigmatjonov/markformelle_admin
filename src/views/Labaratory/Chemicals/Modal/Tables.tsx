@@ -409,6 +409,8 @@ export const LabModalTables = ({
         <CNewMiniModal title="Sablon Recete Secimi">
           <TemplateForm
             handleActions={() => {
+              console.log("222");
+
               setOpenNewModal("");
             }}
           />

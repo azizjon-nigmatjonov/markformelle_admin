@@ -22,7 +22,6 @@ export const LabChemicals = () => {
     TableData({
       filterParams,
     });
-
   const newHeadColumns = useMemo(() => {
     if (!bodyColumns?.length) return [];
     const obj = { ...bodyColumns?.[0] };

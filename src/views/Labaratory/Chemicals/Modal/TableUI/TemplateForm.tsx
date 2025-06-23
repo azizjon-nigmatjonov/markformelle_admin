@@ -23,7 +23,7 @@ export const TemplateForm = ({
         link="recete"
         required={true}
         renderValue={(_: string, obj: any) => {
-          return obj.LABRECETEKODU;
+          return obj.RECETEID;
         }}
         defaultSearch="SABLON=true"
         headColumns={[
