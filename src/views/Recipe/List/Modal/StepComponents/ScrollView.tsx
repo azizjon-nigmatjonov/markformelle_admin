@@ -100,12 +100,12 @@ const ScrollView = ({
   };
 
   return (
-    <div className="group relative">
+    <div className="group relative w-full">
       <div
         ref={ScrollBody}
-        className="flex items-start overflow-x-scroll remove-scroll py-2 pb-3 pl-5"
+        className="flex items-start overflow-x-scroll remove-scroll py-2 pb-3 pl-5 w-full"
       >
-        <div className="body">
+        <div className="body w-full">
           <DragingEl
             rows={rows}
             headColumns={headColumns}

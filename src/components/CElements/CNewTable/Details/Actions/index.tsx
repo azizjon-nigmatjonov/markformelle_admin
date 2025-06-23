@@ -6,14 +6,12 @@ import {
   EditIcon,
   LockIcon,
 } from "../../../../UI/IconGenerator/Svg";
-import cls from "./style.module.scss";
 import Element from "./Element";
 import { ColorConstants } from "../../../../../constants/website";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { PopoverDelete } from "./EditDelete/PopOver";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
-import { styled } from "@mui/material";
 
 interface Props {
   element: any;
@@ -24,29 +22,9 @@ interface Props {
   currentIndex: any;
   setCurrentIndex: (newIndex?: any) => void;
   selectedItems: number[];
+  anchor: any;
+  setAnchor: (anchor: any) => void;
 }
-
-const PopupBody = styled("div")(
-  ({ theme }) => `
-  width: max-content;
-  padding: 12px 16px;
-  margin: 8px;
-  border-radius: 8px;
-  border: 1px solid ${
-    theme.palette.mode === "dark" ? "var(--gray30)" : "var(--gray30)"
-  };
-  background-color: ${theme.palette.mode === "dark" ? "var(--gray30)" : "#fff"};
-  box-shadow: ${
-    theme.palette.mode === "dark"
-      ? `0px 4px 8px rgb(0 0 0 / 0.7)`
-      : `0px 4px 8px rgb(0 0 0 / 0.1)`
-  };
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-weight: 500;
-  font-size: 0.875rem;
-  z-index: 1;
-`
-);
 
 const TabbleActions = ({
   element,
@@ -57,9 +35,34 @@ const TabbleActions = ({
   checkPermission = [],
   handleActions = () => {},
   setCurrentIndex = () => {},
+  anchor,
+  setAnchor,
 }: Props) => {
   const [deletePopover, setDeletePopover] = useState(false);
-  const [anchor, setAnchor] = useState<null | HTMLElement>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
+  const [popupPosition, setPopupPosition] = useState<"top" | "bottom">(
+    "bottom"
+  );
+
+  const calculatePosition = () => {
+    if (!buttonRef.current) return "bottom";
+
+    const buttonRect = buttonRef.current.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    const popupHeight = 200; // Approximate height of the popup
+
+    // Check if there's enough space below the button
+    const spaceBelow = viewportHeight - buttonRect.bottom;
+    const spaceAbove = buttonRect.top;
+
+    // If there's not enough space below but enough space above, position at top
+    if (spaceBelow < popupHeight && spaceAbove > popupHeight) {
+      return "top";
+    }
+
+    return "bottom";
+  };
+
   const handleClick = (element: any, status?: string, active?: boolean) => {
     if (checkPermission(status)) {
       if (status === "delete") {
@@ -76,9 +79,17 @@ const TabbleActions = ({
     }
   };
 
+  // Calculate position when popup opens
+  useEffect(() => {
+    if (currentIndex === rowIndex || deletePopover) {
+      setPopupPosition(calculatePosition());
+    }
+  }, [currentIndex, rowIndex, deletePopover]);
+
   return (
     <>
-      <button
+      <div
+        ref={buttonRef}
         className={`w-[20px] h-full items-center justify-center flex ml-2 ${
           selectedItems.length ? "invisible" : "visible"
         }`}
@@ -86,7 +97,6 @@ const TabbleActions = ({
           setCurrentIndex(rowIndex);
           setAnchor(anchor ? null : event.currentTarget);
         }}
-        type="button"
       >
         <div
           className={`group-hover:visible flex ${
@@ -97,80 +107,82 @@ const TabbleActions = ({
         >
           <DotsVerticalIcon fill="black" />
         </div>
-      </button>
-      <BasePopup
-        id={currentIndex === rowIndex ? "simple-popup" : undefined}
-        open={currentIndex === rowIndex && !deletePopover}
-        anchor={anchor}
-        style={{
-          left: "65px",
-          top: "-8px",
-          padding: 0,
-          zIndex: 99,
-        }}
-      >
-        <PopupBody>
-          <div className={`relative z-[99] ${cls.card}`}>
-            <Element
-              text="freez"
-              active={element?.is_freez && checkPermission("freez")}
-              onClick={() => handleClick(element, "freez", element?.is_freez)}
-              icon={
-                <LockIcon
-                  fill={element?.is_freez ? "var(--main)" : ColorConstants.gray}
-                />
-              }
-              show={actions.includes("freez")}
-            />
-            <Element
-              text="edit"
-              active={element?.is_edit && checkPermission("edit")}
-              onClick={() => handleClick(element, "edit", element.is_edit)}
-              icon={
-                <EditIcon
-                  fill={element?.is_edit ? "var(--main)" : ColorConstants.gray}
-                />
-              }
-              show={actions.includes("edit")}
-            />
-            <Element
-              text="sellect_more"
-              active={
-                element?.is_sellect_more && checkPermission("sellect_more")
-              }
-              onClick={() =>
-                handleClick(element, "sellect_more", element.is_sellect_more)
-              }
-              icon={
-                <CheckCircleOutlineIcon
-                  style={{
-                    color: element?.is_sellect_more
-                      ? "var(--main)"
-                      : ColorConstants.gray,
-                    width: 18,
-                  }}
-                />
-              }
-              border={true}
-              show={actions.includes("delete")}
-            />
-            <Element
-              text="delete"
-              active={element?.is_delete && checkPermission("delete")}
-              onClick={() => handleClick(element, "delete", element.is_delete)}
-              icon={
-                <DeleteIcon
-                  fill={
-                    element?.is_delete ? "var(--main)" : ColorConstants.gray
-                  }
-                />
-              }
-              border={false}
-              show={actions.includes("delete")}
-            />
+      </div>
+      {currentIndex === rowIndex && (
+        <div
+          className={`absolute left-0 z-[99] ${
+            rowIndex > 7 ? "bottom-5" : "top-5"
+          }`}
+        >
+          <div className="bg-white rounded-[8px] border border-[var(--gray30)] shadow-2xl">
+            <div className={`relative z-[99]`}>
+              <Element
+                text="freez"
+                active={element?.is_freez && checkPermission("freez")}
+                onClick={() => handleClick(element, "freez", element?.is_freez)}
+                icon={
+                  <LockIcon
+                    fill={
+                      element?.is_freez ? "var(--main)" : ColorConstants.gray
+                    }
+                  />
+                }
+                show={actions.includes("freez")}
+              />
+              <Element
+                text="edit"
+                active={element?.is_edit && checkPermission("edit")}
+                onClick={() => handleClick(element, "edit", element.is_edit)}
+                icon={
+                  <EditIcon
+                    fill={
+                      element?.is_edit ? "var(--main)" : ColorConstants.gray
+                    }
+                  />
+                }
+                show={actions.includes("edit")}
+              />
+              <Element
+                text="sellect_more"
+                active={
+                  element?.is_sellect_more && checkPermission("sellect_more")
+                }
+                onClick={() =>
+                  handleClick(element, "sellect_more", element.is_sellect_more)
+                }
+                icon={
+                  <CheckCircleOutlineIcon
+                    style={{
+                      color: element?.is_sellect_more
+                        ? "var(--main)"
+                        : ColorConstants.gray,
+                      width: 18,
+                    }}
+                  />
+                }
+                border={true}
+                show={actions.includes("delete")}
+              />
+              <Element
+                text="delete"
+                active={element?.is_delete && checkPermission("delete")}
+                onClick={() =>
+                  handleClick(element, "delete", element.is_delete)
+                }
+                icon={
+                  <DeleteIcon
+                    fill={
+                      element?.is_delete ? "var(--main)" : ColorConstants.gray
+                    }
+                  />
+                }
+                border={false}
+                show={actions.includes("delete")}
+              />
+            </div>
           </div>
-        </PopupBody>
-      </BasePopup>
+        </div>
+      )}
 
       <BasePopup
         id={deletePopover ? "simple-popup" : undefined}
@@ -178,19 +190,22 @@ const TabbleActions = ({
         anchor={anchor}
         style={{
           left: "75px",
-          top: "0px",
+          top:
+            popupPosition === "bottom"
+              ? "0px"
+              : `-${(buttonRef.current?.offsetHeight || 0) + 150}px`,
           padding: 0,
           zIndex: 99,
         }}
       >
-        <PopupBody>
+        <div className="bg-white rounded-[8px] border border-[var(--gray30)] shadow-2xl">
           <PopoverDelete
             closePopover={(status) => {
               setDeletePopover(false);
               if (status) handleActions(element, status);
             }}
           />
-        </PopupBody>
+        </div>
       </BasePopup>
     </>
   );

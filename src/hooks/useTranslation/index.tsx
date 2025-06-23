@@ -4,8 +4,10 @@ export const useTranslationHook = () => {
   const { t } = useTranslation();
 
   const tr = (key: any) => {
-    if (!key) return "";
-    if (t(key)) return t(key);
+    if (!key) return " ";
+
+    const translation = t(key);
+    if (translation && translation !== key) return translation;
 
     return key;
   };

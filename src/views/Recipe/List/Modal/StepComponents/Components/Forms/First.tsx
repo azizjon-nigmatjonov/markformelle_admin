@@ -5,7 +5,6 @@ import {
 } from "../../../../../../../components/UI/Options/LiteTable";
 import CImageViewer from "../../../../../../../components/CElements/CImageViewer";
 import { API_URL } from "../../../../../../../utils/env";
-import { useState } from "react";
 
 interface Props {
   changeGroup: (group: string) => void;
@@ -22,8 +21,7 @@ export const FormFirst = ({
   control,
   setValue,
 }: Props) => {
-  const [CurrentReceteAsamaId, setCurrentReceteAsamaId] = useState<number>(0);
-  console.log("CurrentReceteAsamaId", CurrentReceteAsamaId);
+  // const [CurrentReceteAsamaId, setCurrentReceteAsamaId] = useState<number>(0);
 
   return (
     <div className="space-y-2">
@@ -36,6 +34,7 @@ export const FormFirst = ({
           { id: "RECETEASAMAID", title: "ID", width: 50 },
           { id: "ADI", title: "FIRMAADI", width: 300 },
         ]}
+        staticSearchID="RECETEASAMAID"
         renderValue={(_: string, obj: any) => {
           return obj.RECETEASAMAID && obj.ADI
             ? obj.RECETEASAMAID + " - " + obj.ADI
@@ -46,7 +45,7 @@ export const FormFirst = ({
         // }
         handleSelect={(obj: TableItem) => {
           setValue("RECETEASAMAID", obj.RECETEASAMAID);
-          setCurrentReceteAsamaId(obj.RECETEASAMAID || 0);
+          // setCurrentReceteAsamaId(obj.RECETEASAMAID || 0);
           changeGroup("group1");
         }}
         disabled={disabledFirstGroup}
@@ -61,8 +60,11 @@ export const FormFirst = ({
           { id: "RECETEGRAFIKID", title: "RECETEGRAFIKID", width: 120 },
           { id: "ADI", title: "ADI", width: 160 },
         ]}
+        staticSearchID="RECETEGRAFIKID"
         renderValue={(_: string, obj: any) => {
-          return obj.RECETEGRAFIKID;
+          return obj.RECETEGRAFIKID && obj.ADI
+            ? obj.RECETEGRAFIKID + " - " + obj.ADI
+            : obj.RECETEGRAFIKID;
         }}
         defaultValue={formData?.RECETEGRAFIKID}
         handleSelect={(obj: TableItem) => {

@@ -44,8 +44,6 @@ export const FormSecond = ({
             : ""
         }
         handleSelect={(obj: TableItem) => {
-          console.log("2222");
-
           setValue("RECETEALTASAMAID", obj.RECETEALTASAMAID);
           changeGroup("group2");
         }}

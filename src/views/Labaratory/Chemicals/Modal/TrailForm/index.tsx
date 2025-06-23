@@ -136,20 +136,20 @@ export const TrailForm = ({
         <Alert severity="info">{materialData?.HAMADI}</Alert>
         <div className="grid grid-cols-1 gap-y-2">
           <LiteOptionsTable
-            name="ASAMAID"
-            label="ASAMAID"
-            placeholder="RECETEASAMAID"
-            link="asama"
+            name="RECETEASAMAID"
+            label="RECETE ASAMA ID"
+            link="receteasama"
             renderValue={(_: string, obj: any) => {
-              return obj.ADI || obj.ASAMAID;
+              return obj.RECETEASAMAID + " - " + obj.ADI;
             }}
             defaultValue={trailFormData?.RECETEASAMAADI}
             headColumns={[
-              { id: "ASAMAID", title: "ASAMAID", width: 80 },
-              { id: "ADI", title: "ADI", width: 150 },
+              { id: "RECETEASAMAID", title: "ID", width: 40 },
+              { id: "ADI", title: "ADI" },
             ]}
-            handleSelect={(obj: { ASAMAID: number; ADI: string }) => {
-              setValue("ASAMAID", obj.ASAMAID);
+            handleSelect={(obj: { RECETEASAMAID: number }) => {
+              setValue("ASAMAID", obj.RECETEASAMAID);
+              setValue("RECETEASAMAID", obj.RECETEASAMAID);
             }}
             required={true}
             focused

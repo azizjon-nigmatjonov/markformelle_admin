@@ -117,7 +117,6 @@ export const DetailForm = ({
           <LiteOptionsTable
             name="URUNID"
             label={t("URUNID")}
-            placeholder={t("URUNID")}
             link="urun"
             required
             focused
@@ -152,7 +151,6 @@ export const DetailForm = ({
             label="MIKTARYUZDE %"
             type="number"
             required
-            placeholder="MIKTARYUZDE"
           />
 
           <div className="grid grid-cols-3 gap-x-2">
@@ -161,7 +159,6 @@ export const DetailForm = ({
               control={control}
               disabled
               setValue={setValue}
-              placeholder="BIRIMFIYAT"
               label="BIRIMFIYAT"
             />
 
@@ -170,7 +167,6 @@ export const DetailForm = ({
               control={control}
               disabled
               setValue={setValue}
-              placeholder="DOVIZID"
               label="DOVIZID"
             />
             <HFTextField
@@ -178,7 +174,6 @@ export const DetailForm = ({
               control={control}
               disabled
               setValue={setValue}
-              placeholder="URUNBIRIMID"
               label="URUNBIRIMID"
             />
           </div>
@@ -189,7 +184,6 @@ export const DetailForm = ({
           <textarea
             className="p-3 h-[110px] transparent border border-[var(--border)] outline-none focus:border-[var(--primary)] resize-none rounded-[8px] w-full"
             rows={3}
-            placeholder={t("NOTU")}
             defaultValue={getValues("NOTU")}
             onChange={(e: any) => setValue("NOTU", e.target.value)}
           ></textarea>

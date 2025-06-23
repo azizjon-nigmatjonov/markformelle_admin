@@ -2,9 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { IFilterParams } from "../../interfaces";
 import { useQuery } from "react-query";
-import toast from "react-hot-toast";
 const API_URL = import.meta.env.VITE_TEST_URL;
-import { useErrCapture } from "./useErrCapture";
 export const useFetchType = () => {
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
@@ -38,25 +36,32 @@ export const useFetchType = () => {
   };
 };
 
-export const useFetchTypeSingle = () => {
-  const [filterParams, setFilterParams] = useState<Partial<any>>({ link: "" });
-  const { errorCaptureFn } = useErrCapture();
-  const { data: bodyData, isLoading }: any = useQuery(
-    [`GET_FETCH_TYPE_${filterParams.link}_SINGLE`, filterParams.link],
-    () => {
-      return axios.get(`${API_URL}/${filterParams.link}`);
-    },
-    {
-      enabled: !!filterParams?.link,
-      onError: (err: any) => {
-        toast.error(errorCaptureFn(err));
-      },
-    }
-  );
+export const useFetchTypeSingle = ({
+  setOpenNewModal,
+}: {
+  setOpenNewModal: (val: string) => void;
+}) => {
+  const [data, setData] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const getList = (link: string) => {
+    setIsLoading(true);
+    axios
+      .get(`${API_URL}/${link}`)
+      .then((res) => {
+        setData(res.data);
+        setOpenNewModal("template_ready");
+      })
+      .catch(() => {
+        setOpenNewModal("template_not_ready");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
   return {
-    data: bodyData?.data,
-    setFilterParams,
-    filterParams,
+    data: data,
+    getList,
     isLoading,
   };
 };

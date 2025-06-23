@@ -17,7 +17,6 @@ import { DetailFormLogic } from "./DetailForm/Logic";
 import { PopupUI } from "../../../../components/UI/PopupUI";
 import { AskTemplate } from "./TableUI/AskTemplate";
 import { useFetchTypeSingle } from "../../../../hooks/useFetchRequests/useFetchType";
-import CNewModal from "../../../../components/CElements/CNewModal";
 import { ModalUIRecipe } from "../../../Recipe/List/Modal";
 import { TemplateForm } from "./TableUI/TemplateForm";
 
@@ -53,11 +52,11 @@ export const LabModalTables = ({
     id: formId,
     idTable: idTable,
   });
-  const {
-    data: templateData,
-    setFilterParams: setTemplateFilterParams,
-    filterParams: templateFilterParams,
-  } = useFetchTypeSingle();
+  const { data: templateData, getList } = useFetchTypeSingle({
+    setOpenNewModal,
+  });
+  const [refetchStatus, setRefetchStatus] = useState(false);
+
   const { detailData, refetch: refetchDetailTable } = DetailTableLogic({
     id: formId,
     idTable: idTrail,
@@ -217,18 +216,6 @@ export const LabModalTables = ({
     if (tableData?.data?.length) setBodyData(tableData.data);
   }, [tableData]);
 
-  useEffect(() => {
-    console.log("templateData", templateData, templateFilterParams);
-
-    if (templateFilterParams?.link) {
-      if (templateData?.RECETEID) {
-        setOpenNewModal("template_ready");
-      } else {
-        setOpenNewModal("template_not_ready");
-      }
-    }
-  }, [templateData, templateFilterParams?.link]);
-
   return (
     <>
       <div className="grid grid-cols-3 gap-x-2">
@@ -373,9 +360,7 @@ export const LabModalTables = ({
           <AskTemplate
             handleActions={(val: string) => {
               if (val === "fetch_template") {
-                setTemplateFilterParams({
-                  link: `recete/${formData?.LABRECETEKODU + "." + atisNo}`,
-                });
+                getList(`recete/${formData?.LABRECETEKODU + "." + atisNo}`);
               }
               setOpenPoUp(null);
             }}
@@ -383,34 +368,45 @@ export const LabModalTables = ({
         </PopupUI>
       )}
 
-      {openNewModal === "template_ready" && (
-        <CNewModal
-          title="creating_recipe"
-          handleActions={() => {}}
-          defaultData={{
-            id: templateData?.RECETEID,
+      {openModal.includes("card") || openNewModal === "template_ready" ? (
+        <ModalUIRecipe
+          defaultData={templateData}
+          changed={""}
+          setChanged={() => {}}
+          askAction={""}
+          open={openModal}
+          setOpen={(arr: string[]) => {
+            if (arr.length === 0) {
+              setOpenNewModal("");
+            }
+            setOpenModal(arr);
           }}
-          innerModal={true}
-          disabled="big"
-        >
-          <ModalUIRecipe
-            defaultData={templateData}
-            changed={""}
-            setChanged={() => {}}
-            askAction={""}
-            open={openModal}
-            setOpen={setOpenModal}
-            setAskAction={() => {}}
-          />
-        </CNewModal>
+          refetchStatus={refetchStatus}
+          setAskAction={() => {}}
+        />
+      ) : (
+        ""
       )}
 
       {openNewModal === "template_not_ready" && (
-        <CNewMiniModal title="Sablon Recete Secimi">
+        <CNewMiniModal
+          title="Sablon Recete Secimi"
+          handleActions={() => {
+            setOpenNewModal("");
+          }}
+        >
           <TemplateForm
+            formData={{
+              ...formData,
+              LABRECETEKODU: formData?.LABRECETEKODU + "." + atisNo,
+            }}
+            getList={(val: string) => {
+              getList(val);
+            }}
+            getDetey={() => {
+              setRefetchStatus(true);
+            }}
             handleActions={() => {
-              console.log("222");
-
               setOpenNewModal("");
             }}
           />

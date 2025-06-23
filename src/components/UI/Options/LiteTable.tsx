@@ -46,6 +46,7 @@ interface LiteTableOptionsProps<T extends BaseTableItem = TableItem> {
   defaultSearch?: string;
   staticSearchID?: string;
   staticOptions?: T[];
+  defaultFilters?: string;
   popupUI?: React.ReactNode;
 }
 
@@ -93,7 +94,7 @@ const SearchInput = memo(
         render={({ field: { onChange, value }, fieldState: { error } }) => (
           <div className={`relative w-full ${open ? "z-[99]" : ""}`}>
             <input
-              value={search || value || ""}
+              value={search ?? value ?? ""}
               type="text"
               onBlur={() => {
                 setOpen(false);
@@ -211,6 +212,7 @@ export const LiteOptionsTable = memo(
     staticSearchID = "",
     staticOptions = [],
     popupUI = null,
+    defaultFilters = "",
   }: LiteTableOptionsProps<T>) => {
     const [searchName, setSearchName] = useState(staticSearchID || name);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -228,6 +230,9 @@ export const LiteOptionsTable = memo(
       (value: string) => {
         let fetchName = name;
 
+        if (!value) {
+          return;
+        }
         if (staticOptions.length && !data?.data?.length) {
           if (staticSearchID) fetchName = staticSearchID;
           const newArr = staticOptions.filter((item) =>
@@ -283,10 +288,12 @@ export const LiteOptionsTable = memo(
         if (renderValue) {
           val = renderValue(
             name,
-            el?.[name] ? el : ({ [name]: defaultValue } as T)
+            el?.[name] || el?.[name] == "0"
+              ? el
+              : ({ [name]: defaultValue } as T)
           );
         } else {
-          val = el?.[name] || defaultValue;
+          val = el?.[name] ?? defaultValue;
         }
         setSearch(val);
       },
@@ -353,10 +360,16 @@ export const LiteOptionsTable = memo(
     }, [defaultSearch, link, setFilterParams, search]);
 
     useEffect(() => {
-      if (defaultValue && !search) {
+      if (defaultFilters) {
+        setFilterParams((prev) => ({ ...prev, link, q: defaultFilters }));
+      }
+    }, [defaultFilters]);
+
+    useEffect(() => {
+      if (defaultValue) {
         setCurrentValue();
       }
-    }, [defaultValue, setCurrentValue, search]);
+    }, [defaultValue, setCurrentValue]);
 
     useEffect(() => {
       if (data?.data?.length && defaultSearch && !search) {

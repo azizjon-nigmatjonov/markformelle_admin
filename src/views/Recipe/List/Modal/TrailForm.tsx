@@ -61,26 +61,18 @@ export const TrailForm = ({
           label={t("ATISNO")}
           type="number"
           required={true}
-          placeholder={t("ATISNO")}
         />
-        <HFSelect
-          control={control}
-          name="MIGRASYUN"
-          label={t("MIGRASYUN")}
-          placeholder={t("MIGRASYUN")}
-        />
+        <HFSelect control={control} name="MIGRASYUN" label={t("MIGRASYUN")} />
 
         <HFTextField
           control={control}
           name="GIDISTARIHI"
           required={true}
           label={t("GIDISTARIHI")}
-          placeholder={t("GIDISTARIHI")}
         />
         <SelectOptionsTable
           name="RECETEASAMA"
           label={t("RECETEASAMA")}
-          placeholder={t("RECETEASAMA")}
           options={[]}
           required={true}
           headColumns={[
@@ -102,7 +94,6 @@ export const TrailForm = ({
           name="TARIHI"
           required={true}
           label={t("TARIHI")}
-          placeholder={t("TARIHI")}
         />
         <HFInputMask
           control={control}
@@ -110,7 +101,6 @@ export const TrailForm = ({
           label={t("BOYAMILYETU")}
           type="number"
           required={true}
-          placeholder={t("BOYAMILYETU")}
         />
         <HFInputMask
           control={control}
@@ -118,7 +108,6 @@ export const TrailForm = ({
           label={t("BOYAYUZDESI")}
           type="number"
           required={true}
-          placeholder={t("BOYAYUZDESI")}
         />
         <div>
           <CLabel title={t("Okey")} />

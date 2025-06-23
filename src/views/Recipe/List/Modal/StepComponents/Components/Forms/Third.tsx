@@ -75,7 +75,6 @@ export const FormThird = ({
             handleSelect={(obj: TableItem) => {
               setValue("URUNID", obj.URUNID);
               changeGroup("group3");
-              console.log("11111");
 
               setFilterParams({ ...filterParams, q: `URUNID=${obj.URUNID}` });
             }}

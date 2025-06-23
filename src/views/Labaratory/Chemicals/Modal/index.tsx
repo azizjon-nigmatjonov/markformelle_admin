@@ -8,7 +8,6 @@ import { LabModalTables } from "./Tables";
 import { InputFields } from "./Components/InputFields";
 import { GetCurrentDate } from "../../../../utils/getDate";
 import { ColorMaterial } from "./Components/ColorMaterial";
-import CNewModal from "../../../../components/CElements/CNewModal";
 import dayjs from "dayjs";
 import { SubmitButton } from "../../../../components/UI/FormButtons/SubmitButton";
 import { Validation } from "./Validation";
@@ -19,18 +18,14 @@ const schema = Validation;
 interface ModalUIProps {
   defaultData?: ModalTypes;
   handleModalActions: (val: string, val2: string) => void;
-  modalInitialData: any;
-  open: boolean;
   askClose: string;
   refetchTable: () => void;
   setAskClose: (val: string) => void;
 }
 
 export const ModalUI = ({
-  open = false,
   defaultData = {},
   handleModalActions,
-  modalInitialData = [],
   askClose,
   setAskClose,
   refetchTable,
@@ -84,6 +79,7 @@ export const ModalUI = ({
     setFormId,
     urunId: formId || defaultData?.LABRECETEID,
     refetchTable,
+    defaultData,
     handleModalActions: handleModalActionsFn,
   });
 
@@ -182,102 +178,78 @@ export const ModalUI = ({
     if (defaultData?.LABRECETEID) setFormId(defaultData.LABRECETEID);
   }, [defaultData, disabled]);
 
-  const handleModal = (status: string, id: string) => {
-    handleModalActionsFn(status, id);
-  };
-
   return (
     <>
-      {open ? (
-        <CNewModal
-          title={t(
-            modalInitialData.LABRECETEID ? "updating_lab" : "creating_lab"
-          )}
-          handleActions={handleModal}
-          defaultData={{
-            id: modalInitialData?.LABRECETEID,
-          }}
-          disabled="big"
-        >
-          <form
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-              }
-            }}
-            onSubmit={handleSubmit(onSubmit)}
-            className="mb-5"
+      <form
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+          }
+        }}
+        onSubmit={handleSubmit(onSubmit)}
+        className="mb-5"
+      >
+        <div className="pb-5">
+          <div
+            className={`grid grid-cols-3 gap-x-5 border-b border-[var(--border)] pb-5`}
           >
-            <div className="pb-5">
-              <div
-                className={`grid grid-cols-3 gap-x-5 border-b border-[var(--border)] pb-5`}
-              >
-                <div>
-                  <InputFieldUI title={t("LABRECETEKODU")} disabled={disabled}>
-                    <LiteOptionsTable
-                      name="LABRECETEKODU"
-                      placeholder={t("LABRECETEKODU")}
-                      link="labrecete"
-                      required={true}
-                      renderValue={(_: string, obj: any) => {
-                        return obj.LABRECETEKODU;
-                      }}
-                      defaultValue={formData?.LABRECETEKODU}
-                      headColumns={[
-                        { id: "LABRECETEID", title: "LABRECETEID", width: 110 },
-                        {
-                          title: "LABRECETEKODU",
-                          id: "LABRECETEKODU",
-                          width: 150,
-                        },
-                      ]}
-                      handleSelect={(obj: {
-                        ADI: string;
-                        LABRECETEID: number;
-                      }) => {
-                        setValue("LABRECETEKODU", obj.ADI);
-                        setFormId(obj.LABRECETEID);
-                      }}
-                      control={control}
-                    />
-                  </InputFieldUI>
-                </div>
-                <ColorMaterial PANTONEKODU={formData.PANTONEKODU} />
-                <div className="flex justify-end">
-                  <div className="w-[200px]">
-                    <SubmitButton
-                      uniqueID={uniqueID}
-                      type={formId ? "update" : "create"}
-                      handleActions={(val: string, uniqueID: string) => {
-                        if (uniqueID === "main_table_lab") {
-                          if (val === "Close")
-                            handleModalActionsFn("close", "");
-                          if (val === "Enter") handleSubmit(onSubmit)();
-                        }
-                      }}
-                    />
-                  </div>
-                </div>
+            <div>
+              <InputFieldUI title="LABRECETEKODU" disabled={disabled}>
+                <LiteOptionsTable
+                  name="LABRECETEKODU"
+                  link="labrecete"
+                  required={true}
+                  renderValue={(_: string, obj: any) => {
+                    return obj.LABRECETEKODU;
+                  }}
+                  defaultValue={formData?.LABRECETEKODU}
+                  headColumns={[
+                    { id: "LABRECETEID", title: "LABRECETEID", width: 110 },
+                    {
+                      title: "LABRECETEKODU",
+                      id: "LABRECETEKODU",
+                      width: 150,
+                    },
+                  ]}
+                  handleSelect={(obj: { ADI: string; LABRECETEID: number }) => {
+                    setValue("LABRECETEKODU", obj.ADI);
+                    setFormId(obj.LABRECETEID);
+                  }}
+                  control={control}
+                />
+              </InputFieldUI>
+            </div>
+            <ColorMaterial PANTONEKODU={formData.PANTONEKODU} />
+            <div className="flex justify-end">
+              <div className="w-[200px]">
+                <SubmitButton
+                  uniqueID={uniqueID}
+                  type={formId ? "update" : "create"}
+                  handleActions={(val: string, uniqueID: string) => {
+                    if (uniqueID === "main_table_lab") {
+                      if (val === "Close") handleModalActionsFn("close", "");
+                      if (val === "Enter") handleSubmit(onSubmit)();
+                    }
+                  }}
+                />
               </div>
             </div>
+          </div>
+        </div>
 
-            <InputFields
-              control={control}
-              setValue={setValue}
-              getValues={getValues}
-              formData={formData}
-            />
-          </form>
-          <LabModalTables
-            disabled={disabled}
-            formId={formId}
-            formData={formData}
-            setUniqueID={setUniqueID}
-          />
-        </CNewModal>
-      ) : (
-        <></>
-      )}
+        <InputFields
+          control={control}
+          setValue={setValue}
+          getValues={getValues}
+          formData={formData}
+        />
+      </form>
+      <LabModalTables
+        disabled={disabled}
+        formId={formId}
+        formData={formData}
+        setUniqueID={setUniqueID}
+      />
 
       <CModal
         open={!!askClose}

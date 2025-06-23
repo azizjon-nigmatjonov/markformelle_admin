@@ -12,12 +12,14 @@ export const ModalTableLogic = ({
   urunId,
   filterParams,
   refetchTable,
+  defaultData,
 }: {
   urunId?: number | string;
   filterParams: IFilterParams;
   refetchTable: () => void;
   setFormId: (val: number) => void;
   handleModalActions?: (val: string, val2: string) => void;
+  defaultData?: any;
 }) => {
   const { t } = useTranslationHook();
   const [bodyData, setBodyData]: any = useState({});
@@ -118,7 +120,7 @@ export const ModalTableLogic = ({
     createForm,
     deleteFn,
     testForm,
-    formData: formData ?? {},
+    formData: formData?.LABRECETEKODU ? formData : defaultData,
   };
 };
 
@@ -273,7 +275,7 @@ export const TableHeadersLogic = () => {
         id: "HAMADI",
         width: 105,
         render: (val: string) => {
-          return <p>{val}</p>;
+          return <span>{val}</span>;
         },
       },
 
@@ -371,7 +373,7 @@ export const TableHeadersLogic = () => {
         id: "BIRIM",
         width: 50,
         render: () => {
-          return <p>%</p>;
+          return <span>%</span>;
         },
       },
       {

@@ -84,7 +84,7 @@ export const TableUI = ({
 
         <div className={`${cls.body} w-full`}>
           {isLoading ? (
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center h-[100px]">
               <CircularProgress />
             </div>
           ) : bodyColumns?.length ? (

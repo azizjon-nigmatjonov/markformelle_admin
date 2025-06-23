@@ -74,20 +74,20 @@ export const DragHeader = ({
 
   return (
     <div className="flex justify-between items-center">
+      <div>
+        <ExcelDownload
+          title={"excel_steps"}
+          data={ExcelData}
+          allColumns={ExcelData}
+          defaultExcelFields={Fields}
+          disabled={false}
+          type="directly"
+          label={
+            <span className="text-sm uppercase">{t("download_excel")}</span>
+          }
+        />
+      </div>
       <div className="flex space-x-8 items-center font-medium">
-        <div>
-          <ExcelDownload
-            title={"excel_steps"}
-            data={ExcelData}
-            allColumns={ExcelData}
-            defaultExcelFields={Fields}
-            disabled={false}
-            type="directly"
-            label={
-              <span className="text-sm uppercase">{t("download_excel")}</span>
-            }
-          />
-        </div>
         <Tooltip title={t("delete_sellected_elements")} placement="bottom">
           <button
             onClick={() => handleDelete()}
@@ -109,8 +109,8 @@ export const DragHeader = ({
                 checkedList.length
                   ? "delete_elements"
                   : deleteStep
-                  ? "cancel_select"
-                  : "select_delete"
+                  ? "cancel"
+                  : "sellect"
               )}
             </span>
           </button>

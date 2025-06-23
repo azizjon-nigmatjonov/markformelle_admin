@@ -3,7 +3,7 @@ import Backend from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
 import axios from "axios";
-import { TranslationsObject } from "./constants/translations";
+// import { TranslationsObject } from "./constants/translations";
 
 i18next
   .use(Backend)
@@ -35,11 +35,6 @@ i18next
         //     newObj[KEYWORD] = KEYWORD;
         //   }
         // }
-
-        callback(null, {
-          data: TranslationsObject,
-          status: 200,
-        });
 
         try {
           const res = await axios.get(url);

@@ -7,9 +7,13 @@ const API_URL = import.meta.env.VITE_TEST_URL;
 export const ModalTableLogic = ({
   setFormId,
   urunId,
+  setOpen,
+  defaultData,
 }: {
   urunId?: string;
   setFormId: (val: string) => void;
+  setOpen: (val: string[]) => void;
+  defaultData?: any;
 }) => {
   const { t } = useTranslationHook();
 
@@ -28,7 +32,7 @@ export const ModalTableLogic = ({
   const createForm = async (params: {}) => {
     try {
       const { data } = await axios.post(`${API_URL}/recete/`, params);
-
+      toast.success(t("created!"));
       setFormId(data?.URUNID);
       return data;
     } catch (error) {
@@ -42,6 +46,7 @@ export const ModalTableLogic = ({
     try {
       const { data } = await axios.put(`${API_URL}/recete/${id}`, params);
       refetch();
+      toast.success(t("updated!"));
       return data;
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
@@ -49,17 +54,18 @@ export const ModalTableLogic = ({
     }
   };
 
-  const deleteFn = async (id: string[]) => {
+  const deleteForm = async (id: string[]) => {
     try {
-      await axios.delete(`${API_URL}/urunbirim/`, {
+      await axios.delete(`${API_URL}/recete/`, {
         method: "DELETE",
-        url: `${API_URL}/urunbirim/`,
+        url: `${API_URL}/recete/`,
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         data: id,
       });
+      setOpen([]);
       toast.success(t("deleted_successfully"));
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
@@ -70,9 +76,9 @@ export const ModalTableLogic = ({
   return {
     updateForm,
     createForm,
-    deleteFn,
+    deleteForm,
     testForm,
-    formData: formData?.data ?? {},
+    formData: formData?.data?.RECETEID ? formData?.data : defaultData,
   };
 };
 

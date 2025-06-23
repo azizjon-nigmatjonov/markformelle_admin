@@ -147,7 +147,7 @@ export const MaterialForm = ({
             return obj.DOVIZID || obj.CINSI;
           }}
           link="doviz"
-          defaultValue={materialFormData?.DOVIZID}
+          defaultValue={materialFormData?.DOVIZID || "USD"}
           headColumns={[
             { id: "CINSI", title: "CINSI", width: 60 },
             { id: "DOVIZID", title: "DOVIZID", width: 80 },
@@ -165,7 +165,7 @@ export const MaterialForm = ({
           label="CALISMATARIHI"
           placeholder="CALISMATARIHI"
           format="DD.MM.YYYY"
-          defaultValue={materialFormData?.CALISMATARIHI}
+          defaultValue={materialFormData?.CALISMATARIHI || dayjs()}
         />
       </div>
       <SubmitCancelButtons

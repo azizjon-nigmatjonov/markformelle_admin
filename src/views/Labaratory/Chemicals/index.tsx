@@ -8,6 +8,7 @@ import { useTranslationHook } from "../../../hooks/useTranslation";
 import { ModalUI } from "./Modal";
 import { ModalTypes } from "./interfaces";
 import { PantoneColors } from "../../../constants/pantone";
+import CNewModal from "../../../components/CElements/CNewModal";
 
 export const LabChemicals = () => {
   const { t } = useTranslationHook();
@@ -103,6 +104,7 @@ export const LabChemicals = () => {
 
       setModalInitialData({
         LABRECETEID: el?.LABRECETEID,
+        ...el,
       });
     }
 
@@ -135,6 +137,15 @@ export const LabChemicals = () => {
 
   const handleModalActions = (status: string, id: string) => {
     if (status === "delete") deleteFn([id]);
+  };
+
+  const handleModal = (status: string, id: string) => {
+    // This will be passed to ModalUI
+    if (status === "delete") {
+      deleteFn([id]);
+    } else if (status === "close") {
+      setOpen(false);
+    }
   };
 
   return (
@@ -173,15 +184,28 @@ export const LabChemicals = () => {
         />
       </div>
 
-      <ModalUI
-        defaultData={modalInitialData}
-        modalInitialData={modalInitialData}
-        handleModalActions={handleModalActions}
-        open={open}
-        askClose={askClose}
-        setAskClose={askCloseFn}
-        refetchTable={refetchTable}
-      />
+      {open ? (
+        <CNewModal
+          title={t(
+            modalInitialData.LABRECETEID ? "updating_lab" : "creating_lab"
+          )}
+          handleActions={handleModal}
+          defaultData={{
+            id: modalInitialData?.LABRECETEID,
+          }}
+          disabled="big"
+        >
+          <ModalUI
+            defaultData={modalInitialData}
+            handleModalActions={handleModalActions}
+            askClose={askClose}
+            setAskClose={askCloseFn}
+            refetchTable={refetchTable}
+          />
+        </CNewModal>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

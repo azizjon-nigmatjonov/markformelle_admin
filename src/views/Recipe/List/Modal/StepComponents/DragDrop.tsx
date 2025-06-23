@@ -108,24 +108,26 @@ const useDataProcessor = (tableData: any) => {
         ),
       },
       { title: "GR/KG", id: "MIKTAR", width: 60 },
-      { title: "GR/LT", id: "BANYO", width: 60 },
-      { title: "RECETEDETAYID", id: "RECETEDETAYID", width: 120 },
+      { title: "GR/LT", id: "BANYO", width: 70 },
 
-      { title: "URUNBIRIMID", id: "URUNBIRIMID", width: 100 },
-      { title: "INSERTKULLANICIID", id: "INSERTKULLANICIID", width: 140 },
+      { title: "BIRIM", id: "URUNBIRIMADI", width: 50 },
+      { title: "URUNTIPI", id: "URUNTIPIADI", width: 100 },
+      { title: "INSERKULLANICIADI", id: "INSERKULLANICIADI", width: 140 },
       {
         title: "INSERTTARIHI",
         id: "INSERTTARIHI",
         width: 150,
         render: (val: string) => dayjs(val).format("DD.MM.YYYY HH:mm"),
       },
-      { title: "KULLANICIID", id: "KULLANICIID", width: 100 },
+      { title: "KULLANICIADI", id: "KULLANICIADI", width: 100 },
+
       {
         title: "DEGISIMTARIHI",
         id: "DEGISIMTARIHI",
         width: 120,
         render: (val: string) => dayjs(val).format("DD.MM.YYYY HH:mm"),
       },
+      { title: "RECETEDETAYID", id: "RECETEDETAYID", width: 120 },
     ],
     []
   );

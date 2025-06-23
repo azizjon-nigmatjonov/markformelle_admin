@@ -65,6 +65,7 @@ export const RecipeList = () => {
 
       setModalInitialData({
         RECETEID: el?.RECETEID,
+        ...el,
       });
     }
 

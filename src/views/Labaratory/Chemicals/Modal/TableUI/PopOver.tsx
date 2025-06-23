@@ -16,13 +16,13 @@ export const PopoverDelete = ({
   return (
     <>
       <div className={`relative z-[99] bg-white p-2 ${classes} rounded-[8px]`}>
-        <p className="whitespace-nowrap flex items-start space-x-3">
+        <div className="whitespace-nowrap flex items-start space-x-3">
           <WarningIcon />{" "}
           <div>
             <p className="font-[600] text-sm">{title}</p>
             <p className="text-sm">{text}</p>
           </div>
-        </p>
+        </div>
 
         <div className="flex items-center justify-end space-x-2 mt-2 text-sm">
           <button

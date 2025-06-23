@@ -15,7 +15,7 @@ export const LangDropdown = () => {
 
     setTimeout(() => {
       window.location.reload();
-    }, 100);
+    }, 0);
   };
 
   return (

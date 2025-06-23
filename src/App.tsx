@@ -7,6 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import { persistor, store } from "./store";
 import PageFallback from "./components/UI/PageFallback";
 import Router from "./router";
+import { TranslationProvider } from "./components/TranslationProvider";
 import "./i18next";
 
 function App() {
@@ -17,7 +18,9 @@ function App() {
           <Provider store={store}>
             <PersistGate persistor={persistor}>
               <BrowserRouter>
-                <Router />
+                <TranslationProvider>
+                  <Router />
+                </TranslationProvider>
               </BrowserRouter>
             </PersistGate>
           </Provider>

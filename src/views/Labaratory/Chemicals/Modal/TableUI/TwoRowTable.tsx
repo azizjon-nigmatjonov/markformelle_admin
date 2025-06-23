@@ -205,7 +205,7 @@ export const TwoRowTable = ({
           </div>
 
           <div
-            className={`${cls.body} h-[46%] bg-green-200 w-full`}
+            className={`${cls.body} h-[45%] max-h-[45%] overflow-y-scroll remove-scroll bg-green-200 w-full`}
             style={{ width: headerScrollRef?.current?.scrollWidth + "px" }}
           >
             {bodySource?.okey?.map((item: any, index: number) => (
@@ -276,12 +276,16 @@ export const TwoRowTable = ({
           <div className="h-[6px] w-full"></div>
 
           <div
-            className={`${cls.body} bg-yellow-100 w-full h-[43%] overflow-y-scroll remove-scroll`}
+            className={`${cls.body} bg-yellow-100 w-full h-[43%] max-h-[43%] overflow-y-scroll remove-scroll`}
             style={{ width: headerScrollRef?.current?.scrollWidth + "px" }}
           >
             {bodySource?.okeysiz?.map((item: any, index: number) => (
               <div
                 key={index}
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  handleRightClick(e, item.ATISNO);
+                }}
                 className={`${cls.row} relative ${
                   idTable === item.LABRECETEATISID
                     ? "bg-blue-200"

@@ -55,8 +55,6 @@ const Btn = memo(
 
     const handleClick = useCallback(
       (el: MenuItem) => {
-        console.log("22222");
-
         handleNavigate(el);
       },
       [handleNavigate, el]

@@ -52,8 +52,6 @@ const SidebarComponent = () => {
 
   const handleNavigate = useCallback(
     (obj: any) => {
-      console.log("111");
-
       navigateTo(obj.path);
     },
     [navigateTo]

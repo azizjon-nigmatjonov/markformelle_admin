@@ -121,7 +121,7 @@ export const DragingEl = ({
                       item.checked = !item?.checked;
                       handleCheck(item);
                     }}
-                    className={`w-[18px] mr-2 h-[18px] border border-[var(--main)] rounded-[4px] ml-2 hover:cursor-pointer flex items-center justify-center ${
+                    className={`w-[18px] mr-2 h-[18px] border  border-[var(--main)] rounded-[4px] ml-2 hover:cursor-pointer flex items-center justify-center ${
                       item.checked ? "bg-[var(--main)]" : ""
                     }`}
                   >
@@ -178,9 +178,9 @@ export const DragingEl = ({
                       ></div>
                       <div className="px-2">
                         <p
-                          className={`text-center py-1 rounded-full duration-200 w-[100px] relative bg-blue-200 z-[2] h-full ${
+                          className={`text-center py-1 rounded-full duration-200 whitespace-nowrap min-w-[140px] relative bg-blue-200 z-[2] h-full ${
                             focusedIndex === item.index
-                              ? "bg-blue-300 w-[160px]"
+                              ? "bg-blue-300 min-w-[200px]"
                               : ""
                           }`}
                         >
@@ -196,7 +196,7 @@ export const DragingEl = ({
                   </div>
                 ) : (
                   <div
-                    className={`flex rounded-[8px] ${
+                    className={`flex rounded-[8px] w-full ${
                       focusedIndex === item.index ? "ripple-effect" : ""
                     }`}
                     onDoubleClick={() => {
@@ -214,8 +214,11 @@ export const DragingEl = ({
                       ) => (
                         <div
                           key={index}
-                          style={{ minWidth: column?.width }}
-                          className="cell flex items-center relative z-[2]"
+                          style={{
+                            minWidth: column?.width,
+                            maxWidth: column?.width,
+                          }}
+                          className="cell flex items-center relative z-[2] overflow-hidden"
                         >
                           {editStep && index === 0 && <DragIndicatorIcon />}
                           {column?.render ? (
