@@ -19,7 +19,6 @@ interface ModalUIProps {
   defaultData?: ModalTypes;
   handleModalActions: (val: string, val2: string) => void;
   askClose: string;
-  refetchTable: () => void;
   setAskClose: (val: string) => void;
 }
 
@@ -28,7 +27,6 @@ export const ModalUI = ({
   handleModalActions,
   askClose,
   setAskClose,
-  refetchTable,
 }: ModalUIProps) => {
   const { t } = useTranslationHook();
   const [uniqueID, setUniqueID] = useState("main_table_lab");
@@ -78,7 +76,6 @@ export const ModalUI = ({
     filterParams,
     setFormId,
     urunId: formId || defaultData?.LABRECETEID,
-    refetchTable,
     defaultData,
     handleModalActions: handleModalActionsFn,
   });
@@ -164,6 +161,7 @@ export const ModalUI = ({
   const setInitialFormValues = () => {
     setValue("FIRMAID", "M0868");
     setValue("TALEPTARIHI", dayjs().format("DD.MM.YYYY HH:MM"));
+    setValue("DOVIZID", "USD");
   };
 
   useEffect(() => {

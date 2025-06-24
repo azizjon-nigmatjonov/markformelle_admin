@@ -8,10 +8,9 @@ import {
 } from "../../../../UI/IconGenerator/Svg";
 import Element from "./Element";
 import { ColorConstants } from "../../../../../constants/website";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { PopoverDelete } from "./EditDelete/PopOver";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 
 interface Props {
   element: any;
@@ -40,9 +39,6 @@ const TabbleActions = ({
 }: Props) => {
   const [deletePopover, setDeletePopover] = useState(false);
   const buttonRef = useRef<HTMLDivElement>(null);
-  const [popupPosition, setPopupPosition] = useState<"top" | "bottom">(
-    "bottom"
-  );
 
   const calculatePosition = () => {
     if (!buttonRef.current) return "bottom";
@@ -67,9 +63,6 @@ const TabbleActions = ({
     if (checkPermission(status)) {
       if (status === "delete") {
         setDeletePopover(true);
-        setTimeout(() => {
-          setCurrentIndex(null);
-        }, 0);
       } else {
         if (active) {
           handleActions(element, status);
@@ -78,13 +71,6 @@ const TabbleActions = ({
       }
     }
   };
-
-  // Calculate position when popup opens
-  useEffect(() => {
-    if (currentIndex === rowIndex || deletePopover) {
-      setPopupPosition(calculatePosition());
-    }
-  }, [currentIndex, rowIndex, deletePopover]);
 
   return (
     <>
@@ -108,7 +94,7 @@ const TabbleActions = ({
           <DotsVerticalIcon fill="black" />
         </div>
       </div>
-      {currentIndex === rowIndex && (
+      {currentIndex === rowIndex && !deletePopover && (
         <div
           className={`absolute left-0 z-[99] ${
             rowIndex > 7 ? "bottom-5" : "top-5"
@@ -184,29 +170,24 @@ const TabbleActions = ({
         </div>
       )}
 
-      <BasePopup
-        id={deletePopover ? "simple-popup" : undefined}
-        open={deletePopover}
-        anchor={anchor}
-        style={{
-          left: "75px",
-          top:
-            popupPosition === "bottom"
-              ? "0px"
-              : `-${(buttonRef.current?.offsetHeight || 0) + 150}px`,
-          padding: 0,
-          zIndex: 99,
-        }}
-      >
-        <div className="bg-white rounded-[8px] border border-[var(--gray30)] shadow-2xl">
-          <PopoverDelete
-            closePopover={(status) => {
-              setDeletePopover(false);
-              if (status) handleActions(element, status);
-            }}
-          />
+      {deletePopover && currentIndex === rowIndex ? (
+        <div
+          className={`absolute left-0 z-[99] ${
+            calculatePosition() === "top" ? "bottom-6" : "top-6"
+          }`}
+        >
+          <div className="bg-white rounded-[8px] border border-[var(--gray30)] shadow-2xl">
+            <PopoverDelete
+              closePopover={(status) => {
+                setDeletePopover(false);
+                if (status) handleActions(element, status);
+              }}
+            />
+          </div>
         </div>
-      </BasePopup>
+      ) : (
+        ""
+      )}
     </>
   );
 };

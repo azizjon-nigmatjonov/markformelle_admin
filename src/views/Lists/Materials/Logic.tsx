@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useTranslationHook } from "../../../hooks/useTranslation";
 import { useQuery } from "react-query";
+import { useTranslationHook } from "../../../hooks/useTranslation";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
-export const breadCrumbs = [{ label: "labaratory", link: "/labaratory/list" }];
+export const breadCrumbs = [{ label: "ham", link: "/lists/materials" }];
 
 export const TableData = ({
-  filterParams = { page: 1, perPage: 50 },
+  filterParams,
 }: {
   filterParams: any;
   setOpen?: (val: boolean) => void;
@@ -19,7 +19,7 @@ export const TableData = ({
 
   const fetchList = async (filters: any) => {
     const response = await axios.get(
-      `${API_URL}/labrecete/?skip=${
+      `${API_URL}/ham/?skip=${
         filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
       }&limit=${filters.perPage}${filters.q ? "&" + filters.q : ""}`
     );
@@ -30,30 +30,25 @@ export const TableData = ({
     data: listData,
     isLoading,
     refetch,
-  } = useQuery(
-    ["GET_LABORATORY_CHEMICALS", filterParams],
-    () => fetchList(filterParams),
-    {
-      keepPreviousData: true,
-      enabled: !!filterParams?.page,
-    }
-  );
+  } = useQuery(["GET_MATERIALS", filterParams], () => fetchList(filterParams), {
+    keepPreviousData: true,
+  });
 
   const deleteFn = async (id: string[]) => {
     try {
-      await axios.delete(`${API_URL}/labrecete/`, {
+      await axios.delete(`${API_URL}/ham/?ham_ids=${id}`, {
         method: "DELETE",
-        url: `${API_URL}/labrecete/`,
+        url: `${API_URL}/ham/`,
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        data: id,
+        // data: { ham_ids: id },
       });
       refetch();
       toast.success(t("deleted!"));
     } catch (error) {
-      toast.error(`Error creating element:, ${error}`);
+      toast.error(t("error"));
       return null;
     }
   };
@@ -95,5 +90,6 @@ export const TableData = ({
     bodyData,
     setBodyData,
     deleteFn,
+    refetch,
   };
 };

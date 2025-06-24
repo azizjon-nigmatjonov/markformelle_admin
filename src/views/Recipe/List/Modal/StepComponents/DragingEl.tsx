@@ -121,7 +121,7 @@ export const DragingEl = ({
                       item.checked = !item?.checked;
                       handleCheck(item);
                     }}
-                    className={`w-[18px] mr-2 h-[18px] border  border-[var(--main)] rounded-[4px] ml-2 hover:cursor-pointer flex items-center justify-center ${
+                    className={`w-[18px] mr-2 h-[18px] border border-[var(--main)] rounded-[4px] ml-2 hover:cursor-pointer flex items-center justify-center ${
                       item.checked ? "bg-[var(--main)]" : ""
                     }`}
                   >

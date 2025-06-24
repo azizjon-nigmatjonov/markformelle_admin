@@ -47,14 +47,4 @@ export const adminList = [
     auth: true,
     permissions: ["view_page", "add", "delete", "edit"],
   },
-  // {
-  //   parent: "access",
-  //   link: "routes",
-  //   sidebar: true,
-  //   parent_icon: "/images/access.webp",
-  //   title: "pages",
-  //   icon: "pages",
-  //   element: <RoutePage />,
-  //   auth: true,
-  // },
 ];

@@ -17,25 +17,26 @@ export const TableData = ({
 }) => {
   const { t } = useTranslationHook();
   const [headColumns, setHeadColumns] = useState([]);
+  const [bodyData, setBodyData]: any = useState({});
+
+  const fetchList = async (filters: any) => {
+    const response = await axios.get(
+      `${API_URL}/recete/?skip=${
+        filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
+      }&limit=${filters.perPage}${filters.q ? "&" + filters.q : ""}`
+    );
+    return response.data;
+  };
 
   const {
-    data: bodyData,
-    refetch: refetchTable,
+    data: listData,
     isLoading,
-  }: any = useQuery(
-    ["GET_RECIPE_LIST_TABLE", filterParams],
-    () => {
-      return axios.get(
-        `${API_URL}/recete/?skip=${
-          filterParams.page < 2
-            ? 0
-            : (filterParams.page - 1) * filterParams.perPage
-        }&limit=${filterParams.perPage}${
-          filterParams.q ? "&" + filterParams.q : ""
-        }`
-      );
-    },
+    refetch,
+  } = useQuery(
+    ["GET_RECIPE_LIST", filterParams],
+    () => fetchList(filterParams),
     {
+      keepPreviousData: true,
       enabled: !!filterParams?.page,
     }
   );
@@ -51,13 +52,19 @@ export const TableData = ({
         },
         data: id,
       });
-      refetchTable();
+      refetch();
       toast.success(t("deleted!"));
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
       return null;
     }
   };
+
+  useEffect(() => {
+    if (listData) {
+      setBodyData(listData);
+    }
+  }, [listData]);
 
   useEffect(() => {
     const headColumns: any = [];
@@ -84,11 +91,11 @@ export const TableData = ({
 
   return {
     headColumns,
-
-    bodyColumns: bodyData?.data?.data ?? [],
+    bodyColumns: bodyData?.data ?? [],
     isLoading,
     defaultData: {},
-    bodyData: bodyData?.data,
+    bodyData,
+    setBodyData,
     deleteFn,
   };
 };

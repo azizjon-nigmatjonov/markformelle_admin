@@ -230,9 +230,6 @@ export const LiteOptionsTable = memo(
       (value: string) => {
         let fetchName = name;
 
-        if (!value) {
-          return;
-        }
         if (staticOptions.length && !data?.data?.length) {
           if (staticSearchID) fetchName = staticSearchID;
           const newArr = staticOptions.filter((item) =>

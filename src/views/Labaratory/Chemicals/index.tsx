@@ -19,10 +19,9 @@ export const LabChemicals = () => {
   });
   const [modalInitialData, setModalInitialData] = useState<ModalTypes>({});
   const [askClose, setAskClose] = useState("");
-  const { bodyColumns, isLoading, bodyData, deleteFn, refetchTable } =
-    TableData({
-      filterParams,
-    });
+  const { bodyColumns, isLoading, bodyData, deleteFn } = TableData({
+    filterParams,
+  });
   const newHeadColumns = useMemo(() => {
     if (!bodyColumns?.length) return [];
     const obj = { ...bodyColumns?.[0] };
@@ -129,7 +128,6 @@ export const LabChemicals = () => {
       setModalInitialData({});
     } else if (type === "submit") {
       setAskClose("");
-      refetchTable();
     } else {
       setAskClose(type);
     }
@@ -201,7 +199,6 @@ export const LabChemicals = () => {
             handleModalActions={handleModalActions}
             askClose={askClose}
             setAskClose={askCloseFn}
-            refetchTable={refetchTable}
           />
         </CNewModal>
       ) : (

@@ -1,0 +1,28 @@
+import * as yup from "yup";
+
+export const Validation = yup.object().shape({
+    URUNID: yup.string().required("required"),
+    ADI: yup.string().required("required"),
+    URUNTIPIID: yup.number().required("required"),
+    BOYATIPIID: yup.number().required("required"),
+    MUTFAKDEPONO: yup.string().required("required"),
+    UNITEID: yup.number().required("required"),
+    KIMYASALTIPIID: yup.string().required("required"),
+    KDVORANI: yup.number().required("required"),
+    NOTU: yup.string().optional(),
+    TEMINSURESI: yup.number().required("required"),
+    RAF: yup.string().required("required"),
+    TRANSFERKODU: yup.string().required("required"),
+    ENVANTEREDAHIL: yup.boolean().required("required"),
+    SONALISSTOKDETAYID: yup.string().required("required"),
+    SONALISTARIHI: yup.string().required("required"),
+    BARKOD: yup.string().optional(),
+    KAPALI: yup.boolean().required("required"),
+    INSERTKULLANICIID: yup.number().required("required"),
+    INSERTTARIHI: yup.string().optional(    ),
+    DEGISIMTARIHI: yup.string().optional(),
+    KULLANICIID: yup.number().required("required"),
+    URUNTIPIADI: yup.string().required("required"),
+    BOYATIPIADI: yup.string().required("required"),
+    UNITEADI: yup.string().required("required"),
+}); 

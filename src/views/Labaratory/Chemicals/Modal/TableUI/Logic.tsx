@@ -39,24 +39,13 @@ export const TemplateLogic = ({
 }) => {
   const { t } = useTranslation();
 
-  // const copyRecipe = async (params: {}) => {
-  //   try {
-  //     const { data } = await axios.post(`${API_URL}/recete/copy`, params);
-  //     console.log("data", data);
-  //     toast.success(t("get_list"));
-
-  //     getDetey();
-  //   } catch (error) {
-  //     toast.success(t("error"));
-  //   }
-  // };
-
   const copyRecipe = async (params: {}) => {
     try {
       const { data } = await axios.post(
         `${API_URL}/labrecete/lab-sablon-to-uretim`,
         params
       );
+      console.log("data", data);
 
       toast.success(t("get_list"));
       getList();

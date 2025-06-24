@@ -79,6 +79,8 @@ export const MaterialForm = ({
         "CALISMATARIHI",
         dayjs(materialFormData.CALISMATARIHI).format("DD.MM.YYYY")
       );
+    } else {
+      setValue("DOVIZID", "USD");
     }
   }, [materialFormData]);
 

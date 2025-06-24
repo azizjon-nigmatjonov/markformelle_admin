@@ -26,9 +26,9 @@ export const FieldUI = ({
 
   useEffect(() => {
     if (defaultValue) {
-      onChange(defaultValue)
+      onChange(defaultValue);
     }
-  }, [defaultValue])
+  }, [defaultValue]);
 
   return (
     <div className="HFTextarea">
@@ -38,7 +38,7 @@ export const FieldUI = ({
         value={value}
         onChange={(e) => handleChange(e.target.value)}
         name={name}
-        minRows={5}
+        minRows={3}
         {...props}
       />
       {error?.message && (
@@ -75,14 +75,14 @@ const HFTextarea = ({
   return (
     <div>
       {label && <CLabel title={label} required={required} />}
-      <div className="border border-[var(--lineGray)] rounded-xl ">
+      <div className="border border-[var(--lineGray)] rounded-[4px]">
         <Controller
           name={name}
           control={control}
           defaultValue={defaultValue}
           rules={{ ...rules }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
-            <div className="p-5 relative">
+            <div className="p-2 relative">
               <FieldUI
                 onChange={onChange}
                 value={value}

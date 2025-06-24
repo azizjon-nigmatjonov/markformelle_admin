@@ -10,7 +10,7 @@ export const Closer = ({
   return (
     <div
       onClick={() => handleClose()}
-      className={`w-[100vw]  h-[100vh] fixed top-0 left-0 z-[98] ${classes}`}
+      className={`w-[100vw]  h-[100vh] fixed top-0 left-0 z-[91] ${classes}`}
       style={{ ...styles }}
     ></div>
   );

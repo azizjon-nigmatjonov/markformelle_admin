@@ -7,6 +7,7 @@ export const routeParents = {
   chemical_store: [],
   labaratory: [],
   recipe: [],
+  lists: [],
   access: [],
   settings: [],
 };

@@ -11,12 +11,10 @@ export const ModalTableLogic = ({
   setFormId,
   urunId,
   filterParams,
-  refetchTable,
   defaultData,
 }: {
   urunId?: number | string;
   filterParams: IFilterParams;
-  refetchTable: () => void;
   setFormId: (val: number) => void;
   handleModalActions?: (val: string, val2: string) => void;
   defaultData?: any;
@@ -72,7 +70,6 @@ export const ModalTableLogic = ({
 
       setFormId(data?.LABRECETEID);
       toast.success(t("created!"));
-      refetchTable();
       return data;
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
@@ -85,8 +82,7 @@ export const ModalTableLogic = ({
     try {
       const { data } = await axios.put(`${API_URL}/labrecete/${id}`, params);
       refetch();
-      refetchTable();
-      toast.success(t("updated!" + " 😊"));
+      toast.success(t("updated!"));
       return data;
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);

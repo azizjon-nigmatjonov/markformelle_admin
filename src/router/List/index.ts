@@ -8,6 +8,7 @@ import { chemicalStore } from "./chemicalStore";
 import { wareHouse } from "./warehouse";
 import { labaratorySection } from "./labaratory";
 import { recipeSection } from "./recipe";
+import { listSection } from "./lists";
 
 export const routeList = [
   ...settingList,
@@ -19,5 +20,6 @@ export const routeList = [
   ...chemicalStore,
   ...labaratorySection,
   ...recipeSection,
+  ...listSection,
   ...adminList,
 ];

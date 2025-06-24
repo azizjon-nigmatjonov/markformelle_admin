@@ -25,6 +25,7 @@ interface Props {
   handleActions?: (val: string, val2?: any) => void;
   modalId?: string; // Optional prop for custom modal ID
   innerModal?: boolean;
+  autoWidth?: boolean;
 }
 
 const CNewModal: FC<Props> = ({
@@ -38,6 +39,7 @@ const CNewModal: FC<Props> = ({
   disabled = "",
   modalId,
   innerModal = false,
+  autoWidth = false,
 }) => {
   const [screen, setScreen] = useState(!disabled);
   const [position, setPosition] = useState<{ x: number; y: number } | null>(
@@ -138,7 +140,7 @@ const CNewModal: FC<Props> = ({
         <Card className={`${cls.card}`} style={{ padding }}>
           <div
             className={`duration-300 relative ${
-              title
+              !autoWidth
                 ? screen
                   ? "w-[1200px] max-h-[700px]"
                   : "w-[90vw] max-h-[90vh]"

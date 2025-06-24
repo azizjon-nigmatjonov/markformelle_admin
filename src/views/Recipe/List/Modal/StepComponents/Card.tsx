@@ -58,7 +58,8 @@ export const StepCard = ({
   const [newColumns, setNewColumns] = useState([]);
   const { isAltPressed, currentKey } = useKeyDownEvent();
   const stepRef = useRef<HTMLDivElement[]>([]);
-  // make the ref dynamic and focus the current focused index ref
+  const [selectAll, setSelectAll] = useState(false);
+
   useEffect(() => {
     if (stepRef.current) {
       stepRef.current[focusedIndex]?.focus();
@@ -78,6 +79,20 @@ export const StepCard = ({
   useEffect(() => {
     setNewColumns(headColumns);
   }, [headColumns]);
+
+  useEffect(() => {
+    if (!deleteStep) return;
+
+    const allItems = items.flatMap((row: any) => row.rows || []);
+
+    if (allItems.length === 0) {
+      setSelectAll(false);
+      return;
+    }
+
+    const allChecked = allItems.every((item: any) => item.checked === true);
+    setSelectAll(allChecked);
+  }, [items, deleteStep, checkedList]);
 
   const checkChanges = (newValues: any) => {
     let change = "";
@@ -110,7 +125,6 @@ export const StepCard = ({
     newItems.splice(index, 0, movedItem);
 
     setTimeout(() => {
-      // checkChanges(newItems);
       setItems(newItems);
       setDraggingIndex(null);
       setHoveredIndex(null);
@@ -213,9 +227,28 @@ export const StepCard = ({
     }
   }, [editStep]);
 
+  const handleSelectAll = () => {
+    const newSelectAll = !selectAll;
+    setSelectAll(newSelectAll);
+
+    const allItems = items.flatMap((row: any) => row.rows || []);
+
+    allItems.forEach((item: any) => {
+      item.checked = newSelectAll;
+
+      handleCheck(item);
+    });
+  };
+
   return (
     <div>
-      <CardHeader headColumns={newColumns} headerScrollRef={headerScrollRef} />
+      <CardHeader
+        deleteStep={deleteStep}
+        headColumns={newColumns}
+        headerScrollRef={headerScrollRef}
+        selectAll={selectAll}
+        onSelectAll={handleSelectAll}
+      />
       {items.map((row: any, outerIndex: number) => (
         <div
           key={outerIndex}

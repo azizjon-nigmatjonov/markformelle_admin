@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { useTranslationHook } from "../../../hooks/useTranslation";
 export const CollapseUI = ({
   children,
   title,
@@ -14,6 +15,7 @@ export const CollapseUI = ({
   border?: boolean;
   disabled?: boolean;
 }) => {
+  const { t } = useTranslationHook();
   const [open, setOpen] = useState(true);
   useEffect(() => {
     setOpen(defaultOpen);
@@ -21,7 +23,7 @@ export const CollapseUI = ({
   return (
     <div className="pb-5">
       <div className="flex items-center space-x-2 mt-2 pb-3">
-        <h3 className="text-[14px] ">{title}</h3>
+        <h3 className="text-[14px] ">{t(title)}</h3>
         {disabled ? (
           ""
         ) : (

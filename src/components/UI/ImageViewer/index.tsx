@@ -23,24 +23,24 @@ export const ImageViewer = ({
 
   return (
     <>
-      <div className="fixed z-[99] top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-[100vw] h-[100vh] flex items-center justify-center">
-        <div className="relative h-[60vh] w-[80vw] h-[50vh]z-[99]">
+      <div className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[99]">
+        <div className="relative">
           <img
             src={url}
             alt="image viewer photo"
-            className="w-full h-full cursor-pointer"
+            className="w-[100vw] h-auto cursor-pointer rounded-[12px]"
           />
 
           <button
             onClick={() => closeViewer()}
-            className="absolute -right-20 -top-20"
+            className="absolute -right-10 -top-10"
           >
-            <CancelIcon style={{ color: "var(--gray20)", fontSize: 34 }} />
+            <CancelIcon style={{ color: "white", fontSize: 34 }} />
           </button>
         </div>
       </div>
       <div
-        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vh] z-[98]"
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vh] z-[98] bg-black/50 "
         onClick={() => closeViewer()}
       ></div>
     </>
