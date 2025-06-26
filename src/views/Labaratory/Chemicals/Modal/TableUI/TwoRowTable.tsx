@@ -113,7 +113,7 @@ export const TwoRowTable = ({
                   disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
                 }`}
               >
-                {t(openSelect ? "close_sellect" : "sellect")}
+                {t(openSelect ? "cancel" : "sellect")}
               </p>
             </button>
             <button

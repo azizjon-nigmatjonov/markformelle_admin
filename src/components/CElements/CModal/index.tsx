@@ -2,10 +2,11 @@ import { CloseIcon } from "../../UI/IconGenerator/Svg";
 import { Card, IconButton, Modal } from "@mui/material";
 
 import cls from "./style.module.scss";
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useId } from "react";
 import AddButton from "../../UI/Buttons/AddButton";
 import { t } from "i18next";
 import CancelButton from "../../UI/Buttons/Cancel";
+import { useModalManager } from "../../../hooks/useModalManager";
 
 interface Props {
   title?: string;
@@ -42,6 +43,9 @@ const CModal: FC<Props> = ({
   closable = false,
   titleCenter = true,
 }) => {
+  const modalId = useId();
+  const { zIndex } = useModalManager(modalId, handleClose);
+
   return (
     <Modal
       open={open}
@@ -51,6 +55,7 @@ const CModal: FC<Props> = ({
       }}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+      style={{ zIndex }}
     >
       <Card className={cls.card} style={{ padding }}>
         <div className={classes}>

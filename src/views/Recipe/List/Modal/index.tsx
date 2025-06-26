@@ -42,7 +42,11 @@ export const ModalUIRecipe = ({
   const [formId, setFormId] = useState<string>(defaultData?.RECETEID || "");
   const [disabled, setDisabled] = useState(false);
   const [currentSellect, setCurrentSellect] = useState<any>({});
-  const { tableData, refetch: refetchTable } = DragAndDropDataLogic({
+  const {
+    tableData,
+    refetch: refetchTable,
+    isLoading,
+  } = DragAndDropDataLogic({
     id: formId,
   });
   const { createForm, updateForm, formData, deleteForm } = ModalTableLogic({
@@ -413,7 +417,7 @@ export const ModalUIRecipe = ({
                 </div>
               </div>
             </div>
-            <div className="h-[500px] overflow-y-scroll designed-scroll w-full pt-2">
+            <div className="h-[500px] overflow-y-scroll designed-scroll w-full">
               <LabModalTables
                 changed={changed}
                 setChanged={setChanged}
@@ -424,6 +428,7 @@ export const ModalUIRecipe = ({
                 setCurrentSellect={setCurrentSellect}
                 tableData={tableData}
                 refetchTable={refetchTable}
+                isLoading={isLoading}
               />
             </div>
           </div>

@@ -118,7 +118,7 @@ export const ReviewForm = ({
       </div>
       <SubmitCancelButtons
         uniqueID={open.includes("review") ? "review" : ""}
-        type="save"
+        type={open.includes("review") ? "update" : "create"}
         handleActions={(val: string, uniqueID: string) => {
           if (uniqueID === "review") {
             if (val === "Close") {

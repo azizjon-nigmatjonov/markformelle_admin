@@ -12,7 +12,7 @@ interface Props {
   children?: ReactNode;
   type?: string;
   handleActions?: (val: string, val2?: any) => void;
-  modalId?: string; // Optional prop for custom modal ID
+  modalId?: string;
 }
 
 const CNewMiniModal: FC<Props> = ({
@@ -31,17 +31,14 @@ const CNewMiniModal: FC<Props> = ({
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const modalRef = useRef<HTMLDivElement>(null);
 
-  // Generate unique modal ID if not provided
   const uniqueModalId = useRef(
     modalId || `mini-modal-${Date.now()}-${Math.random()}`
   ).current;
 
-  // Handle modal close
   const handleClose = () => {
     handleActions("Close");
   };
 
-  // Use modal manager for escape key handling and z-index management
   const {} = useModalManager(uniqueModalId, handleClose);
 
   useEffect(() => {
@@ -101,7 +98,9 @@ const CNewMiniModal: FC<Props> = ({
     <>
       <div
         ref={modalRef}
-        className={`fixed z-[99] rounded-[12px] bg-white shadow-2xl border border-[var(--gray30)] ${
+        className={`fixed ${
+          type === "inner" ? "z-[100]" : "z-[99]"
+        } rounded-[12px] bg-white shadow-2xl border border-[var(--gray30)] ${
           isDragging ? "cursor-grabbing" : ""
         }`}
         style={{

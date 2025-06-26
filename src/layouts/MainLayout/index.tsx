@@ -14,6 +14,7 @@ import { globalToolActions } from "../../store/globalTools";
 import { RollLogic } from "./Logic/Roll";
 import { useScreenSize } from "../../hooks/useScreenSize";
 import { tableStoreActions } from "../../store/table";
+import { ModalImporter } from "../../components/UI/ModalImporter";
 
 const MainLayout = () => {
   const wrapperRef: any = useRef(null);
@@ -96,6 +97,7 @@ const MainLayout = () => {
       </button>
 
       <RollLogic />
+      <ModalImporter />
     </div>
   );
 };

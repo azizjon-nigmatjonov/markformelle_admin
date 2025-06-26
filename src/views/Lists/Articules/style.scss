@@ -1,0 +1,30 @@
+.modal-container {
+    position: relative;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin: 16px;
+    max-width: 500px; /* adjust as needed */
+    width: 100%;
+  }
+  
+  .modal-content {
+    padding: 20px;
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  /* Add transition for smooth reordering */
+  .modal-container {
+    transition: transform 0.3s ease;
+  }
+  
+  /* Optional: Add hover effect */
+  .modal-container:hover {
+    transform: scale(1.02);
+  } 

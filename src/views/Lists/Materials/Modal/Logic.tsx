@@ -21,7 +21,7 @@ export const ModalTableLogic = ({
   const { t } = useTranslationHook();
 
   const { data: formData, refetch } = useQuery(
-    ["GET_URUN_DATA_FORM", hamId],
+    ["GET_HAM_DATA_FORM", hamId],
     () => {
       return axios.get(`${API_URL}/ham/${hamId}`);
     },

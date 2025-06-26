@@ -51,7 +51,7 @@ const CCheckbox = ({
         }
       }}
       className={`flex items-center rounded-[8px] border-[var(--border)] w-full whitespace-nowrap relative ${
-        element?.label ? "border gap-2 px-[12px] h-[30px]" : ""
+        element?.label ? "border gap-2 px-2 h-[30px]" : ""
       } ${disabled ? "cursor-not-allowed " : "cursor-pointer "}`}
     >
       <div className="w-[18px] h-[18px] relative z-[2]">
@@ -65,7 +65,9 @@ const CCheckbox = ({
       </div>
       <input
         readOnly
-        className="focus:border w-full absolute left-0 top-0 pl-12 h-full rounded-[8px] cursor-pointer"
+        className={`focus:border  w-full absolute left-0 top-0 h-full rounded-[8px] cursor-pointer ${
+          element?.label?.length > 1 ? "pl-10" : ""
+        }`}
         onKeyDown={(e: any) => handleKeyDown(e)}
         type="text"
         value={t(element?.label || "")}

@@ -73,7 +73,7 @@ export const DragHeader = ({
   };
 
   return (
-    <div className="flex justify-between items-center">
+    <div className="border-t border-[var(--border)] flex justify-between items-center sticky top-0 bg-white z-[90]">
       <div>
         <ExcelDownload
           title={"excel_steps"}

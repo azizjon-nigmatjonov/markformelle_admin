@@ -5,6 +5,7 @@ export const routeParents = {
   drying: [],
   chni: [],
   chemical_store: [],
+  orders: [],
   labaratory: [],
   recipe: [],
   lists: [],

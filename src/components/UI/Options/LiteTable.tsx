@@ -66,6 +66,7 @@ const SearchInput = memo(
     open,
     setIsFocus,
     setOpen,
+    handleEnterKey,
   }: {
     control: any;
     name: string;
@@ -80,6 +81,7 @@ const SearchInput = memo(
     open: boolean;
     setIsFocus: (value: boolean) => void;
     setOpen: (value: boolean) => void;
+    handleEnterKey: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   }) => {
     const { t } = useTranslation();
     const debouncedSearch = useMemo(
@@ -102,21 +104,8 @@ const SearchInput = memo(
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  setTimeout(() => {
-                    const active = inputRef.current;
-                    if (!active) return;
-                    const form = active.closest("form");
-                    if (form) {
-                      const elements = Array.from(
-                        form.elements
-                      ) as HTMLElement[];
-                      const currentIndex = elements.indexOf(active);
-                      const next = elements[currentIndex + 1];
-                      if (next && typeof next.focus === "function") {
-                        next.focus();
-                      }
-                    }
-                  }, 0);
+                  handleSearch(search);
+                  handleEnterKey(e);
                 }
               }}
               onFocus={() => setIsFocus(true)}
@@ -153,7 +142,9 @@ const TablePopup = memo(
     searchName,
     handleActions,
     name,
+    link,
     currentEl,
+    onLoadMore,
   }: {
     open: boolean;
     anchor: HTMLElement | null;
@@ -164,6 +155,8 @@ const TablePopup = memo(
     handleActions: (el: T, type: string) => void;
     name: string;
     currentEl: T;
+    link: string;
+    onLoadMore?: () => void;
   }) => {
     return (
       <BasePopup
@@ -182,10 +175,12 @@ const TablePopup = memo(
             handleRowClick={(el: BaseTableItem, type: string) =>
               handleActions(el as T, type)
             }
+            link={link}
             headColumns={headColumns}
             bodyColumns={options}
             isLoading={isLoading}
             searchName={searchName}
+            onLoadMore={onLoadMore}
           />
         </div>
       </BasePopup>
@@ -226,6 +221,16 @@ export const LiteOptionsTable = memo(
     const [isFocus, setIsFocus] = useState(false);
     const [openPopup, setOpenPopup] = useState(false);
 
+    // Infinite scroll handler - increase perPage by 50 when user scrolls to bottom
+    const handleLoadMore = useCallback(() => {
+      if (isLoading) return;
+
+      setFilterParams((prev) => ({
+        ...prev,
+        perPage: (prev.perPage || 50) + 50,
+      }));
+    }, [setFilterParams, isLoading]);
+
     const handleSearch = useCallback(
       (value: string) => {
         let fetchName = name;
@@ -245,6 +250,7 @@ export const LiteOptionsTable = memo(
             ...filterParams,
             link,
             q: value ? `${staticSearchID}=${value}` : undefined,
+            perPage: 50, // Reset to initial limit when searching
           });
           return;
         }
@@ -264,6 +270,7 @@ export const LiteOptionsTable = memo(
           ...filterParams,
           link,
           q: value ? `${fetchName}=${value}` : undefined,
+          perPage: 50, // Reset to initial limit when searching
         });
         setSearchName(fetchName);
       },
@@ -323,7 +330,7 @@ export const LiteOptionsTable = memo(
         if (currentKey === "Open") {
           setOpen(true);
           setAnchor(inputRef.current);
-          setFilterParams({ ...filterParams, link });
+          setFilterParams({ ...filterParams, link, perPage: 50 }); // Reset to initial limit when opening
         }
       }
 
@@ -352,13 +359,23 @@ export const LiteOptionsTable = memo(
 
     useEffect(() => {
       if (defaultSearch && !search) {
-        setFilterParams((prev) => ({ ...prev, link, q: defaultSearch }));
+        setFilterParams((prev) => ({
+          ...prev,
+          link,
+          q: defaultSearch,
+          perPage: 50,
+        }));
       }
     }, [defaultSearch, link, setFilterParams, search]);
 
     useEffect(() => {
       if (defaultFilters) {
-        setFilterParams((prev) => ({ ...prev, link, q: defaultFilters }));
+        setFilterParams((prev) => ({
+          ...prev,
+          link,
+          q: defaultFilters,
+          perPage: 50,
+        }));
       }
     }, [defaultFilters]);
 
@@ -377,6 +394,29 @@ export const LiteOptionsTable = memo(
       }
     }, [data?.data, defaultSearch, handleSelect, setCurrentValue, search]);
 
+    const handleEnterKey = useCallback(
+      (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") {
+          // setCurrentValue();
+          handleSelect({ [name]: search });
+          setTimeout(() => {
+            const active = inputRef.current;
+            if (!active) return;
+            const form = active.closest("form");
+            if (form) {
+              const elements = Array.from(form.elements) as HTMLElement[];
+              const currentIndex = elements.indexOf(active);
+              const next = elements[currentIndex + 1];
+              if (next && typeof next.focus === "function") {
+                next.focus();
+              }
+            }
+          }, 0);
+        }
+      },
+      [handleSearch, search]
+    );
+
     return (
       <div className="w-full relative">
         {label && (
@@ -393,7 +433,7 @@ export const LiteOptionsTable = memo(
               if (!disabled) {
                 if (!open) {
                   setAnchor(inputRef.current);
-                  setFilterParams({ ...filterParams, link });
+                  setFilterParams({ ...filterParams, link, perPage: 50 }); // Reset to initial limit when opening
                 }
                 setOpen(!open);
               }
@@ -418,6 +458,7 @@ export const LiteOptionsTable = memo(
             open={open}
             setIsFocus={setIsFocus}
             setOpen={setOpen}
+            handleEnterKey={handleEnterKey}
           />
 
           <TablePopup
@@ -429,7 +470,9 @@ export const LiteOptionsTable = memo(
             searchName={searchName}
             handleActions={handleActions}
             name={name}
+            link={link}
             currentEl={currentEl}
+            onLoadMore={handleLoadMore}
           />
 
           {openPopup && (

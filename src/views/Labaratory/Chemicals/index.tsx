@@ -109,7 +109,6 @@ export const LabChemicals = () => {
 
     if (status === "delete") {
       deleteFn([el.LABRECETEID]);
-      setFilterParams({ page: 1, perPage: 50 });
     }
     if (status === "delete_multiple") {
       deleteFn(
@@ -117,7 +116,6 @@ export const LabChemicals = () => {
           return item.LABRECETEID;
         })
       );
-      setFilterParams({ page: 1, perPage: 50 });
     }
   };
 

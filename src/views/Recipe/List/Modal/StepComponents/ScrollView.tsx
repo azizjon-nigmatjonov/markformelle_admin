@@ -23,7 +23,6 @@ interface Props {
   scrollInterval: any;
   maxScroll: number;
   deleteStep: boolean;
-  checkedList: string[] | number[];
   focusedIndex: number;
   handleCheck: (val: any) => void;
   handleKeyDown: (val: any, index: number) => void;
@@ -126,6 +125,7 @@ const ScrollView = ({
             handleCheck={handleCheck}
             stepRef={stepRef}
             setFocusedIndex={setFocusedIndex}
+            headerScrollRef={headerScrollRef}
           />
         </div>
       </div>

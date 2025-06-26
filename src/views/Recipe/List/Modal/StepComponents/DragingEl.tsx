@@ -23,6 +23,7 @@ interface Props {
   handleKeyDown: (val: any, index: number) => void;
   stepRef: any;
   setFocusedIndex: (val: number) => void;
+  headerScrollRef: any;
 }
 
 export const DragingEl = ({
@@ -45,6 +46,7 @@ export const DragingEl = ({
   handleKeyDown,
   stepRef,
   setFocusedIndex,
+  headerScrollRef,
 }: Props) => {
   const timeoutRef = useRef<number | null>(null);
   const [hoverAdd, setHoverAdd] = useState(999);
@@ -138,6 +140,7 @@ export const DragingEl = ({
                     style={{
                       backgroundColor:
                         focusedIndex === item.index ? "" : item.bg,
+                      width: headerScrollRef.current?.clientWidth,
                     }}
                   >
                     <div className="text-center p-2 rounded-[8px] relative z-[2] h-full">
@@ -153,7 +156,10 @@ export const DragingEl = ({
                     </div>
                   </div>
                 ) : item.RECETEALTASAMAID ? (
-                  <div className={`w-full relative flex`}>
+                  <div
+                    className={`w-full relative flex`}
+                    style={{ width: headerScrollRef.current?.clientWidth }}
+                  >
                     <div className="flex items-center">
                       <div className="pr-2">
                         <p
@@ -218,7 +224,7 @@ export const DragingEl = ({
                             minWidth: column?.width,
                             maxWidth: column?.width,
                           }}
-                          className="cell flex items-center relative z-[2] overflow-hidden"
+                          className="cell flex items-center relative z-[2] overflow-hidden whitespace-nowrap"
                         >
                           {editStep && index === 0 && <DragIndicatorIcon />}
                           {column?.render ? (

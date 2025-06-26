@@ -5,7 +5,7 @@ import { Header } from "../../../components/UI/Header";
 import CNewTable from "../../../components/CElements/CNewTable";
 import { IFilterParams } from "../../../interfaces";
 import { useTranslationHook } from "../../../hooks/useTranslation";
-import { ModalUI } from "./Modal";
+import { HamModalUI } from "./Modal";
 import { ModalTypes } from "./interfaces";
 import CNewMiniModal from "../../../components/CElements/CNewMiniModal";
 
@@ -65,7 +65,6 @@ export const MaterialsPage = () => {
 
     if (status === "delete") {
       deleteFn([el.HAMID]);
-      setFilterParams({ page: 0, perPage: 50 });
     }
     if (status === "delete_multiple") {
       deleteFn(
@@ -73,7 +72,6 @@ export const MaterialsPage = () => {
           return item.HAMID;
         })
       );
-      setFilterParams({ page: 0, perPage: 50 });
     }
   };
 
@@ -118,7 +116,7 @@ export const MaterialsPage = () => {
 
       {open && (
         <CNewMiniModal title={"form_ham"} handleActions={handleModalActions}>
-          <ModalUI
+          <HamModalUI
             defaultData={modalInitialData}
             setOpen={setOpen}
             refetchTable={refetchTable}

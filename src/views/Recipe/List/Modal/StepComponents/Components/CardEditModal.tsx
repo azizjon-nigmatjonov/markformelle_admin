@@ -29,7 +29,7 @@ export const CardEditModal = ({
   const [group, setGroup] = useState<string>("");
   const [imageView, setImageView] = useState("");
 
-  const { control, handleSubmit, setValue, reset } = useForm<any>({
+  const { control, handleSubmit, setValue, reset, watch } = useForm<any>({
     mode: "onSubmit",
   });
   const { updateForm, createForm } = FormLogic({
@@ -39,10 +39,10 @@ export const CardEditModal = ({
       setOpen(["card"]);
     },
   });
+  const currentReceteGrafikID = watch("RECETEGRAFIKID");
 
   const onSubmit = (data: any) => {
     let params = data;
-    console.log("group", group);
 
     params.DEGISIMTARIHI = dayjs();
     if (type === "update") {
@@ -118,6 +118,7 @@ export const CardEditModal = ({
     if (type === "update") {
       if (formData.RECETEASAMAID) {
         setGroup("group1");
+        setValue("RECETEGRAFIKID", formData.RECETEGRAFIKID);
       }
       if (formData.RECETEALTASAMAID) {
         setGroup("group2");
@@ -146,6 +147,7 @@ export const CardEditModal = ({
             disabledFirstGroup={
               group ? (group === "group1" ? false : true) : false
             }
+            currentReceteGrafikID={currentReceteGrafikID}
           />
           <div className="pt-5">
             <div className="h-[1px] bg-[var(--gray40)] w-full"></div>
@@ -172,9 +174,7 @@ export const CardEditModal = ({
             }
           />
           <SubmitCancelButtons
-            uniqueID={
-              open.includes("step") && !open.includes("review") ? "step" : ""
-            }
+            uniqueID={open.includes("insert_step") ? "step" : ""}
             type={type}
             handleActions={(val: string, uniqueID: string) => {
               if (uniqueID === "step") {

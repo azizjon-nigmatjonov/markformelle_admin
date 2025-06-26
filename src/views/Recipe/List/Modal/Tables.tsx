@@ -10,6 +10,7 @@ export const LabModalTables = ({
   setCurrentSellect,
   tableData,
   refetchTable,
+  isLoading,
 }: {
   open: string[];
   setOpen: (val: string[]) => void;
@@ -20,9 +21,10 @@ export const LabModalTables = ({
   setChanged: (val: string) => void;
   setCurrentSellect: (val: any) => void;
   refetchTable: () => void;
+  isLoading: boolean;
 }) => {
   return (
-    <div className="border-t border-[var(--border)] w-full">
+    <div className="w-full">
       <DragDrop
         open={open}
         changed={changed}
@@ -33,6 +35,7 @@ export const LabModalTables = ({
         tableData={tableData}
         setCurrentSellect={setCurrentSellect}
         refetchTable={refetchTable}
+        isLoading={isLoading}
       />
     </div>
   );

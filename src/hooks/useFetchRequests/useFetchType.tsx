@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_TEST_URL;
 export const useFetchType = () => {
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
-    perPage: 100,
+    perPage: 50,
   });
 
   const {

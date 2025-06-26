@@ -26,8 +26,6 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({
           translations: cachedTranslations,
         })
       );
-
-      console.log("Loaded cached translations for language:", currentLang);
     }
   }, [dispatch]);
 

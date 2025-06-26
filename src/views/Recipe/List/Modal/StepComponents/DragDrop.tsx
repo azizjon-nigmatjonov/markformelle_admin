@@ -19,6 +19,7 @@ interface Props {
   tableData: any;
   setCurrentSellect: (val: any) => void;
   refetchTable: () => void;
+  isLoading: boolean;
 }
 
 // Custom hook for data processing
@@ -79,8 +80,6 @@ const useDataProcessor = (tableData: any) => {
     setItems(processedItems);
   }, []);
 
-  // 1. SIRA, 2. URUNID, 3. URUNADI, 4. GR/KG, 5. GR/LT, 6. INSERTKULLANICIID, 6. INSERTTARIHI, 7. KULLANICIID, 8. DEGISIMTARIHI, 9. MIKTAR 10. RECETEDETAYID
-
   const columns = useMemo(
     () => [
       {
@@ -119,7 +118,14 @@ const useDataProcessor = (tableData: any) => {
         width: 150,
         render: (val: string) => dayjs(val).format("DD.MM.YYYY HH:mm"),
       },
-      { title: "KULLANICIADI", id: "KULLANICIADI", width: 100 },
+      {
+        title: "KULLANICIADI",
+        id: "KULLANICIADI",
+        width: 140,
+        render: (val: string) => {
+          return val.substring(0, 20) + (val.length > 20 ? "..." : "");
+        },
+      },
 
       {
         title: "DEGISIMTARIHI",
@@ -142,7 +148,6 @@ const useDataProcessor = (tableData: any) => {
   return { items, setItems, oldValues, headColumns };
 };
 
-// Custom hook for modal state management
 const useModalState = () => {
   const [editStep, setEditStep] = useState(false);
   const [deleteStep, setDeleteStep] = useState(false);
@@ -195,10 +200,11 @@ export const DragDrop = memo(
     setOpen = () => {},
     setCurrentSellect,
     refetchTable,
+    isLoading,
   }: Props) => {
     const { t } = useTranslation();
     const [checkedList, setCheckedList] = useState<number[]>([]);
-
+    const [focusedIndex, setFocusedIndex] = useState<number>(0);
     const { items, setItems, oldValues, headColumns } =
       useDataProcessor(tableData);
     const clearSelect = useCallback(() => {
@@ -284,10 +290,14 @@ export const DragDrop = memo(
       setEditStep(false);
       setChanged("");
     }, [clearChanges, setAskClear, setEditStep, setChanged]);
-
     const handleDeleteConfirm = useCallback(() => {
-      deleteForm(checkedList);
-    }, [deleteForm, checkedList]);
+      const newArr = [...checkedList];
+      const currEl = items.map((item: any) => item.rows).flat();
+      const index = currEl.findIndex((el: any) => el.index === focusedIndex);
+      newArr.push(currEl[index]?.RECETEDETAYID);
+
+      deleteForm(newArr);
+    }, [deleteForm, checkedList, focusedIndex]);
 
     const handleCardDeleteConfirm = useCallback(() => {
       toast.success(t("deleted!"));
@@ -328,6 +338,7 @@ export const DragDrop = memo(
           setSaveData={setSaveData}
           setDeleteCardActive={setDeleteCardActive}
         />
+
         <StepCard
           open={open}
           setOpen={setOpen}
@@ -344,6 +355,11 @@ export const DragDrop = memo(
           setDeleteCard={setDeleteCard}
           deleteCardActive={deleteCardActive}
           setCurrentSellect={setCurrentSellect}
+          isLoading={isLoading}
+          askAction={askAction}
+          setAskAction={setAskAction}
+          setFocusedIndex={setFocusedIndex}
+          focusedIndex={focusedIndex}
         />
 
         <ImageViewer url={imageView} closeViewer={() => setImageView("")} />
@@ -380,14 +396,16 @@ export const DragDrop = memo(
           message="Это изменение повлияет на производительность машины!"
           onConfirm={handleSaveConfirm}
           onCancel={handleCancelChanges}
-          confirmText="save"
-          cancelText="cancel_changes"
         />
 
         <ConfirmationModal
           open={askDelete || askAction === "delete"}
           onClose={() => {
+            setDeleteStep(false);
             setAskDelete(false);
+            setAskAction("");
+            setChanged("");
+            clearSelect();
           }}
           title="Вы точно хотите удалить этот данных?"
           message="Это изменение повлияет на производительность машины!"

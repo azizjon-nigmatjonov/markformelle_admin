@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import ReactInputMask from "react-input-mask";
+import { InputMask } from "@react-input/mask";
 import CLabel from "../../CElements/CLabel";
 import { Controller, Control } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -52,7 +52,7 @@ export const MaskInputUI = ({
     }
   }, [defaultValue, onChange]);
 
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && (value || defaultValue)) {
       const form = (e.target as HTMLElement).closest("form");
       if (form) {
@@ -69,17 +69,17 @@ export const MaskInputUI = ({
   };
 
   return (
-    <ReactInputMask
+    <InputMask
       onChange={(e) => {
         const val = e.target.value;
         onChange(val);
         handleChange(val);
       }}
-      onKeyDown={(e: any) => handleKeyDown(e)}
+      onKeyDown={handleKeyDown}
       type={type}
-      inputRef={maskRef}
+      ref={maskRef}
       mask={mask}
-      maskChar=""
+      replacement="_"
       value={value}
       placeholder={placeholder}
       required={required}

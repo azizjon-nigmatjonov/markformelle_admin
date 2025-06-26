@@ -180,6 +180,7 @@ const TabbleActions = ({
             <PopoverDelete
               closePopover={(status) => {
                 setDeletePopover(false);
+                setCurrentIndex(null);
                 if (status) handleActions(element, status);
               }}
             />

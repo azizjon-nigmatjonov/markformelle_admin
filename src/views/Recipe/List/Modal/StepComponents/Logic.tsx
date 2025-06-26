@@ -2,7 +2,11 @@ import axios from "axios";
 import { useQuery } from "react-query";
 const API_URL = import.meta.env.VITE_TEST_URL;
 export const DragAndDropDataLogic = ({ id }: { id: string }) => {
-  const { data: tableData, refetch } = useQuery(
+  const {
+    data: tableData,
+    refetch,
+    isLoading,
+  } = useQuery(
     ["GET_DRAG_AND_DROP_DATA", id],
     () => {
       return axios.get(`${API_URL}/recetedetay/?RECETEID=${id}`);
@@ -12,5 +16,5 @@ export const DragAndDropDataLogic = ({ id }: { id: string }) => {
     }
   );
 
-  return { tableData: tableData?.data ?? {}, refetch };
+  return { tableData: tableData?.data ?? {}, refetch, isLoading };
 };

@@ -1,6 +1,7 @@
 import { memo } from "react";
-import { useTranslation } from "react-i18next";
 import CModal from "../CModal";
+import { EnterCancelButtons } from "../../UI/FormButtons/EnterCancel";
+import CNewMiniModal from "../CNewMiniModal";
 
 interface ConfirmationModalProps {
   open: boolean;
@@ -9,10 +10,6 @@ interface ConfirmationModalProps {
   message?: string;
   onConfirm: () => void;
   onCancel: () => void;
-  confirmText?: string;
-  cancelText?: string;
-  confirmButtonClass?: string;
-  cancelButtonClass?: string;
 }
 
 export const ConfirmationModal = memo(
@@ -23,30 +20,32 @@ export const ConfirmationModal = memo(
     message,
     onConfirm,
     onCancel,
-    confirmText = "yes",
-    cancelText = "no",
-    confirmButtonClass = "custom-btn",
-    cancelButtonClass = "cancel-btn",
   }: ConfirmationModalProps) => {
-    const { t } = useTranslation();
-
     if (!open) return null;
 
     return (
-      <CModal open={open} handleClose={onClose} footerActive={false}>
+      <CNewMiniModal
+        title=""
+        handleActions={() => {
+          onClose();
+        }}
+        type="q"
+      >
         <p className="text-[var(--black)] text-2xl font-medium">{title}</p>
         {message && (
-          <p className="text-[var(--error)] text-lg mt-3">{message}</p>
+          <p className="text-[var(--error)] text-lg mb-5">{message}</p>
         )}
-        <div className="grid gap-2 grid-cols-2 mt-8">
-          <button className={cancelButtonClass} onClick={onCancel}>
-            {t(cancelText)}
-          </button>
-          <button className={confirmButtonClass} onClick={onConfirm}>
-            {t(confirmText)}
-          </button>
-        </div>
-      </CModal>
+        <EnterCancelButtons
+          handleActions={(type: string, _: any) => {
+            if (type === "Close") {
+              onCancel();
+            } else {
+              onConfirm();
+            }
+          }}
+          uniqueID="confirmation-modal"
+        />
+      </CNewMiniModal>
     );
   }
 );

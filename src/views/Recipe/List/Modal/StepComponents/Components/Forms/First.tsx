@@ -3,8 +3,8 @@ import {
   LiteOptionsTable,
   TableItem,
 } from "../../../../../../../components/UI/Options/LiteTable";
-import CImageViewer from "../../../../../../../components/CElements/CImageViewer";
 import { API_URL } from "../../../../../../../utils/env";
+import { useState } from "react";
 
 interface Props {
   changeGroup: (group: string) => void;
@@ -12,6 +12,7 @@ interface Props {
   disabledFirstGroup: boolean;
   control: Control<any>;
   setValue: (name: string, value: any) => void;
+  currentReceteGrafikID: string;
 }
 
 export const FormFirst = ({
@@ -20,9 +21,9 @@ export const FormFirst = ({
   disabledFirstGroup,
   control,
   setValue,
+  currentReceteGrafikID,
 }: Props) => {
-  // const [CurrentReceteAsamaId, setCurrentReceteAsamaId] = useState<number>(0);
-
+  const [hoveredGrafikId, setHoveredGrafikId] = useState<string | null>(null);
   return (
     <div className="space-y-2">
       <LiteOptionsTable
@@ -40,12 +41,15 @@ export const FormFirst = ({
             ? obj.RECETEASAMAID + " - " + obj.ADI
             : obj.RECETEASAMAID;
         }}
-        // defaultValue={
-        //   formData?.RECETEASAMAID + " - " + formData?.RECETEASAMAADI
-        // }
+        focused={true}
+        defaultValue={
+          formData?.RECETEASAMAID
+            ? formData?.RECETEASAMAID + " - " + formData?.RECETEASAMAADI
+            : ""
+        }
         handleSelect={(obj: TableItem) => {
           setValue("RECETEASAMAID", obj.RECETEASAMAID);
-          // setCurrentReceteAsamaId(obj.RECETEASAMAID || 0);
+
           changeGroup("group1");
         }}
         disabled={disabledFirstGroup}
@@ -57,27 +61,69 @@ export const FormFirst = ({
         required
         link="recetegrafik"
         headColumns={[
-          { id: "RECETEGRAFIKID", title: "RECETEGRAFIKID", width: 120 },
-          { id: "ADI", title: "ADI", width: 160 },
+          {
+            id: "RECETEGRAFIKID",
+            title: "RECETEGRAFIKID",
+            width: 120,
+            render: (val: string) => (
+              <div
+                className=" group relative"
+                onMouseEnter={() => setHoveredGrafikId(val)}
+                onMouseLeave={() => setHoveredGrafikId(null)}
+              >
+                {val}
+              </div>
+            ),
+          },
+          {
+            id: "ADI",
+            title: "ADI",
+            width: 200,
+            render: (val: string, obj: any) => {
+              return (
+                <div
+                  onMouseEnter={() => setHoveredGrafikId(obj.RECETEGRAFIKID)}
+                  onMouseLeave={() => setHoveredGrafikId(null)}
+                >
+                  {val}
+                </div>
+              );
+            },
+          },
         ]}
-        staticSearchID="RECETEGRAFIKID"
         renderValue={(_: string, obj: any) => {
           return obj.RECETEGRAFIKID && obj.ADI
             ? obj.RECETEGRAFIKID + " - " + obj.ADI
             : obj.RECETEGRAFIKID;
         }}
-        defaultValue={formData?.RECETEGRAFIKID}
+        defaultValue={currentReceteGrafikID || formData?.RECETEGRAFIKID}
         handleSelect={(obj: TableItem) => {
           setValue("RECETEGRAFIKID", obj.RECETEGRAFIKID);
-          // changeGroup("group1");
+          setHoveredGrafikId(null);
+          changeGroup("group1");
         }}
         disabled={disabledFirstGroup}
         control={control}
       />
-      {formData.RECETEGRAFIKID && (
-        <CImageViewer
-          url={`${API_URL}/recetegrafik/image/${formData.RECETEGRAFIKID}`}
-        />
+
+      <div className="rounded-[8px] border border-[var(--border)] p-2 h-[140px] flex items-center overflow-hidden">
+        {currentReceteGrafikID && (
+          <img
+            src={`${API_URL}/recetegrafik/image/${currentReceteGrafikID}`}
+            alt="recete image"
+            className="w-full"
+          />
+        )}
+      </div>
+
+      {hoveredGrafikId && (
+        <div className="fixed top-1/2 -translate-y-1/2 right-[-520px] z-[99]">
+          <img
+            width={500}
+            src={`${API_URL}/recetegrafik/image/${hoveredGrafikId}`}
+            alt="recete image"
+          />
+        </div>
       )}
     </div>
   );

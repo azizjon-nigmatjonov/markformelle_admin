@@ -9,6 +9,7 @@ import {
   persistStore,
 } from "redux-persist";
 import rootReducer from "./rootReducer";
+import { RootState } from "./types";
 
 export const store = configureStore({
   reducer: rootReducer,
@@ -21,3 +22,7 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
+
+// Export types
+export type AppDispatch = typeof store.dispatch;
+export type { RootState };

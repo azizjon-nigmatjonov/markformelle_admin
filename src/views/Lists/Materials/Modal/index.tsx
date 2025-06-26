@@ -17,7 +17,7 @@ interface ModalUIProps {
   refetchTable: () => void;
 }
 
-export const ModalUI = ({
+export const HamModalUI = ({
   defaultData = {},
   setOpen,
   refetchTable,
@@ -90,165 +90,163 @@ export const ModalUI = ({
   }, [defaultData]);
 
   return (
-    <>
-      <form
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-          }
-        }}
-        onSubmit={handleSubmit(onSubmit)}
-        className="w-full"
-      >
-        <div className="space-y-3 w-[400px] mt-3">
-          <HFTextField
-            name="ADI"
+    <form
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+        }
+      }}
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full"
+    >
+      <div className="space-y-3 w-[400px] mt-3">
+        <HFTextField
+          name="ADI"
+          control={control}
+          setValue={setValue}
+          label="ADI"
+        />
+        <HFTextField
+          name="ADI2"
+          control={control}
+          setValue={setValue}
+          label="Diger Adi-1"
+        />
+        <HFTextField
+          name="ADI3"
+          control={control}
+          setValue={setValue}
+          label="Diger Adi-2"
+        />
+        <HFTextField
+          name="ADI4"
+          control={control}
+          setValue={setValue}
+          label="Diger Adi-3"
+        />
+
+        <LiteOptionsTable
+          name="HAMTIPIID"
+          required={true}
+          label="Ham Tipi"
+          renderValue={(_: string, obj: any) => {
+            return obj?.HAMTIPIID && obj?.ADI
+              ? obj?.HAMTIPIID + " - " + obj?.ADI
+              : obj?.HAMTIPIID;
+          }}
+          headColumns={[
+            { id: "HAMTIPIID", title: "HAMTIPIID", width: 80 },
+            { id: "ADI", title: "ADI", width: 120 },
+          ]}
+          defaultValue={defaultData?.HAMTIPIADI}
+          link="hamtipi"
+          handleSelect={(obj: any) => {
+            setValue("HAMTIPIID", obj.HAMTIPIID);
+            setValue("HAMTIPIADI", obj.HAMTIPIADI);
+          }}
+          control={control}
+        />
+
+        <LiteOptionsTable
+          name="KALINLIKID"
+          label="KALINLIK"
+          headColumns={[
+            { id: "KALINLIKID", title: "KALINLIKID", width: 80 },
+            { id: "ADI", title: "ADI", width: 120 },
+          ]}
+          renderValue={(_: string, obj: any) => {
+            return obj?.KALINLIKID && obj?.ADI
+              ? obj?.KALINLIKID + " - " + obj?.ADI
+              : obj?.KALINLIKID;
+          }}
+          defaultValue={defaultData?.KALINLIKADI}
+          link="kalinlik"
+          handleSelect={(obj: any) => {
+            setValue("KALINLIKID", obj.KALINLIK);
+          }}
+          control={control}
+        />
+
+        <LiteOptionsTable
+          name="IPLIKCINSIID"
+          label="IPLIK CINSI"
+          headColumns={[
+            { id: "IPLIKCINSIID", title: "IPLIKCINSIID", width: 90 },
+            { id: "ADI", title: "ADI", width: 220 },
+          ]}
+          renderValue={(_: string, obj: any) => {
+            return obj?.IPLIKCINSIID && obj?.ADI
+              ? obj?.IPLIKCINSIID + " - " + obj?.ADI
+              : obj?.IPLIKCINSIID;
+          }}
+          defaultValue={defaultData?.IPLIKCINSIID}
+          link="iplikcinsi"
+          handleSelect={(obj: any) => {
+            setValue("IPLIKCINSIID", obj.IPLIKCINSIID);
+          }}
+          control={control}
+        />
+
+        <div className="flex space-x-2">
+          <HFInputMask
+            name="MAXIMUMFIREORANI"
             control={control}
-            setValue={setValue}
-            label="ADI"
-          />
-          <HFTextField
-            name="ADI2"
-            control={control}
-            setValue={setValue}
-            label="Diger Adi-1"
-          />
-          <HFTextField
-            name="ADI3"
-            control={control}
-            setValue={setValue}
-            label="Diger Adi-2"
-          />
-          <HFTextField
-            name="ADI4"
-            control={control}
-            setValue={setValue}
-            label="Diger Adi-3"
+            defaultValue={defaultData?.MAXIMUMFIREORANI}
+            setValue={setValue as any}
+            type="number"
+            label="Max fire orani"
           />
 
-          <LiteOptionsTable
-            name="HAMTIPIID"
-            required={true}
-            label="Ham Tipi"
-            renderValue={(_: string, obj: any) => {
-              return obj?.HAMTIPIID && obj?.ADI
-                ? obj?.HAMTIPIID + " - " + obj?.ADI
-                : obj?.HAMTIPIID;
-            }}
-            headColumns={[
-              { id: "HAMTIPIID", title: "HAMTIPIID", width: 80 },
-              { id: "ADI", title: "ADI", width: 120 },
-            ]}
-            defaultValue={defaultData?.HAMTIPIADI}
-            link="hamtipi"
-            handleSelect={(obj: any) => {
-              setValue("HAMTIPIID", obj.HAMTIPIID);
-              setValue("HAMTIPIADI", obj.HAMTIPIADI);
-            }}
+          <HFInputMask
+            name="MINIMUMFIREORANI"
             control={control}
-          />
-
-          <LiteOptionsTable
-            name="KALINLIKID"
-            label="KALINLIK"
-            headColumns={[
-              { id: "KALINLIKID", title: "KALINLIKID", width: 80 },
-              { id: "ADI", title: "ADI", width: 120 },
-            ]}
-            renderValue={(_: string, obj: any) => {
-              return obj?.KALINLIKID && obj?.ADI
-                ? obj?.KALINLIKID + " - " + obj?.ADI
-                : obj?.KALINLIKID;
-            }}
-            defaultValue={defaultData?.KALINLIKADI}
-            link="kalinlik"
-            handleSelect={(obj: any) => {
-              setValue("KALINLIKID", obj.KALINLIK);
-            }}
-            control={control}
-          />
-
-          <LiteOptionsTable
-            name="IPLIKCINSIID"
-            label="IPLIK CINSI"
-            headColumns={[
-              { id: "IPLIKCINSIID", title: "IPLIKCINSIID", width: 90 },
-              { id: "ADI", title: "ADI", width: 220 },
-            ]}
-            renderValue={(_: string, obj: any) => {
-              return obj?.IPLIKCINSIID && obj?.ADI
-                ? obj?.IPLIKCINSIID + " - " + obj?.ADI
-                : obj?.IPLIKCINSIID;
-            }}
-            defaultValue={defaultData?.IPLIKCINSIID}
-            link="iplikcinsi"
-            handleSelect={(obj: any) => {
-              setValue("IPLIKCINSIID", obj.IPLIKCINSIID);
-            }}
-            control={control}
-          />
-
-          <div className="flex space-x-2">
-            <HFInputMask
-              name="MAXIMUMFIREORANI"
-              control={control}
-              defaultValue={defaultData?.MAXIMUMFIREORANI}
-              setValue={setValue as any}
-              type="number"
-              label="Max fire orani"
-            />
-
-            <HFInputMask
-              name="MINIMUMFIREORANI"
-              control={control}
-              defaultValue={defaultData?.MINIMUMFIREORANI}
-              setValue={setValue as any}
-              type="number"
-              label="Min fire orani"
-            />
-          </div>
-          <LiteOptionsTable
-            name="BIRIMID"
-            label="Varsayilan birim"
-            headColumns={[
-              { id: "BIRIMID", title: "BIRIMID", width: 70 },
-              { id: "BIRIMADI", title: "BIRIMADI", width: 220 },
-            ]}
-            renderValue={(_: string, obj: any) => {
-              return obj?.BIRIMID && obj?.BIRIMADI
-                ? obj?.BIRIMID + " - " + obj?.BIRIMADI
-                : obj?.BIRIMID;
-            }}
-            link="hamstokbirim"
-            handleSelect={(obj: any) => {
-              setValue("BIRIMID", obj.BIRIMID);
-            }}
-            control={control}
-          />
-
-          <HFTextarea
-            name="NOTU"
-            control={control}
-            label="Notu"
-            defaultValue={defaultData?.NOTU}
-          />
-
-          <SubmitCancelButtons
-            type="submit"
-            uniqueID={"inner"}
-            handleActions={(val: string, uniqueID: string) => {
-              if (uniqueID === "inner") {
-                if (val === "Close") {
-                  setOpen(false);
-                }
-                if (val === "Enter") handleSubmit(onSubmit)();
-              }
-            }}
+            defaultValue={defaultData?.MINIMUMFIREORANI}
+            setValue={setValue as any}
+            type="number"
+            label="Min fire orani"
           />
         </div>
+        <LiteOptionsTable
+          name="BIRIMID"
+          label="Varsayilan birim"
+          headColumns={[
+            { id: "BIRIMID", title: "BIRIMID", width: 70 },
+            { id: "BIRIMADI", title: "BIRIMADI", width: 220 },
+          ]}
+          renderValue={(_: string, obj: any) => {
+            return obj?.BIRIMID && obj?.BIRIMADI
+              ? obj?.BIRIMID + " - " + obj?.BIRIMADI
+              : obj?.BIRIMID;
+          }}
+          link="hamstokbirim"
+          handleSelect={(obj: any) => {
+            setValue("BIRIMID", obj.BIRIMID);
+          }}
+          control={control}
+        />
 
-        {/* </CollapseUI> */}
-      </form>
-    </>
+        <HFTextarea
+          name="NOTU"
+          control={control}
+          label="Notu"
+          defaultValue={defaultData?.NOTU}
+        />
+
+        <SubmitCancelButtons
+          type={formId ? "update" : "create"}
+          uniqueID={"inner"}
+          handleActions={(val: string, uniqueID: string) => {
+            if (uniqueID === "inner") {
+              if (val === "Close") {
+                setOpen(false);
+              }
+              if (val === "Enter") handleSubmit(onSubmit)();
+            }
+          }}
+        />
+      </div>
+
+      {/* </CollapseUI> */}
+    </form>
   );
 };

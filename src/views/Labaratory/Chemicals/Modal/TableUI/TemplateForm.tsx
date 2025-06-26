@@ -175,7 +175,7 @@ export const TemplateForm = ({
       <div className="pt-10">
         <SubmitCancelButtons
           uniqueID={"inner"}
-          type={"create"}
+          type={formData.LABRECETEKODU ? "update" : "create"}
           handleActions={(val: string, uniqueID: string) => {
             if (uniqueID === "step") {
               if (val === "Close") {

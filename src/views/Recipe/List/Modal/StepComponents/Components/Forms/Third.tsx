@@ -62,6 +62,7 @@ export const FormThird = ({
               { id: "URUNID", title: "URUNID", width: 70 },
               { id: "ADI", title: "ADI", width: 180 },
             ]}
+            staticSearchID="URUNID"
             renderValue={(_: string, obj: any) => {
               return obj.URUNID && obj.ADI
                 ? obj.URUNID + " - " + obj.ADI

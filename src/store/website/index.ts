@@ -1,10 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { WebsiteState, Route, AlertData } from "../types";
 
-const initialState = {
+const initialState: WebsiteState = {
   routes: {},
-  new_routes: [],
+  new_routes: {},
   alert: {},
   liteTableOpen: "",
+  modalType: "",
 };
 
 export const { actions: websiteActions, reducer: websiteReducer } = createSlice(
@@ -12,17 +14,20 @@ export const { actions: websiteActions, reducer: websiteReducer } = createSlice(
     name: "website",
     initialState,
     reducers: {
-      setRoutes: (state: any, { payload }) => {
+      setRoutes: (state, { payload }: PayloadAction<Record<string, Route[]>>) => {
         state.routes = payload;
       },
-      setNewRoutes: (state: any, { payload }) => {
+      setNewRoutes: (state, { payload }: PayloadAction<Record<string, Route[]>>) => {
         state.new_routes = payload;
       },
-      setAlertData: (state, { payload }) => {
+      setAlertData: (state, { payload }: PayloadAction<AlertData | Record<string, unknown>>) => {
         state.alert = payload;
       },
-      setLiteTableOpen: (state, { payload }) => {
+      setLiteTableOpen: (state, { payload }: PayloadAction<string>) => {
         state.liteTableOpen = payload;
+      },
+      setModalType: (state, { payload }: PayloadAction<string>) => {
+        state.modalType = payload;
       },
     },
   }

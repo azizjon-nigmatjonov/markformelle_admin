@@ -24,6 +24,11 @@ interface Props {
   open: string[];
   setOpen: (val: any) => void;
   setCurrentSellect: (val: any) => void;
+  isLoading: boolean;
+  askAction: string;
+  setAskAction: (val: string) => void;
+  setFocusedIndex: (val: number) => void;
+  focusedIndex: number;
 }
 
 export const StepCard = ({
@@ -42,6 +47,11 @@ export const StepCard = ({
   handleCheck = () => {},
   setDeleteCard = () => {},
   setCurrentSellect = () => {},
+  isLoading = false,
+  askAction = "",
+  setAskAction = () => {},
+  setFocusedIndex = () => {},
+  focusedIndex = 0,
 }: Props) => {
   const [draggingIndex, setDraggingIndex]: any = useState(null);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -50,7 +60,6 @@ export const StepCard = ({
     null
   );
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 100 });
-  const [focusedIndex, setFocusedIndex] = useState<number>(0);
   const headerScrollRef: any = useRef(null);
   const [currentScroll, setCurrentScroll] = useState(0);
   const [maxScroll, setMaxScroll] = useState(0);
@@ -67,12 +76,18 @@ export const StepCard = ({
   }, [open]);
 
   useEffect(() => {
-    if (isAltPressed && currentKey === "Insert") {
-      setOpen(["card", "insert_step"]);
+    if (isAltPressed) {
+      if (currentKey === "Insert") {
+        setOpen(["card", "insert_step"]);
 
-      const currEl = items.map((item: any) => item.rows).flat();
-      const index = currEl.findIndex((el: any) => el.index === focusedIndex);
-      setCurrentSellect(currEl[index]);
+        const currEl = items.map((item: any) => item.rows).flat();
+        const index = currEl.findIndex((el: any) => el.index === focusedIndex);
+        setCurrentSellect(currEl[index]);
+      }
+
+      if (currentKey === "Delete") {
+        setAskAction("delete");
+      }
     }
   }, [isAltPressed, currentKey]);
 
@@ -188,7 +203,12 @@ export const StepCard = ({
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const handleKeyDown = (event: any, outerIndex: number) => {
-    if (!event.ctrlKey && event.code === "Enter") {
+    if (
+      !event.ctrlKey &&
+      event.code === "Enter" &&
+      !checkedList.length &&
+      askAction !== "delete"
+    ) {
       setOpen(["card", "step"]);
       const currItem = items[outerIndex].rows[focusedIndex];
       setCurrentSellect(currItem);
@@ -196,6 +216,14 @@ export const StepCard = ({
 
     if (editStep) return;
 
+    if (event.code === "Space") {
+      event.preventDefault();
+
+      const currEl: any = items.map((item: any) => item.rows).flat();
+      const index = currEl.findIndex((el: any) => el.index === focusedIndex);
+      currEl[index].checked = !currEl[index].checked;
+      handleCheck(currEl[index]);
+    }
     if (event.key === "ArrowUp") {
       setFocusedIndex(focusedIndex < 1 ? 0 : focusedIndex - 1);
     } else if (event.key === "ArrowDown") {
@@ -249,108 +277,113 @@ export const StepCard = ({
         selectAll={selectAll}
         onSelectAll={handleSelectAll}
       />
-      {items.map((row: any, outerIndex: number) => (
-        <div
-          key={outerIndex}
-          draggable={editStep}
-          onDragStart={() => {
-            if (!editStep) return;
-            handleDragStart(outerIndex);
-          }}
-          onDragOver={(e) => {
-            if (!editStep) return;
-            e.preventDefault();
-            handleDragOver(outerIndex);
-          }}
-          onDragLeave={handleDragLeave}
-          onDrop={() => {
-            if (!editStep) return;
-            handleDrop(outerIndex);
-          }}
-          className={`w-full grid grid-cols-4 rounded-[12px] py-3 h-full text-indigo-800 font-medium relative mb-5 shadow-md ${
-            hoveredIndex === outerIndex && !hoveredIndexStep
-              ? "hovered-card"
-              : ""
-          }`}
-          style={{ backgroundColor: row.bg + "aa" }}
-        >
-          <div className="col-span-3">
-            <ScrollView
-              rows={row?.rows ?? []}
-              stepRef={stepRef}
-              editStep={editStep}
-              handleDragStartStep={handleDragStartStep}
-              handleDragOverStep={handleDragOverStep}
-              setInitialModalData={(obj: any) => {
-                setOpen(["card", "step"]);
-
-                setCurrentSellect(obj);
-              }}
-              handleDropSteps={handleDropSteps}
-              hoveredIndexStep={hoveredIndexStep}
-              hoveredIndex={hoveredIndex}
-              outerIndex={outerIndex}
-              draggingIndexStep={draggingIndexStep}
-              handleDragLeaveStep={handleDragLeaveStep}
-              handleAdd={handleAdd}
-              maxScroll={maxScroll}
-              headColumns={newColumns}
-              deleteStep={deleteStep}
-              scrollInterval={scrollInterval}
-              setMaxScroll={setMaxScroll}
-              currentScroll={currentScroll}
-              setCurrentScroll={setCurrentScroll}
-              headerScrollRef={headerScrollRef}
-              checkedList={checkedList}
-              handleCheck={handleCheck}
-              focusedIndex={focusedIndex}
-              handleKeyDown={(val: any) => {
-                handleKeyDown(val, outerIndex);
-              }}
-              setFocusedIndex={setFocusedIndex}
-            />
-          </div>
-          <div className="relative">
-            <div className="sticky top-[40px] flex flex-col items-center">
-              <h1 className="text-6xl font-semibold text-center">{row.id}</h1>
-              <div
-                className="cursor-pointer w-[80%]"
-                onClick={() => setImageView(row.image)}
-              >
-                <img
-                  src={row.image}
-                  alt="Main"
-                  className="w-full h-auto"
-                  loading="lazy"
-                />
-              </div>
-              {deleteCardActive && (
-                <div className="absolute right-2 top-1">
-                  <Button type="button" onClick={() => setDeleteCard(row.id)}>
-                    <DeleteIcon width={26} />
-                  </Button>
-                </div>
-              )}
-            </div>
-          </div>
-          {editStep && (
-            <div
-              onClick={() => handleAddCard(outerIndex)}
-              className="bottom-[-16px] left-0 w-full h-[18px] group absolute flex items-center justify-around"
-            >
-              <div className="hidden group-hover:flex bg-[var(--primary)] h-[4px] w-[48%] mt-1.5 rounded-full"></div>
-              <button
-                type="button"
-                onClick={() => {}}
-                className={`hidden group-hover:flex absolute z-[1] left-1/2 w-[20px] h-[20px] bottom-[-3px]  items-center justify-center bg-[var(--primary)] rounded-[4px]`}
-              >
-                <AddIcon style={{ color: "white", fontSize: "24px" }} />
-              </button>
-              <div className="hidden group-hover:flex bg-[var(--primary)] h-[4px] w-[46.86%] mt-1.5 rounded-full"></div>
-            </div>
-          )}
+      {!items.length && !isLoading ? (
+        <div className="flex justify-center items-center h-full py-5">
+          <img width={140} src="/images/no-data.png" alt="empty" />
         </div>
-      ))}
+      ) : (
+        items.map((row: any, outerIndex: number) => (
+          <div
+            key={outerIndex}
+            draggable={editStep}
+            onDragStart={() => {
+              if (!editStep) return;
+              handleDragStart(outerIndex);
+            }}
+            onDragOver={(e) => {
+              if (!editStep) return;
+              e.preventDefault();
+              handleDragOver(outerIndex);
+            }}
+            onDragLeave={handleDragLeave}
+            onDrop={() => {
+              if (!editStep) return;
+              handleDrop(outerIndex);
+            }}
+            className={`w-full grid grid-cols-4 rounded-[12px] py-3 h-full text-indigo-800 font-medium relative mb-5 shadow-md ${
+              hoveredIndex === outerIndex && !hoveredIndexStep
+                ? "hovered-card"
+                : ""
+            }`}
+            style={{ backgroundColor: row.bg + "aa" }}
+          >
+            <div className="col-span-3">
+              <ScrollView
+                rows={row?.rows ?? []}
+                stepRef={stepRef}
+                editStep={editStep}
+                handleDragStartStep={handleDragStartStep}
+                handleDragOverStep={handleDragOverStep}
+                setInitialModalData={(obj: any) => {
+                  setOpen(["card", "step"]);
+
+                  setCurrentSellect(obj);
+                }}
+                handleDropSteps={handleDropSteps}
+                hoveredIndexStep={hoveredIndexStep}
+                hoveredIndex={hoveredIndex}
+                outerIndex={outerIndex}
+                draggingIndexStep={draggingIndexStep}
+                handleDragLeaveStep={handleDragLeaveStep}
+                handleAdd={handleAdd}
+                maxScroll={maxScroll}
+                headColumns={newColumns}
+                deleteStep={deleteStep}
+                scrollInterval={scrollInterval}
+                setMaxScroll={setMaxScroll}
+                currentScroll={currentScroll}
+                setCurrentScroll={setCurrentScroll}
+                headerScrollRef={headerScrollRef}
+                handleCheck={handleCheck}
+                focusedIndex={focusedIndex}
+                handleKeyDown={(val: any) => {
+                  handleKeyDown(val, outerIndex);
+                }}
+                setFocusedIndex={setFocusedIndex}
+              />
+            </div>
+            <div className="relative">
+              <div className="sticky top-[40px] flex flex-col items-center">
+                <h1 className="text-6xl font-semibold text-center">{row.id}</h1>
+                <div
+                  className="cursor-pointer w-[80%]"
+                  onClick={() => setImageView(row.image)}
+                >
+                  <img
+                    src={row.image}
+                    alt="Main"
+                    className="w-full h-auto"
+                    loading="lazy"
+                  />
+                </div>
+                {deleteCardActive && (
+                  <div className="absolute right-2 top-1">
+                    <Button type="button" onClick={() => setDeleteCard(row.id)}>
+                      <DeleteIcon width={26} />
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+            {editStep && (
+              <div
+                onClick={() => handleAddCard(outerIndex)}
+                className="bottom-[-16px] left-0 w-full h-[18px] group absolute flex items-center justify-around"
+              >
+                <div className="hidden group-hover:flex bg-[var(--primary)] h-[4px] w-[48%] mt-1.5 rounded-full"></div>
+                <button
+                  type="button"
+                  onClick={() => {}}
+                  className={`hidden group-hover:flex absolute z-[1] left-1/2 w-[20px] h-[20px] bottom-[-3px]  items-center justify-center bg-[var(--primary)] rounded-[4px]`}
+                >
+                  <AddIcon style={{ color: "white", fontSize: "24px" }} />
+                </button>
+                <div className="hidden group-hover:flex bg-[var(--primary)] h-[4px] w-[46.86%] mt-1.5 rounded-full"></div>
+              </div>
+            )}
+          </div>
+        ))
+      )}
 
       {open.includes("material") && (
         <MaterialForm onClose={() => setOpen(["card"])} />

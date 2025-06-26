@@ -10,6 +10,7 @@ export const useKeyDownEvent = () => {
     Escape: "Escape",
     Enter: "Enter",
     Insert: "Insert",
+    Delete: "Delete",
   };
 
   useEffect(() => {
@@ -20,6 +21,11 @@ export const useKeyDownEvent = () => {
       if (e.key in keys && e.ctrlKey) {
         e.preventDefault();
         setCurrentKey(keys[e.key]);
+      }
+
+      if (e.key === "Enter") {
+        e.preventDefault();
+        setCurrentKey("Enter");
       }
 
       if (e.key === "Control") {
@@ -34,6 +40,7 @@ export const useKeyDownEvent = () => {
         setIsAltPressed(false);
         setCurrentKey("");
       }
+      setCurrentKey("");
       setPressedKey("");
     };
 
