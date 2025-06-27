@@ -18,6 +18,7 @@ interface OrderFormProps {
   createForm: (val: any) => void;
   updateForm: (val: any, id: number) => void;
   formData: any;
+  uniqueID: string;
 }
 
 export const OrderForm = ({
@@ -25,9 +26,9 @@ export const OrderForm = ({
   handleModalActions,
   createForm,
   updateForm,
+  uniqueID,
   formData,
 }: OrderFormProps) => {
-  const [uniqueID, setUniqueID] = useState("main_order_form");
   const [formId, setFormId] = useState<number>(0);
   const { control, handleSubmit, setValue, getValues, reset } = useForm<any>({
     mode: "onSubmit",
@@ -130,7 +131,7 @@ export const OrderForm = ({
               uniqueID={uniqueID}
               type={formId ? "update" : "create"}
               handleActions={(val: string, uniqueID: string) => {
-                if (uniqueID === "main_table_lab") {
+                if (uniqueID === "main_order_form") {
                   if (val === "Close") handleModalActionsFn("close", "");
                   if (val === "Enter") handleSubmit(onSubmit)();
                 }

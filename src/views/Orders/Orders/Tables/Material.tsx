@@ -1,7 +1,11 @@
 import CNewTable from "../../../../components/CElements/CNewTable";
 import { useState } from "react";
 
-export const MaterialTable = () => {
+export const MaterialTable = ({
+  handleActionsTable,
+}: {
+  handleActionsTable: (val: any, status: string) => void;
+}) => {
   const [filterParams, setFilterParams] = useState({});
   return (
     <CNewTable
@@ -9,8 +13,9 @@ export const MaterialTable = () => {
         { id: "MATERIALID", title: "MATERIALID" },
         { id: "MATERIALADI", title: "MATERIALADI" },
       ]}
+      handleActions={handleActionsTable}
       bodyColumns={[]}
-      autoHeight="400px"
+      autoHeight="250px"
       handleFilterParams={(params: any) => {
         setFilterParams(params);
       }}

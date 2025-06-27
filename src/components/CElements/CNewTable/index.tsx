@@ -933,7 +933,7 @@ const CNewTable = ({
               {!loading && !bodySource?.length ? (
                 <div className="flex justify-center items-center h-full">
                   <img
-                    className="w-[300px]"
+                    className="w-[140px]"
                     src="/images/no-data.png"
                     alt="no data"
                   />
