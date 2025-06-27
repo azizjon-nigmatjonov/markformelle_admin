@@ -36,12 +36,17 @@ export const TableUI = ({
   const handleScroll = useCallback(() => {
     if (!tableRef.current || !onLoadMore || isLoading) return;
 
-    const { scrollTop, scrollHeight, clientHeight } = tableRef.current;
-    const isNearBottom = scrollTop + clientHeight >= scrollHeight - 10;
+    // Use requestAnimationFrame to batch scroll position checks and avoid forced reflow
+    requestAnimationFrame(() => {
+      if (!tableRef.current || !onLoadMore || isLoading) return;
 
-    if (isNearBottom) {
-      onLoadMore();
-    }
+      const { scrollTop, scrollHeight, clientHeight } = tableRef.current;
+      const isNearBottom = scrollTop + clientHeight >= scrollHeight - 10;
+
+      if (isNearBottom) {
+        onLoadMore();
+      }
+    });
   }, [onLoadMore, isLoading]);
 
   useEffect(() => {

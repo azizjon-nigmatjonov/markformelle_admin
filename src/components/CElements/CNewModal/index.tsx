@@ -78,6 +78,7 @@ const CNewModal: FC<Props> = ({
     e.preventDefault();
     e.stopPropagation();
     if (modalRef.current) {
+      // Cache the rect to avoid multiple getBoundingClientRect calls
       const rect = modalRef.current.getBoundingClientRect();
 
       if (!position) {
@@ -98,9 +99,12 @@ const CNewModal: FC<Props> = ({
 
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging && position) {
-      setPosition({
-        x: e.clientX - dragOffset.x,
-        y: e.clientY - dragOffset.y,
+      // Use requestAnimationFrame to batch position updates and avoid forced reflow
+      requestAnimationFrame(() => {
+        setPosition({
+          x: e.clientX - dragOffset.x,
+          y: e.clientY - dragOffset.y,
+        });
       });
     }
   };

@@ -10,7 +10,12 @@ export const ZigzagCard = ({ bgColor }: Props) => {
 
   useEffect(() => {
     if (wrapperRef.current) {
-      setHeight(wrapperRef.current.clientHeight);
+      // Use requestAnimationFrame to defer the measurement and avoid forced reflow
+      requestAnimationFrame(() => {
+        if (wrapperRef.current) {
+          setHeight(wrapperRef.current.clientHeight);
+        }
+      });
     }
   }, []);
   return (

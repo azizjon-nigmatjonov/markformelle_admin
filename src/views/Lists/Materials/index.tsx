@@ -5,6 +5,7 @@ import { Header } from "../../../components/UI/Header";
 import CNewTable from "../../../components/CElements/CNewTable";
 import { IFilterParams } from "../../../interfaces";
 import { useTranslationHook } from "../../../hooks/useTranslation";
+import { useTableHeaders } from "../../../hooks/useTableHeaders";
 import { HamModalUI } from "./Modal";
 import { ModalTypes } from "./interfaces";
 import CNewMiniModal from "../../../components/CElements/CNewMiniModal";
@@ -28,22 +29,7 @@ export const MaterialsPage = () => {
     filterParams,
   });
 
-  const newHeadColumns = useMemo(() => {
-    const obj = { ...bodyColumns?.[0] };
-    const keys = Object.keys(obj);
-    const newColumns: any = [];
-
-    keys.forEach((key: string) => {
-      if (!newColumns.find((item: { id: string }) => item.id === key)) {
-        newColumns.push({
-          title: key,
-          id: key,
-        });
-      }
-    });
-
-    return newColumns;
-  }, [bodyColumns]);
+  const { newHeadColumns } = useTableHeaders({ bodyColumns });
 
   const handleActions = (el: any, status: string) => {
     if (status === "modal") {

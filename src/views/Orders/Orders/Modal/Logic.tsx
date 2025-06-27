@@ -2,7 +2,38 @@ import axios from "axios";
 import { useTranslationHook } from "../../../../hooks/useTranslation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import dayjs from "dayjs";
 const API_URL = import.meta.env.VITE_TEST_URL;
+
+// FormLogic wrapper function that can use hooks
+export const FormLogic = () => {
+  const setFormValues = (
+    form: any,
+    setValue: (name: string, value: any) => void
+  ) => {
+    setValue("FIRMAID", form.FIRMAID);
+    setValue("INSERTKULLANICIADI", form.INSERTKULLANICIADI);
+    setValue("NOTU", form.NOTU);
+    setValue("SIPARISGRUPADI", form.SIPARISGRUPADI);
+    setValue("BOYASIPARISTIPIADI", form.BOYASIPARISTIPIADI);
+    setValue("FASON", form.FASON);
+    setValue("SIPARISYILI", dayjs(form.SIPARISYILI).format("YYYY"));
+    setValue("SIPARISTARIHI", dayjs(form.SIPARISTARIHI).format("DD.MM.YYYY"));
+    setValue("BOYASIPARISKAYITID", form.BOYASIPARISKAYITID);
+    setValue("BOYASIPARISID", form.BOYASIPARISID);
+  };
+
+  const setInitialFormValues = (
+    setValue: (name: string, value: any) => void
+  ) => {
+    setValue("DOVIZID", "USD");
+  };
+
+  return {
+    setFormValues,
+    setInitialFormValues,
+  };
+};
 
 export const ModalTableLogic = ({
   setFormId,
@@ -78,6 +109,6 @@ export const ModalTableLogic = ({
     updateForm,
     createForm,
     deleteFn,
-    formData: formData?.LABRECETEKODU ? formData : defaultData,
+    formData: formData?.BOYASIPARISID ? formData : defaultData,
   };
 };

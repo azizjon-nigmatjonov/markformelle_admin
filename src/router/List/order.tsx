@@ -1,4 +1,4 @@
-import { OrderList } from "../../views/Orders/Chemicals";
+import { OrderList } from "../../views/Orders/Orders";
 
 export const oderList = [
   {

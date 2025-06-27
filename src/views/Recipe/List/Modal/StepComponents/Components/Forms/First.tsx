@@ -106,13 +106,15 @@ export const FormFirst = ({
         control={control}
       />
 
-      <div className="rounded-[8px] border border-[var(--border)] p-2 h-[140px] flex items-center overflow-hidden">
-        {currentReceteGrafikID && (
+      <div className="rounded-[8px] border border-[var(--border)] p-2 h-[140px] flex items-center justify-center overflow-hidden">
+        {currentReceteGrafikID ? (
           <img
             src={`${API_URL}/recetegrafik/image/${currentReceteGrafikID}`}
             alt="recete image"
             className="w-full"
           />
+        ) : (
+          <img src="/images/image.png" alt="no image" className="w-[40px]" />
         )}
       </div>
 

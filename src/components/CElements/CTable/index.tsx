@@ -251,6 +251,7 @@ const CTable = ({
       const mouseDownHandler = function (e: any) {
         x = e.clientX;
 
+        // Cache the computed style to avoid multiple getComputedStyle calls
         const styles = window.getComputedStyle(col);
         w = parseInt(styles.width, 10);
 
@@ -264,17 +265,21 @@ const CTable = ({
         const dx = e.clientX - x;
         const colID = col.getAttribute("id");
         const colWidth = w + dx;
-        dispatch(tableSizeAction.setTableSize({ pageName, colID, colWidth }));
-        dispatch(
-          tableSizeAction.setTableSettings({
-            pageName,
-            colID,
-            colWidth,
-            isStiky: "ineffective",
-            colIdx: idx - 1,
-          })
-        );
-        col.style.width = `${colWidth}px`;
+
+        // Use requestAnimationFrame to batch DOM updates and avoid forced reflow
+        requestAnimationFrame(() => {
+          dispatch(tableSizeAction.setTableSize({ pageName, colID, colWidth }));
+          dispatch(
+            tableSizeAction.setTableSettings({
+              pageName,
+              colID,
+              colWidth,
+              isStiky: "ineffective",
+              colIdx: idx - 1,
+            })
+          );
+          col.style.width = `${colWidth}px`;
+        });
       };
 
       const mouseUpHandler = function () {

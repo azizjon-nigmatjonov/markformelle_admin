@@ -76,19 +76,26 @@ const KnittingMachines = () => {
 
   useEffect(() => {
     if (gridRef.current) {
-      const { clientWidth, clientHeight } = gridRef.current;
-
-      setDimensions({
-        width: clientWidth,
-        height: clientHeight,
+      requestAnimationFrame(() => {
+        if (gridRef.current) {
+          const { clientWidth, clientHeight } = gridRef.current;
+          setDimensions({
+            width: clientWidth,
+            height: clientHeight,
+          });
+        }
       });
     }
 
     const handleResize = () => {
       if (gridRef.current) {
-        setDimensions({
-          width: gridRef.current.clientWidth,
-          height: gridRef.current.clientHeight,
+        requestAnimationFrame(() => {
+          if (gridRef.current) {
+            setDimensions({
+              width: gridRef.current.clientWidth,
+              height: gridRef.current.clientHeight,
+            });
+          }
         });
       }
     };

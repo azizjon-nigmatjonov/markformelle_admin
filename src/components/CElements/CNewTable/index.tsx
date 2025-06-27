@@ -387,6 +387,7 @@ const CNewTable = ({
       const mouseDownHandler = function (e: any) {
         x = e.clientX;
 
+        // Cache the computed style to avoid multiple getComputedStyle calls
         const styles = window.getComputedStyle(col);
         w = parseInt(styles.width, 10);
 
@@ -400,17 +401,21 @@ const CNewTable = ({
         const dx = e.clientX - x;
         const colID = col.getAttribute("id");
         const colWidth = w + dx;
-        dispatch(tableSizeAction.setTableSize({ pageName, colID, colWidth }));
-        dispatch(
-          tableSizeAction.setTableSettings({
-            pageName,
-            colID,
-            colWidth,
-            isStiky: "ineffective",
-            colIdx: idx - 1,
-          })
-        );
-        col.style.width = `${colWidth}px`;
+
+        // Use requestAnimationFrame to batch DOM updates and avoid forced reflow
+        requestAnimationFrame(() => {
+          dispatch(tableSizeAction.setTableSize({ pageName, colID, colWidth }));
+          dispatch(
+            tableSizeAction.setTableSettings({
+              pageName,
+              colID,
+              colWidth,
+              isStiky: "ineffective",
+              colIdx: idx - 1,
+            })
+          );
+          col.style.width = `${colWidth}px`;
+        });
       };
 
       const mouseUpHandler = function () {
@@ -756,7 +761,6 @@ const CNewTable = ({
           }
         }}
         tabIndex={0}
-        // onKeyDown={(e: any) => handleKeyDownRow(e, item.index)}
       >
         <td
           className={`h-[35px] border-b border-[var(--border)] w-full ${

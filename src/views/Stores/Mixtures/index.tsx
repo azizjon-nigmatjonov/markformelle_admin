@@ -8,6 +8,7 @@ import CNewModal from "../../../components/CElements/CNewModal";
 import { ModalUI } from "./Modal";
 import { ModalTypes } from "./interfaces";
 import { useTranslation } from "react-i18next";
+import { useTableHeaders } from "../../../hooks/useTableHeaders";
 
 export const MixturesPage = () => {
   const { t } = useTranslation();
@@ -21,64 +22,53 @@ export const MixturesPage = () => {
     filterParams,
   });
 
-  const newHeadColumns = useMemo(() => {
-    const obj = { ...bodyColumns?.[0] };
-    const keys = Object.keys(obj);
-    const newColumns: any = [
-      {
-        title: "Роствор ID",
-        id: "URUNRECETEURUNID",
-        checked: true,
-      },
-      {
-        title: "Продукт",
-        id: "URUNADI",
-        checked: true,
-      },
-      {
-        title: "Единица",
-        id: "URUNBIRIMADI",
-        checked: true,
-      },
-      {
-        title: "Дата изменения",
-        id: "DEGISIMTARIHI",
-        checked: true,
-      },
-      {
-        title: "Пользователь",
-        id: "KULLANICIADI",
-        checked: true,
-      },
-      {
-        title: "Единица ID",
-        id: "URUNBIRIMID",
-        checked: true,
-      },
+  const predefinedColumns = [
+    {
+      title: "Роствор ID",
+      id: "URUNRECETEURUNID",
+      checked: true,
+    },
+    {
+      title: "Продукт",
+      id: "URUNADI",
+      checked: true,
+    },
+    {
+      title: "Единица",
+      id: "URUNBIRIMADI",
+      checked: true,
+    },
+    {
+      title: "Дата изменения",
+      id: "DEGISIMTARIHI",
+      checked: true,
+    },
+    {
+      title: "Пользователь",
+      id: "KULLANICIADI",
+      checked: true,
+    },
+    {
+      title: "Единица ID",
+      id: "URUNBIRIMID",
+      checked: true,
+    },
+    {
+      title: "Пользователь ID",
+      id: "KULLANICIID",
+      checked: true,
+    },
+    {
+      title: "Заметка",
+      id: "NOTU",
+      checked: true,
+    },
+  ];
 
-      {
-        title: "Пользователь ID",
-        id: "KULLANICIID",
-        checked: true,
-      },
-      {
-        title: "Заметка",
-        id: "NOTU",
-        checked: true,
-      },
-    ];
-
-    keys.forEach((key: string) => {
-      if (!newColumns.find((item: { id: string }) => item.id === key)) {
-        newColumns.push({
-          title: key,
-          id: key,
-        });
-      }
-    });
-
-    return newColumns;
-  }, [bodyColumns]);
+  const { newHeadColumns } = useTableHeaders({
+    bodyColumns,
+    predefinedColumns,
+  });
 
   const handleActions = (el: any, status: string) => {
     if (status === "modal") {

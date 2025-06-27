@@ -270,7 +270,7 @@ export const LiteOptionsTable = memo(
           ...filterParams,
           link,
           q: value ? `${fetchName}=${value}` : undefined,
-          perPage: 50, // Reset to initial limit when searching
+          perPage: 50,
         });
         setSearchName(fetchName);
       },
@@ -313,7 +313,10 @@ export const LiteOptionsTable = memo(
           setCurrentEl(el as T);
           setCurrentValue(el as T);
           setOpen(false);
-          inputRef.current?.focus();
+          // Use requestAnimationFrame to defer focus and avoid forced reflow
+          requestAnimationFrame(() => {
+            inputRef.current?.focus();
+          });
         }
       },
       [handleSelect, setCurrentValue]
@@ -408,7 +411,10 @@ export const LiteOptionsTable = memo(
               const currentIndex = elements.indexOf(active);
               const next = elements[currentIndex + 1];
               if (next && typeof next.focus === "function") {
-                next.focus();
+                // Use requestAnimationFrame to defer focus and avoid forced reflow
+                requestAnimationFrame(() => {
+                  next.focus();
+                });
               }
             }
           }, 0);

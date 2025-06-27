@@ -109,7 +109,10 @@ export const SelectOptionsTable = ({
 
   useEffect(() => {
     if (focused) {
-      inputRef.current.focus();
+      // Use requestAnimationFrame to defer focus and avoid forced reflow
+      requestAnimationFrame(() => {
+        inputRef.current.focus();
+      });
     }
   }, [focused]);
 

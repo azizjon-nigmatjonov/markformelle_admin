@@ -32,7 +32,9 @@ const CCheckbox = ({
 
         const next = elements[currentIndex + 1];
         if (next && typeof next.focus === "function") {
-          next.focus();
+          requestAnimationFrame(() => {
+            next.focus();
+          });
         }
       }
     }

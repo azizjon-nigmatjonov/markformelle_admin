@@ -1,5 +1,5 @@
 import { ModalUIRecipe } from "./Modal";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { breadCrumbs, TableData } from "./Logic";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { Header } from "../../../components/UI/Header";
@@ -9,6 +9,7 @@ import { useTranslationHook } from "../../../hooks/useTranslation";
 import CNewModal from "../../../components/CElements/CNewModal";
 import { playSound } from "../../../utils/playAudio";
 import dayjs from "dayjs";
+import { useTableHeaders } from "../../../hooks/useTableHeaders";
 
 export const RecipeList = () => {
   const { t } = useTranslationHook();
@@ -20,40 +21,25 @@ export const RecipeList = () => {
     perPage: 50,
   });
   const [modalInitialData, setModalInitialData] = useState<any>({});
-
   const { bodyColumns, isLoading, bodyData, deleteFn } = TableData({
     filterParams,
   });
 
-  const newHeadColumns = useMemo(() => {
-    const headColumns: any = [
-      {
-        CALISMATARIHI: "CALISMATARIHI",
-        title: "CALISMATARIHI",
-        width: 100,
-        renderValue: (val: string) => {
-          return dayjs(val).format("DD.MM.YYYY");
-        },
+  const predefinedColumns = [
+    {
+      id: "CALISMATARIHI",
+      title: "CALISMATARIHI",
+      width: 100,
+      renderValue: (val: string) => {
+        return dayjs(val).format("DD.MM.YYYY");
       },
-    ];
-    const arr: any = bodyData?.data ?? [];
+    },
+  ];
 
-    const obj = { ...arr?.[0] };
-    const keys = Object.keys(obj);
-    const newColumns: any = [];
-
-    keys.forEach((key: string) => {
-      const found = headColumns.find((item: any) => item.id === key);
-
-      if (found?.id) {
-        newColumns.push(found);
-      } else {
-        newColumns.push({ title: key, id: key });
-      }
-    });
-
-    return newColumns;
-  }, [bodyColumns]);
+  const { newHeadColumns } = useTableHeaders({
+    bodyColumns,
+    predefinedColumns,
+  });
 
   const handleActions = (el: any, status: string) => {
     if (status === "modal") {
@@ -108,7 +94,7 @@ export const RecipeList = () => {
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />
       <div className="p-2">
         <CNewTable
-          title={t("table_recipe")}
+          title={"table_recipe"}
           headColumns={newHeadColumns}
           bodyColumns={bodyColumns}
           handleActions={handleActions}
@@ -137,9 +123,9 @@ export const RecipeList = () => {
 
       {open.length || changed ? (
         <CNewModal
-          title={t(
+          title={
             modalInitialData.RECETEID ? "updating_recipe" : "creating_recipe"
-          )}
+          }
           handleActions={handleModalActions}
           defaultData={{
             id: modalInitialData?.RECETEID,

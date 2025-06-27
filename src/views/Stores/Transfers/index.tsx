@@ -7,6 +7,7 @@ import { ModalUI } from "./Modal";
 import { IFilterParams } from "../../../interfaces";
 import { GetCurrentDate } from "../../../utils/getDate";
 import { useTranslationHook } from "../../../hooks/useTranslation";
+import { useTableHeaders } from "../../../hooks/useTableHeaders";
 
 interface ModalTypes {
   IRSALIYENO?: string;
@@ -80,137 +81,129 @@ export const Transfers = () => {
   //   FIILISEVKTARIHI: 10,
   //   INSERTKULLANICIID: 11,
   // };
-  const newHeadColumns = useMemo(() => {
-    if (!bodyColumns?.length) return [];
-    const obj = { ...bodyColumns?.[0] };
-    const keys = Object.keys(obj);
-    const newColumns: any = [
-      {
-        id: "index",
-      },
-      {
-        id: "IRSALIYETARIHI",
-        title: "IRSALIYETARIHI",
-        render: (val: string) => {
-          return GetCurrentDate({ date: val, type: "date" });
-        },
-      },
 
-      {
-        title: "Номер документа",
-        id: "IRSALIYENO",
-        checked: true,
+  const predefinedColumns = [
+    {
+      id: "index",
+    },
+    {
+      id: "IRSALIYETARIHI",
+      title: "IRSALIYETARIHI",
+      render: (val: string) => {
+        return GetCurrentDate({ date: val, type: "date" });
       },
-      {
-        title: "Склад ID",
-        id: "DEPOID",
-        checked: true,
-      },
-      {
-        title: "Склад",
-        id: "DEPOADI",
-        checked: true,
-      },
-      {
-        title: "Отдел перемещения ID",
-        id: "TRANSFERDEPOID",
-        checked: true,
-      },
-      {
-        title: "Склад перемещения",
-        id: "TRANSFERDEPOADI",
-        checked: true,
-      },
-      {
-        title: "Дата изменения",
-        id: "DEGISIMTARIHI",
-        checked: true,
-      },
-      {
-        title: "Пользователь",
-        id: "KULLANICIADI",
-        checked: true,
-      },
-      {
-        title: "Дата(создание)",
-        id: "INSERTTARIHI",
-        checked: true,
-      },
-      {
-        title: "Пользователь(создание)",
-        id: "INSERKULLANICIADI",
-        checked: true,
-      },
-      {
-        title: "Регистрации документа ID",
-        id: "EVRAKKAYITID",
-        checked: true,
-      },
-      {
-        title: "Документ ID",
-        id: "IRSALIYEID",
-        checked: true,
-      },
-      {
-        title: "Тип операции",
-        id: "HAREKETTIPI",
-        checked: true,
-      },
-      {
-        title: "Дата отгрузки",
-        id: "FIILISEVKTARIHI",
-        checked: true,
-      },
-      {
-        title: "Валюта",
-        id: "DOVIZID",
-        checked: true,
-      },
-      {
-        title: "Класс",
-        id: "SINIF",
-        checked: true,
-      },
-      {
-        title: "Фирма ID",
-        id: "FIRMAID",
-        checked: true,
-      },
-      {
-        title: "Серийный номер",
-        id: "SERINO",
-        checked: true,
-      },
-      {
-        title: "Заметка",
-        id: "NOTU",
-        checked: true,
-      },
-      {
-        title: "Пользователь ID(создание)",
-        id: "INSERTKULLANICIID",
-        checked: true,
-      },
-      {
-        title: "Пользователь ID",
-        id: "KULLANICIID",
-        checked: true,
-      },
-      {
-        title: "Фирма",
-        id: "FIRMAADI",
-        checked: true,
-      },
-    ];
+    },
+    {
+      title: "Номер документа",
+      id: "IRSALIYENO",
+      checked: true,
+    },
+    {
+      title: "Склад ID",
+      id: "DEPOID",
+      checked: true,
+    },
+    {
+      title: "Склад",
+      id: "DEPOADI",
+      checked: true,
+    },
+    {
+      title: "Отдел перемещения ID",
+      id: "TRANSFERDEPOID",
+      checked: true,
+    },
+    {
+      title: "Склад перемещения",
+      id: "TRANSFERDEPOADI",
+      checked: true,
+    },
+    {
+      title: "Дата изменения",
+      id: "DEGISIMTARIHI",
+      checked: true,
+    },
+    {
+      title: "Пользователь",
+      id: "KULLANICIADI",
+      checked: true,
+    },
+    {
+      title: "Дата(создание)",
+      id: "INSERTTARIHI",
+      checked: true,
+    },
+    {
+      title: "Пользователь(создание)",
+      id: "INSERKULLANICIADI",
+      checked: true,
+    },
+    {
+      title: "Регистрации документа ID",
+      id: "EVRAKKAYITID",
+      checked: true,
+    },
+    {
+      title: "Документ ID",
+      id: "IRSALIYEID",
+      checked: true,
+    },
+    {
+      title: "Тип операции",
+      id: "HAREKETTIPI",
+      checked: true,
+    },
+    {
+      title: "Дата отгрузки",
+      id: "FIILISEVKTARIHI",
+      checked: true,
+    },
+    {
+      title: "Валюта",
+      id: "DOVIZID",
+      checked: true,
+    },
+    {
+      title: "Класс",
+      id: "SINIF",
+      checked: true,
+    },
+    {
+      title: "Фирма ID",
+      id: "FIRMAID",
+      checked: true,
+    },
+    {
+      title: "Серийный номер",
+      id: "SERINO",
+      checked: true,
+    },
+    {
+      title: "Заметка",
+      id: "NOTU",
+      checked: true,
+    },
+    {
+      title: "Пользователь ID(создание)",
+      id: "INSERTKULLANICIID",
+      checked: true,
+    },
+    {
+      title: "Пользователь ID",
+      id: "KULLANICIID",
+      checked: true,
+    },
+    {
+      title: "Фирма",
+      id: "FIRMAADI",
+      checked: true,
+    },
+  ];
 
-    keys.forEach((key: string) => {
-      if (!newColumns.find((item: { id: string }) => item.id === key)) {
-        newColumns.push({ title: key, id: key });
-      }
-    });
-
-    return newColumns;
-  }, [bodyColumns?.length]);
+  const { newHeadColumns } = useTableHeaders({
+    bodyColumns,
+    predefinedColumns,
+  });
 
   return (
     <>

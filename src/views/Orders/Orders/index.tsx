@@ -1,13 +1,13 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { breadCrumbs, TableData } from "./Logic";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { Header } from "../../../components/UI/Header";
 import CNewTable from "../../../components/CElements/CNewTable";
 import { IFilterParams } from "../../../interfaces";
 import { useTranslationHook } from "../../../hooks/useTranslation";
-import { ModalUI } from "./Modal";
+import { useTableHeaders } from "../../../hooks/useTableHeaders";
+import { OrderModal } from "./Modal";
 import { ModalTypes } from "./interfaces";
-import { PantoneColors } from "../../../constants/pantone";
 import CNewModal from "../../../components/CElements/CNewModal";
 
 export const OrderList = () => {
@@ -17,28 +17,15 @@ export const OrderList = () => {
     page: 1,
     perPage: 50,
   });
-  const [modalInitialData, setModalInitialData] = useState<ModalTypes>({});
+  const [modalInitialData, setModalInitialData] = useState<ModalTypes | null>(
+    null
+  );
 
   const { bodyColumns, isLoading, bodyData, deleteFn } = TableData({
     filterParams,
   });
-  const newHeadColumns = useMemo(() => {
-    if (!bodyColumns?.length) return [];
-    const obj = { ...bodyColumns?.[0] };
-    const keys = Object.keys(obj);
-    const newColumns: any = [];
 
-    keys.forEach((key: string) => {
-      const found = newColumns.find((item: any) => item.id === key);
-      if (found?.id) {
-        // newColumns.push(found);
-      } else {
-        newColumns.push({ title: key, id: key });
-      }
-    });
-
-    return newColumns;
-  }, [bodyColumns]);
+  const { newHeadColumns } = useTableHeaders({ bodyColumns });
 
   const handleActions = (el: any, status: string) => {
     if (status === "modal") {
@@ -48,37 +35,28 @@ export const OrderList = () => {
     if (status === "view" || status === "edit") {
       setOpen(true);
 
-      setModalInitialData({
-        LABRECETEID: el?.LABRECETEID,
-        ...el,
-      });
+      setModalInitialData(el);
     }
 
     if (status === "delete") {
-      deleteFn([el.LABRECETEID]);
-      setFilterParams({ page: 1, perPage: 50 });
+      deleteFn([el.BOYASIPARISKAYITID]);
     }
+
     if (status === "delete_multiple") {
       deleteFn(
-        el.map((item: { LABRECETEID: string }) => {
-          return item.LABRECETEID;
+        el.map((item: { BOYASIPARISKAYITID: number }) => {
+          return item.BOYASIPARISKAYITID;
         })
       );
-      setFilterParams({ page: 1, perPage: 50 });
     }
   };
 
-  const handleModalActions = (status: string, id: string) => {
-    if (status === "delete") deleteFn([id]);
-  };
-
-  const handleModal = (status: string, id: string) => {
-    // This will be passed to ModalUI
+  const handleModal = (status: string, id: number) => {
     if (status === "delete") {
       deleteFn([id]);
     } else if (status === "close") {
       setOpen(false);
-      setModalInitialData({});
+      setModalInitialData(null);
     }
   };
 
@@ -104,11 +82,7 @@ export const OrderList = () => {
             "filter",
             "sellect_more",
           ]}
-          defaultSearch={{
-            LABRECETEKODU: "",
-            ESKILABREETEKODU: "",
-            PANTONEKODU: "",
-          }}
+          defaultSearch={{}}
           meta={{
             totalCount: bodyData?.count,
             pageCount: bodyData?.count
@@ -118,22 +92,25 @@ export const OrderList = () => {
         />
       </div>
 
-      {/* {open ? (
+      {open && (
         <CNewModal
           title={t(
-            modalInitialData.LABRECETEID ? "updating_orders" : "creating_orders"
+            modalInitialData?.BOYASIPARISKAYITID
+              ? "updating_orders"
+              : "creating_orders"
           )}
           handleActions={handleModal}
           defaultData={{
-            id: modalInitialData?.LABRECETEID,
+            id: modalInitialData?.BOYASIPARISKAYITID,
           }}
           disabled="big"
         >
-          <ModalUI defaultData={modalInitialData} />
+          <OrderModal
+            defaultData={modalInitialData ?? { BOYASIPARISKAYITID: 0 }}
+            setOpen={setOpen}
+          />
         </CNewModal>
-      ) : (
-        <></>
-      )} */}
+      )}
     </>
   );
 };

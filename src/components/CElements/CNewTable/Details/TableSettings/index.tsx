@@ -247,7 +247,7 @@ export const HeaderSettings = ({
                 disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
               }`}
             >
-              {title}
+              {t(title)}
             </h2>
           ) : (
             ""

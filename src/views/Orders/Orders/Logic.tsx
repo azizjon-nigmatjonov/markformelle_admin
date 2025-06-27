@@ -31,7 +31,7 @@ export const TableData = ({
     isLoading,
     refetch,
   } = useQuery(
-    ["GET_ORDERS_CHEMICALS", filterParams],
+    ["GET_BOYASIPARIS_LIST_ORDERS", filterParams],
     () => fetchList(filterParams),
     {
       keepPreviousData: true,
@@ -39,7 +39,7 @@ export const TableData = ({
     }
   );
 
-  const deleteFn = async (id: string[]) => {
+  const deleteFn = async (id: number[]) => {
     try {
       await axios.delete(`${API_URL}/boyasiparis/`, {
         method: "DELETE",

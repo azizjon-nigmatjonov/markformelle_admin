@@ -5,6 +5,7 @@ import { Header } from "../../../components/UI/Header";
 import CNewTable from "../../../components/CElements/CNewTable";
 import { IFilterParams } from "../../../interfaces";
 import { useTranslationHook } from "../../../hooks/useTranslation";
+import { useTableHeaders } from "../../../hooks/useTableHeaders";
 import { ModalUI } from "./Modal";
 import { ModalTypes } from "./interfaces";
 import { PantoneColors } from "../../../constants/pantone";
@@ -22,76 +23,65 @@ export const LabChemicals = () => {
   const { bodyColumns, isLoading, bodyData, deleteFn } = TableData({
     filterParams,
   });
-  const newHeadColumns = useMemo(() => {
-    if (!bodyColumns?.length) return [];
-    const obj = { ...bodyColumns?.[0] };
-    const keys = Object.keys(obj);
-    const newColumns: any = [
-      {
-        title: "PANTONEKODU",
-        id: "PANTONEKODU",
-        width: 200,
-        render: (value: string) => {
-          return (
-            <div className="flex space-x-2 items-center justify-between">
-              <p className="min-w-[100px]">{value}</p>
-              <div
-                className={`w-[70px] h-[25px] rounded-[8px]`}
-                style={{
-                  backgroundColor:
-                    "#" + PantoneColors[value?.substring(4, 11)]?.hex,
-                }}
-              ></div>
-            </div>
-          );
-        },
-      },
-      {
-        title: "LABRECETEKODU",
-        id: "LABRECETEKODU",
-      },
 
-      {
-        title: "ESKILABRECETEKODU",
-        id: "ESKILABRECETEKODU",
+  const predefinedColumns = [
+    {
+      title: "PANTONEKODU",
+      id: "PANTONEKODU",
+      width: 200,
+      render: (value: string) => {
+        return (
+          <div className="flex space-x-2 items-center justify-between">
+            <p className="min-w-[100px]">{value}</p>
+            <div
+              className={`w-[70px] h-[25px] rounded-[8px]`}
+              style={{
+                backgroundColor:
+                  "#" + PantoneColors[value?.substring(4, 11)]?.hex,
+              }}
+            ></div>
+          </div>
+        );
       },
-      {
-        title: "ACIKLAMA",
-        id: "ACIKLAMA",
-      },
-      {
-        title: "ADI",
-        id: "ADI",
-      },
-      {
-        title: "LABRENKGRUPAD",
-        id: "LABRENKGRUPAD",
-      },
-      {
-        title: "RECETETURAADI",
-        id: "RECETETURAADI",
-      },
-      {
-        title: "RENKDERINLIGIADI",
-        id: "RENKDERINLIGIADI",
-      },
-      {
-        title: "USTASAMAADI",
-        id: "USTASAMAADI",
-      },
-    ];
+    },
+    {
+      title: "LABRECETEKODU",
+      id: "LABRECETEKODU",
+    },
+    {
+      title: "ESKILABRECETEKODU",
+      id: "ESKILABRECETEKODU",
+    },
+    {
+      title: "ACIKLAMA",
+      id: "ACIKLAMA",
+    },
+    {
+      title: "ADI",
+      id: "ADI",
+    },
+    {
+      title: "LABRENKGRUPAD",
+      id: "LABRENKGRUPAD",
+    },
+    {
+      title: "RECETETURAADI",
+      id: "RECETETURAADI",
+    },
+    {
+      title: "RENKDERINLIGIADI",
+      id: "RENKDERINLIGIADI",
+    },
+    {
+      title: "USTASAMAADI",
+      id: "USTASAMAADI",
+    },
+  ];
 
-    keys.forEach((key: string) => {
-      const found = newColumns.find((item: any) => item.id === key);
-      if (found?.id) {
-        // newColumns.push(found);
-      } else {
-        newColumns.push({ title: key, id: key });
-      }
-    });
-
-    return newColumns;
-  }, [bodyColumns]);
+  const { newHeadColumns } = useTableHeaders({
+    bodyColumns,
+    predefinedColumns,
+  });
 
   const handleActions = (el: any, status: string) => {
     if (status === "modal") {
@@ -183,9 +173,7 @@ export const LabChemicals = () => {
 
       {open ? (
         <CNewModal
-          title={t(
-            modalInitialData.LABRECETEID ? "updating_lab" : "creating_lab"
-          )}
+          title={modalInitialData.LABRECETEID ? "updating_lab" : "creating_lab"}
           handleActions={handleModal}
           defaultData={{
             id: modalInitialData?.LABRECETEID,

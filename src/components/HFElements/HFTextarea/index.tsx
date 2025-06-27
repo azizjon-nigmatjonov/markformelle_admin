@@ -13,12 +13,14 @@ export const FieldUI = ({
   onChange = () => {},
   props,
   error,
+  minRows = 3,
 }: {
   value?: any;
   defaultValue?: string;
   onChange?: (val: any) => void;
   props?: any;
   error?: any;
+  minRows?: number;
 }) => {
   const handleChange = (val: any) => {
     onChange(val);
@@ -38,7 +40,7 @@ export const FieldUI = ({
         value={value}
         onChange={(e) => handleChange(e.target.value)}
         name={name}
-        minRows={3}
+        minRows={minRows}
         {...props}
       />
       {error?.message && (
@@ -59,6 +61,7 @@ interface Props {
   placeholder?: string;
   label?: string;
   required?: boolean;
+  minRows?: number;
 }
 
 const HFTextarea = ({
@@ -70,12 +73,13 @@ const HFTextarea = ({
   label = "",
   required = false,
   activePassword = false,
+  minRows = 3,
   ...props
 }: Props) => {
   return (
     <div>
       {label && <CLabel title={label} required={required} />}
-      <div className="border border-[var(--lineGray)] rounded-[4px]">
+      <div className="border border-[var(--lineGray)] rounded-[8px]">
         <Controller
           name={name}
           control={control}
@@ -89,6 +93,7 @@ const HFTextarea = ({
                 error={error}
                 defaultValue={defaultValue}
                 props={props}
+                minRows={minRows}
               />
             </div>
           )}

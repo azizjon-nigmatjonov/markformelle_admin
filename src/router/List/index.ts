@@ -10,7 +10,6 @@ import { labaratorySection } from "./labaratory";
 import { recipeSection } from "./recipe";
 import { listSection } from "./lists";
 import { oderList } from "./order";
-import { ordersSection } from "./orders";
 
 export const routeList = [
   ...settingList,
@@ -25,5 +24,4 @@ export const routeList = [
   ...recipeSection,
   ...listSection,
   ...adminList,
-  ...ordersSection,
 ];

@@ -71,7 +71,11 @@ export const StepCard = ({
 
   useEffect(() => {
     if (stepRef.current) {
-      stepRef.current[focusedIndex]?.focus();
+      requestAnimationFrame(() => {
+        if (stepRef.current) {
+          stepRef.current[focusedIndex]?.focus();
+        }
+      });
     }
   }, [open]);
 
@@ -240,9 +244,13 @@ export const StepCard = ({
 
   useEffect(() => {
     if (rowRefs.current[focusedIndex]) {
-      rowRefs.current[focusedIndex]?.scrollIntoView({
-        behavior: "smooth",
-        block: "center",
+      requestAnimationFrame(() => {
+        if (rowRefs.current[focusedIndex]) {
+          rowRefs.current[focusedIndex]?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
       });
     }
   }, [focusedIndex]);
