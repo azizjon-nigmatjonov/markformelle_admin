@@ -5,14 +5,12 @@ import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { Header } from "../../../components/UI/Header";
 import CNewTable from "../../../components/CElements/CNewTable";
 import { IFilterParams } from "../../../interfaces";
-import { useTranslationHook } from "../../../hooks/useTranslation";
 import CNewModal from "../../../components/CElements/CNewModal";
 import { playSound } from "../../../utils/playAudio";
 import dayjs from "dayjs";
 import { useTableHeaders } from "../../../hooks/useTableHeaders";
 
 export const RecipeList = () => {
-  const { t } = useTranslationHook();
   const [open, setOpen] = useState<string[]>([]);
   const [changed, setChanged] = useState("");
   const [askAction, setAskAction] = useState("");

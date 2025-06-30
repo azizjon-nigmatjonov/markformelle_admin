@@ -13,7 +13,6 @@ import HFTextarea from "../../../../components/HFElements/HFTextarea";
 const schema = Validation;
 
 interface OrderFormProps {
-  defaultData?: any;
   handleModalActions: (val: string, val2: string) => void;
   createForm: (val: any) => void;
   updateForm: (val: any, id: number) => void;
@@ -22,7 +21,6 @@ interface OrderFormProps {
 }
 
 export const OrderForm = ({
-  defaultData = {},
   handleModalActions,
   createForm,
   updateForm,
@@ -34,8 +32,6 @@ export const OrderForm = ({
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
-
-  // Use the FormLogic wrapper to get form functions that can use hooks
   const { setFormValues, setInitialFormValues } = FormLogic();
 
   const handleModalActionsFn = (status: string, id: string) => {
@@ -64,21 +60,71 @@ export const OrderForm = ({
     }
   };
 
+  // {
+  //   "BOYASIPARISKAYITID": 0,
+  //   "BOYASIPARISYIL": 0,
+  //   "BOYASIPARISID": 0,
+  //   "FIRMAID": "string",
+  //   "SIPARISTARIHI": "2025-06-27T15:11:45.824Z",
+  //   "FIRMAYETKILIID": 0,
+  //   "SIPARISIALANKULLANICIID": 0,
+  //   "SIPARISGRUPID": "string",
+  //   "FASON": false,
+  //   "YURTDISI": false,
+  //   "KUMASTEMIN": false,
+  //   "NOTU": "string",
+  //   "ISLEMTIPIID": 0,
+  //   "SIPARISTIPIID": 0,
+  //   "ORMESIPARISSEKLIID": 0,
+  //   "ORMESIPARISTIPIID": 0,
+  //   "PSKKETIKETTIPIID": 0,
+  //   "ORMESIPARISI": false,
+  //   "DOKUMASIPARISI": false,
+  //   "BASKAFIRMAYASATILABILIR": false,
+  //   "KAPALI": false,
+  //   "MARKALI": false,
+  //   "KOMISYONLU": false,
+  //   "KOMISYONORANI": 0,
+  //   "INSERTKULLANICIID": 1,
+  //   "INSERTTARIHI": "2025-06-27T15:11:45.824Z",
+  //   "KULLANICIID": 1,
+  //   "DEGISIMTARIHI": "2025-06-27T15:11:45.824Z"
+  // }
+
   const onSubmit = (data: any) => {
     let params: any = data;
     params.IPTAL = params?.IPTAL ? true : false;
 
     if (formId) {
-      params.TALEPTARIHI = formData.TALEPTARIHI;
-      params.DEGISIMTARIHI = dayjs();
       params = { ...formData, ...params };
+      params.TALEPTARIHI = formData.TALEPTARIHI;
+      params.ISLEMTIPIID = 1;
+      params.DEGISIMTARIHI = dayjs();
+      params.SIPARISTARIHI = formData.SIPARISTARIHI;
 
       updateForm(params, formId);
     } else {
+      params.SIPARA;
       params.INSERTKULLANICIID = 1;
       params.INSERTTARIHI = dayjs();
       params.KULLANICIID = 1;
       params.DEGISIMTARIHI = dayjs();
+      params.SIPARISTARIHI = dayjs();
+      params.BOYASIPARISYIL = dayjs().year();
+      // params.FIRMAYETKILIID = 0;
+      params.SIPARISIALANKULLANICIID = 1;
+      params.ISLEMTIPIID = 1;
+      // params.BOYASIPARISKAYITID = 8888;
+      // params.BOYASIPARISID = 8888;
+      params.FASON = false;
+      params.YURTDISI = false;
+      params.KUMASTEMIN = false;
+      params.ORMESIPARISI = false;
+      params.DOKUMASIPARISI = false;
+      params.BASKAFIRMAYASATILABILIR = false;
+      delete params.KULLANICIADI;
+      delete params.BOYASIPARISKAYITID;
+      params.BOYASIPARISID = null;
 
       createForm(params);
     }
@@ -93,8 +139,12 @@ export const OrderForm = ({
   }, [formData, setValue, setFormValues, setInitialFormValues]);
 
   useEffect(() => {
-    if (defaultData?.LABRECETEID) setFormId(defaultData.LABRECETEID);
-  }, [defaultData]);
+    if (formData?.BOYASIPARISKAYITID) {
+      setFormId(formData.BOYASIPARISKAYITID);
+    } else {
+      setValue("SIPARISTARIHI", dayjs().format("YYYY-MM-DD"));
+    }
+  }, [formData]);
 
   return (
     <form
@@ -145,6 +195,7 @@ export const OrderForm = ({
           <InputFieldUI title="FIRMA">
             <LiteOptionsTable
               name="FIRMAID"
+              staticSearchID="FIRMAID"
               link="firma"
               required={true}
               renderValue={(_: string, obj: any) => {
@@ -164,13 +215,7 @@ export const OrderForm = ({
               ]}
             />
           </InputFieldUI>
-          <InputFieldUI title="SIPARISTARIHI">
-            <HFTextField
-              name="SIPARISTARIHI"
-              control={control}
-              defaultValue={formData?.SIPARISTARIHI}
-            />
-          </InputFieldUI>
+
           <InputFieldUI title="SIPARISGRUPADI">
             <HFTextField
               name="SIPARISGRUPADI"
@@ -202,8 +247,6 @@ export const OrderForm = ({
               }}
             />
           </InputFieldUI>
-        </div>
-        <div className="space-y-2">
           <InputFieldUI title="Sparis Veren">
             <HFTextField
               name="KULLANICIADI"
@@ -211,18 +254,25 @@ export const OrderForm = ({
               defaultValue={formData?.KULLANICIADI}
             />
           </InputFieldUI>
+        </div>
+        <div className="space-y-2">
           <InputFieldUI title="islem tipi">
             <LiteOptionsTable
-              name="ISLEM_TIPI"
+              name="ISLEMTIPIID"
               link="islemtipi"
               control={control}
-              defaultValue={formData?.ISLEM_TIPI}
+              renderValue={(_: string, obj: any) => {
+                return obj?.ISLEMTIPIID && obj?.ADI
+                  ? obj?.ISLEMTIPIID + " - " + obj?.ADI
+                  : obj?.ISLEMTIPIID;
+              }}
+              // defaultValue={formData?.ISLEMTIPIID}
               headColumns={[
-                { id: "ISLEM_TIPI", title: "ISLEM_TIPI" },
+                { id: "ISLEMTIPIID", title: "ISLEMTIPIID" },
                 { id: "ADI", title: "ADI" },
               ]}
               handleSelect={(obj: any) => {
-                setValue("ISLEM_TIPI", obj.ISLEM_TIPI);
+                setValue("ISLEMTIPIID", obj.ISLEMTIPIID);
               }}
             />
           </InputFieldUI>
@@ -235,46 +285,60 @@ export const OrderForm = ({
           </InputFieldUI>
           <InputFieldUI title="sparis sekli">
             <LiteOptionsTable
-              name="ISLEM_TIPI"
-              link="sparissekli"
+              name="ORMESIPARISSEKLIID"
+              link="ormesiparissekli"
               control={control}
-              defaultValue={formData?.ISLEM_TIPI}
+              renderValue={(_: string, obj: any) => {
+                return obj?.ORMESIPARISSEKLIID && obj?.ADI
+                  ? obj?.ORMESIPARISSEKLIID + " - " + obj?.ADI
+                  : obj?.ORMESIPARISSEKLIID;
+              }}
+              defaultValue={formData?.ORMESIPARISSEKLIID}
               headColumns={[
-                { id: "ISLEM_TIPI", title: "ISLEM_TIPI" },
-                { id: "ADI", title: "ADI" },
+                { id: "ORMESIPARISSEKLIID", title: "ID", width: 50 },
+                { id: "ADI", title: "ADI", width: 100 },
               ]}
               handleSelect={(obj: any) => {
-                setValue("ISLEM_TIPI", obj.ISLEM_TIPI);
+                setValue("ORMESIPARISSEKLIID", obj.ORMESIPARISSEKLIID);
+              }}
+            />
+          </InputFieldUI>
+          <InputFieldUI title="Sparis tipi">
+            <LiteOptionsTable
+              name="ORMESIPARISTIPIID"
+              link="ormesiparistipi"
+              control={control}
+              headColumns={[
+                { id: "ORMESIPARISTIPIID", title: "ORMESIPARISTIPIID" },
+                { id: "ADI", title: "ADI" },
+              ]}
+              renderValue={(_: string, obj: any) => {
+                return obj?.ORMESIPARISTIPIID && obj?.ADI
+                  ? obj?.ORMESIPARISTIPIID + " - " + obj?.ADI
+                  : obj?.ORMESIPARISTIPIID;
+              }}
+              defaultValue={formData?.ORMESIPARISTIPIID}
+              handleSelect={(obj: any) => {
+                setValue("ORMESIPARISTIPIID", obj.ORMESIPARISTIPIID);
               }}
             />
           </InputFieldUI>
         </div>
         <div className="space-y-2">
-          <InputFieldUI title="Sparis tipi">
-            <LiteOptionsTable
-              name="SIPARISTIPIID"
-              link="boyasiparistipi"
-              control={control}
-              headColumns={[
-                { id: "SIPARISTIPIID", title: "SIPARISTIPIID" },
-                { id: "ADI", title: "ADI" },
-              ]}
-              renderValue={(_: string, obj: any) => {
-                return obj?.SIPARISTIPIID;
-              }}
-              defaultSearch={`SIPARISTIPIID=${formData?.SIPARISTIPIID}`}
-              handleSelect={(obj: any) => {
-                setValue("SIPARISTIPIID", obj.SIPARISTIPIID);
-              }}
-            />
-          </InputFieldUI>
-
-          <InputFieldUI title="Notu">
+          <InputFieldUI title="Notu" topPosition="items-start">
             <HFTextarea
               name="NOTU"
               control={control}
               minRows={4}
               defaultValue={formData?.NOTU}
+            />
+          </InputFieldUI>
+          <InputFieldUI title="SIPARISTARIHI">
+            <HFTextField
+              name="SIPARISTARIHI"
+              control={control}
+              defaultValue={formData?.SIPARISTARIHI}
+              disabled
             />
           </InputFieldUI>
         </div>

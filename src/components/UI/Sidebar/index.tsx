@@ -43,13 +43,6 @@ const SidebarComponent = () => {
     return "hidden";
   }, [wideSidebar, collapsed]);
 
-  useEffect(() => {
-    if (!sessionStorage.getItem("has_route")) {
-      sessionStorage.setItem("has_route", "true");
-      window.location.reload();
-    }
-  }, []);
-
   const handleNavigate = useCallback(
     (obj: any) => {
       navigateTo(obj.path);

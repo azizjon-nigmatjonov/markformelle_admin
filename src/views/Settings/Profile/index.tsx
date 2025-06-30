@@ -54,7 +54,7 @@ const Profile = () => {
     dispatch(authActions.logout());
     setTimeout(() => {
       navigateTo("/");
-      sessionStorage.removeItem("has_route");
+
       window.location.reload();
     }, 500);
   };

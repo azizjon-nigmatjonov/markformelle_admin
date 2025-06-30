@@ -1,5 +1,4 @@
 import { memo } from "react";
-import CModal from "../CModal";
 import { EnterCancelButtons } from "../../UI/FormButtons/EnterCancel";
 import CNewMiniModal from "../CNewMiniModal";
 

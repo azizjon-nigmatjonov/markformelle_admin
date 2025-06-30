@@ -60,6 +60,7 @@ interface Props {
   doubleClick?: boolean;
   disabled?: boolean;
   removeHeader?: boolean;
+  innerTable?: boolean;
 }
 
 // Interface for MemoizedTableRow props
@@ -91,6 +92,7 @@ const CNewTable = ({
     pageCount: 0,
   },
   animation = true,
+  innerTable = false,
   title = "",
   extra,
   autoHeight = "",
@@ -810,7 +812,9 @@ const CNewTable = ({
               style={{
                 textAlign: column?.textAlign || "left",
               }}
-              className={`relative h-full flex items-center text-[13px] ${
+              className={`relative h-full flex items-center ${
+                innerTable ? "text-[12px]" : "text-[13px]"
+              } ${
                 hoveredIndex === colIndex &&
                 draggingIndex !== null &&
                 hoveredIndex > draggingIndex
@@ -879,8 +883,12 @@ const CNewTable = ({
   });
 
   return (
-    <div className="relative cnewtable w-full rounded-t-[12px] border border-[var(--border)] border-b-0">
-      <div className="h-full">
+    <div
+      className={`relative cnewtable w-full rounded-t-[12px] border border-[var(--border)] ${
+        disablePagination ? "rounded-b-[12px] overflow-hidden" : "border-b-0"
+      } ${innerTable ? "text-[11px]" : "text-[12px]"}`}
+    >
+      <div className="h-full ">
         {defaultFilters?.length || title ? (
           <HeaderSettings
             title={title}
@@ -933,7 +941,7 @@ const CNewTable = ({
               {!loading && !bodySource?.length ? (
                 <div className="flex justify-center items-center h-full">
                   <img
-                    className="w-[140px]"
+                    className="w-[100px]"
                     src="/images/no-data.png"
                     alt="no data"
                   />

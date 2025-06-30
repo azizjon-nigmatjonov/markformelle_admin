@@ -29,7 +29,7 @@ const errorHandler = (error: any) => {
     // const data = {
     //   refresh_token,
     // };
-    sessionStorage.removeItem("has_route");
+    
     store.dispatch(authActions.logout());
     // const originalRequest = error.config;
 

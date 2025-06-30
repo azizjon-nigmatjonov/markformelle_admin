@@ -9,7 +9,6 @@ import { LiteOptionsTable } from "../../../../components/UI/Options/LiteTable";
 import { SubmitCancelButtons } from "../../../../components/UI/FormButtons/SubmitCancel";
 import { CRadio } from "../../../../components/CElements/CRadio";
 import CLabel from "../../../../components/CElements/CLabel";
-import CCheckButton from "../../../../components/CElements/CCheckButton";
 import CCheckbox from "../../../../components/CElements/CCheckbox";
 import { convertToISO } from "../../../../utils/getDate";
 

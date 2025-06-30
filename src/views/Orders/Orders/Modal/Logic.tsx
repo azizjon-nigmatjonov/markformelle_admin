@@ -89,7 +89,7 @@ export const ModalTableLogic = ({
 
   const deleteFn = async (id: string[]) => {
     try {
-      await axios.delete(`${API_URL}/urunbirim/`, {
+      await axios.delete(`${API_URL}/boyasiparis/`, {
         method: "DELETE",
         url: `${API_URL}/urunbirim/`,
         headers: {

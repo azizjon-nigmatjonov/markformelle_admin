@@ -54,7 +54,7 @@ export const TableData = ({
       toast.success(t("deleted!"));
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
-      return null;
+      bodyData;
     }
   };
 

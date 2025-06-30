@@ -3,6 +3,7 @@ import { MaterialTable } from "../Tables/Material";
 import { PaintTable } from "../Tables/Paint";
 import { OrderForm } from "./Form";
 import { MaterialForm } from "./Forms/MaterialForm";
+import { PaintForm } from "./Forms/PaintForm";
 import { ModalTableLogic } from "./Logic";
 import { useEffect, useState } from "react";
 
@@ -19,6 +20,8 @@ export const OrderModal = ({
   const [currentPaint, setCurrentPaint] = useState<any>({});
   const [formId, setFormId] = useState<number | undefined>(undefined);
   const [uniqueID, setUniqueID] = useState("main_order_form");
+  const [modalType, setModalType] = useState<boolean>(false);
+
   const { createForm, updateForm, formData } = ModalTableLogic({
     formId: formId,
     defaultData,
@@ -26,10 +29,11 @@ export const OrderModal = ({
   });
 
   useEffect(() => {
-    if (defaultData?.BOYASIPARISKAYITID) {
-      setFormId(defaultData?.BOYASIPARISKAYITID);
+    if (formData?.BOYASIPARISKAYITID) {
+      setFormId(formData?.BOYASIPARISKAYITID);
+    } else {
     }
-  }, [defaultData]);
+  }, [formData]);
 
   const handleModalActions = (status: string) => {
     if (status === "close") {
@@ -38,26 +42,41 @@ export const OrderModal = ({
     }
   };
 
-  const handleActionsTable = (status: string, type: string) => {
-    console.log(status, type);
-
+  const handleActionsTable = (obj: any, status: string, type: string) => {
     if (type === "material") {
+      if (status === "view" || status === "edit") {
+        setUniqueID("material_form");
+        setCurrentMaterial(obj);
+      }
+
       if (status === "modal") {
         setUniqueID("material_form");
+        setCurrentMaterial({});
+      }
+      if (status === "Close") {
+        setCurrentMaterial({});
+        setUniqueID("main_order_form");
+      }
+    } else if (type === "paint") {
+      if (status === "view" || status === "edit") {
+        setUniqueID("paint_form");
+        setCurrentPaint(obj);
+      }
+      if (status === "modal") {
+        setUniqueID("paint_form");
+        setCurrentPaint({});
       }
       if (status === "Close") {
         setUniqueID("main_order_form");
+        setCurrentPaint({});
       }
-      setCurrentMaterial(status);
-    } else if (type === "paint") {
-      setCurrentPaint(status);
     }
   };
+  console.log("formId", formId);
 
   return (
     <div className="space-y-4 overflow-y-auto designed-scroll max-h-[calc(100vh-200px)]">
       <OrderForm
-        defaultData={defaultData}
         handleModalActions={handleModalActions}
         createForm={createForm}
         updateForm={updateForm}
@@ -66,35 +85,43 @@ export const OrderModal = ({
       />
 
       <MaterialTable
-        handleActionsTable={(val: any, status: string) => {
-          handleActionsTable(status, "material");
+        handleActionsTable={(obj: any, status: string, type: string) => {
+          handleActionsTable(obj, status, type);
         }}
+        uniqueID={uniqueID}
+        currentMaterial={currentMaterial}
+        formId={formId ?? 0}
       />
-      <div className="pt-8">
+      <div className="pt-5 pb-8">
         <PaintTable
-          handleActionsTable={(val: any) => {
-            handleActionsTable(val, "paint");
+          handleActionsTable={(obj: any, status: string) => {
+            handleActionsTable(obj, status, "paint");
           }}
+          formId={formId ?? 0}
         />
-        <div className="grid grid-cols-2 gap-x-2 mt-12">
+        <div className="grid grid-cols-2 gap-x-2 mt-5">
           <PaintTable
-            handleActionsTable={(val: any) => {
-              handleActionsTable(val, "paint");
+            handleActionsTable={(obj: any, status: string) => {
+              handleActionsTable(obj, status, "paint");
             }}
+            formId={formId ?? 0}
           />
           <PaintTable
-            handleActionsTable={(val: any) => {
-              handleActionsTable(val, "paint");
+            handleActionsTable={(obj: any, status: string) => {
+              handleActionsTable(obj, status, "paint");
             }}
+            formId={formId ?? 0}
           />
         </div>
       </div>
 
-      {uniqueID === "material_form" && (
-        <MaterialForm
+      {uniqueID === "paint_form" && (
+        <PaintForm
           handleActions={(val: string) => {
-            handleActionsTable(val, "material");
+            handleActionsTable({}, val, "paint");
           }}
+          defaultData={currentPaint}
+          uniqueID={uniqueID}
         />
       )}
     </div>

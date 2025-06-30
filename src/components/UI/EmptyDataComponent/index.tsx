@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import "./style.scss";
-import emptyImage from "/images/website/no-data.png";
+import emptyImage from "/images/no-data.png";
 import CCard from "../../CElements/CCard";
 import useDeviceHeight from "../../../hooks/useDeviceHeight";
 

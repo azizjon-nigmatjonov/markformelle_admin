@@ -82,7 +82,7 @@ export const OrderList = () => {
             "filter",
             "sellect_more",
           ]}
-          defaultSearch={{}}
+          disablePagination={true}
           meta={{
             totalCount: bodyData?.count,
             pageCount: bodyData?.count
@@ -94,11 +94,7 @@ export const OrderList = () => {
 
       {open && (
         <CNewModal
-          title={t(
-            modalInitialData?.BOYASIPARISKAYITID
-              ? "updating_orders"
-              : "creating_orders"
-          )}
+          title="orders_form"
           handleActions={handleModal}
           defaultData={{
             id: modalInitialData?.BOYASIPARISKAYITID,
