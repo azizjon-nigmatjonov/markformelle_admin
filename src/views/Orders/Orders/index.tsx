@@ -4,14 +4,12 @@ import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { Header } from "../../../components/UI/Header";
 import CNewTable from "../../../components/CElements/CNewTable";
 import { IFilterParams } from "../../../interfaces";
-import { useTranslationHook } from "../../../hooks/useTranslation";
 import { useTableHeaders } from "../../../hooks/useTableHeaders";
 import { OrderModal } from "./Modal";
 import { ModalTypes } from "./interfaces";
 import CNewModal from "../../../components/CElements/CNewModal";
 
 export const OrderList = () => {
-  const { t } = useTranslationHook();
   const [open, setOpen] = useState(false);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
@@ -21,7 +19,7 @@ export const OrderList = () => {
     null
   );
 
-  const { bodyColumns, isLoading, bodyData, deleteFn } = TableData({
+  const { bodyColumns, isLoading, bodyData, deleteFn, refetch } = TableData({
     filterParams,
   });
 
@@ -65,7 +63,7 @@ export const OrderList = () => {
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />
       <div className="p-2">
         <CNewTable
-          title={t("table_orders")}
+          title="table_orders"
           headColumns={newHeadColumns}
           bodyColumns={bodyColumns}
           handleActions={handleActions}
@@ -82,6 +80,9 @@ export const OrderList = () => {
             "filter",
             "sellect_more",
           ]}
+          defaultSearch={{
+            BOYASIPARISKAYID: "",
+          }}
           disablePagination={true}
           meta={{
             totalCount: bodyData?.count,
@@ -104,6 +105,7 @@ export const OrderList = () => {
           <OrderModal
             defaultData={modalInitialData ?? { BOYASIPARISKAYITID: 0 }}
             setOpen={setOpen}
+            refetch={refetch}
           />
         </CNewModal>
       )}

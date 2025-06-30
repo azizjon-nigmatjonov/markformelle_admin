@@ -76,8 +76,6 @@ const HFTextarea = ({
   minRows = 3,
   ...props
 }: Props) => {
-  console.log("defaultValue 1", defaultValue, label);
-
   return (
     <div>
       {label && <CLabel title={label} required={required} />}

@@ -37,7 +37,7 @@ export const MaterialForm = ({
     },
   });
 
-  const [radioValue, setRadioValue] = useState(0);
+  const [radioValue, setRadioValue] = useState(1);
 
   const onSubmit = (data: any) => {
     let params = { ...data };
@@ -247,28 +247,28 @@ export const MaterialForm = ({
           <div className="grid grid-cols-3 gap-2 items-center">
             <CRadio
               onChange={() => {
-                setRadioValue(1);
+                setRadioValue(0);
               }}
               label="Tup"
-              checked={radioValue === 1}
+              checked={radioValue === 0}
               value="TUP"
               name="TUP"
             />
             <CRadio
               onChange={() => {
-                setRadioValue(2);
+                setRadioValue(1);
               }}
               label="Acik en"
-              checked={radioValue === 2}
+              checked={radioValue === 1}
               value="APK"
               name="APK"
             />
             <CRadio
               onChange={() => {
-                setRadioValue(3);
+                setRadioValue(2);
               }}
               label="Mayli"
-              checked={radioValue === 3}
+              checked={radioValue === 2}
               value="MAYLI"
               name="MAYLI"
             />

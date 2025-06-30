@@ -39,10 +39,12 @@ export const ModalTableLogic = ({
   setFormId,
   formId,
   defaultData,
+  refetchTable,
 }: {
   formId?: number | string;
   setFormId: (val: number) => void;
   defaultData?: any;
+  refetchTable: () => void;
 }) => {
   const { t } = useTranslationHook();
   const [formData, setFormData]: any = useState({});
@@ -66,6 +68,7 @@ export const ModalTableLogic = ({
       const { data } = await axios.post(`${API_URL}/boyasiparis/`, params);
 
       setFormId(data?.LABRECETEID);
+      refetchTable();
       toast.success(t("created!"));
       return data;
     } catch (error) {
@@ -79,6 +82,7 @@ export const ModalTableLogic = ({
     try {
       const { data } = await axios.put(`${API_URL}/boyasiparis/${id}`, params);
       refetch();
+      refetchTable();
       toast.success(t("updated!"));
       return data;
     } catch (error) {
@@ -98,6 +102,7 @@ export const ModalTableLogic = ({
         },
         data: id,
       });
+      refetchTable();
       toast.success(t("deleted_successfully"));
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);

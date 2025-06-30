@@ -60,37 +60,6 @@ export const OrderForm = ({
     }
   };
 
-  // {
-  //   "BOYASIPARISKAYITID": 0,
-  //   "BOYASIPARISYIL": 0,
-  //   "BOYASIPARISID": 0,
-  //   "FIRMAID": "string",
-  //   "SIPARISTARIHI": "2025-06-27T15:11:45.824Z",
-  //   "FIRMAYETKILIID": 0,
-  //   "SIPARISIALANKULLANICIID": 0,
-  //   "SIPARISGRUPID": "string",
-  //   "FASON": false,
-  //   "YURTDISI": false,
-  //   "KUMASTEMIN": false,
-  //   "NOTU": "string",
-  //   "ISLEMTIPIID": 0,
-  //   "SIPARISTIPIID": 0,
-  //   "ORMESIPARISSEKLIID": 0,
-  //   "ORMESIPARISTIPIID": 0,
-  //   "PSKKETIKETTIPIID": 0,
-  //   "ORMESIPARISI": false,
-  //   "DOKUMASIPARISI": false,
-  //   "BASKAFIRMAYASATILABILIR": false,
-  //   "KAPALI": false,
-  //   "MARKALI": false,
-  //   "KOMISYONLU": false,
-  //   "KOMISYONORANI": 0,
-  //   "INSERTKULLANICIID": 1,
-  //   "INSERTTARIHI": "2025-06-27T15:11:45.824Z",
-  //   "KULLANICIID": 1,
-  //   "DEGISIMTARIHI": "2025-06-27T15:11:45.824Z"
-  // }
-
   const onSubmit = (data: any) => {
     let params: any = data;
     params.IPTAL = params?.IPTAL ? true : false;
@@ -109,7 +78,7 @@ export const OrderForm = ({
       params.INSERTTARIHI = dayjs();
       params.KULLANICIID = 1;
       params.DEGISIMTARIHI = dayjs();
-      params.SIPARISTARIHI = dayjs();
+      params.SIPARISTARIHI = dayjs().format("YYYY-MM-DD");
       params.BOYASIPARISYIL = dayjs().year();
       // params.FIRMAYETKILIID = 0;
       params.SIPARISIALANKULLANICIID = 1;

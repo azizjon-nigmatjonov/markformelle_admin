@@ -33,12 +33,12 @@ export const MaterialTable = ({
     console.log("el", el);
     console.log("status", status);
     if (status === "delete") {
-      deleteFn([el.BOYASIPARISDETAYID]);
+      deleteFn([el.ORMESIPARISDETAYID]);
     }
     if (status === "delete_multiple") {
       deleteFn(
-        el.map((item: { BOYASIPARISDETAYID: number }) => {
-          return item.BOYASIPARISDETAYID;
+        el.map((item: { ORMESIPARISDETAYID: number }) => {
+          return item.ORMESIPARISDETAYID;
         })
       );
     }

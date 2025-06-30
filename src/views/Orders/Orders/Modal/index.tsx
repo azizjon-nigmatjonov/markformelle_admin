@@ -2,17 +2,17 @@ import { ModalTypes } from "../interfaces";
 import { MaterialTable } from "../Tables/Material";
 import { PaintTable } from "../Tables/Paint";
 import { OrderForm } from "./Form";
-import { MaterialForm } from "./Forms/MaterialForm";
-import { PaintForm } from "./Forms/PaintForm";
 import { ModalTableLogic } from "./Logic";
 import { useEffect, useState } from "react";
 
 interface ModalUIProps {
   defaultData?: ModalTypes;
   setOpen: (open: boolean) => void;
+  refetch: () => void;
 }
 
 export const OrderModal = ({
+  refetch,
   defaultData = { BOYASIPARISKAYITID: 0 },
   setOpen,
 }: ModalUIProps) => {
@@ -20,12 +20,12 @@ export const OrderModal = ({
   const [currentPaint, setCurrentPaint] = useState<any>({});
   const [formId, setFormId] = useState<number | undefined>(undefined);
   const [uniqueID, setUniqueID] = useState("main_order_form");
-  const [modalType, setModalType] = useState<boolean>(false);
 
   const { createForm, updateForm, formData } = ModalTableLogic({
     formId: formId,
     defaultData,
     setFormId,
+    refetchTable: refetch,
   });
 
   useEffect(() => {
@@ -72,7 +72,6 @@ export const OrderModal = ({
       }
     }
   };
-  console.log("formId", formId);
 
   return (
     <div className="space-y-4 overflow-y-auto designed-scroll max-h-[calc(100vh-200px)]">
@@ -97,10 +96,12 @@ export const OrderModal = ({
           handleActionsTable={(obj: any, status: string) => {
             handleActionsTable(obj, status, "paint");
           }}
+          uniqueID={uniqueID}
+          currentPaint={currentPaint}
           formId={formId ?? 0}
         />
         <div className="grid grid-cols-2 gap-x-2 mt-5">
-          <PaintTable
+          {/* <PaintTable
             handleActionsTable={(obj: any, status: string) => {
               handleActionsTable(obj, status, "paint");
             }}
@@ -111,19 +112,9 @@ export const OrderModal = ({
               handleActionsTable(obj, status, "paint");
             }}
             formId={formId ?? 0}
-          />
+          /> */}
         </div>
       </div>
-
-      {uniqueID === "paint_form" && (
-        <PaintForm
-          handleActions={(val: string) => {
-            handleActionsTable({}, val, "paint");
-          }}
-          defaultData={currentPaint}
-          uniqueID={uniqueID}
-        />
-      )}
     </div>
   );
 };

@@ -95,5 +95,6 @@ export const TableData = ({
     bodyData,
     setBodyData,
     deleteFn,
+    refetch,
   };
 };
