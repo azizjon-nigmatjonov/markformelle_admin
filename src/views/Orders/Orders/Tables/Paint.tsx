@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import CNewTable from "../../../../components/CElements/CNewTable";
 import { PaintTableLogic } from "./Logic";
 import { PaintForm } from "../Modal/Forms/PaintForm";
+import { PaintFormYarn } from "../Modal/Forms/PaintFormYarn";
 
 export const PaintTable = ({
   handleActionsTable,
@@ -19,7 +20,7 @@ export const PaintTable = ({
     page: 1,
     perPage: 50,
   });
-  const { isLoading, headColumns, bodyColumns } = PaintTableLogic({
+  const { isLoading, headColumns, bodyColumns, refetch } = PaintTableLogic({
     filterParams,
   });
 
@@ -88,17 +89,19 @@ export const PaintTable = ({
       )}
       {uniqueID === "paint_form" && (
         <PaintForm
+          parentId={formId}
           title="Boya Siparis Detay Girisi (Kumash)"
           handleActions={(val: string) => {
             handleActionsTable({}, val, "paint");
           }}
           defaultData={currentPaint}
           uniqueID={uniqueID}
+          refetch={refetch}
         />
       )}
       {uniqueID === "paint_form_iplik" && (
-        <PaintForm
-          title=" Boya Siparis Detay Girisi (Kumash)"
+        <PaintFormYarn
+          title=" Boya Siparis Detay Girisi (Iplik)"
           handleActions={(val: string) => {
             handleActionsTable({}, val, "paint");
           }}

@@ -91,7 +91,7 @@ export const OrderModal = ({
         currentMaterial={currentMaterial}
         formId={formId ?? 0}
       />
-      <div className="pt-5 pb-8">
+      <div className="">
         <PaintTable
           handleActionsTable={(obj: any, status: string) => {
             handleActionsTable(obj, status, "paint");

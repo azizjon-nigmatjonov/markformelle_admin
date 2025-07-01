@@ -1,6 +1,6 @@
 # 🚀 Project Name
 
-A modern web application built with React.js + Vite + Redux Toolkit + TailwindCSS.
+React.js + Vite + Redux Toolkit + TailwindCSS.
 
 
 ## 📦 Tech Stack
