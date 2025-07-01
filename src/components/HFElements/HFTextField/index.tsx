@@ -20,8 +20,8 @@ const InputUI = ({
   errors = {},
   placeholder,
   focused = false,
-  setPassword = () => {},
-  onKeydown = () => {},
+  setPassword = () => { },
+  onKeydown = () => { },
 }: {
   value: any;
   name: string;
@@ -47,6 +47,7 @@ const InputUI = ({
     }
   }, [defaultValue]);
 
+
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Enter" && (value || defaultValue)) {
       const form = (e.target as HTMLElement).closest("form");
@@ -68,9 +69,8 @@ const InputUI = ({
   return (
     <div>
       <input
-        className={`input-design ${
-          errors[name]?.message || error ? "error" : ""
-        }`}
+        className={`input-design ${errors[name]?.message || error ? "error" : ""
+          }`}
         style={{ width: "100%" }}
         value={value || ""}
         onChange={(e) => onChange(e.target.value)}
@@ -86,8 +86,8 @@ const InputUI = ({
           activatePassword && password
             ? "password"
             : activatePassword && !password
-            ? "text"
-            : type
+              ? "text"
+              : type
         }
         {...props}
       />
@@ -133,14 +133,14 @@ const HFTextField = ({
   label,
   disabled = false,
   defaultValue = "",
-  setValue = () => {},
+  setValue = () => { },
   activatePassword = false,
   type = "text",
   errors = {},
   readOnly = false,
   placeholder,
-  handleChange = () => {},
-  onKeydown = () => {},
+  handleChange = () => { },
+  onKeydown = () => { },
   ...props
 }: Props) => {
   const [password, setPassword] = useState(true);

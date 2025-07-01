@@ -110,11 +110,10 @@ const SearchInput = memo(
               }}
               onFocus={() => setIsFocus(true)}
               autoFocus={focused}
-              className={`border rounded-[8px] pl-8 h-[30px] w-full px-1 bg-transparent ${
-                error?.message
+              className={`border rounded-[8px] pl-8 h-[30px] w-full px-1 bg-transparent ${error?.message
                   ? "border-[var(--error)]"
                   : "border-[var(--border)]"
-              } ${disabled ? "text-[var(--gray)]" : ""}`}
+                } ${disabled ? "text-[var(--gray)]" : ""}`}
               placeholder={t(placeholder)}
               onChange={(e) => {
                 debouncedSearch(e.target.value);
@@ -191,7 +190,7 @@ const TablePopup = memo(
 export const LiteOptionsTable = memo(
   <T extends BaseTableItem = TableItem>({
     link = "",
-    handleSelect = () => {},
+    handleSelect = () => { },
     name = "",
     defaultValue = "",
     label = "",
@@ -389,13 +388,13 @@ export const LiteOptionsTable = memo(
     }, [defaultValue, setCurrentValue]);
 
     useEffect(() => {
-      if (data?.data?.length && defaultSearch && !search) {
+      if (data?.data?.length && defaultFilters && !search) {
         const obj = data.data[0] ?? {};
         setCurrentEl(obj);
         handleSelect(obj);
         setCurrentValue(obj);
       }
-    }, [data?.data, defaultSearch, handleSelect, setCurrentValue, search]);
+    }, [data?.data, defaultFilters, handleSelect, setCurrentValue, search]);
 
     const handleEnterKey = useCallback(
       (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -429,9 +428,8 @@ export const LiteOptionsTable = memo(
           <CLabel title={label} required={required} disabled={disabled} />
         )}
         <div
-          className={`w-full relative flex items-center ${
-            disabled ? "bg-[#fafafa]" : ""
-          }`}
+          className={`w-full relative flex items-center ${disabled ? "bg-[#fafafa]" : ""
+            }`}
         >
           <div
             className="cursor-pointer absolute z-[99] left-2"

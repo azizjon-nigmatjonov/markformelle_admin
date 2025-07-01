@@ -8,6 +8,23 @@ import { SubmitCancelButtons } from "../../../../../components/UI/FormButtons/Su
 import { MaterialFormLogic } from "./MaterialComponents/Logic";
 import dayjs from "dayjs";
 import HFTextField from "../../../../../components/HFElements/HFTextField";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Validation } from "./MaterialComponents/Validation";
+
+interface KaliteParams {
+  KALITEID: string;
+  HAMID: number;
+  HAMADI: string;
+  FEINE: number;
+  PUS: number;
+  MIKTARGUN: number;
+  IPLIKBOYU1: string;
+  MAKINAUSTUGRAMAJ: number;
+  DOVIZID: string;
+  TUPACIKENMAYLI: number;
+  MUSTERISIPARISNO: string;
+  SIPARISPROSESID: string;
+}
 
 interface MaterialFormProps {
   handleActions: (val: string, val2: any) => void;
@@ -25,8 +42,23 @@ export const MaterialForm = ({
   refetch,
 }: MaterialFormProps) => {
   const [formId, setFormId] = useState(0);
-
-  const { control, setValue, handleSubmit } = useForm();
+  const [currentKalite, setCurrentKalite] = useState<KaliteParams>({} as KaliteParams);
+  const { control, setValue, handleSubmit } = useForm({
+    mode: "onSubmit",
+    resolver: yupResolver(Validation),
+    defaultValues: {
+      DOVIZID: "USD",
+      MAKINAUSTUGRAMAJ: 0,
+      TAHMINIFIREORANI: 0,
+      FEINE: 0,
+      PUS: 0,
+      TUPACIKENMAYLI: 0,
+      IPLIKBOYU1: '',
+      MIKTARGUN: 0,
+      MUSTERISIPARISNO: "",
+      SIPARISPROSESID: "",
+    }
+  });
 
   const { formData, createForm, updateForm } = MaterialFormLogic({
     formId: formId,
@@ -56,6 +88,8 @@ export const MaterialForm = ({
       params.HASILBIRIMMALIYETDOVIZID = "USD";
       params.BUKUMBIRIMMALIYETDOVIZID = "USD";
 
+      params.TAHMINIFIREORANI = params.TAHMINIFIREORANI || 0;
+
       params.TUPACIKENMAYLI = radioValue;
       params.TESLIMTARIHI = dayjs(params.TESLIMTARIHI);
       params.REVIZETESLIMTARIHI = dayjs();
@@ -75,7 +109,6 @@ export const MaterialForm = ({
     setValue("HAMMIKTAR", data.HAMMIKTAR);
     setValue("DOVIZID", data.DOVIZID);
     setValue("PUS", data.PUS);
-    setValue("VADEGUN", data.VADEGUN);
     setValue("MIKTARGUN", data.MIKTARGUN);
     setValue("HAMID", data.HAMID);
     setValue("HAMADI", data.HAMADI);
@@ -83,6 +116,7 @@ export const MaterialForm = ({
     setValue("FEINE", data.FEINE);
     setValue("TAHMINIFIREORANI", data.TAHMINIFIREORANI);
     setValue("MUSTERISIPARISNO", data.MUSTERISIPARISNO);
+    setValue("MAKINAUSTUGRAMAJ", data.MAKINAUSTUGRAMAJ);
     setRadioValue(data.TUPACIKENMAYLI);
   };
 
@@ -95,10 +129,33 @@ export const MaterialForm = ({
   useEffect(() => {
     if (formData?.ORMESIPARISDETAYID) {
       setFormDefaultData(formData);
-    } else {
-      setValue("DOVIZID", "USD");
     }
   }, [formData]);
+
+  const setSellectedValues = (obj: {
+    KALITEID: string;
+    HAMID: number;
+    HAMADI: string;
+    FEINE: number;
+    PUS: number;
+    MIKTARGUN: number;
+    IPLIKBOYU1: string;
+    MAKINAUSTUGRAMAJ: number;
+    DOVIZID: string;
+    TUPACIKENMAYLI: number;
+    MUSTERISIPARISNO: string;
+    SIPARISPROSESID: string;
+  }) => {
+    setValue("KALITEID", obj.KALITEID);
+    setValue("FEINE", obj.FEINE || 0);
+    setValue("PUS", obj.PUS || 0);
+    setValue('HAMMIKTAR', obj.MIKTARGUN || 0)
+    // setValue('IPLIKBOYU1', obj.IPLIKBOYU1 || '')
+    setValue('MAKINAUSTUGRAMAJ', obj.MAKINAUSTUGRAMAJ || 0)
+    setValue('DOVIZID', obj.DOVIZID || 'USD')
+    setRadioValue(obj.TUPACIKENMAYLI || 0)
+    setCurrentKalite(obj);
+  };
 
   return (
     <CNewMiniModal
@@ -119,8 +176,21 @@ export const MaterialForm = ({
           renderValue={(_: string, obj: any) => {
             return obj.KALITEADI;
           }}
-          handleSelect={(obj: { KALITEID: string }) => {
-            setValue("KALITEID", obj.KALITEID);
+          handleSelect={(obj: {
+            KALITEID: string;
+            HAMID: number;
+            HAMADI: string;
+            FEINE: number;
+            PUS: number;
+            MIKTARGUN: number;
+            IPLIKBOYU1: string;
+            MAKINAUSTUGRAMAJ: number;
+            DOVIZID: string;
+            TUPACIKENMAYLI: number;
+            MUSTERISIPARISNO: string;
+            SIPARISPROSESID: string;
+          }) => {
+            setSellectedValues(obj);
           }}
           name="KALITEID"
           link="kalite"
@@ -162,23 +232,14 @@ export const MaterialForm = ({
               width: 300,
             },
           ]}
+          defaultFilters={currentKalite?.HAMID ? `HAMID=${currentKalite?.HAMID}` : ''}
           defaultValue={
             formData?.HAMID && formData?.HAMADI
               ? formData?.HAMID + " - " + formData?.HAMADI
-              : defaultData?.HAMADI
+              : currentKalite?.HAMADI
           }
           control={control}
         />
-        {/* <HFInputMask
-          label="Vade Gunu"
-          name="VADEGUN"
-          type="date"
-          control={control}
-          handleChange={(val?: string) => {
-            setValue("VADEGUN", val);
-          }}
-          defaultValue={formData?.VADEGUN}
-        /> */}
 
         <div className="flex space-x-2">
           <HFTextField
@@ -274,6 +335,7 @@ export const MaterialForm = ({
             />
           </div>
         </div>
+
         <SubmitCancelButtons
           uniqueID={uniqueID}
           type={formId ? "update" : "create siparis detey"}
@@ -287,11 +349,6 @@ export const MaterialForm = ({
           }}
         />
       </form>
-      {/* <CollapseUI title="tables" disabled={false}>
-        <div className="mb-8">
-          <MaterialTable />
-        </div>
-      </CollapseUI> */}
     </CNewMiniModal>
   );
 };
