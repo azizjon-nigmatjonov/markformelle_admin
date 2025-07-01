@@ -14,7 +14,7 @@ export const PaintForm = ({
   defaultData,
   title,
   parentId,
-  refetch
+  refetch,
 }: {
   handleActions: (val: string) => void;
   uniqueID: string;
@@ -27,30 +27,30 @@ export const PaintForm = ({
   const { control, setValue, handleSubmit } = useForm();
 
   const { formData, updateForm, createForm } = PaintFormLogic({
-    formId, defaultData, closeFn: () => {
-      refetch()
-      handleActions('Close')
-    }
+    formId,
+    defaultData,
+    closeFn: () => {
+      refetch();
+      handleActions("Close");
+    },
   });
-
 
   const onSubmit = (data: any) => {
     console.log(data);
-    let params = { ...data }
+    let params = { ...data };
     if (formId) {
-      params = { ...formData, ...params }
+      params = { ...formData, ...params };
       // params.BOYASIPARISKAYITID = formId
       // params.SIPARISSIRANO = 1
 
-      updateForm(params, formId)
+      updateForm(params, formId);
     } else {
-      params.ADET = ''
-      params.BOYASIPARISKAYITID = parentId
-      params.DEGISIMLOG = ''
-      params.DINLENMISGRAMAJ = ''
-      createForm(params)
+      params.ADET = "";
+      params.BOYASIPARISKAYITID = parentId;
+      params.DEGISIMLOG = "";
+      params.DINLENMISGRAMAJ = "";
+      createForm(params);
     }
-
   };
 
   //   COLUMN_NAME
@@ -99,20 +99,20 @@ export const PaintForm = ({
     setValue("IPTALMETRE", form.IPTALMETRE);
     setValue("KALITEID", form.KALITEID);
     setValue("DOVIZID", form.DOVIZID);
-    setValue('IPTALKILO', form.IPTALKILO)
-    setValue('BRUTKILO', form.BRUTKILO)
-    setValue('IPTALMETRE', form.IPTALMETRE)
-    setValue('KALITEID', form.KALITEID)
-    setValue('DOVIZID', form.DOVIZID)
-    setValue('LABRECETEKODU', form.LABRECETEKODU)
-    setValue('SIPARISPROSESID', form.SIPARISPROSESID)
-    setValue('RENKID', form.RENKID)
+    setValue("IPTALKILO", form.IPTALKILO);
+    setValue("BRUTKILO", form.BRUTKILO);
+    setValue("IPTALMETRE", form.IPTALMETRE);
+    setValue("KALITEID", form.KALITEID);
+    setValue("DOVIZID", form.DOVIZID);
+    setValue("LABRECETEKODU", form.LABRECETEKODU);
+    setValue("SIPARISPROSESID", form.SIPARISPROSESID);
+    setValue("RENKID", form.RENKID);
 
-    setValue('NOTU', form.NOTU)
-    setValue('PLANLAMANOTU', form.PLANLAMANOTU)
-    setValue('TERMINNOTU', form.TERMINNOTU)
-    setValue('HATAPUANICARPANI', form.HATAPUANICARPANI)
-    setValue('ISLEMTIPIID', form.ISLEMTIPIID)
+    setValue("NOTU", form.NOTU);
+    setValue("PLANLAMANOTU", form.PLANLAMANOTU);
+    setValue("TERMINNOTU", form.TERMINNOTU);
+    setValue("HATAPUANICARPANI", form.HATAPUANICARPANI);
+    setValue("ISLEMTIPIID", form.ISLEMTIPIID);
   };
 
   useEffect(() => {
@@ -128,8 +128,6 @@ export const PaintForm = ({
       setFormId(defaultData.BOYASIPARISDETAYID);
     }
   }, [defaultData]);
-
-  console.log('formData', formData);
 
   return (
     <CNewMiniModal title={title} handleActions={handleActions}>
@@ -211,7 +209,7 @@ export const PaintForm = ({
             />
             <LiteOptionsTable
               label="Birim fiyat 1. Kalite"
-              handleSelect={() => { }}
+              handleSelect={() => {}}
               name="KALITEID"
               headColumns={[
                 { id: "KALITEID", title: "KALITEID" },
@@ -373,9 +371,7 @@ export const PaintForm = ({
               renderValue={(_: string, obj: any) => {
                 return obj.KALITEADI;
               }}
-              handleSelect={(obj: {
-                KALITEID: string;
-              }) => {
+              handleSelect={(obj: { KALITEID: string }) => {
                 setValue("KALITEID", obj.KALITEID);
               }}
               name="KALITEID"
@@ -396,14 +392,31 @@ export const PaintForm = ({
               control={control}
             />
 
-            <HFTextField label="Sekil Adresi" name="SEKILADRES" control={control} defaultValue={formData?.SEKILADRES} />
+            <HFTextField
+              label="Sekil Adresi"
+              name="SEKILADRES"
+              control={control}
+              defaultValue={formData?.SEKILADRES}
+            />
 
-            <HFTextField label="Melanj kodu" name="MELANJKODU" control={control} />
+            <HFTextField
+              label="Melanj kodu"
+              name="MELANJKODU"
+              control={control}
+            />
 
-            <HFTextField type="number" label="Fire oran" name="FIREORANI" control={control} />
+            <HFTextField
+              type="number"
+              label="Fire oran"
+              name="FIREORANI"
+              control={control}
+            />
 
-            <HFTextField label="Hata Puan Carpan" name="HATAPUANICARPANI" control={control} />
-
+            <HFTextField
+              label="Hata Puan Carpan"
+              name="HATAPUANICARPANI"
+              control={control}
+            />
           </div>
 
           <div className="space-y-3">
@@ -472,13 +485,16 @@ export const PaintForm = ({
                 { id: "ADI", title: "ADI", width: 120 },
               ]}
               defaultValue={formData?.ISLEMTIPIID}
-              defaultFilters={formData?.ISLEMTIPIID || formData?.ISLEMTIPIID === 0 ? `ISLEMTIPIID=${formData?.ISLEMTIPIID}` : ''}
+              defaultFilters={
+                formData?.ISLEMTIPIID || formData?.ISLEMTIPIID === 0
+                  ? `ISLEMTIPIID=${formData?.ISLEMTIPIID}`
+                  : ""
+              }
               handleSelect={(obj: { ISLEMTIPIID: number }) => {
                 setValue("ISLEMTIPIID", obj.ISLEMTIPIID);
               }}
               control={control}
             />
-
 
             <HFTextarea
               label="Planlama Notu"
@@ -502,11 +518,12 @@ export const PaintForm = ({
               minRows={2}
             />
           </div>
-
         </div>
         <SubmitCancelButtons
           uniqueID={uniqueID}
-          type={formId ? "update boya siparis detay" : "create boya siparis detay"}
+          type={
+            formId ? "update boya siparis detay" : "create boya siparis detay"
+          }
           handleActions={handleActions}
         />
       </form>

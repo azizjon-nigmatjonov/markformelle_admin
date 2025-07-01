@@ -201,7 +201,7 @@ export const HeaderSettings = ({
       <div className="h-[40px] absolute w-full left-0 top-0 flex items-center desktop:px-1 justify-between">
         <div>
           <h2 className="font-bold">
-            Общий
+            Итого
             <span> {bodyColumns?.length}</span>
           </h2>
         </div>

@@ -3,13 +3,14 @@ import CNewTable from "../../../../components/CElements/CNewTable";
 import { PaintTableLogic } from "./Logic";
 import { PaintForm } from "../Modal/Forms/PaintForm";
 import { PaintFormYarn } from "../Modal/Forms/PaintFormYarn";
-
 export const PaintTable = ({
   handleActionsTable,
   formId,
   uniqueID,
   currentPaint,
+  title,
 }: {
+  title?: string;
   formId: number;
   uniqueID: string;
   currentPaint: any;
@@ -20,32 +21,62 @@ export const PaintTable = ({
     page: 1,
     perPage: 50,
   });
-  const { isLoading, headColumns, bodyColumns, refetch } = PaintTableLogic({
-    filterParams,
-  });
+  const { isLoading, headColumns, bodyColumns, refetch, deleteFn } =
+    PaintTableLogic({
+      filterParams,
+    });
+
+  const handleActions = (el: any, status: string) => {
+    if (status === "delete") {
+      deleteFn([el.BOYASIPARISDETAYID]);
+    }
+    if (status === "delete_multiple") {
+      deleteFn(
+        el.map((item: { BOYASIPARISDETAYID: number }) => {
+          return item.BOYASIPARISDETAYID;
+        })
+      );
+    }
+  };
 
   useEffect(() => {
     if (formId) {
       setFilterParams({ ...filterParams, BOYASIPARISKAYITID: formId });
     }
   }, [formId]);
+  console.log("uniqueID", uniqueID);
 
   return (
     <div className="relative">
       <CNewTable
         key={headColumns.length}
         headColumns={headColumns}
-        defaultFilters={["add", "excel_download"]}
+        defaultFilters={
+          title
+            ? [
+                "add",
+                "delete",
+                "excel_download",
+                "excel_upload",
+                "filter",
+                "active_menu",
+                "actions",
+                "sellect_more",
+              ]
+            : []
+        }
         idForTable="paint_table_inner"
+        innerTable={true}
         handleActions={(obj: any, status: string) => {
           if (status === "modal") {
             setOpen(true);
           } else {
             handleActionsTable(obj, status, "paint");
+            handleActions(obj, status);
           }
         }}
-        bodyColumns={bodyColumns}
-        autoHeight="250px"
+        bodyColumns={title ? bodyColumns : []}
+        autoHeight="180px"
         handleFilterParams={(params: any) => {
           setFilterParams(params);
         }}
@@ -71,7 +102,7 @@ export const PaintTable = ({
               <li className="hover:bg-[var(--primary50)] p-2 rounded-[12px] w-full">
                 <button
                   onClick={() => {
-                    handleActionsTable({}, "modal_iplik", "paint");
+                    handleActionsTable({}, "modal_yarn", "paint");
                     setOpen(false);
                   }}
                   className="w-full"
@@ -87,7 +118,7 @@ export const PaintTable = ({
           ></div>
         </>
       )}
-      {uniqueID === "paint_form" && (
+      {uniqueID === "paint_form" && title && (
         <PaintForm
           parentId={formId}
           title="Boya Siparis Detay Girisi (Kumash)"
@@ -99,11 +130,11 @@ export const PaintTable = ({
           refetch={refetch}
         />
       )}
-      {uniqueID === "paint_form_iplik" && (
+      {uniqueID === "paint_form_iplik" && title && (
         <PaintFormYarn
           title=" Boya Siparis Detay Girisi (Iplik)"
           handleActions={(val: string) => {
-            handleActionsTable({}, val, "paint");
+            handleActionsTable({}, val + "_yarn", "paint");
           }}
           defaultData={currentPaint}
           uniqueID={uniqueID}

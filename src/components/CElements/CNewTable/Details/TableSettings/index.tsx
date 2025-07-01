@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { Closer } from "../../../../UI/Closer";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { MenuItem } from "./MenuItems";
 import { tableStoreActions } from "../../../../../store/table";
 import { useDispatch } from "react-redux";
@@ -19,30 +18,43 @@ import {
   UncheckMultipleIcon,
 } from "../../../../UI/IconGenerator/Svg/Table";
 import { TooltipPosition } from "../../../../../constants/toolPosition";
+import { PopupUI } from "../../../../UI/PopupUI";
 
 export const SettingDropdown = ({
   allCheck = false,
   menuList = [],
   handleFilterSave,
+  open,
+  anchor,
+  onClose,
 }: {
   menuList: any;
   allCheck?: boolean;
-  setOpen: (val: boolean) => void;
   handleFilterSave: (val: any) => void;
+  open: boolean;
+  anchor: any;
+  onClose: () => void;
 }) => {
   return (
-    <div className="absolute right-3 top-[33px] bg-white border border-[var(--gray30)] shadow-2xl rounded-[8px] z-[92] min-w-[150px] whitespace-nowrap px-2 py-2">
-      <ul className="grid gap-y-3 max-h-[400px] overflow-y-scroll designed-scroll">
-        {menuList.map((item: {}, index: number) => (
-          <MenuItem
-            key={index}
-            element={item}
-            allCheck={allCheck}
-            handleFilterSave={handleFilterSave}
-          />
-        ))}
-      </ul>
-    </div>
+    <PopupUI
+      open={open}
+      anchor={anchor}
+      placement="bottom-end"
+      onClose={onClose}
+    >
+      <div className="min-w-[150px] whitespace-nowrap px-2 py-2">
+        <ul className="grid gap-y-3 max-h-[400px] overflow-y-scroll designed-scroll">
+          {menuList.map((item: {}, index: number) => (
+            <MenuItem
+              key={index}
+              element={item}
+              allCheck={allCheck}
+              handleFilterSave={handleFilterSave}
+            />
+          ))}
+        </ul>
+      </div>
+    </PopupUI>
   );
 };
 
@@ -63,6 +75,7 @@ export const HeaderSettings = ({
   disabled = false,
   openSelect = false,
   defaultExcelFields,
+  innerTable,
 }: {
   filterParams: any;
   title: string;
@@ -79,6 +92,7 @@ export const HeaderSettings = ({
   disabled: boolean;
   openSelect: boolean;
   defaultExcelFields: string[];
+  innerTable: boolean;
   tableActions: (el: any, status: string) => void;
 }) => {
   const { t } = useTranslationHook();
@@ -86,6 +100,7 @@ export const HeaderSettings = ({
   const [openDelete, setOpenDelete] = useState(false);
   const dispatch = useDispatch();
   const [allCheck, setAllCheck] = useState(true);
+  const anchorRef = useRef<HTMLDivElement>(null);
 
   const handleFilterSave = (id: any) => {
     let arr: any = pageColumns?.length ? [...pageColumns] : [];
@@ -234,9 +249,15 @@ export const HeaderSettings = ({
   }
 
   return (
-    <div className="pb-[45px] bg-white border-b border-[var(--border)] rounded-t-[12px]">
+    <div
+      className={`${
+        innerTable ? "pb-[30px]" : "pb-[40px]"
+      } bg-[var(--softGray)] border-b border-[var(--border)] rounded-t-[12px]`}
+    >
       <div
-        className={`h-[45px] absolute w-full left-0 top-0 flex items-center ${
+        className={`${
+          innerTable ? "h-[30px]" : "h-[40px]"
+        } absolute w-full left-0 top-0 flex items-center ${
           title ? "desktop:px-3" : ""
         } justify-between`}
       >
@@ -265,10 +286,12 @@ export const HeaderSettings = ({
                   disabled={disabled}
                 >
                   <div className="w-[30px] h-[30px] items-center justify-center flex">
-                    <PlusIcon fill={colorMain} width={20} />
+                    <PlusIcon fill={colorMain} width={innerTable ? 16 : 20} />
                   </div>
                   <p
-                    className={`text-sm pr-2 ${
+                    className={`${
+                      innerTable ? "text-[11px]" : "text-[11px]"
+                    } pr-2 ${
                       disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
                     }`}
                   >
@@ -285,16 +308,21 @@ export const HeaderSettings = ({
                 >
                   <div className="w-[30px] h-[30px] items-center justify-center flex">
                     {openSelect ? (
-                      <UncheckMultipleIcon width={20} fill="var(--main)" />
+                      <UncheckMultipleIcon
+                        width={innerTable ? 16 : 20}
+                        fill="var(--main)"
+                      />
                     ) : (
                       <CheckMultipleIcon
-                        width={20}
+                        width={innerTable ? 16 : 20}
                         fill={disabled ? "var(--gray)" : "var(--main)"}
                       />
                     )}
                   </div>
                   <p
-                    className={`text-sm pr-2 ${
+                    className={`${
+                      innerTable ? "text-[11px]" : "text-sm"
+                    } pr-2 ${
                       selectedItems.length
                         ? "text-[var(--main)]"
                         : `${
@@ -323,11 +351,13 @@ export const HeaderSettings = ({
                         fill={
                           selectedItems?.length ? "var(--main)" : "var(--gray)"
                         }
-                        width={18}
+                        width={innerTable ? 16 : 18}
                       />
                     </div>
                     <p
-                      className={`text-sm pr-2 ${
+                      className={`${
+                        innerTable ? "text-[11px]" : "text-sm"
+                      } pr-2 ${
                         disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
                       }`}
                     >
@@ -362,7 +392,7 @@ export const HeaderSettings = ({
                   className={`h-[30px] w-[30px] flex items-center justify-center`}
                 >
                   <svg
-                    width={24}
+                    width={innerTable ? 18 : 24}
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill={colorMain}
@@ -391,6 +421,7 @@ export const HeaderSettings = ({
                           ? "var(--primary)"
                           : "var(--main)"
                       }
+                      width={innerTable ? 18 : 24}
                     />
                   </Badge>
                 </div>
@@ -404,6 +435,7 @@ export const HeaderSettings = ({
               data={ExcelData}
               allColumns={allColumns}
               disabled={disabled}
+              innerTable={innerTable}
               defaultExcelFields={defaultExcelFields}
             />
           )}
@@ -412,6 +444,7 @@ export const HeaderSettings = ({
             <ExcelReader
               setExcelData={handleExcelUploading}
               disabled={disabled}
+              innerTable={innerTable}
             />
           )}
 
@@ -426,6 +459,7 @@ export const HeaderSettings = ({
                 <div
                   onClick={() => (disabled ? {} : setOpen(true))}
                   className="relative"
+                  ref={anchorRef}
                 >
                   <IconButton disabled={disabled}>
                     <div
@@ -439,24 +473,24 @@ export const HeaderSettings = ({
                             ? "var(--primary)"
                             : "var(--main)"
                         }
+                        width={innerTable ? 18 : 20}
                       />
                     </div>
                   </IconButton>
                 </div>
-                {open && (
-                  <SettingDropdown
-                    setOpen={setOpen}
-                    menuList={menuList}
-                    allCheck={allCheck}
-                    handleFilterSave={handleFilterSave}
-                  />
-                )}
+                <SettingDropdown
+                  open={open}
+                  anchor={anchorRef.current}
+                  menuList={menuList}
+                  allCheck={allCheck}
+                  handleFilterSave={handleFilterSave}
+                  onClose={() => setOpen(false)}
+                />
               </div>
             </Tooltip>
           )}
           {extra}
         </div>
-        {open && <Closer handleClose={() => setOpen(false)} classes="z-[91]" />}
       </div>
     </div>
   );

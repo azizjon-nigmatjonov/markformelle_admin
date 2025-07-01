@@ -6,9 +6,11 @@ import { UploadOutlinedIcon } from "../../components/UI/IconGenerator/Svg/Machin
 const ExcelReader = ({
   setExcelData = () => {},
   disabled = false,
+  innerTable = false,
 }: {
   disabled?: boolean;
   setExcelData: (val: any) => void;
+  innerTable?: boolean;
 }) => {
   const [loading, setLoading] = useState(false);
 
@@ -47,7 +49,10 @@ const ExcelReader = ({
         {loading ? (
           <CircularProgress size={14} />
         ) : (
-          <UploadOutlinedIcon fill={disabled ? "var(--gray)" : "var(--main)"} />
+          <UploadOutlinedIcon
+            fill={disabled ? "var(--gray)" : "var(--main)"}
+            width={innerTable ? 18 : 24}
+          />
         )}
       </IconButton>
 

@@ -17,7 +17,7 @@ export const FourthColumn = ({ data = [] }: Props) => {
     const totalObj: any = {
       month: 0,
       day: 0,
-      title: "Общий",
+      title: "Итого",
       order: 0,
       TABN: "123",
     };

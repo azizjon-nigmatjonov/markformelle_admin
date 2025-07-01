@@ -4043,9 +4043,9 @@ export const RollIcon = () => (
   </svg>
 );
 
-export const FilterIcon = ({ fill = "var(--gray)" }) => (
+export const FilterIcon = ({ fill = "var(--gray)", width = 24 }) => (
   <svg
-    width={24}
+    width={width}
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"
     fill={fill}

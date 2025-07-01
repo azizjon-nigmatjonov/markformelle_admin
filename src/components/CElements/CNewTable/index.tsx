@@ -748,7 +748,6 @@ const CNewTable = ({
     defaultActions,
     setCurrentIndex,
   }: MemoizedTableRowProps) {
-    const [anchor, setAnchor] = useState<null | HTMLElement>(null);
     return (
       <TableRow
         key={item.index}
@@ -813,7 +812,7 @@ const CNewTable = ({
                 textAlign: column?.textAlign || "left",
               }}
               className={`relative h-full flex items-center ${
-                innerTable ? "text-[12px]" : "text-[13px]"
+                innerTable ? "text-[11px]" : "text-[13px]"
               } ${
                 hoveredIndex === colIndex &&
                 draggingIndex !== null &&
@@ -851,8 +850,6 @@ const CNewTable = ({
               {defaultFilters.includes("actions") && colIndex === 0 ? (
                 <div className="relative flex items-center">
                   <TabbleActions
-                    anchor={anchor}
-                    setAnchor={setAnchor}
                     element={item}
                     rowIndex={rowIndex}
                     currentIndex={currentIndex}
@@ -905,6 +902,7 @@ const CNewTable = ({
             defaultFilters={defaultFilters}
             selectedItems={selectedItems}
             disabled={disabled}
+            innerTable={innerTable}
             openSelect={openSelect}
             defaultExcelFields={defaultExcelFields}
           />

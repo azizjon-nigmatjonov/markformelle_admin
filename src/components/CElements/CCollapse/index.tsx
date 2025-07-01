@@ -22,8 +22,8 @@ export const CollapseUI = ({
   }, [defaultOpen]);
   return (
     <div className="pb-5">
-      <div className="flex items-center space-x-2 mt-2 pb-3">
-        <h3 className="text-[14px] ">{t(title)}</h3>
+      <div className="flex items-center space-x-2 mt-1 pb-2">
+        <h3 className="text-[14px] text-[#000]">{t(title)}</h3>
         {disabled ? (
           ""
         ) : (
@@ -38,7 +38,7 @@ export const CollapseUI = ({
         )}
       </div>
       {border ? (
-        <div className="bg-[var(--border)] h-[1px] w-full mb-5"></div>
+        <div className="bg-[var(--border)] h-[1px] w-full mb-3"></div>
       ) : (
         ""
       )}

@@ -14,6 +14,7 @@ interface Props {
   defaultExcelFields?: string[];
   type?: string;
   label?: any;
+  innerTable?: boolean;
 }
 
 const ExcelDownload = ({
@@ -24,6 +25,7 @@ const ExcelDownload = ({
   type = "",
   label = "",
   defaultExcelFields = [],
+  innerTable = false,
 }: Props) => {
   const { t } = useTranslationHook();
   const [open, setOpen] = useState(false);
@@ -93,6 +95,7 @@ const ExcelDownload = ({
           <div className="h-[30px] w-[30px] rounded-[8px] flex items-center justify-center">
             <ExcelIconOutlined
               fill={disabled ? "var(--gray)" : "var(--main)"}
+              width={innerTable ? 18 : 24}
             />
           </div>
           <div className="whitespace-nowrap ml-1 text-[var(--black)]">

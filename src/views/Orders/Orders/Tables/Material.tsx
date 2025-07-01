@@ -30,8 +30,6 @@ export const MaterialTable = ({
   }, [formId]);
 
   const handleActions = (el: any, status: string) => {
-    console.log("el", el);
-    console.log("status", status);
     if (status === "delete") {
       deleteFn([el.ORMESIPARISDETAYID]);
     }
@@ -47,7 +45,7 @@ export const MaterialTable = ({
   return (
     <>
       <CNewTable
-        key={headColumns.length}
+        key={headColumns.length ? "isloading" : "iscame"}
         idForTable="material_table_inner"
         headColumns={headColumns}
         handleActions={(obj: any, status: string) => {
@@ -57,7 +55,7 @@ export const MaterialTable = ({
         disablePagination={true}
         innerTable={true}
         bodyColumns={bodyColumns}
-        autoHeight="250px"
+        autoHeight="180px"
         handleFilterParams={(params: any) => {
           setFilterParams(params);
         }}

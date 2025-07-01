@@ -1,3 +1,4 @@
+import { CollapseUI } from "../../../../components/CElements/CCollapse";
 import { ModalTypes } from "../interfaces";
 import { MaterialTable } from "../Tables/Material";
 import { PaintTable } from "../Tables/Paint";
@@ -58,15 +59,27 @@ export const OrderModal = ({
         setUniqueID("main_order_form");
       }
     } else if (type === "paint") {
-      if (status === "view" || status === "edit") {
-        setUniqueID("paint_form");
-        setCurrentPaint(obj);
+      if (status.includes("yarn")) {
+        if (status.includes("view") || status.includes("edit")) {
+          setUniqueID("paint_form_iplik");
+          setCurrentPaint(obj);
+        }
+        if (status.includes("modal")) {
+          setUniqueID("paint_form_iplik");
+          setCurrentPaint({});
+        }
+      } else {
+        if (status.includes("view") || status.includes("edit")) {
+          setUniqueID("paint_form");
+          setCurrentPaint(obj);
+        }
+        if (status.includes("modal")) {
+          setUniqueID("paint_form");
+          setCurrentPaint({});
+        }
       }
-      if (status === "modal") {
-        setUniqueID("paint_form");
-        setCurrentPaint({});
-      }
-      if (status === "Close") {
+
+      if (status.includes("Close")) {
         setUniqueID("main_order_form");
         setCurrentPaint({});
       }
@@ -74,7 +87,7 @@ export const OrderModal = ({
   };
 
   return (
-    <div className="space-y-4 overflow-y-auto designed-scroll max-h-[calc(100vh-200px)]">
+    <div className="space-y-5 overflow-y-auto designed-scroll max-h-[calc(100vh-200px)]">
       <OrderForm
         handleModalActions={handleModalActions}
         createForm={createForm}
@@ -82,38 +95,46 @@ export const OrderModal = ({
         formData={formData}
         uniqueID={uniqueID}
       />
-
-      <MaterialTable
-        handleActionsTable={(obj: any, status: string, type: string) => {
-          handleActionsTable(obj, status, type);
-        }}
-        uniqueID={uniqueID}
-        currentMaterial={currentMaterial}
-        formId={formId ?? 0}
-      />
-      <div className="">
-        <PaintTable
-          handleActionsTable={(obj: any, status: string) => {
-            handleActionsTable(obj, status, "paint");
-          }}
-          uniqueID={uniqueID}
-          currentPaint={currentPaint}
-          formId={formId ?? 0}
-        />
-        <div className="grid grid-cols-2 gap-x-2 mt-5">
-          {/* <PaintTable
-            handleActionsTable={(obj: any, status: string) => {
-              handleActionsTable(obj, status, "paint");
+      <div>
+        <CollapseUI title="Orme Siparis Detay Girisi" disabled>
+          <MaterialTable
+            handleActionsTable={(obj: any, status: string, type: string) => {
+              handleActionsTable(obj, status, type);
             }}
+            uniqueID={uniqueID}
+            currentMaterial={currentMaterial}
             formId={formId ?? 0}
           />
+        </CollapseUI>
+        <CollapseUI title="Boya Siparis Detay Girisi" disabled>
           <PaintTable
+            title="Boya Siparis Detay Girisi"
             handleActionsTable={(obj: any, status: string) => {
               handleActionsTable(obj, status, "paint");
             }}
+            uniqueID={uniqueID}
+            currentPaint={currentPaint}
             formId={formId ?? 0}
-          /> */}
-        </div>
+          />
+          <div className="grid grid-cols-2 gap-x-2 mt-3">
+            <PaintTable
+              handleActionsTable={(obj: any, status: string) => {
+                handleActionsTable(obj, status, "paint");
+              }}
+              uniqueID={uniqueID}
+              currentPaint={currentPaint}
+              formId={formId ?? 0}
+            />
+            <PaintTable
+              handleActionsTable={(obj: any, status: string) => {
+                handleActionsTable(obj, status, "paint");
+              }}
+              uniqueID={uniqueID}
+              currentPaint={currentPaint}
+              formId={formId ?? 0}
+            />
+          </div>
+        </CollapseUI>
       </div>
     </div>
   );

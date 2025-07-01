@@ -83,7 +83,6 @@ export const OrderList = () => {
           defaultSearch={{
             BOYASIPARISKAYID: "",
           }}
-          disablePagination={true}
           meta={{
             totalCount: bodyData?.count,
             pageCount: bodyData?.count
