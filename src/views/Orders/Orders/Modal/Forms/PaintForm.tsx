@@ -53,7 +53,6 @@ export const PaintForm = ({
       setValue("TERMINTARIHI", dayjs().format("YYYY-MM-DD"));
     }
   }, [formData]);
-  console.log("formData 123", formData);
 
   return (
     <CNewMiniModal title="Paint Form" handleActions={handleActions}>
@@ -111,7 +110,7 @@ export const PaintForm = ({
             />
             <LiteOptionsTable
               label="Birim fiyat 1. Kalite"
-              handleSelect={() => {}}
+              handleSelect={() => { }}
               name="KALITEID"
               headColumns={[
                 { id: "KALITEID", title: "KALITEID" },
@@ -193,7 +192,7 @@ export const PaintForm = ({
                 { id: "LABDIPID", title: "LABDIPID" },
                 { id: "ADI", title: "ADI" },
               ]}
-              handleSelect={() => {}}
+              handleSelect={() => { }}
               control={control}
             />
             <HFInputMask
