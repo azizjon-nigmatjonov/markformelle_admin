@@ -44,7 +44,6 @@ export const PaintTable = ({
       setFilterParams({ ...filterParams, BOYASIPARISKAYITID: formId });
     }
   }, [formId]);
-  console.log("uniqueID", uniqueID);
 
   return (
     <div className="relative">
