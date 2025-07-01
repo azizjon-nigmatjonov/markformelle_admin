@@ -54,24 +54,26 @@ export const PaintTable = ({
       />
       {open && (
         <>
-          <div className="absolute top-10 left-20 bg-white z-50 border border-[var(--gray30)] rounded-[12px] p-2 shadow-2xl">
-            <ul>
-              <li className="py-1">
+          <div className="absolute top-10 left-2 bg-white z-50 border border-[var(--gray30)] rounded-[12px] shadow-2xl">
+            <ul className="rounded-[12px] flex flex-col items-start w-[300px] text-left">
+              <li className="hover:bg-[var(--primary50)] p-2 rounded-[12px] w-full">
                 <button
                   onClick={() => {
                     handleActionsTable({}, "modal", "paint");
                     setOpen(false);
                   }}
+                  className="w-full"
                 >
                   Boya Siparis Detay Girisi (Kumash)
                 </button>
               </li>
-              <li className="py-1">
+              <li className="hover:bg-[var(--primary50)] p-2 rounded-[12px] w-full">
                 <button
                   onClick={() => {
                     handleActionsTable({}, "modal_iplik", "paint");
                     setOpen(false);
                   }}
+                  className="w-full"
                 >
                   Boya Siparis Detay Girisi (Iplik)
                 </button>
@@ -86,6 +88,7 @@ export const PaintTable = ({
       )}
       {uniqueID === "paint_form" && (
         <PaintForm
+          title="Boya Siparis Detay Girisi (Kumash)"
           handleActions={(val: string) => {
             handleActionsTable({}, val, "paint");
           }}
@@ -95,6 +98,7 @@ export const PaintTable = ({
       )}
       {uniqueID === "paint_form_iplik" && (
         <PaintForm
+          title=" Boya Siparis Detay Girisi (Kumash)"
           handleActions={(val: string) => {
             handleActionsTable({}, val, "paint");
           }}

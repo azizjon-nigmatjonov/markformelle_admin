@@ -14,10 +14,12 @@ export const PaintForm = ({
   handleActions,
   uniqueID,
   defaultData,
+  title,
 }: {
   handleActions: (val: string) => void;
   uniqueID: string;
   defaultData: any;
+  title: string;
 }) => {
   const [formId, setFormId] = useState(0);
   const { control, setValue, handleSubmit, getValues } = useForm();
@@ -55,7 +57,7 @@ export const PaintForm = ({
   }, [formData]);
 
   return (
-    <CNewMiniModal title="Paint Form" handleActions={handleActions}>
+    <CNewMiniModal title={title} handleActions={handleActions}>
       <form
         onKeyDown={(e) => {
           if (e.key === "Enter") {
@@ -110,7 +112,7 @@ export const PaintForm = ({
             />
             <LiteOptionsTable
               label="Birim fiyat 1. Kalite"
-              handleSelect={() => { }}
+              handleSelect={() => {}}
               name="KALITEID"
               headColumns={[
                 { id: "KALITEID", title: "KALITEID" },
@@ -192,7 +194,7 @@ export const PaintForm = ({
                 { id: "LABDIPID", title: "LABDIPID" },
                 { id: "ADI", title: "ADI" },
               ]}
-              handleSelect={() => { }}
+              handleSelect={() => {}}
               control={control}
             />
             <HFInputMask
