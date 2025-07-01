@@ -14,6 +14,7 @@ export const PaintTable = ({
   currentPaint: any;
   handleActionsTable: (val: any, status: string, type: string) => void;
 }) => {
+  const [open, setOpen] = useState(false);
   const [filterParams, setFilterParams]: any = useState({
     page: 1,
     perPage: 50,
@@ -29,14 +30,18 @@ export const PaintTable = ({
   }, [formId]);
 
   return (
-    <>
+    <div className="relative">
       <CNewTable
         key={headColumns.length}
         headColumns={headColumns}
         defaultFilters={["add", "excel_download"]}
         idForTable="paint_table_inner"
         handleActions={(obj: any, status: string) => {
-          handleActionsTable(obj, status, "paint");
+          if (status === "modal") {
+            setOpen(true);
+          } else {
+            handleActionsTable(obj, status, "paint");
+          }
         }}
         bodyColumns={bodyColumns}
         autoHeight="250px"
@@ -47,6 +52,38 @@ export const PaintTable = ({
         disablePagination={true}
         filterParams={filterParams}
       />
+      {open && (
+        <>
+          <div className="absolute top-10 left-20 bg-white z-50 border border-[var(--gray30)] rounded-[12px] p-2 shadow-2xl">
+            <ul>
+              <li className="py-1">
+                <button
+                  onClick={() => {
+                    handleActionsTable({}, "modal", "paint");
+                    setOpen(false);
+                  }}
+                >
+                  Boya Siparis Detay Girisi (Kumash)
+                </button>
+              </li>
+              <li className="py-1">
+                <button
+                  onClick={() => {
+                    handleActionsTable({}, "modal_iplik", "paint");
+                    setOpen(false);
+                  }}
+                >
+                  Boya Siparis Detay Girisi (Iplik)
+                </button>
+              </li>
+            </ul>
+          </div>
+          <div
+            className="fixed left-0 top-0 w-full h-full z-40"
+            onClick={() => setOpen(false)}
+          ></div>
+        </>
+      )}
       {uniqueID === "paint_form" && (
         <PaintForm
           handleActions={(val: string) => {
@@ -56,6 +93,15 @@ export const PaintTable = ({
           uniqueID={uniqueID}
         />
       )}
-    </>
+      {uniqueID === "paint_form_iplik" && (
+        <PaintForm
+          handleActions={(val: string) => {
+            handleActionsTable({}, val, "paint");
+          }}
+          defaultData={currentPaint}
+          uniqueID={uniqueID}
+        />
+      )}
+    </div>
   );
 };
