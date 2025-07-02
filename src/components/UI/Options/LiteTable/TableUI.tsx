@@ -88,6 +88,23 @@ export const TableUI = ({
     }
   }, [focusedIndex]);
 
+  // Scroll to active element when table opens
+  useEffect(() => {
+    if (idTable && bodyColumns?.length) {
+      const activeIndex = bodyColumns.findIndex(
+        (item: any) => idTable === item?.[name]
+      );
+      if (activeIndex !== -1 && rowRefs.current[activeIndex]) {
+        setTimeout(() => {
+          rowRefs.current[activeIndex]?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }, 100);
+      }
+    }
+  }, [idTable, bodyColumns, name]);
+
   return (
     <>
       <div

@@ -110,10 +110,11 @@ const SearchInput = memo(
               }}
               onFocus={() => setIsFocus(true)}
               autoFocus={focused}
-              className={`border rounded-[8px] pl-8 h-[30px] w-full px-1 bg-transparent ${error?.message
+              className={`border rounded-[8px] pl-8 h-[30px] w-full px-1 bg-transparent ${
+                error?.message
                   ? "border-[var(--error)]"
                   : "border-[var(--border)]"
-                } ${disabled ? "text-[var(--gray)]" : ""}`}
+              } ${disabled ? "text-[var(--gray)]" : ""}`}
               placeholder={t(placeholder)}
               onChange={(e) => {
                 debouncedSearch(e.target.value);
@@ -190,7 +191,7 @@ const TablePopup = memo(
 export const LiteOptionsTable = memo(
   <T extends BaseTableItem = TableItem>({
     link = "",
-    handleSelect = () => { },
+    handleSelect = () => {},
     name = "",
     defaultValue = "",
     label = "",
@@ -388,18 +389,31 @@ export const LiteOptionsTable = memo(
     }, [defaultValue, setCurrentValue]);
 
     useEffect(() => {
-      if (data?.data?.length && defaultFilters && !search) {
+      if (
+        data?.data?.length &&
+        data?.data?.length === 1 &&
+        defaultFilters &&
+        !search
+      ) {
         const obj = data.data[0] ?? {};
         setCurrentEl(obj);
         handleSelect(obj);
         setCurrentValue(obj);
+        setOpen(false);
       }
     }, [data?.data, defaultFilters, handleSelect, setCurrentValue, search]);
+
+    useEffect(() => {
+      if (data?.data?.length > 1 && defaultFilters) {
+        setOpen(true);
+        setAnchor(inputRef.current);
+        setSearch("");
+      }
+    }, [data?.data, defaultFilters]);
 
     const handleEnterKey = useCallback(
       (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
-          // setCurrentValue();
           handleSelect({ [name]: search });
           setTimeout(() => {
             const active = inputRef.current;
@@ -410,7 +424,6 @@ export const LiteOptionsTable = memo(
               const currentIndex = elements.indexOf(active);
               const next = elements[currentIndex + 1];
               if (next && typeof next.focus === "function") {
-                // Use requestAnimationFrame to defer focus and avoid forced reflow
                 requestAnimationFrame(() => {
                   next.focus();
                 });
@@ -428,8 +441,9 @@ export const LiteOptionsTable = memo(
           <CLabel title={label} required={required} disabled={disabled} />
         )}
         <div
-          className={`w-full relative flex items-center ${disabled ? "bg-[#fafafa]" : ""
-            }`}
+          className={`w-full relative flex items-center ${
+            disabled ? "bg-[#fafafa]" : ""
+          }`}
         >
           <div
             className="cursor-pointer absolute z-[99] left-2"
@@ -437,7 +451,7 @@ export const LiteOptionsTable = memo(
               if (!disabled) {
                 if (!open) {
                   setAnchor(inputRef.current);
-                  setFilterParams({ ...filterParams, link, perPage: 50 }); // Reset to initial limit when opening
+                  setFilterParams({ ...filterParams, link, perPage: 50 });
                 }
                 setOpen(!open);
               }
