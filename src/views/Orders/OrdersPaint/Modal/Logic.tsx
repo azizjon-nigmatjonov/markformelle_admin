@@ -190,4 +190,4 @@ export const OrderModalBaseLogics = ({defaultData, refetch} : {
         handleModalActions,
         handleActionsTable
     };
-};
+}; 

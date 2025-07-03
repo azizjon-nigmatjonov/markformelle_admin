@@ -1,7 +1,6 @@
-import { useState } from "react";
 import {CollapseUI} from "../../../../components/CElements/CCollapse";
 import {ModalTypes} from "../interfaces";
-import {MaterialTable} from "../Tables/Material";
+import { PartianTable} from "../Tables/Partion";
 import {OrderForm} from "./Form";
 import {OrderModalBaseLogics} from "./Logic";
 import {PaintTablesUI} from "./PaintTablesUI";
@@ -19,7 +18,6 @@ export const OrderModal = ({
     },
     setOpen
 } : ModalUIProps) => {
-    const [currentKnitting, setCurrentKnitting] = useState<any>({});
     const {
         currentMaterial,
         currentPaint,
@@ -49,32 +47,13 @@ export const OrderModal = ({
                 formData={formData}
                 uniqueID={uniqueID}/>
             <div>
-                <CollapseUI title="Orme Siparis Detay Girisi" disabled>
-                    <MaterialTable handleActionsTable={
-                            (obj : any, status : string, type : string) => {
-                                if (status === "view_single") {
-                        
-                                    setCurrentKnitting(obj);
-                                } else {
-                                    handleActionsTable(obj, status, type);
-                                }
-                              
-                            }
-                        }
-                        currentKnitting={currentKnitting}
-                        uniqueID={uniqueID}
-                        currentMaterial={currentMaterial}
-                        formId={
-                            formId ?? 0
-                        }/>
-                </CollapseUI>
+         
             <CollapseUI title="Boya Siparis Detay Girisi" disabled>
                 <PaintTablesUI handleActionsTable={
                         (obj : any, status : string, type : string) => {
                             handleActionsTable(obj, status, type);
                         }
                     }
-                    currentKnitting={currentKnitting}
                     setCurrentPaint={setCurrentPaint}
                     uniqueID={uniqueID}
                     currentPaint={currentPaint}
@@ -82,6 +61,18 @@ export const OrderModal = ({
                         formId ?? 0
                     }/>
             </CollapseUI>
+            <CollapseUI title="Partiya" disabled>
+                    <PartianTable handleActionsTable={
+                            (obj : any, status : string, type : string) => {
+                                handleActionsTable(obj, status, type);
+                            }
+                        }
+                        uniqueID={uniqueID}
+                        currentMaterial={currentMaterial}
+                        formId={
+                            formId ?? 0
+                        }/>
+                </CollapseUI>
     </div>
 </div>
     );

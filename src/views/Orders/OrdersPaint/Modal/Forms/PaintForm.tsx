@@ -14,14 +14,12 @@ export const PaintForm = ({
   defaultData,
   title,
   parentId,
-  ORMESIPARISDETAYID,
   refetch,
 }: {
   handleActions: (val: string) => void;
   uniqueID: string;
   defaultData: any;
   parentId: number;
-  ORMESIPARISDETAYID: number;
   title: string;
   refetch: () => void;
 }) => {
@@ -40,7 +38,6 @@ export const PaintForm = ({
   const onSubmit = (data: any) => {
     console.log(data);
     let params = { ...data };
-    params.ORMESIPARISDETAYID = ORMESIPARISDETAYID
     if (formId) {
       params = { ...formData, ...params };
       // params.BOYASIPARISKAYITID = formId

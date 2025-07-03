@@ -9,7 +9,7 @@ import { OrderModal } from "./Modal";
 import { ModalTypes } from "./interfaces";
 import CNewModal from "../../../components/CElements/CNewModal";
 
-export const OrderList = () => {
+export const OrdersPaintPage = () => {
   const [open, setOpen] = useState(false);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
@@ -26,7 +26,6 @@ export const OrderList = () => {
   const { newHeadColumns } = useTableHeaders({ bodyColumns });
 
   const handleActions = (el: any, status: string) => {
- 
     if (status === "modal") {
       setOpen(true);
     }
@@ -64,12 +63,11 @@ export const OrderList = () => {
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />
       <div className="p-2">
         <CNewTable
-          title="table_orders"
+          title="table_orders_paint"
           headColumns={newHeadColumns}
           bodyColumns={bodyColumns}
           handleActions={handleActions}
           isLoading={isLoading}
-   
           filterParams={filterParams}
           handleFilterParams={setFilterParams}
           defaultFilters={[
@@ -96,7 +94,7 @@ export const OrderList = () => {
 
       {open && (
         <CNewModal
-          title="orders_form"
+          title="boya siparis tanitimi (kumash)"
           handleActions={handleModal}
           defaultData={{
             id: modalInitialData?.BOYASIPARISKAYITID,
@@ -112,4 +110,4 @@ export const OrderList = () => {
       )}
     </>
   );
-};
+}; 

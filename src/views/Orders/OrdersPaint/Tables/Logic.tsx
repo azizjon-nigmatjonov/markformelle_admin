@@ -93,7 +93,7 @@ export const MaterialTableLogic = ({filterParams} : {
 };
 
 export const PaintTableLogic = ({filterParams} : {
-    filterParams: any,
+    filterParams: any
 }) => {
     const {t} = useTranslationHook();
     const [headColumns, setHeadColumns] = useState([]);
@@ -106,17 +106,17 @@ export const PaintTableLogic = ({filterParams} : {
             filters.perPage
         }${
             filters.q ? "&" + filters.q : ""
-        }&ORMESIPARISDETAYID=${
-            filters?.ORMESIPARISDETAYID
+        }&BOYASIPARISKAYITID=${
+            filters.BOYASIPARISKAYITID
         }`);
         return response.data;
     };
 
     const {data: listData, isLoading, refetch} = useQuery([
-        "GET_Paint_table_by_orme", filterParams
+        "GET_PAINT_TABLE", filterParams
     ], () => fetchList(filterParams), {
         keepPreviousData: true,
-        enabled: !!filterParams ?. ORMESIPARISDETAYID
+        enabled: !!filterParams ?. BOYASIPARISKAYITID
     });
     useEffect(() => {
         if (listData) {
@@ -355,4 +355,4 @@ export const IslemTipiTableLogic = ({filterParams} : {
         bodyColumns: filterParams ?. ISLEMTIPIID ? bodyData ?. data : [],
         deleteFn
     };
-};
+}; 

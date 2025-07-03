@@ -7,7 +7,7 @@ import { ModalTypes } from "./interfaces";
 
 const API_URL = import.meta.env.VITE_TEST_URL;
 
-export const breadCrumbs = [{ label: "orders", link: "/orders/list" }];
+export const breadCrumbs = [{ label: "orders", link: "/orders/orders-paint" }];
 
 export const TableData = ({
   filterParams = { page: 1, perPage: 50 },
@@ -146,4 +146,4 @@ export const OrderListBaseLogics = ({
   };
 
   return <>{children({ handleActions, handleModal })}</>;
-};
+}; 

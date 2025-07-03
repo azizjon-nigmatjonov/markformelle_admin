@@ -40,4 +40,4 @@ export const PaintTable = ({
             setCurrentPaint={setCurrentPaint}
             setFilterParams={setFilterParams}/>
     );
-};
+}; 

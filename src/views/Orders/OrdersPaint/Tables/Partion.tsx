@@ -3,15 +3,13 @@ import { useEffect, useState } from "react";
 import { MaterialTableLogic } from "./Logic";
 import { MaterialForm } from "../Modal/Forms/MaterialForm";
 
-export const MaterialTable = ({
+export const PartianTable = ({
   handleActionsTable,
   uniqueID,
   formId,
   currentMaterial,
-  currentKnitting,
 }: {
   formId: number;
-  currentKnitting: any;
   currentMaterial: any;
   uniqueID: string;
   handleActionsTable: (val: any, status: string, type: string) => void;
@@ -30,13 +28,6 @@ export const MaterialTable = ({
       setFilterParams({ ...filterParams, BOYASIPARISKAYITID: formId });
     }
   }, [formId]);
-  console.log('currentKnitting', currentKnitting);
-  
-  useEffect(() => {
-      if (bodyColumns?.length) {
-        handleActionsTable(bodyColumns?.[0], "view_single", "material");
-    }
-  }, [bodyColumns]);
 
   const handleActions = (el: any, status: string) => {
     if (status === "delete") {
@@ -55,13 +46,12 @@ export const MaterialTable = ({
     <>
       <CNewTable
         key={headColumns.length ? "isloading" : "iscame"}
-        idForTable="material_table_inner"
+        idForTable="partiya_table_inner"
         headColumns={headColumns}
         handleActions={(obj: any, status: string) => {
           handleActionsTable(obj, status, "material");
           handleActions(obj, status);
         }}
-        currentIdRow={currentKnitting?.index || 1}
         disablePagination={true}
         innerTable={true}
         bodyColumns={bodyColumns}
@@ -85,4 +75,4 @@ export const MaterialTable = ({
       )}
     </>
   );
-};
+}; 
