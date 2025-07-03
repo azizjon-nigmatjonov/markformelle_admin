@@ -18,11 +18,9 @@ export const OrdersPaintPage = () => {
   const [modalInitialData, setModalInitialData] = useState<ModalTypes | null>(
     null
   );
-
   const { bodyColumns, isLoading, bodyData, deleteFn, refetch } = TableData({
     filterParams,
   });
-
   const { newHeadColumns } = useTableHeaders({ bodyColumns });
 
   const handleActions = (el: any, status: string) => {
@@ -110,4 +108,4 @@ export const OrdersPaintPage = () => {
       )}
     </>
   );
-}; 
+};

@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { PaintFormLogic } from "./PaintComponents/Logic";
 import HFTextarea from "../../../../../components/HFElements/HFTextarea";
 import HFTextField from "../../../../../components/HFElements/HFTextField";
+import CCheckbox from "../../../../../components/CElements/CCheckbox";
+import CLabel from "../../../../../components/CElements/CLabel";
 
 export const PaintForm = ({
   handleActions,
@@ -26,8 +28,9 @@ export const PaintForm = ({
   refetch: () => void;
 }) => {
   const [formId, setFormId] = useState(0);
-  const { control, setValue, handleSubmit, watch } = useForm();
+  const { control, setValue, handleSubmit, watch, getValues } = useForm();
   const DESENID = watch("DESENID");
+  const LABRECETEID = watch("LABRECETEID");
   const { formData, updateForm, createForm } = PaintFormLogic({
     formId,
     defaultData,
@@ -36,11 +39,120 @@ export const PaintForm = ({
       handleActions("Close");
     },
   });
-
+  // backend needs this data to create
+  // {
+  //   "BOYASIPARISKAYITID": 2770,
+  //   "ORMESIPARISDETAYID": 12280,
+  //   "FIRMASEVKADRESIID": 904,
+  //   "SIRANO": 38,
+  //   "MUSTERISIPARISNO": "99999",
+  //   "REFERANSSIPARISNO": "123456",
+  //   "LABRECETEID": 13280,
+  //   "LABRECETEKODU": "M0868-PC30001",
+  //   "LABRECETEATISID": 18393,
+  //   "ISLEMGRUBUID": 1,
+  //   "RENKID": 10590,
+  //   "RENKADI": "QORA-3",
+  //   "DESENID": "2667",
+  //   "PROSESID": 58,
+  //   "ISLEMTIPIID": 0,
+  //   "SIPARISPROSESID": 58,
+  //   "SIPARISKILO": 100,
+  //   "BOYANACAK": true,
+  //   "PAKETLEMESEKLIID": 2,
+  //   "RENKDERINLIGIID": 2,
+  //   "BIRIMFIYAT": 8.16,
+  //   "HAMSTOKBIRIMID":0,
+  //   "DOVIZID": "USD",
+  //   "FASONBIRIMFIYATDOVIZID": "USD",
+  //   "BASKIBIRIMFIYATDOVIZID": "USD",
+  //   "FATURAKESILECEK": true,
+  //   "HAMID": 1897,
+  //   "PUS": 32,
+  //   "FEINE": 28,
+  //   "MUSTERIKALITENO": "4",
+  //   "KALITEID": "SJ-001.03.140",
+  //   "ENISTENEN": "180",
+  //   "GRAMAJISTENEN": "140",
+  //   "TERMINTARIHI": "2024-10-15T00:00:00",
+  //   "SONTERMINTARIHI": "2024-10-15T00:00:00",
+  //   "ONAYDURUMU": true,
+  //   "ONAYLAYANKULLANICIID": 6,
+  //   "MAXIMUMFIREORANI": 10,
+  //   "ILAVEISLEMLER": "ON ISLEM",
+  //   "SIPARISTIPIID": 1,
+  // "RECETEGIRISTARIHI": "2024-09-27T14:43:05",
+  // "RECETEGIRISKULLANICIID": 6,
+  // "DESENGIRISTARIHI": "2024-09-27T14:43:05",
+  // "DESENGIRISKULLANICIID": 6,
+  // "BASKITIPIID": 5,
+  // "SIPARISBRUTKILO": 228,
+  // "TUPACIKENMAYLI": 1,
+  // "INSERTKULLANICIID": 6,
+  // "INSERTTARIHI": "2024-09-27T14:43:05",
+  // "KULLANICIID": 6,
+  // "DEGISIMTARIHI": "2024-09-27T14:48:21",
+  // "HATAPUANICARPANI": 0.2
+  // }
+  // my object giving to backend
+  //   {
+  //     "HAMID": 2,
+  //     "PUS": 11,
+  //     "FEINE": 2,
+  //     "SIPARISKILO": 1,
+  //     "BIRIMFIYAT": 1,
+  //     "KALITEID": "10EPXCY-1PC",
+  //     "DOVIZID": "USD",
+  //     "LABRECETEKODU": "M0868-C13028",
+  //     "LABRECETEATISID": 23673,
+  //     "SIPARISPROSESID": 100,
+  //     "RENKID": 11956,
+  //     "RENKDERINLIGIID": 1,
+  //     "SIPARISTIPIID": 2,
+  //     "MUSTERISIPARISNO": "1",
+  //     "MUSTERIKALITENO ": "1",
+  //     "REFSIPARISNO": "1",
+  //     "ENISTENEN": "1",
+  //     "GRAMAJISTENEN": "1",
+  //     "MAXIMUMFIREORANI": 11,
+  //     "HATAPUANICARPANI": 1,
+  //     "DESENID": "1000",
+  //     "ISLEMTIPIID": 1,
+  //     "TERMINTARIHI": "2025-07-03",
+  //     "LABRECETEID": 14955,
+  //     "RENKADI": "MOVIY-67 (polester iplik)-M0868-P23011",
+  //     "ORMESIPARISDETAYID": 12279,
+  //     "BOYASIPARISKAYITID": 2737,
+  //     "FIRMASEVKADRESIID": 904,
+  //     "PAKETLEMESEKLIID": 2,
+  //     "HAMSTOKBIRIMID": 0,
+  //     "FASONBIRIMFIYATDOVIZID": "USD",
+  //     "BASKIBIRIMFIYATDOVIZID": "USD",
+  //     "FATURAKESILECEK": true,
+  //     "SONTERMINTARIHI": "2025-07-03T15:23:24.516Z",
+  //     "ONAYDURUMU": true,
+  //     "ONAYLAYANKULLANICIID": 6,
+  //     "ILAVEISLEMLER": "ON ISLEM",
+  //     "RECETEGIRISTARIHI": "2025-07-03T15:23:24.516Z",
+  //     "RECETEGIRISKULLANICIID": 6,
+  //     "DESENGIRISTARIHI": "2025-07-03T15:23:24.516Z",
+  //     "DESENGIRISKULLANICIID": 6,
+  //     "BASKITIPIID": 5,
+  //     "SIPARISBRUTKILO": 228,
+  //     "TUPACIKENMAYLI": 1,
+  //     "INSERTKULLANICIID": 6,
+  //     "INSERTTARIHI": "2025-07-03T15:23:24.516Z",
+  //     "KULLANICIID": 6,
+  //     "DEGISIMTARIHI": "2025-07-03T15:23:24.516Z",
+  //     "SIRANO": 999,
+  //     "ISLEMGRUBUID": 1,
+  //     "PROSESID": 58,
+  //     "REFERANSSIPARISNO": "1"
+  // }
   const onSubmit = (data: any) => {
     console.log(data);
     let params = { ...data };
-    params.ORMESIPARISDETAYID = ORMESIPARISDETAYID
+
     if (formId) {
       params = { ...formData, ...params };
       // params.BOYASIPARISKAYITID = formId
@@ -48,309 +160,83 @@ export const PaintForm = ({
 
       updateForm(params, formId);
     } else {
-      params.ADET = null;
+      // Required fields from backend
       params.BOYASIPARISKAYITID = parentId;
-      // params.SIPARISDETAYID = parentId;
-      params.DEGISIMLOG = "";
-      params.DINLENMISGRAMAJ = "";
-      params.BASKIBIRIMFIYATDOVIZID = params.DOVIZID;
-      params.FASONBIRIMFIYATDOVIZID = params.DOVIZID;
-      params.FATURAEDILECEKMIKTARTIPI = 0;
-      params.HAMSTOKBIRIMID = 0;
-      params.SIRANO = 999;
+      params.ORMESIPARISDETAYID = ORMESIPARISDETAYID;
       params.FIRMASEVKADRESIID = 904;
-      params.SIPARISPROSESID = Number(params.SIPARISPROSESID);
+      params.SIRANO = 10001;
+      params.MUSTERISIPARISNO = params.MUSTERISIPARISNO;
+      params.REFERANSSIPARISNO = params.REFSIPARISNO; // Fix field name
+      params.LABRECETEID = Number(params.LABRECETEID);
+      params.LABRECETEKODU = params.LABRECETEKODU;
+      params.LABRECETEATISID = Number(params.LABRECETEATISID);
+      params.ISLEMGRUBUID = 1;
       params.RENKID = Number(params.RENKID);
-      params.INSERTKULLANICIID = 1;
-      params.ORMESIPARISDETAYID = 12280;
-      params.BOYASIPARISDETAYID = 40546;
+      params.RENKADI = params.RENKADI;
+      params.DESENID = params.DESENID;
+      params.PROSESID = 58;
+      params.ISLEMTIPIID = Number(params.ISLEMTIPIID);
+      params.SIPARISPROSESID = Number(params.SIPARISPROSESID);
+      params.SIPARISKILO = Number(params.SIPARISKILO);
+      params.BOYANACAK = params.BOYANACAK;
+      params.PAKETLEMESEKLIID = 2;
+      params.RENKDERINLIGIID = Number(params.RENKDERINLIGIID);
+      params.BIRIMFIYAT = Number(params.BIRIMFIYAT);
+      params.HAMSTOKBIRIMID = 0;
+      params.DOVIZID = params.DOVIZID;
+      params.FASONBIRIMFIYATDOVIZID = params.DOVIZID;
+      params.BASKIBIRIMFIYATDOVIZID = params.DOVIZID;
+      params.FATURAKESILECEK = true;
+      params.HAMID = Number(params.HAMID);
+      params.PUS = Number(params.PUS);
+      params.FEINE = Number(params.FEINE);
+      params.MUSTERIKALITENO = params.MUSTERIKALITENO;
+      params.KALITEID = params.KALITEID;
+      params.ENISTENEN = params.ENISTENEN;
+      params.GRAMAJISTENEN = params.GRAMAJISTENEN;
+      params.TERMINTARIHI = params.TERMINTARIHI;
+      params.SONTERMINTARIHI = dayjs();
+      params.ONAYDURUMU = true;
+      params.ONAYLAYANKULLANICIID = 6;
+      params.MAXIMUMFIREORANI = Number(params.MAXIMUMFIREORANI);
+      params.ILAVEISLEMLER = "ON ISLEM";
+      params.SIPARISTIPIID = Number(params.SIPARISTIPIID);
+      params.RECETEGIRISTARIHI = dayjs();
+      params.RECETEGIRISKULLANICIID = 6;
+      params.DESENGIRISTARIHI = dayjs();
+      params.DESENGIRISKULLANICIID = 6;
+      params.BASKITIPIID = 5;
+      params.SIPARISBRUTKILO = 228;
+      params.TUPACIKENMAYLI = 1;
+      params.INSERTKULLANICIID = 6;
+      params.INSERTTARIHI = dayjs();
+      params.KULLANICIID = 6;
+      params.DEGISIMTARIHI = dayjs();
+      params.HATAPUANICARPANI = Number(params.HATAPUANICARPANI);
+
+      // Remove extra fields that are not expected by backend
+      delete params.ADET;
+      delete params.DEGISIMLOG;
+      delete params.DINLENMISGRAMAJ;
+      delete params.FATURAEDILECEKMIKTARTIPI;
+      delete params.BOYASIPARISDETAYID;
+      delete params.BRUTKILO;
+      delete params.IPTALMETRE;
+      delete params.HAMMIKTAR;
+      delete params.SEKILADRES;
+      delete params.MELANJKODU;
+      delete params.FIREORANI;
+      delete params.DESENVARYANTID;
+      delete params.PLANLAMANOTU;
+      delete params.SIPARISNOTU;
+      delete params.TERMINNOTU;
+      delete params.IPTALKILO;
+
       console.log(params);
 
       createForm(params);
     }
   };
-
-  //   {
-  //     "HAMID": 2,
-  //     "PUS": "1",
-  //     "FEINE": "1",
-  //     "IPTALKILO": "1",
-  //     "BRUTKILO": "1",
-  //     "IPTALMETRE": "1",
-  //     "HAMMIKTAR": "1",
-  //     "KALITEID": "10CX-2",
-  //     "DOVIZID": "USD",
-  //     "LABRECETEKODU": "M0868-C13027",
-  //     "LABDIPID": "1",
-  //     "SIPARISPROSESID": 100,
-  //     "RENKID": 11956,
-  //     "RENKDERINLIGIID": 1,
-  //     "MUSTERISIPARISNO": "1",
-  //     "REFSIPARISNO": "1",
-  //     "SEKILADRES": "1",
-  //     "MELANJKODU": "1",
-  //     "FIREORANI": "1",
-  //     "HATAPUANICARPANI": "1",
-  //     "DESENID": "6113",
-  //     "DESENVARYANTID": 2,
-  //     "ISLEMTIPIID": 1,
-  //     "PLANLAMANOTU": "1",
-  //     "SIPARISNOTU": "TEST",
-  //     "TERMINNOTU": "TEST",
-  //     "TERMINTARIHI": "2025-07-02",
-  //     "ADET": null,
-  //     "BOYASIPARISKAYITID": 2737,
-  //     "DEGISIMLOG": "",
-  //     "DINLENMISGRAMAJ": "",
-  //     "BASKIBIRIMFIYATDOVIZID": "USD",
-  //     "FASONBIRIMFIYATDOVIZID": "USD",
-  //     "FATURAEDILECEKMIKTARTIPI": 0,
-  //     "HAMSTOKBIRIMID": 0,
-  //     "SIRANO": 999,
-  //     "FIRMASEVKADRESIID": 904
-  // }
-
-  //   COLUMN_NAMEs
-  // ADET
-  // BOYASIPARISKAYITID
-  // DEGISIMLOG
-  // DINLENMISGRAMAJ
-  // FEINE
-  // HAMID
-  // HAMMIKTAR
-  // HAMSTOKBIRIMID
-  // IGNESAYISI
-  // INSERTKULLANICIID
-  // KAPALI
-  // KOPYAID
-  // KULLANICIID
-  // MAKINAUSTUGRAMAJ
-  // MALIONAYDURUMU
-  // MALIONAYLAYANKULLANICIID
-  // MUSTERITALIMATI
-  // NOTU
-  // ONAYDURUMU
-  // ONAYLAYANKULLANICIID
-  // ORMEBIRIMMALIYET
-  // ORMESIPARISDETAYID
-  // PLANLANANMIKTAR
-  // PUS
-  // SATINALINACAKMIKTAR
-  // SATISFIYATI
-  // SIPARISSIRANO
-  // TAHMINIFIREORANI
-  // TOPLAMBOYALISATIS
-  // TOPLAMBOYAYACIKIS
-  // TOPLAMORULEN
-  // TOPLAMSAKATORULEN
-  // TOPLAMSATIS
-  // TUPACIKENMAYLI
-  // URETIMNOTU
-
-  // my object
-  //   {
-  //     "HAMID": 4,
-  //     "PUS": "1",
-  //     "FEINE": "1",
-  //     "IPTALKILO": "1",
-  //     "BRUTKILO": "1",
-  //     "IPTALMETRE": "11",
-  //     "HAMMIKTAR": "11",
-  //     "KALITEID": "10CX-2",
-  //     "LABRECETEKODU": "M0868-C33120",
-  //     "SIPARISPROSESID": 100,
-  //     "RENKID": 11956,
-  //     "MUSTERISIPARISNO": "1",
-  //     "REFSIPARISNO": "1",
-  //     "SEKILADRES": "1",
-  //     "MELANJKODU": "1",
-  //     "FIREORANI": "1",
-  //     "HATAPUANICARPANI": "1",
-  //     "DESENID": "6113",
-  //     "DESENVARYANTID": 1938,
-  //     "ISLEMTIPIID": 1,
-  //     "TERMINNOTU": "111",
-  //     "TERMINTARIHI": "2025-07-02",
-  //     "ADET": "",
-  //     "BOYASIPARISKAYITID": 2737,
-  //     "DEGISIMLOG": "",
-  //     "DINLENMISGRAMAJ": ""
-  // }
-
-  // old object
-  //   {
-  //     "BOYASIPARISDETAYID": 40544,
-  //     "BOYASIPARISKAYITID": 2737,
-  //     "ORMESIPARISDETAYID": 12215,
-  //     "FIRMASEVKADRESIID": 904,
-  //     "SIRANO": 4,
-  //     "MUSTERISIPARISNO": "6857",
-  //     "REFERANSSIPARISNO": "180719",
-  //     "LABRECETEID": 13280,
-  //     "LABRECETEKODU": "M0868-PC30001",
-  //     "LABRECETEATISID": 18393,
-  //     "ISLEMGRUBUID": 1,
-  //     "RENKID": 10590,
-  //     "RENKADI": "QORA-3-M0868-PC30001",
-  //     "DESENID": null,
-  //     "DESENKENARYAZISI": null,
-  //     "DESENILKBASKI": false,
-  //     "MELANJKODU": "",
-  //     "FLAMKODU": "",
-  //     "PROSESID": 2,
-  //     "BASKIPROSESID": null,
-  //     "SIPARISPROSESID": 2,
-  //     "PAKETLEMESEKLIID": 2,
-  //     "RENKDERINLIGIID": 2,
-  //     "BIRIMFIYAT": 7.67,
-  //     "IKINCIKALITEBIRIMFIYAT": 0,
-  //     "FASONBIRIMFIYATI": 0,
-  //     "BASKIBIRIMFIYATI": 0,
-  //     "HAMSTOKBIRIMID": 0,
-  //     "FATURAEDILECEKMIKTARTIPI": 0,
-  //     "DOVIZID": "EURO",
-  //     "FASONBIRIMFIYATDOVIZID": "USD",
-  //     "BASKIBIRIMFIYATDOVIZID": "USD",
-  //     "UCRETLITAMIR": false,
-  //     "FATURAKESILECEK": false,
-  //     "VADEGUN": 0,
-  //     "ODEMESEKLIID": null,
-  //     "HAMID": 1110,
-  //     "BELGEHAMADI": null,
-  //     "PUS": 32,
-  //     "FEINE": 28,
-  //     "LOT": null,
-  //     "MUSTERIRENKKODUVEADI": null,
-  //     "MUSTERIKALITENO": null,
-  //     "KALITEONAYTARIHI": null,
-  //     "MUSTERIKALITEADI": null,
-  //     "KALITEID": "SJ-010.01.170",
-  //     "DENYE": null,
-  //     "ENISTENEN": "180",
-  //     "GRAMAJISTENEN": "170",
-  //     "DONMEISTENEN": null,
-  //     "CEKMEZLIKENISTENEN": null,
-  //     "CEKMEZLIKBOYISTENEN": null,
-  //     "SANSISTENEN": null,
-  //     "TOLERANSEN": "",
-  //     "TOLERANSGRAMAJ": "",
-  //     "TOLERANSENDENCEKMEZLIK": "",
-  //     "TOLERANSBOYDANCEKMEZLIK": "",
-  //     "TOLERANSDONME": "",
-  //     "TERMINTARIHI": "2025-01-15T00:00:00",
-  //     "REVIZETERMINTARIHI": null,
-  //     "SONTERMINTARIHI": "2025-01-15T00:00:00",
-  //     "TERMINNOTU": "19-3911\r\n",
-  //     "NOTU": null,
-  //     "PLANLAMANOTU": null,
-  //     "ONAYDURUMU": false,
-  //     "ONAYTARIHI": null,
-  //     "ONAYLAYANKULLANICIID": null,
-  //     "PARTILENENKILO": 0,
-  //     "PARTILENENMETRE": 0,
-  //     "IPTALKILO": 0,
-  //     "IPTALMETRE": 0,
-  //     "PARTILENENKILOBASKI": 0,
-  //     "PARTILENENMETREBASKI": 0,
-  //     "IPTALKILOBASKI": 0,
-  //     "IPTALMETREBASKI": 0,
-  //     "ONGORUYAPILACAK": false,
-  //     "ORNEKONAY": false,
-  //     "MAXIMUMFIREORANI": 12,
-  //     "MINIMUMFIREORANI": 0,
-  //     "SATISFIREONGORUORANI": null,
-  //     "TARTIICINFIREORANI": 0,
-  //     "FIRMAADIMIZETIKETTECIKSINMI": false,
-  //     "KAPALI": false,
-  //     "KAPATMATARIHI": null,
-  //     "OZELTESTLER": null,
-  //     "ILAVEISLEMLER": "ENZİM, ON ISLEM",
-  //     "SIPARISTIPIID": 1,
-  //     "ISLEMTIPIID": 3,
-  //     "TOPLAMBOYAYACIKIS": 0,
-  //     "TOPLAMBOYAIADE": 0,
-  //     "TOPLAMBOYADANGELENBRUTKILO": 0,
-  //     "TOPLAMBOYAHANEBRUTSEVKKILO": 0,
-  //     "BASKASIPARISEKAYDIRILAN": 0,
-  //     "BASKASIPARISTENKAYDIRILAN": 0,
-  //     "TAMIRBOYASIPARISDETAYID": null,
-  //     "RECETEGIRISTARIHI": "2024-09-16T15:41:20",
-  //     "RECETEGIRISKULLANICIID": 43,
-  //     "RECETEDEGISIMTARIHI": null,
-  //     "RECETEDEGISIMKULLANICIID": null,
-  //     "DESENGIRISTARIHI": null,
-  //     "DESENGIRISKULLANICIID": null,
-  //     "DESENDEGISIMTARIHI": null,
-  //     "DESENDEGISIMKULLANICIID": null,
-  //     "KKLABEL1": null,
-  //     "KKLABEL2": null,
-  //     "KKLABEL3": null,
-  //     "KKLABEL4": null,
-  //     "KKLABEL5": null,
-  //     "KKLABEL6": null,
-  //     "KKLABEL7": null,
-  //     "KKDEGER1": null,
-  //     "RENKDERINLIGIBIRIMMALIYET": 0,
-  //     "SIPARISTEISBRUTNETDARADAN": false,
-  //     "BASKITIPIID": null,
-  //     "REFERANSISEMRINO": null,
-  //     "SIPARISBRUTKILO": 133,
-  //     "SIPARISBRUTMETRE": 0,
-  //     "BOBINSAYISI": 0,
-  //     "TEKRARURETIM": false,
-  //     "TUPACIKENMAYLI": 1,
-  //     "FIYATKOMISYON": false,
-  //     "FIYATKOMISYONORANI": 0,
-  //     "KOPYASONUUPDATEYOK": false,
-  //     "CEKILISTESICIKACAK": false,
-  //     "HEDEFSATISKARORANI": 0,
-  //     "ADET": null,
-  //     "KAPADEDI": 0,
-  //     "ICETIKETYAZDIR": false,
-  //     "DISETIKETYAZDIR": false,
-  //     "YANETIKETYAZDIR": false,
-  //     "MAXTOPMETRESI": 0,
-  //     "DEGISIMLOG": "Yaxyohon Muzrobxonov 14.09.2024 11:12:07 İlave İşlemler Değiştirdi, Eskisi =  Yenisi = ENZİM\r\nYaxyohon Muzrobxonov 14.09.2024 11:12:07 İlave İşlemler Değiştirdi, Eskisi = ENZİM Yenisi = ENZİM, ON ISLEM\r\nYaxyohon Muzrobxonov 14.09.2024 11:12:31 Sipariş Kilosunu Değiştirdi, Eski Sipariş Kilo = 224 Yeni Sipariş Kilo = 117\r\nYaxyohon Muzrobxonov 14.09.2024 11:12:31 Renk Adını Değiştirdi, Eski Renk Adı = 12-1106 Yeni Renk Adı = 19-3911\r\nYaxyohon Muzrobxonov 14.09.2024 11:12:31 Termin Notunu Değiştirdi, Eski Termin Notu = 12-1106\r Yeni Termin Notu = 19-3911\r\r\nYaxyohon Muzrobxonov 16.09.2024 15:41:20 Lab.Reçete Kodunu Değiştirdi, Eski Lab Reçete Kodu =  Yeni Lab Reçete Kodu = M0868-PC30001\r\nYaxyohon Muzrobxonov 16.09.2024 15:41:20 Renk Adını Değiştirdi, Eski Renk Adı = 19-3911 Yeni Renk Adı = QORA-3\r\nYaxyohon Muzrobxonov 01.07.2025 15:25:04 Renk Adını Değiştirdi, Eski Renk Adı = QORA-3 Yeni Renk Adı = QORA-3-M0868-PC30001\r\n",
-  //     "LINKISLEMI": 0,
-  //     "INSERTKULLANICIID": 43,
-  //     "INSERTTARIHI": "2024-09-14T11:12:07",
-  //     "KULLANICIID": 43,
-  //     "DEGISIMTARIHI": "2025-07-01T15:39:58",
-  //     "HATAPUANICARPANI": 0.2,
-  //     "SIPARISDETAYGRUPID": null,
-  //     "PONO": null,
-  //     "SASNO": null,
-  //     "BOYANACAK": true,
-  //     "SIPARISKILO": 117,
-  //     "SIPARISMETRE": 0,
-  //     "STOKTANKULLANILACAKKILO": 0,
-  //     "STOKTANKULLANILACAKMETRE": 0,
-  //     "BOYASIPARISYIL": 2024,
-  //     "BOYASIPARISID": 471,
-  //     "FIRMAADI": "MARK FORMELLE",
-  //     "DESENADI": null,
-  //     "HAMADI": "36/1 PENYE COMPACT 30 DEN 8% LYC SÜPREM",
-  //     "KALITEADI": "single jersey-92%COTTON--8%EL-170gr",
-  //     "PROSESADI": null,
-  //     "BASKIPROSESADI": null,
-  //     "SIPARISPROSESADI": null,
-  //     "PAKETLEMESEKLIADI": null,
-  //     "RENKDERINLIGIADI": null,
-  //     "HAMSTOKBIRIMADI": null,
-  //     "DOVIZADI": null,
-  //     "FASONBIRIMFIYATDOVIZADI": null,
-  //     "BASKIBIRIMFIYATDOVIZADI": null,
-  //     "BASKITIPIADI": null,
-  //     "SIPARISGRUPADI": null,
-  //     "INSERTKULLANICIADI": "Yaxyohon Muzrobxonov",
-  //     "KULLANICIADI": "Yaxyohon Muzrobxonov",
-  //     "RECETEGIRISKULLANICIADI": null,
-  //     "RECETEDEGISIMKULLANICIADI": null,
-  //     "DESENGIRISKULLANICIADI": null,
-  //     "DESENDEGISIMKULLANICIADI": null,
-  //     "ONAYLAYANKULLANICIADI": null,
-  //     "FIRMASEVKADRESIADI": "Firma Tanıtım Adresi"
-  // }
 
   const setFormValues = (form: any) => {
     setValue("HAMID", form.HAMID);
@@ -442,27 +328,36 @@ export const PaintForm = ({
               control={control}
               defaultValue={formData?.FEINE}
             />
-            <HFTextField
-              type="number"
-              label="Kilo"
-              name="IPTALKILO"
-              control={control}
-              defaultValue={formData?.IPTALKILO}
-            />
-            <HFTextField
-              type="number"
-              label="Brut Kilo"
-              name="BRUTKILO"
-              control={control}
-              defaultValue={formData?.BRUTKILO}
-            />
-            <HFTextField
-              type="number"
-              label="Metre"
-              name="IPTALMETRE"
-              control={control}
-              defaultValue={formData?.IPTALMETRE}
-            />
+            <div className="grid grid-cols-4 gap-x-2">
+              <HFTextField
+                type="number"
+                label="Kilo"
+                name="SIPARISKILO"
+                control={control}
+                defaultValue={formData?.SIPARISKILO}
+              />
+              <HFTextField
+                type="number"
+                label="Brut Kilo"
+                name="BRUTKILO"
+                control={control}
+                defaultValue={formData?.BRUTKILO}
+              />{" "}
+              <HFTextField
+                type="number"
+                label="Metre"
+                name="IPTALMETRE"
+                control={control}
+                defaultValue={formData?.IPTALMETRE}
+              />{" "}
+              <HFTextField
+                type="number"
+                label="Birim Fiyat"
+                name="BIRIMFIYAT"
+                control={control}
+                defaultValue={formData?.BIRIMFIYAT}
+              />
+            </div>
             <HFTextField
               label="Miktar"
               name="HAMMIKTAR"
@@ -502,7 +397,6 @@ export const PaintForm = ({
               }}
               control={control}
             />
-
             <LiteOptionsTable
               label="Lab Recete Kod"
               name="LABRECETEKODU"
@@ -512,40 +406,43 @@ export const PaintForm = ({
               link="labrecete"
               headColumns={[
                 { id: "LABRECETEKODU", title: "LABRECETEKODU", width: 140 },
+                { id: "LABRECETEID", title: "LABRECETEID", width: 100 },
                 { id: "ADI", title: "ADI", width: 140 },
               ]}
               defaultValue={formData?.LABRECETEKODU}
-              handleSelect={(obj: { LABRECETEKODU: string }) => {
+              handleSelect={(obj: {
+                LABRECETEKODU: string;
+                LABRECETEID: number;
+                LABRECETEATISID: number;
+              }) => {
                 setValue("LABRECETEKODU", obj.LABRECETEKODU);
+                setValue("LABRECETEID", obj.LABRECETEID);
               }}
               control={control}
             />
-
             <LiteOptionsTable
               label="Lab dip no"
-              name="LABDIPID"
-              link="labdipno"
+              name="LABRECETEATISID"
+              link="labreceteatis"
               renderValue={(_: string, obj: any) => {
-                return obj.LABDIPID && obj.ADI
-                  ? obj.SIPARISPROSESID + " - " + obj.ADI
-                  : obj.SIPARISPROSESID;
+                return obj.LABRECETEATISID && obj.ADI
+                  ? obj.LABRECETEATISID + " - " + obj.ADI
+                  : obj.LABRECETEATISID;
               }}
               headColumns={[
                 {
-                  id: "SIPARISPROSESID",
-                  title: "SIPARISPROSESID",
-                  width: 120,
+                  id: "LABRECETEATISID",
+                  title: "LABRECETEATISID",
                 },
-                { id: "ADI", title: "ADI", width: 280 },
               ]}
-              defaultValue={formData?.SIPARISPROSESID}
-              handleSelect={(obj: { SIPARISPROSESID: number }) => {
-                setValue("SIPARISPROSESID", obj.SIPARISPROSESID);
+              disabled={LABRECETEID ? false : true}
+              defaultFilters={LABRECETEID ? `LABRECETEID=${LABRECETEID}` : ""}
+              defaultValue={formData?.LABRECETEATISID}
+              handleSelect={(obj: { LABRECETEATISID: number }) => {
+                setValue("LABRECETEATISID", obj.LABRECETEATISID);
               }}
               control={control}
             />
-          </div>
-          <div className="space-y-3">
             <LiteOptionsTable
               label="Sparis Proses"
               name="SIPARISPROSESID"
@@ -569,7 +466,8 @@ export const PaintForm = ({
               }}
               control={control}
             />
-
+          </div>
+          <div className="space-y-3">
             <LiteOptionsTable
               label="Renk"
               name="RENKID"
@@ -588,12 +486,12 @@ export const PaintForm = ({
                 { id: "RENKID", title: "RENKID", width: 80 },
                 { id: "ADI", title: "ADI", width: 280 },
               ]}
-              handleSelect={(obj: { RENKID: number }) => {
+              handleSelect={(obj: { RENKID: number; ADI: string }) => {
                 setValue("RENKID", obj.RENKID);
+                setValue("RENKADI", obj.ADI);
               }}
               control={control}
             />
-
             <LiteOptionsTable
               label="Renk Deringligi"
               name="RENKDERINLIGIID"
@@ -619,7 +517,29 @@ export const PaintForm = ({
               }}
               control={control}
             />
-
+            <LiteOptionsTable
+              label="Siparis Tipi"
+              name="SIPARISTIPIID"
+              renderValue={(_: string, obj: any) => {
+                return obj.SIPARISTIPIID && obj.ADI
+                  ? obj.SIPARISTIPIID + " - " + obj.ADI
+                  : obj.SIPARISTIPIID;
+              }}
+              defaultValue={
+                formData?.SIPARISTIPIID && formData?.SIPARISTIPIADI
+                  ? formData?.SIPARISTIPIID + " - " + formData?.SIPARISTIPIADI
+                  : formData?.SIPARISTIPIID
+              }
+              link="boyasiparistipi"
+              headColumns={[
+                { id: "SIPARISTIPIID", title: "SIPARISTIPIID", width: 80 },
+                { id: "ADI", title: "ADI", width: 280 },
+              ]}
+              handleSelect={(obj: { SIPARISTIPIID: number }) => {
+                setValue("SIPARISTIPIID", obj.SIPARISTIPIID);
+              }}
+              control={control}
+            />
             <HFTextField
               type="number"
               label="Musteri Siparis No"
@@ -627,7 +547,13 @@ export const PaintForm = ({
               control={control}
               defaultValue={formData?.MUSTERISIPARISNO}
             />
-
+            <HFTextField
+              type="number"
+              label="Musteri Kalite No"
+              name="MUSTERIKALITENO "
+              control={control}
+              defaultValue={formData?.MUSTERIKALITENO}
+            />
             <HFTextField
               type="number"
               label="Ref Siparis No"
@@ -635,7 +561,30 @@ export const PaintForm = ({
               control={control}
               defaultValue={formData?.REFSIPARISNO}
             />
+            <div className="grid grid-cols-3 gap-x-2">
+              <HFTextField
+                type="number"
+                label="Enistenen"
+                name="ENISTENEN"
+                control={control}
+                defaultValue={formData?.ENISTENEN}
+              />
 
+              <HFTextField
+                type="number"
+                label="Gramajistenen"
+                name="GRAMAJISTENEN"
+                control={control}
+                defaultValue={formData?.GRAMAJISTENEN}
+              />
+              <HFTextField
+                type="number"
+                label="Maximum Fire Or"
+                name="MAXIMUMFIREORANI"
+                control={control}
+                defaultValue={formData?.MAXIMUMFIREORANI}
+              />
+            </div>
             <LiteOptionsTable
               label="Kalite no"
               renderValue={(_: string, obj: any) => {
@@ -661,32 +610,40 @@ export const PaintForm = ({
               defaultValue={formData?.KALITEID}
               control={control}
             />
-
             <HFTextField
               label="Sekil Adresi"
               name="SEKILADRES"
               control={control}
               defaultValue={formData?.SEKILADRES}
             />
+            <div className="grid grid-cols-3 gap-x-2">
+              <HFTextField
+                label="Melanj kodu"
+                name="MELANJKODU"
+                control={control}
+              />
 
-            <HFTextField
-              label="Melanj kodu"
-              name="MELANJKODU"
-              control={control}
-            />
-
-            <HFTextField
-              type="number"
-              label="Fire oran"
-              name="FIREORANI"
-              control={control}
-            />
-
-            <HFTextField
-              label="Hata Puan Carpan"
-              name="HATAPUANICARPANI"
-              control={control}
-            />
+              <HFTextField
+                label="Hata Puan Carpan"
+                name="HATAPUANICARPANI"
+                control={control}
+              />
+              <div>
+                <CLabel title="Kilo" />
+                <CCheckbox
+                  element={{
+                    label: "Siparis Kilo",
+                    name: "BOYANACAK",
+                    control: control,
+                    defaultValue: formData?.BOYANACAK,
+                  }}
+                  handleCheck={(val: any) => {
+                    setValue("BOYANACAK", val.BOYANACAK);
+                  }}
+                  checked={formData?.BOYANACAK || getValues()?.BOYANACAK}
+                />
+              </div>
+            </div>
           </div>
 
           <div className="space-y-3">

@@ -186,7 +186,6 @@ export const SelectOptionsTable = ({
                   handleActions={handleActions}
                   defaultFilters={[]}
                   autoHeight="300px"
-                  doubleClick={false}
                   idForTable={name + "select"}
                   disablePagination={true}
                 />
