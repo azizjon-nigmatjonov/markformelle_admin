@@ -110,11 +110,10 @@ const SearchInput = memo(
               }}
               onFocus={() => setIsFocus(true)}
               autoFocus={focused}
-              className={`border rounded-[8px] pl-8 h-[30px] w-full px-1 bg-transparent ${
-                error?.message
-                  ? "border-[var(--error)]"
-                  : "border-[var(--border)]"
-              } ${disabled ? "text-[var(--gray)]" : ""}`}
+              className={`border rounded-[8px] pl-8 h-[30px] w-full px-1 bg-transparent ${error?.message
+                ? "border-[var(--error)]"
+                : "border-[var(--border)]"
+                } ${disabled ? "text-[var(--gray)]" : ""}`}
               placeholder={t(placeholder)}
               onChange={(e) => {
                 debouncedSearch(e.target.value);
@@ -191,7 +190,7 @@ const TablePopup = memo(
 export const LiteOptionsTable = memo(
   <T extends BaseTableItem = TableItem>({
     link = "",
-    handleSelect = () => {},
+    handleSelect = () => { },
     name = "",
     defaultValue = "",
     label = "",
@@ -216,7 +215,7 @@ export const LiteOptionsTable = memo(
     const [anchor, setAnchor] = useState<HTMLElement | null>(null);
     const [currentEl, setCurrentEl] = useState<T>({} as T);
     const [options, setOptions] = useState<T[]>([]);
-    const { data, setFilterParams, filterParams, isLoading } = useFetchType();
+    const { data, setFilterParams, filterParams, isLoading } = useFetchType(`liteTable_${name}`);
     const { isAltPressed, currentKey, pressedKey } = useKeyDownEvent();
     const [isFocus, setIsFocus] = useState(false);
     const [openPopup, setOpenPopup] = useState(false);
@@ -441,9 +440,8 @@ export const LiteOptionsTable = memo(
           <CLabel title={label} required={required} disabled={disabled} />
         )}
         <div
-          className={`w-full relative flex items-center ${
-            disabled ? "bg-[#fafafa]" : ""
-          }`}
+          className={`w-full relative flex items-center ${disabled ? "bg-[#fafafa]" : ""
+            }`}
         >
           <div
             className="cursor-pointer absolute z-[99] left-2"

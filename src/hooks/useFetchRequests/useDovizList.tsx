@@ -4,19 +4,19 @@ import { useQuery } from "react-query";
 const API_URL = import.meta.env.VITE_TEST_URL;
 interface Params {
   enabled?: string;
+  uniqueId?: string;
 }
-export const useGetDovizList = ({ enabled = "" }: Params) => {
+export const useGetDovizList = ({ enabled = "", uniqueId }: Params) => {
   const [filterParams, setFilterParams] = useState<any>({
     page: 1,
     perPage: 100,
   });
 
   const { data: bodyData }: any = useQuery(
-    ["GET_DOVIZ_LIST__", filterParams],
+    [`GET_DOVIZ_LIST_${uniqueId || 'default'}`, filterParams],
     () => {
       return axios.get(
-        `${API_URL}/doviz/?skip=${filterParams.page - 1}&limit=${
-          filterParams.perPage
+        `${API_URL}/doviz/?skip=${filterParams.page - 1}&limit=${filterParams.perPage
         }${filterParams?.q ? "&" + filterParams.q : ""}`
       );
     },

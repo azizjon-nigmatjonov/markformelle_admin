@@ -75,12 +75,12 @@ export const DetailForm = ({
     }
   }, [formData]);
 
-  const { setFilterParams, data: birimData, filterParams } = useFetchType();
+  const { setFilterParams, data: birimData, filterParams } = useFetchType("birim");
   const {
     setFilterParams: setFilterParamsFiyat,
     data: fiyatData,
     filterParams: filterParamsFiyat,
-  } = useFetchType();
+  } = useFetchType("fiyat");
 
   useEffect(() => {
     const obj =

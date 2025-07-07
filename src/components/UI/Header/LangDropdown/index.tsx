@@ -9,13 +9,16 @@ export const LangDropdown = () => {
   const { langList } = useLangs();
   const dispatch = useDispatch();
 
-  const handleLanguage = (val: string) => {
+  const handleLanguage = async (val: string) => {
     dispatch(authActions.setLang(val));
-    i18next.changeLanguage(val);
 
-    setTimeout(() => {
-      window.location.reload();
-    }, 0);
+    // Change language and wait for it to complete
+    await i18next.changeLanguage(val);
+
+    // Only reload if necessary (e.g., for major layout changes)
+    // setTimeout(() => {
+    //   window.location.reload();
+    // }, 0);
   };
 
   return (

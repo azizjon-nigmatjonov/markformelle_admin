@@ -3,7 +3,8 @@ import { useState } from "react";
 import { IFilterParams } from "../../interfaces";
 import { useQuery } from "react-query";
 const API_URL = import.meta.env.VITE_TEST_URL;
-export const useFetchType = () => {
+
+export const useFetchType = (uniqueId?: string) => {
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
@@ -14,11 +15,10 @@ export const useFetchType = () => {
     refetch,
     isLoading,
   }: any = useQuery(
-    [`GET_FETCH_TYPE_${filterParams?.link}`, filterParams],
+    [`GET_FETCH_TYPE_${filterParams?.link}_${uniqueId || 'default'}`, filterParams],
     () => {
       return axios.get(
-        `${API_URL}/${filterParams.link}/?skip=${filterParams.page - 1}&limit=${
-          filterParams.perPage
+        `${API_URL}/${filterParams.link}/?skip=${filterParams.page - 1}&limit=${filterParams.perPage
         }${filterParams?.q ? "&" + filterParams.q : ""}`
       );
     },

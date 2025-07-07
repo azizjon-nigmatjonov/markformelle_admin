@@ -16,14 +16,23 @@ i18next
       escapeValue: false,
     },
     useSuspense: true,
+    // Add caching to prevent multiple requests
+    cache: {
+      enabled: true,
+      expirationTime: 7 * 24 * 60 * 60 * 1000, // 7 days
+    },
+    // Prevent multiple simultaneous requests
+    partialBundledLanguages: true,
     backend: {
-      loadPath: `${import.meta.env.VITE_TEST_URL}/translation/language/${localStorage.getItem("i18nextLng")?.includes("US")
-        ? "ru"
-        : localStorage.getItem("i18nextLng")
-        }?limit=1000`,
+      loadPath: `${import.meta.env.VITE_TEST_URL}/translation/language/{{lng}}?limit=1000`,
       request: async (options, url, payload, callback) => {
-        let currentLang = i18next.language;
-        if (currentLang?.includes("US")) currentLang = "ru";
+        const urlParts = url.split("/");
+        const langFromUrl = urlParts[urlParts.length - 1]?.split("?")[0];
+        let currentLang = langFromUrl || i18next.language || "ru";
+
+        if (currentLang?.includes("US")) {
+          currentLang = "ru";
+        }
 
         try {
           const res = await axios.get(url);
@@ -39,7 +48,6 @@ i18next
           });
         } catch (err) {
           // Use static translations when backend is not available
-          const currentLang = i18next.language;
           const fallbackLang = currentLang?.includes("US") ? "ru" : currentLang || "ru";
           const staticTranslations = allTranslations[fallbackLang] || allTranslations.ru;
 

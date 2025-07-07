@@ -4,18 +4,17 @@ import { IFilterParams } from "../../interfaces";
 import { useQuery } from "react-query";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
-export const useLabRenkGroupList = () => {
+export const useLabRenkGroupList = (uniqueId?: string) => {
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 100,
   });
 
   const { data: bodyData }: any = useQuery(
-    ["GET_LAB_RANK_GRUP_LIST", filterParams],
+    [`GET_LAB_RANK_GRUP_LIST_${uniqueId || 'default'}`, filterParams],
     () => {
       return axios.get(
-        `${API_URL}/labrenkgrup/?skip=${filterParams.page - 1}&limit=${
-          filterParams.perPage
+        `${API_URL}/labrenkgrup/?skip=${filterParams.page - 1}&limit=${filterParams.perPage
         }${filterParams?.q ? "&" + filterParams.q : ""}`
       );
     },
