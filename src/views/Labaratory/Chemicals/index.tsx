@@ -161,7 +161,7 @@ export const LabChemicals = () => {
         />
       </div>
 
-      {open ? (
+      {open && (
         <CNewModal
           title={modalInitialData.LABRECETEID ? "updating_lab" : "creating_lab"}
           handleActions={handleModal}
@@ -177,8 +177,6 @@ export const LabChemicals = () => {
             setAskClose={askCloseFn}
           />
         </CNewModal>
-      ) : (
-        <></>
       )}
     </>
   );

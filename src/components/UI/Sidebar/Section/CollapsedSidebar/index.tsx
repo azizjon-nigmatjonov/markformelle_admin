@@ -13,6 +13,7 @@ interface CollapsedSidebarProps {
   handleNavigate: (val: MenuItem) => void;
   clearFilter: () => void;
   collapsed: boolean;
+  locationName: string;
 }
 
 export const CollapsedSidebar = memo(
@@ -25,6 +26,7 @@ export const CollapsedSidebar = memo(
     handleNavigate,
     clearFilter,
     collapsed,
+    locationName
   }: CollapsedSidebarProps) => {
     const menuEntries = useMemo(
       () =>
@@ -47,17 +49,14 @@ export const CollapsedSidebar = memo(
               return (
                 <div key={index}>
                   <div
-                    className={`accordion cursor-pointer group ${
-                      activeIndex === key ? "active" : ""
-                    } flex justify-between items-center w-full`}
+                    className={`accordion cursor-pointer group ${activeIndex === key ? "active" : ""
+                      } flex justify-between items-center w-full`}
                     onClick={() => toggleAccordion(key)}
                   >
                     <div
-                      className={`flex items-center ${
-                        collapsed ? "justify-center w-full" : "space-x-3"
-                      } ${
-                        activeIndex === key ? "bg-[#ffc3a24d] h-[40px]" : ""
-                      }`}
+                      className={`flex items-center ${collapsed ? "justify-center w-full" : "space-x-3"
+                        } ${activeIndex === key ? "bg-[#ffc3a24d] h-[40px]" : ""
+                        }`}
                     >
                       <IconGenerator
                         icon={items[0]?.parent_icon || items[0].icon}
@@ -67,33 +66,34 @@ export const CollapsedSidebar = memo(
 
                     {window?.screen?.width < 980
                       ? collapsed &&
-                        activeIndex === key && (
-                          <DropDown
-                            title={key}
-                            value={items}
-                            active={
-                              expandedInner ? expandedInner : expanded || ""
-                            }
-                            handleNavigate={handleNavigate}
-                          />
-                        )
+                      activeIndex === key && (
+                        <DropDown
+                          title={key}
+                          value={items}
+                          active={
+                            expandedInner ? expandedInner : expanded || ""
+                          }
+                          locationName={locationName}
+                          handleNavigate={handleNavigate}
+                        />
+                      )
                       : collapsed && (
-                          <DropDown
-                            title={key}
-                            active={
-                              expandedInner ? expandedInner : expanded || ""
-                            }
-                            value={items}
-                            handleNavigate={handleNavigate}
-                          />
-                        )}
+                        <DropDown
+                          title={key}
+                          active={
+                            expandedInner ? expandedInner : expanded || ""
+                          }
+                          locationName={locationName}
+                          value={items}
+                          handleNavigate={handleNavigate}
+                        />
+                      )}
                   </div>
 
                   {!collapsed && (
                     <div
-                      className={`panel ${
-                        activeIndex === key && !collapsed ? "show" : ""
-                      }`}
+                      className={`panel ${activeIndex === key && !collapsed ? "show" : ""
+                        }`}
                     >
                       {items.map((el: MenuItem, i: number, arr: MenuItem[]) => {
                         const isLastItem = i === arr.length - 1;
@@ -112,6 +112,7 @@ export const CollapsedSidebar = memo(
                                 el={el}
                                 children={el.children}
                                 isLastItem={isLastItem}
+                                locationName={locationName}
                                 active={
                                   el.id === location.pathname.substring(1)
                                 }

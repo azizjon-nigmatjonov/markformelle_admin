@@ -23,6 +23,7 @@ interface SectionBtnsProps {
   handleNavigate: (val: MenuItem) => void;
   clearFilter?: () => void;
   active: string | boolean;
+  locationName: string;
 }
 
 // Utility functions
@@ -48,7 +49,7 @@ const Btn = memo(
     index,
     isLastItem,
     handleNavigate,
-    clearFilter = () => {},
+    clearFilter = () => { },
     active = false,
   }: BtnProps) => {
     const { t } = useTranslation();
@@ -75,8 +76,7 @@ const Btn = memo(
 
     const menuLinkClass = useMemo(
       () =>
-        `${
-          isLastItem ? "mb-2" : ""
+        `${isLastItem ? "mb-2" : ""
         } flex gap-x-2 menu_link menu_inner_link cursor-pointer text-sm font-medium ${getTextClass(
           active
         )}`,
@@ -91,9 +91,8 @@ const Btn = memo(
             handleClearFilter(e);
           }, 0);
         }}
-        className={`${stepsClass} menu_link2 flex items-center steps ${
-          active ? "active" : ""
-        }`}
+        className={`${stepsClass} menu_link2 flex items-center steps ${active ? "active" : ""
+          }`}
       >
         <div className={menuLinkClass}>
           <div className="w-[24px]">
@@ -115,9 +114,10 @@ export const SectionBtns = memo(
     index,
     isLastItem,
     handleNavigate,
-    clearFilter = () => {},
+    clearFilter = () => { },
     children = [],
     active,
+    locationName
   }: SectionBtnsProps) => {
     const { t } = useTranslation();
     const location = useLocation();
@@ -143,13 +143,13 @@ export const SectionBtns = memo(
     const menuLinkClass = useMemo(
       () =>
         `flex gap-2 menu_link cursor-pointer text-sm font-medium whitespace-nowrap ${getMenuLinkClass(
-          isActiveItem(active, el.id)
+          isActiveItem(locationName, el.id)
         )}`,
       [active, el.id]
     );
 
     const shouldShowChildren = useMemo(
-      () => open || isActiveItem(active, el.id),
+      () => open || isActiveItem(locationName, el.id),
       [open, el.id, active]
     );
 
@@ -169,7 +169,7 @@ export const SectionBtns = memo(
               <div className={menuLinkClass}>
                 <IconGenerator
                   icon={el.icon}
-                  fill={getIconFill(isActiveItem(active, el.id))}
+                  fill={getIconFill(isActiveItem(locationName, el.id))}
                 />
                 <span>{t(el.title)}</span>
               </div>
@@ -177,7 +177,7 @@ export const SectionBtns = memo(
               <div className={open ? "rotate-[180deg]" : ""}>
                 <ArrowDropDownIcon
                   style={{
-                    color: isActiveItem(active, el.id)
+                    color: isActiveItem(locationName, el.id)
                       ? "var(--black)"
                       : "var(--gray)",
                   }}
@@ -213,7 +213,7 @@ export const SectionBtns = memo(
         el={el}
         children={el.children}
         isLastItem={isLastItem}
-        active={isActiveItem(active, el.id)}
+        active={isActiveItem(locationName, el.id)}
       />
     );
   }
