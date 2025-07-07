@@ -11,6 +11,7 @@ interface DropDownProps {
   value: MenuItem[];
   active: string | false;
   handleNavigate: (link: MenuItem) => void;
+  locationName: string;
 }
 
 interface OneDropdownProps {
@@ -23,7 +24,7 @@ interface OneDropdownProps {
 
 // Memoized DropDown component
 export const DropDown = memo(
-  ({ title, value, active, handleNavigate = () => {} }: DropDownProps) => {
+  ({ title, value, active, handleNavigate = () => { }, locationName = '' }: DropDownProps) => {
     const { t } = useTranslation();
 
     const filteredItems = useMemo(
@@ -37,6 +38,7 @@ export const DropDown = memo(
       },
       [handleNavigate]
     );
+
 
     return (
       <div className="mt-[-40px]">
@@ -53,14 +55,14 @@ export const DropDown = memo(
                     return (
                       <div
                         key={index}
-                        className={`${
-                          el?.children?.length ? "pb-2 pr-3" : ""
-                        } relative overflow-hidden`}
+                        className={`${el?.children?.length ? "pb-2 pr-3" : ""
+                          } relative overflow-hidden`}
                       >
                         <SectionBtns
                           index={index}
                           handleNavigate={handleNavigateCallback}
                           el={el}
+                          locationName={locationName}
                           active={active || false}
                           children={el.children}
                           isLastItem={isLastItem}
@@ -86,8 +88,8 @@ export const OneDropdown = memo(
     title = "",
     icon = "",
     path = "/",
-    clearFilter = () => {},
-    handleNavigate = () => {},
+    clearFilter = () => { },
+    handleNavigate = () => { },
   }: OneDropdownProps) => {
     const location = useLocation();
 
@@ -121,8 +123,7 @@ export const OneDropdown = memo(
 
     const menuLinkClass = useMemo(
       () =>
-        `flex justify-between capitalize menu_link2 cursor-pointer font-medium text-[var(--black)] whitespace-nowrap pr-10 ${
-          isActive ? "active" : ""
+        `flex justify-between capitalize menu_link2 cursor-pointer font-medium text-[var(--black)] whitespace-nowrap pr-10 ${isActive ? "active" : ""
         }`,
       [isActive]
     );

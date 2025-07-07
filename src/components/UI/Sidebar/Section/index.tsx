@@ -122,6 +122,7 @@ const SidebarSection = ({
       handleNavigate={handleNavigate}
       clearFilter={clearFilter}
       collapsed={collapsed}
+      locationName={locationName}
     />
   );
 };
