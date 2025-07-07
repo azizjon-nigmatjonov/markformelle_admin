@@ -11,4 +11,5 @@ export const routeParents = {
   lists: [],
   access: [],
   settings: [],
+  parties: []
 };

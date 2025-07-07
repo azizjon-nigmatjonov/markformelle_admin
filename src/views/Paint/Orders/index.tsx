@@ -1,16 +1,13 @@
-import { useTranslation } from "react-i18next";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import CNewTable from "../../../components/CElements/CNewTable";
 import { Header } from "../../../components/UI/Header";
 import { breadCrumbs, TableData, useTableHeaders } from "./Logic";
 import { IFilterParams } from "../../../interfaces";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import CNewModal from "../../../components/CElements/CNewModal";
 import { ModalUI } from "./Modal";
 
 export const PartyOrders = () => {
-  const { t } = useTranslation();
-
   const [open, setOpen] = useState(false);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
@@ -22,35 +19,34 @@ export const PartyOrders = () => {
     filterParams,
   });
 
-  const predefinedColumns: any = [];
+  const predefinedColumns = useMemo(() => {
+    return [];
+  }, []);
 
   const { newHeadColumns } = useTableHeaders({
     bodyColumns,
     predefinedColumns,
   });
 
-
   const handleActions = (el: any, status: string) => {
     if (status === "modal") {
       setOpen(true);
+      setModalInitialData({});
     }
 
     if (status === "view" || status === "edit") {
       setOpen(true);
 
-      setModalInitialData({
-        LABRECETEID: el?.LABRECETEID,
-        ...el,
-      });
+      setModalInitialData(el);
     }
 
     if (status === "delete") {
-      deleteFn([el.LABRECETEID]);
+      deleteFn([el.PARTIKAYITID]);
     }
     if (status === "delete_multiple") {
       deleteFn(
-        el.map((item: { LABRECETEID: string }) => {
-          return item.LABRECETEID;
+        el.map((item: { PARTIKAYITID: string }) => {
+          return item.PARTIKAYITID;
         })
       );
     }
@@ -67,7 +63,7 @@ export const PartyOrders = () => {
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />
       <div className="p-2">
         <CNewTable
-          title={t("table_party")}
+          title="table_party"
           headColumns={newHeadColumns}
           bodyColumns={bodyColumns}
           handleActions={handleActions}
@@ -87,7 +83,7 @@ export const PartyOrders = () => {
           defaultSearch={{
             PARTIYIL: "",
             PARTIID: "",
-
+            PARTIKAYITID: "",
           }}
           meta={{
             totalCount: bodyData?.count,
@@ -99,8 +95,16 @@ export const PartyOrders = () => {
       </div>
 
       {open && (
-        <CNewModal title="Party Orders" handleActions={modalActionsFn} defaultData={modalInitialData}>
-          <ModalUI handleModalActions={modalActionsFn} defaultData={modalInitialData} />
+        <CNewModal
+          title="Party Orders"
+          disabled="big"
+          handleActions={modalActionsFn}
+          defaultData={modalInitialData}
+        >
+          <ModalUI
+            handleModalActions={modalActionsFn}
+            defaultData={modalInitialData}
+          />
         </CNewModal>
       )}
     </>

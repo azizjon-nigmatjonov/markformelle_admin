@@ -26,12 +26,12 @@ export const paintSection = [
   },
   {
     parent: "dying",
-    link: "orders",
+    link: "party-stage",
     sidebar: true,
-    title: "Orders",
+    title: "parti",
     icon: "/images/documents.webp",
     element: <PartyOrders />,
     auth: true,
-    permissions: ["view_page", 'delete', 'edit', 'add'],
+    permissions: ["view_page", "delete", "edit", "add"],
   },
 ];

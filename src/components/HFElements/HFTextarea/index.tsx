@@ -36,8 +36,8 @@ export const FieldUI = ({
     <div className="HFTextarea">
       <TextareaAutosize
         // size="small"
-        defaultValue={defaultValue}
-        value={value}
+        defaultValue={value ? undefined : defaultValue}
+        value={value || ""}
         onChange={(e) => handleChange(e.target.value)}
         name={name}
         minRows={minRows}

@@ -5,7 +5,6 @@ export const breadCrumbs = [
   },
 ];
 
-
 export const TableData = ({
   filterParams = { page: 1, perPage: 50 },
 }: {
@@ -18,7 +17,8 @@ export const TableData = ({
 
   const fetchList = async (filters: any) => {
     const response = await axios.get(
-      `${API_URL}/parti/?skip=${filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
+      `${API_URL}/parti/?skip=${
+        filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
       }&limit=${filters.perPage}${filters.q ? "&" + filters.q : ""}`
     );
     return response.data;
@@ -39,7 +39,7 @@ export const TableData = ({
 
   const deleteFn = async (id: string[]) => {
     try {
-      await axios.delete(`${API_URL}/lapartibrecete/`, {
+      await axios.delete(`${API_URL}/parti/`, {
         method: "DELETE",
         url: `${API_URL}/parti/`,
         headers: {
@@ -99,7 +99,6 @@ export const TableData = ({
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "react-query";
 
-
 interface UseTableHeadersProps {
   bodyColumns: any[];
   predefinedColumns?: any[];
@@ -128,13 +127,20 @@ export const useTableHeaders = ({
   return { newHeadColumns };
 };
 
-
 import axios from "axios";
 import { API_URL } from "../../../utils/env";
 import toast from "react-hot-toast";
 import { useTranslationHook } from "../../../hooks/useTranslation";
 
-export const FormLogic = ({ refetchTable, formId, defaultData }: { refetchTable: () => void, formId: number, defaultData: any }) => {
+export const FormLogic = ({
+  refetchTable,
+  formId,
+  defaultData,
+}: {
+  refetchTable: () => void;
+  formId: number;
+  defaultData: any;
+}) => {
   const { t } = useTranslationHook();
 
   const { data: formData } = useQuery(
@@ -149,7 +155,7 @@ export const FormLogic = ({ refetchTable, formId, defaultData }: { refetchTable:
 
   const createForm = async (params: {}) => {
     try {
-      const { data } = await axios.post(`${API_URL}/recetedetay/`, params);
+      const { data } = await axios.post(`${API_URL}/parti/`, params);
       toast.success(t("created!"));
       refetchTable();
       return data;
@@ -162,7 +168,7 @@ export const FormLogic = ({ refetchTable, formId, defaultData }: { refetchTable:
 
   const updateForm = async (params: {}, id: number) => {
     try {
-      const { data } = await axios.put(`${API_URL}/recetedetay/${id}`, params);
+      const { data } = await axios.put(`${API_URL}/parti/${id}`, params);
 
       refetchTable();
       toast.success(t("updated!"));
@@ -175,7 +181,7 @@ export const FormLogic = ({ refetchTable, formId, defaultData }: { refetchTable:
 
   const deleteForm = async (id: number[]) => {
     try {
-      const { data } = await axios.delete(`${API_URL}/recetedetay/`, {
+      const { data } = await axios.delete(`${API_URL}/parti/`, {
         data: id,
       });
       refetchTable();
@@ -187,5 +193,10 @@ export const FormLogic = ({ refetchTable, formId, defaultData }: { refetchTable:
     }
   };
 
-  return { updateForm, createForm, deleteForm, formData: formId ? formData?.data : defaultData };
+  return {
+    updateForm,
+    createForm,
+    deleteForm,
+    formData: formId ? formData?.data : defaultData,
+  };
 };

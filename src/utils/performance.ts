@@ -1,3 +1,4 @@
+
 // Performance monitoring utility
 export class PerformanceMonitor {
   private static instance: PerformanceMonitor;
@@ -21,9 +22,9 @@ export class PerformanceMonitor {
       const result = await fn();
       const duration = performance.now() - start;
       
-      if (duration > this.getInstance().SLOW_THRESHOLD) {
+      if (duration > PerformanceMonitor.getInstance().SLOW_THRESHOLD) {
         console.warn(`[Performance] Slow operation detected: ${name} took ${duration.toFixed(2)}ms`);
-        this.getInstance().slowOperations.set(name, duration);
+        PerformanceMonitor.getInstance().slowOperations.set(name, duration);
       }
       
       return result;
@@ -41,9 +42,9 @@ export class PerformanceMonitor {
       const result = fn();
       const duration = performance.now() - start;
       
-      if (duration > this.getInstance().SLOW_THRESHOLD) {
+      if (duration > PerformanceMonitor.getInstance().SLOW_THRESHOLD) {
         console.warn(`[Performance] Slow operation detected: ${name} took ${duration.toFixed(2)}ms`);
-        this.getInstance().slowOperations.set(name, duration);
+        PerformanceMonitor.getInstance().slowOperations.set(name, duration);
       }
       
       return result;
