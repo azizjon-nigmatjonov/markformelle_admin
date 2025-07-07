@@ -1,4 +1,4 @@
-import React, { Component, ReactNode, useEffect } from "react";
+import React, { Component, ReactNode } from "react";
 import WarningIcon from "@mui/icons-material/Warning";
 
 interface ErrorBoundaryState {
@@ -21,14 +21,20 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     console.error(error, info);
   }
 
+  componentDidUpdate(
+    prevProps: ErrorBoundaryProps,
+    prevState: ErrorBoundaryState
+  ) {
+    // Set up auto-reload timer when error occurs
+    if (this.state.hasError && !prevState.hasError) {
+      setTimeout(() => {
+        window.location.reload();
+      }, 60000);
+    }
+  }
+
   render() {
     if (this.state.hasError) {
-      useEffect(() => {
-        setTimeout(() => {
-          window.location.reload();
-        }, 60000);
-      }, []);
-
       return (
         <div className="flex items-center flex-col text-center text-[var(--black)] mt-20">
           <h1 className="text-3xl flex space-x-2 font-medium">

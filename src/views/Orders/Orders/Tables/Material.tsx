@@ -9,12 +9,14 @@ export const MaterialTable = ({
   formId,
   currentMaterial,
   currentKnitting,
+  title,
 }: {
   formId: number;
   currentKnitting: any;
   currentMaterial: any;
   uniqueID: string;
   handleActionsTable: (val: any, status: string, type: string) => void;
+  title: string;
 }) => {
   const [filterParams, setFilterParams]: any = useState({
     page: 1,
@@ -30,11 +32,10 @@ export const MaterialTable = ({
       setFilterParams({ ...filterParams, BOYASIPARISKAYITID: formId });
     }
   }, [formId]);
-  console.log('currentKnitting', currentKnitting);
-  
+
   useEffect(() => {
-      if (bodyColumns?.length) {
-        handleActionsTable(bodyColumns?.[0], "view_single", "material");
+    if (bodyColumns?.length) {
+      handleActionsTable(bodyColumns?.[0], "view_single", "material");
     }
   }, [bodyColumns]);
 
@@ -54,6 +55,7 @@ export const MaterialTable = ({
   return (
     <>
       <CNewTable
+        title={title}
         key={headColumns.length ? "isloading" : "iscame"}
         idForTable="material_table_inner"
         headColumns={headColumns}
@@ -65,7 +67,7 @@ export const MaterialTable = ({
         disablePagination={true}
         innerTable={true}
         bodyColumns={bodyColumns}
-        autoHeight="180px"
+        autoHeight="140px"
         handleFilterParams={(params: any) => {
           setFilterParams(params);
         }}

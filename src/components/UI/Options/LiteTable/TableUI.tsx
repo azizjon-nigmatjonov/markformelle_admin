@@ -5,6 +5,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useEffect, useRef, useState, useCallback } from "react";
 import { websiteActions } from "../../../../store/website";
 import { useDispatch } from "react-redux";
+import { debounce, measureSync } from "../../../../utils/performance";
+
 interface Props {
   bodyColumns: any;
   headColumns: any;
@@ -32,6 +34,38 @@ export const TableUI = ({
   const [focusedIndex, setFocusedIndex] = useState<number>(0);
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
   const tableRef = useRef<HTMLDivElement>(null);
+
+  // Optimized handlers with debouncing and requestAnimationFrame
+  const debouncedHandleRowClick = useCallback(
+    debounce((item: any, type: string) => {
+      requestAnimationFrame(() => {
+        handleRowClick(item, type);
+      });
+    }, 100),
+    [handleRowClick]
+  );
+
+  const handleSingleClick = useCallback(
+    (item: any) => {
+      measureSync("table_single_click", () => {
+        debouncedHandleRowClick({ ...item }, "view_single");
+      });
+    },
+    [debouncedHandleRowClick]
+  );
+
+  const handleDoubleClick = useCallback(
+    (item: any) => {
+      // Cancel the single click if double click occurs
+      debouncedHandleRowClick.cancel?.();
+      measureSync("table_double_click", () => {
+        requestAnimationFrame(() => {
+          handleRowClick({ ...item }, "view");
+        });
+      });
+    },
+    [handleRowClick, debouncedHandleRowClick]
+  );
 
   const handleScroll = useCallback(() => {
     if (!tableRef.current || !onLoadMore || isLoading) return;
@@ -141,16 +175,12 @@ export const TableUI = ({
                 <div
                   key={rowInd}
                   className={`${cls.row} flex w-full cursor-pointer`}
-                  onClick={() => {
-                    handleRowClick({ ...item, rowInd }, "view_single");
-                  }}
+                  onClick={() => handleSingleClick({ ...item, rowInd })}
                   onMouseDown={() => {
-                    handleRowClick({ ...item, rowInd }, "view_single");
+                    handleSingleClick({ ...item, rowInd });
                   }}
                   ref={(el) => (rowRefs.current[rowInd] = el)}
-                  onDoubleClick={() =>
-                    handleRowClick({ ...item, rowInd }, "view")
-                  }
+                  onDoubleClick={() => handleDoubleClick({ ...item, rowInd })}
                 >
                   {headColumns.map(
                     (

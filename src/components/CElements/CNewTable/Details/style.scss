@@ -129,6 +129,10 @@
   .MuiTableRow-root {
     height: 35px !important;
 
+    &.innerTable {
+      height: 24px !important;
+    }
+
     // &:last-child {
     //   .CTableCell {
     //     border-bottom: 0;

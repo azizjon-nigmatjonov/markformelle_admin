@@ -1,12 +1,11 @@
-import { CollapseUI } from "../../../../components/CElements/CCollapse";
-import { ModalTypes } from "../interfaces";
-import { PartianTable } from "../Tables/Partion";
-import { OrderForm } from "./Form";
+import { useState } from "react";
+// import { ModalTypes } from "../interfaces";
+import { OrderForm } from "../../Orders/Modal/Form";
 import { OrderModalBaseLogics } from "./Logic";
 import { PaintTablesUI } from "./PaintTablesUI";
 
 interface ModalUIProps {
-  defaultData?: ModalTypes;
+  defaultData?: any;
   setOpen: (open: boolean) => void;
   refetch: () => void;
 }
@@ -18,10 +17,10 @@ export const OrderModal = ({
   },
   setOpen,
 }: ModalUIProps) => {
+  const [formId, setFormId] = useState<number>(0);
   const {
     currentMaterial,
     currentPaint,
-    formId,
     uniqueID,
     createForm,
     updateForm,
@@ -29,7 +28,12 @@ export const OrderModal = ({
     handleModalActions,
     handleActionsTable,
     setCurrentPaint,
-  } = OrderModalBaseLogics({ defaultData, refetch });
+  } = OrderModalBaseLogics({
+    defaultData,
+    refetch,
+    formId,
+    setFormId,
+  });
 
   const handleModalClose = (status: string) => {
     handleModalActions(status);
@@ -39,37 +43,29 @@ export const OrderModal = ({
   };
 
   return (
-    <div className="space-y-5 overflow-y-auto designed-scroll max-h-[calc(100vh-200px)]">
+    <div className="space-y-3 overflow-y-auto designed-scroll max-h-[calc(100vh-200px)]">
       <OrderForm
         handleModalActions={handleModalClose}
         createForm={createForm}
         updateForm={updateForm}
         formData={formData}
+        formId={formId}
+        setFormId={(val: number) => {
+          setFormId(val);
+        }}
         uniqueID={uniqueID}
       />
-      <div>
-        <CollapseUI title="Boya Siparis Detay Girisi" disabled>
-          <PaintTablesUI
-            handleActionsTable={(obj: any, status: string, type: string) => {
-              handleActionsTable(obj, status, type);
-            }}
-            setCurrentPaint={setCurrentPaint}
-            uniqueID={uniqueID}
-            currentPaint={currentPaint}
-            formId={formId ?? 0}
-          />
-        </CollapseUI>
-        <CollapseUI title="Partiya" disabled>
-          <PartianTable
-            handleActionsTable={(obj: any, status: string, type: string) => {
-              handleActionsTable(obj, status, type);
-            }}
-            uniqueID={uniqueID}
-            currentMaterial={currentMaterial}
-            formId={formId ?? 0}
-          />
-        </CollapseUI>
-      </div>
+
+      <PaintTablesUI
+        handleActionsTable={(obj: any, status: string, type: string) => {
+          handleActionsTable(obj, status, type);
+        }}
+        currentMaterial={currentMaterial}
+        setCurrentPaint={setCurrentPaint}
+        uniqueID={uniqueID}
+        currentPaint={currentPaint}
+        formId={formId ?? 0}
+      />
     </div>
   );
 };

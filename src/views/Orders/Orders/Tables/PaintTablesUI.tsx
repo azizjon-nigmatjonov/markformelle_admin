@@ -75,7 +75,7 @@ export const PaintTablesUI = ({
         }}
         title={title}
         bodyColumns={bodyColumns}
-        autoHeight="180px"
+        autoHeight="140px"
         handleFilterParams={(params: any) => {
           setFilterParams?.(params);
         }}

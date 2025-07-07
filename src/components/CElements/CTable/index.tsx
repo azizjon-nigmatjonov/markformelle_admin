@@ -814,7 +814,7 @@ const CTable = ({
                         ))}
                       </TableRow>
                     ))
-                  : ""}
+                  : null}
               </CTableBody>
             </CTableWrapper>
             {footer && active ? (
@@ -843,9 +843,7 @@ const CTable = ({
                   <p className="footer_text">{footer.day}</p>
                 </div>
               </div>
-            ) : (
-              ""
-            )}
+            ) : null}
           </div>
         </div>
 
@@ -860,9 +858,7 @@ const CTable = ({
             handleFilterParams={handleFilterParams}
             dataLength={newBodyColumns?.length}
           />
-        ) : (
-          ""
-        )}
+        ) : null}
       </div>
     </div>
   );

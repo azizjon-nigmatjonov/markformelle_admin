@@ -8,11 +8,15 @@ export const PartianTable = ({
   uniqueID,
   formId,
   currentMaterial,
+  currentPaint,
+  defaultFilters = [],
 }: {
   formId: number;
   currentMaterial: any;
   uniqueID: string;
   handleActionsTable: (val: any, status: string, type: string) => void;
+  currentPaint: any;
+  defaultFilters?: string[];
 }) => {
   const [filterParams, setFilterParams]: any = useState({
     page: 1,
@@ -24,10 +28,13 @@ export const PartianTable = ({
     });
 
   useEffect(() => {
-    if (formId) {
-      setFilterParams({ ...filterParams, BOYASIPARISKAYITID: formId });
+    if (currentPaint?.BOYASIPARISDETAYID) {
+      setFilterParams({
+        ...filterParams,
+        BOYASIPARISDETAYID: currentPaint.BOYASIPARISDETAYID,
+      });
     }
-  }, [formId]);
+  }, [currentPaint]);
 
   const handleActions = (el: any, status: string) => {
     if (status === "delete") {
@@ -45,6 +52,7 @@ export const PartianTable = ({
   return (
     <>
       <CNewTable
+        title="Partiye"
         key={headColumns.length ? "isloading" : "iscame"}
         idForTable="partiya_table_inner"
         headColumns={headColumns}
@@ -52,10 +60,11 @@ export const PartianTable = ({
           handleActionsTable(obj, status, "material");
           handleActions(obj, status);
         }}
+        defaultFilters={defaultFilters}
         disablePagination={true}
         innerTable={true}
         bodyColumns={bodyColumns}
-        autoHeight="180px"
+        autoHeight="140px"
         handleFilterParams={(params: any) => {
           setFilterParams(params);
         }}
@@ -75,4 +84,4 @@ export const PartianTable = ({
       )}
     </>
   );
-}; 
+};

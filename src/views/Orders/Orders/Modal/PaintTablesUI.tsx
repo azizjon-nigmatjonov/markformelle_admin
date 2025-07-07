@@ -15,6 +15,7 @@ export const PaintTablesUI = ({
   formId,
   setCurrentPaint,
   currentKnitting,
+  title,
 }: {
   handleActionsTable: (obj: any, status: string, type: string) => void;
   uniqueID: string;
@@ -22,6 +23,7 @@ export const PaintTablesUI = ({
   formId: number;
   currentKnitting: any;
   setCurrentPaint: (obj: any) => void;
+  title: string;
 }) => {
   const [filterParams, setFilterParams]: any = useState({
     page: 1,
@@ -63,7 +65,7 @@ export const PaintTablesUI = ({
       });
       setFilterParamsIslemTipi({
         ...filterParamsIslemTipi,
-        ISLEMTIPIID: currentPaint?.ISLEMTIPIID,
+        BOYASIPARISDETAYID: currentPaint?.BOYASIPARISDETAYID,
       });
     }
   }, [currentPaint]);
@@ -75,7 +77,7 @@ export const PaintTablesUI = ({
   return (
     <>
       <PaintTable
-        title="Boya Siparis Detay Girisi"
+        title={title}
         handleActionsTable={(obj: any, status: string) => {
           handlePaintActionsPaint(obj, status);
         }}
@@ -115,7 +117,7 @@ export const PaintTablesUI = ({
           handleActionsTable={(obj: any, status: string) => {
             handleActionsTable(obj, status, "paint");
           }}
-          title="Islem Tipi"
+          title="Islem Ilavasi"
           headColumns={headColumnsIslemTipi}
           bodyColumns={bodyColumnsIslemTipi}
           formId={formId ?? 0}

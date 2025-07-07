@@ -22,7 +22,7 @@ export const InputFieldUI = ({
       <div className="w-full flex space-x-3 items-center">
         <p
           className={`text-sm ${
-            disabled ? "text-[var(--gray)]" : "text-[var(--black)] relative"
+            disabled ? "text-[var(--gray)]" : "text-[var(--gray)] relative"
           }`}
         >
           {title.substring(0, 13)}

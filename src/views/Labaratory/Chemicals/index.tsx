@@ -147,16 +147,6 @@ export const LabChemicals = () => {
           isLoading={isLoading}
           filterParams={filterParams}
           handleFilterParams={setFilterParams}
-          defaultFilters={[
-            "sidebar_filter",
-            "add",
-            "delete",
-            "actions",
-            "excel_download",
-            "active_menu",
-            "filter",
-            "sellect_more",
-          ]}
           defaultSearch={{
             LABRECETEKODU: "",
             ESKILABREETEKODU: "",

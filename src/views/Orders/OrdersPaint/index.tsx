@@ -66,6 +66,7 @@ export const OrdersPaintPage = () => {
           bodyColumns={bodyColumns}
           handleActions={handleActions}
           isLoading={isLoading}
+          animation={false}
           filterParams={filterParams}
           handleFilterParams={setFilterParams}
           defaultFilters={[
@@ -80,6 +81,8 @@ export const OrdersPaintPage = () => {
           ]}
           defaultSearch={{
             BOYASIPARISKAYID: "",
+            SIPARISTARIHI: "",
+            BOYASIPARISID: "",
           }}
           meta={{
             totalCount: bodyData?.count,
@@ -92,7 +95,7 @@ export const OrdersPaintPage = () => {
 
       {open && (
         <CNewModal
-          title="boya siparis tanitimi (kumash)"
+          title="Boya siparis tanitimi (kumash)"
           handleActions={handleModal}
           defaultData={{
             id: modalInitialData?.BOYASIPARISKAYITID,

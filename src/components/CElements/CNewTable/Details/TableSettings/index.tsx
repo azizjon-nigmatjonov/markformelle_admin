@@ -258,13 +258,13 @@ export const HeaderSettings = ({
         className={`${
           innerTable ? "h-[30px]" : "h-[40px]"
         } absolute w-full left-0 top-0 flex items-center ${
-          title ? "desktop:px-3" : ""
+          title ? "px-2" : ""
         } justify-between`}
       >
         <div className="flex items-center space-x-2 h-full">
           {title ? (
             <h2
-              className={`font-medium ${
+              className={`font-medium whitespace-nowrap ${
                 disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
               }`}
             >

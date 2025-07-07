@@ -64,7 +64,7 @@ export const ModalTableLogic = ({
     try {
       const { data } = await axios.post(`${API_URL}/boyasiparis/`, params);
 
-      setFormId(data?.LABRECETEID);
+      setFormId(data?.BOYASIPARISKAYITID);
       refetchTable();
       toast.success(t("created!"));
       return data;
@@ -118,13 +118,16 @@ export const ModalTableLogic = ({
 export const OrderModalBaseLogics = ({
   defaultData,
   refetch,
+  formId,
+  setFormId,
 }: {
   defaultData?: any;
   refetch: () => void;
+  formId: number;
+  setFormId: (val: number) => void;
 }) => {
   const [currentMaterial, setCurrentMaterial] = useState<any>({});
   const [currentPaint, setCurrentPaint] = useState<any>({});
-  const [formId, setFormId] = useState<number | undefined>(undefined);
   const [uniqueID, setUniqueID] = useState("main_order_form");
 
   const { createForm, updateForm, formData } = ModalTableLogic({
@@ -143,7 +146,7 @@ export const OrderModalBaseLogics = ({
 
   const handleModalActions = (status: string) => {
     if (status === "close") {
-      setFormId(undefined);
+      setFormId(0);
     }
   };
 
