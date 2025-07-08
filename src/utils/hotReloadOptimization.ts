@@ -14,7 +14,7 @@ export const HotReloadOptimization = {
   },
 
   // Memoize expensive computations to prevent unnecessary re-renders
-  memoizeExpensive: <T,>(fn: () => T, deps: any[]): T => {
+  memoizeExpensive: <T,>(fn: () => T, _: any[]): T => {
     // This is a simplified version - use React.useMemo in components
     return fn();
   },

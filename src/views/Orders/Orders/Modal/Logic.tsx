@@ -17,7 +17,8 @@ export const FormLogic = () => {
     setValue("SIPARISGRUPADI", form.SIPARISGRUPADI);
     setValue("BOYASIPARISTIPIADI", form.BOYASIPARISTIPIADI);
     setValue("FASON", form.FASON);
-    setValue("SIPARISYILI", dayjs(form.SIPARISYILI).format("YYYY"));
+
+    setValue("SIPARISYILI", dayjs(form.INSERTTARIHI).format("YYYY"));
     setValue("SIPARISTARIHI", dayjs(form.SIPARISTARIHI).format("DD.MM.YYYY"));
     setValue("BOYASIPARISKAYITID", form.BOYASIPARISKAYITID);
     setValue("BOYASIPARISID", form.BOYASIPARISID);

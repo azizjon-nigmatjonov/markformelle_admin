@@ -21,10 +21,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
     console.error(error, info);
   }
 
-  componentDidUpdate(
-    prevProps: ErrorBoundaryProps,
-    prevState: ErrorBoundaryState
-  ) {
+  componentDidUpdate(_: ErrorBoundaryProps, prevState: ErrorBoundaryState) {
     // Set up auto-reload timer when error occurs
     if (this.state.hasError && !prevState.hasError) {
       setTimeout(() => {

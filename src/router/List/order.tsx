@@ -23,15 +23,4 @@ export const oderList = [
     auth: true,
     permissions: ["view_page", "edit"],
   },
-  {
-    parent: "orders",
-    link: "party-stage",
-    sidebar: true,
-    title: "table_orders_paint",
-    parent_icon: "/images/order.png",
-    icon: "/images/documents.webp",
-    element: <OrderList />,
-    auth: true,
-    permissions: ["view_page", "edit"],
-  },
 ];

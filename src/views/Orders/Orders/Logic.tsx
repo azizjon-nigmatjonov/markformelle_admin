@@ -18,20 +18,20 @@ export const TableData = ({
   const { t } = useTranslationHook();
   const [headColumns, setHeadColumns] = useState([]);
   const [bodyData, setBodyData]: any = useState({});
-
+  const [isLoading, setIsLoading] = useState(false);
   const fetchList = async (filters: any) => {
+    setIsLoading(true);
+
     const response = await axios.get(
-      `${API_URL}/boyasiparis/?skip=${filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
+      `${API_URL}/boyasiparis/?skip=${
+        filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
       }&limit=${filters.perPage}${filters.q ? "&" + filters.q : ""}`
     );
+    setIsLoading(false);
     return response.data;
   };
 
-  const {
-    data: listData,
-    isLoading,
-    refetch,
-  } = useQuery(
+  const { data: listData, refetch } = useQuery(
     ["GET_BOYASIPARIS_LIST_ORDERS", filterParams],
     () => fetchList(filterParams),
     {

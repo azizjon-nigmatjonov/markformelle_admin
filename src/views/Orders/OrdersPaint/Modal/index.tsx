@@ -43,7 +43,7 @@ export const OrderModal = ({
   };
 
   return (
-    <div className="space-y-3 overflow-y-auto designed-scroll max-h-[calc(100vh-200px)]">
+    <div className="space-y-5 overflow-y-auto designed-scroll max-h-[calc(100vh-100px)]">
       <OrderForm
         handleModalActions={handleModalClose}
         createForm={createForm}

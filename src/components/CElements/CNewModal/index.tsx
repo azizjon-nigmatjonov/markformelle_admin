@@ -146,8 +146,8 @@ const CNewModal: FC<Props> = ({
             className={`duration-300 relative ${
               !autoWidth
                 ? screen
-                  ? "w-[1200px] max-h-[700px]"
-                  : "w-[90vw] max-h-[90vh]"
+                  ? "w-[1200px] max-h-[100vh]"
+                  : "w-[90vw] max-h-[100vh]"
                 : "w-auto h-[800px]"
             }`}
           >

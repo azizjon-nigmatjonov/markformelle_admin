@@ -92,7 +92,7 @@ export const TableUI = ({
 
   const handleRightClick = (event: any) => {
     event.preventDefault(); // Prevents the default context menu
-    setAnchor(event.current)
+    setAnchor(event.current);
   };
 
   return (
@@ -186,7 +186,7 @@ export const TableUI = ({
           </button>
         </div>
       </div>
-      <div className="overflow-scroll designed-scroll h-[300px] deskop:h-[340px]">
+      <div className="overflow-scroll designed-scroll h-[400px]">
         <div>
           <table
             className={`text-sm h-full ${cls.table}`}

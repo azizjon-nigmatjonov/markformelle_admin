@@ -8,6 +8,7 @@ import { PaintTableLogic } from "../Tables/Logic";
 import { PaintForm } from "./Forms/PaintForm";
 import { PaintFormYarn } from "./Forms/PaintFormYarn";
 import { PartianTable } from "../Tables/Partion";
+import { PartiCreate } from "./PartiCreate";
 
 export const PaintTablesUI = ({
   handleActionsTable,
@@ -72,11 +73,12 @@ export const PaintTablesUI = ({
 
   return (
     <>
-      <div className="space-y-2">
+      <div className="space-y-3">
         <PaintTable
           handleActionsTable={(obj: any, status: string) => {
             handlePaintActionsPaint(obj, status);
           }}
+          height="180px"
           title="Boya Siparis Detay Girisi"
           currentPaint={currentPaint}
           setCurrentPaint={setCurrentPaint}
@@ -115,13 +117,13 @@ export const PaintTablesUI = ({
           ]}
         />
 
-        <div className="grid grid-cols-2 gap-x-2">
+        <div className="grid grid-cols-2 gap-x-3">
           <PaintTable
             handleActionsTable={(obj: any, status: string) => {
               handleActionsTable(obj, status, "paint");
             }}
             title="Variant"
-            height="140px"
+            height="180px"
             headColumns={headColumnsVariant}
             bodyColumns={bodyColumnsVariant}
             formId={formId ?? 0}
@@ -132,7 +134,7 @@ export const PaintTablesUI = ({
               handleActionsTable(obj, status, "paint");
             }}
             title="Islem Ilavasi"
-            height="140px"
+            height="180px"
             headColumns={headColumnsIslemTipi}
             bodyColumns={bodyColumnsIslemTipi}
             formId={formId ?? 0}
@@ -161,7 +163,8 @@ export const PaintTablesUI = ({
           defaultData={currentPaint}
           uniqueID={uniqueID}
         />
-      )}{" "}
+      )}
+      <PartiCreate />
     </>
   );
 };

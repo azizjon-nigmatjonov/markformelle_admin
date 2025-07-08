@@ -17,9 +17,7 @@ function App() {
           <Provider store={store}>
             <PersistGate persistor={persistor}>
               <BrowserRouter>
-
                 <Router />
-
               </BrowserRouter>
             </PersistGate>
           </Provider>

@@ -740,7 +740,7 @@ const CNewTable = ({
           clickable && !item.empty && checkPermission("view") ? "clickable" : ""
         } ${currentIndex === rowIndex ? "bg-[var(--primary50)]" : ""} ${
           selectedItems.includes(rowIndex) || item?.checked ? "sellected" : ""
-        } ${currentIdRow == item.index ? "bg-[var(--primary50)]" : ""}`}
+        } ${currentIdRow == item.index ? "bg-blue-200" : ""}`}
         onClick={() => {
           if (openSelect) {
             tableActions(item, "sellect_more");
@@ -802,8 +802,6 @@ const CNewTable = ({
                 textAlign: column?.textAlign || "left",
               }}
               className={`relative h-full flex items-center ${
-                innerTable ? "text-[11px]" : "text-[13px]"
-              } ${
                 hoveredIndex === colIndex &&
                 draggingIndex !== null &&
                 hoveredIndex > draggingIndex
@@ -876,7 +874,7 @@ const CNewTable = ({
     <div
       className={`relative cnewtable w-full rounded-t-[12px] border border-[var(--border)] ${
         disablePagination ? "rounded-b-[12px] overflow-hidden" : "border-b-0"
-      } ${innerTable ? "text-[11px]" : "text-[12px]"}`}
+      } ${innerTable ? "text-[11.5px]" : "text-[12px]"}`}
     >
       <div className="h-full ">
         {defaultFilters?.length || title ? (
@@ -953,7 +951,7 @@ const CNewTable = ({
                     <CTableRow>
                       <td
                         className={`sticky bg-white ${
-                          innerTable ? "h-[30px]" : "h-[41px]"
+                          innerTable ? "h-[35px]" : "h-[41px]"
                         } ${
                           openSelect ? "flex" : "hidden"
                         } items-center border-b justify-center duration-100 w-[40px]`}
@@ -1018,7 +1016,7 @@ const CNewTable = ({
                             onDragLeave={handleDragLeave}
                             onDrop={() => handleDrop(index)}
                             className={`w-full group flex items-center ${
-                              innerTable ? "min-h-[25px]" : "min-h-[40px]"
+                              innerTable ? "min-h-[30px]" : "min-h-[40px]"
                             } px-2 flex-nowrap cursor-pointer hover:bg-[var(--border)] ${
                               column?.id === "index"
                                 ? "justify-center"
@@ -1051,7 +1049,7 @@ const CNewTable = ({
                           >
                             <div
                               className={`w-full ${
-                                innerTable ? "min-h-[30px]" : "min-h-[40px]"
+                                innerTable ? "min-h-[35px]" : "min-h-[40px]"
                               } flex items-center whitespace-nowrap cursor-move ${
                                 disabled ? "text-[var(--gray)]" : ""
                               }`}

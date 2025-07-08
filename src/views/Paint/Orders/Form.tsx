@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import dayjs from "dayjs";
-// import {Validation} from "./Validation";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { InputFieldUI } from "../../../components/UI/FieldUI";
 import { LiteOptionsTable } from "../../../components/UI/Options/LiteTable";
 import HFTextField from "../../../components/HFElements/HFTextField";

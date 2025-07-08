@@ -64,7 +64,7 @@ export const PartianTable = ({
         disablePagination={true}
         innerTable={true}
         bodyColumns={bodyColumns}
-        autoHeight="140px"
+        autoHeight="180px"
         handleFilterParams={(params: any) => {
           setFilterParams(params);
         }}

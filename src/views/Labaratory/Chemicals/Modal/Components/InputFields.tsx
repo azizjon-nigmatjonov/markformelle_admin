@@ -217,7 +217,7 @@ export const InputFields = ({
             renderValue={(_: string, obj: any) => {
               return obj.KALITEID;
             }}
-            defaultSearch={selectedHamID ? `HAMID=${selectedHamID}` : ""}
+            defaultFilters={selectedHamID ? `HAMID=${selectedHamID}` : ""}
             defaultValue={formData?.KALITEID}
             headColumns={[
               { id: "KALITEID", title: "KALITEID", width: 120 },

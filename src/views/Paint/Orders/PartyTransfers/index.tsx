@@ -2,9 +2,9 @@ import { useMemo, useState } from "react";
 import { PartyTransfersLogic } from "./Logic";
 import { useTableHeaders } from "../Logic";
 import CNewTable from "../../../../components/CElements/CNewTable";
-import CNewModal from "../../../../components/CElements/CNewModal";
 import { TransferModal } from "./TransferModal";
 import CNewMiniModal from "../../../../components/CElements/CNewMiniModal";
+import { RezervTable } from "./Rezerve";
 
 export const PartyTransfers = ({ defaultData }: { defaultData: any }) => {
   const [open, setOpen] = useState(false);
@@ -102,8 +102,8 @@ export const PartyTransfers = ({ defaultData }: { defaultData: any }) => {
       <div className="h-[800px] overflow-y-scroll designed-scroll space-y-3">
         <CNewTable
           title="parti_asamalari"
-          headColumns={newHeadColumns}
-          bodyColumns={bodyColumns}
+          headColumns={newHeadColumns?.length ? newHeadColumns : []}
+          bodyColumns={bodyColumns?.length ? bodyColumns : []}
           handleActions={handleActions}
           isLoading={isLoading}
           idForTable="party_transfers"
@@ -119,19 +119,8 @@ export const PartyTransfers = ({ defaultData }: { defaultData: any }) => {
         />
 
         <div className="space-y-3 overflow-y-scroll designed-scroll">
-          {/* <CNewTable
-        title="Asama verilcek Ilaveler"
-        headColumns={[]}
-        innerTable={true}
-        bodyColumns={[]}
-        handleActions={() => {}}
-        isLoading={false}
-        autoHeight="140px"
-        disablePagination={true}
-        handleFilterParams={() => {}}
-        filterParams={{}}
-      />
-      <CNewTable
+          <RezervTable PARTIKAYITID={defaultData?.PARTIKAYITID} />
+          {/*  <CNewTable
         title="Siparise Alt am Stoklan ilave islemleri"
         headColumns={[]}
         innerTable={true}

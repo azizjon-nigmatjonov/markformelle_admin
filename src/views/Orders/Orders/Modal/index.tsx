@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { CollapseUI } from "../../../../components/CElements/CCollapse";
 import { ModalTypes } from "../interfaces";
 import { MaterialTable } from "../Tables/Material";
 import { OrderForm } from "./Form";
@@ -41,7 +40,7 @@ export const OrderModal = ({
   };
 
   return (
-    <div className="space-y-4 overflow-y-auto designed-scroll max-h-[calc(100vh-200px)]">
+    <div className="space-y-5 overflow-y-auto designed-scroll max-h-[calc(100vh-100px)]">
       <OrderForm
         handleModalActions={handleModalClose}
         createForm={createForm}
@@ -51,7 +50,7 @@ export const OrderModal = ({
         formId={formId}
         setFormId={setFormId}
       />
-      <div className="space-y-2">
+      <div className="space-y-4">
         <MaterialTable
           title="Orme Siparis Detay Girisi"
           handleActionsTable={(obj: any, status: string, type: string) => {

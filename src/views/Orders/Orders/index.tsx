@@ -26,7 +26,6 @@ export const OrderList = () => {
   const { newHeadColumns } = useTableHeaders({ bodyColumns });
 
   const handleActions = (el: any, status: string) => {
- 
     if (status === "modal") {
       setOpen(true);
     }
@@ -69,7 +68,6 @@ export const OrderList = () => {
           bodyColumns={bodyColumns}
           handleActions={handleActions}
           isLoading={isLoading}
-   
           filterParams={filterParams}
           handleFilterParams={setFilterParams}
           defaultFilters={[

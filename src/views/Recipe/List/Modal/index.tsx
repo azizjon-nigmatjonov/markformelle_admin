@@ -155,7 +155,7 @@ export const ModalUIRecipe = ({
           }}
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="space-y-2">
+          <div className="space-y-5">
             <div className="grid grid-cols-3 gap-x-3">
               <InputFieldUI title={t("Recete Kodu")} disabled={disabled}>
                 <LiteOptionsTable
@@ -274,7 +274,7 @@ export const ModalUIRecipe = ({
                           ? obj.RECETEGRAFIKID + " - " + obj.ADI
                           : obj.RECETEGRAFIKID;
                       }}
-                      defaultSearch={
+                      defaultFilters={
                         formData?.RECETEGRAFIKID
                           ? `RECETEGRAFIKID=${formData?.RECETEGRAFIKID}`
                           : ""
@@ -302,7 +302,7 @@ export const ModalUIRecipe = ({
                       renderValue={(_: string, obj: any) => {
                         return obj.ADI;
                       }}
-                      defaultSearch={
+                      defaultFilters={
                         formData?.LABRECETEGRUPID
                           ? `LABRECETEGRUPID=${formData?.LABRECETEGRUPID}`
                           : ""
@@ -331,7 +331,7 @@ export const ModalUIRecipe = ({
                       renderValue={(_: string, obj: any) => {
                         return obj.ADI;
                       }}
-                      defaultSearch={
+                      defaultFilters={
                         formData?.LABRENKGRUPID
                           ? `LABRENKGRUPID=${formData?.LABRENKGRUPID}`
                           : ""
@@ -363,7 +363,7 @@ export const ModalUIRecipe = ({
                           ? obj.RENKDERINLIGIID + " - " + obj.ADI
                           : obj.RENKDERINLIGIID;
                       }}
-                      defaultSearch={
+                      defaultFilters={
                         formData?.RENKDERINLIGIID
                           ? `RENKDERINLIGIID=${formData?.RENKDERINLIGIID}`
                           : ""
