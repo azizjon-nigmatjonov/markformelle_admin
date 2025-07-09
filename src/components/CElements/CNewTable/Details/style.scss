@@ -128,10 +128,19 @@
 
   .MuiTableRow-root {
     height: 35px !important;
-
+    .innerCell {
+      height: 35px;
+      display: flex;
+      align-items: center;
+    }
     &.innerTable {
       height: 28px !important;
+
+      .innerCell {
+        height: 28px;
+      }
     }
+  
 
     // &:last-child {
     //   .CTableCell {

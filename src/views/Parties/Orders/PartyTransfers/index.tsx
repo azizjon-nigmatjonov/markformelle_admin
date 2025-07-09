@@ -99,7 +99,7 @@ export const PartyTransfers = ({ defaultData }: { defaultData: any }) => {
 
   return (
     <>
-      <div className="h-[800px] overflow-y-scroll designed-scroll space-y-3">
+      <div className="space-y-5">
         <CNewTable
           title="parti_asamalari"
           headColumns={newHeadColumns?.length ? newHeadColumns : []}

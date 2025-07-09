@@ -9,7 +9,7 @@ export const ModalUI = ({
   defaultData: any;
 }) => {
   return (
-    <div className="space-y-3">
+    <div className="space-y-5">
       <Form
         handleModalActions={handleModalActions}
         defaultData={defaultData}

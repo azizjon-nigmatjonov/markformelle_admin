@@ -5,7 +5,7 @@ export const PaintTable = ({
   formId,
   currentPaint = {},
   title,
-  isLoading,
+  isLoading = false,
   headColumns,
   bodyColumns,
   deleteFn = () => {},

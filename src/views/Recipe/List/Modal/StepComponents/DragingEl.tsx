@@ -16,7 +16,6 @@ interface Props {
   handleDropSteps: (innerIndex: number, outerIndex: number) => void;
   handleDragLeaveStep: () => void;
   setInitialModalData: (data: any) => void;
-  handleAdd: (ind: number, outInd: number, item: any) => void;
   deleteStep: boolean;
   handleCheck: (val: any) => void;
   focusedIndex: number;
@@ -24,6 +23,7 @@ interface Props {
   stepRef: any;
   setFocusedIndex: (val: number) => void;
   headerScrollRef: any;
+  handleAddCard: () => void;
 }
 
 export const DragingEl = ({
@@ -39,7 +39,6 @@ export const DragingEl = ({
   handleDropSteps,
   handleDragLeaveStep,
   setInitialModalData,
-  handleAdd,
   deleteStep,
   handleCheck = () => {},
   focusedIndex,
@@ -47,6 +46,7 @@ export const DragingEl = ({
   stepRef,
   setFocusedIndex,
   headerScrollRef,
+  handleAddCard = () => {},
 }: Props) => {
   const timeoutRef = useRef<number | null>(null);
   const [hoverAdd, setHoverAdd] = useState(999);
@@ -206,7 +206,7 @@ export const DragingEl = ({
                       focusedIndex === item.index ? "ripple-effect" : ""
                     }`}
                     onDoubleClick={() => {
-                      handleAdd(innerIndex, outerIndex, item);
+                      handleAddCard();
                     }}
                   >
                     {headColumns.map(
@@ -257,7 +257,7 @@ export const DragingEl = ({
                     {hoverAdd === innerIndex && (
                       <div
                         className="absolute left-[0px] w-[20px] h-[20px] bottom-[-5px]"
-                        onClick={() => handleAdd(innerIndex, outerIndex, item)}
+                        onClick={() => handleAddCard()}
                       ></div>
                     )}
                   </div>
@@ -273,7 +273,7 @@ export const DragingEl = ({
 
                     <button
                       type="button"
-                      onClick={() => handleAdd(innerIndex, outerIndex, item)}
+                      onClick={() => handleAddCard()}
                       className={`flex absolute z-[1] left-[-15px] w-[20px] h-[20px] items-center justify-center bg-[var(--primary)] rounded-[4px] ${
                         item.RECETEALTASAMAID
                           ? "bottom-[-6px]"

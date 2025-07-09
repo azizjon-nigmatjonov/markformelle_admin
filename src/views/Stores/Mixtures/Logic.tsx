@@ -3,7 +3,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { GetCurrentDate } from "../../../utils/getDate";
 import { useQuery } from "react-query";
-import { IFilterParams } from "../../../interfaces";
 import { useTranslationHook } from "../../../hooks/useTranslation";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
@@ -18,28 +17,28 @@ export const TableData = ({
   setOpen?: (val: boolean) => void;
 }) => {
   const [headColumns, setHeadColumns] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [bodyData, setBodyData]: any = useState({});
 
-  const getList = (filters: IFilterParams) => {
-    setIsLoading(true);
-    axios
-      .get(
-        `${API_URL}/urunrecete/?skip=${
-          filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
-        }&limit=${filters.perPage}${filters.q ? "&" + filters.q : ""}`
-      )
-      .then((res) => {
-        setBodyData(res.data);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+  const fetchList = async (filters: any) => {
+    const response = await axios.get(
+      `${API_URL}/urunrecete/?skip=${
+        filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
+      }&limit=${filters.perPage}${filters.q ? "&" + filters.q : ""}`
+    );
+    return response.data;
   };
 
+  const { data, refetch, isLoading } = useQuery(
+    ["GET_MIXTURES_LIST", filterParams],
+    () => fetchList(filterParams),
+    {
+      keepPreviousData: true,
+    }
+  );
+
   useEffect(() => {
-    getList(filterParams);
-  }, [filterParams]);
+    if (data) setBodyData(data);
+  }, [data]);
 
   useEffect(() => {
     const headColumns: any = [];
@@ -75,7 +74,7 @@ export const TableData = ({
         },
         data: id,
       });
-      getList(filterParams);
+      refetch();
       toast.success("Muvaffaqiyatli amalga oshirildi!");
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);

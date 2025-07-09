@@ -7,7 +7,7 @@ import { useMemo, useState } from "react";
 import CNewModal from "../../../components/CElements/CNewModal";
 import { ModalUI } from "./Modal";
 
-export const PartyOrders = () => {
+export const PartyAsamalar = () => {
   const [open, setOpen] = useState(false);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,

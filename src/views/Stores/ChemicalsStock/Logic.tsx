@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useQuery } from "react-query";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const breadCrumbs = [
@@ -15,7 +16,6 @@ export const TableData = ({
   handleActionsModal?: (val: any, element?: any) => void;
 }) => {
   const [headColumns, setHeadColumns] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [bodyData, setBodyData]: any = useState({});
 
   const handleActions = (el: any, status: string) => {
@@ -35,25 +35,36 @@ export const TableData = ({
     }
   };
 
-  useEffect(() => {
-    setIsLoading(true);
-    if (!filterParams?.page) return;
+  const fetchList = async (filters: any) => {
+    const response = await axios.get(
+      `${API_URL}/reports/stok-envanter-raporu/?ADepoId=D008&skip=${
+        filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
+      }&limit=${filters.perPage}${
+        filters?.DATE_FROM
+          ? `&DATE_FROM=${filters.DATE_FROM}&DATE_TO=${filters.DATE_TO}`
+          : ""
+      }${filters?.q ? "&" + filters?.q : ""}`
+    );
+    return response.data;
+  };
 
-    axios
-      .get(
-        `${API_URL}/reports/stok-envanter-raporu/?ADepoId=D008&skip=${
-          filterParams.page < 2
-            ? 0
-            : (filterParams.page - 1) * filterParams.perPage
-        }&limit=${filterParams.perPage}${
-          filterParams?.DATE_FROM
-            ? `&DATE_FROM=${filterParams.DATE_FROM}&DATE_TO=${filterParams.DATE_TO}`
-            : ""
-        }${filterParams?.q ? "&" + filterParams?.q : ""}`
-      )
-      .then((res) => {
-        setBodyData({
-          data: res.data.data.map((item: any) => {
+  const { data, isLoading: isLoadingList } = useQuery(
+    ["GET_CHEMICALS_STOCK_LIST", filterParams],
+    () => fetchList(filterParams),
+    {
+      keepPreviousData: true,
+    }
+  );
+
+  useEffect(() => {
+    if (data)
+      setBodyData({
+        data: data.data
+          .slice(
+            (filterParams.page - 1) * filterParams.perPage,
+            filterParams.page * filterParams.perPage
+          )
+          .map((item: any) => {
             const obj = item.StokHareketleri;
             delete item.StokHareketleri;
             return {
@@ -61,13 +72,9 @@ export const TableData = ({
               ...obj,
             };
           }),
-          count: res.data.count,
-        });
-      })
-      .finally(() => {
-        setIsLoading(false);
+        count: data.total_count,
       });
-  }, [filterParams]);
+  }, [data, filterParams]);
 
   useEffect(() => {
     const headColumns: any = [];
@@ -96,7 +103,7 @@ export const TableData = ({
     headColumns,
     handleActions,
     bodyColumns: bodyData?.data ?? [],
-    isLoading,
+    isLoading: isLoadingList,
     defaultData: {},
     bodyData,
     setBodyData,

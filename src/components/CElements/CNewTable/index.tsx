@@ -832,7 +832,7 @@ const CNewTable = ({
                       tableActions(item, "view_single");
                     });
                   }}
-                  className="w-full whitespace-nowrap"
+                  className="w-full whitespace-nowrap innerCell"
                 >
                   <>{getBodyCol(column, item)}</>
                 </div>
@@ -874,7 +874,7 @@ const CNewTable = ({
     <div
       className={`relative cnewtable w-full rounded-t-[12px] border border-[var(--border)] ${
         disablePagination ? "rounded-b-[12px] overflow-hidden" : "border-b-0"
-      } ${innerTable ? "text-[11.5px]" : "text-[12px]"}`}
+      } ${innerTable ? "text-[11.5px]" : "text-[13px]"}`}
     >
       <div className="h-full ">
         {defaultFilters?.length || title ? (
@@ -915,9 +915,7 @@ const CNewTable = ({
 
           <div
             id="table"
-            className={`flex h-full w-full overflow-scroll designed-scroll ${
-              sideFilter ? "" : "pl-5"
-            }`}
+            className={`flex h-full w-full overflow-scroll designed-scroll`}
             style={{
               height: autoHeight
                 ? autoHeight

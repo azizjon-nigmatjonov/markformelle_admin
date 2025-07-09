@@ -84,24 +84,26 @@ const ExcelDownload = ({
   return (
     <div className="relative">
       <Tooltip title="Загрузить данные в Excel" placement="bottom">
-        <IconButton
-          onClick={() => {
-            if (type === "directly") {
-              downloadExcel("selected");
-            } else setOpen(true);
-          }}
-          disabled={disabled}
-        >
-          <div className="h-[30px] w-[30px] rounded-[8px] flex items-center justify-center">
-            <ExcelIconOutlined
-              fill={disabled ? "var(--gray)" : "var(--main)"}
-              width={innerTable ? 18 : 24}
-            />
-          </div>
-          <div className="whitespace-nowrap ml-1 text-[var(--black)]">
-            <span>{label}</span>
-          </div>
-        </IconButton>
+        <span>
+          <IconButton
+            onClick={() => {
+              if (type === "directly") {
+                downloadExcel("selected");
+              } else setOpen(true);
+            }}
+            disabled={disabled}
+          >
+            <div className="h-[30px] w-[30px] rounded-[8px] flex items-center justify-center">
+              <ExcelIconOutlined
+                fill={disabled ? "var(--gray)" : "var(--main)"}
+                width={innerTable ? 18 : 24}
+              />
+            </div>
+            <div className="whitespace-nowrap ml-1 text-[var(--black)]">
+              <span>{label}</span>
+            </div>
+          </IconButton>
+        </span>
       </Tooltip>
 
       {open && (

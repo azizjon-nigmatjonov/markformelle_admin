@@ -24,7 +24,6 @@ interface Props {
   open: string[];
   setOpen: (val: any) => void;
   setCurrentSellect: (val: any) => void;
-  isLoading: boolean;
   askAction: string;
   setAskAction: (val: string) => void;
   setFocusedIndex: (val: number) => void;
@@ -47,7 +46,6 @@ export const StepCard = ({
   handleCheck = () => {},
   setDeleteCard = () => {},
   setCurrentSellect = () => {},
-  isLoading = false,
   askAction = "",
   setAskAction = () => {},
   setFocusedIndex = () => {},
@@ -192,16 +190,12 @@ export const StepCard = ({
     setHoveredIndex(null);
   };
 
-  const handleAdd = (
-    index: number,
-    outerIndex: number,
-    item: { RECETEALTASAMAID: string }
-  ) => {
-    setCurrentSellect({ ...item, index, outerIndex });
-  };
+  const handleAddCard = () => {
+    setOpen(["card", "insert_step"]);
 
-  const handleAddCard = (outerIndex: number) => {
-    setCurrentSellect({ outerIndex, type: "card_add" });
+    const currEl = items.map((item: any) => item.rows).flat();
+    const index = currEl.findIndex((el: any) => el.index === focusedIndex);
+    setCurrentSellect(currEl[index]);
   };
 
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -229,7 +223,10 @@ export const StepCard = ({
       handleCheck(currEl[index]);
     }
     if (event.key === "ArrowUp") {
-      setFocusedIndex(focusedIndex < 1 ? 0 : focusedIndex - 1);
+      const firstIndex = items?.[0]?.rows?.[0]?.index ?? 0;
+      setFocusedIndex(
+        focusedIndex < firstIndex + 1 ? firstIndex : focusedIndex - 1
+      );
     } else if (event.key === "ArrowDown") {
       setFocusedIndex(
         focusedIndex >=
@@ -285,11 +282,7 @@ export const StepCard = ({
         selectAll={selectAll}
         onSelectAll={handleSelectAll}
       />
-      {!items.length && !isLoading ? (
-        <div className="flex justify-center items-center h-full py-5">
-          <img width={140} src="/images/no-data.png" alt="empty" />
-        </div>
-      ) : (
+      {items.length ? (
         items.map((row: any, outerIndex: number) => (
           <div
             key={outerIndex}
@@ -333,7 +326,6 @@ export const StepCard = ({
                 outerIndex={outerIndex}
                 draggingIndexStep={draggingIndexStep}
                 handleDragLeaveStep={handleDragLeaveStep}
-                handleAdd={handleAdd}
                 maxScroll={maxScroll}
                 headColumns={newColumns}
                 deleteStep={deleteStep}
@@ -347,6 +339,7 @@ export const StepCard = ({
                 handleKeyDown={(val: any) => {
                   handleKeyDown(val, outerIndex);
                 }}
+                handleAddCard={handleAddCard}
                 setFocusedIndex={setFocusedIndex}
               />
             </div>
@@ -375,7 +368,7 @@ export const StepCard = ({
             </div>
             {editStep && (
               <div
-                onClick={() => handleAddCard(outerIndex)}
+                onClick={() => handleAddCard()}
                 className="bottom-[-16px] left-0 w-full h-[18px] group absolute flex items-center justify-around"
               >
                 <div className="hidden group-hover:flex bg-[var(--primary)] h-[4px] w-[48%] mt-1.5 rounded-full"></div>
@@ -391,6 +384,10 @@ export const StepCard = ({
             )}
           </div>
         ))
+      ) : (
+        <div className="flex justify-center items-center h-full py-5">
+          <img width={140} src="/images/no-data.png" alt="empty" />
+        </div>
       )}
 
       {open.includes("material") && (

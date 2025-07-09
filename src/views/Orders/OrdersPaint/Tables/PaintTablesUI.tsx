@@ -7,7 +7,7 @@ export const PaintTablesUI = ({
   setCurrentPaint = () => {},
   currentPaint,
   title,
-  isLoading,
+  isLoading = false,
   headColumns = [],
   bodyColumns,
   deleteFn,
@@ -63,11 +63,10 @@ export const PaintTablesUI = ({
     <div className="relative">
       <CNewTable
         title={title}
-        key={headColumns.length}
         headColumns={headColumns}
         defaultFilters={defaultFilters}
-        currentIdRow={currentPaint.index || 1}
-        idForTable="paint_table_inner"
+        currentIdRow={currentPaint?.index ? currentPaint.index : undefined}
+        idForTable={`paint_table_inner_${title}`}
         innerTable={true}
         handleActions={(obj: any, status: string) => {
           if (status === "modal") {

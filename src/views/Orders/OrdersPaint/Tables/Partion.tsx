@@ -4,7 +4,6 @@ import { MaterialTableLogic } from "./Logic";
 import { MaterialForm } from "../Modal/Forms/MaterialForm";
 import { MaterialModal } from "./RezervedMaterial/MaterialModal";
 import CNewMiniModal from "../../../../components/CElements/CNewMiniModal";
-import CNewModal from "../../../../components/CElements/CNewModal";
 
 export const PartianTable = ({
   handleActionsTable,
@@ -60,7 +59,6 @@ export const PartianTable = ({
     <>
       <CNewTable
         title="rezerv"
-        key={headColumns.length ? "isloading" : "iscame"}
         idForTable="partiya_table_inner"
         headColumns={headColumns}
         handleActions={(obj: any, status: string) => {

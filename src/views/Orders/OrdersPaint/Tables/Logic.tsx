@@ -10,8 +10,10 @@ export const MaterialTableLogic = ({ filterParams }: { filterParams: any }) => {
   const { t } = useTranslationHook();
   const [headColumns, setHeadColumns] = useState([]);
   const [bodyData, setBodyData]: any = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchList = async (filters: any) => {
+    setIsLoading(true);
     const response = await axios.get(
       `${API_URL}/boyasiparisrezerv/?skip=${
         filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
@@ -19,14 +21,11 @@ export const MaterialTableLogic = ({ filterParams }: { filterParams: any }) => {
         filters.q ? "&" + filters.q : ""
       }&BOYASIPARISDETAYID=${filters.BOYASIPARISDETAYID}`
     );
+    setIsLoading(false);
     return response.data;
   };
 
-  const {
-    data: listData,
-    isLoading,
-    refetch,
-  } = useQuery(
+  const { data: listData, refetch } = useQuery(
     ["GET_REZERVE_LIST", filterParams],
     () => fetchList(filterParams),
     {
@@ -34,6 +33,13 @@ export const MaterialTableLogic = ({ filterParams }: { filterParams: any }) => {
       enabled: !!filterParams?.BOYASIPARISDETAYID,
     }
   );
+
+  useEffect(() => {
+    if (!filterParams?.BOYASIPARISDETAYID) {
+      setIsLoading(false);
+    }
+  }, [filterParams]);
+
   useEffect(() => {
     if (listData) {
       setBodyData(listData);
@@ -98,8 +104,10 @@ export const PaintTableLogic = ({ filterParams }: { filterParams: any }) => {
   const { t } = useTranslationHook();
   const [headColumns, setHeadColumns] = useState([]);
   const [bodyData, setBodyData]: any = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchList = async (filters: any) => {
+    setIsLoading(true);
     const response = await axios.get(
       `${API_URL}/boyasiparisdetay/?skip=${
         filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
@@ -107,14 +115,11 @@ export const PaintTableLogic = ({ filterParams }: { filterParams: any }) => {
         filters.q ? "&" + filters.q : ""
       }&BOYASIPARISKAYITID=${filters.BOYASIPARISKAYITID}`
     );
+    setIsLoading(false);
     return response.data;
   };
 
-  const {
-    data: listData,
-    isLoading,
-    refetch,
-  } = useQuery(
+  const { data: listData, refetch } = useQuery(
     ["GET_PAINT_TABLE", filterParams],
     () => fetchList(filterParams),
     {
@@ -122,6 +127,13 @@ export const PaintTableLogic = ({ filterParams }: { filterParams: any }) => {
       enabled: !!filterParams?.BOYASIPARISKAYITID,
     }
   );
+
+  useEffect(() => {
+    if (!filterParams?.BOYASIPARISKAYITID) {
+      setIsLoading(false);
+    }
+  }, [filterParams]);
+
   useEffect(() => {
     if (listData) {
       setBodyData(listData);
@@ -182,7 +194,7 @@ export const PaintTableLogic = ({ filterParams }: { filterParams: any }) => {
 
   return {
     bodyData,
-    isLoading,
+    isLoading: isLoading,
     refetch,
     headColumns,
     bodyColumns: bodyData?.data ?? [],

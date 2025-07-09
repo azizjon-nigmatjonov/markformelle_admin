@@ -155,24 +155,26 @@ export const DragHeader = ({
         </Tooltip>
 
         <Tooltip title="Сохранить изменения" placement="bottom">
-          <div>
-            <button
-              onClick={() => {
-                if (editStep && changed) setSaveData(true);
-              }}
-              disabled={!editStep && !changed}
-              type="button"
-              className={`flex items-center space-x-2 ${
-                editStep && changed ? "text-[var(--main)]" : "disabled"
-              }`}
-            >
-              <SaveIcon
-                width={20}
-                fill={editStep && changed ? "var(--main)" : "var(--gray)"}
-              />
-              <span className="text-[var(--black)]">{t("save")}</span>
-            </button>
-          </div>
+          <span>
+            <div>
+              <button
+                onClick={() => {
+                  if (editStep && changed) setSaveData(true);
+                }}
+                disabled={!editStep && !changed}
+                type="button"
+                className={`flex items-center space-x-2 ${
+                  editStep && changed ? "text-[var(--main)]" : "disabled"
+                }`}
+              >
+                <SaveIcon
+                  width={20}
+                  fill={editStep && changed ? "var(--main)" : "var(--gray)"}
+                />
+                <span className="text-[var(--black)]">{t("save")}</span>
+              </button>
+            </div>
+          </span>
         </Tooltip>
       </div>
     </div>

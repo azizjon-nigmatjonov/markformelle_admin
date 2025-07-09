@@ -417,7 +417,7 @@ export const ModalUIRecipe = ({
                 </div>
               </div>
             </div>
-            <div className="h-[500px] overflow-y-scroll designed-scroll w-full">
+            <div className="h-[650px] overflow-y-scroll designed-scroll w-full">
               <LabModalTables
                 changed={changed}
                 setChanged={setChanged}

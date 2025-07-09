@@ -24,7 +24,9 @@ i18next
     // Prevent multiple simultaneous requests
     partialBundledLanguages: true,
     backend: {
-      loadPath: `${import.meta.env.VITE_TEST_URL}/translation/language/{{lng}}?limit=1000`,
+      loadPath: `${
+        import.meta.env.VITE_TEST_URL
+      }/translation/language/{{lng}}?limit=1000`,
       request: async (options, url, payload, callback) => {
         const urlParts = url.split("/");
         const langFromUrl = urlParts[urlParts.length - 1]?.split("?")[0];
@@ -48,8 +50,11 @@ i18next
           });
         } catch (err) {
           // Use static translations when backend is not available
-          const fallbackLang = currentLang?.includes("US") ? "ru" : currentLang || "ru";
-          const staticTranslations = allTranslations[fallbackLang] || allTranslations.ru;
+          const fallbackLang = currentLang?.includes("US")
+            ? "ru"
+            : currentLang || "ru";
+          const staticTranslations =
+            allTranslations[fallbackLang] || allTranslations.ru;
 
           callback(null, {
             data: staticTranslations,

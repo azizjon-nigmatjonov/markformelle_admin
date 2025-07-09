@@ -1,5 +1,5 @@
 import PaintSection from "../../views/Paint/Fabric";
-import { PartyOrders } from "../../views/Paint/Orders";
+import { PartyAsamalar } from "../../views/Parties/Orders";
 import PaintSectionYarn from "../../views/Paint/Yarn";
 
 export const paintSection = [
@@ -28,9 +28,9 @@ export const paintSection = [
     parent: "dying",
     link: "party-stage",
     sidebar: true,
-    title: "parti",
+    title: "Parti asamalari",
     icon: "/images/documents.webp",
-    element: <PartyOrders />,
+    element: <PartyAsamalar />,
     auth: true,
     permissions: ["view_page", "delete", "edit", "add"],
   },

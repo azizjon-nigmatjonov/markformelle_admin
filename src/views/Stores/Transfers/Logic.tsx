@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import useCQuery from "../../../hooks/useCQuery";
+import { useQuery } from "react-query";
 const API_URL = import.meta.env.VITE_TEST_URL;
 export const breadCrumbs = [
   { label: "Внутреннее примешенные", link: "/chemical_store/transfers" },
@@ -11,33 +12,37 @@ export const TableData = ({ filterParams }: { filterParams: any }) => {
   const [headColumns, setHeadColumns] = useState<
     { title: string; id: string }[]
   >([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [bodyData, setBodyData] = useState<{ data: any[]; count: number }>({
     data: [],
     count: 0,
   });
 
-  const getList = async (filters: any) => {
-    if (!filters?.page) return;
-    setIsLoading(true);
-    try {
-      const { data } = await axios.get(
-        `${API_URL}/irsaliye/?skip=${
-          filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
-        }&limit=${filters.perPage}&HAREKETTIPI=5${
-          filters?.DATE_FROM
-            ? `&DATE_FROM=${filters.DATE_FROM}&DATE_TO=${filters.DATE_TO}`
-            : ""
-        }${filters?.q ? "&" + filters?.q : ""}`
-      );
-      setBodyData(data);
-    } finally {
-      setIsLoading(false);
-    }
+  const fetchList = async (filters: any) => {
+    const response = await axios.get(
+      `${API_URL}/irsaliye/?skip=${
+        filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
+      }&limit=${filters.perPage}&HAREKETTIPI=5${
+        filters?.DATE_FROM
+          ? `&DATE_FROM=${filters.DATE_FROM}&DATE_TO=${filters.DATE_TO}`
+          : ""
+      }${filters?.q ? "&" + filters?.q : ""}`
+    );
+    return response.data;
   };
 
+  const {
+    data,
+    refetch,
+    isLoading: isLoadingList,
+  } = useQuery(
+    ["GET_TRANSFERS_LIST", filterParams],
+    () => fetchList(filterParams),
+    {
+      keepPreviousData: true,
+    }
+  );
+
   const deleteFn = async (id: [string]) => {
-    setIsLoading(true);
     try {
       await axios.delete(`${API_URL}/irsaliye/`, {
         method: "DELETE",
@@ -49,17 +54,15 @@ export const TableData = ({ filterParams }: { filterParams: any }) => {
         data: id,
       });
       toast.success("Muvaffaqiyatli amalga oshirildi!");
-      getList(filterParams);
+      refetch();
     } catch (error) {
       toast.error("O'chirib bo'lmaydi");
-    } finally {
-      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    getList(filterParams);
-  }, [filterParams]);
+    if (data) setBodyData(data);
+  }, [data]);
 
   useEffect(() => {
     if (!bodyData?.data?.length) return;
@@ -70,11 +73,11 @@ export const TableData = ({ filterParams }: { filterParams: any }) => {
   return {
     headColumns,
     bodyColumns: bodyData?.data ?? [],
-    isLoading,
+    isLoading: isLoadingList,
     defaultData: {},
     bodyData,
+    getList: refetch,
     setBodyData,
-    getList,
     deleteFn,
   };
 };

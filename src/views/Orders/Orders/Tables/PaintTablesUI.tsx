@@ -63,7 +63,7 @@ export const PaintTablesUI = ({
         key={headColumns.length}
         headColumns={headColumns}
         defaultFilters={defaultFilters}
-        currentIdRow={currentPaint?.index || 1}
+        currentIdRow={currentPaint?.index ? currentPaint.index : undefined}
         idForTable="paint_table_inner"
         innerTable={true}
         handleActions={(obj: any, status: string) => {

@@ -242,7 +242,7 @@ export const Transfers = () => {
       {open && (
         <ModalUI
           defaultData={modalInitialData}
-          getList={() => getList(filterParams)}
+          getList={() => getList()}
           irsaliyaNo={bodyColumns?.[0]?.IRSALIYEID || 9000}
           handleActionsModal={handleActionsModal}
         />

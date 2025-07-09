@@ -8,6 +8,7 @@ import { DragHeader } from "./Components/DragHeader";
 import ConfirmationModal from "../../../../../components/CElements/CConfirmationModal";
 import dayjs from "dayjs";
 import { FormLogic } from "./Components/FormLogic";
+import { OneSkeleton } from "../../../../../components/CElements/CSkeleton/OneSkeleton";
 const API_URL = import.meta.env.VITE_TEST_URL;
 interface Props {
   open: string[];
@@ -216,6 +217,10 @@ export const DragDrop = memo(
       setCheckedList([]);
     }, [items, setItems]);
 
+    useEffect(() => {
+      setFocusedIndex(items?.[0]?.rows?.[0]?.index ?? 0);
+    }, [items]);
+
     const { deleteForm } = FormLogic({
       refetchTable: () => {
         refetchTable();
@@ -322,6 +327,13 @@ export const DragDrop = memo(
       setOpen,
     ]);
 
+    if (isLoading && !items.length)
+      return (
+        <div>
+          <OneSkeleton height={500} />
+        </div>
+      );
+
     return (
       <div className="cdraganddrop text-sm">
         <DragHeader
@@ -355,7 +367,6 @@ export const DragDrop = memo(
           setDeleteCard={setDeleteCard}
           deleteCardActive={deleteCardActive}
           setCurrentSellect={setCurrentSellect}
-          isLoading={isLoading}
           askAction={askAction}
           setAskAction={setAskAction}
           setFocusedIndex={setFocusedIndex}

@@ -81,7 +81,7 @@ export const PaintTablesUI = ({
           }}
           height="180px"
           title="Boya Siparis Detay Girisi"
-          currentPaint={currentPaint}
+          currentPaint={{ ...currentPaint, index: currentPaint?.index || 1 }}
           setCurrentPaint={setCurrentPaint}
           isLoading={isLoading}
           headColumns={headColumns}
@@ -95,7 +95,6 @@ export const PaintTablesUI = ({
             "delete",
             "excel_download",
             "excel_upload",
-            "filter",
             "active_menu",
             "actions",
             "sellect_more",

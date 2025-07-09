@@ -74,6 +74,12 @@ export const PaintTablesUI = ({
     handleActionsTable(obj, status, "paint");
   };
 
+  useEffect(() => {
+    if (bodyColumns.length > 0) {
+      setCurrentPaint(bodyColumns[0]);
+    }
+  }, [bodyColumns.length]);
+
   return (
     <>
       <PaintTable
@@ -91,7 +97,7 @@ export const PaintTablesUI = ({
           "actions",
           "sellect_more",
         ]}
-        currentPaint={currentPaint}
+        currentPaint={{ ...currentPaint, index: currentPaint?.index || 1 }}
         setCurrentPaint={setCurrentPaint}
         isLoading={isLoading}
         headColumns={headColumns}

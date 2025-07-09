@@ -1,5 +1,5 @@
 import { ModalUIRecipe } from "./Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { breadCrumbs, TableData } from "./Logic";
 import CBreadcrumbs from "../../../components/CElements/CBreadcrumbs";
 import { Header } from "../../../components/UI/Header";
@@ -19,7 +19,7 @@ export const RecipeList = () => {
     perPage: 50,
   });
   const [modalInitialData, setModalInitialData] = useState<any>({});
-  const { bodyColumns, isLoading, bodyData, deleteFn } = TableData({
+  const { bodyColumns, isLoading, bodyData, deleteFn, refetch } = TableData({
     filterParams,
   });
 
@@ -38,6 +38,10 @@ export const RecipeList = () => {
     bodyColumns,
     predefinedColumns,
   });
+
+  useEffect(() => {
+    refetch();
+  }, [open]);
 
   const handleActions = (el: any, status: string) => {
     if (status === "modal") {

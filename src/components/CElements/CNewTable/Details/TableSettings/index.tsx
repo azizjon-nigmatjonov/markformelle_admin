@@ -281,101 +281,111 @@ export const HeaderSettings = ({
           <div className="space-x-4 flex items-center">
             {defaultFilters.includes("add") && (
               <Tooltip title="Нажмите, чтобы добавить строку" placement="top">
-                <IconButton
-                  onClick={() => tableActions({}, "modal")}
-                  disabled={disabled}
-                >
-                  <div className="w-[30px] h-[30px] items-center justify-center flex">
-                    <PlusIcon fill={colorMain} width={innerTable ? 16 : 20} />
-                  </div>
-                  <p
-                    className={`${
-                      innerTable ? "text-[11px]" : "text-[11px]"
-                    } pr-2 ${
-                      disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
-                    }`}
+                <span>
+                  <IconButton
+                    onClick={() => tableActions({}, "modal")}
+                    disabled={disabled}
                   >
-                    {t("add")}
-                  </p>
-                </IconButton>
+                    <div className="w-[30px] h-[30px] items-center justify-center flex">
+                      <PlusIcon fill={colorMain} width={innerTable ? 16 : 20} />
+                    </div>
+                    <p
+                      className={`${
+                        innerTable ? "text-[11px]" : "text-[11px]"
+                      } pr-2 ${
+                        disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
+                      }`}
+                    >
+                      {t("add")}
+                    </p>
+                  </IconButton>
+                </span>
               </Tooltip>
             )}
             {defaultFilters.includes("sellect_more") && (
               <Tooltip title="Нажмите, чтобы выбрать строки" placement="top">
-                <IconButton
-                  onClick={() => tableActions({}, "sellect_more_active")}
-                  disabled={disabled}
-                >
-                  <div className="w-[30px] h-[30px] items-center justify-center flex">
-                    {openSelect ? (
-                      <UncheckMultipleIcon
-                        width={innerTable ? 16 : 20}
-                        fill="var(--main)"
-                      />
-                    ) : (
-                      <CheckMultipleIcon
-                        width={innerTable ? 16 : 20}
-                        fill={disabled ? "var(--gray)" : "var(--main)"}
-                      />
-                    )}
-                  </div>
-                  <p
-                    className={`${
-                      innerTable ? "text-[11px]" : "text-sm"
-                    } pr-2 ${
-                      selectedItems.length
-                        ? "text-[var(--main)]"
-                        : `${
-                            disabled
-                              ? "text-[var(--gray)]"
-                              : "text-[var(--black)]"
-                          }`
-                    }`}
-                  >
-                    {t(openSelect ? "cancel" : "sellect_columns")}
-                  </p>
-                </IconButton>
-              </Tooltip>
-            )}
-            {defaultFilters.includes("delete") && (
-              <Tooltip title="Выберите строки для удаления" placement="top">
-                <div className="relative">
+                <span>
                   <IconButton
-                    onClick={() => {
-                      if (selectedItems.length) setOpenDelete(true);
-                    }}
+                    onClick={() => tableActions({}, "sellect_more_active")}
                     disabled={disabled}
                   >
                     <div className="w-[30px] h-[30px] items-center justify-center flex">
-                      <DeleteIcon
-                        fill={
-                          selectedItems?.length ? "var(--main)" : "var(--gray)"
-                        }
-                        width={innerTable ? 16 : 18}
-                      />
+                      {openSelect ? (
+                        <UncheckMultipleIcon
+                          width={innerTable ? 16 : 20}
+                          fill="var(--main)"
+                        />
+                      ) : (
+                        <CheckMultipleIcon
+                          width={innerTable ? 16 : 20}
+                          fill={disabled ? "var(--gray)" : "var(--main)"}
+                        />
+                      )}
                     </div>
                     <p
                       className={`${
                         innerTable ? "text-[11px]" : "text-sm"
                       } pr-2 ${
-                        disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
+                        selectedItems.length
+                          ? "text-[var(--main)]"
+                          : `${
+                              disabled
+                                ? "text-[var(--gray)]"
+                                : "text-[var(--black)]"
+                            }`
                       }`}
                     >
-                      {t("delete")}
+                      {t(openSelect ? "cancel" : "sellect_columns")}
                     </p>
                   </IconButton>
+                </span>
+              </Tooltip>
+            )}
+            {defaultFilters.includes("delete") && (
+              <Tooltip title="Выберите строки для удаления" placement="top">
+                <span>
+                  <div className="relative">
+                    <IconButton
+                      onClick={() => {
+                        if (selectedItems.length) setOpenDelete(true);
+                      }}
+                      disabled={disabled}
+                    >
+                      <div className="w-[30px] h-[30px] items-center justify-center flex">
+                        <DeleteIcon
+                          fill={
+                            selectedItems?.length
+                              ? "var(--main)"
+                              : "var(--gray)"
+                          }
+                          width={innerTable ? 16 : 18}
+                        />
+                      </div>
+                      <p
+                        className={`${
+                          innerTable ? "text-[11px]" : "text-sm"
+                        } pr-2 ${
+                          disabled
+                            ? "text-[var(--gray)]"
+                            : "text-[var(--black)]"
+                        }`}
+                      >
+                        {t("delete")}
+                      </p>
+                    </IconButton>
 
-                  {openDelete && (
-                    <div className="absolute top-full shadow-2xl border border-[var(--gray30)] w-[300px] z-[99] bg-white rounded-[8px]">
-                      <PopoverDelete
-                        closePopover={(status) => {
-                          setOpenDelete(false);
-                          if (status) tableActions({}, "delete_multiple");
-                        }}
-                      />
-                    </div>
-                  )}
-                </div>
+                    {openDelete && (
+                      <div className="absolute top-full shadow-2xl border border-[var(--gray30)] w-[300px] z-[99] bg-white rounded-[8px]">
+                        <PopoverDelete
+                          closePopover={(status) => {
+                            setOpenDelete(false);
+                            if (status) tableActions({}, "delete_multiple");
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </span>
               </Tooltip>
             )}
           </div>
@@ -384,48 +394,52 @@ export const HeaderSettings = ({
         <div className="flex items-center space-x-2 h-full">
           {defaultFilters.includes("add") && (
             <Tooltip title="Нажмите, чтобы перейти к переводам" placement="top">
-              <IconButton
-                onClick={() => tableActions({}, "translation")}
-                disabled={disabled}
-              >
-                <div
-                  className={`h-[30px] w-[30px] flex items-center justify-center`}
+              <span>
+                <IconButton
+                  onClick={() => tableActions({}, "translation")}
+                  disabled={disabled}
                 >
-                  <svg
-                    width={innerTable ? 18 : 24}
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill={colorMain}
+                  <div
+                    className={`h-[30px] w-[30px] flex items-center justify-center`}
                   >
-                    <path d="M5 15V17C5 18.0544 5.81588 18.9182 6.85074 18.9945L7 19H10V21H7C4.79086 21 3 19.2091 3 17V15H5ZM18 10L22.4 21H20.245L19.044 18H14.954L13.755 21H11.601L16 10H18ZM17 12.8852L15.753 16H18.245L17 12.8852ZM8 2V4H12V11H8V14H6V11H2V4H6V2H8ZM17 3C19.2091 3 21 4.79086 21 7V9H19V7C19 5.89543 18.1046 5 17 5H14V3H17ZM6 6H4V9H6V6ZM10 6H8V9H10V6Z"></path>
-                  </svg>
-                </div>
-              </IconButton>
+                    <svg
+                      width={innerTable ? 18 : 24}
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill={colorMain}
+                    >
+                      <path d="M5 15V17C5 18.0544 5.81588 18.9182 6.85074 18.9945L7 19H10V21H7C4.79086 21 3 19.2091 3 17V15H5ZM18 10L22.4 21H20.245L19.044 18H14.954L13.755 21H11.601L16 10H18ZM17 12.8852L15.753 16H18.245L17 12.8852ZM8 2V4H12V11H8V14H6V11H2V4H6V2H8ZM17 3C19.2091 3 21 4.79086 21 7V9H19V7C19 5.89543 18.1046 5 17 5H14V3H17ZM6 6H4V9H6V6ZM10 6H8V9H10V6Z"></path>
+                    </svg>
+                  </div>
+                </IconButton>
+              </span>
             </Tooltip>
           )}
           {defaultFilters.includes("filter") && (
             <Tooltip title="Активный фильтр" placement="top">
-              <IconButton
-                onClick={() => tableActions({}, "sidefilter")}
-                disabled={disabled}
-              >
-                <div
-                  className={`h-[30px] w-[30px] flex items-center justify-center`}
+              <span>
+                <IconButton
+                  onClick={() => tableActions({}, "sidefilter")}
+                  disabled={disabled}
                 >
-                  <Badge badgeContent={sortData?.length} color="secondary">
-                    <FilterIcon
-                      fill={
-                        disabled
-                          ? "var(--gray)"
-                          : sideFilter
-                          ? "var(--primary)"
-                          : "var(--main)"
-                      }
-                      width={innerTable ? 18 : 24}
-                    />
-                  </Badge>
-                </div>
-              </IconButton>
+                  <div
+                    className={`h-[30px] w-[30px] flex items-center justify-center`}
+                  >
+                    <Badge badgeContent={sortData?.length} color="secondary">
+                      <FilterIcon
+                        fill={
+                          disabled
+                            ? "var(--gray)"
+                            : sideFilter
+                            ? "var(--primary)"
+                            : "var(--main)"
+                        }
+                        width={innerTable ? 18 : 24}
+                      />
+                    </Badge>
+                  </div>
+                </IconButton>
+              </span>
             </Tooltip>
           )}
 
@@ -455,38 +469,40 @@ export const HeaderSettings = ({
               placement="left"
               slotProps={TooltipPosition}
             >
-              <div className="relative">
-                <div
-                  onClick={() => (disabled ? {} : setOpen(true))}
-                  className="relative"
-                  ref={anchorRef}
-                >
-                  <IconButton disabled={disabled}>
-                    <div
-                      className={`w-[30px] h-[30px] rounded-[8px] items-center justify-center flex`}
-                    >
-                      <ListDotIcon
-                        fill={
-                          disabled
-                            ? "var(--gray)"
-                            : open
-                            ? "var(--primary)"
-                            : "var(--main)"
-                        }
-                        width={innerTable ? 18 : 20}
-                      />
-                    </div>
-                  </IconButton>
+              <span>
+                <div className="relative">
+                  <div
+                    onClick={() => (disabled ? {} : setOpen(true))}
+                    className="relative"
+                    ref={anchorRef}
+                  >
+                    <IconButton disabled={disabled}>
+                      <div
+                        className={`w-[30px] h-[30px] rounded-[8px] items-center justify-center flex`}
+                      >
+                        <ListDotIcon
+                          fill={
+                            disabled
+                              ? "var(--gray)"
+                              : open
+                              ? "var(--primary)"
+                              : "var(--main)"
+                          }
+                          width={innerTable ? 18 : 20}
+                        />
+                      </div>
+                    </IconButton>
+                  </div>
+                  <SettingDropdown
+                    open={open}
+                    anchor={anchorRef.current}
+                    menuList={menuList}
+                    allCheck={allCheck}
+                    handleFilterSave={handleFilterSave}
+                    onClose={() => setOpen(false)}
+                  />
                 </div>
-                <SettingDropdown
-                  open={open}
-                  anchor={anchorRef.current}
-                  menuList={menuList}
-                  allCheck={allCheck}
-                  handleFilterSave={handleFilterSave}
-                  onClose={() => setOpen(false)}
-                />
-              </div>
+              </span>
             </Tooltip>
           )}
           {extra}

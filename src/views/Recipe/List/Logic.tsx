@@ -37,7 +37,6 @@ export const TableData = ({
     () => fetchList(filterParams),
     {
       keepPreviousData: true,
-      enabled: !!filterParams?.page,
     }
   );
 
@@ -97,5 +96,6 @@ export const TableData = ({
     bodyData,
     setBodyData,
     deleteFn,
+    refetch,
   };
 };

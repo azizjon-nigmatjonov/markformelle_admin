@@ -119,7 +119,7 @@ export const SideFilter = ({
   return (
     <div
       className={`bg-white relative duration-200  ${
-        sideFilter ? "w-[240px]" : "w-0 -ml-5"
+        sideFilter ? "w-[240px]" : "w-0"
       }`}
     >
       {sideFilter && (

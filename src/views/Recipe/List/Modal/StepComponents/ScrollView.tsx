@@ -15,7 +15,6 @@ interface Props {
   handleDropSteps: (innerIndex: number, outerIndex: number) => void;
   handleDragLeaveStep: () => void;
   setInitialModalData: (data: any) => void;
-  handleAdd: (ind: number, outInd: number, item: any) => void;
   setMaxScroll: (val: number) => void;
   setCurrentScroll: (val: number) => void;
   headerScrollRef: React.RefObject<HTMLDivElement>;
@@ -28,6 +27,7 @@ interface Props {
   handleKeyDown: (val: any, index: number) => void;
   stepRef: any;
   setFocusedIndex: (val: number) => void;
+  handleAddCard: () => void;
 }
 
 const ScrollView = ({
@@ -43,7 +43,6 @@ const ScrollView = ({
   handleDropSteps,
   handleDragLeaveStep,
   setInitialModalData,
-  handleAdd,
   currentScroll,
   setCurrentScroll = () => {},
   headerScrollRef,
@@ -56,6 +55,7 @@ const ScrollView = ({
   handleKeyDown,
   stepRef,
   setFocusedIndex,
+  handleAddCard = () => {},
 }: Props) => {
   const ScrollBody = useRef<HTMLDivElement>(null);
 
@@ -118,7 +118,6 @@ const ScrollView = ({
             outerIndex={outerIndex}
             draggingIndexStep={draggingIndexStep}
             handleDragLeaveStep={handleDragLeaveStep}
-            handleAdd={handleAdd}
             deleteStep={deleteStep}
             focusedIndex={focusedIndex}
             handleKeyDown={handleKeyDown}
@@ -126,6 +125,7 @@ const ScrollView = ({
             stepRef={stepRef}
             setFocusedIndex={setFocusedIndex}
             headerScrollRef={headerScrollRef}
+            handleAddCard={handleAddCard}
           />
         </div>
       </div>

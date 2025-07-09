@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useQuery } from "react-query";
 const API_URL = import.meta.env.VITE_TEST_URL;
 
 export const breadCrumbs = [
@@ -14,24 +15,29 @@ export const TableData = ({
   setOpen?: (val: boolean) => void;
 }) => {
   const [headColumns, setHeadColumns] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [bodyData, setBodyData]: any = useState({});
 
-  const getList = (filters: any) => {
-    setIsLoading(true);
-    axios
-      .get(
-        `${API_URL}/urun/?skip=${
-          filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
-        }&limit=${filters.perPage}${filters.q ? "&" + filters.q : ""}`
-      )
-      .then((res) => {
-        setBodyData(res.data);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+  const fetchList = async (filters: any) => {
+    const response = await axios.get(
+      `${API_URL}/urun/?skip=${
+        filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
+      }&limit=${filters.perPage}${filters.q ? "&" + filters.q : ""}`
+    );
+
+    return response.data;
   };
+
+  const { data, refetch, isLoading } = useQuery(
+    ["GET_ERITMA_LIST", filterParams],
+    () => fetchList(filterParams),
+    {
+      keepPreviousData: true,
+    }
+  );
+
+  useEffect(() => {
+    if (data) setBodyData(data);
+  }, [data]);
 
   const deleteFn = async (id: string[]) => {
     try {
@@ -44,17 +50,13 @@ export const TableData = ({
         },
         data: id,
       });
-      getList(filterParams);
+      refetch();
       toast.success("Muvaffaqiyatli amalga oshirildi!");
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
       return null;
     }
   };
-
-  useEffect(() => {
-    getList(filterParams);
-  }, [filterParams]);
 
   useEffect(() => {
     const headColumns: any = [];
@@ -81,7 +83,6 @@ export const TableData = ({
 
   return {
     headColumns,
-
     bodyColumns: bodyData?.data ?? [],
     isLoading,
     defaultData: {},

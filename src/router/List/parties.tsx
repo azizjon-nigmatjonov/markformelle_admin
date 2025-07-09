@@ -1,4 +1,6 @@
-import { PartyOrders } from "../../views/Paint/Orders";
+import { PartyAsamalar } from "../../views/Parties/Orders";
+import { PartiTanitimi } from "../../views/Parties/PartiTanitimi";
+import { PartyProcess } from "../../views/Parties/PartyProcess";
 
 export const partiesList = [
   {
@@ -7,8 +9,8 @@ export const partiesList = [
     sidebar: true,
     title: "Parti Tanitimi",
     parent_icon: "/images/catalogue.png",
-    icon: "/images/documents.webp",
-    element: <PartyOrders />,
+    icon: "/images/plus.png",
+    element: <PartiTanitimi />,
     auth: true,
     permissions: ["view_page", "delete", "edit", "add"],
   },
@@ -18,7 +20,7 @@ export const partiesList = [
     sidebar: true,
     title: "Parti Asamalari",
     icon: "/images/documents.webp",
-    element: <PartyOrders />,
+    element: <PartyAsamalar />,
     auth: true,
     permissions: ["view_page", "delete", "edit", "add"],
   },
@@ -28,7 +30,7 @@ export const partiesList = [
     sidebar: true,
     title: "Parti Harakatlari",
     icon: "/images/documents.webp",
-    element: <PartyOrders />,
+    element: <PartyProcess />,
     auth: true,
     permissions: ["view_page", "delete", "edit", "add"],
   },
