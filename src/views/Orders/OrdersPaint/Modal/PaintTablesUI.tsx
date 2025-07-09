@@ -25,6 +25,7 @@ export const PaintTablesUI = ({
   setCurrentPaint: (obj: any) => void;
   currentMaterial: any;
 }) => {
+  const [openParty, setOpenParty] = useState(false);
   const [filterParams, setFilterParams]: any = useState({
     page: 1,
     perPage: 50,
@@ -73,7 +74,7 @@ export const PaintTablesUI = ({
 
   return (
     <>
-      <div className="space-y-3">
+      <div className="space-y-5">
         <PaintTable
           handleActionsTable={(obj: any, status: string) => {
             handlePaintActionsPaint(obj, status);
@@ -164,7 +165,7 @@ export const PaintTablesUI = ({
           uniqueID={uniqueID}
         />
       )}
-      <PartiCreate />
+      {openParty && <PartiCreate onClose={() => setOpenParty(false)} />}
     </>
   );
 };

@@ -96,7 +96,7 @@ export const PartyOrders = () => {
 
       {open && (
         <CNewModal
-          title="Party Orders"
+          title="Parti Asamalari"
           disabled="big"
           handleActions={modalActionsFn}
           defaultData={modalInitialData}

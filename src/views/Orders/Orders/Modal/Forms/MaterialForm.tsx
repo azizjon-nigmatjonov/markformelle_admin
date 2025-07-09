@@ -42,7 +42,9 @@ export const MaterialForm = ({
   refetch,
 }: MaterialFormProps) => {
   const [formId, setFormId] = useState(0);
-  const [currentKalite, setCurrentKalite] = useState<KaliteParams>({} as KaliteParams);
+  const [currentKalite, setCurrentKalite] = useState<KaliteParams>(
+    {} as KaliteParams
+  );
   const { control, setValue, handleSubmit } = useForm({
     mode: "onSubmit",
     resolver: yupResolver(Validation),
@@ -53,11 +55,11 @@ export const MaterialForm = ({
       FEINE: 0,
       PUS: 0,
       TUPACIKENMAYLI: 0,
-      IPLIKBOYU1: '',
+      IPLIKBOYU1: "",
       MIKTARGUN: 0,
       MUSTERISIPARISNO: "",
       SIPARISPROSESID: "",
-    }
+    },
   });
 
   const { formData, createForm, updateForm } = MaterialFormLogic({
@@ -149,11 +151,11 @@ export const MaterialForm = ({
     setValue("KALITEID", obj.KALITEID);
     setValue("FEINE", obj.FEINE || 0);
     setValue("PUS", obj.PUS || 0);
-    setValue('HAMMIKTAR', obj.MIKTARGUN || 0)
+    setValue("HAMMIKTAR", obj.MIKTARGUN || 0);
     // setValue('IPLIKBOYU1', obj.IPLIKBOYU1 || '')
-    setValue('MAKINAUSTUGRAMAJ', obj.MAKINAUSTUGRAMAJ || 0)
-    setValue('DOVIZID', obj.DOVIZID || 'USD')
-    setRadioValue(obj.TUPACIKENMAYLI || 0)
+    setValue("MAKINAUSTUGRAMAJ", obj.MAKINAUSTUGRAMAJ || 0);
+    setValue("DOVIZID", obj.DOVIZID || "USD");
+    setRadioValue(obj.TUPACIKENMAYLI || 0);
     setCurrentKalite(obj);
   };
 
@@ -232,7 +234,9 @@ export const MaterialForm = ({
               width: 300,
             },
           ]}
-          defaultFilters={currentKalite?.HAMID ? `HAMID=${currentKalite?.HAMID}` : ''}
+          defaultFilters={
+            currentKalite?.HAMID ? `HAMID=${currentKalite?.HAMID}` : ""
+          }
           defaultValue={
             formData?.HAMID && formData?.HAMADI
               ? formData?.HAMID + " - " + formData?.HAMADI

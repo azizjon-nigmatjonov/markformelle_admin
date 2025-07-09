@@ -120,18 +120,6 @@ export const PartyTransfers = ({ defaultData }: { defaultData: any }) => {
 
         <div className="space-y-3 overflow-y-scroll designed-scroll">
           <RezervTable PARTIKAYITID={defaultData?.PARTIKAYITID} />
-          {/*  <CNewTable
-        title="Siparise Alt am Stoklan ilave islemleri"
-        headColumns={[]}
-        innerTable={true}
-        bodyColumns={[]}
-        handleActions={() => {}}
-        isLoading={false}
-        autoHeight="140px"
-        disablePagination={true}
-        handleFilterParams={() => {}}
-        filterParams={{}}
-      /> */}
         </div>
       </div>
 

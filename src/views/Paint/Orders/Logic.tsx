@@ -1,6 +1,6 @@
 export const breadCrumbs = [
   {
-    label: "Party Orders",
+    label: "Parti Asamalari",
     link: "/paint/orders",
   },
 ];

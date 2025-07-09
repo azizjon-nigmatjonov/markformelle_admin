@@ -2,6 +2,9 @@ import CNewTable from "../../../../components/CElements/CNewTable";
 import { useEffect, useState } from "react";
 import { MaterialTableLogic } from "./Logic";
 import { MaterialForm } from "../Modal/Forms/MaterialForm";
+import { MaterialModal } from "./RezervedMaterial/MaterialModal";
+import CNewMiniModal from "../../../../components/CElements/CNewMiniModal";
+import CNewModal from "../../../../components/CElements/CNewModal";
 
 export const PartianTable = ({
   handleActionsTable,
@@ -18,6 +21,7 @@ export const PartianTable = ({
   currentPaint: any;
   defaultFilters?: string[];
 }) => {
+  const [openAddRezerv, setOpenAddRezerv] = useState(false);
   const [filterParams, setFilterParams]: any = useState({
     page: 1,
     perPage: 50,
@@ -37,6 +41,9 @@ export const PartianTable = ({
   }, [currentPaint]);
 
   const handleActions = (el: any, status: string) => {
+    if (status === "modal") {
+      setOpenAddRezerv(true);
+    }
     if (status === "delete") {
       deleteFn([el.ORMESIPARISDETAYID]);
     }
@@ -52,12 +59,12 @@ export const PartianTable = ({
   return (
     <>
       <CNewTable
-        title="Partiye"
+        title="rezerv"
         key={headColumns.length ? "isloading" : "iscame"}
         idForTable="partiya_table_inner"
         headColumns={headColumns}
         handleActions={(obj: any, status: string) => {
-          handleActionsTable(obj, status, "material");
+          // handleActionsTable(obj, status, "material");
           handleActions(obj, status);
         }}
         defaultFilters={defaultFilters}
@@ -81,6 +88,14 @@ export const PartianTable = ({
           uniqueID={uniqueID}
           parentId={formId ?? 0}
         />
+      )}
+      {openAddRezerv && (
+        <CNewMiniModal
+          title="Rezerve Icin Siparis Ham Stok Listesi"
+          handleActions={() => setOpenAddRezerv(false)}
+        >
+          <MaterialModal />
+        </CNewMiniModal>
       )}
     </>
   );
