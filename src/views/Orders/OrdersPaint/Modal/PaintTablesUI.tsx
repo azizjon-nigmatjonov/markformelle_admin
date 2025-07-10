@@ -25,6 +25,8 @@ export const PaintTablesUI = ({
   setCurrentPaint: (obj: any) => void;
   currentMaterial: any;
 }) => {
+  console.log("formId", formId);
+
   const [openParty, setOpenParty] = useState(false);
   const [filterParams, setFilterParams]: any = useState({
     page: 1,
@@ -113,6 +115,7 @@ export const PaintTablesUI = ({
             "delete",
             "excel_download",
             "actions",
+            "active_menu",
             "sellect_more",
           ]}
         />

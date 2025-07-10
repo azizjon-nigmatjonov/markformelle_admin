@@ -78,10 +78,7 @@ export const useModalManager = (modalId: string, closeHandler: () => void) => {
 
   return {
     zIndex: zIndexRef.current,
-    isTopModal: () => {
-      const topModal = globalModalManager.getTopModal();
-      return topModal?.id === modalId;
-    },
+    isTopModal: globalModalManager.getTopModal()?.id === modalId,
     modalCount: globalModalManager.getModalCount(),
   };
 };

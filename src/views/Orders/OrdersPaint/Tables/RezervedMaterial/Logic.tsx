@@ -92,3 +92,63 @@ export const MaterialTableLogic = ({ filterParams }: { filterParams: any }) => {
     deleteFn,
   };
 };
+
+export const RezervingLogics = ({
+  refetch = () => {},
+}: {
+  refetch: () => void;
+}) => {
+  const createForm = async (params: {}) => {
+    try {
+      const { data } = await axios.post(
+        `${API_URL}/boyasiparisrezerv/`,
+        params
+      );
+      refetch();
+      return data;
+    } catch (error) {
+      refetch();
+      toast.error(`Error creating element:, ${error}`);
+
+      return null;
+    }
+  };
+
+  const updateForm = async (params: {}, id: number) => {
+    try {
+      const { data } = await axios.put(
+        `${API_URL}/boyasiparisrezerv/${id}`,
+        params
+      );
+      refetch();
+      return data;
+    } catch (error) {
+      toast.error(`Error creating element:, ${error}`);
+      return null;
+    }
+  };
+
+  const deleteFn = async (id: string[]) => {
+    try {
+      await axios.delete(`${API_URL}/boyasiparisrezerv/`, {
+        method: "DELETE",
+        url: `${API_URL}/boyasiparisrezerv/`,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        data: id,
+      });
+      refetch();
+    } catch (error) {
+      toast.error(`Error creating element:, ${error}`);
+      return null;
+    }
+  };
+
+  return {
+    createForm,
+    updateForm,
+    deleteFn,
+  };
+};

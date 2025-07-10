@@ -44,16 +44,17 @@ export const PartianTable = ({
       setOpenAddRezerv(true);
     }
     if (status === "delete") {
-      deleteFn([el.ORMESIPARISDETAYID]);
+      deleteFn([el.BOYASIPARISREZERVID]);
     }
     if (status === "delete_multiple") {
       deleteFn(
-        el.map((item: { ORMESIPARISDETAYID: number }) => {
-          return item.ORMESIPARISDETAYID;
+        el.map((item: { BOYASIPARISREZERVID: number }) => {
+          return item.BOYASIPARISREZERVID;
         })
       );
     }
   };
+  console.log("currentPaint", currentPaint);
 
   return (
     <>
@@ -62,7 +63,6 @@ export const PartianTable = ({
         idForTable="partiya_table_inner"
         headColumns={headColumns}
         handleActions={(obj: any, status: string) => {
-          // handleActionsTable(obj, status, "material");
           handleActions(obj, status);
         }}
         defaultFilters={defaultFilters}
@@ -92,7 +92,11 @@ export const PartianTable = ({
           title="Rezerve Icin Siparis Ham Stok Listesi"
           handleActions={() => setOpenAddRezerv(false)}
         >
-          <MaterialModal />
+          <MaterialModal
+            currentId={currentPaint?.BOYASIPARISDETAYID}
+            BOYASIPARISKAYITID={formId}
+            setOpenAddRezerv={setOpenAddRezerv}
+          />
         </CNewMiniModal>
       )}
     </>
