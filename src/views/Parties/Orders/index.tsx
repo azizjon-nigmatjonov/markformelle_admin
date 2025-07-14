@@ -7,7 +7,7 @@ import { useMemo, useState } from "react";
 import CNewModal from "../../../components/CElements/CNewModal";
 import { ModalUI } from "./Modal";
 
-export const PartyAsamalar = () => {
+export const Orders = () => {
   const [open, setOpen] = useState(false);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
@@ -36,7 +36,6 @@ export const PartyAsamalar = () => {
 
     if (status === "view" || status === "edit") {
       setOpen(true);
-
       setModalInitialData(el);
     }
 
@@ -63,7 +62,7 @@ export const PartyAsamalar = () => {
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />
       <div className="p-2">
         <CNewTable
-          title="table_party"
+          title="Orders"
           headColumns={newHeadColumns}
           bodyColumns={bodyColumns}
           handleActions={handleActions}
@@ -96,7 +95,7 @@ export const PartyAsamalar = () => {
 
       {open && (
         <CNewModal
-          title="Parti Asamalari"
+          title="Order Details"
           disabled="big"
           handleActions={modalActionsFn}
           defaultData={modalInitialData}

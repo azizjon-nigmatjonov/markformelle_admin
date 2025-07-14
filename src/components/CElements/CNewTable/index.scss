@@ -1,0 +1,54 @@
+// CNewTable Drag and Drop Animations
+.cnewtable {
+  .drag-and-drop {
+    color: var(--primary) !important;
+    opacity: 0.5;
+    transform: rotate(2deg);
+    transition: all 0.2s ease;
+  }
+
+  .drag-hovered {
+    &.right {
+      border-right: 2px solid var(--main);
+      transition: border 0.2s ease;
+    }
+    
+    &.left {
+      border-left: 2px solid var(--main);
+      transition: border 0.2s ease;
+    }
+  }
+
+  // Table header drag animations
+  th {
+    .group {
+      transition: all 0.2s ease;
+      cursor: move;
+      
+      &:hover {
+        background-color: var(--gray20);
+      }
+      
+      &.drag-and-drop {
+        opacity: 0.5;
+        transform: rotate(2deg);
+        background-color: var(--primary50);
+      }
+    }
+  }
+
+  // Enhanced drag animations
+  .draggable-header {
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: var(--gray20);
+    }
+    
+    &.dragging {
+      opacity: 0.5;
+      transform: rotate(2deg);
+      background-color: var(--primary50);
+    }
+  }
+} 

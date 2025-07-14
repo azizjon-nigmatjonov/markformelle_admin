@@ -11,7 +11,6 @@ import { AddRezerveModal } from "./AddRezerv";
 export const MaterialModal = ({
   currentId,
   BOYASIPARISKAYITID,
-  setOpenAddRezerv,
 }: {
   currentId: number;
   BOYASIPARISKAYITID: number;
@@ -47,6 +46,16 @@ export const MaterialModal = ({
   const handleActions = (obj: any, status: string) => {
     if (status === "view_single") {
       setOpenModal(obj);
+      // if (sellectedList.includes(obj.index)) {
+      //   setSellectedList(sellectedList.filter((item) => item !== obj.index));
+      // } else {
+      //   setSellectedList([...sellectedList, obj.index]);
+      // }
+    }
+    console.log("status", status);
+
+    if (status === "view_single_right_click") {
+      console.log("obj", obj);
     }
   };
 
@@ -116,7 +125,6 @@ export const MaterialModal = ({
           />
         </CNewMiniModal>
       )}
-
       <Cards />
     </div>
   );

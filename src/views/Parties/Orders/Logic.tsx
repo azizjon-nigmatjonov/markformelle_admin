@@ -1,7 +1,14 @@
+import { useEffect, useMemo, useState } from "react";
+import { useQuery } from "react-query";
+import axios from "axios";
+import { API_URL } from "../../../utils/env";
+import toast from "react-hot-toast";
+import { useTranslationHook } from "../../../hooks/useTranslation";
+
 export const breadCrumbs = [
   {
-    label: "Parti Asamalari",
-    link: "/paint/orders",
+    label: "Orders",
+    link: "/parties/orders",
   },
 ];
 
@@ -28,7 +35,7 @@ export const TableData = ({
   };
 
   const { data: listData, refetch } = useQuery(
-    ["GET_PARTY_ORDERS", filterParams],
+    ["GET_ORDERS", filterParams],
     () => fetchList(filterParams),
     {
       keepPreviousData: true,
@@ -50,8 +57,7 @@ export const TableData = ({
       refetch();
       toast.success(t("deleted!"));
     } catch (error) {
-      toast.error(`Error creating element:, ${error}`);
-      bodyData;
+      toast.error(`Error deleting order: ${error}`);
     }
   };
 
@@ -95,9 +101,6 @@ export const TableData = ({
   };
 };
 
-import { useEffect, useMemo, useState } from "react";
-import { useQuery } from "react-query";
-
 interface UseTableHeadersProps {
   bodyColumns: any[];
   predefinedColumns?: any[];
@@ -126,11 +129,6 @@ export const useTableHeaders = ({
   return { newHeadColumns };
 };
 
-import axios from "axios";
-import { API_URL } from "../../../utils/env";
-import toast from "react-hot-toast";
-import { useTranslationHook } from "../../../hooks/useTranslation";
-
 export const FormLogic = ({
   refetchTable,
   formId,
@@ -143,7 +141,7 @@ export const FormLogic = ({
   const { t } = useTranslationHook();
 
   const { data: formData } = useQuery(
-    ["GET_PARTY_ORDERS_FORM", formId],
+    ["GET_ORDER_FORM", formId],
     () => {
       return axios.get(`${API_URL}/parti/${formId}`);
     },
@@ -155,12 +153,11 @@ export const FormLogic = ({
   const createForm = async (params: {}) => {
     try {
       const { data } = await axios.post(`${API_URL}/parti/`, params);
-      toast.success(t("created!"));
+      toast.success(t("Order created!"));
       refetchTable();
       return data;
     } catch (error) {
-      toast.error(`error!`);
-
+      toast.error(`Error creating order: ${error}`);
       return null;
     }
   };
@@ -170,10 +167,10 @@ export const FormLogic = ({
       const { data } = await axios.put(`${API_URL}/parti/${id}`, params);
 
       refetchTable();
-      toast.success(t("updated!"));
+      toast.success(t("Order updated!"));
       return data;
     } catch (error) {
-      toast.error(`Error creating element:, ${error}`);
+      toast.error(`Error updating order: ${error}`);
       return null;
     }
   };
@@ -184,10 +181,10 @@ export const FormLogic = ({
         data: id,
       });
       refetchTable();
-      toast.success(t("deleted!"));
+      toast.success(t("Order deleted!"));
       return data;
     } catch (error) {
-      toast.error(`Error deleting element:, ${error}`);
+      toast.error(`Error deleting order: ${error}`);
       return null;
     }
   };

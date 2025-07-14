@@ -19,7 +19,7 @@ export const AddRezerveModal = ({
 }) => {
   const [checked, setChecked] = useState(true);
   const { control, handleSubmit, setValue } = useForm();
-  const { createForm } = RezervingLogics({ refetch });
+  const { createForm } = RezervingLogics({ refetch, setOpenModal });
 
   const onSubmit = (data: any) => {
     const params = {

@@ -1,5 +1,6 @@
 import { TableRow } from "@mui/material";
 import React, { useRef } from "react";
+import "./index.scss";
 
 import {
   CTableHeadCell,
@@ -29,6 +30,7 @@ import {
   areAllRowsSelectedOnPage,
   toggleRowGroupSelection,
 } from "./Logic/helpers";
+import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 
 interface Props {
   meta?: {
@@ -46,7 +48,7 @@ interface Props {
   limitList?: number[];
   handleFilterParams: (val: any) => void;
   filterParams: any;
-  handleActions?: (val: any, val2?: any) => void;
+  handleActions?: (val: any, val2?: any, evt?: any) => void;
   idForTable?: string;
   footer?: any;
   removeSearch?: boolean;
@@ -60,7 +62,8 @@ interface Props {
   disabled?: boolean;
   removeHeader?: boolean;
   innerTable?: boolean;
-  currentIdRow?: number;
+  currentIdRow?: number | number[];
+  rightChildren?: any;
 }
 
 // Interface for MemoizedTableRow props
@@ -74,7 +77,7 @@ interface MemoizedTableRowProps {
   currentIndex: number | null;
   selectedItems: any[];
   openSelect: boolean;
-  tableActions: (el: any, status: string) => void;
+  tableActions: (el: any, status: string, evt?: any) => void;
   tableSettings: any;
   pageName: string;
   calculateWidth: (colId: any, index: number) => number;
@@ -83,7 +86,8 @@ interface MemoizedTableRowProps {
   getBodyCol: (column: any, item: any) => any;
   defaultFilters: string[];
   defaultActions: string[];
-  currentIdRow?: number;
+  sellectedRows?: number[];
+  rightChildren?: any;
   setCurrentIndex: React.Dispatch<React.SetStateAction<null>>;
 }
 
@@ -127,6 +131,7 @@ const CNewTable = ({
     "sellect_more",
   ],
   defaultSearch = {},
+  rightChildren,
 }: Props) => {
   const { navigateTo } = usePageRouter();
   const tableSize = useSelector((state: any) => state.tableSize.tableSize);
@@ -175,6 +180,10 @@ const CNewTable = ({
   const [openSelect, setOpenSelect] = useState(false);
 
   const [bodySource, setBodySource] = useState<any[]>([]);
+
+  const sellectedRows = useMemo(() => {
+    return typeof currentIdRow === "number" ? [currentIdRow] : currentIdRow;
+  }, [currentIdRow]);
 
   const SetFiltersFn = (obj: any) => {
     const newObj: any = JSON.parse(JSON.stringify(obj));
@@ -535,7 +544,7 @@ const CNewTable = ({
     setHoveredIndex(null);
   };
 
-  const tableActions = (el: any, status: string) => {
+  const tableActions = (el: any, status: string, evt?: any) => {
     if (disabled) {
       return;
     }
@@ -612,7 +621,7 @@ const CNewTable = ({
       handleSortLogic({ value: "clear" });
     }
 
-    handleActions(el, status);
+    handleActions(el, status, evt);
   };
 
   const addAndRemoveFilter = (obj: any) => {
@@ -729,8 +738,11 @@ const CNewTable = ({
     defaultFilters,
     defaultActions,
     setCurrentIndex,
-    currentIdRow,
+    sellectedRows = [],
+    rightChildren,
   }: MemoizedTableRowProps) {
+    const [currentAnchor, setCurrentAnchor] = useState<any>(null);
+
     return (
       <TableRow
         key={item.index}
@@ -740,7 +752,7 @@ const CNewTable = ({
           clickable && !item.empty && checkPermission("view") ? "clickable" : ""
         } ${currentIndex === rowIndex ? "bg-[var(--primary50)]" : ""} ${
           selectedItems.includes(rowIndex) || item?.checked ? "sellected" : ""
-        } ${currentIdRow == item.index ? "bg-blue-200" : ""}`}
+        } ${sellectedRows.includes(rowIndex + 1) ? "bg-blue-200" : ""}`}
         onClick={() => {
           if (openSelect) {
             tableActions(item, "sellect_more");
@@ -769,7 +781,7 @@ const CNewTable = ({
                   width: 14,
                 }}
               />
-            )}{" "}
+            )}
           </div>
         </td>
         {newHeadColumns.map((column: any, colIndex: number) => (
@@ -827,6 +839,11 @@ const CNewTable = ({
                       });
                     }
                   }}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    tableActions(item, "view_single_right_click");
+                    setCurrentAnchor(e.target);
+                  }}
                   onClick={() => {
                     requestAnimationFrame(() => {
                       tableActions(item, "view_single");
@@ -839,6 +856,19 @@ const CNewTable = ({
               ) : (
                 ""
               )}
+              <BasePopup
+                id={Boolean(currentAnchor) ? "simple-popup" : undefined}
+                open={Boolean(currentAnchor)}
+                anchor={currentAnchor}
+                style={{
+                  padding: 0,
+                  zIndex: 99,
+                }}
+              >
+                <div className="bg-white rounded-[8px] border border-[var(--border)] overflow-hidden">
+                  {rightChildren}
+                </div>
+              </BasePopup>
               {defaultFilters.includes("actions") && colIndex === 0 ? (
                 <div className="relative flex items-center">
                   <TabbleActions
@@ -850,7 +880,7 @@ const CNewTable = ({
                     actions={defaultActions}
                     checkPermission={checkPermission}
                     selectedItems={selectedItems}
-                  />{" "}
+                  />
                   {currentIndex === rowIndex && (
                     <div
                       className="w-[200vw] h-[200vh] fixed left-[-50vw] top-[-50vw] z-[97]"
@@ -1013,14 +1043,16 @@ const CNewTable = ({
                             }}
                             onDragLeave={handleDragLeave}
                             onDrop={() => handleDrop(index)}
-                            className={`w-full group flex items-center ${
+                            className={`w-full group draggable-header flex items-center ${
                               innerTable ? "min-h-[30px]" : "min-h-[40px]"
-                            } px-2 flex-nowrap cursor-pointer hover:bg-[var(--border)] ${
+                            } px-2 flex-nowrap cursor-move hover:bg-[var(--border)] ${
                               column?.id === "index"
                                 ? "justify-center"
                                 : "justify-between"
                             } ${
-                              draggingIndex === index ? "drag-and-drop" : ""
+                              draggingIndex === index
+                                ? "drag-and-drop dragging"
+                                : ""
                             } ${
                               hoveredIndex === index &&
                               hoveredIndex > draggingIndex
@@ -1048,7 +1080,7 @@ const CNewTable = ({
                             <div
                               className={`w-full ${
                                 innerTable ? "min-h-[35px]" : "min-h-[40px]"
-                              } flex items-center whitespace-nowrap cursor-move ${
+                              } flex items-center whitespace-nowrap ${
                                 disabled ? "text-[var(--gray)]" : ""
                               }`}
                             >
@@ -1107,7 +1139,8 @@ const CNewTable = ({
                         <MemoizedTableRow
                           key={item.index}
                           item={item}
-                          currentIdRow={currentIdRow}
+                          rightChildren={rightChildren}
+                          sellectedRows={sellectedRows}
                           rowIndex={rowIndex}
                           newHeadColumns={newHeadColumns}
                           effect={effect}
@@ -1126,7 +1159,6 @@ const CNewTable = ({
                           defaultFilters={defaultFilters}
                           defaultActions={defaultActions}
                           setCurrentIndex={setCurrentIndex}
-                          // handleKeyDownRow={handleKeyDownRow}
                         />
                       ))
                     ) : (

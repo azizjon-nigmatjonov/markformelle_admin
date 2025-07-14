@@ -23,7 +23,9 @@ export const CollapseUI = ({
   return (
     <div className="pb-5">
       <div className="flex items-center space-x-2 mt-1 pb-2">
-        <h3 className="text-[14px] text-[#000]">{t(title)}</h3>
+        <h3 className="text-[14px] text-[var(--gray)] font-semibold">
+          {t(title)}
+        </h3>
         {disabled ? (
           ""
         ) : (

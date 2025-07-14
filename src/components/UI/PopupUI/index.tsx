@@ -48,7 +48,10 @@ export const PopupUI = ({
       {open && (
         <div
           className="fixed top-0 left-0 w-[100vw] h-[100vh] z-[98]"
-          onClick={() => onClose()}
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose();
+          }}
         ></div>
       )}
     </>

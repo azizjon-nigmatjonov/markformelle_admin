@@ -95,8 +95,10 @@ export const MaterialTableLogic = ({ filterParams }: { filterParams: any }) => {
 
 export const RezervingLogics = ({
   refetch = () => {},
+  setOpenModal = () => {},
 }: {
   refetch: () => void;
+  setOpenModal: (val: any) => void;
 }) => {
   const createForm = async (params: {}) => {
     try {
@@ -105,6 +107,7 @@ export const RezervingLogics = ({
         params
       );
       refetch();
+      setOpenModal({});
       return data;
     } catch (error) {
       refetch();
@@ -121,6 +124,7 @@ export const RezervingLogics = ({
         params
       );
       refetch();
+      setOpenModal({});
       return data;
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);

@@ -39,7 +39,7 @@ const CNewMiniModal: FC<Props> = ({
     handleActions("Close");
   };
 
-  const {} = useModalManager(uniqueModalId, handleClose);
+  const { isMostRecentModal } = useModalManager(uniqueModalId, handleClose);
 
   useEffect(() => {
     if (!position && modalRef.current) {
@@ -114,7 +114,10 @@ const CNewMiniModal: FC<Props> = ({
         <Card className={`${cls.card}`} style={{ padding }}>
           <div>
             {title && (
-              <div className="grid grid-cols-3 px-3 py-1 items-center top-0 bg-white z-[91] border-b border-[var(--border)]">
+              <div
+                className="grid grid-cols-3 px-3 py-1 items-center top-0 bg-white z-[91] border-b border-[var(--border)] cursor-move"
+                onMouseDown={handleDragStart}
+              >
                 <h2 className="font-medium">{t(title)}</h2>
 
                 <div className="flex justify-center">

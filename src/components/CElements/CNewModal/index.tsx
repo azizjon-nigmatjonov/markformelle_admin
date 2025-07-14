@@ -59,7 +59,7 @@ const CNewModal: FC<Props> = ({
     handleActions("close");
   };
 
-  const {} = useModalManager(uniqueModalId, handleClose);
+  const { isMostRecentModal } = useModalManager(uniqueModalId, handleClose);
 
   useEffect(() => {
     if (!position && modalRef.current) {
@@ -152,7 +152,10 @@ const CNewModal: FC<Props> = ({
             }`}
           >
             {title && (
-              <div className="flex items-center justify-between px-2 py-1 top-0 bg-white z-[91] border-b border-[var(--border)]">
+              <div
+                className="grid grid-cols-3 px-2 py-1 top-0 bg-white z-[91] border-b border-[var(--border)] cursor-move"
+                onMouseDown={handleDragStart}
+              >
                 <div className="flex items-center space-x-3">
                   <IconButton onClick={handleClose}>
                     <div className="w-[30px] h-[30px] items-center justify-center flex bg-[var(--main80)] rounded-full">
@@ -163,21 +166,6 @@ const CNewModal: FC<Props> = ({
                   </IconButton>
 
                   <h2>{t(title)}</h2>
-                </div>
-
-                <div className="flex items-center space-x-3">
-                  {actions.includes("edit") && (
-                    <IconButton onClick={() => handleActions("edit_modal")}>
-                      <div
-                        className={`flex items-center justify-center rounded-full w-[30px] h-[30px] ${
-                          action === "edit" ? "border border-[var(--main)]" : ""
-                        }`}
-                      >
-                        <EditIcon fill="var(--main)" />
-                      </div>
-                    </IconButton>
-                  )}
-
                   {defaultData?.id && (
                     <div className="relative">
                       <IconButton onClick={() => setOpenPopup((prev) => !prev)}>
@@ -206,6 +194,9 @@ const CNewModal: FC<Props> = ({
                       )}
                     </div>
                   )}
+                </div>
+
+                <div className="flex items-center justify-center">
                   <Tooltip
                     title="Переместить модальное окно"
                     arrow
@@ -232,6 +223,20 @@ const CNewModal: FC<Props> = ({
                       </div>
                     </IconButton>
                   </Tooltip>
+                </div>
+
+                <div className="flex items-center justify-end space-x-3">
+                  {actions.includes("edit") && (
+                    <IconButton onClick={() => handleActions("edit_modal")}>
+                      <div
+                        className={`flex items-center justify-center rounded-full w-[30px] h-[30px] ${
+                          action === "edit" ? "border border-[var(--main)]" : ""
+                        }`}
+                      >
+                        <EditIcon fill="var(--main)" />
+                      </div>
+                    </IconButton>
+                  )}
 
                   <Tooltip
                     title="Свернуть модальное окно"

@@ -63,6 +63,7 @@ export const OrderModal = ({
         currentMaterial={currentMaterial}
         setCurrentPaint={setCurrentPaint}
         uniqueID={uniqueID}
+        formData={formData}
         currentPaint={currentPaint}
         formId={formId ?? 0}
       />

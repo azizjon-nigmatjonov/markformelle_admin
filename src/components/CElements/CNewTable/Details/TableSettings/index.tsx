@@ -27,6 +27,7 @@ export const SettingDropdown = ({
   open,
   anchor,
   onClose,
+  onReorder,
 }: {
   menuList: any;
   allCheck?: boolean;
@@ -34,6 +35,7 @@ export const SettingDropdown = ({
   open: boolean;
   anchor: any;
   onClose: () => void;
+  onReorder?: (newList: any[]) => void;
 }) => {
   return (
     <PopupUI
@@ -50,6 +52,7 @@ export const SettingDropdown = ({
               element={item}
               allCheck={allCheck}
               handleFilterSave={handleFilterSave}
+              onReorder={onReorder}
             />
           ))}
         </ul>
@@ -144,6 +147,34 @@ export const HeaderSettings = ({
     dispatch(tableStoreActions.setColumns({ pageName, payload: [...arr] }));
   };
 
+  const handleReorder = (newList: any[]) => {
+    const newColumns = newList.map((item: any) => {
+      if (typeof item.id === "object") {
+        return item.id.join("");
+      } else {
+        return item.id;
+      }
+    });
+
+    // Update the columns in Redux store
+    dispatch(tableStoreActions.setColumns({ pageName, payload: newColumns }));
+
+    // Update the order in Redux store to match the new column order
+    dispatch(tableStoreActions.setOrder({ pageName, payload: newColumns }));
+
+    // Update the menu list state to reflect the new order
+    setMenuListState((prev) => {
+      const updatedMenuList = [...prev];
+      if (updatedMenuList[0] && updatedMenuList[0].type === "checkbox") {
+        updatedMenuList[0] = {
+          ...updatedMenuList[0],
+          data: newList,
+        };
+      }
+      return updatedMenuList;
+    });
+  };
+
   useEffect(() => {
     if (
       (!pageColumns?.length && headColumns?.length && allCheck) ||
@@ -166,8 +197,10 @@ export const HeaderSettings = ({
     }
   }, [pageColumns?.length, headColumns, allCheck]);
 
-  const menuList = useMemo(() => {
-    return [
+  const [menuListState, setMenuListState] = useState<any[]>([]);
+
+  useEffect(() => {
+    const newMenuList = [
       {
         label: t("active_columns"),
         id: "columns",
@@ -191,7 +224,10 @@ export const HeaderSettings = ({
         ),
       },
     ];
+    setMenuListState(newMenuList);
   }, [headColumns?.length, pageColumns?.length]);
+
+  const menuList = menuListState;
 
   const ExcelData = useMemo(() => {
     const keyOrder: any = [];
@@ -500,6 +536,7 @@ export const HeaderSettings = ({
                     allCheck={allCheck}
                     handleFilterSave={handleFilterSave}
                     onClose={() => setOpen(false)}
+                    onReorder={handleReorder}
                   />
                 </div>
               </span>

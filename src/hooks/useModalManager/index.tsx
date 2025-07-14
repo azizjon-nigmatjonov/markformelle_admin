@@ -4,6 +4,7 @@ interface ModalInstance {
   id: string;
   closeHandler: () => void;
   zIndex: number;
+  timestamp: number; // Add timestamp to track opening order
 }
 
 class ModalManager {
@@ -12,7 +13,8 @@ class ModalManager {
 
   addModal(id: string, closeHandler: () => void): number {
     const zIndex = this.nextZIndex++;
-    this.modals.push({ id, closeHandler, zIndex });
+    const timestamp = Date.now();
+    this.modals.push({ id, closeHandler, zIndex, timestamp });
     return zIndex;
   }
 
@@ -24,6 +26,15 @@ class ModalManager {
     return this.modals.length > 0 ? this.modals[this.modals.length - 1] : null;
   }
 
+  getMostRecentModal(): ModalInstance | null {
+    if (this.modals.length === 0) return null;
+
+    // Find the modal with the highest timestamp (most recently opened)
+    return this.modals.reduce((mostRecent, current) =>
+      current.timestamp > mostRecent.timestamp ? current : mostRecent
+    );
+  }
+
   closeTopModal(): void {
     const topModal = this.getTopModal();
     if (topModal) {
@@ -31,8 +42,25 @@ class ModalManager {
     }
   }
 
+  closeMostRecentModal(): void {
+    const mostRecentModal = this.getMostRecentModal();
+    if (mostRecentModal) {
+      mostRecentModal.closeHandler();
+    }
+  }
+
   getModalCount(): number {
     return this.modals.length;
+  }
+
+  isTopModal(modalId: string): boolean {
+    const topModal = this.getTopModal();
+    return topModal?.id === modalId;
+  }
+
+  isMostRecentModal(modalId: string): boolean {
+    const mostRecentModal = this.getMostRecentModal();
+    return mostRecentModal?.id === modalId;
   }
 }
 
@@ -53,8 +81,8 @@ export const useModalManager = (modalId: string, closeHandler: () => void) => {
   const handleEscapeKey = useCallback(
     (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        const topModal = globalModalManager.getTopModal();
-        if (topModal && topModal.id === modalId) {
+        // Only handle escape if this modal is the most recently opened one
+        if (globalModalManager.isMostRecentModal(modalId)) {
           event.preventDefault();
           event.stopPropagation();
           closeHandler();
@@ -78,7 +106,8 @@ export const useModalManager = (modalId: string, closeHandler: () => void) => {
 
   return {
     zIndex: zIndexRef.current,
-    isTopModal: globalModalManager.getTopModal()?.id === modalId,
+    isTopModal: globalModalManager.isTopModal(modalId),
+    isMostRecentModal: globalModalManager.isMostRecentModal(modalId),
     modalCount: globalModalManager.getModalCount(),
   };
 };

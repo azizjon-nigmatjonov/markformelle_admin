@@ -10,7 +10,7 @@ export const Cards = () => {
       </div>
       <div className="grid grid-cols-9 gap-x-2 w-full text-center">
         <div className="p-2 rounded-[8px] bg-white shadow-md border border-[var(--border)]">
-          <div className="h-[30px] w-full bg-red-100 flex items-center justify-center">
+          <div className="h-[30px] w-full rounded-[8px] bg-red-100 flex items-center justify-center">
             <span className="text-red-700">Girisleri</span>
           </div>
           <div className="p-2">
@@ -19,7 +19,7 @@ export const Cards = () => {
           </div>
         </div>
         <div className="p-2 rounded-[8px] bg-white shadow-md border border-[var(--border)]">
-          <div className="h-[30px] w-full bg-red-100 flex items-center justify-center">
+          <div className="h-[30px] w-full rounded-[8px] bg-red-100 flex items-center justify-center">
             <span className="text-red-700">Stok Dormunu</span>
           </div>
           <div className="p-2">
@@ -28,7 +28,7 @@ export const Cards = () => {
           </div>
         </div>
         <div className="p-2 rounded-[8px] bg-white shadow-md border border-[var(--border)]">
-          <div className="h-[30px] w-full bg-red-400 flex items-center justify-center">
+          <div className="h-[30px] w-full rounded-[8px] bg-red-400 flex items-center justify-center">
             <span className="text-red-700">Secilen</span>
           </div>
           <div className="p-2">
@@ -37,7 +37,7 @@ export const Cards = () => {
           </div>
         </div>
         <div className="p-2 rounded-[8px] bg-white shadow-md border border-[var(--border)]">
-          <div className="h-[30px] w-full bg-green-300 flex items-center justify-center">
+          <div className="h-[30px] w-full rounded-[8px] bg-green-300 flex items-center justify-center">
             <span className="text-green-700">Siparis Net</span>
           </div>
           <div className="p-2">
@@ -46,7 +46,7 @@ export const Cards = () => {
           </div>
         </div>
         <div className="p-2 rounded-[8px] bg-white shadow-md border border-[var(--border)]">
-          <div className="h-[30px] w-full bg-blue-300 flex items-center justify-center">
+          <div className="h-[30px] w-full rounded-[8px] bg-blue-300 flex items-center justify-center">
             <span className="text-blue-700">Siparis Brut</span>
           </div>
           <div className="p-2">
@@ -55,7 +55,7 @@ export const Cards = () => {
           </div>
         </div>
         <div className="p-2 rounded-[8px] bg-white shadow-md border border-[var(--border)]">
-          <div className="h-[30px] w-full bg-green-300 flex items-center justify-center">
+          <div className="h-[30px] w-full rounded-[8px] bg-green-300 flex items-center justify-center">
             <span className="text-green-700">Partilenen</span>
           </div>
           <div className="p-2">
@@ -64,7 +64,7 @@ export const Cards = () => {
           </div>
         </div>
         <div className="p-2 rounded-[8px] bg-white shadow-md border border-[var(--border)]">
-          <div className="h-[30px] w-full bg-green-300 flex items-center justify-center">
+          <div className="h-[30px] w-full rounded-[8px] bg-green-300 flex items-center justify-center">
             <span className="text-green-700">Rezerve Edilen</span>
           </div>
           <div className="p-2">
@@ -73,7 +73,7 @@ export const Cards = () => {
           </div>
         </div>
         <div className="p-2 rounded-[8px] bg-white shadow-md border border-[var(--border)]">
-          <div className="h-[30px] w-full bg-red-200 flex items-center justify-center">
+          <div className="h-[30px] w-full rounded-[8px] bg-red-200 flex items-center justify-center">
             <span className="text-red-700">Secilen Toplam</span>
           </div>
           <div className="p-2">
@@ -82,7 +82,7 @@ export const Cards = () => {
           </div>
         </div>
         <div className="p-2 rounded-[8px] bg-white shadow-md border border-[var(--border)]">
-          <div className="h-[30px] w-full bg-red-200 flex items-center justify-center">
+          <div className="h-[30px] w-full rounded-[8px] bg-red-200 flex items-center justify-center">
             <span className="text-red-700">Rezerve Edilen</span>
           </div>
           <div className="p-2">

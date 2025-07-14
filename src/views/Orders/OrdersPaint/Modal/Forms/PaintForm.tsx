@@ -387,7 +387,7 @@ export const PaintForm = ({
       setFormId(defaultData.BOYASIPARISDETAYID);
     }
   }, [defaultData]);
-  console.log("DESENID", DESENID);
+  const LABRECETEID = watch("LABRECETEID");
 
   return (
     <CNewMiniModal title={title} handleActions={handleActions}>
@@ -501,7 +501,7 @@ export const PaintForm = ({
             />
 
             <LiteOptionsTable
-              label="Lab Recete Kod"
+              label="Lab Recete Kodu"
               name="LABRECETEKODU"
               renderValue={(_: string, obj: any) => {
                 return obj.LABRECETEKODU;
@@ -509,35 +509,38 @@ export const PaintForm = ({
               link="labrecete"
               headColumns={[
                 { id: "LABRECETEKODU", title: "LABRECETEKODU", width: 140 },
+                { id: "LABRECETEID", title: "LABRECETEID", width: 110 },
                 { id: "ADI", title: "ADI", width: 140 },
               ]}
               defaultValue={formData?.LABRECETEKODU}
-              handleSelect={(obj: { LABRECETEKODU: string }) => {
+              handleSelect={(obj: {
+                LABRECETEKODU: string;
+                LABRECETEID: number;
+              }) => {
                 setValue("LABRECETEKODU", obj.LABRECETEKODU);
+                setValue("LABRECETEID", obj.LABRECETEID);
               }}
               control={control}
             />
 
             <LiteOptionsTable
               label="Lab dip no"
-              name="LABDIPID"
-              link="labdipno"
-              renderValue={(_: string, obj: any) => {
-                return obj.LABDIPID && obj.ADI
-                  ? obj.SIPARISPROSESID + " - " + obj.ADI
-                  : obj.SIPARISPROSESID;
-              }}
+              name="ATISNO"
+              link="labreceteatis"
+              renderValue={(_: string, obj: any) => obj.ATISNO}
+              disabled={!LABRECETEID}
               headColumns={[
                 {
-                  id: "SIPARISPROSESID",
-                  title: "SIPARISPROSESID",
-                  width: 120,
+                  id: "ATISNO",
+                  title: "ATISNO",
+                  width: 80,
                 },
-                { id: "ADI", title: "ADI", width: 280 },
+                { id: "DURUMUSTR", title: "OKEY", width: 80 },
               ]}
-              defaultValue={formData?.SIPARISPROSESID}
-              handleSelect={(obj: { SIPARISPROSESID: number }) => {
-                setValue("SIPARISPROSESID", obj.SIPARISPROSESID);
+              defaultFilters={LABRECETEID ? `LABRECETEID=${LABRECETEID}` : ""}
+              defaultValue={formData?.LABRECETEATISID}
+              handleSelect={(obj: { ATISNO: number }) => {
+                setValue("ATISNO", obj.ATISNO);
               }}
               control={control}
             />

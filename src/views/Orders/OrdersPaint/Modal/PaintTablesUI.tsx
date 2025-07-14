@@ -8,7 +8,6 @@ import { PaintTableLogic } from "../Tables/Logic";
 import { PaintForm } from "./Forms/PaintForm";
 import { PaintFormYarn } from "./Forms/PaintFormYarn";
 import { PartianTable } from "../Tables/Partion";
-import { PartiCreate } from "./PartiCreate";
 
 export const PaintTablesUI = ({
   handleActionsTable,
@@ -17,6 +16,7 @@ export const PaintTablesUI = ({
   formId,
   setCurrentPaint,
   currentMaterial,
+  formData,
 }: {
   handleActionsTable: (obj: any, status: string, type: string) => void;
   uniqueID: string;
@@ -24,10 +24,8 @@ export const PaintTablesUI = ({
   formId: number;
   setCurrentPaint: (obj: any) => void;
   currentMaterial: any;
+  formData: any;
 }) => {
-  console.log("formId", formId);
-
-  const [openParty, setOpenParty] = useState(false);
   const [filterParams, setFilterParams]: any = useState({
     page: 1,
     perPage: 50,
@@ -118,6 +116,7 @@ export const PaintTablesUI = ({
             "active_menu",
             "sellect_more",
           ]}
+          formData={formData}
         />
 
         <div className="grid grid-cols-2 gap-x-3">
@@ -167,7 +166,6 @@ export const PaintTablesUI = ({
           uniqueID={uniqueID}
         />
       )}
-      {openParty && <PartiCreate onClose={() => setOpenParty(false)} />}
     </>
   );
 };
