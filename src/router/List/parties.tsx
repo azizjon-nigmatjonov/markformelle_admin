@@ -1,6 +1,5 @@
-import { Orders } from "../../views/Parties/Orders";
+import { OrdersProcess } from "../../views/Parties/Orders";
 import { PartiTanitimi } from "../../views/Parties/PartiTanitimi";
-import { PartyProcess } from "../../views/Parties/PartyProcess";
 
 export const partiesList = [
   {
@@ -9,39 +8,29 @@ export const partiesList = [
     sidebar: true,
     title: "Parti Tanitimi",
     parent_icon: "/images/catalogue.png",
-    icon: "/images/plus.png",
+    icon: "/images/catalogue.png",
     element: <PartiTanitimi />,
     auth: true,
     permissions: ["view_page", "delete", "edit", "add"],
   },
   {
     parent: "parties",
-    link: "orders",
+    link: "proceses",
     sidebar: true,
-    title: "Orders",
+    title: "Parti asamalari",
     icon: "/images/documents.webp",
-    element: <Orders />,
+    element: <OrdersProcess />,
     auth: true,
     permissions: ["view_page", "delete", "edit", "add"],
   },
-  {
-    parent: "parties",
-    link: "transfers",
-    sidebar: true,
-    title: "Parti Asamalari",
-    icon: "/images/documents.webp",
-    element: <Orders />,
-    auth: true,
-    permissions: ["view_page", "delete", "edit", "add"],
-  },
-  {
-    parent: "parties",
-    link: "process",
-    sidebar: true,
-    title: "Parti Harakatlari",
-    icon: "/images/documents.webp",
-    element: <PartyProcess />,
-    auth: true,
-    permissions: ["view_page", "delete", "edit", "add"],
-  },
+  // {
+  //   parent: "parties",
+  //   link: "process",
+  //   sidebar: true,
+  //   title: "Parti Harakatlari",
+  //   icon: "/images/documents.webp",
+  //   element: <PartyProcess />,
+  //   auth: true,
+  //   permissions: ["view_page", "delete", "edit", "add"],
+  // },
 ];

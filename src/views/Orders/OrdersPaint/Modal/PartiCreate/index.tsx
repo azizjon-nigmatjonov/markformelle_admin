@@ -20,73 +20,61 @@ export const PartiCreate = ({
   currentRezerv: any;
   formData: any;
 }) => {
-  console.log("currentPaint", currentPaint);
-
-  console.log("formData", formData);
-
   const { control, handleSubmit, setValue } = useForm();
   const { createForm } = PartiCreateLogics({ refetch: () => {} });
+
   const onSubmit = (data: any) => {
-    console.log(data);
+    console.log("111", data.PROSESASAMALARIID);
+
     const params = {
       ...data,
-      PARTIYIL: 2025,
-      PARTIID: 16,
       ACILISTARIHI: dayjs(),
+      MODELNO: null,
       FIRMAID: formData.FIRMAID,
       IMALATTIPIID: false,
-      MODELNO: "",
       FASON: false,
-      RECETEID: currentPaint.LABRECETEKODU + "." + 1,
-      RECETETARIHI: currentPaint.RECETEGIRISTARIHI,
-      ISLEMTIPIID: 1,
+      RECETEID: null,
+      RECETETARIHI: null,
       ISLEMGRUBUID: 0,
+      ISLEMTIPIID: 0,
       ACILIYETDERECESIID: 0,
       ISLETMEONCELIKNO: 1000,
-      ACILIYETNOTU: "",
       PLANLANANIMALATTARIHI: dayjs(),
       TERMINTARIHI: dayjs(),
-      RECETEOKEY: false,
-      TALIMAT: false,
-      TALIMATOKEY: false,
+      RECETEOKEY: true,
+      TALIMAT: true,
+      TALIMATOKEY: true,
       NOTU: "",
       RECETEYAZILDI: false,
-      RECETEYAZILISTARIHI: dayjs(),
+      RECETEYAZILISTARIHI: null,
       REFAKATKARTIYAZILDI: false,
-      PARCALISEVK: false,
+      PARCALISEVK: true,
       FATURAKESILECEK: true,
       BOYASIPARISKAYITID: formData.BOYASIPARISKAYITID,
-      // DESENVARYANTID: null,
       FATURAKESILDI: false,
       SINIF: "B",
       VADEGUN: 0,
-      // RAFID: "",
-      // EMULSIYONURUNID: "",
       PATMIKTARI: 0,
       ONAYDURUMU: true,
       ONAYTARIHI: dayjs(),
-      ONAYLAYANKULLANICIID: 0,
+      ONAYLAYANKULLANICIID: 1,
       SABLONRECETESTOKTANDUSULDU: false,
-      PARTITIPIID: 0,
-      SEVKIYATNOTU: "",
+      PARTITIPIID: 1,
       REFAKATKARTIYAZMASAYISI: 0,
       SABLONSAYISI: 0,
-      ARGENO: "",
       NUMUNEONAYTARIHI: dayjs().format("YYYY-MM-DD"),
-      NUMUNENOTU: "",
-      DEGISIMLOG: "",
       LAMINASYON: false,
       LINKISLEMI: 0,
       INSERTKULLANICIID: 1,
       INSERTTARIHI: dayjs(),
       KULLANICIID: 1,
+      DEGISIMLOG: "",
       DEGISIMTARIHI: currentPaint.DEGISIMTARIHI,
       NUMUNEGONDERITARIHI: dayjs(),
       REVIZETERMINTARIHI: dayjs(),
       RECETEYAZMASAYISI: 0,
-      PARTIKAYITID: 0,
     };
-    // console.log("params", params);
+    console.log("params", params.PROSESASAMALARIID);
 
     createForm(params);
   };
@@ -111,9 +99,7 @@ export const PartiCreate = ({
   }, [currentPaint, currentRezerv]);
 
   useEffect(() => {
-    if (currentPaint) {
-      setValue("TERMINTARIHI", dayjs().format("YYYY-MM-DD"));
-    }
+    setValue("TERMINTARIHI", dayjs().format("YYYY-MM-DD"));
   }, []);
 
   return (
@@ -185,37 +171,82 @@ export const PartiCreate = ({
                 }}
               />
               <LiteOptionsTable
-                name="BOYASIPARISDETAYMUSTERISIPARISNO"
-                link="parti"
+                name="PROSESASAMALARIID"
+                link="prosesasamalari"
                 label="Prozes No"
                 headColumns={[
                   {
-                    title: "Parti",
-                    id: "PARTI",
+                    title: "PROSESASAMALARIID",
+                    id: "PROSESASAMALARIID",
+                    width: 150,
+                  },
+                  {
+                    title: "ASAMAADI",
+                    id: "ASAMAADI",
+                    width: 150,
                   },
                 ]}
-                renderValue={(val: any) => {
-                  return val.BOYASIPARISDETAYMUSTERISIPARISNO;
+                renderValue={(_: string, obj: any) => {
+                  return obj.PROSESASAMALARIID && obj.PROSESASAMALARIID
+                    ? obj.PROSESASAMALARIID + " - " + obj.ASAMAADI
+                    : obj.PROSESASAMALARIID;
                 }}
-                defaultValue={currentRezerv.BOYASIPARISDETAYMUSTERISIPARISNO}
+                defaultValue={currentRezerv.PROSESASAMALARIID}
                 control={control}
                 handleSelect={(val: any) => {
-                  setValue("PARTI", val.PARTI);
+                  setValue("PROSESASAMALARIID", val.PROSESASAMALARIID);
                 }}
               />
               <LiteOptionsTable
-                name="ISLEMGRUPLARI"
-                link="islem"
-                label="Islem Gruplari"
+                name="ISLEMTIPIID"
+                link="islemtipi"
+                label="Islem Tipi"
+                renderValue={(_: string, val: any) => {
+                  return val.ISLEMTIPIID && val.ADI
+                    ? val.ISLEMTIPIID + " - " + val.ADI
+                    : val.ISLEMTIPIID ?? "";
+                }}
                 headColumns={[
                   {
-                    title: "Islem",
-                    id: "PARTI",
+                    title: "ISLEMTIPIID",
+                    id: "ISLEMTIPIID",
+                    width: 120,
+                  },
+                  {
+                    title: "ADI",
+                    id: "ADI",
+                    width: 100,
                   },
                 ]}
                 control={control}
                 handleSelect={(val: any) => {
-                  setValue("ISLEMGRUPLARI", val.ISLEMGRUPLARI);
+                  setValue("ISLEMTIPIID", val.ISLEMTIPIID);
+                }}
+              />
+              <LiteOptionsTable
+                name="ISLEMGRUBUID"
+                link="islemgrubu"
+                label="Islem Gruplari"
+                renderValue={(_: string, val: any) => {
+                  return val.ISLEMGRUBUID && val.ADI
+                    ? val.ISLEMGRUBUID + " - " + val.ADI
+                    : val.ISLEMGRUBUID;
+                }}
+                headColumns={[
+                  {
+                    title: "ISLEMGRUBUID",
+                    id: "ISLEMGRUBUID",
+                    width: 120,
+                  },
+                  {
+                    title: "ADI",
+                    id: "ADI",
+                    width: 100,
+                  },
+                ]}
+                control={control}
+                handleSelect={(val: any) => {
+                  setValue("ISLEMGRUBUID", val.ISLEMGRUBUID);
                 }}
               />
               <LiteOptionsTable

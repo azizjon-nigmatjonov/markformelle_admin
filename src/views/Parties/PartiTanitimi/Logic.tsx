@@ -7,8 +7,8 @@ import { useTranslationHook } from "../../../hooks/useTranslation";
 
 export const breadCrumbs = [
   {
-    label: "Parti asamalari",
-    link: "/parties/proceses",
+    label: "Parti",
+    link: "/parties/list",
   },
 ];
 
@@ -19,27 +19,34 @@ export const TableData = ({
   setOpen?: (val: boolean) => void;
 }) => {
   const { t } = useTranslationHook();
-  const [headColumns, setHeadColumns] = useState([]);
+  const [headColumns, setHeadColumns] = useState<any[]>([]);
   const [bodyData, setBodyData]: any = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchList = async (filters: any) => {
     setIsLoading(true);
-    const response = await axios.get(
-      `${API_URL}/parti/?skip=${
-        filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
-      }&limit=${filters.perPage}${filters.q ? "&" + filters.q : ""}`
-    );
-    setIsLoading(false);
-    return response.data;
+    try {
+      const response = await axios.get(
+        `${API_URL}/parti/?skip=${
+          filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
+        }&limit=${filters.perPage}${filters.q ? "&" + filters.q : ""}`
+      );
+      setIsLoading(false);
+      return response.data;
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error fetching data:", error);
+      return { data: [], count: 0 };
+    }
   };
 
   const { data: listData, refetch } = useQuery(
-    ["GET_PARTI_PROCESS", filterParams],
+    ["GET_PARTI_LIST", filterParams],
     () => fetchList(filterParams),
     {
       keepPreviousData: true,
       enabled: !!filterParams?.page,
+      refetchOnWindowFocus: false,
     }
   );
 
@@ -68,31 +75,34 @@ export const TableData = ({
   }, [listData]);
 
   useEffect(() => {
-    const headColumns: any = [];
     const arr: any = bodyData?.data ?? [];
 
-    const obj = { ...arr?.[0] };
-    const keys = Object.keys(obj);
-    const newColumns: any = [];
+    if (arr.length > 0) {
+      const obj = { ...arr[0] };
+      const keys = Object.keys(obj);
+      const newColumns: any = [];
 
-    keys.forEach((key: string) => {
-      const found = headColumns.find((item: any) => item.id === key);
+      keys.forEach((key: string) => {
+        const found = headColumns.find((item: any) => item?.id === key);
+        if (found?.id) {
+          newColumns.push(found);
+        } else {
+          newColumns.push({ title: key, id: key });
+        }
+      });
 
-      if (found?.id) {
-        newColumns.push(found);
-      } else {
-        newColumns.push({ title: key, id: key });
-      }
-    });
-
-    setTimeout(() => {
       setHeadColumns(newColumns);
-    }, 0);
+    }
+  }, [bodyData]);
+
+  const bodyColumns = useMemo(() => {
+    const data = bodyData?.data ?? [];
+    return data;
   }, [bodyData]);
 
   return {
     headColumns,
-    bodyColumns: bodyData?.data ?? [],
+    bodyColumns,
     isLoading,
     defaultData: {},
     bodyData,
@@ -111,8 +121,10 @@ export const useTableHeaders = ({
   predefinedColumns = [],
 }: UseTableHeadersProps) => {
   const newHeadColumns = useMemo(() => {
-    if (!bodyColumns?.length) return [];
-    const obj = { ...bodyColumns?.[0] };
+    if (!bodyColumns?.length) {
+      return [];
+    }
+    const obj = { ...bodyColumns[0] };
     const keys = Object.keys(obj);
     const newColumns: any = [...predefinedColumns];
 
@@ -133,15 +145,17 @@ export const FormLogic = ({
   refetchTable,
   formId,
   defaultData,
+  setFormId,
 }: {
   refetchTable: () => void;
   formId: number;
   defaultData: any;
+  setFormId: (id: number) => void;
 }) => {
   const { t } = useTranslationHook();
 
   const { data: formData } = useQuery(
-    ["GET_ORDER_FORM", formId],
+    ["GET_PARTI_FORM", formId],
     () => {
       return axios.get(`${API_URL}/parti/${formId}`);
     },
@@ -152,42 +166,40 @@ export const FormLogic = ({
 
   const createForm = async (params: {}) => {
     try {
-      const { data } = await axios.post(`${API_URL}/partiasamalari/`, params);
-      toast.success(t("Order created!"));
+      const { data } = await axios.post(`${API_URL}/parti/`, params);
+      toast.success(t("Parti created!"));
+      setFormId(data.PARTIID);
       refetchTable();
       return data;
     } catch (error) {
-      toast.error(`Error creating order: ${error}`);
+      toast.error(`Error creating parti: ${error}`);
       return null;
     }
   };
 
   const updateForm = async (params: {}, id: number) => {
     try {
-      const { data } = await axios.put(
-        `${API_URL}/partiasamalari/${id}`,
-        params
-      );
+      const { data } = await axios.put(`${API_URL}/parti/${id}`, params);
 
       refetchTable();
-      toast.success(t("Order updated!"));
+      toast.success(t("Parti updated!"));
       return data;
     } catch (error) {
-      toast.error(`Error updating order: ${error}`);
+      toast.error(`Error updating parti: ${error}`);
       return null;
     }
   };
 
   const deleteForm = async (id: number[]) => {
     try {
-      const { data } = await axios.delete(`${API_URL}/partiasamalari/`, {
+      const { data } = await axios.delete(`${API_URL}/parti/`, {
         data: id,
       });
       refetchTable();
-      toast.success(t("Order deleted!"));
+      toast.success(t("Parti deleted!"));
       return data;
     } catch (error) {
-      toast.error(`Error deleting order: ${error}`);
+      toast.error(`Error deleting parti: ${error}`);
       return null;
     }
   };

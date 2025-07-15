@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import HFTextField from "../../../../../components/HFElements/HFTextField";
 import CNewTable from "../../../../../components/CElements/CNewTable";
 import { MaterialStokLogic } from "../Logic";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import dayjs from "dayjs";
 import { Cards } from "./Cards";
 import CNewMiniModal from "../../../../../components/CElements/CNewMiniModal";
@@ -11,10 +11,12 @@ import { AddRezerveModal } from "./AddRezerv";
 export const MaterialModal = ({
   currentId,
   BOYASIPARISKAYITID,
+  currentPaint,
 }: {
   currentId: number;
   BOYASIPARISKAYITID: number;
   setOpenAddRezerv: (val: boolean) => void;
+  currentPaint: any;
 }) => {
   const [formId, setFormId] = useState(0);
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 50 });
@@ -22,6 +24,7 @@ export const MaterialModal = ({
     filterParams,
     currentId,
   });
+  console.log("isLoading", isLoading);
 
   const [openModal, setOpenModal]: any = useState({});
   const { control, handleSubmit, setValue } = useForm();
@@ -43,6 +46,9 @@ export const MaterialModal = ({
     }
   }, [formId]);
 
+  const [allRezerv, setAllRezerv] = useState<any[]>([]);
+  console.log("allRezerv", allRezerv);
+
   const handleActions = (obj: any, status: string) => {
     if (status === "view_single") {
       setOpenModal(obj);
@@ -58,6 +64,14 @@ export const MaterialModal = ({
       console.log("obj", obj);
     }
   };
+
+  const CardData = useMemo(() => {
+    return {
+      SIPARISBRUTKILO: currentPaint.SIPARISBRUTKILO,
+      SIPARISBRUTMETRE: currentPaint.SIPARISBRUTMETRE,
+      SECILENTOPLAM: allRezerv.reduce((acc, el) => acc + el.KILO, 0),
+    };
+  }, [currentPaint, allRezerv]);
 
   return (
     <div className="w-[80vw]">
@@ -105,6 +119,7 @@ export const MaterialModal = ({
         handleFilterParams={setFilterParams}
         filterParams={filterParams}
         isLoading={isLoading}
+        currentIdRow={allRezerv.map((el) => el.index)}
         handleActions={handleActions}
         defaultFilters={["excel_download", "active_menu", "sellect_more"]}
         autoHeight="500px"
@@ -122,10 +137,12 @@ export const MaterialModal = ({
             defaultData={openModal}
             currentId={BOYASIPARISKAYITID}
             refetch={refetch}
+            allRezerv={allRezerv}
+            setAllRezerv={setAllRezerv}
           />
         </CNewMiniModal>
       )}
-      <Cards />
+      <Cards CardData={CardData} />
     </div>
   );
 };

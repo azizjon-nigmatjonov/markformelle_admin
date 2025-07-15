@@ -11,11 +11,15 @@ export const AddRezerveModal = ({
   defaultData = {},
   currentId,
   refetch,
+  allRezerv = [],
+  setAllRezerv = () => {},
 }: {
   setOpenModal: (val: any) => void;
   defaultData: any;
   currentId: number;
   refetch: () => void;
+  allRezerv: any[];
+  setAllRezerv: (val: any) => void;
 }) => {
   const [checked, setChecked] = useState(true);
   const { control, handleSubmit, setValue } = useForm();
@@ -38,8 +42,18 @@ export const AddRezerveModal = ({
       INSERTTARIHI: dayjs(),
       KULLANICIID: 1,
       DEGISIMTARIHI: dayjs(),
+      index: defaultData?.index,
     };
-    createForm(params);
+    // createForm(params);
+    if (allRezerv.find((el) => el.HAMSTOKDETAYID === params?.HAMSTOKDETAYID)) {
+      setAllRezerv(
+        allRezerv.filter((el) => el.HAMSTOKDETAYID !== params?.HAMSTOKDETAYID)
+      );
+    } else {
+      setAllRezerv((prev: any) => [...prev, params]);
+    }
+
+    setOpenModal(false);
   };
 
   useEffect(() => {

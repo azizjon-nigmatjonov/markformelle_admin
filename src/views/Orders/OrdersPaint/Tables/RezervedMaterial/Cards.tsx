@@ -1,4 +1,6 @@
-export const Cards = () => {
+export const Cards = ({ CardData }: { CardData: any }) => {
+  console.log("CardData", CardData);
+
   return (
     <div className="flex gap-x-2 w-full pt-5">
       <div className="p-2">
@@ -50,8 +52,8 @@ export const Cards = () => {
             <span className="text-blue-700">Siparis Brut</span>
           </div>
           <div className="p-2">
-            <p>1100</p>
-            <p>0</p>
+            <p>{CardData.SIPARISBRUTKILO}</p>
+            <p>{CardData.SIPARISBRUTMETRE}</p>
           </div>
         </div>
         <div className="p-2 rounded-[8px] bg-white shadow-md border border-[var(--border)]">
@@ -83,7 +85,7 @@ export const Cards = () => {
         </div>
         <div className="p-2 rounded-[8px] bg-white shadow-md border border-[var(--border)]">
           <div className="h-[30px] w-full rounded-[8px] bg-red-200 flex items-center justify-center">
-            <span className="text-red-700">Rezerve Edilen</span>
+            <span className="text-red-700">Kalan Toplam</span>
           </div>
           <div className="p-2">
             <p>999.00</p>

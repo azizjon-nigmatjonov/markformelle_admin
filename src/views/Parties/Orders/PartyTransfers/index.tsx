@@ -109,13 +109,13 @@ export const PartyTransfers = ({ defaultData }: { defaultData: any }) => {
           idForTable="party_transfers"
           filterParams={filterParams}
           handleFilterParams={setFilterParams}
-          autoHeight="300px"
+          autoHeight="500px"
           innerTable={true}
           defaultSearch={{
             PARTIYIL: "",
             PARTIID: "",
           }}
-          disablePagination={true}
+          disablePagination
         />
 
         <div className="space-y-3 overflow-y-scroll designed-scroll">

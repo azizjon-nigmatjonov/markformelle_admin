@@ -1,5 +1,5 @@
 import PaintSection from "../../views/Paint/Fabric";
-import { PartyAsamalar } from "../../views/Parties/Orders";
+// import { PartyAsamalar } from "../../views/Parties/Orders";
 import PaintSectionYarn from "../../views/Paint/Yarn";
 
 export const paintSection = [
@@ -24,14 +24,14 @@ export const paintSection = [
     auth: true,
     permissions: ["view_page"],
   },
-  {
-    parent: "dying",
-    link: "party-stage",
-    sidebar: true,
-    title: "Parti asamalari",
-    icon: "/images/documents.webp",
-    element: <PartyAsamalar />,
-    auth: true,
-    permissions: ["view_page", "delete", "edit", "add"],
-  },
+  // {
+  //   parent: "dying",
+  //   link: "party-stage",
+  //   sidebar: true,
+  //   title: "Parti asamalari",
+  //   icon: "/images/documents.webp",
+  //   element: <PartyAsamalar />,
+  //   auth: true,
+  //   permissions: ["view_page", "delete", "edit", "add"],
+  // },
 ];

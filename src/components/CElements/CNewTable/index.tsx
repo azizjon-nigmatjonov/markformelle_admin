@@ -315,6 +315,7 @@ const CNewTable = ({
               : index + filterParams.perPage * (filterParams.page - 1) + 1,
         };
       }) ?? [];
+
     setBodySource(list);
   }, [
     newBodyColumns,
@@ -840,6 +841,7 @@ const CNewTable = ({
                     }
                   }}
                   onContextMenu={(e) => {
+                    if (!rightChildren) return;
                     e.preventDefault();
                     tableActions(item, "view_single_right_click");
                     setCurrentAnchor(e.target);

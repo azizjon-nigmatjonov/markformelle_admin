@@ -16,7 +16,6 @@ export const TableUI = ({ defaultData = {} }: { defaultData: any }) => {
     page: 1,
     perPage: 10,
   });
-  console.log("defaultData", defaultData);
 
   const { birimler, isLoading } = FetchTable({
     filterParams,

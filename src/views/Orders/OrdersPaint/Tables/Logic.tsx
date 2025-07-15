@@ -37,12 +37,6 @@ export const MaterialStokLogic = ({
   );
 
   useEffect(() => {
-    if (!filterParams?.BOYASIPARISDETAYID) {
-      setIsLoading(false);
-    }
-  }, [filterParams]);
-
-  useEffect(() => {
     if (listData) {
       setBodyData(listData);
     }

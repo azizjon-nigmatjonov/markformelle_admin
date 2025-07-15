@@ -29,7 +29,6 @@ export const PartianTable = ({
     page: 1,
     perPage: 50,
   });
-
   const { isLoading, headColumns, bodyColumns, deleteFn, refetch } =
     MaterialTableLogic({
       filterParams,
@@ -52,8 +51,6 @@ export const PartianTable = ({
       deleteFn([el.BOYASIPARISREZERVID]);
     }
     if (status === "view_single_right_click") {
-      console.log("222");
-
       setCurrentRezerv(el);
     }
     if (status === "delete_multiple") {
@@ -64,14 +61,6 @@ export const PartianTable = ({
       );
     }
   };
-
-  const CardData = useMemo(() => {
-    return {
-      KILO: currentPaint.KILOSIPARIS,
-      METRE: currentPaint.METRESIPARIS,
-      ADET: currentPaint.ADETSIPARIS,
-    };
-  }, [currentPaint]);
 
   return (
     <>
@@ -127,6 +116,7 @@ export const PartianTable = ({
               setOpenAddRezerv(false);
               refetch();
             }}
+            currentPaint={currentPaint}
           />
         </CNewMiniModal>
       )}
