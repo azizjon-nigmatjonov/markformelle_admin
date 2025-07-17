@@ -21,10 +21,8 @@ export const MaterialModal = ({
   const [formId, setFormId] = useState(0);
   const [filterParams, setFilterParams] = useState({ page: 1, perPage: 50 });
   const { headColumns, bodyColumns, refetch, isLoading } = MaterialStokLogic({
-    filterParams,
     currentId,
   });
-  console.log("isLoading", isLoading);
 
   const [openModal, setOpenModal]: any = useState({});
   const { control, handleSubmit, setValue } = useForm();
@@ -47,7 +45,6 @@ export const MaterialModal = ({
   }, [formId]);
 
   const [allRezerv, setAllRezerv] = useState<any[]>([]);
-  console.log("allRezerv", allRezerv);
 
   const handleActions = (obj: any, status: string) => {
     if (status === "view_single") {

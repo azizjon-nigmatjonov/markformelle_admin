@@ -8,16 +8,15 @@ import { useTableHeaders } from "../../../hooks/useTableHeaders";
 import { ModalTypes } from "./interfaces";
 import CNewModal from "../../../components/CElements/CNewModal";
 import { OrderModalPartiCreate } from "./Modal";
+import { modalsActions } from "../../../store/modal/modal.slice";
+import { useDispatch } from "react-redux";
 
 export const OrdersPaintPage = () => {
-  const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
   });
-  const [modalInitialData, setModalInitialData] = useState<ModalTypes | null>(
-    null
-  );
   const { bodyColumns, isLoading, bodyData, deleteFn, refetch } = TableData({
     filterParams,
   });
@@ -25,13 +24,22 @@ export const OrdersPaintPage = () => {
 
   const handleActions = (el: any, status: string) => {
     if (status === "modal") {
-      setOpen(true);
+      dispatch(
+        modalsActions.setModalData({
+          id: "order-paint",
+          defaultData: {},
+        })
+      );
+      refetch();
     }
 
     if (status === "view" || status === "edit") {
-      setOpen(true);
-
-      setModalInitialData(el);
+      dispatch(
+        modalsActions.setModalData({
+          id: "order-paint",
+          defaultData: el,
+        })
+      );
     }
 
     if (status === "delete") {
@@ -51,8 +59,12 @@ export const OrdersPaintPage = () => {
     if (status === "delete") {
       deleteFn([id]);
     } else if (status === "close") {
-      setOpen(false);
-      setModalInitialData(null);
+      dispatch(
+        modalsActions.setModalData({
+          id: "order-paint",
+          defaultData: {},
+        })
+      );
     }
   };
 
@@ -93,7 +105,7 @@ export const OrdersPaintPage = () => {
         />
       </div>
 
-      {open && (
+      {/* {open && (
         <CNewModal
           title="Boya siparis tanitimi (kumash)"
           handleActions={handleModal}
@@ -108,7 +120,7 @@ export const OrdersPaintPage = () => {
             refetch={refetch}
           />
         </CNewModal>
-      )}
+      )} */}
     </>
   );
 };

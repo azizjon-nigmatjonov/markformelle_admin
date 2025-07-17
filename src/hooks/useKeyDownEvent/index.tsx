@@ -13,7 +13,6 @@ export const useKeyDownEvent = () => {
     Delete: "Delete",
     F4: "F4",
   };
-
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key in keys) {

@@ -1,5 +1,6 @@
 import { OrdersProcess } from "../../views/Parties/Orders";
 import { PartiTanitimi } from "../../views/Parties/PartiTanitimi";
+import { PartyProcess } from "../../views/Parties/PartyProcess";
 
 export const partiesList = [
   {
@@ -23,14 +24,14 @@ export const partiesList = [
     auth: true,
     permissions: ["view_page", "delete", "edit", "add"],
   },
-  // {
-  //   parent: "parties",
-  //   link: "process",
-  //   sidebar: true,
-  //   title: "Parti Harakatlari",
-  //   icon: "/images/documents.webp",
-  //   element: <PartyProcess />,
-  //   auth: true,
-  //   permissions: ["view_page", "delete", "edit", "add"],
-  // },
+  {
+    parent: "parties",
+    link: "process",
+    sidebar: true,
+    title: "Parti Harakatlari",
+    icon: "/images/documents.webp",
+    element: <PartyProcess />,
+    auth: true,
+    permissions: ["view_page", "delete", "edit", "add"],
+  },
 ];

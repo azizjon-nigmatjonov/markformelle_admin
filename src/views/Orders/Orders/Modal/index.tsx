@@ -35,9 +35,6 @@ export const OrderModal = ({
 
   const handleModalClose = (status: string) => {
     handleModalActions(status);
-    if (status === "close") {
-      // setOpen(false);
-    }
   };
 
   return (

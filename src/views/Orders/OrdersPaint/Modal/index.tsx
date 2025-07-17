@@ -1,12 +1,12 @@
 import { useState } from "react";
-// import { ModalTypes } from "../interfaces";
 import { OrderForm } from "../../Orders/Modal/Form";
 import { OrderModalBaseLogics } from "./Logic";
 import { PaintTablesUI } from "./PaintTablesUI";
+import { modalsActions } from "../../../../store/modal/modal.slice";
+import { useDispatch } from "react-redux";
 
 interface ModalUIProps {
   defaultData?: any;
-  setOpen: (open: boolean) => void;
   refetch: () => void;
 }
 
@@ -15,8 +15,8 @@ export const OrderModalPartiCreate = ({
   defaultData = {
     BOYASIPARISKAYITID: 0,
   },
-  setOpen,
 }: ModalUIProps) => {
+  const dispatch = useDispatch();
   const [formId, setFormId] = useState<number>(0);
   const {
     currentMaterial,
@@ -37,9 +37,12 @@ export const OrderModalPartiCreate = ({
 
   const handleModalClose = (status: string) => {
     handleModalActions(status);
-    if (status === "close") {
-      setOpen(false);
-    }
+    dispatch(
+      modalsActions.setModalData({
+        id: "order-paint",
+        defaultData: {},
+      })
+    );
   };
 
   return (

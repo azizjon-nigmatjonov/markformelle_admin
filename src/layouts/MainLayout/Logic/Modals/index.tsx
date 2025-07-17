@@ -8,28 +8,22 @@ export const ModalImporter = () => {
   const modalData = useSelector((state: any) => state.modals.modalData);
   const dispatch = useDispatch();
 
-  const modalActionsFn = (status: string) => {
-    if (status === "close") {
-      dispatch(
-        modalsActions.setModalData({ id: "partitanitimi", defaultData: {} })
-      );
-    }
+  const modalActionsFn = (id: string) => {
+    dispatch(modalsActions.setModalData({ id, defaultData: {} }));
   };
 
   return (
     <>
-      {modalData.map((modal: any) => {
+      {modalData.map((modal: any, index: number) => {
         return (
           <CNewModal
-            key={modal.id}
+            key={index}
             title="Parti Details"
             disabled="big"
-            handleActions={modalActionsFn}
+            handleActions={() => modalActionsFn(modal.id)}
+            // innerModal={true}
           >
-            {
-              modals.find((modal: any) => modal.id === "partitanitimi")
-                ?.component
-            }
+            {modals.find((item: any) => item.id === modal.id)?.component}
           </CNewModal>
         );
       })}

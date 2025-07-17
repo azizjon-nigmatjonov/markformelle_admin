@@ -6,13 +6,7 @@ import { useQuery } from "react-query";
 import { useTranslationHook } from "../../../../hooks/useTranslation";
 import dayjs from "dayjs";
 
-export const MaterialStokLogic = ({
-  filterParams,
-  currentId,
-}: {
-  filterParams: any;
-  currentId: number;
-}) => {
+export const MaterialStokLogic = ({ currentId }: { currentId: number }) => {
   const { t } = useTranslationHook();
   const [headColumns, setHeadColumns] = useState([]);
   const [bodyData, setBodyData]: any = useState({});

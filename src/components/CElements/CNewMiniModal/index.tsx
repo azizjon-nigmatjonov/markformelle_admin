@@ -39,7 +39,7 @@ const CNewMiniModal: FC<Props> = ({
     handleActions("Close");
   };
 
-  const { isMostRecentModal } = useModalManager(uniqueModalId, handleClose);
+  const {} = useModalManager(uniqueModalId, handleClose);
 
   useEffect(() => {
     if (!position && modalRef.current) {

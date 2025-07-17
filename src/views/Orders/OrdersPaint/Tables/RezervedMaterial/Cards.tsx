@@ -1,6 +1,4 @@
 export const Cards = ({ CardData }: { CardData: any }) => {
-  console.log("CardData", CardData);
-
   return (
     <div className="flex gap-x-2 w-full pt-5">
       <div className="p-2">

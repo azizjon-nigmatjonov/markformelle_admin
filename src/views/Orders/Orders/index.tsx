@@ -15,7 +15,7 @@ export const OrderList = () => {
   });
 
   const dispatch = useDispatch();
-  const { bodyColumns, isLoading, bodyData, deleteFn, refetch } = TableData({
+  const { bodyColumns, isLoading, bodyData, deleteFn } = TableData({
     filterParams,
   });
 
@@ -48,19 +48,6 @@ export const OrderList = () => {
       deleteFn(
         el.map((item: { BOYASIPARISKAYITID: number }) => {
           return item.BOYASIPARISKAYITID;
-        })
-      );
-    }
-  };
-
-  const handleModal = (status: string, id: number) => {
-    if (status === "delete") {
-      deleteFn([id]);
-    } else if (status === "close") {
-      dispatch(
-        modalsActions.setModalData({
-          id: "boya",
-          defaultData: {},
         })
       );
     }

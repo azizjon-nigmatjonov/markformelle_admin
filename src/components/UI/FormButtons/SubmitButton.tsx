@@ -12,17 +12,23 @@ export const SubmitButton = ({
   handleActions: (val: string, val2: string) => void;
 }) => {
   const { t } = useTranslationHook();
-  const { isAltPressed, currentKey } = useKeyDownEvent();
+  const { isAltPressed, currentKey, pressedKey } = useKeyDownEvent();
 
   useEffect(() => {
     if (currentKey && isAltPressed) handleActions(currentKey, uniqueID);
   }, [currentKey, isAltPressed]);
 
+  useEffect(() => {
+    if (type === "F4" && pressedKey === "F4") {
+      handleActions(pressedKey, uniqueID);
+    }
+  }, [pressedKey, type]);
+
   if (type === "F4") {
     return (
       <button
         onClick={() => {
-          handleActions(currentKey, uniqueID);
+          handleActions(pressedKey, uniqueID);
         }}
         className="h-[30px] px-8 bg-[var(--primary)] text-white rounded-[8px] relative"
         type="button"
