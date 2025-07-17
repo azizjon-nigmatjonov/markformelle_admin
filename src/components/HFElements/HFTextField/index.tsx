@@ -20,8 +20,9 @@ const InputUI = ({
   errors = {},
   placeholder,
   focused = false,
-  setPassword = () => { },
-  onKeydown = () => { },
+  setPassword = () => {},
+  onKeydown = () => {},
+  onBlur = () => {},
 }: {
   value: any;
   name: string;
@@ -39,6 +40,7 @@ const InputUI = ({
   placeholder: string;
   onKeydown?: (val: number) => void;
   setPassword: (val: any) => void;
+  onBlur?: (name: string, value: any) => void;
 }) => {
   const { t } = useTranslation();
   useEffect(() => {
@@ -46,7 +48,6 @@ const InputUI = ({
       onChange(defaultValue);
     }
   }, [defaultValue]);
-
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Enter" && (value || defaultValue)) {
@@ -69,8 +70,9 @@ const InputUI = ({
   return (
     <div>
       <input
-        className={`input-design ${errors[name]?.message || error ? "error" : ""
-          }`}
+        className={`input-design ${
+          errors[name]?.message || error ? "error" : ""
+        }`}
         style={{ width: "100%" }}
         value={value || ""}
         onChange={(e) => onChange(e.target.value)}
@@ -81,13 +83,16 @@ const InputUI = ({
           onKeydown(e.keyCode);
           handleKeyDown(e);
         }}
+        onBlur={(e) => {
+          onBlur(name, e.target.value);
+        }}
         readOnly={readOnly}
         type={
           activatePassword && password
             ? "password"
             : activatePassword && !password
-              ? "text"
-              : type
+            ? "text"
+            : type
         }
         {...props}
       />
@@ -122,6 +127,8 @@ interface Props {
   focused?: boolean;
   onKeydown?: (val: number) => void;
   handleChange?: (name: string, value: any) => void;
+  onFocus?: () => void;
+  onBlur?: (name: string, value: any) => void;
 }
 
 const HFTextField = ({
@@ -133,14 +140,15 @@ const HFTextField = ({
   label,
   disabled = false,
   defaultValue = "",
-  setValue = () => { },
+  setValue = () => {},
   activatePassword = false,
   type = "text",
   errors = {},
   readOnly = false,
   placeholder,
-  handleChange = () => { },
-  onKeydown = () => { },
+  handleChange = () => {},
+  onKeydown = () => {},
+  onBlur = () => {},
   ...props
 }: Props) => {
   const [password, setPassword] = useState(true);
@@ -178,6 +186,7 @@ const HFTextField = ({
             }}
             focused={focused}
             onKeydown={onKeydown}
+            onBlur={onBlur}
             readOnly={readOnly}
             disabled={disabled}
             errors={errors}

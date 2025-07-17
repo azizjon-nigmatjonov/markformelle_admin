@@ -1,26 +1,19 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import CNewTable from "../../../../components/CElements/CNewTable";
-import { RezerveTableLogic } from "./Logic";
 import { useTableHeaders } from "../Logic";
 
-export const RezervTable = ({ PARTIKAYITID }: { PARTIKAYITID: number }) => {
+export const RezervTable = ({
+  bodyColumns,
+  isLoading,
+}: {
+  bodyColumns: any;
+  isLoading: boolean;
+}) => {
   const [filterParams, setFilterParams] = useState({});
-  const { bodyColumns, isLoading } = RezerveTableLogic({
-    PARTIKAYITID,
-  });
-
-  const predefinedColumns = useMemo(() => {
-    return [
-      {
-        title: "ASAMAID",
-        id: "ASAMAID",
-      },
-    ];
-  }, []);
 
   const { newHeadColumns } = useTableHeaders({
     bodyColumns,
-    predefinedColumns,
+    predefinedColumns: [],
   });
 
   return (
@@ -28,6 +21,7 @@ export const RezervTable = ({ PARTIKAYITID }: { PARTIKAYITID: number }) => {
       title="Rezerve"
       headColumns={newHeadColumns?.length ? newHeadColumns : []}
       innerTable={true}
+      idForTable="rezerve_table"
       bodyColumns={bodyColumns?.length ? bodyColumns : []}
       handleActions={() => {}}
       isLoading={isLoading}
@@ -36,6 +30,7 @@ export const RezervTable = ({ PARTIKAYITID }: { PARTIKAYITID: number }) => {
       handleFilterParams={(params: any) => {
         setFilterParams(params);
       }}
+      defaultFilters={["delete", "actions", "excel_download", "sellect_more"]}
       filterParams={filterParams}
     />
   );

@@ -36,6 +36,7 @@ export const Tables = ({ formId }: { formId: number }) => {
         handleFilterParams={setFilterParams}
         filterParams={filterParams}
         disablePagination
+        innerTable
         defaultFilters={["excel_download"]}
       />
       <CNewTable
@@ -48,6 +49,7 @@ export const Tables = ({ formId }: { formId: number }) => {
         handleFilterParams={setFilterParams}
         filterParams={filterParams}
         disablePagination
+        innerTable
         defaultFilters={["excel_download"]}
       />
     </div>

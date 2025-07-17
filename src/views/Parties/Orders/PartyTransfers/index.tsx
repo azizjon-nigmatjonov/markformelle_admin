@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { PartyTransfersLogic } from "./Logic";
+import { PartyTransfersLogic, RezerveTableLogic } from "./Logic";
 import { useTableHeaders } from "../Logic";
 import CNewTable from "../../../../components/CElements/CNewTable";
 import { TransferModal } from "./TransferModal";
@@ -97,6 +97,11 @@ export const PartyTransfers = ({ defaultData }: { defaultData: any }) => {
     predefinedColumns,
   });
 
+  const { bodyColumns: bodyColumnsRezerve, isLoading: isLoadingRezerve } =
+    RezerveTableLogic({
+      PARTIKAYITID: defaultData?.PARTIKAYITID,
+    });
+
   return (
     <>
       <div className="space-y-5">
@@ -109,6 +114,12 @@ export const PartyTransfers = ({ defaultData }: { defaultData: any }) => {
           idForTable="party_transfers"
           filterParams={filterParams}
           handleFilterParams={setFilterParams}
+          defaultFilters={[
+            "delete",
+            "actions",
+            "excel_download",
+            "sellect_more",
+          ]}
           autoHeight="250px"
           innerTable={true}
           defaultSearch={{
@@ -119,15 +130,24 @@ export const PartyTransfers = ({ defaultData }: { defaultData: any }) => {
         />
 
         <div className="overflow-y-scroll designed-scroll">
-          <RezervTable PARTIKAYITID={defaultData?.PARTIKAYITID} />
+          <RezervTable
+            bodyColumns={bodyColumnsRezerve}
+            isLoading={isLoadingRezerve}
+          />
         </div>
       </div>
 
       {open && (
         <CNewMiniModal title="Party transfers" handleActions={modalActionsFn}>
           <TransferModal
-            defaultData={modalInitialData}
-            refetchTable={refetch}
+            defaultData={{
+              ...modalInitialData,
+              calculateNumber: bodyColumnsRezerve?.[0]?.MIKTAR || 1,
+            }}
+            refetchTable={() => {
+              refetch();
+              setOpen(false);
+            }}
           />
         </CNewMiniModal>
       )}

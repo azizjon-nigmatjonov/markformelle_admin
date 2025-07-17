@@ -115,7 +115,7 @@ export const TransferFormLogic = ({
   };
 
   return {
-    formData: formId ? formData?.data : defaultData,
+    formData: formData?.data ? formData?.data : defaultData,
     createForm,
     updateForm,
   };

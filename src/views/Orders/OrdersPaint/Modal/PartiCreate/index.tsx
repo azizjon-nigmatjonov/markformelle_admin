@@ -55,13 +55,12 @@ export const PartiCreate = ({
       VADEGUN: 0,
       PATMIKTARI: 0,
       ONAYDURUMU: true,
-      ONAYTARIHI: dayjs(),
+      ONAYTARIHI: convertToISO(dayjs().format("DD.MM.YYYY")),
       ONAYLAYANKULLANICIID: 1,
       SABLONRECETESTOKTANDUSULDU: false,
       PARTITIPIID: 1,
       REFAKATKARTIYAZMASAYISI: 0,
       SABLONSAYISI: 0,
-      NUMUNEONAYTARIHI: dayjs().format("YYYY-MM-DD"),
       LAMINASYON: false,
       LINKISLEMI: 0,
       INSERTKULLANICIID: 1,
@@ -69,8 +68,6 @@ export const PartiCreate = ({
       KULLANICIID: 1,
       DEGISIMLOG: "",
       DEGISIMTARIHI: dayjs(),
-      NUMUNEGONDERITARIHI: dayjs(),
-      REVIZETERMINTARIHI: dayjs(),
       RECETEYAZMASAYISI: 0,
     };
 
@@ -154,18 +151,23 @@ export const PartiCreate = ({
                 label="Termin Tarihi"
               />
               <LiteOptionsTable
-                name="PARTI"
+                name="PARTIID"
                 link="parti"
                 label="Parti Grubu"
                 headColumns={[
                   {
-                    title: "Parti",
-                    id: "PARTI",
+                    title: "PARTIID",
+                    id: "PARTIID",
                   },
                 ]}
+                renderValue={(_: string, val: any) => {
+                  return val.PARTIID && val.PARTIADI
+                    ? val.PARTIID + " - " + val.PARTIADI
+                    : val.PARTIID;
+                }}
                 control={control}
                 handleSelect={(val: any) => {
-                  setValue("PARTI", val.PARTI);
+                  setValue("PARTIID", val.PARTIID);
                 }}
               />
               <LiteOptionsTable

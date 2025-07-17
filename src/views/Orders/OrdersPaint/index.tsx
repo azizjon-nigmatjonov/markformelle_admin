@@ -5,9 +5,9 @@ import { Header } from "../../../components/UI/Header";
 import CNewTable from "../../../components/CElements/CNewTable";
 import { IFilterParams } from "../../../interfaces";
 import { useTableHeaders } from "../../../hooks/useTableHeaders";
-import { OrderModal } from "./Modal";
 import { ModalTypes } from "./interfaces";
 import CNewModal from "../../../components/CElements/CNewModal";
+import { OrderModalPartiCreate } from "./Modal";
 
 export const OrdersPaintPage = () => {
   const [open, setOpen] = useState(false);
@@ -102,7 +102,7 @@ export const OrdersPaintPage = () => {
           }}
           disabled="big"
         >
-          <OrderModal
+          <OrderModalPartiCreate
             defaultData={modalInitialData ?? { BOYASIPARISKAYITID: 0 }}
             setOpen={setOpen}
             refetch={refetch}

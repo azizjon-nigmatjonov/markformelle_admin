@@ -7,7 +7,6 @@ import { SubmitCancelButtons } from "../../../../components/UI/FormButtons/Submi
 import { TransferFormLogic } from "./Logic";
 import { useEffect, useState } from "react";
 import { Alert } from "@mui/material";
-import dayjs from "dayjs";
 
 export const TransferModal = ({
   defaultData,
@@ -16,9 +15,10 @@ export const TransferModal = ({
   defaultData: any;
   refetchTable: () => void;
 }) => {
+  const [currentCalculatedNum, setCurrentCalculatedNum] = useState<number>(0);
   const [openNumberInput, setOpenNumberInput] = useState<string>("");
   const [formId, setFormId] = useState<number>(0);
-  const { formData } = TransferFormLogic({
+  const { formData, updateForm } = TransferFormLogic({
     formId,
     refetchTable: () => {
       refetchTable();
@@ -32,97 +32,15 @@ export const TransferModal = ({
       setFormId(defaultData.PARTIASAMALARIID);
     }
   }, [defaultData]);
-
   const onSubmit = (data: any) => {
     const params = {
+      ...formData,
       ...data,
-      PARTIASAMALARIID: 0,
-      PARTIKAYITID: 0,
-      SIRA: 0,
-      RECETEID: "string",
-      ASAMAID: 0,
-      OTOMASYONADAHILMI: false,
-      SERBESTASAMA: false,
-      KONTROLASAMA: false,
-      PARTITAMIRID: 0,
-      BANYOCARPANI: 0,
-      BANYOCARPANI2: 0,
-      BANYOCARPANI3: 0,
-      BANYOCARPANI4: 0,
-      FULARBASINCI: 0,
-      KOYULTMA: 0,
-      DURULAMASUYU: 0,
-      BOYASUYU: 0,
-      HAMSTOKFLOTTECARPANI: 0,
-      BOYAMASEVIYESI: 0,
-      POMPADEGERI: 0,
-      TUR: 0,
-      DUZE: 0,
-      TUPSAYISI: 0,
-      FANGUCU: 0,
-      STOKTANDUSULDU: false,
-      PARTININASILRECETESIMI: false,
-      MAKINAPLANLAMAGRUPID: "string",
-      GRUPPROSESNO: "string",
-      PROSESNOTU: "string",
-      CIKISTAKILOZORUNLU: false,
-      CIKISTAMETREZORUNLU: false,
-      CIKISTAARABAZORUNLU: false,
-      ILAVEPROSES: false,
-      ILAVEPROSESSEBEBIID: 0,
-      ONAYLIILAVEPROSES: false,
-      LINKISLEMI: 0,
-      ESKIPARTIASAMALARIID: 0,
-      URETIMMALIYETI: 0,
-      URETIMMALIYETIDOVIZID: "string",
-      URETIMMALIYETIKG: 0,
-      URETIMMALIYETIKGDOVIZID: "string",
-      ISCILIKURETIMMALIYETI: 0,
-      ISCILIKURETIMMALIYETIDOVIZID: "string",
-      ISCILIKURETIMMALIYETIKG: 0,
-      ISCILIKURETIMMALIYETIKGDOVIZID: "string",
-      DOZAJLAMAGRUPDEGERID: 0,
-      ASAMADEGISTIRILDI: false,
-      ASAMADEGISIMTARIHI: dayjs(),
-      ASAMADEGISIMSEBEBIID: 0,
-      ASAMADEGISTIRENPERSONELID: 0,
-      OTOMASYONPARTINO: "string",
-      OTOMASYONMAKINANO: "string",
-      OTOMASYONBASLAMATARIHI: dayjs(),
-      OTOMASYONBITISTARIHI: dayjs(),
-      OTOMASYONCALISMAZAMANI: 0,
-      OTOMASYONDURUSZAMANI: 0,
-      OTOMASYONALARMSAYISI: 0,
-      OTOMASYONILAVESAYISI: 0,
-      OTOMASYONILAVEZAMANI: 0,
-      OTOMASYONTEORIKSURE: 0,
-      STOKGRUPID: "string",
-      MUTFAKDEPONO: "string",
-      TUZCARPANI: 1,
-      KUMASTAKISU: 0,
-      ILAVEMIKTAR: 0,
-      GOZUZUNLUGU: 0,
-      ISLAKLIKORANI: 0,
-      ICTAMBURHIZI: 0,
-      YIKAMAKATSAYISI: 0,
-      DEVIRLICALISMAHIZI: 0,
-      MAKINAICIYIKAMA: 0,
-      KULEHIZI: 0,
-      MAXKULEHIZI: 0,
-      SUTIPIARTITUZ: 1,
-      FLOTEORANIYIKAMA: 1.5,
-      FULARHAVABASINCI: 0,
-      BOYAMETODU: 0,
-      FULARLITRE: 0,
-      YIKAMASEVIYESI: 0,
-      DUZEBASINCI: 0,
-      MAKINABILGIRECETEID: 0,
-      AKUPLE: true,
-      INSERTKULLANICIID: 1,
-      INSERTTARIHI: dayjs(),
-      KULLANICIID: 1,
-      DEGISIMTARIHI: dayjs(),
     };
+    params.RECETEID = params.RECETEID || formData?.RECETEID;
+    delete data[""];
+
+    updateForm(params, params.PARTIASAMALARIID);
   };
 
   const handleModalActionsFn = (status: string) => {
@@ -131,10 +49,9 @@ export const TransferModal = ({
     if (status === "close") {
     }
   };
-  const [currentCalculatedNum, setCurrentCalculatedNum] = useState<number>(0);
+
   const setFormData = (data: any) => {
     setValue("ASAMAKODU", data.ASAMAKODU);
-    setCurrentCalculatedNum(data.BANYOCARPANI);
     setValue("BANYOCARPANI", data.BANYOCARPANI);
     setValue("BANYOCARPANI2", data.BANYOCARPANI2);
     setValue("BANYOCARPANI3", data.BANYOCARPANI3);
@@ -145,6 +62,10 @@ export const TransferModal = ({
   };
 
   const setInitalFormData = () => {};
+
+  useEffect(() => {
+    setCurrentCalculatedNum(defaultData?.calculateNumber || 1);
+  }, [defaultData]);
 
   useEffect(() => {
     if (formData?.PARTIASAMALARIID) {
@@ -244,6 +165,7 @@ export const TransferModal = ({
               id: "ADI",
             },
           ]}
+          staticSearchID="RECETEID"
           renderValue={(_: string, obj: any) => {
             return obj?.RECETEID && obj?.RECETEADI
               ? `${obj?.RECETEID} - ${obj?.RECETEADI}`
@@ -272,11 +194,11 @@ export const TransferModal = ({
                   }}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      setOpenNumberInput("BANYOCARPANI2");
                       setValue(
                         "BANYOCARPANI",
                         calculateNumber(inputNumber, currentCalculatedNum)
                       );
+                      setOpenNumberInput("BANYOCARPANI2");
                       setInputNumber(0);
                       setInputValue("");
                     }
@@ -285,7 +207,7 @@ export const TransferModal = ({
                 <p className="absolute right-2 top-1/2 -translate-y-1/2 bg-white w-[80%] pl-2 text-[var(--gray)]">
                   x {currentCalculatedNum}
                 </p>
-                <p className="absolute right-2 top-1/2 -translate-y-1/2 bg-white w-[50%] pl-2 text-[var(--gray)]">
+                <p className="absolute right-2 top-1/2 -translate-y-1/2 bg-white w-[40%] pl-2 text-[var(--gray)]">
                   = {calculateNumber(inputNumber, currentCalculatedNum)}
                 </p>
               </div>
@@ -297,6 +219,23 @@ export const TransferModal = ({
                   if (val === 113) {
                     setOpenNumberInput("BANYOCARPANI");
                   }
+                }}
+                onFocus={() => {
+                  setValue(
+                    "BANYOCARPANI",
+                    calculateNumber(inputNumber, currentCalculatedNum)
+                  );
+                  setInputNumber(
+                    getValues("BANYOCARPANI")
+                      ? getValues("BANYOCARPANI") / currentCalculatedNum
+                      : 1
+                  );
+                  setInputValue(
+                    getValues("BANYOCARPANI")
+                      ? getValues("BANYOCARPANI") / currentCalculatedNum + ""
+                      : "1"
+                  );
+                  setOpenNumberInput("BANYOCARPANI");
                 }}
                 defaultValue={formData?.BANYOCARPANI}
               />
@@ -328,7 +267,7 @@ export const TransferModal = ({
                     }
                   }}
                 />
-                <p className="absolute right-2 top-1/2 -translate-y-1/2 bg-white w-[70%] pl-2 text-[var(--gray)]">
+                <p className="absolute right-2 top-1/2 -translate-y-1/2 bg-white w-[80%] pl-2 text-[var(--gray)]">
                   x {currentCalculatedNum}
                 </p>
                 <p className="absolute right-2 top-1/2 -translate-y-1/2 bg-white w-[40%] pl-2 text-[var(--gray)]">
@@ -343,6 +282,26 @@ export const TransferModal = ({
                   if (val === 113) {
                     setOpenNumberInput("BANYOCARPANI2");
                   }
+                }}
+                onFocus={() => {
+                  setValue(
+                    "BANYOCARPANI2",
+                    calculateNumber(inputNumber, currentCalculatedNum)
+                  );
+                  setInputNumber(
+                    getValues("BANYOCARPANI2")
+                      ? getValues("BANYOCARPANI2") / currentCalculatedNum
+                      : 1
+                  );
+                  setInputValue(
+                    getValues("BANYOCARPANI2")
+                      ? getValues("BANYOCARPANI2") / currentCalculatedNum + ""
+                      : "1"
+                  );
+                  setOpenNumberInput("BANYOCARPANI2");
+                }}
+                handleChange={(name: string, value: any) => {
+                  setValue(name, value);
                 }}
                 defaultValue={formData?.BANYOCARPANI2}
               />
@@ -374,7 +333,7 @@ export const TransferModal = ({
                     }
                   }}
                 />
-                <p className="absolute right-2 top-1/2 -translate-y-1/2 bg-white w-[70%] pl-2 text-[var(--gray)]">
+                <p className="absolute right-2 top-1/2 -translate-y-1/2 bg-white w-[80%] pl-2 text-[var(--gray)]">
                   x {currentCalculatedNum}
                 </p>
                 <p className="absolute right-2 top-1/2 -translate-y-1/2 bg-white w-[40%] pl-2 text-[var(--gray)]">
@@ -385,8 +344,25 @@ export const TransferModal = ({
               <HFTextField
                 name="BANYOCARPANI3"
                 control={control}
-                handleChange={(e: any) => {
-                  setValue("BANYOCARPANI3", e.target.value);
+                handleChange={(name: string, value: any) => {
+                  setValue(name, value);
+                }}
+                onFocus={() => {
+                  setValue(
+                    openNumberInput,
+                    calculateNumber(inputNumber, currentCalculatedNum)
+                  );
+                  setInputNumber(
+                    getValues("BANYOCARPANI3")
+                      ? getValues("BANYOCARPANI3") / currentCalculatedNum
+                      : 1
+                  );
+                  setInputValue(
+                    getValues("BANYOCARPANI3")
+                      ? getValues("BANYOCARPANI3") / currentCalculatedNum + ""
+                      : "1"
+                  );
+                  setOpenNumberInput("BANYOCARPANI3");
                 }}
               />
             )}
@@ -416,7 +392,7 @@ export const TransferModal = ({
                     }
                   }}
                 />
-                <p className="absolute right-2 top-1/2 -translate-y-1/2 bg-white w-[70%] pl-2 text-[var(--gray)]">
+                <p className="absolute right-2 top-1/2 -translate-y-1/2 bg-white w-[80%] pl-2 text-[var(--gray)]">
                   x {currentCalculatedNum}
                 </p>
                 <p className="absolute right-2 top-1/2 -translate-y-1/2 bg-white w-[40%] pl-2 text-[var(--gray)]">
@@ -427,8 +403,25 @@ export const TransferModal = ({
               <HFTextField
                 name="BANYOCARPANI4"
                 control={control}
-                handleChange={(e: any) => {
-                  setValue("BANYOCARPANI4", e.target.value);
+                handleChange={(name: string, value: any) => {
+                  setValue(name, value);
+                }}
+                onFocus={() => {
+                  setValue(
+                    openNumberInput,
+                    calculateNumber(inputNumber, currentCalculatedNum)
+                  );
+                  setInputNumber(
+                    getValues("BANYOCARPANI4")
+                      ? getValues("BANYOCARPANI4") / currentCalculatedNum
+                      : 1
+                  );
+                  setInputValue(
+                    getValues("BANYOCARPANI4")
+                      ? getValues("BANYOCARPANI4") / currentCalculatedNum + ""
+                      : "1"
+                  );
+                  setOpenNumberInput("BANYOCARPANI4");
                 }}
               />
             )}

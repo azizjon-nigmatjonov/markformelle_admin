@@ -10,7 +10,7 @@ interface ModalUIProps {
   refetch: () => void;
 }
 
-export const OrderModal = ({
+export const OrderModalPartiCreate = ({
   refetch,
   defaultData = {
     BOYASIPARISKAYITID: 0,
