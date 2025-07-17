@@ -44,7 +44,7 @@ export const AddRezerveModal = ({
       DEGISIMTARIHI: dayjs(),
       index: defaultData?.index,
     };
-    // createForm(params);
+    createForm(params);
     if (allRezerv.find((el) => el.HAMSTOKDETAYID === params?.HAMSTOKDETAYID)) {
       setAllRezerv(
         allRezerv.filter((el) => el.HAMSTOKDETAYID !== params?.HAMSTOKDETAYID)

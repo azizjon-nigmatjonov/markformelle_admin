@@ -109,7 +109,7 @@ export const PartyTransfers = ({ defaultData }: { defaultData: any }) => {
           idForTable="party_transfers"
           filterParams={filterParams}
           handleFilterParams={setFilterParams}
-          autoHeight="500px"
+          autoHeight="250px"
           innerTable={true}
           defaultSearch={{
             PARTIYIL: "",
@@ -118,7 +118,7 @@ export const PartyTransfers = ({ defaultData }: { defaultData: any }) => {
           disablePagination
         />
 
-        <div className="space-y-3 overflow-y-scroll designed-scroll">
+        <div className="overflow-y-scroll designed-scroll">
           <RezervTable PARTIKAYITID={defaultData?.PARTIKAYITID} />
         </div>
       </div>

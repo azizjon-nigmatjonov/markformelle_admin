@@ -11,6 +11,7 @@ import { tableReducer } from "./table";
 import { machineReducer } from "./machine/machine.slice";
 import { globalToolReducer } from "./globalTools";
 import { translateReducer } from "./translation/translate.slice";
+import { modalsReducer } from "./modal/modal.slice";  
 
 const authPersistConfig = {
   key: "auth",
@@ -68,6 +69,7 @@ const rootReducer = combineReducers({
   globalTool: persistReducer(globalToolPersistConfig, globalToolReducer),
   translation: persistReducer(translationPersistConfig, translateReducer),
   website: websiteReducer,
+  modals: modalsReducer,
 });
 
 export default rootReducer;

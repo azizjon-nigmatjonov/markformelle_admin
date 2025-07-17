@@ -5,20 +5,16 @@ import { Header } from "../../../components/UI/Header";
 import CNewTable from "../../../components/CElements/CNewTable";
 import { IFilterParams } from "../../../interfaces";
 import { useTableHeaders } from "../../../hooks/useTableHeaders";
-import { OrderModal } from "./Modal";
-import { ModalTypes } from "./interfaces";
-import CNewModal from "../../../components/CElements/CNewModal";
+import { modalsActions } from "../../../store/modal/modal.slice";
+import { useDispatch } from "react-redux";
 
 export const OrderList = () => {
-  const [open, setOpen] = useState(false);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
   });
-  const [modalInitialData, setModalInitialData] = useState<ModalTypes | null>(
-    null
-  );
 
+  const dispatch = useDispatch();
   const { bodyColumns, isLoading, bodyData, deleteFn, refetch } = TableData({
     filterParams,
   });
@@ -27,13 +23,21 @@ export const OrderList = () => {
 
   const handleActions = (el: any, status: string) => {
     if (status === "modal") {
-      setOpen(true);
+      dispatch(
+        modalsActions.setModalData({
+          id: "boya",
+          defaultData: {},
+        })
+      );
     }
 
     if (status === "view" || status === "edit") {
-      setOpen(true);
-
-      setModalInitialData(el);
+      dispatch(
+        modalsActions.setModalData({
+          id: "boya",
+          defaultData: el,
+        })
+      );
     }
 
     if (status === "delete") {
@@ -53,8 +57,12 @@ export const OrderList = () => {
     if (status === "delete") {
       deleteFn([id]);
     } else if (status === "close") {
-      setOpen(false);
-      setModalInitialData(null);
+      dispatch(
+        modalsActions.setModalData({
+          id: "boya",
+          defaultData: {},
+        })
+      );
     }
   };
 
@@ -92,7 +100,7 @@ export const OrderList = () => {
         />
       </div>
 
-      {open && (
+      {/* {open && (
         <CNewModal
           title="orders_form"
           handleActions={handleModal}
@@ -103,11 +111,9 @@ export const OrderList = () => {
         >
           <OrderModal
             defaultData={modalInitialData ?? { BOYASIPARISKAYITID: 0 }}
-            setOpen={setOpen}
-            refetch={refetch}
           />
         </CNewModal>
-      )}
+      )} */}
     </>
   );
 };

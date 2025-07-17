@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs from "./deyjsSetUp";
 
 const addZero = (num: number) => {
   return num < 10 ? num.toString().padStart(2, "0") : num;

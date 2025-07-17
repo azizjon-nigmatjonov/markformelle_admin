@@ -4,6 +4,7 @@ import { useTranslationHook } from "../../../../hooks/useTranslation";
 import { API_URL } from "../../../../utils/env";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
+import { t } from "i18next";
 
 export const FormLogic = ({
   refetchTable,
@@ -89,13 +90,17 @@ export const TableData = ({
   const fetchList = async (filters: any) => {
     setIsLoading(true);
     const response = await axios.get(
-      `${API_URL}/partistok/?skip=${
-        filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
-      }&limit=${filters.perPage}${
+      `${API_URL}/partistok/?PARTIKAYITID=${formId}${
         filters.q ? "&" + filters.q : ""
-      }&PARTIKAYITID=${formId}`
+      }`
     );
     setIsLoading(false);
+    return response.data;
+  };
+
+  const fetchListSiparis = async () => {
+    const response = await axios.get(`${API_URL}/parti/boyasiparis/${formId}`);
+
     return response.data;
   };
 
@@ -107,6 +112,15 @@ export const TableData = ({
       enabled: !!formId,
     }
   );
+
+  const {
+    data: siparisData,
+    refetch: siparisRefetch,
+    isLoading: siparisIsLoading,
+  } = useQuery(["GET_ORDERS_SIPARIS", formId], () => fetchListSiparis(), {
+    keepPreviousData: true,
+    enabled: !!formId,
+  });
 
   const deleteFn = async (id: string[]) => {
     try {
@@ -158,10 +172,35 @@ export const TableData = ({
   return {
     headColumns,
     bodyColumns: bodyData?.data ?? [],
+    siparisData: siparisData ?? [],
     isLoading,
     defaultData: {},
     bodyData,
     setBodyData,
     deleteFn,
+    siparisIsLoading,
+    siparisRefetch,
   };
+};
+
+export const CreateAsama = ({
+  setOpenParti,
+}: {
+  setOpenParti: (val: boolean) => void;
+}) => {
+  const createAsama = async (formId: number) => {
+    try {
+      const { data } = await axios.post(
+        `${API_URL}/partiasamalari/partikayitid/${formId}?kullanici_id=1`
+      );
+      setOpenParti(true);
+      toast.success(t("Parti asama!"));
+      return data;
+    } catch (error) {
+      toast.error(`Error creating parti: ${error}`);
+      return null;
+    }
+  };
+
+  return { createAsama };
 };

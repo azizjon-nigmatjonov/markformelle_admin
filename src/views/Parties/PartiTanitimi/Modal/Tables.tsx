@@ -9,18 +9,35 @@ export const Tables = ({ formId }: { formId: number }) => {
     page: 1,
     perPage: 50,
   });
-  const { bodyColumns, isLoading } = TableData({
+  const { bodyColumns, isLoading, siparisData, siparisIsLoading } = TableData({
     filterParams,
     formId,
   });
 
   const { newHeadColumns } = useTableHeaders({
     bodyColumns,
-    predefinedColumns: [{ id: "index", title: "index" }],
+    predefinedColumns: [],
+  });
+
+  const { newHeadColumns: newHeadColumnsSiparis } = useTableHeaders({
+    bodyColumns: siparisData,
+    predefinedColumns: [],
   });
 
   return (
     <div className="space-y-5">
+      <CNewTable
+        title="siparisler"
+        headColumns={newHeadColumnsSiparis}
+        bodyColumns={siparisData}
+        autoHeight="200px"
+        isLoading={siparisIsLoading}
+        idForTable="modal_table_zerve"
+        handleFilterParams={setFilterParams}
+        filterParams={filterParams}
+        disablePagination
+        defaultFilters={["excel_download"]}
+      />
       <CNewTable
         title="partistok"
         headColumns={newHeadColumns}
@@ -31,17 +48,7 @@ export const Tables = ({ formId }: { formId: number }) => {
         handleFilterParams={setFilterParams}
         filterParams={filterParams}
         disablePagination
-      />
-      <CNewTable
-        title="rezerv"
-        headColumns={newHeadColumns}
-        bodyColumns={bodyColumns}
-        autoHeight="200px"
-        isLoading={isLoading}
-        idForTable="modal_table_zerve"
-        handleFilterParams={setFilterParams}
-        filterParams={filterParams}
-        disablePagination
+        defaultFilters={["excel_download"]}
       />
     </div>
   );

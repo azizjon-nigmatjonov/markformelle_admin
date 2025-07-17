@@ -3,18 +3,16 @@ import CNewTable from "../../../components/CElements/CNewTable";
 import { Header } from "../../../components/UI/Header";
 import { breadCrumbs, TableData, useTableHeaders } from "./Logic";
 import { IFilterParams } from "../../../interfaces";
-import { useMemo, useState, useEffect } from "react";
-import CNewModal from "../../../components/CElements/CNewModal";
-import { ModalUI } from "./Modal/Modal";
+import { useMemo, useState } from "react";
+import { modalsActions } from "../../../store/modal/modal.slice";
+import { useDispatch } from "react-redux";
 
 export const PartiTanitimi = () => {
-  const [open, setOpen] = useState(false);
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
   });
-  const [modalInitialData, setModalInitialData] = useState<any>({});
-
+  const dispatch = useDispatch();
   const { bodyColumns, isLoading, bodyData, deleteFn } = TableData({
     filterParams,
   });
@@ -30,13 +28,24 @@ export const PartiTanitimi = () => {
 
   const handleActions = (el: any, status: string) => {
     if (status === "modal") {
-      setOpen(true);
-      setModalInitialData({});
+      dispatch(
+        modalsActions.setModalData({
+          id: "partitanitimi",
+          defaultData: {},
+          type: "add",
+        })
+      );
     }
 
     if (status === "view" || status === "edit") {
-      setOpen(true);
-      setModalInitialData(el);
+      // implement modaldata with redux dispatch
+      dispatch(
+        modalsActions.setModalData({
+          id: "partitanitimi",
+          defaultData: el,
+          type: "edit",
+        })
+      );
     }
 
     if (status === "delete") {
@@ -48,12 +57,6 @@ export const PartiTanitimi = () => {
           return item.PARTIKAYITID;
         })
       );
-    }
-  };
-
-  const modalActionsFn = (status: string) => {
-    if (status === "close") {
-      setOpen(false);
     }
   };
 
@@ -93,19 +96,16 @@ export const PartiTanitimi = () => {
         />
       </div>
 
-      {open && (
+      {/* {open && (
         <CNewModal
           title="Parti Details"
           disabled="big"
           handleActions={modalActionsFn}
           defaultData={modalInitialData}
         >
-          <ModalUI
-            handleModalActions={modalActionsFn}
-            defaultData={modalInitialData}
-          />
+          <ModalUIPartiTanitimi defaultData={modalInitialData} />
         </CNewModal>
-      )}
+      )} */}
     </>
   );
 };

@@ -31,7 +31,7 @@ export const RezervTable = ({ PARTIKAYITID }: { PARTIKAYITID: number }) => {
       bodyColumns={bodyColumns?.length ? bodyColumns : []}
       handleActions={() => {}}
       isLoading={isLoading}
-      autoHeight="140px"
+      autoHeight="250px"
       disablePagination={true}
       handleFilterParams={(params: any) => {
         setFilterParams(params);

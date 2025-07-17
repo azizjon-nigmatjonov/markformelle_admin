@@ -1,7 +1,7 @@
 import { Form } from "./Form";
 import { PartyTransfers } from "./PartyTransfers";
 
-export const ModalUI = ({
+export const ModalUIPariTransfers = ({
   handleModalActions,
   defaultData,
 }: {

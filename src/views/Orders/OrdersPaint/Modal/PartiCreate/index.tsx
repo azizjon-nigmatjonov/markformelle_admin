@@ -8,6 +8,7 @@ import HFTextField from "../../../../../components/HFElements/HFTextField";
 import HFTextarea from "../../../../../components/HFElements/HFTextarea";
 import { LiteOptionsTable } from "../../../../../components/UI/Options/LiteTable";
 import { SubmitCancelButtons } from "../../../../../components/UI/FormButtons/SubmitCancel";
+import { convertToISO } from "../../../../../utils/getDate";
 
 export const PartiCreate = ({
   onClose,
@@ -24,11 +25,9 @@ export const PartiCreate = ({
   const { createForm } = PartiCreateLogics({ refetch: () => {} });
 
   const onSubmit = (data: any) => {
-    console.log("111", data.PROSESASAMALARIID);
-
     const params = {
       ...data,
-      ACILISTARIHI: dayjs(),
+      ACILISTARIHI: convertToISO(dayjs().format("DD.MM.YYYY")),
       MODELNO: null,
       FIRMAID: formData.FIRMAID,
       IMALATTIPIID: false,
@@ -39,8 +38,8 @@ export const PartiCreate = ({
       ISLEMTIPIID: 0,
       ACILIYETDERECESIID: 0,
       ISLETMEONCELIKNO: 1000,
-      PLANLANANIMALATTARIHI: dayjs(),
-      TERMINTARIHI: dayjs(),
+      PLANLANANIMALATTARIHI: convertToISO(dayjs().format("DD.MM.YYYY")),
+      TERMINTARIHI: convertToISO(dayjs().format("DD.MM.YYYY")),
       RECETEOKEY: true,
       TALIMAT: true,
       TALIMATOKEY: true,
@@ -69,12 +68,11 @@ export const PartiCreate = ({
       INSERTTARIHI: dayjs(),
       KULLANICIID: 1,
       DEGISIMLOG: "",
-      DEGISIMTARIHI: currentPaint.DEGISIMTARIHI,
+      DEGISIMTARIHI: dayjs(),
       NUMUNEGONDERITARIHI: dayjs(),
       REVIZETERMINTARIHI: dayjs(),
       RECETEYAZMASAYISI: 0,
     };
-    console.log("params", params.PROSESASAMALARIID);
 
     createForm(params);
   };
@@ -292,8 +290,8 @@ export const PartiCreate = ({
           type={"create parfti"}
           handleActions={(val: string, uniqueID: string) => {
             if (uniqueID === "innerbtns") {
-              if (val === "Close") {
-              }
+              if (val === "Close") onClose();
+
               if (val === "Enter") handleSubmit(onSubmit)();
             }
           }}

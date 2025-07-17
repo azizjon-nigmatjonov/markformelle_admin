@@ -18,6 +18,21 @@ export const SubmitButton = ({
     if (currentKey && isAltPressed) handleActions(currentKey, uniqueID);
   }, [currentKey, isAltPressed]);
 
+  if (type === "F4") {
+    return (
+      <button
+        onClick={() => {
+          handleActions(currentKey, uniqueID);
+        }}
+        className="h-[30px] px-8 bg-[var(--primary)] text-white rounded-[8px] relative"
+        type="button"
+      >
+        create asama
+        {isAltPressed && <span className="absolute right-2">F4</span>}
+      </button>
+    );
+  }
+
   return (
     <button className="custom-btn relative" type="submit">
       <span>{t(type)}</span>

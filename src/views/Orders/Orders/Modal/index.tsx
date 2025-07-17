@@ -7,16 +7,12 @@ import { PaintTablesUI } from "./PaintTablesUI";
 
 interface ModalUIProps {
   defaultData?: ModalTypes;
-  setOpen: (open: boolean) => void;
-  refetch: () => void;
 }
 
 export const OrderModal = ({
-  refetch,
   defaultData = {
     BOYASIPARISKAYITID: 0,
   },
-  setOpen,
 }: ModalUIProps) => {
   const [formId, setFormId] = useState<number>(0);
   const [currentKnitting, setCurrentKnitting] = useState<any>({});
@@ -30,12 +26,17 @@ export const OrderModal = ({
     handleModalActions,
     handleActionsTable,
     setCurrentPaint,
-  } = OrderModalBaseLogics({ defaultData, refetch, formId, setFormId });
+  } = OrderModalBaseLogics({
+    defaultData,
+    refetch: () => {},
+    formId,
+    setFormId,
+  });
 
   const handleModalClose = (status: string) => {
     handleModalActions(status);
     if (status === "close") {
-      setOpen(false);
+      // setOpen(false);
     }
   };
 

@@ -5,7 +5,7 @@ import { breadCrumbs, TableData, useTableHeaders } from "./Logic";
 import { IFilterParams } from "../../../interfaces";
 import { useMemo, useState } from "react";
 import CNewModal from "../../../components/CElements/CNewModal";
-import { ModalUI } from "./Modal";
+import { ModalUIPariTransfers } from "./Modal";
 
 export const OrdersProcess = () => {
   const [open, setOpen] = useState(false);
@@ -100,7 +100,7 @@ export const OrdersProcess = () => {
           handleActions={modalActionsFn}
           defaultData={modalInitialData}
         >
-          <ModalUI
+          <ModalUIPariTransfers
             handleModalActions={modalActionsFn}
             defaultData={modalInitialData}
           />

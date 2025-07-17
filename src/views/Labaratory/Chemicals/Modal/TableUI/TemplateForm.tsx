@@ -28,7 +28,6 @@ export const TemplateForm = ({
     },
     getDetey,
   });
-  console.log("formData", formData);
 
   const onSubmit = (data: any) => {
     const params: any = {};

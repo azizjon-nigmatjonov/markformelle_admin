@@ -11,6 +11,7 @@ export const useKeyDownEvent = () => {
     Enter: "Enter",
     Insert: "Insert",
     Delete: "Delete",
+    F4: "F4",
   };
 
   useEffect(() => {

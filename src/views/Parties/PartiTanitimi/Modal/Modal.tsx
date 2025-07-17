@@ -2,13 +2,7 @@ import { useEffect, useState } from "react";
 import { Form } from "./Form";
 import { Tables } from "./Tables";
 
-export const ModalUI = ({
-  handleModalActions = () => {},
-  defaultData,
-}: {
-  handleModalActions?: (status: string) => void;
-  defaultData: any;
-}) => {
+export const ModalUIPartiTanitimi = ({ defaultData }: { defaultData: any }) => {
   const [formId, setFormId] = useState(0);
 
   useEffect(() => {

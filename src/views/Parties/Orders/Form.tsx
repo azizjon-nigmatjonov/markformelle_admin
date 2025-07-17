@@ -94,7 +94,6 @@ export const Form = ({
       params.NUMUNEGONDERITARIHI = dayjs();
       params.REVIZETERMINTARIHI = dayjs();
       params.RECETEYAZMASAYISI = 0;
-      // params.PARTIKAYITID = 0;
       params.ISLEMGRUBUID = 0;
       params.ACILIYETDERECESIID = 0;
       params.PATMIKTARI = 0;
