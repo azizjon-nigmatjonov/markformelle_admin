@@ -14,6 +14,7 @@ export const PaintTable = ({
   setCurrentPaint = () => {},
   defaultFilters = [],
   height = "170px",
+  rightChildren,
 }: {
   title?: string;
   formId: number;
@@ -28,6 +29,7 @@ export const PaintTable = ({
   setCurrentPaint?: (obj: any) => void;
   defaultFilters?: string[];
   height?: string;
+  rightChildren?: any;
 }) => {
   return (
     <PaintTablesUI
@@ -44,6 +46,7 @@ export const PaintTable = ({
       setFilterParams={setFilterParams}
       defaultFilters={defaultFilters}
       height={height}
+      rightChildren={rightChildren}
     />
   );
 };

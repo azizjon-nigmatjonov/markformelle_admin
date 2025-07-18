@@ -53,7 +53,7 @@ const CSearchInput = ({
         type="text"
         onKeyUp={handleKeyPress}
         placeholder={title ? title : t("search")}
-        className={`w-full min-w-[140px] pl-7 pr-1 bg-transparent h-full outline-none  text-[var(--black)] placeholder-[var(--gray)] rounded-[8px] ${classes}`}
+        className={`w-full min-w-[140px] pl-7 pr-1 bg-white h-full outline-none  text-[var(--black)] placeholder-[var(--gray)] rounded-[8px] ${classes}`}
       />
       {value?.length ? (
         <button

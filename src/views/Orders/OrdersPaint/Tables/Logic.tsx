@@ -423,7 +423,7 @@ export const MaterialTableLogic = ({ filterParams }: { filterParams: any }) => {
 export const PaintTableLogic = ({ filterParams }: { filterParams: any }) => {
   const { t } = useTranslationHook();
   const [headColumns, setHeadColumns] = useState([]);
-  const [bodyData, setBodyData]: any = useState({});
+  const [bodyData, setBodyData]: any = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchList = async (filters: any) => {
@@ -456,7 +456,9 @@ export const PaintTableLogic = ({ filterParams }: { filterParams: any }) => {
 
   useEffect(() => {
     if (listData) {
-      setBodyData(listData);
+      console.log("listData", listData?.data);
+
+      setBodyData(listData?.data || []);
     }
   }, [listData]);
 
@@ -475,13 +477,12 @@ export const PaintTableLogic = ({ filterParams }: { filterParams: any }) => {
       toast.success(t("deleted!"));
     } catch (error) {
       toast.error(`Error creating element:, ${error}`);
-      bodyData;
     }
   };
 
   useEffect(() => {
     const headColumns: any = [];
-    const arr: any = bodyData?.data ?? [];
+    const arr: any = bodyData;
 
     const obj = {
       ...arr?.[0],
@@ -513,11 +514,11 @@ export const PaintTableLogic = ({ filterParams }: { filterParams: any }) => {
   }, [bodyData]);
 
   return {
-    bodyData,
+    bodyData: listData || {},
     isLoading: isLoading,
     refetch,
     headColumns,
-    bodyColumns: bodyData?.data ?? [],
+    bodyColumns: bodyData ?? [],
     deleteFn,
   };
 };

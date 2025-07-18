@@ -103,117 +103,6 @@ export const Form = ({
     }
   };
 
-  //   {
-  //     "PARTIKAYITID": 0,
-  //     "PARTIYIL": "2025",
-  //     "PARTIID": 999,
-  //     "FIRMAID": "M0002",
-  //     "ISLEMTIPIID": 1,
-  //     "PATMIKTARI": 0,
-  //     "INSERTTARIHI": "2025-07-07T10:15:45.732Z",
-  //     "NOTU": "1",
-  //     "SIPARISTARIHI": "2025-07-07",
-  //     "FASON": true,
-  //     "RECETEYAZILDI": false,
-  //     "REFAKATKARTIYAZILDI": true,
-  //     "ACILISTARIHI": "2025-07-07T10:15:45.732Z",
-  //     "PLANLANANIMALATTARIHI": "2025-07-07T10:15:45.732Z",
-  //     "DEGISIMTARIHI": "2025-07-07T10:15:45.732Z",
-  //     "TERMINTARIHI": "2025-07-07T10:15:45.732Z",
-  //     "TALIMAT": false,
-  //     "TALIMATOKEY": false,
-  //     "RECETEYAZILISTARIHI": "2025-07-07T10:15:45.732Z",
-  //     "PARCALISEVK": false,
-  //     "FATURAKESILECEK": false,
-  //     "BOYASIPARISKAYITID": 0,
-  //     "DESENVARYANTID": 0,
-  //     "FATURAKESILDI": false,
-  //     "SINIF": "B",
-  //     "VADEGUN": 0,
-  //     "RAFID": "",
-  //     "EMULSIYONURUNID": "",
-  //     "ONAYDURUMU": false,
-  //     "ONAYTARIHI": "2025-07-07T10:15:45.732Z",
-  //     "ONAYLAYANKULLANICIID": 0,
-  //     "SABLONRECETESTOKTANDUSULDU": false,
-  //     "PARTITIPIID": 0,
-  //     "SEVKIYATNOTU": "",
-  //     "REFAKATKARTIYAZMASAYISI": 0,
-  //     "SABLONSAYISI": 0,
-  //     "ARGENO": "",
-  //     "NUMUNEONAYTARIHI": "2025-07-07",
-  //     "NUMUNENOTU": "",
-  //     "DEGISIMLOG": "",
-  //     "LAMINASYON": false,
-  //     "LINKISLEMI": 0,
-  //     "INSERTKULLANICIID": 1,
-  //     "KULLANICIID": 1,
-  //     "NUMUNEGONDERITARIHI": "2025-07-07T10:15:45.732Z",
-  //     "REVIZETERMINTARIHI": "2025-07-07T10:15:45.732Z",
-  //     "RECETEYAZMASAYISI": 0,
-  //     "ISLEMGRUBUID": 0,
-  //     "ACILIYETDERECESIID": 0
-  // }
-
-  // {
-  //   "PARTIYIL": 0,
-  //   "PARTIID": 0,
-  //   "ACILISTARIHI": "2025-07-07T05:36:32.964Z",
-  //   "FIRMAID": "string",
-  //   "IMALATTIPIID": false,
-  //   "PARTIGRUPID": "string",
-  //   "MODELNO": "string",
-  //   "FASON": false,
-  //   "RECETEID": "string",
-  //   "RECETETARIHI": "2025-07-07T05:36:32.964Z",
-  //   "ISLEMGRUBUID": 0,
-  //   "ISLEMTIPIID": 0,
-  //   "ACILIYETDERECESIID": 0,
-  //   "ISLETMEONCELIKNO": 1000,
-  //   "ACILIYETNOTU": "string",
-  //   "PLANLANANIMALATTARIHI": "2025-07-07T05:36:32.964Z",
-  //   "TERMINTARIHI": "2025-07-07T05:36:32.964Z",
-  //   "RECETEOKEY": false,
-  //   "TALIMAT": false,
-  //   "TALIMATOKEY": false,
-  //   "NOTU": "string",
-  //   "RECETEYAZILDI": false,
-  //   "RECETEYAZILISTARIHI": "2025-07-07T05:36:32.964Z",
-  //   "REFAKATKARTIYAZILDI": false,
-  //   "PARCALISEVK": false,
-  //   "FATURAKESILECEK": true,
-  //   "BOYASIPARISKAYITID": 0,
-  //   "DESENVARYANTID": 0,
-  //   "FATURAKESILDI": false,
-  //   "SINIF": "B",
-  //   "VADEGUN": 0,
-  //   "RAFID": "string",
-  //   "EMULSIYONURUNID": "string",
-  //   "PATMIKTARI": 0,
-  //   "ONAYDURUMU": true,
-  //   "ONAYTARIHI": "2025-07-07T05:36:32.964Z",
-  //   "ONAYLAYANKULLANICIID": 0,
-  //   "SABLONRECETESTOKTANDUSULDU": false,
-  //   "PARTITIPIID": 0,
-  //   "SEVKIYATNOTU": "string",
-  //   "REFAKATKARTIYAZMASAYISI": 0,
-  //   "SABLONSAYISI": 0,
-  //   "ARGENO": "string",
-  //   "NUMUNEONAYTARIHI": "2025-07-07",
-  //   "NUMUNENOTU": "string",
-  //   "DEGISIMLOG": "string",
-  //   "LAMINASYON": false,
-  //   "LINKISLEMI": 0,
-  //   "INSERTKULLANICIID": 1,
-  //   "INSERTTARIHI": "2025-07-04T18:43:04.084397",
-  //   "KULLANICIID": 1,
-  //   "DEGISIMTARIHI": "2025-07-07T05:36:32.964Z",
-  //   "NUMUNEGONDERITARIHI": "2025-07-07T05:36:32.964Z",
-  //   "REVIZETERMINTARIHI": "2025-07-07T05:36:32.964Z",
-  //   "RECETEYAZMASAYISI": 0,
-  //   "PARTIKAYITID": 0
-  // }
-
   const setFormData = (data: any, setValue: any) => {
     setValue("PARTIYIL", data.PARTIYIL);
     setValue("PARTIID", data.PARTIID);
@@ -436,22 +325,24 @@ export const Form = ({
           </InputFieldUI>
         </div>
 
-        <div className="grid grid-cols-2 gap-x-2">
-          <HFTextarea
-            label="notu 1"
-            name="NOTU"
-            defaultValue={formData?.NOTU}
-            control={control}
-            minRows={4}
-          />
+        <div className="grid grid-cols-1 gap-x-2">
+          <InputFieldUI title="Notu">
+            <HFTextarea
+              name="NOTU"
+              defaultValue={formData?.NOTU}
+              control={control}
+              minRows={2}
+            />
+          </InputFieldUI>
 
-          <HFTextarea
-            label="notu 2"
-            name="PLANLAMANOTU"
-            defaultValue={formData?.PLANLAMANOTU}
-            control={control}
-            minRows={4}
-          />
+          <InputFieldUI title="Planlanan notu">
+            <HFTextarea
+              name="PLANLAMANOTU"
+              defaultValue={formData?.PLANLAMANOTU}
+              control={control}
+              minRows={2}
+            />
+          </InputFieldUI>
         </div>
       </div>
     </form>

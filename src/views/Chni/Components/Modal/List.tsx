@@ -211,7 +211,7 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
 
             <textarea
               value={descriptionText}
-              className="p-3 bg-transparent border border-[var(--border)] outline-none focus:border-[var(--primary)] rounded-[8px] w-full"
+              className="p-3 bg-white border border-[var(--border)] outline-none focus:border-[var(--primary)] rounded-[8px] w-full"
               rows={1}
               onChange={(e: any) => setDescriptionText(e.target.value)}
             ></textarea>

@@ -21,7 +21,7 @@ export const ModalImporter = () => {
             title="Parti Details"
             disabled="big"
             handleActions={() => modalActionsFn(modal.id)}
-            // innerModal={true}
+            innerModal={index !== 0}
           >
             {modals.find((item: any) => item.id === modal.id)?.component}
           </CNewModal>

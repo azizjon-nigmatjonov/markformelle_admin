@@ -1,10 +1,10 @@
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { TableSortFilter } from "../Sort";
-import { CloseIcon } from "../../../../UI/IconGenerator/Svg";
 import { Field } from "./Field";
 import { useEffect, useState } from "react";
 import { SelectFilter } from "./Select";
 import { useTranslationHook } from "../../../../../hooks/useTranslation";
+import { ArrowLeftIcon } from "@mui/x-date-pickers-pro";
 // import { CPeriodPicker } from "../../../CPeriodPicker";
 interface Props {
   colId?: any;
@@ -127,7 +127,7 @@ export const SideFilter = ({
           className="absolute right-2 top-4"
           onClick={() => handleClick()}
         >
-          <CloseIcon width={24} />
+          <ArrowLeftIcon style={{ width: "30px" }} />
         </button>
       )}
 

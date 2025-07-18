@@ -15,6 +15,7 @@ export const PaintTablesUI = ({
   setFilterParams = () => {},
   defaultFilters = [],
   height = "170px",
+  rightChildren,
 }: {
   title?: string;
   formId: number;
@@ -29,6 +30,7 @@ export const PaintTablesUI = ({
   setFilterParams?: (val: any) => void;
   defaultFilters?: string[];
   height?: string;
+  rightChildren?: any;
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -83,6 +85,7 @@ export const PaintTablesUI = ({
         isLoading={isLoading}
         disablePagination={true}
         filterParams={filterParams}
+        rightChildren={rightChildren}
       />
       {open && (
         <>

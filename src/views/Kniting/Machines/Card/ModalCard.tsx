@@ -350,7 +350,7 @@ const ModalCard = ({ machine, setOpen = () => {} }: MachineCardProps) => {
                   Введите причину поломки
                 </p>
                 <textarea
-                  className="p-3 bg-transparent border border-[var(--border)] outline-none focus:border-[var(--primary)] rounded-[8px] w-full"
+                  className="p-3 bg-white border border-[var(--border)] outline-none focus:border-[var(--primary)] rounded-[8px] w-full"
                   rows={window?.screen?.height < 800 ? 1 : 5}
                   onChange={(e: any) => setDescriptionText(e.target.value)}
                 ></textarea>

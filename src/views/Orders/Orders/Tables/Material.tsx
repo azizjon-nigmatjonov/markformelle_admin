@@ -56,7 +56,6 @@ export const MaterialTable = ({
     <>
       <CNewTable
         title={title}
-        key={headColumns.length ? "isloading" : "iscame"}
         idForTable="material_table_inner"
         headColumns={headColumns}
         handleActions={(obj: any, status: string) => {

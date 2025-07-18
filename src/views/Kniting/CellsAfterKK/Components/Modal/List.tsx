@@ -29,7 +29,7 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
 
     return Number(num.toFixed(2));
   };
-  
+
   return (
     <div className="grid grid-cols-2">
       <ul
@@ -45,12 +45,12 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
       >
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>Номер машины</p>
-          <p>{machine.DeviceNo ?? '-'}</p>
+          <p>{machine.DeviceNo ?? "-"}</p>
         </li>
         <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>Название машины</p>
-          <p>{machine?.Description ?? '-'}</p>
+          <p>{machine?.Description ?? "-"}</p>
         </li>
         <ListDivider />
         <li className="flex items-center justify-between">
@@ -59,32 +59,32 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
         <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>Статус машины</p>
-          <p>{machine.status ?? '-'}</p>
+          <p>{machine.status ?? "-"}</p>
         </li>
         <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>IP адрес </p>
-          <p>{machine.ip_address ?? '-'}</p>
+          <p>{machine.ip_address ?? "-"}</p>
         </li>
         <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>Версия программы </p>
-          <p>{machine.soft_version ?? '-'}</p>
+          <p>{machine.soft_version ?? "-"}</p>
         </li>
         <ListDivider sx={{ background: "var(--gray)" }} />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>Номер заказа </p>
-          <p>{machine.zakaz ?? '-'}</p>
+          <p>{machine.zakaz ?? "-"}</p>
         </li>
         <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>Артикул </p>
-          <p>{machine.art ?? '-'}</p>
+          <p>{machine.art ?? "-"}</p>
         </li>
         <ListDivider />
         <li style={{ display: "flex", justifyContent: "space-between" }}>
           <p>Лот пряжи </p>
-          <p>{machine.lotno ?? '-'}</p>
+          <p>{machine.lotno ?? "-"}</p>
         </li>
 
         <ListDivider />
@@ -264,7 +264,7 @@ export const ChniCardList = ({ machine }: { machine: any }) => {
             </p>
             <textarea
               value={descriptionText}
-              className="p-3 bg-transparent border border-[var(--border)] outline-none focus:border-[var(--primary)] rounded-[8px] w-full"
+              className="p-3 bg-white border border-[var(--border)] outline-none focus:border-[var(--primary)] rounded-[8px] w-full"
               rows={window?.screen?.height < 800 ? 1 : 5}
               onChange={(e: any) => setDescriptionText(e.target.value)}
             ></textarea>

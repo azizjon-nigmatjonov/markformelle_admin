@@ -17,6 +17,105 @@
   -webkit-text-size-adjust: 100%;
 }
 
+/* Force light backgrounds on form elements to prevent dark mode issues */
+input, textarea, select {
+  background-color: white !important;
+  color: var(--black) !important;
+}
+
+/* Ensure all input types have white backgrounds */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"] {
+  background-color: white !important;
+  color: var(--black) !important;
+}
+
+/* Additional specific overrides for problematic components */
+#hfInputMask input {
+  background-color: white !important;
+}
+
+.rmdp-input {
+  background-color: white !important;
+}
+
+/* Override any dark mode styles for form elements */
+@media (prefers-color-scheme: dark) {
+  input, textarea, select {
+    background-color: white !important;
+    color: var(--black) !important;
+  }
+  
+  /* Ensure MUI components also have light backgrounds */
+  .MuiInputBase-root {
+    background-color: white !important;
+  }
+  
+  .MuiOutlinedInput-root {
+    background-color: white !important;
+  }
+  
+  .MuiFilledInput-root {
+    background-color: white !important;
+  }
+  
+  /* Additional form elements */
+  .MuiTextField-root input {
+    background-color: white !important;
+    color: var(--black) !important;
+  }
+  
+  .MuiFormControl-root input {
+    background-color: white !important;
+    color: var(--black) !important;
+  }
+  
+  /* Override any autofill styles */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    -webkit-text-fill-color: var(--black) !important;
+  }
+  
+  /* Additional specific overrides for problematic components */
+  #hfInputMask input {
+    background-color: white !important;
+  }
+  
+  .rmdp-input {
+    background-color: white !important;
+  }
+  
+  /* Ensure all input types have white backgrounds */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="search"],
+  input[type="date"],
+  input[type="time"],
+  input[type="datetime-local"],
+  input[type="month"],
+  input[type="week"] {
+    background-color: white !important;
+    color: var(--black) !important;
+  }
+}
+
 @font-face {
   font-family: "Inter";
   src: url("/fonts/Inter/Inter-ExtraBold.woff2") format("woff2"),

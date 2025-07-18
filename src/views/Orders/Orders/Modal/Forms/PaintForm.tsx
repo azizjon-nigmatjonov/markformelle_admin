@@ -150,7 +150,6 @@ export const PaintForm = ({
   //     "REFERANSSIPARISNO": "1"
   // }
   const onSubmit = (data: any) => {
-    console.log(data);
     let params = { ...data };
 
     if (formId) {
@@ -232,8 +231,6 @@ export const PaintForm = ({
       delete params.TERMINNOTU;
       delete params.IPTALKILO;
 
-      console.log(params);
-
       createForm(params);
     }
   };
@@ -276,7 +273,6 @@ export const PaintForm = ({
       setFormId(defaultData.BOYASIPARISDETAYID);
     }
   }, [defaultData]);
-  console.log("DESENID", DESENID);
 
   return (
     <CNewMiniModal title={title} handleActions={handleActions}>

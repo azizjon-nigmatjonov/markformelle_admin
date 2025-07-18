@@ -5,9 +5,6 @@ import { Header } from "../../../components/UI/Header";
 import CNewTable from "../../../components/CElements/CNewTable";
 import { IFilterParams } from "../../../interfaces";
 import { useTableHeaders } from "../../../hooks/useTableHeaders";
-import { ModalTypes } from "./interfaces";
-import CNewModal from "../../../components/CElements/CNewModal";
-import { OrderModalPartiCreate } from "./Modal";
 import { modalsActions } from "../../../store/modal/modal.slice";
 import { useDispatch } from "react-redux";
 
@@ -55,19 +52,6 @@ export const OrdersPaintPage = () => {
     }
   };
 
-  const handleModal = (status: string, id: number) => {
-    if (status === "delete") {
-      deleteFn([id]);
-    } else if (status === "close") {
-      dispatch(
-        modalsActions.setModalData({
-          id: "order-paint",
-          defaultData: {},
-        })
-      );
-    }
-  };
-
   return (
     <>
       <Header extra={<CBreadcrumbs items={breadCrumbs} progmatic={true} />} />
@@ -104,23 +88,6 @@ export const OrdersPaintPage = () => {
           }}
         />
       </div>
-
-      {/* {open && (
-        <CNewModal
-          title="Boya siparis tanitimi (kumash)"
-          handleActions={handleModal}
-          defaultData={{
-            id: modalInitialData?.BOYASIPARISKAYITID,
-          }}
-          disabled="big"
-        >
-          <OrderModalPartiCreate
-            defaultData={modalInitialData ?? { BOYASIPARISKAYITID: 0 }}
-            setOpen={setOpen}
-            refetch={refetch}
-          />
-        </CNewModal>
-      )} */}
     </>
   );
 };

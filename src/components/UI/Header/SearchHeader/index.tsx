@@ -8,7 +8,7 @@ import stl from "./style.module.scss";
 interface Props {
   //   handleSearch?: (val: any) => void;
   btns?: string[];
-//   children?: ReactNode;
+  //   children?: ReactNode;
   extra?: any;
   //   delay?: number;
 }
@@ -24,7 +24,7 @@ const SearchHeader: FC<Props> = ({ extra }) => {
           //   onChange={(e) => debounce(e.target.value)}
           type="text"
           placeholder="Izlash..."
-          className={`w-full  bg-transparent h-[40px] outline-none pr-5 text=[var(--black)] placeholder-gray focus:border-[var(--main)] rounded-[10px] `}
+          className={`w-full  bg-white h-[40px] outline-none pr-5 text=[var(--black)] placeholder-gray focus:border-[var(--main)] rounded-[10px] `}
         />
       </div>
 

@@ -15,7 +15,7 @@ export const PartyTransfersLogic = ({
 
   const fetchList = async () => {
     const response = await axios.get(
-      `${API_URL}/partiasamalari/partikayitid/${PARTIKAYITID}`
+      `${API_URL}/partiasamalari/partihareketigetir/${PARTIKAYITID}`
     );
     return response.data;
   };
@@ -24,7 +24,7 @@ export const PartyTransfersLogic = ({
     data: listData,
     isLoading,
     refetch,
-  } = useQuery(["GET_PARTY_TRANSFERS", PARTIKAYITID], () => fetchList(), {
+  } = useQuery(["GET_PARTI_HARAKATLARI", PARTIKAYITID], () => fetchList(), {
     keepPreviousData: true,
     enabled: !!PARTIKAYITID,
   });
@@ -118,64 +118,5 @@ export const TransferFormLogic = ({
     formData: formData?.data ? formData?.data : defaultData,
     createForm,
     updateForm,
-  };
-};
-
-export const RezerveTableLogic = ({
-  PARTIKAYITID,
-}: {
-  PARTIKAYITID: number;
-}) => {
-  const { t } = useTranslationHook();
-  const [bodyData, setBodyData]: any = useState({});
-
-  const fetchList = async () => {
-    const response = await axios.get(
-      `${API_URL}/partiasamalarireceteboyamiktar/?PARTIKAYITID=${PARTIKAYITID}`
-    );
-    return response.data;
-  };
-
-  const {
-    data: listData,
-    isLoading,
-    refetch,
-  } = useQuery(["GET_REZERVE_TRANSFERS", PARTIKAYITID], () => fetchList(), {
-    keepPreviousData: true,
-    enabled: !!PARTIKAYITID,
-  });
-
-  const deleteFn = async (id: string[]) => {
-    try {
-      await axios.delete(`${API_URL}/boyasiparisrezerv/`, {
-        method: "DELETE",
-        url: `${API_URL}/boyasiparisrezerv/`,
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        data: id,
-      });
-      refetch();
-      toast.success(t("deleted!"));
-    } catch (error) {
-      toast.error(`Error creating element:, ${error}`);
-      bodyData;
-    }
-  };
-
-  useEffect(() => {
-    if (listData) {
-      setBodyData(listData);
-    }
-  }, [listData]);
-
-  return {
-    bodyColumns: listData?.data,
-    isLoading,
-    defaultData: {},
-    setBodyData,
-    deleteFn,
-    refetch,
   };
 };

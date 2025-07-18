@@ -24,7 +24,7 @@ const PopupBody = styled("div")(
   border: 1px solid ${
     theme.palette.mode === "dark" ? "var(--gray30)" : "var(--gray30)"
   };
-  background-color: ${theme.palette.mode === "dark" ? "var(--gray30)" : "#fff"};
+  background-color: 'white';
   box-shadow: ${
     theme.palette.mode === "dark"
       ? `0px 4px 8px rgb(0 0 0 / 0.7)`

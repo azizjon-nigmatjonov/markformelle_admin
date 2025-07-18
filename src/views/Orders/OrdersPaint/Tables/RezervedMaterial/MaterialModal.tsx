@@ -81,7 +81,7 @@ export const MaterialModal = ({
         onSubmit={handleSubmit(onSubmit)}
         className="mb-5 space-y-5"
       >
-        <div className="grid grid-cols-2 gap-x-3">
+        <div className="grid grid-cols-4">
           <HFTextField name="ADI" control={control} label="Ad Soyad" />
         </div>
         <div className="w-[1100px] grid grid-cols-4 gap-3">
@@ -118,7 +118,7 @@ export const MaterialModal = ({
         isLoading={isLoading}
         currentIdRow={allRezerv.map((el) => el.index)}
         handleActions={handleActions}
-        defaultFilters={["excel_download", "active_menu", "sellect_more"]}
+        defaultFilters={["excel_download", "sellect_more"]}
         autoHeight="500px"
         innerTable={true}
         disablePagination

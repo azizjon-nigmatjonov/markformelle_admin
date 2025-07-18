@@ -8,6 +8,9 @@ import { PaintTableLogic } from "../Tables/Logic";
 import { PaintForm } from "./Forms/PaintForm";
 import { PaintFormYarn } from "./Forms/PaintFormYarn";
 import { PartianTable } from "../Tables/Partion";
+import CLabel from "../../../../components/CElements/CLabel";
+import CCheckbox from "../../../../components/CElements/CCheckbox";
+import { PaintFormLogic } from "./Forms/PaintComponents/Logic";
 
 export const PaintTablesUI = ({
   handleActionsTable,
@@ -26,6 +29,9 @@ export const PaintTablesUI = ({
   currentMaterial: any;
   formData: any;
 }) => {
+  const [currentElementRightClick, setCurrentElementRightClick]: any = useState(
+    {}
+  );
   const [filterParams, setFilterParams]: any = useState({
     page: 1,
     perPage: 50,
@@ -40,6 +46,11 @@ export const PaintTablesUI = ({
   });
   const { isLoading, headColumns, bodyColumns, refetch, deleteFn } =
     PaintTableLogic({ filterParams });
+  const { updateForm } = PaintFormLogic({
+    formId: 0,
+    defaultData: {},
+    closeFn: () => refetch(),
+  });
 
   const { headColumns: headColumnsVariant, bodyColumns: bodyColumnsVariant } =
     PaintVariantTableLogic({ filterParams: filterParamsVariant });
@@ -77,6 +88,10 @@ export const PaintTablesUI = ({
       <div className="space-y-5">
         <PaintTable
           handleActionsTable={(obj: any, status: string) => {
+            if (status === "view_single_right_click") {
+              setCurrentElementRightClick(obj);
+              return;
+            }
             handlePaintActionsPaint(obj, status);
           }}
           height="180px"
@@ -85,7 +100,12 @@ export const PaintTablesUI = ({
           setCurrentPaint={setCurrentPaint}
           isLoading={isLoading}
           headColumns={headColumns}
-          bodyColumns={bodyColumns}
+          bodyColumns={bodyColumns?.map((item: any) => {
+            return {
+              ...item,
+              backgroundColor: item?.ONAYDURUMU ? "bg-green-200" : "",
+            };
+          })}
           deleteFn={deleteFn}
           filterParams={filterParams}
           setFilterParams={setFilterParams}
@@ -95,10 +115,30 @@ export const PaintTablesUI = ({
             "delete",
             "excel_download",
             "excel_upload",
-            "active_menu",
             "actions",
             "sellect_more",
           ]}
+          rightChildren={(obj: any) => {
+            return (
+              <div className="p-2 w-[180px]">
+                <CLabel title="ONAYDURUMU" />
+                <CCheckbox
+                  element={{
+                    label: "ONAYDURUMU",
+                    name: "ONAYDURUMU",
+                  }}
+                  checked={obj?.ONAYDURUMU}
+                  handleCheck={(val: any) => {
+                    updateForm(
+                      { ...obj, ONAYDURUMU: val.checked },
+                      obj?.BOYASIPARISDETAYID
+                    );
+                    setCurrentElementRightClick({});
+                  }}
+                />
+              </div>
+            );
+          }}
         />
         <PartianTable
           handleActionsTable={(obj: any, status: string, type: string) => {

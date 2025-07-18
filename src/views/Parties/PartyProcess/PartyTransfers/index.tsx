@@ -1,33 +1,23 @@
 import { useMemo, useState } from "react";
-import { PartyTransfersLogic, RezerveTableLogic } from "./Logic";
+import { PartyTransfersLogic } from "./Logic";
 import { useTableHeaders } from "../Logic";
 import CNewTable from "../../../../components/CElements/CNewTable";
-import { TransferModal } from "./TransferModal";
-import CNewMiniModal from "../../../../components/CElements/CNewMiniModal";
-import { RezervTable } from "./Rezerve";
 
 export const PartyTransfers = ({ defaultData }: { defaultData: any }) => {
-  const [open, setOpen] = useState(false);
-  const [modalInitialData, setModalInitialData] = useState({});
   const [filterParams, setFilterParams] = useState({
     page: 1,
     perPage: 10,
   });
 
-  const { bodyColumns, isLoading, deleteFn, refetch } = PartyTransfersLogic({
+  const { bodyColumns, isLoading, deleteFn } = PartyTransfersLogic({
     PARTIKAYITID: defaultData?.PARTIKAYITID,
   });
 
   const handleActions = (el: any, status: string) => {
     if (status === "modal") {
-      setOpen(true);
-      setModalInitialData({});
     }
 
     if (status === "view" || status === "edit") {
-      setOpen(true);
-
-      setModalInitialData(el);
     }
 
     if (status === "delete") {
@@ -86,27 +76,16 @@ export const PartyTransfers = ({ defaultData }: { defaultData: any }) => {
     ];
   }, []);
 
-  const modalActionsFn = (status: string) => {
-    if (status === "Close") {
-      setOpen(false);
-    }
-  };
-
   const { newHeadColumns } = useTableHeaders({
     bodyColumns,
     predefinedColumns,
   });
 
-  const { bodyColumns: bodyColumnsRezerve, isLoading: isLoadingRezerve } =
-    RezerveTableLogic({
-      PARTIKAYITID: defaultData?.PARTIKAYITID,
-    });
-
   return (
     <>
       <div className="space-y-5">
         <CNewTable
-          title="parti_asamalari"
+          title="parti_hareketleri"
           headColumns={newHeadColumns?.length ? newHeadColumns : []}
           bodyColumns={bodyColumns?.length ? bodyColumns : []}
           handleActions={handleActions}
@@ -120,7 +99,7 @@ export const PartyTransfers = ({ defaultData }: { defaultData: any }) => {
             "excel_download",
             "sellect_more",
           ]}
-          autoHeight="250px"
+          autoHeight="500px"
           innerTable={true}
           defaultSearch={{
             PARTIYIL: "",
@@ -128,16 +107,9 @@ export const PartyTransfers = ({ defaultData }: { defaultData: any }) => {
           }}
           disablePagination
         />
-
-        <div className="overflow-y-scroll designed-scroll">
-          <RezervTable
-            bodyColumns={bodyColumnsRezerve}
-            isLoading={isLoadingRezerve}
-          />
-        </div>
       </div>
 
-      {open && (
+      {/* {open && (
         <CNewMiniModal title="Party transfers" handleActions={modalActionsFn}>
           <TransferModal
             defaultData={{
@@ -150,7 +122,7 @@ export const PartyTransfers = ({ defaultData }: { defaultData: any }) => {
             }}
           />
         </CNewMiniModal>
-      )}
+      )} */}
     </>
   );
 };

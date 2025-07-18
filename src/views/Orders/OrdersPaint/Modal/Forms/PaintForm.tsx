@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import { PaintFormLogic } from "./PaintComponents/Logic";
 import HFTextarea from "../../../../../components/HFElements/HFTextarea";
 import HFTextField from "../../../../../components/HFElements/HFTextField";
+import CLabel from "../../../../../components/CElements/CLabel";
+import CCheckbox from "../../../../../components/CElements/CCheckbox";
 
 export const PaintForm = ({
   handleActions,
@@ -743,7 +745,7 @@ export const PaintForm = ({
               name="ISLEMTIPIID"
               link="islemtipi"
               renderValue={(_: string, obj: any) => {
-                return obj.ISLEMTIPIID && obj.ADI
+                return obj.ISLEMTIPIID || (obj.ISLEMTIPIID === 0 && obj.ADI)
                   ? obj.ISLEMTIPIID + " - " + obj.ADI
                   : obj.ISLEMTIPIID;
               }}
@@ -756,11 +758,7 @@ export const PaintForm = ({
                 { id: "ADI", title: "ADI", width: 120 },
               ]}
               defaultValue={formData?.ISLEMTIPIID}
-              defaultFilters={
-                formData?.ISLEMTIPIID || formData?.ISLEMTIPIID === 0
-                  ? `ISLEMTIPIID=${formData?.ISLEMTIPIID}`
-                  : ""
-              }
+              defaultSearchSingle={formData?.ISLEMTIPIID + ""}
               handleSelect={(obj: { ISLEMTIPIID: number }) => {
                 setValue("ISLEMTIPIID", obj.ISLEMTIPIID);
               }}
@@ -788,6 +786,16 @@ export const PaintForm = ({
               control={control}
               minRows={2}
             />
+            <div>
+              <CLabel title="ONAYDURUMU" />
+              <CCheckbox
+                element={{
+                  label: "ONAYDURUMU",
+                  name: "ONAYDURUMU",
+                  control: control,
+                }}
+              />
+            </div>
           </div>
         </div>
         <SubmitCancelButtons

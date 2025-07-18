@@ -111,7 +111,7 @@ ul {
 
 #hfInputMask {
   input {
-    background-color: transparent;
+    background-color: white !important;
     height: 30px;
     width: 100%;
     border: 1px solid var(--border);
@@ -249,7 +249,7 @@ ul {
   }
 
   .rmdp-input {
-    background-color: transparent;
+    background-color: white !important;
     height: 42px;
     border-radius: 10px;
   }
@@ -265,7 +265,7 @@ ul {
   border-radius: 8px;
   border: 1px solid var(--border);
   height: 30px;
-  padding: 0 16px;
+  padding: 0 32px;
   width: 100%;
   white-space: nowrap;
   text-align: center;
@@ -664,6 +664,8 @@ ul {
   padding: 0px 9px;
   height: 30px;
   width: 100%;
+  background-color: white;
+  color: var(--black);
   &:focus {
     border-color: var(--primary);
   }

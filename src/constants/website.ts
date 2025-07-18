@@ -50,6 +50,7 @@ export const ColorConstants = {
   main500: "#FF5B01",
   green: "#0BD976",
   green50: "#ECFDF3",
+  green70: "#bbf7d0",
   brown10: "#FFDECC",
 
   border: "#EAECF0",

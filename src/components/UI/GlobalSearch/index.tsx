@@ -231,7 +231,7 @@ const GlobalSearch = ({
         type="text"
         onKeyUp={handleKeyPress}
         placeholder={t("search")}
-        className={`w-full min-w-[140px] bg-transparent h-full outline-none text-[var(--black)] placeholder-[var(--gray)] rounded-[8px] ${classes}`}
+        className={`w-full min-w-[140px] bg-white h-full outline-none text-[var(--black)] placeholder-[var(--gray)] rounded-[8px] ${classes}`}
       />
 
       {open && searchedData.length ? (

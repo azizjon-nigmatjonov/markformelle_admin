@@ -4,7 +4,10 @@ import { Controller } from "react-hook-form";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 import { TableUI } from "./LiteTable/TableUI";
-import { useFetchType } from "../../../hooks/useFetchRequests/useFetchType";
+import {
+  useFetchType,
+  useFetchTypeSingle,
+} from "../../../hooks/useFetchRequests/useFetchType";
 import { useKeyDownEvent } from "../../../hooks/useKeyDownEvent";
 import { PopupUI } from "../PopupUI";
 import debounce from "lodash/debounce";
@@ -47,6 +50,7 @@ interface LiteTableOptionsProps<T extends BaseTableItem = TableItem> {
   staticSearchID?: string;
   staticOptions?: T[];
   defaultFilters?: string;
+  defaultSearchSingle?: string;
   popupUI?: React.ReactNode;
 }
 
@@ -110,10 +114,11 @@ const SearchInput = memo(
               }}
               onFocus={() => setIsFocus(true)}
               autoFocus={focused}
-              className={`border rounded-[8px] pl-8 h-[30px] w-full px-1 bg-transparent ${error?.message
-                ? "border-[var(--error)]"
-                : "border-[var(--border)]"
-                } ${disabled ? "text-[var(--gray)]" : ""}`}
+              className={`border rounded-[8px] pl-8 h-[30px] w-full px-1 bg-white ${
+                error?.message
+                  ? "border-[var(--error)]"
+                  : "border-[var(--border)]"
+              } ${disabled ? "text-[var(--gray)]" : ""}`}
               placeholder={t(placeholder)}
               onChange={(e) => {
                 debouncedSearch(e.target.value);
@@ -190,7 +195,7 @@ const TablePopup = memo(
 export const LiteOptionsTable = memo(
   <T extends BaseTableItem = TableItem>({
     link = "",
-    handleSelect = () => { },
+    handleSelect = () => {},
     name = "",
     defaultValue = "",
     label = "",
@@ -206,6 +211,7 @@ export const LiteOptionsTable = memo(
     staticSearchID = "",
     staticOptions = [],
     popupUI = null,
+    defaultSearchSingle = "",
     defaultFilters = "",
   }: LiteTableOptionsProps<T>) => {
     const [searchName, setSearchName] = useState(staticSearchID || name);
@@ -215,12 +221,16 @@ export const LiteOptionsTable = memo(
     const [anchor, setAnchor] = useState<HTMLElement | null>(null);
     const [currentEl, setCurrentEl] = useState<T>({} as T);
     const [options, setOptions] = useState<T[]>([]);
-    const { data, setFilterParams, filterParams, isLoading } = useFetchType(`liteTable_${name}`);
+    const { data, setFilterParams, filterParams, isLoading } = useFetchType(
+      `liteTable_${name}`
+    );
+    const { data: dataSingle, getList } = useFetchTypeSingle({
+      setOpenNewModal: () => {},
+    });
     const { isAltPressed, currentKey, pressedKey } = useKeyDownEvent();
     const [isFocus, setIsFocus] = useState(false);
     const [openPopup, setOpenPopup] = useState(false);
 
-    // Infinite scroll handler - increase perPage by 50 when user scrolls to bottom
     const handleLoadMore = useCallback(() => {
       if (isLoading) return;
 
@@ -249,7 +259,7 @@ export const LiteOptionsTable = memo(
             ...filterParams,
             link,
             q: value ? `${staticSearchID}=${value}` : undefined,
-            perPage: 50, // Reset to initial limit when searching
+            perPage: 50,
           });
           return;
         }
@@ -283,6 +293,7 @@ export const LiteOptionsTable = memo(
         data?.data?.length,
       ]
     );
+    console.log("defaultValue", defaultValue);
 
     const setCurrentValue = useCallback(
       (el?: T) => {
@@ -312,7 +323,6 @@ export const LiteOptionsTable = memo(
           setCurrentEl(el as T);
           setCurrentValue(el as T);
           setOpen(false);
-          // Use requestAnimationFrame to defer focus and avoid forced reflow
           requestAnimationFrame(() => {
             inputRef.current?.focus();
           });
@@ -371,7 +381,7 @@ export const LiteOptionsTable = memo(
     }, [defaultSearch, link, setFilterParams, search]);
 
     useEffect(() => {
-      if (defaultFilters) {
+      if (defaultFilters && !defaultSearchSingle) {
         setFilterParams((prev) => ({
           ...prev,
           link,
@@ -382,10 +392,16 @@ export const LiteOptionsTable = memo(
     }, [defaultFilters]);
 
     useEffect(() => {
-      if (defaultValue) {
+      if (defaultSearchSingle) {
+        getList(`${link}/${defaultSearchSingle}`);
+      }
+    }, [defaultSearchSingle]);
+
+    useEffect(() => {
+      if (defaultValue && !defaultSearchSingle) {
         setCurrentValue();
       }
-    }, [defaultValue, setCurrentValue]);
+    }, [defaultValue, setCurrentValue, defaultSearchSingle]);
 
     useEffect(() => {
       if (
@@ -399,8 +415,21 @@ export const LiteOptionsTable = memo(
         handleSelect(obj);
         setCurrentValue(obj);
         setOpen(false);
+      } else if (!data?.data?.length && dataSingle && !search) {
+        setCurrentEl(dataSingle);
+        handleSelect(dataSingle);
+        setCurrentValue(dataSingle);
+        setOpen(false);
       }
-    }, [data?.data, defaultFilters, handleSelect, setCurrentValue, search]);
+    }, [
+      data?.data,
+      defaultFilters,
+      handleSelect,
+      setCurrentValue,
+      search,
+      dataSingle,
+    ]);
+    console.log("dataSingle", defaultValue);
 
     useEffect(() => {
       if (data?.data?.length > 1 && defaultFilters) {
@@ -440,8 +469,9 @@ export const LiteOptionsTable = memo(
           <CLabel title={label} required={required} disabled={disabled} />
         )}
         <div
-          className={`w-full relative flex items-center ${disabled ? "bg-[#fafafa]" : ""
-            }`}
+          className={`w-full relative flex items-center ${
+            disabled ? "bg-[#fafafa]" : ""
+          }`}
         >
           <div
             className="cursor-pointer absolute z-[99] left-2"

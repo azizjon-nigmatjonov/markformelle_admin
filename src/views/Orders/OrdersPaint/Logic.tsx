@@ -31,7 +31,7 @@ export const TableData = ({
   };
 
   const { data: listData, refetch } = useQuery(
-    ["GET_BOYASIPARIS_LIST_ORDERS", filterParams],
+    ["GET_BOYASIPARIS_LIST_ORDERS_PAINT", filterParams],
     () => fetchList(filterParams),
     {
       keepPreviousData: true,

@@ -146,7 +146,7 @@ export const SelectOptionsTable = ({
               <input
                 value={value ? value : defaultData[name] || search}
                 type="text"
-                className={`h-[30px] w-full px-1 bg-transparent ${
+                className={`h-[30px] w-full px-1 bg-white ${
                   error?.message
                     ? "border-[var(--error)]"
                     : "border-[var(--border)]"

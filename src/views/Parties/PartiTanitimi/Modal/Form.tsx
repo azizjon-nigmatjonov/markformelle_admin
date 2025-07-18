@@ -140,9 +140,13 @@ export const Form = ({
           </div>
           <div className="col-span-2 flex justify-end space-x-3">
             <div>
+              <input type="text" className="input-design" />
+            </div>
+            <div>
               <SubmitButton
                 type="F4"
                 uniqueID="F4"
+                title="Parti asama"
                 handleActions={() => {
                   createAsama(formData?.PARTIKAYITID);
                 }}

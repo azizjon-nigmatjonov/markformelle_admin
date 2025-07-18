@@ -6,10 +6,12 @@ export const SubmitButton = ({
   handleActions,
   type = "create",
   uniqueID,
+  title,
 }: {
   type: string;
   uniqueID: string;
   handleActions: (val: string, val2: string) => void;
+  title?: string;
 }) => {
   const { t } = useTranslationHook();
   const { isAltPressed, currentKey, pressedKey } = useKeyDownEvent();
@@ -30,11 +32,10 @@ export const SubmitButton = ({
         onClick={() => {
           handleActions(pressedKey, uniqueID);
         }}
-        className="h-[30px] px-8 bg-[var(--primary)] text-white rounded-[8px] relative"
+        className="h-[30px] px-8 border border-[var(--border)] text-[var(--main)] rounded-[8px] relative"
         type="button"
       >
-        create asama
-        {isAltPressed && <span className="absolute right-2">F4</span>}
+        {title} F4
       </button>
     );
   }

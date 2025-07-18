@@ -87,7 +87,7 @@ interface MemoizedTableRowProps {
   defaultFilters: string[];
   defaultActions: string[];
   sellectedRows?: number[];
-  rightChildren?: any;
+  rightChildren?: (val: any) => any;
   setCurrentIndex: React.Dispatch<React.SetStateAction<null>>;
 }
 
@@ -131,7 +131,7 @@ const CNewTable = ({
     "sellect_more",
   ],
   defaultSearch = {},
-  rightChildren,
+  rightChildren = () => {},
 }: Props) => {
   const { navigateTo } = usePageRouter();
   const tableSize = useSelector((state: any) => state.tableSize.tableSize);
@@ -740,7 +740,7 @@ const CNewTable = ({
     defaultActions,
     setCurrentIndex,
     sellectedRows = [],
-    rightChildren,
+    rightChildren = () => {},
   }: MemoizedTableRowProps) {
     const [currentAnchor, setCurrentAnchor] = useState<any>(null);
 
@@ -753,7 +753,11 @@ const CNewTable = ({
           clickable && !item.empty && checkPermission("view") ? "clickable" : ""
         } ${currentIndex === rowIndex ? "bg-[var(--primary50)]" : ""} ${
           selectedItems.includes(rowIndex) || item?.checked ? "sellected" : ""
-        } ${sellectedRows.includes(rowIndex + 1) ? "bg-blue-200" : ""}`}
+        } ${
+          sellectedRows.includes(rowIndex + 1)
+            ? "bg-blue-200"
+            : item?.backgroundColor
+        }`}
         onClick={() => {
           if (openSelect) {
             tableActions(item, "sellect_more");
@@ -841,9 +845,9 @@ const CNewTable = ({
                     }
                   }}
                   onContextMenu={(e) => {
-                    if (!rightChildren) return;
+                    // if (!rightChildren) return;
                     e.preventDefault();
-                    tableActions(item, "view_single_right_click");
+                    // tableActions(item, "view_single_right_click");
                     setCurrentAnchor(e.target);
                   }}
                   onClick={() => {
@@ -868,7 +872,7 @@ const CNewTable = ({
                 }}
               >
                 <div className="bg-white rounded-[8px] border border-[var(--border)] overflow-hidden">
-                  {rightChildren}
+                  {rightChildren(item)}
                 </div>
               </BasePopup>
               {defaultFilters.includes("actions") && colIndex === 0 ? (

@@ -37,9 +37,7 @@ export default function HFInput({
     [name]
   );
   return (
-    <div
-      className={`w-full bg-[var(--softGray)] font-[500] relative`}
-    >
+    <div className={`w-full bg-[var(--softGray)] font-[500] relative`}>
       {label && (
         <p className="font-[500] mb-[6px]">
           {required ? <span className="text-[var(--error)] pr-1">*</span> : ""}
@@ -52,14 +50,16 @@ export default function HFInput({
         placeholder={t(placeholder)}
         disabled={disabled}
         defaultValue={defaultValue}
-        className={`w-full bg-transparent focus:border-[var(--main)] placeholder:text-[var(--gray)] rounded-[14px] px-[14px] pl-[40px] h-[50px] ${
+        className={`w-full bg-white focus:border-[var(--main)] placeholder:text-[var(--gray)] rounded-[14px] px-[14px] pl-[40px] h-[50px] ${
           errors[name] ? "border border-[var(--error)]" : ""
         } ${classesInput}`}
         {...props}
         {...registerProps}
       />
       {errors[name]?.message && (
-        <p className="text-sm text-[var(--error)] absolute -bottom-5">{t(errors[name].message || "")}</p>
+        <p className="text-sm text-[var(--error)] absolute -bottom-5">
+          {t(errors[name].message || "")}
+        </p>
       )}
     </div>
   );

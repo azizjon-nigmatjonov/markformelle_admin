@@ -125,9 +125,7 @@ export const RecipeList = () => {
 
       {open.length || changed ? (
         <CNewModal
-          title={
-            modalInitialData.RECETEID ? "updating_recipe" : "creating_recipe"
-          }
+          title="form"
           handleActions={handleModalActions}
           defaultData={{
             id: modalInitialData?.RECETEID,

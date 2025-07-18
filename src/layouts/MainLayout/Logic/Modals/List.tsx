@@ -14,7 +14,6 @@ export const ModalList = () => {
     });
     return map;
   }, [modalData]);
-  console.log("modalDataMap", modalData);
 
   const modals = useMemo(() => {
     return [
