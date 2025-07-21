@@ -29,9 +29,9 @@ export const PaintTablesUI = ({
   currentMaterial: any;
   formData: any;
 }) => {
-  const [currentElementRightClick, setCurrentElementRightClick]: any = useState(
-    {}
-  );
+  // const [currentElementRightClick, setCurrentElementRightClick]: any = useState(
+  //   {}
+  // );
   const [filterParams, setFilterParams]: any = useState({
     page: 1,
     perPage: 50,
@@ -89,7 +89,7 @@ export const PaintTablesUI = ({
         <PaintTable
           handleActionsTable={(obj: any, status: string) => {
             if (status === "view_single_right_click") {
-              setCurrentElementRightClick(obj);
+
               return;
             }
             handlePaintActionsPaint(obj, status);
@@ -133,7 +133,7 @@ export const PaintTablesUI = ({
                       { ...obj, ONAYDURUMU: val.checked },
                       obj?.BOYASIPARISDETAYID
                     );
-                    setCurrentElementRightClick({});
+
                   }}
                 />
               </div>
@@ -193,7 +193,7 @@ export const PaintTablesUI = ({
           }}
           defaultData={currentPaint}
           uniqueID={uniqueID}
-          refetch={refetch || (() => {})}
+          refetch={refetch || (() => { })}
         />
       )}
       {uniqueID === "paint_form_iplik" && (

@@ -139,9 +139,7 @@ export const Form = ({
             </InputFieldUI>
           </div>
           <div className="col-span-2 flex justify-end space-x-3">
-            <div>
-              <input type="text" className="input-design" />
-            </div>
+
             <div>
               <SubmitButton
                 type="F4"
@@ -156,7 +154,7 @@ export const Form = ({
               <SubmitButton
                 type="save"
                 uniqueID="submit"
-                handleActions={() => {}}
+                handleActions={() => { }}
               />
             </div>
           </div>

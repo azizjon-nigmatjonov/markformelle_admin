@@ -3,8 +3,10 @@ import CNewTable from "../../../../components/CElements/CNewTable";
 import { IFilterParams } from "../../../../interfaces";
 import { TableData } from "./Logic";
 import { useTableHeaders } from "../Logic";
+import { ProxyPopup } from "./ProxyPopup";
 
 export const Tables = ({ formId }: { formId: number }) => {
+  const [proxyPopup, setProxyPopup] = useState({});
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
@@ -37,6 +39,14 @@ export const Tables = ({ formId }: { formId: number }) => {
         filterParams={filterParams}
         disablePagination
         innerTable
+        rightChildren={(obj: any) => {
+          return (
+            <div className="p-2 w-[180px]">
+              <p>{obj?.PARTIKAYITID}</p>
+              <input type="text" className="input-design" />
+            </div>
+          );
+        }}
         defaultFilters={["excel_download"]}
       />
       <CNewTable
@@ -52,6 +62,8 @@ export const Tables = ({ formId }: { formId: number }) => {
         innerTable
         defaultFilters={["excel_download"]}
       />
+
+      <ProxyPopup />
     </div>
   );
 };

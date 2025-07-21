@@ -38,7 +38,7 @@ export const PartiTanitimi = () => {
     }
 
     if (status === "view" || status === "edit") {
-      // implement modaldata with redux dispatch
+
       dispatch(
         modalsActions.setModalData({
           id: "partitanitimi",
