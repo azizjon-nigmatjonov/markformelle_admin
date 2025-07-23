@@ -6,7 +6,6 @@ import { useTableHeaders } from "../Logic";
 import { ProxyPopup } from "./ProxyPopup";
 
 export const Tables = ({ formId }: { formId: number }) => {
-  const [proxyPopup, setProxyPopup] = useState({});
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,

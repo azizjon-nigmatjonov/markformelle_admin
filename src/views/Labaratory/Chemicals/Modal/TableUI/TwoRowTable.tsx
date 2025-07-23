@@ -11,6 +11,10 @@ import {
   CheckMultipleIcon,
   UncheckMultipleIcon,
 } from "../../../../../components/UI/IconGenerator/Svg/Table";
+import { IconButton } from "@mui/material";
+import { translateActions } from "../../../../../store/translation/translate.slice";
+import { useDispatch } from "react-redux";
+import usePageRouter from "../../../../../hooks/useObjectRouter";
 interface Props {
   title: string;
   disabled: boolean;
@@ -24,7 +28,6 @@ interface Props {
   handleRowClick: (val: any, type: string, arr?: any) => void;
 }
 export const TwoRowTable = ({
-  title = "table",
   disabled = false,
   bodyColumns = {},
   headColumns = [],
@@ -32,6 +35,8 @@ export const TwoRowTable = ({
   idTable,
   handleRightClick,
 }: Props) => {
+  const { navigateTo } = usePageRouter();
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const headerScrollRef: any = useRef(null);
   const [openSelect, setOpenSelect] = useState(false);
@@ -79,17 +84,46 @@ export const TwoRowTable = ({
     }
   };
 
+  const translationActions = () => {
+    const newArr: object[] = [];
+    headColumns.forEach((element: { id: string }) => {
+      const obj = {
+        KEYWORD: element.id,
+        RU: "",
+        EN: "",
+        UZ: "",
+        TU: "",
+      };
+      newArr.push(obj);
+    });
+
+    dispatch(translateActions.setTranslation(newArr));
+
+    navigateTo("/settings/profile?tab=translation");
+  }
+
+
   return (
     <>
       <div className="rounded-[12px] border border-[var(--border)]">
-        <div className="py-1 flex items-center justify-between px-2 border-b border-[var(--border)] text-sm">
-          <h2
-            className={`font-medium ${
-              disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
-            }`}
+        <div className="flex items-center justify-between px-2 border-b border-[var(--border)] text-sm">
+
+          <button
+            className={`flex space-x-1 items-center text-sm ${disabled ? "text-[var(--gray)]" : "text-[var(--main)]"
+              }`}
+            onClick={() => handleRowClick({}, "modal")}
+            disabled={disabled}
+            type="button"
+          >
+            <PlusIcon fill={disabled ? "var(--gray)" : "var(--main)"} />
+            <span>{t("add")}</span>
+          </button>
+          {/* <h2
+            className={`font-medium ${disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
+              }`}
           >
             {t(title)}
-          </h2>
+          </h2> */}
           <div className="flex space-x-3 relative">
             <button
               className="flex items-center"
@@ -109,9 +143,8 @@ export const TwoRowTable = ({
                 )}
               </div>
               <p
-                className={`text-sm pr-2 ${
-                  disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
-                }`}
+                className={`text-sm pr-2 ${disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
+                  }`}
               >
                 {t(openSelect ? "cancel" : "sellect")}
               </p>
@@ -130,24 +163,30 @@ export const TwoRowTable = ({
                 />
               </div>
               <p
-                className={`text-sm pr-2 ${
-                  disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
-                }`}
+                className={`text-sm pr-2 ${disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
+                  }`}
               >
                 {t("delete")}
               </p>
             </button>
-            <button
-              className={`flex space-x-1 items-center text-sm ${
-                disabled ? "text-[var(--gray)]" : "text-[var(--main)]"
-              }`}
-              onClick={() => handleRowClick({}, "modal")}
+
+            <IconButton
+              onClick={() => translationActions()}
               disabled={disabled}
-              type="button"
             >
-              <PlusIcon fill={disabled ? "var(--gray)" : "var(--main)"} />
-              <span>{t("add")}</span>
-            </button>
+              <div
+                className={`h-[30px] w-[30px] flex items-center justify-center`}
+              >
+                <svg
+                  width={20}
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill={disabled ? "var(--gray)" : "var(--main)"}
+                >
+                  <path d="M5 15V17C5 18.0544 5.81588 18.9182 6.85074 18.9945L7 19H10V21H7C4.79086 21 3 19.2091 3 17V15H5ZM18 10L22.4 21H20.245L19.044 18H14.954L13.755 21H11.601L16 10H18ZM17 12.8852L15.753 16H18.245L17 12.8852ZM8 2V4H12V11H8V14H6V11H2V4H6V2H8ZM17 3C19.2091 3 21 4.79086 21 7V9H19V7C19 5.89543 18.1046 5 17 5H14V3H17ZM6 6H4V9H6V6ZM10 6H8V9H10V6Z"></path>
+                </svg>
+              </div>
+            </IconButton>
             {openDelete && (
               <div className="absolute top-full shadow-2xl border border-[var(--gray30)] w-[300px] z-[99] bg-white rounded-[8px]">
                 <PopoverDelete
@@ -180,9 +219,8 @@ export const TwoRowTable = ({
         >
           <div className={`${cls.header} flex`} ref={headerScrollRef}>
             <div
-              className={`flex font-medium ${
-                disabled ? "text-[var(--gray)]" : "text-[var(--main)]"
-              }`}
+              className={`flex font-medium ${disabled ? "text-[var(--gray)]" : "text-[var(--main)]"
+                }`}
             >
               {openSelect && (
                 <div
@@ -214,11 +252,10 @@ export const TwoRowTable = ({
             {bodySource?.okey?.map((item: any, index: number) => (
               <div
                 key={index}
-                className={`${cls.row} relative ${
-                  idTable === item.LABRECETEATISID
-                    ? "bg-blue-200"
-                    : "bg-green-200"
-                } flex relative`}
+                className={`${cls.row} relative ${idTable === item.LABRECETEATISID
+                  ? "bg-blue-200"
+                  : "bg-green-200"
+                  } flex relative`}
                 onContextMenu={(e) => {
                   e.preventDefault();
                   handleRightClick(e, item);
@@ -251,13 +288,11 @@ export const TwoRowTable = ({
                     <div
                       key={head.id + head.title}
                       style={{ width: head?.width || "auto" }}
-                      className={`${
-                        cls.cell
-                      } font-medium border-b border-l border-green-300 ${
-                        idTable === item.LABRECETEATISID
+                      className={`${cls.cell
+                        } font-medium border-b border-l border-green-300 ${idTable === item.LABRECETEATISID
                           ? "bg-blue-200 border-blue-300"
                           : "bg-green-200"
-                      } cursor-pointer`}
+                        } cursor-pointer`}
                       onClick={() =>
                         handleRowClick({ ...item, index }, "view_single")
                       }
@@ -289,11 +324,10 @@ export const TwoRowTable = ({
                   e.preventDefault();
                   handleRightClick(e, item);
                 }}
-                className={`${cls.row} relative ${
-                  idTable === item.LABRECETEATISID
-                    ? "bg-blue-200"
-                    : "bg-yellow-100"
-                } flex cursor-pointer`}
+                className={`${cls.row} relative ${idTable === item.LABRECETEATISID
+                  ? "bg-blue-200"
+                  : "bg-yellow-100"
+                  } flex cursor-pointer`}
               >
                 {idTable === item.LABRECETEATISID && (
                   <div className="bg-[var(--primary)] left-0 top-0 h-full w-[2px] absolute"></div>
@@ -328,11 +362,10 @@ export const TwoRowTable = ({
                       onDoubleClick={() =>
                         handleRowClick({ ...item, index }, "view")
                       }
-                      className={`${cls.cell} ${
-                        idTable === item.LABRECETEATISID
-                          ? "bg-blue-200 border-blue-300"
-                          : "bg-yellow-100"
-                      } font-medium border-b border-l border-yellow-300`}
+                      className={`${cls.cell} ${idTable === item.LABRECETEATISID
+                        ? "bg-blue-200 border-blue-300"
+                        : "bg-yellow-100"
+                        } font-medium border-b border-l border-yellow-300`}
                     >
                       <p style={{ width: head?.width || "auto" }}>
                         {head.render
