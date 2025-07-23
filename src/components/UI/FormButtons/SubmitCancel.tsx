@@ -21,7 +21,7 @@ export const SubmitCancelButtons = ({
   return (
     <div className="flex space-x-2">
       <button
-        onClick={() => handleActions("Close", uniqueID)}
+        onClick={() => handleActions("close", uniqueID)}
         className="cancel-btn"
         type="button"
       >

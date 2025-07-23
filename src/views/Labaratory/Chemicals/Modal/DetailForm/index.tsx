@@ -75,7 +75,11 @@ export const DetailForm = ({
     }
   }, [formData]);
 
-  const { setFilterParams, data: birimData, filterParams } = useFetchType("birim");
+  const {
+    setFilterParams,
+    data: birimData,
+    filterParams,
+  } = useFetchType("birim");
   const {
     setFilterParams: setFilterParamsFiyat,
     data: fiyatData,
@@ -193,7 +197,7 @@ export const DetailForm = ({
           type={formId ? "update" : "create"}
           handleActions={(val: string, uniqueID: string) => {
             if (uniqueID === open) {
-              if (val === "Close") {
+              if (val === "close") {
                 onClose();
               }
               if (val === "Enter") handleSubmit(onSubmit)();

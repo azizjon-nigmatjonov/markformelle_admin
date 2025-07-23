@@ -321,7 +321,7 @@ export const ArticulModalUI = ({
         uniqueID={"inner"}
         handleActions={(val: string, uniqueID: string) => {
           if (uniqueID === "inner") {
-            if (val === "Close") {
+            if (val === "close") {
               setOpen(false);
             }
             if (val === "Enter") handleSubmit(onSubmit)();

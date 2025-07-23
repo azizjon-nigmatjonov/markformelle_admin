@@ -121,7 +121,7 @@ export const ReviewForm = ({
         type={open.includes("review") ? "update" : "create"}
         handleActions={(val: string, uniqueID: string) => {
           if (uniqueID === "review") {
-            if (val === "Close") {
+            if (val === "close") {
               handleActions();
             }
             if (val === "Enter") handleSubmit(onSubmit)();

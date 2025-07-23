@@ -178,7 +178,7 @@ export const CardEditModal = ({
             type={type}
             handleActions={(val: string, uniqueID: string) => {
               if (uniqueID === "step") {
-                if (val === "Close") {
+                if (val === "close") {
                   handleActions();
                 }
                 if (val === "Enter") {

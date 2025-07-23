@@ -459,7 +459,7 @@ export const TransferModal = ({
         type={formId ? "update" : "create"}
         handleActions={(val: string, uniqueID: string) => {
           if (uniqueID === "main_order_form") {
-            if (val === "Close") handleModalActionsFn("close");
+            if (val === "close") handleModalActionsFn("close");
 
             if (val === "Enter") handleSubmit(onSubmit)();
           }

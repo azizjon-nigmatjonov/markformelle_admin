@@ -345,7 +345,7 @@ export const MaterialForm = ({
           type={formId ? "update" : "create siparis detey"}
           handleActions={(val: string, uniqueID: string) => {
             if (uniqueID === "material_form") {
-              if (val === "Close") {
+              if (val === "close") {
                 handleActions("Close", uniqueID);
               }
               if (val === "Enter") handleSubmit(onSubmit)();

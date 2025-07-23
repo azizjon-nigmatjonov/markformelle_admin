@@ -230,7 +230,7 @@ export const TrailForm = ({
           type={trailFormData?.LABRECETEATISID ? "update" : "create"}
           handleActions={(val: string, uniqueID: string) => {
             if (uniqueID === "trail") {
-              if (val === "Close") {
+              if (val === "close") {
                 onClose();
               }
               if (val === "Enter") handleSubmit(onSubmit)();

@@ -115,7 +115,7 @@ const CNewMiniModal: FC<Props> = ({
           <div>
             {title && (
               <div
-                className="grid grid-cols-3 px-3 py-1 items-center top-0 bg-white z-[91] border-b border-[var(--border)] cursor-move"
+                className="grid grid-cols-3 px-3 items-center top-0 bg-white z-[91] border-b border-[var(--border)] cursor-move"
                 onMouseDown={handleDragStart}
               >
                 <h2 className="font-medium">{t(title)}</h2>

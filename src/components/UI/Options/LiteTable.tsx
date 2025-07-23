@@ -293,7 +293,6 @@ export const LiteOptionsTable = memo(
         data?.data?.length,
       ]
     );
-    console.log("defaultValue", defaultValue);
 
     const setCurrentValue = useCallback(
       (el?: T) => {
@@ -429,7 +428,6 @@ export const LiteOptionsTable = memo(
       search,
       dataSingle,
     ]);
-    console.log("dataSingle", defaultValue);
 
     useEffect(() => {
       if (data?.data?.length > 1 && defaultFilters) {
