@@ -231,8 +231,9 @@ export const LabModalTables = ({
     <>
       <div className="grid grid-cols-3 gap-x-2">
         <div>
+          <h3 className="text-sm font-medium text-[var(--gray)] pb-1 pl-1">labrecetecalisma</h3>
           <TableUI
-            title="labrecetecalisma"
+            title=""
             headColumns={headColumns}
             idTable={idTable}
             bodyColumns={bodyData}
@@ -262,8 +263,9 @@ export const LabModalTables = ({
         </div>
 
         <div>
+          <h3 className="text-sm font-medium text-[var(--gray)] pb-1 pl-1">labreceteatis</h3>
           <TwoRowTable
-            title="labreceteatis"
+            title=""
             headColumns={trailHeadColumns}
             bodyColumns={trailData}
             handleRowClick={handleActionsTrial}
@@ -286,8 +288,9 @@ export const LabModalTables = ({
         </div>
 
         <div>
+          <h3 className="text-sm font-medium text-[var(--gray)] pb-1 pl-1">labreceteurun</h3>
           <TableUI
-            title="labreceteurun"
+            title=""
             idTable={idDetailForm}
             handleRowClick={handleActionsDetails}
             headColumns={detailHeadColumns}
@@ -391,7 +394,7 @@ export const LabModalTables = ({
         <ModalUIRecipe
           defaultData={templateData}
           changed={""}
-          setChanged={() => {}}
+          setChanged={() => { }}
           askAction={""}
           open={openModal}
           setOpen={(arr: string[]) => {
@@ -401,7 +404,7 @@ export const LabModalTables = ({
             setOpenModal(arr);
           }}
           refetchStatus={refetchStatus}
-          setAskAction={() => {}}
+          setAskAction={() => { }}
         />
       ) : (
         ""

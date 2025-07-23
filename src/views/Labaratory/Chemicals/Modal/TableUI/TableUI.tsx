@@ -13,7 +13,10 @@ import {
   UncheckMultipleIcon,
 } from "../../../../../components/UI/IconGenerator/Svg/Table";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
-import { styled } from "@mui/material";
+import { IconButton, styled } from "@mui/material";
+import { translateActions } from "../../../../../store/translation/translate.slice";
+import { useDispatch } from "react-redux";
+import usePageRouter from "../../../../../hooks/useObjectRouter";
 
 const PopupBody = styled("div")(
   ({ theme }) => `
@@ -21,15 +24,13 @@ const PopupBody = styled("div")(
   padding: 12px 16px;
   margin: 8px;
   border-radius: 8px;
-  border: 1px solid ${
-    theme.palette.mode === "dark" ? "var(--gray30)" : "var(--gray30)"
-  };
+  border: 1px solid ${theme.palette.mode === "dark" ? "var(--gray30)" : "var(--gray30)"
+    };
   background-color: 'white';
-  box-shadow: ${
-    theme.palette.mode === "dark"
+  box-shadow: ${theme.palette.mode === "dark"
       ? `0px 4px 8px rgb(0 0 0 / 0.7)`
       : `0px 4px 8px rgb(0 0 0 / 0.1)`
-  };
+    };
   z-index: 1;
 `
 );
@@ -50,9 +51,10 @@ export const TableUI = ({
   headColumns = [],
   handleRowClick,
   disabled = false,
-  title = "table",
   extra,
 }: Props) => {
+  const { navigateTo } = usePageRouter();
+  const dispatch = useDispatch();
   const { t } = useTranslation();
   const headerScrollRef: any = useRef(null);
   const [openSelect, setOpenSelect] = useState(false);
@@ -95,16 +97,46 @@ export const TableUI = ({
     setAnchor(event.current);
   };
 
+  const translationActions = () => {
+    const newArr: object[] = [];
+    headColumns.forEach((element: { id: string }) => {
+      const obj = {
+        KEYWORD: element.id,
+        RU: "",
+        EN: "",
+        UZ: "",
+        TU: "",
+      };
+      newArr.push(obj);
+    });
+
+    dispatch(translateActions.setTranslation(newArr));
+
+    navigateTo("/settings/profile?tab=translation");
+  }
+
+
   return (
     <div className="border rounded-[12px] border-[var(--border)]">
-      <div className="py-1 flex items-center justify-between px-2 border-b border-[var(--border)] text-sm">
-        <h2
-          className={`font-medium ${
-            disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
-          }`}
+      <div className="flex items-center justify-between px-2 border-b border-[var(--border)] text-sm">
+        {/* <h2
+          className={`font-medium ${disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
+            }`}
         >
           {t(title)}
-        </h2>
+        </h2> */}
+
+        <button
+          className={`flex space-x-1 items-center text-sm ${disabled ? "text-[var(--gray)]" : "text-[var(--main)]"
+            }`}
+          onClick={() => handleRowClick({}, "modal")}
+          disabled={disabled}
+          type="button"
+        >
+          <PlusIcon fill={disabled ? "var(--gray)" : "var(--main)"} />
+          <span>{t("add")}</span>
+        </button>
+
         <div className="flex space-x-3 relative">
           <button
             className="flex items-center"
@@ -124,9 +156,8 @@ export const TableUI = ({
               )}
             </div>
             <p
-              className={`text-sm pr-2 ${
-                disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
-              }`}
+              className={`text-sm pr-2 ${disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
+                }`}
             >
               {t(openSelect ? "unsellect" : "sellect")}
             </p>
@@ -145,13 +176,15 @@ export const TableUI = ({
               />
             </div>
             <p
-              className={`text-sm pr-2 ${
-                disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
-              }`}
+              className={`text-sm pr-2 ${disabled ? "text-[var(--gray)]" : "text-[var(--black)]"
+                }`}
             >
               {t("delete")}
             </p>
           </button>
+
+
+
           {openDelete && (
             <div className="absolute right-0 top-full shadow-2xl border border-[var(--gray30)] w-[300px] z-[99] bg-white rounded-[8px]">
               <PopoverDelete
@@ -173,17 +206,23 @@ export const TableUI = ({
               />
             </div>
           )}
-          <button
-            className={`flex space-x-1 items-center text-sm ${
-              disabled ? "text-[var(--gray)]" : "text-[var(--main)]"
-            }`}
-            onClick={() => handleRowClick({}, "modal")}
+          <IconButton
+            onClick={() => translationActions()}
             disabled={disabled}
-            type="button"
           >
-            <PlusIcon fill={disabled ? "var(--gray)" : "var(--main)"} />
-            <span>{t("add")}</span>
-          </button>
+            <div
+              className={`h-[30px] w-[30px] flex items-center justify-center`}
+            >
+              <svg
+                width={20}
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill={disabled ? "var(--gray)" : "var(--main)"}
+              >
+                <path d="M5 15V17C5 18.0544 5.81588 18.9182 6.85074 18.9945L7 19H10V21H7C4.79086 21 3 19.2091 3 17V15H5ZM18 10L22.4 21H20.245L19.044 18H14.954L13.755 21H11.601L16 10H18ZM17 12.8852L15.753 16H18.245L17 12.8852ZM8 2V4H12V11H8V14H6V11H2V4H6V2H8ZM17 3C19.2091 3 21 4.79086 21 7V9H19V7C19 5.89543 18.1046 5 17 5H14V3H17ZM6 6H4V9H6V6ZM10 6H8V9H10V6Z"></path>
+              </svg>
+            </div>
+          </IconButton>
         </div>
       </div>
       <div className="overflow-scroll designed-scroll h-[400px]">
@@ -197,9 +236,8 @@ export const TableUI = ({
               style={{ height: "30px" }}
             >
               <tr
-                className={` ${
-                  disabled ? "text-[var(--gray)]" : "text-[var(--main)]"
-                }`}
+                className={` ${disabled ? "text-[var(--gray)]" : "text-[var(--main)]"
+                  }`}
               >
                 {openSelect && (
                   <th
@@ -211,7 +249,7 @@ export const TableUI = ({
                       className={`w-[18px] h-[18px] rounded-[4px] border border-[var(--main)] flex items-center justify-center cursor-pointer`}
                     >
                       {areAllRowsSelectedOnPage(sellectedItems, bodySource) &&
-                      sellectedItems.length ? (
+                        sellectedItems.length ? (
                         <CheckIcon style={{ fill: "var(--main)", width: 14 }} />
                       ) : (
                         ""
@@ -242,9 +280,8 @@ export const TableUI = ({
               {bodySource.map((item: any, rowIndex: number) => (
                 <tr
                   key={rowIndex}
-                  className={`${cls.row} ${
-                    idTable === item[name] ? "bg-blue-200 relative w-full" : ""
-                  } w-full cursor-pointer relative`}
+                  className={`${cls.row} ${idTable === item[name] ? "bg-blue-200 relative w-full" : ""
+                    } w-full cursor-pointer relative`}
                   style={{ height: "30px", minHeight: "30px !important" }}
                   onContextMenu={handleRightClick}
                 >
