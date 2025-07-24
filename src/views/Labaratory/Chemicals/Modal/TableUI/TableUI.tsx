@@ -267,7 +267,7 @@ export const TableUI = ({
                       className={`text-left border-b border-r border-[var(--border)] ${cls.cell}`}
                     >
                       <div className="flex space-x-2 items-center">
-                        <p>{head.title}</p>
+                        <p>{t(head.title) || head.title}</p>
                         {index === 0 ? extra : ""}
                       </div>
                     </th>

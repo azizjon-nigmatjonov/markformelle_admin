@@ -47,8 +47,7 @@ export const ModalTableLogic = ({
 
     axios
       .get(
-        `${API_URL}/urunbirim/?URUNID=${urunId}&skip=${
-          filters.page - 1
+        `${API_URL}/urunbirim/?URUNID=${urunId}&skip=${filters.page - 1
         }&limit=${filters.perPage}${filters?.q ? "&" + filters.q : ""}`
       )
       .then((res) => {
@@ -62,7 +61,7 @@ export const ModalTableLogic = ({
     }
   }, [urunId, filterParams]);
 
-  const testForm = (_: string) => {};
+  const testForm = (_: string) => { };
 
   const createForm = async (params: {}) => {
     try {
@@ -122,7 +121,7 @@ export const ModalTableLogic = ({
 
 export const DetailsFormLogic = ({
   formId = "",
-  setOpen = () => {},
+  setOpen = () => { },
   refetch,
 }: {
   formId?: string | number;
@@ -177,8 +176,7 @@ export const TablesLogic = ({ formId }: Props) => {
     ["GET_TABLE_DATA", formId, filterParams],
     () => {
       return axios.get(
-        `${API_URL}/labrecetecalisma/?LABRECETEID=${formId}${
-          filterParams?.q ? `&q=${filterParams.q}` : ""
+        `${API_URL}/labrecetecalisma/?LABRECETEID=${formId}${filterParams?.q ? `&q=${filterParams.q}` : ""
         }`
       );
     },
@@ -359,7 +357,7 @@ export const TableHeadersLogic = () => {
       {
         title: "MIKTAR",
         id: "BOYAYUZDESI",
-        width: 63,
+        width: 80,
         render: (val: number) => {
           return val.toString().substring(0, 8);
         },

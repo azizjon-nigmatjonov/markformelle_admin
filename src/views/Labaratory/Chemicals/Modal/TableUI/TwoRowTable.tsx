@@ -238,7 +238,7 @@ export const TwoRowTable = ({
                     style={{ width: head?.width || "auto" }}
                     className={`${cls.cell} border-b border-l border-[var(--border)]`}
                   >
-                    <p>{head.title}</p>
+                    <p>{t(head.title) || head.title}</p>
                   </div>
                 )
               )}
