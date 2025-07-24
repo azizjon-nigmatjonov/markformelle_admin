@@ -152,6 +152,17 @@ export const LabChemicals = () => {
             ESKILABREETEKODU: "",
             PANTONEKODU: "",
           }}
+          defaultFilters={[
+            "sidebar_filter",
+            "add",
+            "delete",
+            "excel_download",
+            "excel_upload",
+            "filter",
+            "active_menu",
+            "actions",
+            "sellect_more",
+          ]}
           meta={{
             totalCount: bodyData?.count,
             pageCount: bodyData?.count

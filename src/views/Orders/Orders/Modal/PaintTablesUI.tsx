@@ -137,6 +137,7 @@ export const PaintTablesUI = ({
           handleActions={(val: string) => {
             handleActionsTable({}, val, "paint");
           }}
+          currentKnitting={currentKnitting}
           defaultData={currentPaint}
           uniqueID={uniqueID}
           refetch={refetch || (() => {})}

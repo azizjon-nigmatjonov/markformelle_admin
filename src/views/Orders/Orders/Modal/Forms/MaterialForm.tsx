@@ -176,7 +176,7 @@ export const MaterialForm = ({
         <LiteOptionsTable
           label="Kalite no"
           renderValue={(_: string, obj: any) => {
-            return obj.KALITEADI;
+            return obj.KALITEID;
           }}
           handleSelect={(obj: {
             KALITEID: string;

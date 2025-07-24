@@ -129,7 +129,16 @@ export const OrderForm = ({
     >
       <div className="border-b border-[var(--border)] pb-3 mb-3 grid grid-cols-4 gap-x-3">
         <div className="col-span-2 flex space-x-3">
-          <InputFieldUI title="Boya Siparis ID">
+          <InputFieldUI title="Siparis Yili">
+            <HFTextField
+              name="SIPARISYILI"
+              control={control}
+              disabled={true}
+              defaultValue={formData?.SIPARISYILI}
+              focused
+            />
+          </InputFieldUI>
+          <InputFieldUI title="Siparis ID">
             <LiteOptionsTable
               name="BOYASIPARISKAYITID"
               link="boyasiparis"
@@ -143,26 +152,10 @@ export const OrderForm = ({
                   title: "BOYASIPARISKAYITID",
                 },
               ]}
+              defaultValue={formData?.BOYASIPARISKAYITID}
               handleSelect={(obj: { BOYASIPARISKAYITID: number }) => {
                 setFormId(obj.BOYASIPARISKAYITID);
               }}
-            />
-          </InputFieldUI>
-          <InputFieldUI title="Siparis Yili">
-            <HFTextField
-              name="SIPARISYILI"
-              control={control}
-              disabled={true}
-              defaultValue={formData?.SIPARISYILI}
-              focused
-            />
-          </InputFieldUI>
-          <InputFieldUI title="Boya Siparis Kayit ID">
-            <HFTextField
-              name="BOYASIPARISKAYITID"
-              control={control}
-              disabled={true}
-              defaultValue={formData?.BOYASIPARISKAYITID}
             />
           </InputFieldUI>
         </div>

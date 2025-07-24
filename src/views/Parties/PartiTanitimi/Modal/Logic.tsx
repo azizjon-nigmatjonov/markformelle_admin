@@ -204,3 +204,81 @@ export const CreateAsama = ({
 
   return { createAsama };
 };
+
+export const ProxyLogic = ({
+  setOpenModal,
+  setModalData,
+  currentSiparis,
+}: {
+  setOpenModal: (val: boolean) => void;
+  setModalData: (val: any) => void;
+  currentSiparis: any;
+}) => {
+  const checkProxy = async (value: string) => {
+    axios
+      .get(`${API_URL}/proxy/${value}`)
+      .then(() => {})
+      .catch((err) => {
+        if (err.status === 404) {
+          axios.post(`${API_URL}/proxy/`, {
+            PROXYID: value,
+          });
+          toast.success(t("proxy_created_successfully"));
+        }
+      });
+
+    axios.get(`${API_URL}/partistok/proxyid/${value}`).then((res) => {
+      if (res?.data?.length > 0) {
+        setOpenModal(true);
+        setModalData(res?.data);
+        toast.error(t("proxy_used_inside_another_partistok"));
+      } else {
+        setOpenModal(true);
+
+        setModalData([{ PROXYID: value }]);
+      }
+    });
+  };
+
+  const deleteProxy = async (data: any) => {
+    const putProxy = async () => {
+      axios
+        .get(`${API_URL}/partistok/${currentSiparis.PARTISINIFID}`)
+        .then((res) => {
+          axios
+            .put(`${API_URL}/partistok/${currentSiparis.PARTISINIFID}`, {
+              ...res.data,
+              PROXYID: currentSiparis?.PROXYID,
+            })
+            .then(() => {
+              toast.success(
+                t(
+                  `${currentSiparis?.PROXYID} ${t(
+                    "proxy_submitted_to_partistok"
+                  )}`
+                )
+              );
+              setModalData([]);
+              setOpenModal(false);
+            });
+        });
+    };
+
+    if (data?.PARTIKAYITID) {
+      axios.get(`${API_URL}/partistok/${data.PARTISINIFID}`).then((res) => {
+        axios
+          .put(`${API_URL}/partistok/${data.PARTISINIFID}`, {
+            ...res.data,
+            PROXYID: null,
+          })
+          .then(() => {
+            putProxy();
+          });
+      });
+    } else {
+      putProxy();
+    }
+  };
+
+  return { checkProxy, deleteProxy };
+};

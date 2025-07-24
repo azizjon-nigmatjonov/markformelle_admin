@@ -38,7 +38,6 @@ export const PartiTanitimi = () => {
     }
 
     if (status === "view" || status === "edit") {
-
       dispatch(
         modalsActions.setModalData({
           id: "partitanitimi",
@@ -95,17 +94,6 @@ export const PartiTanitimi = () => {
           }}
         />
       </div>
-
-      {/* {open && (
-        <CNewModal
-          title="Parti Details"
-          disabled="big"
-          handleActions={modalActionsFn}
-          defaultData={modalInitialData}
-        >
-          <ModalUIPartiTanitimi defaultData={modalInitialData} />
-        </CNewModal>
-      )} */}
     </>
   );
 };

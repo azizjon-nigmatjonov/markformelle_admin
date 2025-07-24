@@ -414,7 +414,7 @@ export const LiteOptionsTable = memo(
         handleSelect(obj);
         setCurrentValue(obj);
         setOpen(false);
-      } else if (!data?.data?.length && dataSingle && !search) {
+      } else if (!defaultFilters && dataSingle) {
         setCurrentEl(dataSingle);
         handleSelect(dataSingle);
         setCurrentValue(dataSingle);
