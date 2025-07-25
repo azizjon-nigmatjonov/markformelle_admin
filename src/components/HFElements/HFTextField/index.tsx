@@ -2,7 +2,7 @@ import { Controller } from "react-hook-form";
 import CLabel from "../../CElements/CLabel";
 import "../style.scss";
 import { VisibilityOff, Visibility } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 const InputUI = ({
@@ -43,11 +43,29 @@ const InputUI = ({
   onBlur?: (name: string, value: any) => void;
 }) => {
   const { t } = useTranslation();
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [isOverflowing, setIsOverflowing] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (defaultValue) {
       onChange(defaultValue);
     }
   }, [defaultValue]);
+
+  // Check if text is overflowing
+  const checkOverflow = useCallback(() => {
+    if (inputRef.current) {
+      const input = inputRef.current;
+      const isOverflow = input.scrollWidth > input.clientWidth;
+      setIsOverflowing(isOverflow);
+    }
+  }, []);
+
+  // Check overflow on value change
+  useEffect(() => {
+    checkOverflow();
+  }, [value, checkOverflow]);
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Enter" && (value || defaultValue)) {
@@ -68,8 +86,19 @@ const InputUI = ({
   };
 
   return (
-    <div>
+    <div
+      className="relative"
+      onMouseEnter={() => {
+        if (isOverflowing) {
+          setShowTooltip(true);
+        }
+      }}
+      onMouseLeave={() => {
+        setShowTooltip(false);
+      }}
+    >
       <input
+        ref={inputRef}
         className={`input-design ${
           errors[name]?.message || error ? "error" : ""
         }`}
@@ -85,6 +114,7 @@ const InputUI = ({
         }}
         onBlur={(e) => {
           onBlur(name, e.target.value);
+          setShowTooltip(false);
         }}
         readOnly={readOnly}
         type={
@@ -104,6 +134,21 @@ const InputUI = ({
         >
           {!password ? <VisibilityOff /> : <Visibility />}
         </span>
+      )}
+
+      {/* Tooltip */}
+      {showTooltip && isOverflowing && (
+        <div
+          className="absolute z-[100] bg-gray-900 text-white text-sm px-2 py-1 rounded shadow-lg whitespace-nowrap"
+          style={{
+            top: "-30px",
+            left: "0",
+            maxWidth: "300px",
+            wordBreak: "break-word",
+          }}
+        >
+          {value || ""}
+        </div>
       )}
     </div>
   );

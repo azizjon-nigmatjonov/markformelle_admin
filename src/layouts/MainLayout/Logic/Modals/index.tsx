@@ -2,8 +2,10 @@ import { useDispatch, useSelector } from "react-redux";
 import CNewModal from "../../../../components/CElements/CNewModal";
 import { ModalList } from "./List";
 import { modalsActions } from "../../../../store/modal/modal.slice";
+import { useTranslation } from "react-i18next";
 
 export const ModalImporter = () => {
+  const { t } = useTranslation();
   const { modals } = ModalList();
   const modalData = useSelector((state: any) => state.modals.modalData);
   const dispatch = useDispatch();
@@ -18,7 +20,7 @@ export const ModalImporter = () => {
         return (
           <CNewModal
             key={index}
-            title="Parti Details"
+            title={t(modal.id)}
             disabled="big"
             handleActions={() => modalActionsFn(modal.id)}
             innerModal={index !== 0}

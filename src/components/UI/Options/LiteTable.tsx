@@ -88,23 +88,50 @@ const SearchInput = memo(
     handleEnterKey: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   }) => {
     const { t } = useTranslation();
+    const [showTooltip, setShowTooltip] = useState(false);
+    const [isOverflowing, setIsOverflowing] = useState(false);
     const debouncedSearch = useMemo(
       () => debounce(handleSearch, 300),
       [handleSearch]
     );
+
+    // Check if text is overflowing
+    const checkOverflow = useCallback(() => {
+      if (inputRef.current) {
+        const input = inputRef.current;
+        const isOverflow = input.scrollWidth > input.clientWidth;
+        setIsOverflowing(isOverflow);
+      }
+    }, []);
+
+    // Check overflow on value change
+    useEffect(() => {
+      checkOverflow();
+    }, [search, checkOverflow]);
 
     return (
       <Controller
         control={control}
         name={name}
         render={({ field: { onChange, value }, fieldState: { error } }) => (
-          <div className={`relative w-full ${open ? "z-[99]" : ""}`}>
+          <div
+            className={`relative w-full ${open ? "z-[99]" : ""}`}
+            onMouseEnter={() => {
+              if (isOverflowing) {
+                setShowTooltip(true);
+              }
+            }}
+            onMouseLeave={() => {
+              setShowTooltip(false);
+            }}
+          >
             <input
               value={search ?? value ?? ""}
               type="text"
               onBlur={() => {
                 setOpen(false);
                 setIsFocus(false);
+                setShowTooltip(false);
               }}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
@@ -128,6 +155,21 @@ const SearchInput = memo(
               ref={inputRef}
               readOnly={readOnly || disabled}
             />
+
+            {/* Tooltip */}
+            {showTooltip && isOverflowing && (
+              <div
+                className="absolute z-[100] bg-gray-900 text-white text-sm px-2 py-1 rounded shadow-lg whitespace-nowrap"
+                style={{
+                  top: "-30px",
+                  left: "0",
+                  maxWidth: "300px",
+                  wordBreak: "break-word",
+                }}
+              >
+                {search ?? value ?? ""}
+              </div>
+            )}
           </div>
         )}
       />

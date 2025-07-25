@@ -200,11 +200,30 @@ export const PaintForm = ({
         <div className="grid grid-cols-3 gap-3 mb-3">
           <div className="space-y-3">
             <LiteOptionsTable
+              label="Kalite"
+              handleSelect={(obj: { KALITEID: string }) => {
+                setValue("KALITEID", obj.KALITEID);
+              }}
+              renderValue={(_: string, obj: any) => {
+                return obj.KALITEID;
+              }}
+              name="KALITEID"
+              headColumns={[
+                { id: "KALITEID", title: "KALITEID", width: 200 },
+                { id: "KALITEADI", title: "KALITEADI" },
+              ]}
+              link="kalite"
+              control={control}
+              defaultFilters={
+                currentKnitting?.KALITEID
+                  ? `KALITEID=${currentKnitting?.KALITEID}`
+                  : ""
+              }
+            />
+            <LiteOptionsTable
               label="Ham Stok"
               renderValue={(_: string, obj: any) => {
-                return obj.HAMID && obj.ADI
-                  ? obj.HAMID + " - " + obj.ADI
-                  : obj.HAMID;
+                return obj.ADI;
               }}
               handleSelect={(data: { HAMID: string }) => {
                 setValue("HAMID", data.HAMID);
@@ -225,6 +244,7 @@ export const PaintForm = ({
               link="ham"
               control={control}
             />
+
             <HFTextField
               type="number"
               label="Pus"
@@ -239,6 +259,7 @@ export const PaintForm = ({
               control={control}
               defaultValue={formData?.FEINE}
             />
+
             <div className="grid grid-cols-4 gap-x-2">
               <HFTextField
                 type="number"
@@ -280,24 +301,7 @@ export const PaintForm = ({
               control={control}
               defaultValue={formData?.HAMMIKTAR}
             />
-            <LiteOptionsTable
-              label="Birim fiyat 1. Kalite"
-              handleSelect={(obj: { KALITEID: string }) => {
-                setValue("KALITEID", obj.KALITEID);
-              }}
-              renderValue={(_: string, obj: any) => {
-                return obj.KALITEID && obj.KALITEADI
-                  ? obj.KALITEID + " - " + obj.KALITEADI
-                  : obj.KALITEID;
-              }}
-              name="KALITEID"
-              headColumns={[
-                { id: "KALITEID", title: "KALITEID", width: 200 },
-                { id: "KALITEADI", title: "KALITEADI" },
-              ]}
-              link="kalite"
-              control={control}
-            />
+
             <LiteOptionsTable
               label="Fason Birim Fiyat"
               name="DOVIZID"
@@ -500,7 +504,7 @@ export const PaintForm = ({
                 defaultValue={formData?.MAXIMUMFIREORANI}
               />
             </div>
-            <LiteOptionsTable
+            {/* <LiteOptionsTable
               label="Kalite no"
               renderValue={(_: string, obj: any) => {
                 return obj.KALITEADI;
@@ -524,7 +528,7 @@ export const PaintForm = ({
               ]}
               defaultValue={formData?.KALITEID}
               control={control}
-            />
+            /> */}
             <HFTextField
               label="Sekil Adresi"
               name="SEKILADRES"

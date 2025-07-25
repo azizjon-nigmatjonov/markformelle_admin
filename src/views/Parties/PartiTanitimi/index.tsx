@@ -8,11 +8,12 @@ import { modalsActions } from "../../../store/modal/modal.slice";
 import { useDispatch } from "react-redux";
 
 export const PartiTanitimi = () => {
+  const dispatch = useDispatch();
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
   });
-  const dispatch = useDispatch();
+
   const { bodyColumns, isLoading, bodyData, deleteFn } = TableData({
     filterParams,
   });

@@ -180,6 +180,7 @@ export const TableData = ({
     deleteFn,
     siparisIsLoading,
     siparisRefetch,
+    refetch,
   };
 };
 
@@ -209,57 +210,31 @@ export const ProxyLogic = ({
   setOpenModal,
   setModalData,
   currentSiparis,
+  refetchTable,
 }: {
   setOpenModal: (val: boolean) => void;
   setModalData: (val: any) => void;
   currentSiparis: any;
+  refetchTable: () => void;
 }) => {
-  const checkProxy = async (value: string) => {
-    axios
-      .get(`${API_URL}/proxy/${value}`)
-      .then(() => {})
-      .catch((err) => {
-        if (err.status === 404) {
-          axios.post(`${API_URL}/proxy/`, {
-            PROXYID: value,
-          });
-          toast.success(t("proxy_created_successfully"));
-        }
-      });
-
-    axios.get(`${API_URL}/partistok/proxyid/${value}`).then((res) => {
-      if (res?.data?.length > 0) {
-        setOpenModal(true);
-        setModalData(res?.data);
-        toast.error(t("proxy_used_inside_another_partistok"));
-      } else {
-        setOpenModal(true);
-
-        setModalData([{ PROXYID: value }]);
-      }
-    });
-  };
-
   const deleteProxy = async (data: any) => {
     const putProxy = async () => {
+      const proxyId = currentSiparis?.PROXYID || data?.PROXYID;
       axios
         .get(`${API_URL}/partistok/${currentSiparis.PARTISINIFID}`)
         .then((res) => {
           axios
             .put(`${API_URL}/partistok/${currentSiparis.PARTISINIFID}`, {
               ...res.data,
-              PROXYID: currentSiparis?.PROXYID,
+              PROXYID: proxyId,
             })
             .then(() => {
               toast.success(
-                t(
-                  `${currentSiparis?.PROXYID} ${t(
-                    "proxy_submitted_to_partistok"
-                  )}`
-                )
+                t(`${proxyId} ${t("proxy_submitted_to_partistok")}`)
               );
               setModalData([]);
               setOpenModal(false);
+              refetchTable();
             });
         });
     };
@@ -278,6 +253,30 @@ export const ProxyLogic = ({
     } else {
       putProxy();
     }
+  };
+
+  const checkProxy = async (value: string) => {
+    axios
+      .get(`${API_URL}/proxy/${value}`)
+      .then(() => {})
+      .catch((err) => {
+        if (err.status === 404) {
+          axios.post(`${API_URL}/proxy/`, {
+            PROXYID: value,
+          });
+          toast.success(t("proxy_created_successfully"));
+        }
+      });
+
+    axios.get(`${API_URL}/partistok/?PROXYID=${value}`).then((res) => {
+      if (res?.data?.data?.length) {
+        setOpenModal(true);
+        setModalData(res?.data?.data);
+        toast.error(t("proxy_used_inside_another_partistok"));
+      } else {
+        deleteProxy({ PROXYID: value });
+      }
+    });
   };
 
   return { checkProxy, deleteProxy };

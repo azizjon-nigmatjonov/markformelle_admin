@@ -41,11 +41,7 @@ const CNewMiniModal: FC<Props> = ({
 
   const {} = useModalManager(uniqueModalId, handleClose);
 
-  useEffect(() => {
-    if (!position && modalRef.current) {
-      setPosition(null);
-    }
-  }, [position]);
+  // Remove this useEffect as it's causing issues with position management
 
   const handleDragStart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -54,6 +50,7 @@ const CNewMiniModal: FC<Props> = ({
       const rect = modalRef.current.getBoundingClientRect();
 
       if (!position) {
+        // Use the current visual position of the modal
         setPosition({
           x: rect.left,
           y: rect.top,
@@ -71,9 +68,11 @@ const CNewMiniModal: FC<Props> = ({
 
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging && position) {
-      setPosition({
-        x: e.clientX - dragOffset.x,
-        y: e.clientY - dragOffset.y,
+      requestAnimationFrame(() => {
+        setPosition({
+          x: e.clientX - dragOffset.x,
+          y: e.clientY - dragOffset.y,
+        });
       });
     }
   };
@@ -100,9 +99,7 @@ const CNewMiniModal: FC<Props> = ({
         ref={modalRef}
         className={`fixed ${
           type === "inner" ? "z-[100]" : "z-[99]"
-        } rounded-[12px] bg-white shadow-2xl border border-[var(--gray30)] ${
-          isDragging ? "cursor-grabbing" : ""
-        }`}
+        } rounded-[12px] bg-white shadow-2xl border border-[var(--gray30)]`}
         style={{
           left: position ? `${position.x}px` : "50%",
           top: position ? `${position.y}px` : "50%",
@@ -114,10 +111,7 @@ const CNewMiniModal: FC<Props> = ({
         <Card className={`${cls.card}`} style={{ padding }}>
           <div>
             {title && (
-              <div
-                className="grid grid-cols-3 px-3 items-center top-0 bg-white z-[91] border-b border-[var(--border)] cursor-move"
-                onMouseDown={handleDragStart}
-              >
+              <div className="grid grid-cols-3 px-3 items-center top-0 bg-white z-[91] border-b border-[var(--border)]">
                 <h2 className="font-medium">{t(title)}</h2>
 
                 <div className="flex justify-center">

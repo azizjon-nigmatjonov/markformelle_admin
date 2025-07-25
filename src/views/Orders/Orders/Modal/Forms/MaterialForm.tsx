@@ -178,6 +178,7 @@ export const MaterialForm = ({
           renderValue={(_: string, obj: any) => {
             return obj.KALITEID;
           }}
+          staticSearchID="KALITEID"
           handleSelect={(obj: {
             KALITEID: string;
             HAMID: number;
@@ -214,7 +215,7 @@ export const MaterialForm = ({
         <LiteOptionsTable
           label="Ham Adi"
           renderValue={(_: string, obj: any) => {
-            return obj.HAMID && obj.ADI ? obj.HAMID + " - " + obj.ADI : obj.ADI;
+            return obj.ADI ? obj.ADI : obj.HAMID;
           }}
           handleSelect={(obj: { HAMID: string; ADI: string }) => {
             setValue("HAMID", obj.HAMID);
@@ -237,11 +238,7 @@ export const MaterialForm = ({
           defaultFilters={
             currentKalite?.HAMID ? `HAMID=${currentKalite?.HAMID}` : ""
           }
-          defaultValue={
-            formData?.HAMID && formData?.HAMADI
-              ? formData?.HAMID + " - " + formData?.HAMADI
-              : currentKalite?.HAMADI
-          }
+          defaultValue={formData?.HAMADI}
           control={control}
         />
 

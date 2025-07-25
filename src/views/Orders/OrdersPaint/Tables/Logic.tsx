@@ -456,8 +456,6 @@ export const PaintTableLogic = ({ filterParams }: { filterParams: any }) => {
 
   useEffect(() => {
     if (listData) {
-      console.log("listData", listData?.data);
-
       setBodyData(listData?.data || []);
     }
   }, [listData]);

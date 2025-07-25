@@ -79,14 +79,14 @@ const HFTextarea = ({
   return (
     <div>
       {label && <CLabel title={label} required={required} />}
-      <div className="border border-[var(--lineGray)] rounded-[8px]">
+      <div className="rounded-[8px]">
         <Controller
           name={name}
           control={control}
           defaultValue={defaultValue}
           rules={{ ...rules }}
           render={({ field: { onChange, value }, fieldState: { error } }) => (
-            <div className="p-2 relative">
+            <div className="relative">
               <FieldUI
                 onChange={onChange}
                 value={value}

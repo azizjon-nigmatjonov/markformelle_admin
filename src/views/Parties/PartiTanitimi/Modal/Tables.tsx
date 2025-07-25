@@ -10,19 +10,23 @@ export const Tables = ({ formId }: { formId: number }) => {
   const [openModal, setOpenModal] = useState(false);
   const [modalData, setModalData] = useState<any>([]);
   const [currentSiparis, setCurrentSiparis] = useState<any>({});
-  const { checkProxy, deleteProxy } = ProxyLogic({
-    setOpenModal,
-    setModalData,
-    currentSiparis,
-  });
+
   const [filterParams, setFilterParams] = useState<IFilterParams>({
     page: 1,
     perPage: 50,
   });
 
-  const { bodyColumns, isLoading, siparisData, siparisIsLoading } = TableData({
-    filterParams,
-    formId,
+  const { bodyColumns, isLoading, siparisData, siparisIsLoading, refetch } =
+    TableData({
+      filterParams,
+      formId,
+    });
+
+  const { checkProxy, deleteProxy } = ProxyLogic({
+    setOpenModal,
+    setModalData,
+    currentSiparis,
+    refetchTable: refetch,
   });
 
   const { newHeadColumns } = useTableHeaders({
@@ -86,7 +90,7 @@ export const Tables = ({ formId }: { formId: number }) => {
           bodyColumns={bodyColumns}
           autoHeight="200px"
           isLoading={isLoading}
-          idForTable="modal_table_zerve"
+          idForTable="modal_inner_partistok"
           handleFilterParams={setFilterParams}
           filterParams={filterParams}
           disablePagination

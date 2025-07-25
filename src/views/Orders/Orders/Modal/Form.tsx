@@ -140,7 +140,7 @@ export const OrderForm = ({
           </InputFieldUI>
           <InputFieldUI title="Siparis ID">
             <LiteOptionsTable
-              name="BOYASIPARISKAYITID"
+              name="BOYASIPARISID"
               link="boyasiparis"
               control={control}
               renderValue={(_: string, obj: any) => {
@@ -150,13 +150,22 @@ export const OrderForm = ({
                 {
                   id: "BOYASIPARISKAYITID",
                   title: "BOYASIPARISKAYITID",
+                  width: 150,
+                },
+                {
+                  id: "BOYASIPARISID",
+                  title: "BOYASIPARISID",
+                  width: 100,
                 },
               ]}
-              defaultValue={formData?.BOYASIPARISKAYITID}
+              defaultValue={formData?.BOYASIPARISID}
               handleSelect={(obj: { BOYASIPARISKAYITID: number }) => {
                 setFormId(obj.BOYASIPARISKAYITID);
               }}
             />
+          </InputFieldUI>
+          <InputFieldUI title={formId ? "ID: " + formId : ""}>
+            <span></span>
           </InputFieldUI>
         </div>
         <div className="col-span-2 flex justify-end">
@@ -211,7 +220,7 @@ export const OrderForm = ({
             <HFTextField
               name="SIPARISTARIHI"
               control={control}
-              defaultValue={formData?.SIPARISTARIHI}
+              defaultValue={dayjs(formData?.SIPARISTARIHI).format("YYYY-MM-DD")}
               disabled
             />
           </InputFieldUI>

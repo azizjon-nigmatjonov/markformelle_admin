@@ -69,5 +69,12 @@
     outline: none;
     border: none;
     object-fit: cover;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    // padding: 8px;
+    &:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
   }
 }
