@@ -19,6 +19,7 @@ import { AskTemplate } from "./TableUI/AskTemplate";
 import { useFetchTypeSingle } from "../../../../hooks/useFetchRequests/useFetchType";
 import { ModalUIRecipe } from "../../../Recipe/List/Modal";
 import { TemplateForm } from "./TableUI/TemplateForm";
+import { useTranslation } from "react-i18next";
 
 export const LabModalTables = ({
   disabled,
@@ -35,6 +36,7 @@ export const LabModalTables = ({
   const { tableData, refetch: refetchMaterial } = TablesLogic({
     formId: formId || formData?.LABRECETEID,
   });
+  const { t } = useTranslation();
   const [idTable, setIdTable]: any = useState(null);
   const [materialData, setMaterialData] = useState({});
   const [idMaterial, setIdMaterial]: any = useState(null);
@@ -231,7 +233,7 @@ export const LabModalTables = ({
     <>
       <div className="grid grid-cols-3 gap-x-2">
         <div>
-          <h3 className="text-sm font-medium text-[var(--gray)] pb-1 pl-1">labrecetecalisma</h3>
+          <h3 className="text-sm font-medium text-[var(--gray)] pb-1 pl-1">{t("labrecetecalisma")}</h3>
           <TableUI
             title=""
             headColumns={headColumns}
@@ -263,7 +265,7 @@ export const LabModalTables = ({
         </div>
 
         <div>
-          <h3 className="text-sm font-medium text-[var(--gray)] pb-1 pl-1">labreceteatis</h3>
+          <h3 className="text-sm font-medium text-[var(--gray)] pb-1 pl-1">{t("labreceteatis")}</h3>
           <TwoRowTable
             title=""
             headColumns={trailHeadColumns}
@@ -288,7 +290,7 @@ export const LabModalTables = ({
         </div>
 
         <div>
-          <h3 className="text-sm font-medium text-[var(--gray)] pb-1 pl-1">labreceteurun</h3>
+          <h3 className="text-sm font-medium text-[var(--gray)] pb-1 pl-1">{t("labreceteurun")}</h3>
           <TableUI
             title=""
             idTable={idDetailForm}
