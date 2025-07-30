@@ -17,7 +17,6 @@ const InputUI = ({
   onChange,
   readOnly,
   disabled,
-  errors = {},
   placeholder,
   focused = false,
   setPassword = () => {},
@@ -100,7 +99,7 @@ const InputUI = ({
       <input
         ref={inputRef}
         className={`input-design ${
-          errors[name]?.message || error ? "error" : ""
+          error?.message && error?.type !== "typeError" ? "error" : ""
         }`}
         style={{ width: "100%" }}
         value={value || ""}
@@ -143,8 +142,6 @@ const InputUI = ({
           style={{
             top: "-30px",
             left: "0",
-            maxWidth: "300px",
-            wordBreak: "break-word",
           }}
         >
           {value || ""}

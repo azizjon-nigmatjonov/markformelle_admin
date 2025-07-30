@@ -113,65 +113,65 @@ const SearchInput = memo(
       <Controller
         control={control}
         name={name}
-        render={({ field: { onChange, value }, fieldState: { error } }) => (
-          <div
-            className={`relative w-full ${open ? "z-[99]" : ""}`}
-            onMouseEnter={() => {
-              if (isOverflowing) {
-                setShowTooltip(true);
-              }
-            }}
-            onMouseLeave={() => {
-              setShowTooltip(false);
-            }}
-          >
-            <input
-              value={search ?? value ?? ""}
-              type="text"
-              onBlur={() => {
-                setOpen(false);
-                setIsFocus(false);
-                setShowTooltip(false);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleSearch(search);
-                  handleEnterKey(e);
+        render={({ field: { onChange, value }, fieldState: { error } }) => {
+          return (
+            <div
+              className={`relative w-full ${open ? "z-[99]" : ""}`}
+              onMouseEnter={() => {
+                if (isOverflowing) {
+                  setShowTooltip(true);
                 }
               }}
-              onFocus={() => setIsFocus(true)}
-              autoFocus={focused}
-              className={`border rounded-[8px] pl-8 h-[30px] w-full px-1 bg-white ${
-                error?.message
-                  ? "border-[var(--error)]"
-                  : "border-[var(--border)]"
-              } ${disabled ? "text-[var(--gray)]" : ""}`}
-              placeholder={t(placeholder)}
-              onChange={(e) => {
-                debouncedSearch(e.target.value);
-                onChange(e.target.value);
-                setSearch(e.target.value);
+              onMouseLeave={() => {
+                setShowTooltip(false);
               }}
-              ref={inputRef}
-              readOnly={readOnly || disabled}
-            />
-
-            {/* Tooltip */}
-            {showTooltip && isOverflowing && (
-              <div
-                className="absolute z-[100] bg-gray-900 text-white text-sm px-2 py-1 rounded shadow-lg whitespace-nowrap"
-                style={{
-                  top: "-30px",
-                  left: "0",
-                  maxWidth: "300px",
-                  wordBreak: "break-word",
+            >
+              <input
+                value={search ?? value ?? ""}
+                type="text"
+                onBlur={() => {
+                  setOpen(false);
+                  setIsFocus(false);
+                  setShowTooltip(false);
                 }}
-              >
-                {search ?? value ?? ""}
-              </div>
-            )}
-          </div>
-        )}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSearch(search);
+                    handleEnterKey(e);
+                  }
+                }}
+                onFocus={() => setIsFocus(true)}
+                autoFocus={focused}
+                className={`border rounded-[8px] pl-8 h-[30px] w-full px-1 bg-white ${
+                  error?.message && error?.type !== "typeError"
+                    ? "border-[var(--error)]"
+                    : "border-[var(--border)]"
+                } ${disabled ? "text-[var(--gray)]" : ""}`}
+                placeholder={t(placeholder)}
+                onChange={(e) => {
+                  debouncedSearch(e.target.value);
+                  onChange(e.target.value);
+                  setSearch(e.target.value);
+                }}
+                ref={inputRef}
+                readOnly={readOnly || disabled}
+              />
+
+              {/* Tooltip */}
+              {showTooltip && isOverflowing && (
+                <div
+                  className="absolute z-[100] bg-gray-900 text-white text-sm px-2 py-1 rounded shadow-lg whitespace-nowrap"
+                  style={{
+                    top: "-30px",
+                    left: "0",
+                  }}
+                >
+                  {search ?? value ?? ""}
+                </div>
+              )}
+            </div>
+          );
+        }}
       />
     );
   }
