@@ -8,7 +8,7 @@
 }
 
 .cnewtable {
-  background-color: white;
+  background-color: var(--bg);
 
   .CTableContainer {
     width: 100%;
@@ -16,7 +16,7 @@
       width: 100%;
       position: relative;
       color: var(--main);
-      background-color: white;
+      background-color: var(--bg);
 
       table {
         width: 100%;
@@ -34,7 +34,7 @@
     position: absolute;
     bottom: -35px;
     width: 100%;
-    background-color: white;
+    background-color: var(--bg);
 
     .MuiPagination-ul {
       display: flex;
@@ -194,6 +194,7 @@
     th {
       position: relative;
       padding: 0 !important;
+      background-color: var(--bg) !important;
       .cell {
         color: var(--main);
         font-weight: 400;

@@ -11,7 +11,8 @@ import { tableReducer } from "./table";
 import { machineReducer } from "./machine/machine.slice";
 import { globalToolReducer } from "./globalTools";
 import { translateReducer } from "./translation/translate.slice";
-import { modalsReducer } from "./modal/modal.slice";  
+import { modalsReducer } from "./modal/modal.slice";
+import themeReducer from "./theme/theme.slice";
 
 const authPersistConfig = {
   key: "auth",
@@ -54,9 +55,14 @@ const globalToolPersistConfig = {
 };
 
 const translationPersistConfig = {
-  key: 'translation',
-  storage
-}
+  key: "translation",
+  storage,
+};
+
+const themePersistConfig = {
+  key: "theme",
+  storage,
+};
 
 const rootReducer = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
@@ -68,6 +74,7 @@ const rootReducer = combineReducers({
   machine: persistReducer(machinePersistConfig, machineReducer),
   globalTool: persistReducer(globalToolPersistConfig, globalToolReducer),
   translation: persistReducer(translationPersistConfig, translateReducer),
+  theme: persistReducer(themePersistConfig, themeReducer),
   website: websiteReducer,
   modals: modalsReducer,
 });

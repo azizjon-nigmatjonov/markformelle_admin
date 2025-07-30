@@ -53,9 +53,7 @@ export const OrderModalPartiCreate = ({
         updateForm={updateForm}
         formData={formData}
         formId={formId}
-        setFormId={(val: number) => {
-          setFormId(val);
-        }}
+        setFormId={(val: number) => setFormId(val)}
         uniqueID={uniqueID}
       />
 

@@ -15,7 +15,7 @@ export const MobileHeader = ({ extra, filters }: Props) => {
 
   return (
     <>
-      <div className="h-[35px] w-full bg-white z-[98] relative flex items-center justify-between px-3">
+      <div className="h-[35px] w-full bg-[var(--surface)] z-[98] relative flex items-center justify-between px-3">
         <button onClick={() => setOpen(!open)}>
           <MenuIcon />
         </button>

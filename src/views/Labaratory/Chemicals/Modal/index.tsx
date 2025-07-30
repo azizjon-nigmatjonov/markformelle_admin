@@ -14,6 +14,10 @@ import { Validation } from "./Validation";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LiteOptionsTable } from "../../../../components/UI/Options/LiteTable";
 import CModal from "../../../../components/CElements/CModal";
+import { websiteActions } from "../../../../store/website";
+import { useDispatch, useSelector } from "react-redux";
+import CNewMiniModal from "../../../../components/CElements/CNewMiniModal";
+import { RootState } from "../../../../store/types";
 const schema = Validation;
 interface ModalUIProps {
   defaultData?: ModalTypes;
@@ -37,6 +41,13 @@ export const ModalUI = ({
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
+  const dispatch = useDispatch();
+  const isDirty = useSelector(
+    (state: RootState) => state.website.dirty_places.isDirty
+  );
+  const handleDirtyPlaces = (list: string) => {
+    dispatch(websiteActions.setDirtyPlaces({ list, isDirty: true }));
+  };
 
   const handleModalActionsFn = (status: string, id: string) => {
     if (status === "delete") {
@@ -191,7 +202,24 @@ export const ModalUI = ({
           <div
             className={`grid grid-cols-3 gap-x-5 border-b border-[var(--border)] pb-5`}
           >
-            <div>
+            <div className="grid grid-cols-2 gap-x-5">
+              <InputFieldUI title="Pantone Kodu" disabled={disabled}>
+                <LiteOptionsTable
+                  name="PANTONEKODU"
+                  link="labrecete"
+                  required={true}
+                  renderValue={(_: string, obj: any) => {
+                    return obj.LABRECETEKODU;
+                  }}
+                  defaultValue={formData?.LABRECETEKODU}
+                  headColumns={[{ id: "PANTONEKODU", title: "PANTONEKODU" }]}
+                  handleSelect={(obj: { ADI: string; LABRECETEID: number }) => {
+                    setValue("LABRECETEKODU", obj.ADI);
+                    setFormId(obj.LABRECETEID);
+                  }}
+                  control={control}
+                />
+              </InputFieldUI>
               <InputFieldUI title="LABRECETEKODU" disabled={disabled}>
                 <LiteOptionsTable
                   name="LABRECETEKODU"
@@ -240,6 +268,7 @@ export const ModalUI = ({
           setValue={setValue}
           getValues={getValues}
           formData={formData}
+          handleDirtyPlaces={handleDirtyPlaces}
         />
       </form>
       <LabModalTables
@@ -287,6 +316,46 @@ export const ModalUI = ({
           </button>
         </div>
       </CModal>
+
+      {isDirty && (
+        <CNewMiniModal
+          title=" "
+          handleActions={() => {
+            dispatch(
+              websiteActions.setDirtyPlaces({ list: "", isDirty: false })
+            );
+          }}
+        >
+          <div className="w-[400px]">
+            <p>{t("you_have_changes")}</p>
+            <div className="flex space-x-2 mt-5">
+              <button
+                className="cancel-btn"
+                type="button"
+                onClick={() => {
+                  dispatch(
+                    websiteActions.setDirtyPlaces({ list: "", isDirty: false })
+                  );
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                className="custom-btn"
+                type="button"
+                onClick={() => {
+                  handleSubmit(onSubmit)();
+                  dispatch(
+                    websiteActions.setDirtyPlaces({ list: "", isDirty: false })
+                  );
+                }}
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </CNewMiniModal>
+      )}
     </>
   );
 };

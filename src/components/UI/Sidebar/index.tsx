@@ -117,7 +117,7 @@ const SidebarComponent = () => {
         </div>
 
         <div
-          className={`absolute bottom-0 h-[40px] border-t border-[var(--border)] flex items-center w-full z-[2] bg-white ${
+          className={`absolute bottom-0 h-[40px] border-t border-[var(--border)] flex items-center w-full z-[2] bg-[var(--bg)] ${
             collapsed ? "" : "px-16px"
           }`}
         >

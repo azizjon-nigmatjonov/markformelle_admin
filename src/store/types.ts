@@ -7,9 +7,8 @@ export interface Route {
   children?: Route[];
 }
 
-
 export interface AlertData {
-  type: 'success' | 'error' | 'warning' | 'info';
+  type: "success" | "error" | "warning" | "info";
   message: string;
   title?: string;
   duration?: number;
@@ -21,11 +20,15 @@ export interface WebsiteState {
   alert: AlertData | Record<string, unknown>;
   liteTableOpen: string;
   modalType: string;
+  dirty_places: {
+    list: string[];
+    isDirty: boolean;
+  };
 }
 
 export interface RootState {
-  auth: unknown; 
-  tableSize: unknown; 
+  auth: unknown;
+  tableSize: unknown;
   notification: unknown;
   sidebar: unknown;
   filter: unknown;
@@ -33,5 +36,6 @@ export interface RootState {
   machine: unknown;
   globalTool: unknown;
   translation: unknown;
+  theme: { isDarkMode: boolean };
   website: WebsiteState;
-} 
+}

@@ -9,6 +9,7 @@ import { useScreenSize } from "../../../hooks/useScreenSize";
 import { MobileHeader } from "./MobileHeader";
 import { Tooltip } from "@mui/material";
 import { TooltipPosition } from "../../../constants/toolPosition";
+import { ThemeToggle } from "../ThemeToggle";
 
 interface Props {
   open?: boolean;
@@ -55,7 +56,7 @@ export const Header = ({
       <div className="fixed z-[96]">
         <HeaderFoldButton collapsed={openHeader} setCollapsed={setCollapsed} />
         <div
-          className={`h-[45px] desktop:h-[45px] relative z-[98] bg-white w-full duration-300 ${
+          className={`h-[45px] desktop:h-[45px] relative z-[98] bg-[var(--surface)] w-full duration-300 ${
             openHeader ? "" : "hidden"
           }`}
         >
@@ -96,6 +97,8 @@ export const Header = ({
                     <LangDropdown />
                   </div>
                 </Tooltip>
+
+                <ThemeToggle />
 
                 <Notification />
               </div>

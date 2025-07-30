@@ -47,7 +47,7 @@ export const SelectFilter = ({
 
       <p
         onClick={() => setOpen(true)}
-        className="text-[12px] text-[var(--main)] absolute left-0 top-0 flex items-center justify-center text-sm z-[1] cursor-pointer bg-white h-full w-full"
+        className="text-[12px] text-[var(--main)] absolute left-0 top-0 flex items-center justify-center text-sm z-[1] cursor-pointer bg-[var(--bg)] h-full w-full"
       >
         <PlusIcon fill="var(--main)" />
         Фильтр

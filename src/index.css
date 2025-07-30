@@ -7,23 +7,66 @@
   line-height: 1.5;
   font-weight: 400;
   color-scheme: light dark;
-  color: #151515;
-  background-color: #f5f5f5;
+  color: var(--black);
+  background-color: var(--background, #f5f5f5);
   font-size: 14px;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Force light backgrounds on form elements to prevent dark mode issues */
+/* Dark mode base styles */
+[data-theme="dark"] {
+  color-scheme: dark;
+  
+  /* Modern scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--surface);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--gray40);
+  }
+  
+  /* Modern selection styling */
+  ::selection {
+    background: var(--primary);
+    color: var(--black);
+  }
+  
+  ::-moz-selection {
+    background: var(--primary);
+    color: var(--black);
+  }
+}
+
+/* Light mode base styles */
+[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* Form elements styling for both light and dark modes */
 input, textarea, select {
-  background-color: white !important;
+  background-color: var(--surface, white) !important;
   color: var(--black) !important;
+  border-color: var(--border) !important;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
-/* Ensure all input types have white backgrounds */
+/* Ensure all input types have proper backgrounds */
 input[type="text"],
 input[type="email"],
 input[type="password"],
@@ -36,47 +79,42 @@ input[type="time"],
 input[type="datetime-local"],
 input[type="month"],
 input[type="week"] {
-  background-color: white !important;
+  background-color: var(--surface, white) !important;
   color: var(--black) !important;
 }
 
 /* Additional specific overrides for problematic components */
 #hfInputMask input {
-  background-color: white !important;
+  background-color: var(--surface, white) !important;
 }
 
 .rmdp-input {
-  background-color: white !important;
+  background-color: var(--surface, white) !important;
 }
 
-/* Override any dark mode styles for form elements */
-@media (prefers-color-scheme: dark) {
-  input, textarea, select {
-    background-color: white !important;
-    color: var(--black) !important;
-  }
-  
-  /* Ensure MUI components also have light backgrounds */
+/* Dark mode specific overrides */
+[data-theme="dark"] {
+  /* Ensure MUI components also have proper backgrounds */
   .MuiInputBase-root {
-    background-color: white !important;
+    background-color: var(--surface, #1e293b) !important;
   }
   
   .MuiOutlinedInput-root {
-    background-color: white !important;
+    background-color: var(--surface, #1e293b) !important;
   }
   
   .MuiFilledInput-root {
-    background-color: white !important;
+    background-color: var(--surface, #1e293b) !important;
   }
   
   /* Additional form elements */
   .MuiTextField-root input {
-    background-color: white !important;
+    background-color: var(--surface, #1e293b) !important;
     color: var(--black) !important;
   }
   
   .MuiFormControl-root input {
-    background-color: white !important;
+    background-color: var(--surface, #1e293b) !important;
     color: var(--black) !important;
   }
   
@@ -85,20 +123,20 @@ input[type="week"] {
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
   input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    -webkit-box-shadow: 0 0 0 30px var(--surface, #1e293b) inset !important;
     -webkit-text-fill-color: var(--black) !important;
   }
   
   /* Additional specific overrides for problematic components */
   #hfInputMask input {
-    background-color: white !important;
+    background-color: var(--surface, #1e293b) !important;
   }
   
   .rmdp-input {
-    background-color: white !important;
+    background-color: var(--surface, #1e293b) !important;
   }
   
-  /* Ensure all input types have white backgrounds */
+  /* Ensure all input types have proper backgrounds */
   input[type="text"],
   input[type="email"],
   input[type="password"],
@@ -111,7 +149,7 @@ input[type="week"] {
   input[type="datetime-local"],
   input[type="month"],
   input[type="week"] {
-    background-color: white !important;
+    background-color: var(--surface, #1e293b) !important;
     color: var(--black) !important;
   }
 }

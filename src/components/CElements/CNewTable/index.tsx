@@ -806,7 +806,7 @@ const CNewTable = ({
               )?.isStiky
                 ? calculateWidth(column?.id, colIndex)
                 : "0",
-              backgroundColor: "#fff",
+              backgroundColor: "var(--bg)",
               zIndex: tableSettings?.[pageName]?.find(
                 (item: any) => item?.id === column?.id
               )?.isStiky
@@ -871,7 +871,7 @@ const CNewTable = ({
                   zIndex: 99,
                 }}
               >
-                <div className="bg-white rounded-[8px] border border-[var(--border)] overflow-hidden">
+                <div className="bg-[var(--bg)] rounded-[8px] border border-[var(--border)] overflow-hidden">
                   {rightChildren(item)}
                 </div>
               </BasePopup>
@@ -984,7 +984,7 @@ const CNewTable = ({
                   <CTableHead>
                     <CTableRow>
                       <td
-                        className={`sticky bg-white ${
+                        className={`sticky bg-[var(--bg)] ${
                           innerTable ? "h-[35px]" : "h-[41px]"
                         } ${
                           openSelect ? "flex" : "hidden"

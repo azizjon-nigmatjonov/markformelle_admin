@@ -6,9 +6,10 @@ import authService from "../../../services/auth/authService";
 import { useDispatch, useSelector } from "react-redux";
 import { memo, useEffect, useMemo } from "react";
 import { authActions } from "../../../store/auth/auth.slice";
-import { ColorConstants } from "../../../constants/website";
+import { getThemeColors } from "../../../constants/theme";
 import CModal from "../../../components/CElements/CModal";
 import Login from "../../../views/Auth/Login";
+import { RootState } from "../../../store/types";
 
 export const BackButtonRoute = () => {
   const { fromRoutes } = useGetQueries();
@@ -85,16 +86,27 @@ export const GetUserInfo = () => {
 };
 
 export const ColorData = memo(() => {
+  const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
+
   useEffect(() => {
-    (Object.keys(ColorConstants) as (keyof typeof ColorConstants)[]).forEach(
+    const currentColors = getThemeColors(isDarkMode);
+
+    // Set theme attribute
+    document.documentElement.setAttribute(
+      "data-theme",
+      isDarkMode ? "dark" : "light"
+    );
+
+    // Set CSS variables
+    (Object.keys(currentColors) as (keyof typeof currentColors)[]).forEach(
       (key) => {
         document.documentElement.style.setProperty(
           "--" + key,
-          ColorConstants[key]
+          currentColors[key]
         );
       }
     );
-  }, []);
+  }, [isDarkMode]);
 
   return "";
 });

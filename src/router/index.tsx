@@ -62,7 +62,6 @@ const Router = () => {
   }: Path) => {
     const path = `${parent}/${link}${childLink ? `/${childLink}` : ""}`;
 
-    // Create a serializable version of the route object
     const serializableObj = {
       path: path,
       sidebar,

@@ -118,7 +118,7 @@ export const SideFilter = ({
 
   return (
     <div
-      className={`bg-white relative duration-200  ${
+      className={`bg-[var(--bg)] relative duration-200  ${
         sideFilter ? "w-[240px]" : "w-0"
       }`}
     >
@@ -181,7 +181,7 @@ export const SideFilter = ({
             ""
           )}
 
-          <div className="sticky bottom-0 h-[50px] bg-white left-0 w-full mt-3">
+          <div className="sticky bottom-0 h-[50px] bg-[var(--bg)] left-0 w-full mt-3">
             <SelectFilter
               handleClick={(val: any) =>
                 addAndRemoveFilter({

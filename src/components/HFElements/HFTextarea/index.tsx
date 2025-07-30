@@ -62,6 +62,7 @@ interface Props {
   label?: string;
   required?: boolean;
   minRows?: number;
+  handleChange?: (val: any) => void;
 }
 
 const HFTextarea = ({
@@ -74,6 +75,7 @@ const HFTextarea = ({
   required = false,
   activePassword = false,
   minRows = 3,
+  handleChange = () => {},
   ...props
 }: Props) => {
   return (
@@ -88,7 +90,10 @@ const HFTextarea = ({
           render={({ field: { onChange, value }, fieldState: { error } }) => (
             <div className="relative">
               <FieldUI
-                onChange={onChange}
+                onChange={(val) => {
+                  onChange(val);
+                  handleChange(val);
+                }}
                 value={value}
                 error={error}
                 defaultValue={defaultValue}

@@ -10,6 +10,9 @@ import { ModalUI } from "./Modal";
 import { ModalTypes } from "./interfaces";
 import { PantoneColors } from "../../../constants/pantone";
 import CNewModal from "../../../components/CElements/CNewModal";
+import { RootState } from "../../../store/types";
+import { useDispatch, useSelector } from "react-redux";
+import { websiteActions } from "../../../store/website";
 
 export const LabChemicals = () => {
   const { t } = useTranslationHook();
@@ -23,7 +26,10 @@ export const LabChemicals = () => {
   const { bodyColumns, isLoading, bodyData, deleteFn } = TableData({
     filterParams,
   });
-
+  const isDirty = useSelector(
+    (state: RootState) => state.website.dirty_places.isDirty
+  );
+  const dispatch = useDispatch();
   const predefinedColumns = [
     {
       title: "PANTONEKODU",
@@ -112,8 +118,12 @@ export const LabChemicals = () => {
   const askCloseFn = (type: string) => {
     if (type === "close") {
       setAskClose("");
-      setOpen(false);
-      setModalInitialData({});
+      if (isDirty) {
+        dispatch(websiteActions.setDirtyPlaces({ list: "", isDirty: false }));
+      } else {
+        setOpen(false);
+        setModalInitialData({});
+      }
     } else if (type === "submit") {
       setAskClose("");
     } else {
@@ -127,11 +137,16 @@ export const LabChemicals = () => {
 
   const handleModal = (status: string, id: string) => {
     // This will be passed to ModalUI
+
     if (status === "delete") {
       deleteFn([id]);
     } else if (status === "close") {
-      setOpen(false);
-      setModalInitialData({});
+      if (isDirty) {
+        dispatch(websiteActions.setDirtyPlaces({ list: "", isDirty: false }));
+      } else {
+        setOpen(false);
+        setModalInitialData({});
+      }
     }
   };
 
@@ -172,7 +187,7 @@ export const LabChemicals = () => {
         />
       </div>
 
-      {open && (
+      {open ? (
         <CNewModal
           title={modalInitialData.LABRECETEID ? "updating_lab" : "creating_lab"}
           handleActions={handleModal}
@@ -188,6 +203,8 @@ export const LabChemicals = () => {
             setAskClose={askCloseFn}
           />
         </CNewModal>
+      ) : (
+        ""
       )}
     </>
   );

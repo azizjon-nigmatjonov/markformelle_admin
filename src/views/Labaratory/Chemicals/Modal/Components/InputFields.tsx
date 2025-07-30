@@ -9,6 +9,7 @@ interface InputFieldsProps {
   setValue: (name: any, value: any) => void;
   getValues: () => any;
   formData: any;
+  handleDirtyPlaces: (list: string) => void;
 }
 
 export const InputFields = ({
@@ -16,6 +17,7 @@ export const InputFields = ({
   setValue,
   getValues,
   formData,
+  handleDirtyPlaces,
 }: InputFieldsProps) => {
   const [selectedHamID, setSelectedHamID]: any = useState(null);
   useEffect(() => {
@@ -34,6 +36,7 @@ export const InputFields = ({
             name="ADI"
             control={control}
             setValue={setValue}
+            handleChange={() => handleDirtyPlaces("ADI")}
             focused={formData?.LABRECETEKODU ? false : true}
           />
         </InputFieldUI>
@@ -51,6 +54,7 @@ export const InputFields = ({
             staticSearchID="FIRMAID"
             handleSelect={(obj: { FIRMAID: string }) => {
               setValue("FIRMAID", obj.FIRMAID);
+              handleDirtyPlaces("FIRMAID");
             }}
             defaultValue={formData?.FIRMAID}
             control={control}
@@ -83,9 +87,10 @@ export const InputFields = ({
                 },
               },
             ]}
-            handleSelect={(obj: { LABRENKGRUPID: number }) =>
-              setValue("LABRENKGRUPID", obj.LABRENKGRUPID)
-            }
+            handleSelect={(obj: { LABRENKGRUPID: number }) => {
+              setValue("LABRENKGRUPID", obj.LABRENKGRUPID);
+              handleDirtyPlaces("LABRENKGRUPID");
+            }}
             control={control}
           />
         </InputFieldUI>
@@ -108,6 +113,7 @@ export const InputFields = ({
               setValue("HAMID", obj.HAMID);
               setValue("HAMADI", obj.ADI);
               setSelectedHamID(obj.HAMID);
+              handleDirtyPlaces("HAMID");
             }}
             control={control}
           />
@@ -128,6 +134,7 @@ export const InputFields = ({
             ]}
             handleSelect={(obj: { RECETETURUID: number }) => {
               setValue("RECETETURUID", obj.RECETETURUID);
+              handleDirtyPlaces("RECETETURUID");
             }}
             disabled={!!formData?.RECETETURUID}
             control={control}
@@ -151,6 +158,7 @@ export const InputFields = ({
             handleSelect={(obj: { ASAMAID: number; ADI: string }) => {
               setValue("USTASAMAID", obj.ASAMAID);
               setValue("USTASAMAADI", obj.ADI);
+              handleDirtyPlaces("USTASAMAID");
             }}
             control={control}
           />
@@ -169,6 +177,7 @@ export const InputFields = ({
             ]}
             handleSelect={(obj: { DOVIZID: string }) => {
               setValue("DOVIZID", obj.DOVIZID);
+              handleDirtyPlaces("DOVIZID");
             }}
             disabled={!!formData?.FIRMAID}
             control={control}
@@ -203,6 +212,7 @@ export const InputFields = ({
             ]}
             handleSelect={(obj: { RENKDERINLIGIID: number }) => {
               setValue("RENKDERINLIGIID", obj.RENKDERINLIGIID);
+              handleDirtyPlaces("RENKDERINLIGIID");
             }}
             defaultValue={formData?.RENKDERINLIGIADI}
             control={control}
@@ -226,6 +236,7 @@ export const InputFields = ({
             handleSelect={(obj: { KALITEADI: string; KALITEID: string }) => {
               setValue("KALITEADI", obj.KALITEADI);
               setValue("KALITEID", obj.KALITEID);
+              handleDirtyPlaces("KALITEID");
             }}
             disabled={true}
             control={control}
@@ -246,6 +257,7 @@ export const InputFields = ({
               checked={getValues().FASON === 1 ? true : false}
               handleCheck={(obj: { checked: boolean }) => {
                 setValue("FASON", obj.checked ? "1" : "0");
+                handleDirtyPlaces("FASON");
               }}
             />
           </div>
