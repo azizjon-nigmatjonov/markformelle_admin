@@ -46,7 +46,7 @@ export const OrderForm = ({
   const { setFormValues, setInitialFormValues } = FormLogic();
   const dispatch = useDispatch();
 
-  const handleDirtyPlaces = (list: string) => {
+  const handleDirtyPlaces = (_: string) => {
     // dispatch(websiteActions.setDirtyPlaces({ list, isDirty: false }));
   };
 
