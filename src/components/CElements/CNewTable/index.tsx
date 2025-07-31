@@ -857,7 +857,7 @@ const CNewTable = ({
                   }}
                   className="w-full whitespace-nowrap innerCell"
                 >
-                  <>{getBodyCol(column, item)}</>
+                  {getBodyCol(column, item)}
                 </div>
               ) : (
                 ""

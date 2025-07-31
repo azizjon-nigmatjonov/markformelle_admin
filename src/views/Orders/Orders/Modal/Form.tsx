@@ -47,7 +47,7 @@ export const OrderForm = ({
   const dispatch = useDispatch();
 
   const handleDirtyPlaces = (list: string) => {
-    dispatch(websiteActions.setDirtyPlaces({ list, isDirty: false }));
+    // dispatch(websiteActions.setDirtyPlaces({ list, isDirty: false }));
   };
 
   const handleModalActionsFn = (status: string, id: string) => {
@@ -198,7 +198,7 @@ export const OrderForm = ({
             </div>
           </div>
         </div>
-        <div className={`grid grid-cols-3 gap-x-3`}>
+        <div className="grid grid-cols-3 gap-x-3">
           <div className="space-y-2">
             <InputFieldUI title="Firma Adi">
               <LiteOptionsTable

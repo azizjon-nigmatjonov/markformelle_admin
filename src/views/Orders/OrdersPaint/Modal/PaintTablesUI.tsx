@@ -11,6 +11,9 @@ import { PartianTable } from "../Tables/Partion";
 import CLabel from "../../../../components/CElements/CLabel";
 import CCheckbox from "../../../../components/CElements/CCheckbox";
 import { PaintFormLogic } from "./Forms/PaintComponents/Logic";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../../store";
+import { websiteActions } from "../../../../store/website";
 
 export const PaintTablesUI = ({
   handleActionsTable,
@@ -29,9 +32,6 @@ export const PaintTablesUI = ({
   currentMaterial: any;
   formData: any;
 }) => {
-  // const [currentElementRightClick, setCurrentElementRightClick]: any = useState(
-  //   {}
-  // );
   const [filterParams, setFilterParams]: any = useState({
     page: 1,
     perPage: 50,
@@ -44,6 +44,10 @@ export const PaintTablesUI = ({
     page: 1,
     perPage: 50,
   });
+  const isDirty = useSelector(
+    (state: RootState) => state.website.dirty_places.isDirty
+  );
+  const dispatch = useDispatch();
   const { isLoading, headColumns, bodyColumns, refetch, deleteFn } =
     PaintTableLogic({ filterParams });
   const { updateForm } = PaintFormLogic({
@@ -51,6 +55,9 @@ export const PaintTablesUI = ({
     defaultData: {},
     closeFn: () => refetch(),
   });
+  const dirty_places = useSelector(
+    (state: RootState) => state.website.dirty_places
+  );
 
   const { headColumns: headColumnsVariant, bodyColumns: bodyColumnsVariant } =
     PaintVariantTableLogic({ filterParams: filterParamsVariant });
@@ -89,10 +96,13 @@ export const PaintTablesUI = ({
         <PaintTable
           handleActionsTable={(obj: any, status: string) => {
             if (status === "view_single_right_click") {
-
               return;
             }
-            handlePaintActionsPaint(obj, status);
+            if (isDirty) {
+              handleActionsTable(obj, "modal", "paint");
+            } else {
+              handlePaintActionsPaint(obj, status);
+            }
           }}
           height="180px"
           title="Boya Siparis Detay Girisi"
@@ -117,6 +127,7 @@ export const PaintTablesUI = ({
             "excel_upload",
             "actions",
             "sellect_more",
+            "active_menu",
           ]}
           rightChildren={(obj: any) => {
             return (
@@ -133,7 +144,6 @@ export const PaintTablesUI = ({
                       { ...obj, ONAYDURUMU: val.checked },
                       obj?.BOYASIPARISDETAYID
                     );
-
                   }}
                 />
               </div>
@@ -184,17 +194,26 @@ export const PaintTablesUI = ({
           />
         </div>
       </div>
-      {uniqueID === "paint_form" && (
+      {uniqueID === "paint_form" ? (
         <PaintForm
           parentId={formId}
           title="Boya Siparis Detay Girisi (Kumash)"
           handleActions={(val: string) => {
-            handleActionsTable({}, val, "paint");
+            if (dirty_places.list.length) {
+              dispatch(
+                websiteActions.setDirtyPlaces({ list: "", isDirty: true })
+              );
+            } else {
+              handleActionsTable({}, val, "paint");
+            }
           }}
           defaultData={currentPaint}
           uniqueID={uniqueID}
-          refetch={refetch || (() => { })}
+          refetch={refetch || (() => {})}
+          isDirty={isDirty}
         />
+      ) : (
+        ""
       )}
       {uniqueID === "paint_form_iplik" && (
         <PaintFormYarn
