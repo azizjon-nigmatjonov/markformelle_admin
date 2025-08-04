@@ -35,10 +35,12 @@ export const PaintTablesUI = ({
   const [open, setOpen] = useState(false);
 
   const handleActions = (el: any, status: string) => {
+    console.log("status", status);
+
     if (status === "view_single") {
       setCurrentPaint(el);
     } else {
-      handleActionsTable(el, status, "paint");
+      handleActionsTable(el, status === "view" ? "edit" : status, "paint");
     }
     if (status === "delete" && deleteFn) {
       deleteFn([el.BOYASIPARISDETAYID.toString()]);
@@ -54,10 +56,10 @@ export const PaintTablesUI = ({
 
   useEffect(() => {
     if (formId) {
-      setFilterParams({
-        ...filterParams,
+      setFilterParams((prevParams: any) => ({
+        ...prevParams,
         BOYASIPARISKAYITID: formId,
-      });
+      }));
     }
   }, [formId]);
 
@@ -65,6 +67,7 @@ export const PaintTablesUI = ({
     <div className="relative">
       <CNewTable
         title={title}
+        key={headColumns?.length}
         headColumns={headColumns}
         defaultFilters={defaultFilters}
         currentIdRow={currentPaint?.index ? currentPaint.index : undefined}

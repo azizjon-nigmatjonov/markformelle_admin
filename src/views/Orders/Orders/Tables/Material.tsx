@@ -29,7 +29,10 @@ export const MaterialTable = ({
 
   useEffect(() => {
     if (formId) {
-      setFilterParams({ ...filterParams, BOYASIPARISKAYITID: formId });
+      setFilterParams((prevParams: any) => ({
+        ...prevParams,
+        BOYASIPARISKAYITID: formId,
+      }));
     }
   }, [formId]);
 

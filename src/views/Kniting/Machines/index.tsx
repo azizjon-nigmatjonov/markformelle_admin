@@ -34,7 +34,7 @@ const KnittingMachines = () => {
   useEffect(() => {
     setHeightWindow(window?.screen?.height);
     setWidthWindow(window?.screen?.width);
-  }, [list]);
+  }, []);
 
   useEffect(() => {
     const refetching = setInterval(() => {

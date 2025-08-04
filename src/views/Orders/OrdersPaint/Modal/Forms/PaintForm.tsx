@@ -30,6 +30,8 @@ export const PaintForm = ({
   refetch: () => void;
   isDirty: boolean;
 }) => {
+  console.log("isDirty", isDirty);
+
   const dispatch = useDispatch();
   const [formId, setFormId] = useState(0);
   const { control, setValue, handleSubmit, watch, getValues } = useForm({});
@@ -80,7 +82,6 @@ export const PaintForm = ({
       createForm(params);
     }
   };
-  console.log("formData", formData);
 
   const setFormValues = (form: any) => {
     setValue("HAMID", form.HAMID);
@@ -192,7 +193,7 @@ export const PaintForm = ({
                 handleSelect={(data: { HAMID: string }) => {
                   setValue("HAMADI", data.HAMID);
                   setValue("HAMID", data.HAMID);
-                  handleDirtyPlaces("KALITEID");
+                  handleDirtyPlaces("HAMID");
                 }}
                 name="HAMID"
                 headColumns={[
@@ -215,6 +216,10 @@ export const PaintForm = ({
                   label="Pus"
                   name="PUS"
                   control={control}
+                  handleChange={(name: string, value: string) => {
+                    setValue(name, value);
+                    handleDirtyPlaces(name);
+                  }}
                   defaultValue={formData?.PUS ?? ""}
                 />
                 <HFTextField
@@ -228,6 +233,10 @@ export const PaintForm = ({
                   type="number"
                   label="En"
                   name="ENISTENEN"
+                  handleChange={(name: string, value: string) => {
+                    setValue(name, value);
+                    handleDirtyPlaces(name);
+                  }}
                   control={control}
                   defaultValue={formData?.ENISTENEN}
                 />
@@ -235,6 +244,10 @@ export const PaintForm = ({
                   type="number"
                   label="Gramaj"
                   name="GRAMAJISTENEN"
+                  handleChange={(name: string, value: string) => {
+                    setValue(name, value);
+                    handleDirtyPlaces(name);
+                  }}
                   control={control}
                   defaultValue={formData?.GRAMAJISTENEN}
                 />
@@ -245,6 +258,10 @@ export const PaintForm = ({
                   label="Kilo"
                   name="IPTALKILO"
                   control={control}
+                  handleChange={(name: string, value: string) => {
+                    setValue(name, value);
+                    handleDirtyPlaces(name);
+                  }}
                   defaultValue={formData?.IPTALKILO}
                 />
                 <HFTextField
@@ -252,6 +269,10 @@ export const PaintForm = ({
                   label="Brut Kilo"
                   name="BRUTKILO"
                   control={control}
+                  handleChange={(name: string, value: string) => {
+                    setValue(name, value);
+                    handleDirtyPlaces(name);
+                  }}
                   defaultValue={formData?.BRUTKILO}
                 />
               </div>
@@ -262,6 +283,10 @@ export const PaintForm = ({
                   name="BIRIMFIYAT"
                   type="number"
                   control={control}
+                  handleChange={(name: string, value: string) => {
+                    setValue(name, value);
+                    handleDirtyPlaces(name);
+                  }}
                   defaultValue={formData?.BIRIMFIYAT}
                 />
                 <LiteOptionsTable
@@ -275,6 +300,7 @@ export const PaintForm = ({
                   headColumns={[{ id: "DOVIZID", title: "DOVIZID", width: 80 }]}
                   handleSelect={(obj: { DOVIZID: string }) => {
                     setValue("DOVIZID", obj.DOVIZID);
+                    handleDirtyPlaces("DOVIZID");
                   }}
                   control={control}
                 />
@@ -286,6 +312,10 @@ export const PaintForm = ({
                 defaultValue={""}
                 control={control}
                 setValue={setValue}
+                handleChange={(name: string, value: string) => {
+                  setValue(name, value);
+                  handleDirtyPlaces(name);
+                }}
               />
               <LiteOptionsTable
                 label="Lab Recete Kodu"
@@ -309,6 +339,7 @@ export const PaintForm = ({
                 }) => {
                   setValue("LABRECETEKODU", obj.LABRECETEKODU);
                   setValue("LABRECETEID", obj.LABRECETEID);
+                  handleDirtyPlaces("LABRECETEKODU");
                 }}
                 control={control}
               />
@@ -347,6 +378,7 @@ export const PaintForm = ({
                     setValue("LABRECETEATISID", obj.ATISNO);
                     setValue("RECETEASAMAADI", obj.RECETEASAMAADI);
                     setReceteData(obj);
+                    handleDirtyPlaces("LABRECETEATISID");
                   }}
                   control={control}
                 />
@@ -377,6 +409,7 @@ export const PaintForm = ({
                 }
                 handleSelect={(obj: { RENKID: number }) => {
                   setValue("RENKID", obj.RENKID);
+                  handleDirtyPlaces("RENKID");
                 }}
                 control={control}
               />
@@ -413,6 +446,7 @@ export const PaintForm = ({
                 ]}
                 handleSelect={(obj: { RENKDERINLIGIID: number }) => {
                   setValue("RENKDERINLIGIID", obj.RENKDERINLIGIID);
+                  handleDirtyPlaces("RENKDERINLIGIID");
                 }}
                 control={control}
               />
@@ -438,6 +472,7 @@ export const PaintForm = ({
                 defaultValue={formData?.SIPARISPROSESID}
                 handleSelect={(obj: { SIPARISPROSESID: number }) => {
                   setValue("SIPARISPROSESID", obj.SIPARISPROSESID);
+                  handleDirtyPlaces("SIPARISPROSESID");
                 }}
                 control={control}
               />
@@ -448,6 +483,10 @@ export const PaintForm = ({
                 name="MUSTERISIPARISNO"
                 control={control}
                 defaultValue={formData?.MUSTERISIPARISNO}
+                handleChange={(name: string, value: string) => {
+                  setValue(name, value);
+                  handleDirtyPlaces(name);
+                }}
               />
 
               <HFTextField
@@ -456,6 +495,10 @@ export const PaintForm = ({
                 name="REFSIPARISNO"
                 control={control}
                 defaultValue={formData?.REFSIPARISNO}
+                handleChange={(name: string, value: string) => {
+                  setValue(name, value);
+                  handleDirtyPlaces(name);
+                }}
               />
 
               <HFTextField
@@ -463,12 +506,20 @@ export const PaintForm = ({
                 name="SEKILADRES"
                 control={control}
                 defaultValue={formData?.SEKILADRES}
+                handleChange={(name: string, value: string) => {
+                  setValue(name, value);
+                  handleDirtyPlaces(name);
+                }}
               />
 
               <HFTextField
                 label="Melanj kodu"
                 name="MELANJKODU"
                 control={control}
+                handleChange={(name: string, value: string) => {
+                  setValue(name, value);
+                  handleDirtyPlaces(name);
+                }}
               />
 
               <HFTextField
@@ -476,12 +527,20 @@ export const PaintForm = ({
                 label="Fire oran"
                 name="FIREORANI"
                 control={control}
+                handleChange={(name: string, value: string) => {
+                  setValue(name, value);
+                  handleDirtyPlaces(name);
+                }}
               />
 
               <HFTextField
                 label="Hata Puan Carpan"
                 name="HATAPUANICARPANI"
                 control={control}
+                handleChange={(name: string, value: string) => {
+                  setValue(name, value);
+                  handleDirtyPlaces(name);
+                }}
               />
             </div>
 
@@ -506,6 +565,7 @@ export const PaintForm = ({
                 defaultValue={formData?.DESENID}
                 handleSelect={(obj: { DESENID: number }) => {
                   setValue("DESENID", obj.DESENID);
+                  handleDirtyPlaces("DESENID");
                 }}
                 control={control}
               />
@@ -530,6 +590,7 @@ export const PaintForm = ({
                 defaultValue={formData?.DESENVARYANTID}
                 handleSelect={(obj: { DESENVARYANTID: number }) => {
                   setValue("DESENVARYANTID", obj.DESENVARYANTID);
+                  handleDirtyPlaces("DESENVARYANTID");
                 }}
                 control={control}
               />
@@ -555,6 +616,7 @@ export const PaintForm = ({
                 defaultSearchSingle={formData?.ISLEMTIPIID + ""}
                 handleSelect={(obj: { ISLEMTIPIID: number }) => {
                   setValue("ISLEMTIPIID", obj.ISLEMTIPIID);
+                  handleDirtyPlaces("ISLEMTIPIID");
                 }}
                 control={control}
               />
@@ -565,6 +627,10 @@ export const PaintForm = ({
                 defaultValue={formData?.PLANLAMANOTU}
                 control={control}
                 minRows={2}
+                handleChange={(value: any) => {
+                  setValue("PLANLAMANOTU", value);
+                  handleDirtyPlaces("PLANLAMANOTU");
+                }}
               />
               <HFTextarea
                 label="Siparis Notu"
@@ -572,6 +638,10 @@ export const PaintForm = ({
                 defaultValue={formData?.SIPARISNOTU}
                 control={control}
                 minRows={2}
+                handleChange={(value: any) => {
+                  setValue("SIPARISNOTU", value);
+                  handleDirtyPlaces("SIPARISNOTU");
+                }}
               />
               <HFTextarea
                 label="Termin Notu"
@@ -579,6 +649,10 @@ export const PaintForm = ({
                 defaultValue={formData?.TERMINNOTU}
                 control={control}
                 minRows={2}
+                handleChange={(value: any) => {
+                  setValue("TERMINNOTU", value);
+                  handleDirtyPlaces("TERMINNOTU");
+                }}
               />
               <div>
                 <CLabel title="ONAYDURUMU" />
@@ -587,6 +661,10 @@ export const PaintForm = ({
                     label: "ONAYDURUMU",
                     name: "ONAYDURUMU",
                     control: control,
+                  }}
+                  handleCheck={(value: any) => {
+                    setValue("ONAYDURUMU", value.checked);
+                    handleDirtyPlaces("ONAYDURUMU");
                   }}
                 />
               </div>

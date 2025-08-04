@@ -50,23 +50,23 @@ export const PaintTablesUI = ({
 
   useEffect(() => {
     if (currentKnitting?.ORMESIPARISDETAYID) {
-      setFilterParams({
-        ...filterParams,
+      setFilterParams((prevParams: any) => ({
+        ...prevParams,
         ORMESIPARISDETAYID: currentKnitting?.ORMESIPARISDETAYID,
-      });
+      }));
     }
   }, [currentKnitting]);
 
   useEffect(() => {
     if (currentPaint) {
-      setFilterParamsVariant({
-        ...filterParamsVariant,
+      setFilterParamsVariant((prevParams: any) => ({
+        ...prevParams,
         DESENID: currentPaint?.DESENID,
-      });
-      setFilterParamsIslemTipi({
-        ...filterParamsIslemTipi,
+      }));
+      setFilterParamsIslemTipi((prevParams: any) => ({
+        ...prevParams,
         BOYASIPARISDETAYID: currentPaint?.BOYASIPARISDETAYID,
-      });
+      }));
     }
   }, [currentPaint]);
 

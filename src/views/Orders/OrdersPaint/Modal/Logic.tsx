@@ -151,6 +151,8 @@ export const OrderModalBaseLogics = ({
   };
 
   const handleActionsTable = (obj: any, status: string, type: string) => {
+    console.log("type0", type);
+
     if (type === "material") {
       if (status === "view" || status === "edit") {
         setUniqueID("material_form");
@@ -190,7 +192,7 @@ export const OrderModalBaseLogics = ({
           status.includes("edit")
         ) {
           setUniqueID("paint_form");
-          setCurrentPaint(obj);
+          // setCurrentPaint(obj);
         }
         if (status.includes("modal")) {
           setUniqueID("paint_form");

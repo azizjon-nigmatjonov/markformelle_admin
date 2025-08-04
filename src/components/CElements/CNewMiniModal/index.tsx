@@ -41,8 +41,6 @@ const CNewMiniModal: FC<Props> = ({
 
   const {} = useModalManager(uniqueModalId, handleClose);
 
-  // Remove this useEffect as it's causing issues with position management
-
   const handleDragStart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -50,7 +48,6 @@ const CNewMiniModal: FC<Props> = ({
       const rect = modalRef.current.getBoundingClientRect();
 
       if (!position) {
-        // Use the current visual position of the modal
         setPosition({
           x: rect.left,
           y: rect.top,
@@ -68,11 +65,15 @@ const CNewMiniModal: FC<Props> = ({
 
   const handleMouseMove = (e: MouseEvent) => {
     if (isDragging && position) {
-      requestAnimationFrame(() => {
-        setPosition({
-          x: e.clientX - dragOffset.x,
-          y: e.clientY - dragOffset.y,
-        });
+      const newX = e.clientX - dragOffset.x;
+      const newY = e.clientY - dragOffset.y;
+
+      const maxX = window.innerWidth - (modalRef.current?.offsetWidth || 0);
+      const maxY = window.innerHeight - (modalRef.current?.offsetHeight || 0);
+
+      setPosition({
+        x: Math.max(0, Math.min(newX, maxX)),
+        y: Math.max(0, Math.min(newY, maxY)),
       });
     }
   };
@@ -91,7 +92,7 @@ const CNewMiniModal: FC<Props> = ({
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging, dragOffset]);
+  }, [isDragging, dragOffset, position]);
 
   return (
     <>

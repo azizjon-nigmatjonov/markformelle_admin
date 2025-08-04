@@ -9,7 +9,7 @@ import {
 import cls from "./style.module.scss";
 import Element from "./Element";
 import { ColorConstants } from "../../../../../constants/website";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { PopoverDelete } from "./EditDelete/PopOver";
 
 interface Props {
@@ -33,20 +33,35 @@ const TabbleActions = ({
 }: Props) => {
   const [deletePopover, setDeletePopover]: any = useState(null);
 
-  const handleClick = (element: any, status?: string, active?: boolean) => {
-    if (checkPermission(status)) {
-      if (status === "delete") {
-        setDeletePopover(rowIndex);
-        setCurrentIndex(null);
-      } else {
-        if (active) {
-          handleActions(element, status);
+  const handleClick = useCallback(
+    (element: any, status?: string, active?: boolean) => {
+      if (checkPermission(status)) {
+        if (status === "delete") {
+          setDeletePopover(rowIndex);
           setCurrentIndex(null);
+        } else {
+          if (active) {
+            handleActions(element, status);
+            setCurrentIndex(null);
+          }
         }
       }
-    }
-  };
-  
+    },
+    [checkPermission, handleActions, setCurrentIndex, rowIndex]
+  );
+
+  const handleOverlayClick = useCallback(() => {
+    setCurrentIndex(999);
+  }, [setCurrentIndex]);
+
+  const handleDeleteConfirm = useCallback(
+    (status: any) => {
+      setDeletePopover(null);
+      if (status) handleActions(element, status);
+    },
+    [handleActions, element]
+  );
+
   return (
     <div>
       {currentIndex === rowIndex ? (
@@ -55,7 +70,7 @@ const TabbleActions = ({
         >
           <Element
             text="view"
-            active={element?.is_view && checkPermission('view')}
+            active={element?.is_view && checkPermission("view")}
             onClick={() => handleClick(element, "view", element?.is_delete)}
             icon={
               <EyeIcon
@@ -66,7 +81,7 @@ const TabbleActions = ({
           />
           <Element
             text="freez"
-            active={element?.is_freez && checkPermission('freez')}
+            active={element?.is_freez && checkPermission("freez")}
             onClick={() => handleClick(element, "freez", element?.is_freez)}
             icon={
               <LockIcon
@@ -77,7 +92,7 @@ const TabbleActions = ({
           />
           <Element
             text="edit"
-            active={element?.is_edit && checkPermission('edit')}
+            active={element?.is_edit && checkPermission("edit")}
             onClick={() => handleClick(element, "edit", element.is_edit)}
             icon={
               <EditIcon
@@ -88,7 +103,7 @@ const TabbleActions = ({
           />
           <Element
             text="delete"
-            active={element?.is_delete && checkPermission('delete')}
+            active={element?.is_delete && checkPermission("delete")}
             onClick={() => handleClick(element, "delete", element.is_delete)}
             icon={
               <DeleteIcon
@@ -110,19 +125,14 @@ const TabbleActions = ({
       {currentIndex === rowIndex ? (
         <div
           className="w-full h-full fixed left-0 top-0 z-[98]"
-          onClick={() => setCurrentIndex(999)}
+          onClick={handleOverlayClick}
         ></div>
       ) : (
         ""
       )}
 
       {deletePopover === rowIndex && (
-        <PopoverDelete
-          closePopover={(status) => {
-            setDeletePopover(null);
-            if (status) handleActions(element, status);
-          }}
-        />
+        <PopoverDelete closePopover={handleDeleteConfirm} />
       )}
     </div>
   );

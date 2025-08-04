@@ -28,7 +28,7 @@ export const ConfirmationModal = memo(
         handleActions={() => {
           onClose();
         }}
-        type="q"
+        type="question"
       >
         <p className="text-[var(--black)] text-2xl font-medium">{title}</p>
         {message && (

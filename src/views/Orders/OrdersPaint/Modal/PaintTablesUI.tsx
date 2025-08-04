@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { PaintTable } from "../Tables/Paint";
 import {
   IslemTipiTableLogic,
@@ -50,10 +50,18 @@ export const PaintTablesUI = ({
   const dispatch = useDispatch();
   const { isLoading, headColumns, bodyColumns, refetch, deleteFn } =
     PaintTableLogic({ filterParams });
+
+  // Memoize the refetch function to prevent unnecessary re-renders
+  const memoizedRefetch = useCallback(() => {
+    if (refetch) {
+      refetch();
+    }
+  }, [refetch]);
+
   const { updateForm } = PaintFormLogic({
     formId: 0,
     defaultData: {},
-    closeFn: () => refetch(),
+    closeFn: memoizedRefetch,
   });
   const dirty_places = useSelector(
     (state: RootState) => state.website.dirty_places
@@ -71,18 +79,18 @@ export const PaintTablesUI = ({
     if (bodyColumns?.[0]) {
       setCurrentPaint(bodyColumns?.[0]);
     }
-  }, [bodyColumns]);
+  }, [bodyColumns, setCurrentPaint]);
 
   useEffect(() => {
     if (currentPaint) {
-      setFilterParamsVariant({
-        ...filterParamsVariant,
+      setFilterParamsVariant((prevParams: any) => ({
+        ...prevParams,
         DESENID: currentPaint?.DESENID,
-      });
-      setFilterParamsIslemTipi({
-        ...filterParamsIslemTipi,
+      }));
+      setFilterParamsIslemTipi((prevParams: any) => ({
+        ...prevParams,
         BOYASIPARISDETAYID: currentPaint?.BOYASIPARISDETAYID,
-      });
+      }));
     }
   }, [currentPaint]);
 
@@ -90,10 +98,29 @@ export const PaintTablesUI = ({
     handleActionsTable(obj, status, "paint");
   };
 
+  // Memoize the currentPaint with index to prevent unnecessary re-renders
+  const currentPaintWithIndex = useMemo(
+    () => ({
+      ...currentPaint,
+      index: currentPaint?.index || 1,
+    }),
+    [currentPaint]
+  );
+
+  // Memoize the bodyColumns with backgroundColor to prevent unnecessary re-renders
+  const bodyColumnsWithBackground = useMemo(() => {
+    return bodyColumns?.map((item: any) => ({
+      ...item,
+      backgroundColor: item?.ONAYDURUMU ? "bg-green-200" : "",
+    }));
+  }, [bodyColumns]);
+  console.log("isDirty paintTablesUI", isDirty);
+
   return (
     <>
       <div className="space-y-5">
         <PaintTable
+          title="Boya Siparis Detay Girisi"
           handleActionsTable={(obj: any, status: string) => {
             if (status === "view_single_right_click") {
               return;
@@ -105,17 +132,11 @@ export const PaintTablesUI = ({
             }
           }}
           height="180px"
-          title="Boya Siparis Detay Girisi"
-          currentPaint={{ ...currentPaint, index: currentPaint?.index || 1 }}
+          currentPaint={currentPaintWithIndex}
           setCurrentPaint={setCurrentPaint}
           isLoading={isLoading}
           headColumns={headColumns}
-          bodyColumns={bodyColumns?.map((item: any) => {
-            return {
-              ...item,
-              backgroundColor: item?.ONAYDURUMU ? "bg-green-200" : "",
-            };
-          })}
+          bodyColumns={bodyColumnsWithBackground}
           deleteFn={deleteFn}
           filterParams={filterParams}
           setFilterParams={setFilterParams}
@@ -127,9 +148,9 @@ export const PaintTablesUI = ({
             "excel_upload",
             "actions",
             "sellect_more",
-            "active_menu",
           ]}
           rightChildren={(obj: any) => {
+            if (!bodyColumns?.length) return;
             return (
               <div className="p-2 w-[180px]">
                 <CLabel title="ONAYDURUMU" />
@@ -209,7 +230,7 @@ export const PaintTablesUI = ({
           }}
           defaultData={currentPaint}
           uniqueID={uniqueID}
-          refetch={refetch || (() => {})}
+          refetch={memoizedRefetch}
           isDirty={isDirty}
         />
       ) : (

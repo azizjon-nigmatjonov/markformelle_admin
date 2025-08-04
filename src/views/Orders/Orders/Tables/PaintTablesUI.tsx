@@ -50,17 +50,16 @@ export const PaintTablesUI = ({
 
   useEffect(() => {
     if (formId) {
-      setFilterParams({
-        ...filterParams,
+      setFilterParams((prevParams: any) => ({
+        ...prevParams,
         BOYASIPARISKAYITID: formId,
-      });
+      }));
     }
   }, [formId]);
 
   return (
     <div className="relative">
       <CNewTable
-        key={headColumns.length}
         headColumns={headColumns}
         defaultFilters={defaultFilters}
         currentIdRow={currentPaint?.index ? currentPaint.index : undefined}

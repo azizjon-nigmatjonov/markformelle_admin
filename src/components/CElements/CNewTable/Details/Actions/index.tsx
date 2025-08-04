@@ -8,7 +8,7 @@ import {
 } from "../../../../UI/IconGenerator/Svg";
 import Element from "./Element";
 import { ColorConstants } from "../../../../../constants/website";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { PopoverDelete } from "./EditDelete/PopOver";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { PopupUI } from "../../../../UI/PopupUI";
@@ -38,18 +38,48 @@ const TabbleActions = ({
   const [buttonElement, setButtonElement] = useState<HTMLDivElement | null>(
     null
   );
-  const handleClick = (element: any, status?: string, active?: boolean) => {
-    if (checkPermission(status)) {
-      if (status === "delete") {
-        setDeletePopover(true);
-      } else {
-        if (active) {
-          handleActions(element, status);
-          setCurrentIndex(null);
+
+  const handleClick = useCallback(
+    (element: any, status?: string, active?: boolean) => {
+      if (checkPermission(status)) {
+        if (status === "delete") {
+          setDeletePopover(true);
+        } else {
+          if (active) {
+            handleActions(element, status);
+            setCurrentIndex(null);
+          }
         }
       }
+    },
+    [checkPermission, handleActions, setCurrentIndex]
+  );
+
+  const handleMainClick = useCallback(() => {
+    if (currentIndex === rowIndex) {
+      setCurrentIndex(null);
+    } else {
+      setCurrentIndex(rowIndex);
     }
-  };
+  }, [currentIndex, rowIndex, setCurrentIndex]);
+
+  const handleClosePopup = useCallback(() => {
+    setCurrentIndex(null);
+  }, [setCurrentIndex]);
+
+  const handleCloseDeletePopup = useCallback(() => {
+    setDeletePopover(false);
+    setCurrentIndex(null);
+  }, [setCurrentIndex]);
+
+  const handleDeleteConfirm = useCallback(
+    (status: any) => {
+      setDeletePopover(false);
+      setCurrentIndex(null);
+      if (status) handleActions(element, status);
+    },
+    [handleActions, element, setCurrentIndex]
+  );
 
   return (
     <>
@@ -57,13 +87,7 @@ const TabbleActions = ({
         className={`w-[20px] h-full items-center justify-center flex ml-2 ${
           selectedItems.length ? "invisible" : "visible"
         }`}
-        onClick={() => {
-          if (currentIndex === rowIndex) {
-            setCurrentIndex(null);
-          } else {
-            setCurrentIndex(rowIndex);
-          }
-        }}
+        onClick={handleMainClick}
       >
         <div
           ref={(el) => setButtonElement(el)}
@@ -79,7 +103,7 @@ const TabbleActions = ({
       <PopupUI
         open={currentIndex === rowIndex && !deletePopover}
         anchor={buttonElement}
-        onClose={() => setCurrentIndex(null)}
+        onClose={handleClosePopup}
       >
         <div className={`relative z-[99]`}>
           <Element
@@ -141,18 +165,9 @@ const TabbleActions = ({
       <PopupUI
         open={deletePopover && currentIndex === rowIndex}
         anchor={buttonElement}
-        onClose={() => {
-          setDeletePopover(false);
-          setCurrentIndex(null);
-        }}
+        onClose={handleCloseDeletePopup}
       >
-        <PopoverDelete
-          closePopover={(status) => {
-            setDeletePopover(false);
-            setCurrentIndex(null);
-            if (status) handleActions(element, status);
-          }}
-        />
+        <PopoverDelete closePopover={handleDeleteConfirm} />
       </PopupUI>
     </>
   );
