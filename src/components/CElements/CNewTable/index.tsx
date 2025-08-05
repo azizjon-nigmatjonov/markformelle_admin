@@ -1,5 +1,5 @@
 import { TableRow } from "@mui/material";
-import React, { useRef } from "react";
+import React, { useRef, useTransition } from "react";
 import "./index.scss";
 
 import {
@@ -32,30 +32,80 @@ import {
 } from "./Logic/helpers";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 
-interface Props {
-  meta?: {
-    totalCount: number;
-    pageCount: number;
-  };
+// Define base types for better type safety
+interface TableMeta {
+  totalCount: number;
+  pageCount: number;
+}
+
+interface TableColumn<T = any> {
+  id: string | string[];
+  title: string;
+  width?: string | number;
+  textAlign?: 'left' | 'center' | 'right';
+  render?: (value: any, item: T) => React.ReactNode;
+  renderHead?: () => React.ReactNode;
+  filter?: boolean;
+  click?: 'custom' | 'default';
+  freez?: boolean;
+  delete?: boolean;
+  edit?: boolean;
+  view?: boolean;
+  sellect_more?: boolean;
+  innerId?: string;
+}
+
+interface TableRowData {
+  id: string | number;
+  index: number;
+  empty?: boolean;
+  checked?: boolean;
+  backgroundColor?: string;
+  freez?: boolean;
+  delete?: boolean;
+  edit?: boolean;
+  view?: boolean;
+  sellect_more?: boolean;
+  [key: string]: any;
+}
+
+interface FilterParams {
+  page: number;
+  perPage: number;
+  q?: string;
+  drag?: boolean;
+  edit?: boolean;
+  [key: string]: any;
+}
+
+interface TableSettings {
+  id: string;
+  colWidth: number;
+  isStiky: boolean;
+  colIdx: number;
+}
+
+interface Props<T = TableRowData> {
+  meta?: TableMeta;
   title?: string;
-  headColumns: any[];
-  bodyColumns?: object[] | any;
+  headColumns: TableColumn<T>[];
+  bodyColumns?: T[];
   clickable?: boolean;
   isLoading?: boolean;
   passRouter?: boolean;
   isResizeble?: boolean;
   disablePagination?: boolean;
   limitList?: number[];
-  handleFilterParams: (val: any) => void;
-  filterParams: any;
-  handleActions?: (val: any, val2?: any, evt?: any) => void;
+  handleFilterParams: (val: FilterParams) => void;
+  filterParams: FilterParams;
+  handleActions?: (val: T, val2?: string, evt?: any) => void;
   idForTable?: string;
-  footer?: any;
+  footer?: React.ReactNode;
   removeSearch?: boolean;
-  extra?: any;
+  extra?: React.ReactNode;
   autoHeight?: string;
-  defaultFilters?: any;
-  defaultSearch?: any;
+  defaultFilters?: string[];
+  defaultSearch?: Record<string, any>;
   animation?: boolean;
   defaultActions?: string[];
   defaultExcelFields?: string[];
@@ -63,35 +113,35 @@ interface Props {
   removeHeader?: boolean;
   innerTable?: boolean;
   currentIdRow?: number | number[];
-  rightChildren?: any;
+  rightChildren?: (item: T) => React.ReactNode;
 }
 
 // Interface for MemoizedTableRow props
-interface MemoizedTableRowProps {
-  item: any;
+interface MemoizedTableRowProps<T = TableRowData> {
+  item: T;
   rowIndex: number;
-  newHeadColumns: any[];
+  newHeadColumns: TableColumn<T>[];
   effect: number[];
   clickable: boolean;
   checkPermission: (permission: string) => boolean;
   currentIndex: number | null;
-  selectedItems: any[];
+  selectedItems: number[];
   openSelect: boolean;
-  tableActions: (el: any, status: string, evt?: any) => void;
-  tableSettings: any;
+  tableActions: (el: T, status: string, evt?: any) => void;
+  tableSettings: Record<string, TableSettings[]>;
   pageName: string;
-  calculateWidth: (colId: any, index: number) => number;
+  calculateWidth: (colId: string, index: number) => number;
   hoveredIndex: number | null;
   draggingIndex: number | null;
-  getBodyCol: (column: any, item: any) => any;
+  getBodyCol: (column: TableColumn<T>, item: T) => React.ReactNode;
   defaultFilters: string[];
   defaultActions: string[];
   sellectedRows?: number[];
-  rightChildren?: (val: any) => any;
-  setCurrentIndex: React.Dispatch<React.SetStateAction<null>>;
+  rightChildren?: (val: T) => React.ReactNode;
+  setCurrentIndex: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-const CNewTable = ({
+const CNewTable = <T extends TableRowData = TableRowData>({
   meta = {
     totalCount: 0,
     pageCount: 0,
@@ -115,8 +165,8 @@ const CNewTable = ({
     page: 1,
     perPage: 50,
   },
-  handleFilterParams = () => {},
-  handleActions = () => {},
+  handleFilterParams = () => { },
+  handleActions = () => { },
   defaultExcelFields = [],
   disabled = false,
   defaultActions = ["view", "edit", "delete", "is_sellect_more"],
@@ -131,8 +181,8 @@ const CNewTable = ({
     "sellect_more",
   ],
   defaultSearch = {},
-  rightChildren = () => {},
-}: Props) => {
+  rightChildren = () => { },
+}: Props<T>) => {
   const { navigateTo } = usePageRouter();
   const tableSize = useSelector((state: any) => state.tableSize.tableSize);
   const location = useLocation();
@@ -142,24 +192,25 @@ const CNewTable = ({
   const dispatch = useDispatch();
   const [effect, setEffect] = useState<number[]>([]);
   const { checkPermission } = usePermissions();
-  const [selectedItems, setSelectedItems] = useState<any[]>([]);
-  const [searchedElements, setSearchedElements] = useState({
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [searchedElements, setSearchedElements] = useState<Record<string, any>>({
     ...defaultSearch,
   });
+  const [isPending, startTransition] = useTransition();
   const { handleCheckbox } = TableSettingsData({
     filterParams,
     handleFilterParams,
   });
   const storedColumns = useSelector((state: any) => state.table.columns);
   const order = useSelector((state: any) => state.table.order);
-  const [newBodyColumns, setNewBodyColumns] = useState([]);
-  const [sortData, setSortData]: any = useState([]);
+  const [newBodyColumns, setNewBodyColumns] = useState<T[]>([]);
+  const [sortData, setSortData]: [Array<{ value: string; id: string; search?: string; title?: string }>, React.Dispatch<React.SetStateAction<Array<{ value: string; id: string; search?: string; title?: string }>>>] = useState([]);
   const [reOrder, setReorder] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [draggingIndex, setDraggingIndex]: any = useState(null);
+  const [draggingIndex, setDraggingIndex]: [number | null, React.Dispatch<React.SetStateAction<number | null>>] = useState(null);
   const [searchLoop, setSearchLoop] = useState(false);
   const [sideFilter, setSideFilter] = useState(false);
-  const pageName: any = useMemo(() => {
+  const pageName: string = useMemo(() => {
     const strLen =
       location.pathname.split("/")[2].length +
       location.pathname.split("/")[1].length;
@@ -172,35 +223,37 @@ const CNewTable = ({
   }, [location, idForTable]);
   const pageColumns = storedColumns[pageName];
   const pageOrder = order[pageName] ?? [];
-  const [newHeadColumns, setNewHeadColumns]: any = useState([...headColumns]);
-  const [items, setItems]: any = useState([...headColumns]);
-  const [currentFilter, setCurrentFilter]: any = useState(null);
+  const [newHeadColumns, setNewHeadColumns]: [TableColumn<T>[], React.Dispatch<React.SetStateAction<TableColumn<T>[]>>] = useState([...headColumns]);
+  const [items, setItems]: [TableColumn<T>[], React.Dispatch<React.SetStateAction<TableColumn<T>[]>>] = useState([...headColumns]);
+  const [currentFilter, setCurrentFilter]: [number | null, React.Dispatch<React.SetStateAction<number | null>>] = useState(null);
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   // const rowRefs = useRef<HTMLTableRowElement[]>([]);
   const [openSelect, setOpenSelect] = useState(false);
 
-  const [bodySource, setBodySource] = useState<any[]>([]);
+  const [bodySource, setBodySource] = useState<T[]>([]);
 
   const sellectedRows = useMemo(() => {
     return typeof currentIdRow === "number" ? [currentIdRow] : currentIdRow;
   }, [currentIdRow]);
 
-  const SetFiltersFn = (obj: any) => {
-    const newObj: any = JSON.parse(JSON.stringify(obj));
-    let str = "";
+  const SetFiltersFn = (obj: Record<string, any>) => {
+    startTransition(() => {
+      const newObj: Record<string, any> = JSON.parse(JSON.stringify(obj));
+      let str = "";
 
-    for (let key in newObj) {
-      if (newObj[key]) {
-        str.length
-          ? (str += "&" + key + "=" + newObj[key])
-          : (str += key + "=" + newObj[key]);
+      for (let key in newObj) {
+        if (newObj[key]) {
+          str.length
+            ? (str += "&" + key + "=" + newObj[key])
+            : (str += key + "=" + newObj[key]);
+        }
       }
-    }
 
-    handleFilterParams({
-      ...filterParams,
-      page: 1,
-      q: str,
+      handleFilterParams({
+        ...filterParams,
+        page: 1,
+        q: str,
+      });
     });
   };
 
@@ -219,56 +272,59 @@ const CNewTable = ({
       setNewBodyColumns([]);
       return;
     }
-    const arr = JSON.parse(JSON.stringify(bodyColumns));
-    let result: any = [];
 
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 0);
-    sortData?.forEach((sortObj: any) => {
-      const { value, id, search }: any = {
-        ...sortObj,
-      };
+    startTransition(() => {
+      const arr = JSON.parse(JSON.stringify(bodyColumns));
+      let result: any = [];
 
-      if (value === "sort") {
-        if (search === "up") {
-          result = arr?.sort((a: any, b: any) => {
-            const aVal = a[id] + "";
-            const bVal = b[id] + "";
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 0);
+      sortData?.forEach((sortObj: any) => {
+        const { value, id, search }: any = {
+          ...sortObj,
+        };
 
-            if (isNaN(parseFloat(a[id]))) {
-              return bVal.localeCompare(aVal);
-            }
+        if (value === "sort") {
+          if (search === "up") {
+            result = arr?.sort((a: any, b: any) => {
+              const aVal = a[id] + "";
+              const bVal = b[id] + "";
 
-            return (
-              parseInt(bVal.replace(/\D/g, "")) -
-              parseInt(aVal.replace(/\D/g, ""))
-            );
-          });
+              if (isNaN(parseFloat(a[id]))) {
+                return bVal.localeCompare(aVal);
+              }
+
+              return (
+                parseInt(bVal.replace(/\D/g, "")) -
+                parseInt(aVal.replace(/\D/g, ""))
+              );
+            });
+          }
+
+          if (search === "down") {
+            result = arr?.sort((a: any, b: any) => {
+              const aVal = a[id] + "";
+              const bVal = b[id] + "";
+
+              if (isNaN(parseFloat(a[id]))) {
+                return aVal.localeCompare(bVal);
+              }
+
+              return (
+                parseInt(aVal.replace(/\D/g, "")) -
+                parseInt(bVal.replace(/\D/g, ""))
+              );
+            });
+          }
         }
+      });
 
-        if (search === "down") {
-          result = arr?.sort((a: any, b: any) => {
-            const aVal = a[id] + "";
-            const bVal = b[id] + "";
+      setNewBodyColumns(result.length ? result : arr);
 
-            if (isNaN(parseFloat(a[id]))) {
-              return aVal.localeCompare(bVal);
-            }
-
-            return (
-              parseInt(aVal.replace(/\D/g, "")) -
-              parseInt(bVal.replace(/\D/g, ""))
-            );
-          });
-        }
-      }
+      result = [];
     });
-
-    setNewBodyColumns(result.length ? result : arr);
-
-    result = [];
   }, [bodyColumns, activeSort, sortData.length]);
 
   const SetAnimationEffectTime = (index: number) => {
@@ -399,76 +455,78 @@ const CNewTable = ({
     createResizableTable(document.getElementById("resizeMe"));
   }, [bodySource]);
 
-  const calculateWidth = (colId: any, index: number) => {
+  const calculateWidth = (colId: string, index: number): number => {
     const colIdx = tableSettings?.[pageName]
-      ?.filter((item: any) => item?.isStiky === true)
-      ?.findIndex((item: any) => item?.id === colId);
+      ?.filter((item: TableSettings) => item?.isStiky === true)
+      ?.findIndex((item: TableSettings) => item?.id === colId);
 
     if (index === 0) {
       return 0;
     } else if (colIdx === 0) {
       return 0;
     } else if (
-      tableSettings?.[pageName]?.filter((item: any) => item?.isStiky === true)
+      tableSettings?.[pageName]?.filter((item: TableSettings) => item?.isStiky === true)
         .length === 1
     ) {
       return 0;
     } else {
       return tableSettings?.[pageName]
-        ?.filter((item: any) => item?.isStiky === true)
+        ?.filter((item: TableSettings) => item?.isStiky === true)
         ?.slice(0, colIdx)
-        ?.reduce((acc: any, item: any) => acc + item?.colWidth, 0);
+        ?.reduce((acc: number, item: TableSettings) => acc + item?.colWidth, 0) || 0;
     }
   };
 
-  const handleSortLogic = ({ value, id, search, title }: any) => {
-    const DeleteFunction = (type: string) => {
-      const arr: any = [];
-      sortData.forEach((item: any) => {
-        if (item.value === type) {
-          if (item.id !== id) {
-            arr.push(item);
+  const handleSortLogic = ({ value, id, search, title }: { value: string; id: string; search?: string; title?: string }) => {
+    startTransition(() => {
+      const DeleteFunction = (type: string) => {
+        const arr: Array<{ value: string; id: string; search?: string; title?: string }> = [];
+        sortData.forEach((item: { value: string; id: string; search?: string; title?: string }) => {
+          if (item.value === type) {
+            if (item.id !== id) {
+              arr.push(item);
+            }
+          }
+        });
+        setSortData(arr);
+      };
+
+      if (value === "sort") {
+        if (search) {
+          if (
+            sortData.find((item: { value: string; id: string }) => item.value === "sort" && item.id === id)
+          ) {
+            const newSortData = sortData?.map((item: { value: string; id: string; search?: string }) => {
+              if (item.value === "sort" && item.id === id) {
+                item.search = search;
+              }
+              return {
+                ...item,
+              };
+            });
+            setSortData(newSortData);
+          } else {
+            setSortData([
+              ...sortData,
+              {
+                search,
+                value,
+                id,
+                title,
+              },
+            ]);
+          }
+        } else {
+          if (
+            sortData.find((item: { value: string; id: string }) => item.value === "sort" && item.id === id)
+          ) {
+            DeleteFunction("sort");
           }
         }
-      });
-      setSortData(arr);
-    };
-
-    if (value === "sort") {
-      if (search) {
-        if (
-          sortData.find((item: any) => item.value === "sort" && item.id === id)
-        ) {
-          const newSortData = sortData?.map((item: any) => {
-            if (item.value === "sort" && item.id === id) {
-              item.search = search;
-            }
-            return {
-              ...item,
-            };
-          });
-          setSortData(newSortData);
-        } else {
-          setSortData([
-            ...sortData,
-            {
-              search,
-              value,
-              id,
-              title,
-            },
-          ]);
-        }
-      } else {
-        if (
-          sortData.find((item: any) => item.value === "sort" && item.id === id)
-        ) {
-          DeleteFunction("sort");
-        }
       }
-    }
 
-    setActiveSort((prev) => !prev);
+      setActiveSort((prev) => !prev);
+    });
   };
 
   useEffect(() => {
@@ -527,21 +585,23 @@ const CNewTable = ({
   };
 
   const handleDrop = (index: any) => {
-    const newItems = newHeadColumns;
-    const [movedItem] = newItems.splice(draggingIndex, 1);
-    newItems.splice(index, 0, movedItem);
+    startTransition(() => {
+      const newItems = newHeadColumns;
+      const [movedItem] = newItems.splice(draggingIndex, 1);
+      newItems.splice(index, 0, movedItem);
 
-    setTimeout(() => {
-      dispatch(
-        tableStoreActions.setOrder({
-          pageName,
-          payload: newItems.map((item: { id: any }) => item.id),
-        })
-      );
-      setItems(newItems);
-      setDraggingIndex(null);
-      setHoveredIndex(null);
-    }, 100);
+      setTimeout(() => {
+        dispatch(
+          tableStoreActions.setOrder({
+            pageName,
+            payload: newItems.map((item: { id: any }) => item.id),
+          })
+        );
+        setItems(newItems);
+        setDraggingIndex(null);
+        setHoveredIndex(null);
+      }, 100);
+    });
   };
 
   const handleDragOver = (index: number) => {
@@ -552,7 +612,7 @@ const CNewTable = ({
     setHoveredIndex(null);
   };
 
-  const tableActions = (el: any, status: string, evt?: any) => {
+  const tableActions = (el: T, status: string, evt?: any) => {
     if (disabled) {
       return;
     }
@@ -572,13 +632,15 @@ const CNewTable = ({
     }
 
     if (status === "sellect_more") {
-      if (selectedItems.includes(el.index - 1)) {
-        setSelectedItems(
-          selectedItems.filter((item: any) => item !== el.index - 1)
-        );
-      } else {
-        setSelectedItems([...selectedItems, el.index - 1]);
-      }
+      startTransition(() => {
+        if (selectedItems.includes(el.index - 1)) {
+          setSelectedItems(
+            selectedItems.filter((item: number) => item !== el.index - 1)
+          );
+        } else {
+          setSelectedItems([...selectedItems, el.index - 1]);
+        }
+      });
     }
 
     if (status === "multiple") {
@@ -586,7 +648,7 @@ const CNewTable = ({
     }
 
     if (status === "translation") {
-      const newArr: object[] = [];
+      const newArr: Array<{ KEYWORD: string; RU: string; EN: string; UZ: string; TU: string }> = [];
       newHeadColumns.forEach((element: { id: string }) => {
         const obj = {
           KEYWORD: element.id,
@@ -632,7 +694,7 @@ const CNewTable = ({
     handleActions(el, status, evt);
   };
 
-  const addAndRemoveFilter = (obj: any) => {
+  const addAndRemoveFilter = (obj: { id: string; value: string }) => {
     const { id, value } = obj;
     if (value === "add") {
       setSearchedElements({
@@ -642,7 +704,7 @@ const CNewTable = ({
     }
 
     if (value === "close") {
-      const obj: any = {
+      const obj: Record<string, any> = {
         ...searchedElements,
       };
       delete obj[id];
@@ -650,14 +712,8 @@ const CNewTable = ({
     }
   };
 
-  const handleKeyDown = (e: KeyboardEvent, search: string, id: any) => {
-    if (e.key === "Escape") {
-      setSelectedItems([]);
-      setOpenSelect(false);
-      setSelectedItems([]);
-    }
-
-    if (e.key === "Enter" && Object.values(searchedElements)?.length) {
+  const searchDebounce = (search: string, id: string) => {
+    startTransition(() => {
       const obj = {
         ...searchedElements,
       };
@@ -666,45 +722,57 @@ const CNewTable = ({
         obj[id] = search;
       } else {
         obj[id] = "";
+        SetFiltersFn(obj);
       }
-      SetFiltersFn(obj);
+
       setSearchedElements(obj);
-    }
+    });
   };
 
-  const searchDebounce = (search: string, id: any) => {
-    const obj = {
-      ...searchedElements,
-    };
-
-    if (search) {
-      obj[id] = search;
-    } else {
-      obj[id] = "";
-      SetFiltersFn(obj);
+  const handleKeyDown = (e: KeyboardEvent, search: string, id: string) => {
+    if (e.key === "Escape") {
+      setSelectedItems([]);
+      setOpenSelect(false);
+      setSelectedItems([]);
     }
 
-    setSearchedElements(obj);
+    if (e.key === "Enter" && Object.values(searchedElements)?.length) {
+      startTransition(() => {
+        const obj = {
+          ...searchedElements,
+        };
+
+        if (search) {
+          obj[id] = search;
+        } else {
+          obj[id] = "";
+        }
+        SetFiltersFn(obj);
+        setSearchedElements(obj);
+      });
+    }
   };
 
   const handleSelectAll = () => {
-    const rowIndexes = bodySource.map(
-      (item: { index: number }) => item.index - 1
-    );
-    setSelectedItems(
-      toggleRowGroupSelection({ selectedItems, currentGroup: rowIndexes })
-    );
+    startTransition(() => {
+      const rowIndexes = bodySource.map(
+        (item: { index: number }) => item.index - 1
+      );
+      setSelectedItems(
+        toggleRowGroupSelection({ selectedItems, currentGroup: rowIndexes })
+      );
+    });
   };
 
-  const getBodyCol = (column: any, item: any) => {
+  const getBodyCol = (column: TableColumn<T>, item: T): React.ReactNode => {
     return column.render
       ? Array.isArray(column?.id)
-        ? column.render(column?.id.map((data: any) => item[data]))
-        : column.render(item[column?.id], item)
+        ? column.render(column?.id.map((data: string) => item[data as keyof T]))
+        : column.render(item[column?.id as keyof T], item)
       : GetCurrentDate({
-          date: item[column?.id],
-          type: "usually",
-        });
+        date: item[column?.id as keyof T],
+        type: "usually",
+      });
   };
 
   useEffect(() => {
@@ -726,7 +794,7 @@ const CNewTable = ({
     }
   }, []);
 
-  const MemoizedTableRow = React.memo(function MemoizedTableRow({
+  const MemoizedTableRow = React.memo(function MemoizedTableRow<T extends TableRowData = TableRowData>({
     item,
     rowIndex,
     newHeadColumns,
@@ -747,24 +815,20 @@ const CNewTable = ({
     defaultActions,
     setCurrentIndex,
     sellectedRows = [],
-    rightChildren = () => {},
-  }: MemoizedTableRowProps) {
+    rightChildren = () => { },
+  }: MemoizedTableRowProps<T>) {
     const [currentAnchor, setCurrentAnchor] = useState<any>(null);
 
     return (
       <TableRow
         key={item.index}
-        className={`group ${innerTable ? "innerTable" : ""} ${
-          effect.includes(rowIndex) ? "effect" : ""
-        } ${
-          clickable && !item.empty && checkPermission("view") ? "clickable" : ""
-        } ${currentIndex === rowIndex ? "bg-[var(--primary50)]" : ""} ${
-          selectedItems.includes(rowIndex) || item?.checked ? "sellected" : ""
-        } ${
-          sellectedRows.includes(rowIndex + 1)
+        className={`group ${innerTable ? "innerTable" : ""} ${effect.includes(rowIndex) ? "effect" : ""
+          } ${clickable && !item.empty && checkPermission("view") ? "clickable" : ""
+          } ${currentIndex === rowIndex ? "bg-[var(--primary50)]" : ""} ${selectedItems.includes(rowIndex) || item?.checked ? "sellected" : ""
+          } ${sellectedRows.includes(rowIndex + 1)
             ? "bg-blue-200"
             : item?.backgroundColor
-        }`}
+          }`}
         onClick={() => {
           if (openSelect) {
             tableActions(item, "sellect_more");
@@ -773,18 +837,16 @@ const CNewTable = ({
         tabIndex={0}
       >
         <td
-          className={`h-[35px] border-b border-[var(--border)] w-full ${
-            openSelect ? "flex" : "hidden"
-          } justify-center items-center`}
+          className={`h-[35px] border-b border-[var(--border)] w-full ${openSelect ? "flex" : "hidden"
+            } justify-center items-center`}
           style={{ padding: "0px !importaint" }}
         >
           <div
             onClick={() => tableActions(item, "sellect_more")}
-            className={`w-[18px] h-[18px] check rounded-[4px] border flex items-center justify-center cursor-pointer ${
-              selectedItems.includes(item.index - 1)
-                ? "border-[var(--main)]"
-                : "border-[var(--gray)]"
-            }`}
+            className={`w-[18px] h-[18px] check rounded-[4px] border flex items-center justify-center cursor-pointer ${selectedItems.includes(item.index - 1)
+              ? "border-[var(--main)]"
+              : "border-[var(--gray)]"
+              }`}
           >
             {selectedItems.includes(item.index - 1) && (
               <CheckIcon
@@ -825,21 +887,20 @@ const CNewTable = ({
               style={{
                 textAlign: column?.textAlign || "left",
               }}
-              className={`relative h-full flex items-center ${
-                hoveredIndex === colIndex &&
+              className={`relative h-full flex items-center ${hoveredIndex === colIndex &&
                 draggingIndex !== null &&
                 hoveredIndex > draggingIndex
-                  ? "drag-hovered right"
-                  : hoveredIndex === colIndex &&
-                    draggingIndex !== null &&
-                    hoveredIndex < draggingIndex
+                ? "drag-hovered right"
+                : hoveredIndex === colIndex &&
+                  draggingIndex !== null &&
+                  hoveredIndex < draggingIndex
                   ? "drag-hovered left"
                   : ""
-              }`}
+                }`}
             >
               {column?.id !== "actions" &&
-              !item.empty &&
-              getBodyCol(column, item) ? (
+                !item.empty &&
+                getBodyCol(column, item) ? (
                 <div
                   onDoubleClick={() => {
                     if (
@@ -915,10 +976,17 @@ const CNewTable = ({
 
   return (
     <div
-      className={`relative cnewtable w-full rounded-t-[12px] border border-[var(--border)] ${
-        disablePagination ? "rounded-b-[12px] overflow-hidden" : "border-b-0"
-      } ${innerTable ? "text-[11.5px]" : "text-[13px]"}`}
+      className={`relative cnewtable w-full rounded-t-[12px] border border-[var(--border)] ${disablePagination ? "rounded-b-[12px] overflow-hidden" : "border-b-0"
+        } ${innerTable ? "text-[11.5px]" : "text-[13px]"}`}
     >
+      {isPending && (
+        <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10 rounded-t-[12px]">
+          <div className="flex items-center space-x-2">
+            <div className="w-4 h-4 border-2 border-[var(--primary)] border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-[var(--primary)] text-sm">Processing...</span>
+          </div>
+        </div>
+      )}
       <div className="h-full ">
         {defaultFilters?.length || title ? (
           <HeaderSettings
@@ -963,8 +1031,8 @@ const CNewTable = ({
               height: autoHeight
                 ? autoHeight
                 : openHeader
-                ? "calc(100vh - 140px)"
-                : "calc(100vh - 95px)",
+                  ? "calc(100vh - 140px)"
+                  : "calc(100vh - 95px)",
             }}
           >
             <div className="w-full">
@@ -991,11 +1059,9 @@ const CNewTable = ({
                   <CTableHead>
                     <CTableRow>
                       <td
-                        className={`sticky bg-[var(--bg)] ${
-                          innerTable ? "h-[35px]" : "h-[41px]"
-                        } ${
-                          openSelect ? "flex" : "hidden"
-                        } items-center border-b justify-center duration-100 w-[40px]`}
+                        className={`sticky bg-[var(--bg)] ${innerTable ? "h-[35px]" : "h-[41px]"
+                          } ${openSelect ? "flex" : "hidden"
+                          } items-center border-b justify-center duration-100 w-[40px]`}
                       >
                         <div
                           onClick={() => handleSelectAll()}
@@ -1005,13 +1071,13 @@ const CNewTable = ({
                             selectedItems,
                             bodySource
                           ) && (
-                            <CheckIcon
-                              style={{
-                                fill: "var(--main)",
-                                width: 14,
-                              }}
-                            />
-                          )}
+                              <CheckIcon
+                                style={{
+                                  fill: "var(--main)",
+                                  width: 14,
+                                }}
+                              />
+                            )}
                         </div>
                       </td>
                       {newHeadColumns?.map((column: any, index: number) => (
@@ -1022,13 +1088,13 @@ const CNewTable = ({
                             minWidth: tableSize?.[pageName]?.[column?.id]
                               ? tableSize?.[pageName]?.[column?.id]
                               : column?.width
-                              ? column.width
-                              : "auto",
+                                ? column.width
+                                : "auto",
                             width: tableSize?.[pageName]?.[column?.id]
                               ? tableSize?.[pageName]?.[column?.id]
                               : column?.width
-                              ? column.width
-                              : "auto",
+                                ? column.width
+                                : "auto",
                             position: tableSettings?.[pageName]?.find(
                               (item: any) => item?.id === column?.id
                             )?.isStiky
@@ -1056,33 +1122,29 @@ const CNewTable = ({
                             }}
                             onDragLeave={handleDragLeave}
                             onDrop={() => handleDrop(index)}
-                            className={`w-full group draggable-header flex items-center ${
-                              innerTable ? "min-h-[30px]" : "min-h-[40px]"
-                            } px-2 flex-nowrap cursor-move hover:bg-[var(--border)] ${
-                              column?.id === "index"
+                            className={`w-full group draggable-header flex items-center ${innerTable ? "min-h-[30px]" : "min-h-[40px]"
+                              } px-2 flex-nowrap cursor-move hover:bg-[var(--border)] ${column?.id === "index"
                                 ? "justify-center"
                                 : "justify-between"
-                            } ${
-                              draggingIndex === index
+                              } ${draggingIndex === index
                                 ? "drag-and-drop dragging"
                                 : ""
-                            } ${
-                              hoveredIndex === index &&
-                              hoveredIndex > draggingIndex
+                              } ${hoveredIndex === index &&
+                                hoveredIndex > draggingIndex
                                 ? "drag-hovered right"
                                 : hoveredIndex === index &&
                                   hoveredIndex < draggingIndex
-                                ? "drag-hovered left"
-                                : ""
-                            }`}
+                                  ? "drag-hovered left"
+                                  : ""
+                              }`}
                             style={{
                               color: sortData?.find(
                                 (item: any) => item.id === column.id
                               )
                                 ? "var(--primary)"
                                 : draggingIndex === index
-                                ? "var(--primary)"
-                                : "",
+                                  ? "var(--primary)"
+                                  : "",
                               textAlign: !column?.filter ? "left" : "left",
                               backgroundColor:
                                 currentFilter === index
@@ -1091,29 +1153,27 @@ const CNewTable = ({
                             }}
                           >
                             <div
-                              className={`w-full ${
-                                innerTable ? "min-h-[35px]" : "min-h-[40px]"
-                              } flex items-center whitespace-nowrap ${
-                                disabled ? "text-[var(--gray)]" : ""
-                              }`}
+                              className={`w-full ${innerTable ? "min-h-[35px]" : "min-h-[40px]"
+                                } flex items-center whitespace-nowrap ${disabled ? "text-[var(--gray)]" : ""
+                                }`}
                             >
                               {column.renderHead
                                 ? Array.isArray(column.renderHead)
                                   ? column.renderHead(
-                                      column.renderHead.map(
-                                        (data: any) => column[data]
-                                      )
+                                    column.renderHead.map(
+                                      (data: any) => column[data]
                                     )
+                                  )
                                   : column.renderHead()
                                 : column.id === "index"
-                                ? "№"
-                                : t(column?.title) === ""
-                                ? column?.title
-                                : t(column?.title)}{" "}
+                                  ? "№"
+                                  : t(column?.title) === ""
+                                    ? column?.title
+                                    : t(column?.title)}{" "}
                             </div>
                             {column.id !== "multiple" &&
-                            column.id !== "index" &&
-                            !column?.id?.includes("actions") ? (
+                              column.id !== "index" &&
+                              !column?.id?.includes("actions") ? (
                               <TableFilter
                                 colId={column?.id ?? currentFilter}
                                 sortData={sortData}
