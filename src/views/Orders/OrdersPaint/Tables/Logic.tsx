@@ -10,7 +10,7 @@ export const MaterialStokLogic = ({ currentId }: { currentId: number }) => {
   const { t } = useTranslationHook();
   const [headColumns, setHeadColumns] = useState([]);
   const [bodyData, setBodyData]: any = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchList = async () => {
     setIsLoading(true);
@@ -336,7 +336,7 @@ export const MaterialTableLogic = ({
   const { t } = useTranslationHook();
   const [headColumns, setHeadColumns] = useState([]);
   const [bodyData, setBodyData]: any = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchList = async (filters: any) => {
     setIsLoading(true);
@@ -358,15 +358,6 @@ export const MaterialTableLogic = ({
       enabled: !!formId,
     }
   );
-  console.log("formId", formId);
-
-  console.log("listData", listData);
-
-  useEffect(() => {
-    if (!formId) {
-      setIsLoading(false);
-    }
-  }, [formId]);
 
   useEffect(() => {
     if (listData) {
@@ -432,7 +423,7 @@ export const PaintTableLogic = ({ filterParams }: { filterParams: any }) => {
   const { t } = useTranslationHook();
   const [headColumns, setHeadColumns] = useState([]);
   const [bodyData, setBodyData]: any = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchList = async (filters: any) => {
     setIsLoading(true);
@@ -455,12 +446,6 @@ export const PaintTableLogic = ({ filterParams }: { filterParams: any }) => {
       enabled: !!filterParams?.BOYASIPARISKAYITID,
     }
   );
-
-  useEffect(() => {
-    if (!filterParams?.BOYASIPARISKAYITID) {
-      setIsLoading(false);
-    }
-  }, [filterParams]);
 
   useEffect(() => {
     if (listData) {

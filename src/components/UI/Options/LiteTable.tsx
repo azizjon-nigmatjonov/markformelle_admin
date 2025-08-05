@@ -52,6 +52,7 @@ interface LiteTableOptionsProps<T extends BaseTableItem = TableItem> {
   defaultFilters?: string;
   defaultSearchSingle?: string;
   popupUI?: React.ReactNode;
+  secondName?: string;
 }
 
 // Search Input Component
@@ -160,10 +161,10 @@ const SearchInput = memo(
               {/* Tooltip */}
               {showTooltip && isOverflowing && (
                 <div
-                  className="absolute z-[100] bg-gray-900 text-white text-sm px-2 py-1 rounded shadow-lg whitespace-nowrap"
+                  className="absolute z-[100] -translate-x-1/2 bg-[var(--main)] text-white text-sm px-2 py-1 rounded shadow-lg whitespace-nowrap"
                   style={{
-                    top: "-30px",
-                    left: "0",
+                    top: "33px",
+                    left: "50%",
                   }}
                 >
                   {search ?? value ?? ""}
@@ -255,6 +256,7 @@ export const LiteOptionsTable = memo(
     popupUI = null,
     defaultSearchSingle = "",
     defaultFilters = "",
+    secondName = "",
   }: LiteTableOptionsProps<T>) => {
     const [searchName, setSearchName] = useState(staticSearchID || name);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -482,7 +484,7 @@ export const LiteOptionsTable = memo(
     const handleEnterKey = useCallback(
       (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === "Enter") {
-          handleSelect({ [name]: search });
+          handleSelect({ [secondName || name]: search });
           setTimeout(() => {
             const active = inputRef.current;
             if (!active) return;
@@ -555,7 +557,7 @@ export const LiteOptionsTable = memo(
             isLoading={isLoading}
             searchName={searchName}
             handleActions={handleActions}
-            name={name}
+            name={secondName || name}
             link={link}
             currentEl={currentEl}
             onLoadMore={handleLoadMore}

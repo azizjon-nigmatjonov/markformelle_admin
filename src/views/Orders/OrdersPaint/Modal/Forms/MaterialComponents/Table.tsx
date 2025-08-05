@@ -2,7 +2,7 @@ import { useState } from "react";
 import CNewTable from "../../../../../../components/CElements/CNewTable";
 
 export const MaterialTable = () => {
-  const [filterParams, setFilterParams] = useState({});
+  const [filterParams, setFilterParams] = useState({ page: 1, perPage: 50 });
   return (
     <div>
       <CNewTable

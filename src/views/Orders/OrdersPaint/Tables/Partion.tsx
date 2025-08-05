@@ -1,5 +1,5 @@
 import CNewTable from "../../../../components/CElements/CNewTable";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { MaterialTableLogic } from "./Logic";
 import { MaterialForm } from "../Modal/Forms/MaterialForm";
 import { MaterialModal } from "./RezervedMaterial/MaterialModal";

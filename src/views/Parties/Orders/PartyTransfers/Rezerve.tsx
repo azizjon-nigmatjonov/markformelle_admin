@@ -9,7 +9,7 @@ export const RezervTable = ({
   bodyColumns: any;
   isLoading: boolean;
 }) => {
-  const [filterParams, setFilterParams] = useState({});
+  const [filterParams, setFilterParams] = useState({ page: 1, perPage: 50 });
 
   const { newHeadColumns } = useTableHeaders({
     bodyColumns,

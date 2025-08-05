@@ -41,7 +41,7 @@ export const PaintTablesUI = ({
     PaintTableLogic({ filterParams });
 
   const { headColumns: headColumnsVariant, bodyColumns: bodyColumnsVariant } =
-    PaintVariantTableLogic({ filterParams: filterParamsVariant, formId });
+    PaintVariantTableLogic({ filterParams: filterParamsVariant });
 
   const {
     headColumns: headColumnsIslemTipi,

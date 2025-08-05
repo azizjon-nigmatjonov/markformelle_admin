@@ -36,11 +36,11 @@ export const PaintTablesUI = ({
     page: 1,
     perPage: 50,
   });
-  const [filterParamsVariant, setFilterParamsVariant]: any = useState({
+  const [filterParamsVariant]: any = useState({
     page: 1,
     perPage: 50,
   });
-  const [filterParamsIslemTipi, setFilterParamsIslemTipi]: any = useState({
+  const [filterParamsIslemTipi]: any = useState({
     page: 1,
     perPage: 50,
   });

@@ -22,6 +22,8 @@ interface Props {
 
 const DetailsList = [
   {
+    id: "1",
+    index: 1,
     SIRA: "SIOR",
     URUNADI: "SEZATOL GOLDEN YELLOW",
     MIKTAR: "0.044320",
