@@ -41,12 +41,12 @@ export const PaintTablesUI = ({
     PaintTableLogic({ filterParams });
 
   const { headColumns: headColumnsVariant, bodyColumns: bodyColumnsVariant } =
-    PaintVariantTableLogic({ filterParams: filterParamsVariant });
+    PaintVariantTableLogic({ filterParams: filterParamsVariant, formId });
 
   const {
     headColumns: headColumnsIslemTipi,
     bodyColumns: bodyColumnsIslemTipi,
-  } = IslemTipiTableLogic({ filterParams: filterParamsIslemTipi });
+  } = IslemTipiTableLogic({ filterParams: filterParamsIslemTipi, formId });
 
   useEffect(() => {
     if (currentKnitting?.ORMESIPARISDETAYID) {

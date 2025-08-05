@@ -90,7 +90,11 @@ const TabbleActions = ({
         onClick={handleMainClick}
       >
         <div
-          ref={(el) => setButtonElement(el)}
+          ref={(e) => {
+            if (e) {
+              setButtonElement(e);
+            }
+          }}
           className={`group-hover:visible flex ${
             rowIndex === currentIndex || deletePopover
               ? "bg-[var(--gray20)] visible"

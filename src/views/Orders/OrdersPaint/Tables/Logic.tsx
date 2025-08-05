@@ -326,7 +326,13 @@ export const MaterialStokLogic = ({ currentId }: { currentId: number }) => {
   };
 };
 
-export const MaterialTableLogic = ({ filterParams }: { filterParams: any }) => {
+export const MaterialTableLogic = ({
+  filterParams,
+  formId,
+}: {
+  filterParams: any;
+  formId: number;
+}) => {
   const { t } = useTranslationHook();
   const [headColumns, setHeadColumns] = useState([]);
   const [bodyData, setBodyData]: any = useState({});
@@ -339,26 +345,28 @@ export const MaterialTableLogic = ({ filterParams }: { filterParams: any }) => {
         filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
       }&limit=${filters.perPage}${
         filters.q ? "&" + filters.q : ""
-      }&BOYASIPARISDETAYID=${filters.BOYASIPARISDETAYID}`
+      }&BOYASIPARISKAYITID=${formId}`
     );
     setIsLoading(false);
     return response.data;
   };
 
   const { data: listData, refetch } = useQuery(
-    ["GET_REZERVE_LIST", filterParams],
+    ["GET_REZERVE_LIST", formId],
     () => fetchList(filterParams),
     {
-      keepPreviousData: true,
-      enabled: !!filterParams?.BOYASIPARISDETAYID,
+      enabled: !!formId,
     }
   );
+  console.log("formId", formId);
+
+  console.log("listData", listData);
 
   useEffect(() => {
-    if (!filterParams?.BOYASIPARISDETAYID) {
+    if (!formId) {
       setIsLoading(false);
     }
-  }, [filterParams]);
+  }, [formId]);
 
   useEffect(() => {
     if (listData) {

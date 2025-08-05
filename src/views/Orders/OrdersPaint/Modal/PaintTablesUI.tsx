@@ -70,10 +70,28 @@ export const PaintTablesUI = ({
   const { headColumns: headColumnsVariant, bodyColumns: bodyColumnsVariant } =
     PaintVariantTableLogic({ filterParams: filterParamsVariant });
 
+  const newbodyColumnsVariant = useMemo(() => {
+    return bodyColumnsVariant?.filter(
+      (item: any) =>
+        item.BOYASIPARISDETAYID === currentPaint?.BOYASIPARISDETAYID
+    );
+  }, [bodyColumnsVariant, currentPaint]);
+
   const {
     headColumns: headColumnsIslemTipi,
     bodyColumns: bodyColumnsIslemTipi,
-  } = IslemTipiTableLogic({ filterParams: filterParamsIslemTipi });
+  } = IslemTipiTableLogic({ filterParams: filterParamsIslemTipi, formId });
+
+  const newbodyColumnsIslemTipi = useMemo(() => {
+    // setFilterParamsVariant((prevParams: any) => ({
+    //   ...prevParams,
+    //   BOYASIPARISDETAYID: currentPaint?.BOYASIPARISDETAYID,
+    // }));
+    return bodyColumnsIslemTipi?.filter(
+      (item: any) =>
+        item.BOYASIPARISDETAYID === currentPaint?.BOYASIPARISDETAYID
+    );
+  }, [bodyColumnsIslemTipi, currentPaint]);
 
   useEffect(() => {
     if (bodyColumns?.[0]) {
@@ -83,14 +101,14 @@ export const PaintTablesUI = ({
 
   useEffect(() => {
     if (currentPaint) {
-      setFilterParamsVariant((prevParams: any) => ({
-        ...prevParams,
-        DESENID: currentPaint?.DESENID,
-      }));
-      setFilterParamsIslemTipi((prevParams: any) => ({
-        ...prevParams,
-        BOYASIPARISDETAYID: currentPaint?.BOYASIPARISDETAYID,
-      }));
+      // setFilterParamsVariant((prevParams: any) => ({
+      //   ...prevParams,
+      //   DESENID: currentPaint?.DESENID,
+      // }));
+      // setFilterParamsIslemTipi((prevParams: any) => ({
+      //   ...prevParams,
+      //   BOYASIPARISDETAYID: currentPaint?.BOYASIPARISDETAYID,
+      // }));
     }
   }, [currentPaint]);
 
@@ -98,7 +116,6 @@ export const PaintTablesUI = ({
     handleActionsTable(obj, status, "paint");
   };
 
-  // Memoize the currentPaint with index to prevent unnecessary re-renders
   const currentPaintWithIndex = useMemo(
     () => ({
       ...currentPaint,
@@ -107,14 +124,12 @@ export const PaintTablesUI = ({
     [currentPaint]
   );
 
-  // Memoize the bodyColumns with backgroundColor to prevent unnecessary re-renders
   const bodyColumnsWithBackground = useMemo(() => {
     return bodyColumns?.map((item: any) => ({
       ...item,
       backgroundColor: item?.ONAYDURUMU ? "bg-green-200" : "",
     }));
   }, [bodyColumns]);
-  console.log("isDirty paintTablesUI", isDirty);
 
   return (
     <>
@@ -184,7 +199,6 @@ export const PaintTablesUI = ({
             "delete",
             "excel_download",
             "actions",
-            "active_menu",
             "sellect_more",
           ]}
           formData={formData}
@@ -198,7 +212,7 @@ export const PaintTablesUI = ({
             title="Variant"
             height="180px"
             headColumns={headColumnsVariant}
-            bodyColumns={bodyColumnsVariant}
+            bodyColumns={newbodyColumnsVariant}
             formId={formId ?? 0}
             defaultFilters={["add", "delete", "excel_download", "actions"]}
           />
@@ -209,7 +223,7 @@ export const PaintTablesUI = ({
             title="Islem Ilavasi"
             height="180px"
             headColumns={headColumnsIslemTipi}
-            bodyColumns={bodyColumnsIslemTipi}
+            bodyColumns={newbodyColumnsIslemTipi}
             formId={formId ?? 0}
             defaultFilters={["add", "delete", "excel_download", "actions"]}
           />

@@ -35,8 +35,6 @@ export const PaintTablesUI = ({
   const [open, setOpen] = useState(false);
 
   const handleActions = (el: any, status: string) => {
-    console.log("status", status);
-
     if (status === "view_single") {
       setCurrentPaint(el);
     } else {
@@ -67,7 +65,6 @@ export const PaintTablesUI = ({
     <div className="relative">
       <CNewTable
         title={title}
-        key={headColumns?.length}
         headColumns={headColumns}
         defaultFilters={defaultFilters}
         currentIdRow={currentPaint?.index ? currentPaint.index : undefined}

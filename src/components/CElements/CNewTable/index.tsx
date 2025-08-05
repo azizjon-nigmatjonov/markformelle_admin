@@ -472,7 +472,7 @@ const CNewTable = ({
   };
 
   useEffect(() => {
-    if (pageOrder?.length) {
+    if (pageOrder?.length && defaultFilters.includes("active_menu")) {
       const arr: any = [];
       const getId = (id: any) => {
         if (typeof id === "object") {
@@ -492,13 +492,19 @@ const CNewTable = ({
     } else {
       setItems(headColumns);
     }
-  }, [headColumns, pageOrder]);
+  }, [headColumns, pageOrder, defaultFilters]);
 
   useEffect(() => {
     const data: any = [];
     if (selectedItems.length) {
       setOpenSelect(true);
     }
+
+    if (!defaultFilters.includes("active_menu")) {
+      setNewHeadColumns(items);
+      return;
+    }
+
     const arr = pageColumns ?? [];
     items?.forEach((el: { id: string }) => {
       let id: any = el.id;
@@ -507,6 +513,7 @@ const CNewTable = ({
       }
       if (arr.includes(id)) data.push(el);
     });
+
     if (title) setNewHeadColumns(data);
   }, [pageColumns, items, title, selectedItems]);
 

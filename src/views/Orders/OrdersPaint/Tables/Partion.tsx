@@ -1,5 +1,5 @@
 import CNewTable from "../../../../components/CElements/CNewTable";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { MaterialTableLogic } from "./Logic";
 import { MaterialForm } from "../Modal/Forms/MaterialForm";
 import { MaterialModal } from "./RezervedMaterial/MaterialModal";
@@ -32,16 +32,16 @@ export const PartianTable = ({
   const { isLoading, headColumns, bodyColumns, deleteFn, refetch } =
     MaterialTableLogic({
       filterParams,
+      formId,
     });
 
-  useEffect(() => {
-    if (currentPaint?.BOYASIPARISDETAYID) {
-      setFilterParams({
-        ...filterParams,
-        BOYASIPARISDETAYID: currentPaint.BOYASIPARISDETAYID,
-      });
-    }
-  }, [currentPaint]);
+  const newBodyColumns = useMemo(() => {
+    return bodyColumns?.filter(
+      (item: any) =>
+        item.BOYASIPARISDETAYID === currentPaint?.BOYASIPARISDETAYID
+    );
+  }, [bodyColumns, currentPaint]);
+
   const [currentRezerv, setCurrentRezerv] = useState<any>(null);
   const handleActions = (el: any, status: string) => {
     if (status === "modal") {
@@ -74,19 +74,21 @@ export const PartianTable = ({
         defaultFilters={defaultFilters}
         disablePagination={true}
         innerTable={true}
-        bodyColumns={bodyColumns}
+        bodyColumns={newBodyColumns}
         autoHeight="180px"
         handleFilterParams={(params: any) => {
           setFilterParams(params);
         }}
-        rightChildren={
-          <button
-            onClick={() => setOpenParty(true)}
-            className="px-2 py-1 hover:bg-blue-200"
-          >
-            Rezervden hizli parti olustir
-          </button>
-        }
+        rightChildren={() => {
+          return (
+            <button
+              onClick={() => setOpenParty(true)}
+              className="px-2 py-1 hover:bg-blue-200"
+            >
+              Rezervden hizli parti olustir
+            </button>
+          );
+        }}
         isLoading={isLoading}
         filterParams={filterParams}
       />

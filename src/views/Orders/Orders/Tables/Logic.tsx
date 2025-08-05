@@ -30,7 +30,6 @@ export const MaterialTableLogic = ({ filterParams }: { filterParams: any }) => {
     ["GET_MATERIAL_TABLE", filterParams],
     () => fetchList(filterParams),
     {
-      keepPreviousData: true,
       enabled: !!filterParams?.BOYASIPARISKAYITID,
     }
   );
@@ -118,7 +117,6 @@ export const PaintTableLogic = ({ filterParams }: { filterParams: any }) => {
     ["GET_Paint_table_by_orme", filterParams],
     () => fetchList(filterParams),
     {
-      keepPreviousData: true,
       enabled: !!filterParams?.ORMESIPARISDETAYID,
     }
   );
@@ -199,14 +197,10 @@ export const PaintVariantTableLogic = ({
   const [headColumns, setHeadColumns] = useState([]);
   const [bodyData, setBodyData]: any = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const fetchList = async (filters: any) => {
+  const fetchList = async (_: any) => {
     setIsLoading(true);
     const response = await axios.get(
-      `${API_URL}/desenvaryant/?skip=${
-        filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
-      }&limit=${filters.perPage}${filters.q ? "&" + filters.q : ""}&DESENID=${
-        filters.DESENID
-      }`
+      `${API_URL}/desenvaryant/?BOYASIPARISDETAYID=${filterParams?.BOYASIPARISDETAYID}`
     );
     setIsLoading(false);
     return response.data;
@@ -216,8 +210,7 @@ export const PaintVariantTableLogic = ({
     ["GET_PAINT_VARIANT_TABLE", filterParams],
     () => fetchList(filterParams),
     {
-      keepPreviousData: true,
-      enabled: !!filterParams?.DESENID,
+      enabled: !!filterParams?.BOYASIPARISDETAYID,
     }
   );
 
@@ -282,15 +275,17 @@ export const PaintVariantTableLogic = ({
     isLoading,
     refetch,
     headColumns,
-    bodyColumns: filterParams?.DESENID ? bodyData?.data : [],
+    bodyColumns: bodyData?.data ?? [],
     deleteFn,
   };
 };
 
 export const IslemTipiTableLogic = ({
   filterParams,
+  formId,
 }: {
   filterParams: any;
+  formId: number;
 }) => {
   const { t } = useTranslationHook();
   const [headColumns, setHeadColumns] = useState([]);
@@ -303,26 +298,19 @@ export const IslemTipiTableLogic = ({
         filters.page < 2 ? 0 : (filters.page - 1) * filters.perPage
       }&limit=${filters.perPage}${
         filters.q ? "&" + filters.q : ""
-      }&BOYASIPARISDETAYID=${filters.BOYASIPARISDETAYID}`
+      }&BOYASIPARISKAYITID=${formId}`
     );
     setIsLoading(false);
     return response.data;
   };
 
   const { data: listData, refetch } = useQuery(
-    ["GET_ILAVA_TABLE_PAINT" + filterParams?.BOYASIPARISDETAYID, filterParams],
+    ["GET_ILAVA_TABLE_PAINT" + formId, filterParams],
     () => fetchList(filterParams),
     {
-      keepPreviousData: true,
-      enabled: !!filterParams?.BOYASIPARISDETAYID,
+      enabled: !!formId,
     }
   );
-
-  useEffect(() => {
-    if (!filterParams?.BOYASIPARISDETAYID) {
-      setIsLoading(false);
-    }
-  }, [filterParams]);
 
   useEffect(() => {
     if (listData) {
@@ -379,7 +367,7 @@ export const IslemTipiTableLogic = ({
     isLoading,
     refetch,
     headColumns,
-    bodyColumns: filterParams?.BOYASIPARISDETAYID ? bodyData?.data : [],
+    bodyColumns: formId ? bodyData?.data : [],
     deleteFn,
   };
 };

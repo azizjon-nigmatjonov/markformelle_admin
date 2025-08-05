@@ -4,13 +4,14 @@ import { API_URL } from "../../../../../../utils/env";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
+import { useCallback, useMemo } from "react";
 
 export const PaintFormLogic = ({
   formId,
   defaultData,
   closeFn,
 }: {
-  formId: number;
+  formId: number | null;
   defaultData: any;
   closeFn: () => void;
 }) => {
@@ -37,45 +38,58 @@ export const PaintFormLogic = ({
     }
   );
 
-  const createForm = async (params: {}) => {
-    try {
-      const { data } = await axios.post(`${API_URL}/boyasiparisdetay/`, params);
+  const createForm = useCallback(
+    async (params: {}) => {
+      try {
+        const { data } = await axios.post(
+          `${API_URL}/boyasiparisdetay/`,
+          params
+        );
 
-      toast.success(t("created!"));
-      closeFn();
-      // refetchTable(data?.LABRECETEATISID);
-      return data;
-    } catch (error) {
-      toast.error(`error!`);
+        toast.success(t("created!"));
+        closeFn();
+        // refetchTable(data?.LABRECETEATISID);
+        return data;
+      } catch (error) {
+        toast.error(`error!`);
 
-      return null;
-    }
-  };
+        return null;
+      }
+    },
+    [closeFn, t]
+  );
 
-  const updateForm = async (params: {}, id: number) => {
-    try {
-      const { data } = await axios.put(
-        `${API_URL}/boyasiparisdetay/${id}`,
-        params
-      );
-      toast.success(t("updated!"));
-      closeFn();
-      // refetchTable(data?.LABRECETEATISID);
+  const updateForm = useCallback(
+    async (params: {}, id: number) => {
+      try {
+        const { data } = await axios.put(
+          `${API_URL}/boyasiparisdetay/${id}`,
+          params
+        );
+        toast.success(t("updated!"));
+        closeFn();
+        // refetchTable(data?.LABRECETEATISID);
 
-      return data;
-    } catch (error) {
-      toast.error(`Error creating element:, ${error}`);
-      return null;
-    }
-  };
+        return data;
+      } catch (error) {
+        toast.error(`Error creating element:, ${error}`);
+        return null;
+      }
+    },
+    [closeFn, t]
+  );
 
+  // Memoize the formData to prevent unnecessary re-renders
+  const memoizedFormData = useMemo(() => {
+    return formData?.BOYASIPARISDETAYID ? formData : defaultData;
+  }, [formData, defaultData]);
 
   return {
-    formData: formData?.BOYASIPARISDETAYID ? formData : defaultData,
+    formData: memoizedFormData,
     isLoading,
     error,
     refetch,
     updateForm,
-    createForm
+    createForm,
   };
 };
