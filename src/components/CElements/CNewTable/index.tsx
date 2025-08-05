@@ -32,30 +32,80 @@ import {
 } from "./Logic/helpers";
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 
-interface Props {
-  meta?: {
-    totalCount: number;
-    pageCount: number;
-  };
+// Define base types for better type safety
+interface TableMeta {
+  totalCount: number;
+  pageCount: number;
+}
+
+interface TableColumn<T = any> {
+  id: string | string[];
+  title: string;
+  width?: string | number;
+  textAlign?: 'left' | 'center' | 'right';
+  render?: (value: any, item: T) => React.ReactNode;
+  renderHead?: () => React.ReactNode;
+  filter?: boolean;
+  click?: 'custom' | 'default';
+  freez?: boolean;
+  delete?: boolean;
+  edit?: boolean;
+  view?: boolean;
+  sellect_more?: boolean;
+  innerId?: string;
+}
+
+interface TableRowData {
+  id: string | number;
+  index: number;
+  empty?: boolean;
+  checked?: boolean;
+  backgroundColor?: string;
+  freez?: boolean;
+  delete?: boolean;
+  edit?: boolean;
+  view?: boolean;
+  sellect_more?: boolean;
+  [key: string]: any;
+}
+
+interface FilterParams {
+  page: number;
+  perPage: number;
+  q?: string;
+  drag?: boolean;
+  edit?: boolean;
+  [key: string]: any;
+}
+
+interface TableSettings {
+  id: string;
+  colWidth: number;
+  isStiky: boolean;
+  colIdx: number;
+}
+
+interface Props<T = TableRowData> {
+  meta?: TableMeta;
   title?: string;
-  headColumns: any[];
-  bodyColumns?: object[] | any;
+  headColumns: TableColumn<T>[];
+  bodyColumns?: T[];
   clickable?: boolean;
   isLoading?: boolean;
   passRouter?: boolean;
   isResizeble?: boolean;
   disablePagination?: boolean;
   limitList?: number[];
-  handleFilterParams: (val: any) => void;
-  filterParams: any;
-  handleActions?: (val: any, val2?: any, evt?: any) => void;
+  handleFilterParams: (val: FilterParams) => void;
+  filterParams: FilterParams;
+  handleActions?: (val: T, val2?: string, evt?: any) => void;
   idForTable?: string;
-  footer?: any;
+  footer?: React.ReactNode;
   removeSearch?: boolean;
-  extra?: any;
+  extra?: React.ReactNode;
   autoHeight?: string;
-  defaultFilters?: any;
-  defaultSearch?: any;
+  defaultFilters?: string[];
+  defaultSearch?: Record<string, any>;
   animation?: boolean;
   defaultActions?: string[];
   defaultExcelFields?: string[];
@@ -63,35 +113,35 @@ interface Props {
   removeHeader?: boolean;
   innerTable?: boolean;
   currentIdRow?: number | number[];
-  rightChildren?: any;
+  rightChildren?: (item: T) => React.ReactNode;
 }
 
 // Interface for MemoizedTableRow props
-interface MemoizedTableRowProps {
-  item: any;
+interface MemoizedTableRowProps<T = TableRowData> {
+  item: T;
   rowIndex: number;
-  newHeadColumns: any[];
+  newHeadColumns: TableColumn<T>[];
   effect: number[];
   clickable: boolean;
   checkPermission: (permission: string) => boolean;
   currentIndex: number | null;
-  selectedItems: any[];
+  selectedItems: number[];
   openSelect: boolean;
-  tableActions: (el: any, status: string, evt?: any) => void;
-  tableSettings: any;
+  tableActions: (el: T, status: string, evt?: any) => void;
+  tableSettings: Record<string, TableSettings[]>;
   pageName: string;
-  calculateWidth: (colId: any, index: number) => number;
+  calculateWidth: (colId: string, index: number) => number;
   hoveredIndex: number | null;
   draggingIndex: number | null;
-  getBodyCol: (column: any, item: any) => any;
+  getBodyCol: (column: TableColumn<T>, item: T) => React.ReactNode;
   defaultFilters: string[];
   defaultActions: string[];
   sellectedRows?: number[];
-  rightChildren?: (val: any) => any;
-  setCurrentIndex: React.Dispatch<React.SetStateAction<null>>;
+  rightChildren?: (val: T) => React.ReactNode;
+  setCurrentIndex: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-const CNewTable = ({
+const CNewTable = <T extends TableRowData = TableRowData>({
   meta = {
     totalCount: 0,
     pageCount: 0,
@@ -132,7 +182,7 @@ const CNewTable = ({
   ],
   defaultSearch = {},
   rightChildren = () => { },
-}: Props) => {
+}: Props<T>) => {
   const { navigateTo } = usePageRouter();
   const tableSize = useSelector((state: any) => state.tableSize.tableSize);
   const location = useLocation();
@@ -142,8 +192,8 @@ const CNewTable = ({
   const dispatch = useDispatch();
   const [effect, setEffect] = useState<number[]>([]);
   const { checkPermission } = usePermissions();
-  const [selectedItems, setSelectedItems] = useState<any[]>([]);
-  const [searchedElements, setSearchedElements] = useState({
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [searchedElements, setSearchedElements] = useState<Record<string, any>>({
     ...defaultSearch,
   });
   const [isPending, startTransition] = useTransition();
@@ -153,14 +203,14 @@ const CNewTable = ({
   });
   const storedColumns = useSelector((state: any) => state.table.columns);
   const order = useSelector((state: any) => state.table.order);
-  const [newBodyColumns, setNewBodyColumns] = useState([]);
-  const [sortData, setSortData]: any = useState([]);
+  const [newBodyColumns, setNewBodyColumns] = useState<T[]>([]);
+  const [sortData, setSortData]: [Array<{ value: string; id: string; search?: string; title?: string }>, React.Dispatch<React.SetStateAction<Array<{ value: string; id: string; search?: string; title?: string }>>>] = useState([]);
   const [reOrder, setReorder] = useState(false);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [draggingIndex, setDraggingIndex]: any = useState(null);
+  const [draggingIndex, setDraggingIndex]: [number | null, React.Dispatch<React.SetStateAction<number | null>>] = useState(null);
   const [searchLoop, setSearchLoop] = useState(false);
   const [sideFilter, setSideFilter] = useState(false);
-  const pageName: any = useMemo(() => {
+  const pageName: string = useMemo(() => {
     const strLen =
       location.pathname.split("/")[2].length +
       location.pathname.split("/")[1].length;
@@ -173,22 +223,22 @@ const CNewTable = ({
   }, [location, idForTable]);
   const pageColumns = storedColumns[pageName];
   const pageOrder = order[pageName] ?? [];
-  const [newHeadColumns, setNewHeadColumns]: any = useState([...headColumns]);
-  const [items, setItems]: any = useState([...headColumns]);
-  const [currentFilter, setCurrentFilter]: any = useState(null);
+  const [newHeadColumns, setNewHeadColumns]: [TableColumn<T>[], React.Dispatch<React.SetStateAction<TableColumn<T>[]>>] = useState([...headColumns]);
+  const [items, setItems]: [TableColumn<T>[], React.Dispatch<React.SetStateAction<TableColumn<T>[]>>] = useState([...headColumns]);
+  const [currentFilter, setCurrentFilter]: [number | null, React.Dispatch<React.SetStateAction<number | null>>] = useState(null);
   const openHeader = useSelector((state: any) => state.sidebar.openHeader);
   // const rowRefs = useRef<HTMLTableRowElement[]>([]);
   const [openSelect, setOpenSelect] = useState(false);
 
-  const [bodySource, setBodySource] = useState<any[]>([]);
+  const [bodySource, setBodySource] = useState<T[]>([]);
 
   const sellectedRows = useMemo(() => {
     return typeof currentIdRow === "number" ? [currentIdRow] : currentIdRow;
   }, [currentIdRow]);
 
-  const SetFiltersFn = (obj: any) => {
+  const SetFiltersFn = (obj: Record<string, any>) => {
     startTransition(() => {
-      const newObj: any = JSON.parse(JSON.stringify(obj));
+      const newObj: Record<string, any> = JSON.parse(JSON.stringify(obj));
       let str = "";
 
       for (let key in newObj) {
@@ -405,33 +455,33 @@ const CNewTable = ({
     createResizableTable(document.getElementById("resizeMe"));
   }, [bodySource]);
 
-  const calculateWidth = (colId: any, index: number) => {
+  const calculateWidth = (colId: string, index: number): number => {
     const colIdx = tableSettings?.[pageName]
-      ?.filter((item: any) => item?.isStiky === true)
-      ?.findIndex((item: any) => item?.id === colId);
+      ?.filter((item: TableSettings) => item?.isStiky === true)
+      ?.findIndex((item: TableSettings) => item?.id === colId);
 
     if (index === 0) {
       return 0;
     } else if (colIdx === 0) {
       return 0;
     } else if (
-      tableSettings?.[pageName]?.filter((item: any) => item?.isStiky === true)
+      tableSettings?.[pageName]?.filter((item: TableSettings) => item?.isStiky === true)
         .length === 1
     ) {
       return 0;
     } else {
       return tableSettings?.[pageName]
-        ?.filter((item: any) => item?.isStiky === true)
+        ?.filter((item: TableSettings) => item?.isStiky === true)
         ?.slice(0, colIdx)
-        ?.reduce((acc: any, item: any) => acc + item?.colWidth, 0);
+        ?.reduce((acc: number, item: TableSettings) => acc + item?.colWidth, 0) || 0;
     }
   };
 
-  const handleSortLogic = ({ value, id, search, title }: any) => {
+  const handleSortLogic = ({ value, id, search, title }: { value: string; id: string; search?: string; title?: string }) => {
     startTransition(() => {
       const DeleteFunction = (type: string) => {
-        const arr: any = [];
-        sortData.forEach((item: any) => {
+        const arr: Array<{ value: string; id: string; search?: string; title?: string }> = [];
+        sortData.forEach((item: { value: string; id: string; search?: string; title?: string }) => {
           if (item.value === type) {
             if (item.id !== id) {
               arr.push(item);
@@ -444,9 +494,9 @@ const CNewTable = ({
       if (value === "sort") {
         if (search) {
           if (
-            sortData.find((item: any) => item.value === "sort" && item.id === id)
+            sortData.find((item: { value: string; id: string }) => item.value === "sort" && item.id === id)
           ) {
-            const newSortData = sortData?.map((item: any) => {
+            const newSortData = sortData?.map((item: { value: string; id: string; search?: string }) => {
               if (item.value === "sort" && item.id === id) {
                 item.search = search;
               }
@@ -468,7 +518,7 @@ const CNewTable = ({
           }
         } else {
           if (
-            sortData.find((item: any) => item.value === "sort" && item.id === id)
+            sortData.find((item: { value: string; id: string }) => item.value === "sort" && item.id === id)
           ) {
             DeleteFunction("sort");
           }
@@ -555,7 +605,7 @@ const CNewTable = ({
     setHoveredIndex(null);
   };
 
-  const tableActions = (el: any, status: string, evt?: any) => {
+  const tableActions = (el: T, status: string, evt?: any) => {
     if (disabled) {
       return;
     }
@@ -578,7 +628,7 @@ const CNewTable = ({
       startTransition(() => {
         if (selectedItems.includes(el.index - 1)) {
           setSelectedItems(
-            selectedItems.filter((item: any) => item !== el.index - 1)
+            selectedItems.filter((item: number) => item !== el.index - 1)
           );
         } else {
           setSelectedItems([...selectedItems, el.index - 1]);
@@ -591,7 +641,7 @@ const CNewTable = ({
     }
 
     if (status === "translation") {
-      const newArr: object[] = [];
+      const newArr: Array<{ KEYWORD: string; RU: string; EN: string; UZ: string; TU: string }> = [];
       newHeadColumns.forEach((element: { id: string }) => {
         const obj = {
           KEYWORD: element.id,
@@ -637,7 +687,7 @@ const CNewTable = ({
     handleActions(el, status, evt);
   };
 
-  const addAndRemoveFilter = (obj: any) => {
+  const addAndRemoveFilter = (obj: { id: string; value: string }) => {
     const { id, value } = obj;
     if (value === "add") {
       setSearchedElements({
@@ -647,7 +697,7 @@ const CNewTable = ({
     }
 
     if (value === "close") {
-      const obj: any = {
+      const obj: Record<string, any> = {
         ...searchedElements,
       };
       delete obj[id];
@@ -655,7 +705,24 @@ const CNewTable = ({
     }
   };
 
-  const handleKeyDown = (e: KeyboardEvent, search: string, id: any) => {
+  const searchDebounce = (search: string, id: string) => {
+    startTransition(() => {
+      const obj = {
+        ...searchedElements,
+      };
+
+      if (search) {
+        obj[id] = search;
+      } else {
+        obj[id] = "";
+        SetFiltersFn(obj);
+      }
+
+      setSearchedElements(obj);
+    });
+  };
+
+  const handleKeyDown = (e: KeyboardEvent, search: string, id: string) => {
     if (e.key === "Escape") {
       setSelectedItems([]);
       setOpenSelect(false);
@@ -679,23 +746,6 @@ const CNewTable = ({
     }
   };
 
-  const searchDebounce = (search: string, id: any) => {
-    startTransition(() => {
-      const obj = {
-        ...searchedElements,
-      };
-
-      if (search) {
-        obj[id] = search;
-      } else {
-        obj[id] = "";
-        SetFiltersFn(obj);
-      }
-
-      setSearchedElements(obj);
-    });
-  };
-
   const handleSelectAll = () => {
     startTransition(() => {
       const rowIndexes = bodySource.map(
@@ -707,13 +757,13 @@ const CNewTable = ({
     });
   };
 
-  const getBodyCol = (column: any, item: any) => {
+  const getBodyCol = (column: TableColumn<T>, item: T): React.ReactNode => {
     return column.render
       ? Array.isArray(column?.id)
-        ? column.render(column?.id.map((data: any) => item[data]))
-        : column.render(item[column?.id], item)
+        ? column.render(column?.id.map((data: string) => item[data as keyof T]))
+        : column.render(item[column?.id as keyof T], item)
       : GetCurrentDate({
-        date: item[column?.id],
+        date: item[column?.id as keyof T],
         type: "usually",
       });
   };
@@ -737,7 +787,7 @@ const CNewTable = ({
     }
   }, []);
 
-  const MemoizedTableRow = React.memo(function MemoizedTableRow({
+  const MemoizedTableRow = React.memo(function MemoizedTableRow<T extends TableRowData = TableRowData>({
     item,
     rowIndex,
     newHeadColumns,
@@ -759,7 +809,7 @@ const CNewTable = ({
     setCurrentIndex,
     sellectedRows = [],
     rightChildren = () => { },
-  }: MemoizedTableRowProps) {
+  }: MemoizedTableRowProps<T>) {
     const [currentAnchor, setCurrentAnchor] = useState<any>(null);
 
     return (
