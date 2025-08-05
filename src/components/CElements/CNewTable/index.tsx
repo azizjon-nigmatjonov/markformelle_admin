@@ -1,5 +1,5 @@
 import { TableRow } from "@mui/material";
-import React, { useRef } from "react";
+import React, { useRef, useTransition } from "react";
 import "./index.scss";
 
 import {
@@ -115,8 +115,8 @@ const CNewTable = ({
     page: 1,
     perPage: 50,
   },
-  handleFilterParams = () => {},
-  handleActions = () => {},
+  handleFilterParams = () => { },
+  handleActions = () => { },
   defaultExcelFields = [],
   disabled = false,
   defaultActions = ["view", "edit", "delete", "is_sellect_more"],
@@ -131,7 +131,7 @@ const CNewTable = ({
     "sellect_more",
   ],
   defaultSearch = {},
-  rightChildren = () => {},
+  rightChildren = () => { },
 }: Props) => {
   const { navigateTo } = usePageRouter();
   const tableSize = useSelector((state: any) => state.tableSize.tableSize);
@@ -146,6 +146,7 @@ const CNewTable = ({
   const [searchedElements, setSearchedElements] = useState({
     ...defaultSearch,
   });
+  const [isPending, startTransition] = useTransition();
   const { handleCheckbox } = TableSettingsData({
     filterParams,
     handleFilterParams,
@@ -186,21 +187,23 @@ const CNewTable = ({
   }, [currentIdRow]);
 
   const SetFiltersFn = (obj: any) => {
-    const newObj: any = JSON.parse(JSON.stringify(obj));
-    let str = "";
+    startTransition(() => {
+      const newObj: any = JSON.parse(JSON.stringify(obj));
+      let str = "";
 
-    for (let key in newObj) {
-      if (newObj[key]) {
-        str.length
-          ? (str += "&" + key + "=" + newObj[key])
-          : (str += key + "=" + newObj[key]);
+      for (let key in newObj) {
+        if (newObj[key]) {
+          str.length
+            ? (str += "&" + key + "=" + newObj[key])
+            : (str += key + "=" + newObj[key]);
+        }
       }
-    }
 
-    handleFilterParams({
-      ...filterParams,
-      page: 1,
-      q: str,
+      handleFilterParams({
+        ...filterParams,
+        page: 1,
+        q: str,
+      });
     });
   };
 
@@ -219,56 +222,59 @@ const CNewTable = ({
       setNewBodyColumns([]);
       return;
     }
-    const arr = JSON.parse(JSON.stringify(bodyColumns));
-    let result: any = [];
 
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 0);
-    sortData?.forEach((sortObj: any) => {
-      const { value, id, search }: any = {
-        ...sortObj,
-      };
+    startTransition(() => {
+      const arr = JSON.parse(JSON.stringify(bodyColumns));
+      let result: any = [];
 
-      if (value === "sort") {
-        if (search === "up") {
-          result = arr?.sort((a: any, b: any) => {
-            const aVal = a[id] + "";
-            const bVal = b[id] + "";
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 0);
+      sortData?.forEach((sortObj: any) => {
+        const { value, id, search }: any = {
+          ...sortObj,
+        };
 
-            if (isNaN(parseFloat(a[id]))) {
-              return bVal.localeCompare(aVal);
-            }
+        if (value === "sort") {
+          if (search === "up") {
+            result = arr?.sort((a: any, b: any) => {
+              const aVal = a[id] + "";
+              const bVal = b[id] + "";
 
-            return (
-              parseInt(bVal.replace(/\D/g, "")) -
-              parseInt(aVal.replace(/\D/g, ""))
-            );
-          });
+              if (isNaN(parseFloat(a[id]))) {
+                return bVal.localeCompare(aVal);
+              }
+
+              return (
+                parseInt(bVal.replace(/\D/g, "")) -
+                parseInt(aVal.replace(/\D/g, ""))
+              );
+            });
+          }
+
+          if (search === "down") {
+            result = arr?.sort((a: any, b: any) => {
+              const aVal = a[id] + "";
+              const bVal = b[id] + "";
+
+              if (isNaN(parseFloat(a[id]))) {
+                return aVal.localeCompare(bVal);
+              }
+
+              return (
+                parseInt(aVal.replace(/\D/g, "")) -
+                parseInt(bVal.replace(/\D/g, ""))
+              );
+            });
+          }
         }
+      });
 
-        if (search === "down") {
-          result = arr?.sort((a: any, b: any) => {
-            const aVal = a[id] + "";
-            const bVal = b[id] + "";
+      setNewBodyColumns(result.length ? result : arr);
 
-            if (isNaN(parseFloat(a[id]))) {
-              return aVal.localeCompare(bVal);
-            }
-
-            return (
-              parseInt(aVal.replace(/\D/g, "")) -
-              parseInt(bVal.replace(/\D/g, ""))
-            );
-          });
-        }
-      }
+      result = [];
     });
-
-    setNewBodyColumns(result.length ? result : arr);
-
-    result = [];
   }, [bodyColumns, activeSort, sortData.length]);
 
   const SetAnimationEffectTime = (index: number) => {
@@ -422,53 +428,55 @@ const CNewTable = ({
   };
 
   const handleSortLogic = ({ value, id, search, title }: any) => {
-    const DeleteFunction = (type: string) => {
-      const arr: any = [];
-      sortData.forEach((item: any) => {
-        if (item.value === type) {
-          if (item.id !== id) {
-            arr.push(item);
+    startTransition(() => {
+      const DeleteFunction = (type: string) => {
+        const arr: any = [];
+        sortData.forEach((item: any) => {
+          if (item.value === type) {
+            if (item.id !== id) {
+              arr.push(item);
+            }
+          }
+        });
+        setSortData(arr);
+      };
+
+      if (value === "sort") {
+        if (search) {
+          if (
+            sortData.find((item: any) => item.value === "sort" && item.id === id)
+          ) {
+            const newSortData = sortData?.map((item: any) => {
+              if (item.value === "sort" && item.id === id) {
+                item.search = search;
+              }
+              return {
+                ...item,
+              };
+            });
+            setSortData(newSortData);
+          } else {
+            setSortData([
+              ...sortData,
+              {
+                search,
+                value,
+                id,
+                title,
+              },
+            ]);
+          }
+        } else {
+          if (
+            sortData.find((item: any) => item.value === "sort" && item.id === id)
+          ) {
+            DeleteFunction("sort");
           }
         }
-      });
-      setSortData(arr);
-    };
-
-    if (value === "sort") {
-      if (search) {
-        if (
-          sortData.find((item: any) => item.value === "sort" && item.id === id)
-        ) {
-          const newSortData = sortData?.map((item: any) => {
-            if (item.value === "sort" && item.id === id) {
-              item.search = search;
-            }
-            return {
-              ...item,
-            };
-          });
-          setSortData(newSortData);
-        } else {
-          setSortData([
-            ...sortData,
-            {
-              search,
-              value,
-              id,
-              title,
-            },
-          ]);
-        }
-      } else {
-        if (
-          sortData.find((item: any) => item.value === "sort" && item.id === id)
-        ) {
-          DeleteFunction("sort");
-        }
       }
-    }
 
-    setActiveSort((prev) => !prev);
+      setActiveSort((prev) => !prev);
+    });
   };
 
   useEffect(() => {
@@ -520,21 +528,23 @@ const CNewTable = ({
   };
 
   const handleDrop = (index: any) => {
-    const newItems = newHeadColumns;
-    const [movedItem] = newItems.splice(draggingIndex, 1);
-    newItems.splice(index, 0, movedItem);
+    startTransition(() => {
+      const newItems = newHeadColumns;
+      const [movedItem] = newItems.splice(draggingIndex, 1);
+      newItems.splice(index, 0, movedItem);
 
-    setTimeout(() => {
-      dispatch(
-        tableStoreActions.setOrder({
-          pageName,
-          payload: newItems.map((item: { id: any }) => item.id),
-        })
-      );
-      setItems(newItems);
-      setDraggingIndex(null);
-      setHoveredIndex(null);
-    }, 100);
+      setTimeout(() => {
+        dispatch(
+          tableStoreActions.setOrder({
+            pageName,
+            payload: newItems.map((item: { id: any }) => item.id),
+          })
+        );
+        setItems(newItems);
+        setDraggingIndex(null);
+        setHoveredIndex(null);
+      }, 100);
+    });
   };
 
   const handleDragOver = (index: number) => {
@@ -565,13 +575,15 @@ const CNewTable = ({
     }
 
     if (status === "sellect_more") {
-      if (selectedItems.includes(el.index - 1)) {
-        setSelectedItems(
-          selectedItems.filter((item: any) => item !== el.index - 1)
-        );
-      } else {
-        setSelectedItems([...selectedItems, el.index - 1]);
-      }
+      startTransition(() => {
+        if (selectedItems.includes(el.index - 1)) {
+          setSelectedItems(
+            selectedItems.filter((item: any) => item !== el.index - 1)
+          );
+        } else {
+          setSelectedItems([...selectedItems, el.index - 1]);
+        }
+      });
     }
 
     if (status === "multiple") {
@@ -651,6 +663,24 @@ const CNewTable = ({
     }
 
     if (e.key === "Enter" && Object.values(searchedElements)?.length) {
+      startTransition(() => {
+        const obj = {
+          ...searchedElements,
+        };
+
+        if (search) {
+          obj[id] = search;
+        } else {
+          obj[id] = "";
+        }
+        SetFiltersFn(obj);
+        setSearchedElements(obj);
+      });
+    }
+  };
+
+  const searchDebounce = (search: string, id: any) => {
+    startTransition(() => {
       const obj = {
         ...searchedElements,
       };
@@ -659,34 +689,22 @@ const CNewTable = ({
         obj[id] = search;
       } else {
         obj[id] = "";
+        SetFiltersFn(obj);
       }
-      SetFiltersFn(obj);
+
       setSearchedElements(obj);
-    }
-  };
-
-  const searchDebounce = (search: string, id: any) => {
-    const obj = {
-      ...searchedElements,
-    };
-
-    if (search) {
-      obj[id] = search;
-    } else {
-      obj[id] = "";
-      SetFiltersFn(obj);
-    }
-
-    setSearchedElements(obj);
+    });
   };
 
   const handleSelectAll = () => {
-    const rowIndexes = bodySource.map(
-      (item: { index: number }) => item.index - 1
-    );
-    setSelectedItems(
-      toggleRowGroupSelection({ selectedItems, currentGroup: rowIndexes })
-    );
+    startTransition(() => {
+      const rowIndexes = bodySource.map(
+        (item: { index: number }) => item.index - 1
+      );
+      setSelectedItems(
+        toggleRowGroupSelection({ selectedItems, currentGroup: rowIndexes })
+      );
+    });
   };
 
   const getBodyCol = (column: any, item: any) => {
@@ -695,9 +713,9 @@ const CNewTable = ({
         ? column.render(column?.id.map((data: any) => item[data]))
         : column.render(item[column?.id], item)
       : GetCurrentDate({
-          date: item[column?.id],
-          type: "usually",
-        });
+        date: item[column?.id],
+        type: "usually",
+      });
   };
 
   useEffect(() => {
@@ -740,24 +758,20 @@ const CNewTable = ({
     defaultActions,
     setCurrentIndex,
     sellectedRows = [],
-    rightChildren = () => {},
+    rightChildren = () => { },
   }: MemoizedTableRowProps) {
     const [currentAnchor, setCurrentAnchor] = useState<any>(null);
 
     return (
       <TableRow
         key={item.index}
-        className={`group ${innerTable ? "innerTable" : ""} ${
-          effect.includes(rowIndex) ? "effect" : ""
-        } ${
-          clickable && !item.empty && checkPermission("view") ? "clickable" : ""
-        } ${currentIndex === rowIndex ? "bg-[var(--primary50)]" : ""} ${
-          selectedItems.includes(rowIndex) || item?.checked ? "sellected" : ""
-        } ${
-          sellectedRows.includes(rowIndex + 1)
+        className={`group ${innerTable ? "innerTable" : ""} ${effect.includes(rowIndex) ? "effect" : ""
+          } ${clickable && !item.empty && checkPermission("view") ? "clickable" : ""
+          } ${currentIndex === rowIndex ? "bg-[var(--primary50)]" : ""} ${selectedItems.includes(rowIndex) || item?.checked ? "sellected" : ""
+          } ${sellectedRows.includes(rowIndex + 1)
             ? "bg-blue-200"
             : item?.backgroundColor
-        }`}
+          }`}
         onClick={() => {
           if (openSelect) {
             tableActions(item, "sellect_more");
@@ -766,18 +780,16 @@ const CNewTable = ({
         tabIndex={0}
       >
         <td
-          className={`h-[35px] border-b border-[var(--border)] w-full ${
-            openSelect ? "flex" : "hidden"
-          } justify-center items-center`}
+          className={`h-[35px] border-b border-[var(--border)] w-full ${openSelect ? "flex" : "hidden"
+            } justify-center items-center`}
           style={{ padding: "0px !importaint" }}
         >
           <div
             onClick={() => tableActions(item, "sellect_more")}
-            className={`w-[18px] h-[18px] check rounded-[4px] border flex items-center justify-center cursor-pointer ${
-              selectedItems.includes(item.index - 1)
-                ? "border-[var(--main)]"
-                : "border-[var(--gray)]"
-            }`}
+            className={`w-[18px] h-[18px] check rounded-[4px] border flex items-center justify-center cursor-pointer ${selectedItems.includes(item.index - 1)
+              ? "border-[var(--main)]"
+              : "border-[var(--gray)]"
+              }`}
           >
             {selectedItems.includes(item.index - 1) && (
               <CheckIcon
@@ -818,21 +830,20 @@ const CNewTable = ({
               style={{
                 textAlign: column?.textAlign || "left",
               }}
-              className={`relative h-full flex items-center ${
-                hoveredIndex === colIndex &&
+              className={`relative h-full flex items-center ${hoveredIndex === colIndex &&
                 draggingIndex !== null &&
                 hoveredIndex > draggingIndex
-                  ? "drag-hovered right"
-                  : hoveredIndex === colIndex &&
-                    draggingIndex !== null &&
-                    hoveredIndex < draggingIndex
+                ? "drag-hovered right"
+                : hoveredIndex === colIndex &&
+                  draggingIndex !== null &&
+                  hoveredIndex < draggingIndex
                   ? "drag-hovered left"
                   : ""
-              }`}
+                }`}
             >
               {column?.id !== "actions" &&
-              !item.empty &&
-              getBodyCol(column, item) ? (
+                !item.empty &&
+                getBodyCol(column, item) ? (
                 <div
                   onDoubleClick={() => {
                     if (
@@ -908,10 +919,17 @@ const CNewTable = ({
 
   return (
     <div
-      className={`relative cnewtable w-full rounded-t-[12px] border border-[var(--border)] ${
-        disablePagination ? "rounded-b-[12px] overflow-hidden" : "border-b-0"
-      } ${innerTable ? "text-[11.5px]" : "text-[13px]"}`}
+      className={`relative cnewtable w-full rounded-t-[12px] border border-[var(--border)] ${disablePagination ? "rounded-b-[12px] overflow-hidden" : "border-b-0"
+        } ${innerTable ? "text-[11.5px]" : "text-[13px]"}`}
     >
+      {isPending && (
+        <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10 rounded-t-[12px]">
+          <div className="flex items-center space-x-2">
+            <div className="w-4 h-4 border-2 border-[var(--primary)] border-t-transparent rounded-full animate-spin"></div>
+            <span className="text-[var(--primary)] text-sm">Processing...</span>
+          </div>
+        </div>
+      )}
       <div className="h-full ">
         {defaultFilters?.length || title ? (
           <HeaderSettings
@@ -956,8 +974,8 @@ const CNewTable = ({
               height: autoHeight
                 ? autoHeight
                 : openHeader
-                ? "calc(100vh - 140px)"
-                : "calc(100vh - 95px)",
+                  ? "calc(100vh - 140px)"
+                  : "calc(100vh - 95px)",
             }}
           >
             <div className="w-full">
@@ -984,11 +1002,9 @@ const CNewTable = ({
                   <CTableHead>
                     <CTableRow>
                       <td
-                        className={`sticky bg-[var(--bg)] ${
-                          innerTable ? "h-[35px]" : "h-[41px]"
-                        } ${
-                          openSelect ? "flex" : "hidden"
-                        } items-center border-b justify-center duration-100 w-[40px]`}
+                        className={`sticky bg-[var(--bg)] ${innerTable ? "h-[35px]" : "h-[41px]"
+                          } ${openSelect ? "flex" : "hidden"
+                          } items-center border-b justify-center duration-100 w-[40px]`}
                       >
                         <div
                           onClick={() => handleSelectAll()}
@@ -998,13 +1014,13 @@ const CNewTable = ({
                             selectedItems,
                             bodySource
                           ) && (
-                            <CheckIcon
-                              style={{
-                                fill: "var(--main)",
-                                width: 14,
-                              }}
-                            />
-                          )}
+                              <CheckIcon
+                                style={{
+                                  fill: "var(--main)",
+                                  width: 14,
+                                }}
+                              />
+                            )}
                         </div>
                       </td>
                       {newHeadColumns?.map((column: any, index: number) => (
@@ -1015,13 +1031,13 @@ const CNewTable = ({
                             minWidth: tableSize?.[pageName]?.[column?.id]
                               ? tableSize?.[pageName]?.[column?.id]
                               : column?.width
-                              ? column.width
-                              : "auto",
+                                ? column.width
+                                : "auto",
                             width: tableSize?.[pageName]?.[column?.id]
                               ? tableSize?.[pageName]?.[column?.id]
                               : column?.width
-                              ? column.width
-                              : "auto",
+                                ? column.width
+                                : "auto",
                             position: tableSettings?.[pageName]?.find(
                               (item: any) => item?.id === column?.id
                             )?.isStiky
@@ -1049,33 +1065,29 @@ const CNewTable = ({
                             }}
                             onDragLeave={handleDragLeave}
                             onDrop={() => handleDrop(index)}
-                            className={`w-full group draggable-header flex items-center ${
-                              innerTable ? "min-h-[30px]" : "min-h-[40px]"
-                            } px-2 flex-nowrap cursor-move hover:bg-[var(--border)] ${
-                              column?.id === "index"
+                            className={`w-full group draggable-header flex items-center ${innerTable ? "min-h-[30px]" : "min-h-[40px]"
+                              } px-2 flex-nowrap cursor-move hover:bg-[var(--border)] ${column?.id === "index"
                                 ? "justify-center"
                                 : "justify-between"
-                            } ${
-                              draggingIndex === index
+                              } ${draggingIndex === index
                                 ? "drag-and-drop dragging"
                                 : ""
-                            } ${
-                              hoveredIndex === index &&
-                              hoveredIndex > draggingIndex
+                              } ${hoveredIndex === index &&
+                                hoveredIndex > draggingIndex
                                 ? "drag-hovered right"
                                 : hoveredIndex === index &&
                                   hoveredIndex < draggingIndex
-                                ? "drag-hovered left"
-                                : ""
-                            }`}
+                                  ? "drag-hovered left"
+                                  : ""
+                              }`}
                             style={{
                               color: sortData?.find(
                                 (item: any) => item.id === column.id
                               )
                                 ? "var(--primary)"
                                 : draggingIndex === index
-                                ? "var(--primary)"
-                                : "",
+                                  ? "var(--primary)"
+                                  : "",
                               textAlign: !column?.filter ? "left" : "left",
                               backgroundColor:
                                 currentFilter === index
@@ -1084,29 +1096,27 @@ const CNewTable = ({
                             }}
                           >
                             <div
-                              className={`w-full ${
-                                innerTable ? "min-h-[35px]" : "min-h-[40px]"
-                              } flex items-center whitespace-nowrap ${
-                                disabled ? "text-[var(--gray)]" : ""
-                              }`}
+                              className={`w-full ${innerTable ? "min-h-[35px]" : "min-h-[40px]"
+                                } flex items-center whitespace-nowrap ${disabled ? "text-[var(--gray)]" : ""
+                                }`}
                             >
                               {column.renderHead
                                 ? Array.isArray(column.renderHead)
                                   ? column.renderHead(
-                                      column.renderHead.map(
-                                        (data: any) => column[data]
-                                      )
+                                    column.renderHead.map(
+                                      (data: any) => column[data]
                                     )
+                                  )
                                   : column.renderHead()
                                 : column.id === "index"
-                                ? "№"
-                                : t(column?.title) === ""
-                                ? column?.title
-                                : t(column?.title)}{" "}
+                                  ? "№"
+                                  : t(column?.title) === ""
+                                    ? column?.title
+                                    : t(column?.title)}{" "}
                             </div>
                             {column.id !== "multiple" &&
-                            column.id !== "index" &&
-                            !column?.id?.includes("actions") ? (
+                              column.id !== "index" &&
+                              !column?.id?.includes("actions") ? (
                               <TableFilter
                                 colId={column?.id ?? currentFilter}
                                 sortData={sortData}
