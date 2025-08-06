@@ -23,6 +23,7 @@ export const PaintTablesUI = ({
   setCurrentPaint,
   currentMaterial,
   formData,
+  handleModalActions = () => {},
 }: {
   handleActionsTable: (obj: any, status: string, type: string) => void;
   uniqueID: string;
@@ -31,6 +32,7 @@ export const PaintTablesUI = ({
   setCurrentPaint: (obj: any) => void;
   currentMaterial: any;
   formData: any;
+  handleModalActions: (val: string) => void;
 }) => {
   const [filterParams, setFilterParams]: any = useState({
     page: 1,
@@ -51,7 +53,6 @@ export const PaintTablesUI = ({
   const { isLoading, headColumns, bodyColumns, refetch, deleteFn } =
     PaintTableLogic({ filterParams });
 
-  // Memoize the refetch function to prevent unnecessary re-renders
   const memoizedRefetch = useCallback(() => {
     if (refetch) {
       refetch();
@@ -83,10 +84,6 @@ export const PaintTablesUI = ({
   } = IslemTipiTableLogic({ filterParams: filterParamsIslemTipi, formId });
 
   const newbodyColumnsIslemTipi = useMemo(() => {
-    // setFilterParamsVariant((prevParams: any) => ({
-    //   ...prevParams,
-    //   BOYASIPARISDETAYID: currentPaint?.BOYASIPARISDETAYID,
-    // }));
     return bodyColumnsIslemTipi?.filter(
       (item: any) =>
         item.BOYASIPARISDETAYID === currentPaint?.BOYASIPARISDETAYID
@@ -98,19 +95,6 @@ export const PaintTablesUI = ({
       setCurrentPaint(bodyColumns?.[0]);
     }
   }, [bodyColumns, setCurrentPaint]);
-
-  useEffect(() => {
-    if (currentPaint) {
-      // setFilterParamsVariant((prevParams: any) => ({
-      //   ...prevParams,
-      //   DESENID: currentPaint?.DESENID,
-      // }));
-      // setFilterParamsIslemTipi((prevParams: any) => ({
-      //   ...prevParams,
-      //   BOYASIPARISDETAYID: currentPaint?.BOYASIPARISDETAYID,
-      // }));
-    }
-  }, [currentPaint]);
 
   const handlePaintActionsPaint = (obj: any, status: string) => {
     handleActionsTable(obj, status, "paint");
@@ -137,14 +121,9 @@ export const PaintTablesUI = ({
         <PaintTable
           title="Boya Siparis Detay Girisi"
           handleActionsTable={(obj: any, status: string) => {
-            if (status === "view_single_right_click") {
-              return;
-            }
-            if (isDirty) {
-              handleActionsTable(obj, "modal", "paint");
-            } else {
-              handlePaintActionsPaint(obj, status);
-            }
+            if (status === "view_single_right_click") return;
+
+            handlePaintActionsPaint(obj, status);
           }}
           height="180px"
           currentPaint={currentPaintWithIndex}
@@ -232,6 +211,7 @@ export const PaintTablesUI = ({
       {uniqueID === "paint_form" ? (
         <PaintForm
           parentId={formId}
+          siparisId={formData?.BOYASIPARISID}
           title="Boya Siparis Detay Girisi (Kumash)"
           handleActions={(val: string) => {
             if (dirty_places.list.length) {
@@ -246,6 +226,10 @@ export const PaintTablesUI = ({
           uniqueID={uniqueID}
           refetch={memoizedRefetch}
           isDirty={isDirty}
+          handleModalActions={() => {
+            handleModalActions("Close");
+            refetch();
+          }}
         />
       ) : (
         ""

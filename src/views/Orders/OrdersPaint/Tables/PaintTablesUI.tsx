@@ -68,7 +68,7 @@ export const PaintTablesUI = ({
         headColumns={headColumns}
         defaultFilters={defaultFilters}
         currentIdRow={currentPaint?.index ? currentPaint.index : undefined}
-        idForTable={`paint_table_inner_${title}${formId}`}
+        idForTable={`paint_table_inner_${title?.replace(" ", "_")}${formId}`}
         innerTable={true}
         handleActions={(obj: any, status: string) => {
           if (status === "modal") {

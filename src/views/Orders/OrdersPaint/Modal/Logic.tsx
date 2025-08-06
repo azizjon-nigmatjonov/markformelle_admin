@@ -145,8 +145,9 @@ export const OrderModalBaseLogics = ({
   }, [formData]);
 
   const handleModalActions = (status: string) => {
-    if (status === "close") {
+    if (status.toLocaleLowerCase() === "close") {
       setFormId(0);
+      setUniqueID("");
     }
   };
 
@@ -184,13 +185,9 @@ export const OrderModalBaseLogics = ({
           setCurrentPaint({});
         }
       } else {
-        if (
-          status !== "view_single" ||
-          status.includes("view") ||
-          status.includes("edit")
-        ) {
+        if (status.includes("view") || status.includes("edit")) {
           setUniqueID("paint_form");
-          // setCurrentPaint(obj);
+          setCurrentPaint(obj);
         }
         if (status.includes("modal")) {
           setUniqueID("paint_form");

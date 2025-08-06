@@ -4,5 +4,6 @@ export const Validation = () => {
     HAMID: yup.string().required("Обязательное поле!"),
     RENKDERINLIGIID: yup.number().required("Обязательное поле!"),
     ISLEMTIPIID: yup.number().required("Обязательное поле!"),
+    BIRIMFIYAT: yup.number().required("Обязательное поле!"),
   });
 };

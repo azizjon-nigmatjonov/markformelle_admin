@@ -18,7 +18,6 @@ import CCheckbox from "../../../../../components/CElements/CCheckbox";
 import { websiteActions } from "../../../../../store/website";
 import { useDispatch } from "react-redux";
 
-// Define the form data interface
 interface PaintFormData {
   HAMID?: string | number;
   PUS?: number;
@@ -78,6 +77,8 @@ export const PaintForm = ({
   title,
   parentId,
   refetch,
+  siparisId,
+  handleModalActions,
 }: {
   handleActions: (val: string) => void;
   uniqueID: string;
@@ -86,10 +87,12 @@ export const PaintForm = ({
   title: string;
   refetch: () => void;
   isDirty: boolean;
+  siparisId: number;
+  handleModalActions: (val: string) => void;
 }) => {
   const dispatch = useDispatch();
   const [formId, setFormId] = useState(null);
-  const [isPending, startTransition] = useTransition();
+  const [_, startTransition] = useTransition();
 
   // Configure useForm with proper mode to prevent excessive re-renders
   const { control, setValue, handleSubmit, watch, getValues } = useForm<any>({
@@ -107,6 +110,7 @@ export const PaintForm = ({
 
   // Memoize the closeFn to prevent PaintFormLogic from re-creating
   const closeFn = useCallback(() => {
+    handleModalActions("Close");
     startTransition(() => {
       refetch();
       handleActions("Close");
@@ -160,7 +164,6 @@ export const PaintForm = ({
 
   const onSubmit = useCallback(
     (data: PaintFormData) => {
-      // Form submission is lower priority - wrap in startTransition
       startTransition(() => {
         let params: any = { ...data };
         params.MAXIMUMFIREORANI = Number(params.MAXIMUMFIREORANI || 0);
@@ -183,13 +186,29 @@ export const PaintForm = ({
           params.FASONBIRIMFIYATDOVIZID = params.DOVIZID;
           params.FATURAEDILECEKMIKTARTIPI = 0;
           params.HAMSTOKBIRIMID = 0;
-          params.SIRANO = 999;
+          // params.SIRANO = 999212121213232;
           params.FIRMASEVKADRESIID = 904;
           params.SIPARISPROSESID = Number(params.SIPARISPROSESID);
           params.RENKID = Number(params.RENKID);
           params.INSERTKULLANICIID = 1;
-          params.ORMESIPARISDETAYID = 12280;
-          params.BOYASIPARISDETAYID = 40546;
+          params.ISLEMGRUBUID = 1;
+          params.FEINE = Number(params.FEINE || 0);
+          params.PUS = Number(params.PUS || 0);
+          params.MUSTERIKALITENO = "2";
+          params.TERMINTARIHI = dayjs();
+          params.SONTERMINTARIHI = dayjs();
+          params.INSERTTARIHI = dayjs();
+          params.DEGISIMTARIHI = dayjs();
+          params.HATAPUANICARPANI = Number(params.HATAPUANICARPANI || 0);
+          params.BOYASIPARISYIL = dayjs().year();
+          params.BOYASIPARISID = siparisId;
+          params.FIRMAADI = "MARK FORMELLE";
+          params.FIRMASEVKADRESIADI = "Firma Tanıtım Adresi";
+          params.RECETEDEGISIMTARIHI = dayjs();
+          params.RECETEGIRISTARIHI = dayjs();
+          params.RECETEDEGISIMKULLANICIID = 43;
+          params.HAMID = params.HAMADI;
+          params.HAMADI = params.HAMID;
 
           createForm(params);
         }
@@ -197,14 +216,11 @@ export const PaintForm = ({
     },
     [formId, formData, updateForm, createForm, parentId, startTransition]
   );
-  console.log("formdata", formData);
 
-  // Memoize setFormValues to prevent recreation
   const setFormValues = useCallback(
     (form: any) => {
       if (!form) return;
 
-      // Setting form values from API data is lower priority
       startTransition(() => {
         const fieldsToSet = [
           { name: "HAMID", value: form.HAMID },
@@ -262,7 +278,6 @@ export const PaintForm = ({
       GRAMAJISTENEN: string;
       ENISTENEN: string;
     }) => {
-      // User selection is high priority - immediate response
       setValue("KALITEID", obj.KALITEID);
       setKaliteData(obj);
       setValue("HAMADI", obj.HAMID);
@@ -276,10 +291,8 @@ export const PaintForm = ({
     [setValue, handleDirtyPlaces]
   );
 
-  // Memoize the ham select handler - HIGH PRIORITY (user input)
   const handleHamSelect = useCallback(
     (data: { HAMID: string }) => {
-      // User selection is high priority - immediate response
       setValue("HAMADI", data.HAMID);
       setValue("HAMID", data.HAMID);
       handleDirtyPlaces("HAMID");
@@ -287,10 +300,8 @@ export const PaintForm = ({
     [setValue, handleDirtyPlaces]
   );
 
-  // Memoize the doviz select handler - HIGH PRIORITY (user input)
   const handleDovizSelect = useCallback(
     (obj: { DOVIZID: string }) => {
-      // User selection is high priority - immediate response
       setValue("DOVIZID", obj.DOVIZID);
       handleDirtyPlaces("DOVIZID");
     },
@@ -308,61 +319,48 @@ export const PaintForm = ({
     [setValue, handleDirtyPlaces]
   );
 
-  // Memoize the renk select handler - HIGH PRIORITY (user input)
   const handleRenkSelect = useCallback(
     (obj: { RENKID: number }) => {
-      // User selection is high priority - immediate response
       setValue("RENKID", obj.RENKID);
       handleDirtyPlaces("RENKID");
     },
     [setValue, handleDirtyPlaces]
   );
 
-  // Memoize the renk derinligi select handler - HIGH PRIORITY (user input)
   const handleRenkDerinligiSelect = useCallback(
     (obj: { RENKDERINLIGIID: number }) => {
-      // User selection is high priority - immediate response
       setValue("RENKDERINLIGIID", obj.RENKDERINLIGIID);
       handleDirtyPlaces("RENKDERINLIGIID");
     },
     [setValue, handleDirtyPlaces]
   );
 
-  // Memoize the siparis proses select handler - HIGH PRIORITY (user input)
   const handleSiparisProsesSelect = useCallback(
     (obj: { SIPARISPROSESID: number }) => {
-      // User selection is high priority - immediate response
       setValue("SIPARISPROSESID", obj.SIPARISPROSESID);
       handleDirtyPlaces("SIPARISPROSESID");
     },
     [setValue, handleDirtyPlaces]
   );
 
-  // Memoize the desen select handler - HIGH PRIORITY (user input)
   const handleDesenSelect = useCallback(
     (obj: { DESENID: number }) => {
-      // User selection is high priority - immediate response
       setValue("DESENID", obj.DESENID);
       handleDirtyPlaces("DESENID");
     },
     [setValue, handleDirtyPlaces]
   );
 
-  // Memoize the desen varyant select handler - HIGH PRIORITY (user input)
   const handleDesenVaryantSelect = useCallback(
     (obj: { DESENVARYANTID: number }) => {
-      // User selection is high priority - immediate response
       setValue("DESENVARYANTID", obj.DESENVARYANTID);
       handleDirtyPlaces("DESENVARYANTID");
     },
     [setValue, handleDirtyPlaces]
   );
 
-  // Memoize the form submit handler
-
   useEffect(() => {
     if (formData?.LABRECETEATISNO) {
-      // Setting form values from API data is lower priority
       startTransition(() => {
         setValue("LABRECETEATISNO", formData.LABRECETEATISNO);
         setValue("RENKDERINLIGIID", formData.RENKDERINLIGIID);
@@ -372,7 +370,6 @@ export const PaintForm = ({
         setValue("SIPARISKILO", formData.SIPARISKILO);
         setValue("SIPARISBRUTKILO", formData.SIPARISBRUTKILO);
         setValue("BIRIMFIYAT", formData.BIRIMFIYAT);
-        console.log("aaaa", formData.MUSTERISIPARISNO);
 
         setValue("MELANJKODU", formData.MELANJKODU);
         setValue("REFERANSSIPARISNO", formData.REFERANSSIPARISNO);
@@ -386,9 +383,7 @@ export const PaintForm = ({
       });
     }
   }, [formData, setValue, startTransition]);
-  const KALITEID = watch("KALITEID");
 
-  // Memoize the form JSX to prevent unnecessary re-renders
   const formContent = useMemo(
     () => (
       <form
@@ -400,18 +395,6 @@ export const PaintForm = ({
         onSubmit={handleSubmit(onSubmit)}
         className="w-[1000px]"
       >
-        {/* Show loading indicator when API operations are pending */}
-        {isPending && (
-          <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10 rounded-t-[12px]">
-            <div className="flex items-center space-x-2">
-              <div className="w-4 h-4 border-2 border-[var(--primary)] border-t-transparent rounded-full animate-spin"></div>
-              <span className="text-[var(--primary)] text-sm">
-                Processing...
-              </span>
-            </div>
-          </div>
-        )}
-
         <div className="grid grid-cols-3 gap-4 mb-3">
           <div className="space-y-3">
             <LiteOptionsTable
@@ -419,7 +402,19 @@ export const PaintForm = ({
               renderValue={(_: string, obj: any) => {
                 return obj.KALITEID;
               }}
-              handleSelect={handleKaliteSelect}
+              handleSelect={(obj: any) => {
+                console.log("obj", obj);
+
+                setValue("KALITEID", obj.KALITEID);
+                setKaliteData(obj);
+                setValue("HAMADI", obj.HAMID);
+                setValue("HAMID", obj.HAMADI);
+                setValue("FEINE", obj.FEINE);
+                setValue("PUS", obj.PUS);
+                setValue("GRAMAJISTENEN", obj.GRAMAJISTENEN);
+                setValue("ENISTENEN", obj.ENISTENEN);
+                handleDirtyPlaces("KALITEID");
+              }}
               staticSearchID="KALITEID"
               name="KALITEID"
               link="kalite"
@@ -444,7 +439,8 @@ export const PaintForm = ({
               renderValue={(_: string, obj: any) => {
                 return obj.ADI;
               }}
-              defaultFilters={KALITEID ? `KALITEID=${KALITEID}` : ""}
+              defaultValue={kaliteData?.HAMADI}
+              // defaultFilters={KALITEID ? `KALITEID=${KALITEID}` : ""}
               handleSelect={(obj: any) => {
                 setValue("HAMID", obj.HAMID);
                 setValue("HAMADI", obj.ADI);
@@ -593,15 +589,14 @@ export const PaintForm = ({
                 defaultValue={formData?.LABRECETEATISNO}
                 defaultFilters={
                   receteData?.LABRECETEID
-                    ? `LABRECETEATISID=${receteData?.LABRECETEID}`
+                    ? `LABRECETEID=${receteData?.LABRECETEID}`
                     : ""
                 }
-                // defaultValue={formData?.LABRECETEATISID}
                 handleSelect={(obj: any) => {
-                  setValue("LABRECETEATISID", obj.ATISNO);
+                  setValue("LABRECETEATISID", obj.LABRECETEATISID);
+                  setValue("ATISNO", obj.ATISNO);
                   setValue("RECETEASAMAADI", obj.RECETEASAMAADI);
                   setReceteData(obj);
-                  // handleDirtyPlaces("LABRECETEATISID");
                 }}
                 control={control}
               />
@@ -618,11 +613,6 @@ export const PaintForm = ({
                 { id: "RENKID", title: "RENKID", width: 80 },
                 { id: "ADI", title: "ADI", width: 280 },
               ]}
-              // defaultFilters={
-              //   receteData?.LABRECETEID
-              //     ? `LABRECETEID=${receteData?.LABRECETEID}`
-              //     : ""
-              // }
               handleSelect={handleRenkSelect}
               control={control}
             />
@@ -850,7 +840,6 @@ export const PaintForm = ({
       handleActions,
       uniqueID,
       formId,
-      isPending,
     ]
   );
 

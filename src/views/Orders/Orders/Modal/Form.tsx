@@ -9,11 +9,6 @@ import HFTextField from "../../../../components/HFElements/HFTextField";
 import { SubmitButton } from "../../../../components/UI/FormButtons/SubmitButton";
 import { FormLogic } from "./Logic";
 import HFTextarea from "../../../../components/HFElements/HFTextarea";
-import CNewMiniModal from "../../../../components/CElements/CNewMiniModal";
-import { useTranslation } from "react-i18next";
-import { websiteActions } from "../../../../store/website";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../../store/types";
 const schema = Validation;
 
 interface OrderFormProps {
@@ -35,16 +30,12 @@ export const OrderForm = ({
   formId,
   setFormId,
 }: OrderFormProps) => {
-  const { t } = useTranslation();
   const { control, handleSubmit, setValue, getValues, reset } = useForm<any>({
     mode: "onSubmit",
     resolver: yupResolver(schema),
   });
-  const isDirty = useSelector(
-    (state: RootState) => state.website.dirty_places.isDirty
-  );
+
   const { setFormValues, setInitialFormValues } = FormLogic();
-  const dispatch = useDispatch();
 
   const handleDirtyPlaces = (_: string) => {
     // dispatch(websiteActions.setDirtyPlaces({ list, isDirty: false }));
@@ -391,7 +382,7 @@ export const OrderForm = ({
         </div>
       </form>
 
-      {isDirty && (
+      {/* {isDirty && (
         <CNewMiniModal
           title=" "
           handleActions={() => {
@@ -429,7 +420,7 @@ export const OrderForm = ({
             </div>
           </div>
         </CNewMiniModal>
-      )}
+      )} */}
     </>
   );
 };

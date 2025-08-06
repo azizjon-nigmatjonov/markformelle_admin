@@ -193,12 +193,13 @@ const CNewTable = <T extends TableRowData = TableRowData>({
   const [effect, setEffect] = useState<number[]>([]);
   const { checkPermission } = usePermissions();
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchedElements, setSearchedElements] = useState<Record<string, any>>(
     {
       ...defaultSearch,
     }
   );
-  const [isPending, startTransition] = useTransition();
+  const [_, startTransition] = useTransition();
   const { handleCheckbox } = TableSettingsData({
     filterParams,
     handleFilterParams,
@@ -269,9 +270,10 @@ const CNewTable = <T extends TableRowData = TableRowData>({
     }
   }, [defaultFilters]);
 
-  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    setLoading(isLoading);
+    setTimeout(() => {
+      setLoading(isLoading);
+    }, 700);
   }, [isLoading]);
   useEffect(() => {
     if (!bodyColumns?.length) {
@@ -283,10 +285,10 @@ const CNewTable = <T extends TableRowData = TableRowData>({
       const arr = JSON.parse(JSON.stringify(bodyColumns));
       let result: any = [];
 
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-      }, 0);
+      // setLoading(true);
+      // setTimeout(() => {
+      //   setLoading(false);
+      // }, 0);
       sortData?.forEach((sortObj: any) => {
         const { value, id, search }: any = {
           ...sortObj,
@@ -815,6 +817,10 @@ const CNewTable = <T extends TableRowData = TableRowData>({
   };
 
   const getBodyCol = (column: TableColumn<T>, item: T): React.ReactNode => {
+    if (item[column?.id as keyof T] == 0) {
+      return "0";
+    }
+
     return column.render
       ? Array.isArray(column?.id)
         ? column.render(
@@ -1040,14 +1046,14 @@ const CNewTable = <T extends TableRowData = TableRowData>({
         disablePagination ? "rounded-b-[12px] overflow-hidden" : "border-b-0"
       } ${innerTable ? "text-[11.5px]" : "text-[13px]"}`}
     >
-      {isPending && (
+      {/* {isPending && (
         <div className="absolute inset-0 bg-white/50 flex items-center justify-center z-10 rounded-t-[12px]">
           <div className="flex items-center space-x-2">
             <div className="w-4 h-4 border-2 border-[var(--primary)] border-t-transparent rounded-full animate-spin"></div>
             <span className="text-[var(--primary)] text-sm">Processing...</span>
           </div>
         </div>
-      )}
+      )} */}
       <div className="h-full ">
         {defaultFilters?.length || title ? (
           <HeaderSettings

@@ -4,7 +4,7 @@ import { API_URL } from "../../../../../../utils/env";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import axios from "axios";
-import { useCallback, useMemo } from "react";
+import { useCallback } from "react";
 
 export const PaintFormLogic = ({
   formId,
@@ -32,14 +32,12 @@ export const PaintFormLogic = ({
     },
     {
       enabled: !!formId,
-      keepPreviousData: true,
-      staleTime: 1 * 60 * 1000,
-      cacheTime: 2 * 60 * 1000,
     }
   );
 
   const createForm = useCallback(
     async (params: {}) => {
+      closeFn();
       try {
         const { data } = await axios.post(
           `${API_URL}/boyasiparisdetay/`,
@@ -79,13 +77,8 @@ export const PaintFormLogic = ({
     [closeFn, t]
   );
 
-  // Memoize the formData to prevent unnecessary re-renders
-  const memoizedFormData = useMemo(() => {
-    return formData?.BOYASIPARISDETAYID ? formData : defaultData;
-  }, [formData, defaultData]);
-
   return {
-    formData: memoizedFormData,
+    formData: formData?.BOYASIPARISDETAYID ? formData : defaultData,
     isLoading,
     error,
     refetch,

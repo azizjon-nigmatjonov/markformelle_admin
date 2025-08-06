@@ -161,10 +161,10 @@ const SearchInput = memo(
               {/* Tooltip */}
               {showTooltip && isOverflowing && (
                 <div
-                  className="absolute z-[100] -translate-x-1/2 bg-[var(--main)] text-white text-sm px-2 py-1 rounded shadow-lg whitespace-nowrap"
+                  className="absolute z-[100]  bg-[var(--main)] text-white text-sm px-2 py-1 rounded shadow-lg whitespace-nowrap"
                   style={{
                     top: "33px",
-                    left: "50%",
+                    left: "0",
                   }}
                 >
                   {search ?? value ?? ""}

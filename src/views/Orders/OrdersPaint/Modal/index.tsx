@@ -67,6 +67,7 @@ export const OrderModalPartiCreate = ({
         formData={formData}
         currentPaint={currentPaint}
         formId={formId ?? 0}
+        handleModalActions={handleModalActions}
       />
     </div>
   );
