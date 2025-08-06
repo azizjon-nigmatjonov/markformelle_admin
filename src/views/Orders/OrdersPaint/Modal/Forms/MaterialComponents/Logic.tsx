@@ -30,9 +30,6 @@ export const MaterialFormLogic = ({
     },
     {
       enabled: !!formId,
-      keepPreviousData: true,
-      staleTime: 1 * 60 * 1000,
-      cacheTime: 2 * 60 * 1000,
     }
   );
 

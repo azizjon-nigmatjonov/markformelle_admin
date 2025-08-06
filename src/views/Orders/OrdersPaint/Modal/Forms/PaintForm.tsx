@@ -17,9 +17,15 @@ import CLabel from "../../../../../components/CElements/CLabel";
 import CCheckbox from "../../../../../components/CElements/CCheckbox";
 import { websiteActions } from "../../../../../store/website";
 import { useDispatch } from "react-redux";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Validation } from "./Validation";
+const schema = Validation();
 
 interface PaintFormData {
-  HAMID?: string | number;
+  HAMID: string;
+  RENKDERINLIGIID: number;
+  ISLEMTIPIID: number;
+  // BIRIMFIYAT: number;
   PUS?: number;
   FEINE?: number;
   IPTALKILO?: number;
@@ -30,20 +36,17 @@ interface PaintFormData {
   LABRECETEKODU?: string;
   SIPARISPROSESID?: number;
   RENKID?: number;
-  RENKDERINLIGIID?: number;
   NOTU?: string;
   PLANLAMANOTU?: string;
   TERMINNOTU?: string;
-  HATAPUANICARPANI?: number;
-  ISLEMTIPIID?: number;
-  DESENID?: number;
+  HATAPUANICARPANI?: string;
+  DESENID?: string;
   PANTONEKODU?: string;
   LABRECETEID?: number;
   HAMADI?: string | number;
   ENISTENEN?: string;
   GRAMAJISTENEN?: string;
-  BIRIMFIYAT?: number;
-  MUSTERISIPARISNO?: number;
+  MUSTERISIPARISNO?: string;
   REFSIPARISNO?: number;
   SEKILADRES?: string;
   MELANJKODU?: string;
@@ -68,6 +71,15 @@ interface PaintFormData {
   INSERTKULLANICIID?: number;
   ORMESIPARISDETAYID?: number;
   BOYASIPARISDETAYID?: number;
+  // Missing fields that are being set
+  LABRECETEATISNO?: string;
+  RENKDERINLIGIADI?: string;
+  SIPARISKILO?: number;
+  SIPARISBRUTKILO?: number;
+  REFERANSSIPARISNO?: string;
+  MAXIMUMFIREORANI?: string;
+  ATISNO?: string;
+  SIPARISPROSESADI?: string;
 }
 
 export const PaintForm = ({
@@ -95,14 +107,10 @@ export const PaintForm = ({
   const [_, startTransition] = useTransition();
 
   // Configure useForm with proper mode to prevent excessive re-renders
-  const { control, setValue, handleSubmit, watch, getValues } = useForm<any>({
-    mode: "onSubmit", // Only validate on submit, not on every change
-    defaultValues: {
-      DOVIZID: "USD",
-      TERMINTARIHI: dayjs().format("YYYY-MM-DD"),
-    },
+  const { control, setValue, handleSubmit, watch, getValues } = useForm({
+    mode: "onSubmit",
+    resolver: yupResolver(schema),
   });
-
   // Only watch the fields that are actually needed for conditional rendering
   const DESENID = watch("DESENID");
   const PANTONEKODU = watch("PANTONEKODU");
@@ -207,8 +215,9 @@ export const PaintForm = ({
           params.RECETEDEGISIMTARIHI = dayjs();
           params.RECETEGIRISTARIHI = dayjs();
           params.RECETEDEGISIMKULLANICIID = 43;
-          params.HAMID = params.HAMADI;
-          params.HAMADI = params.HAMID;
+          // params.MUSTERISIPARISNO = Number(params.MUSTERISIPARISNO || 0);
+          // params.REFERANSSIPARISNO = Number(params.REFERANSSIPARISNO || 0);
+          // params.DESENID = Number(params.DESENID || 0);
 
           createForm(params);
         }
@@ -280,7 +289,7 @@ export const PaintForm = ({
     }) => {
       setValue("KALITEID", obj.KALITEID);
       setKaliteData(obj);
-      setValue("HAMADI", obj.HAMID);
+      setValue("HAMADI", obj.HAMID + "");
       setValue("HAMID", obj.HAMADI);
       setValue("FEINE", obj.FEINE);
       setValue("PUS", obj.PUS);
@@ -345,7 +354,7 @@ export const PaintForm = ({
 
   const handleDesenSelect = useCallback(
     (obj: { DESENID: number }) => {
-      setValue("DESENID", obj.DESENID);
+      setValue("DESENID", obj.DESENID + "");
       handleDirtyPlaces("DESENID");
     },
     [setValue, handleDirtyPlaces]
@@ -392,7 +401,7 @@ export const PaintForm = ({
             e.preventDefault();
           }
         }}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onSubmit as any)}
         className="w-[1000px]"
       >
         <div className="grid grid-cols-3 gap-4 mb-3">
@@ -403,12 +412,10 @@ export const PaintForm = ({
                 return obj.KALITEID;
               }}
               handleSelect={(obj: any) => {
-                console.log("obj", obj);
-
                 setValue("KALITEID", obj.KALITEID);
                 setKaliteData(obj);
-                setValue("HAMADI", obj.HAMID);
-                setValue("HAMID", obj.HAMADI);
+                setValue("HAMADI", obj.HAMADI);
+                setValue("HAMID", obj.HAMID);
                 setValue("FEINE", obj.FEINE);
                 setValue("PUS", obj.PUS);
                 setValue("GRAMAJISTENEN", obj.GRAMAJISTENEN);
@@ -434,27 +441,7 @@ export const PaintForm = ({
               control={control}
             />
 
-            <LiteOptionsTable
-              label="Ham Stok"
-              renderValue={(_: string, obj: any) => {
-                return obj.ADI;
-              }}
-              defaultValue={kaliteData?.HAMADI}
-              // defaultFilters={KALITEID ? `KALITEID=${KALITEID}` : ""}
-              handleSelect={(obj: any) => {
-                setValue("HAMID", obj.HAMID);
-                setValue("HAMADI", obj.ADI);
-              }}
-              name="HAMID"
-              secondName="HAMID"
-              headColumns={[
-                { id: "HAMID", title: "HAMID", width: 60 },
-                { id: "ADI", title: "ADI", width: 150 },
-              ]}
-              // defaultValue={formData?.HAMADI}
-              link="ham"
-              control={control}
-            />
+            <HFTextField disabled name="HAMADI" control={control} />
             <div className="grid grid-cols-4 gap-x-3">
               <HFTextField
                 type="number"
@@ -488,7 +475,7 @@ export const PaintForm = ({
                 defaultValue={formData?.GRAMAJISTENEN}
               />
             </div>
-            <div className="grid grid-cols-4 gap-x-3">
+            <div className="grid grid-cols-3 gap-x-3">
               <HFTextField
                 type="number"
                 label="Kilo"
@@ -499,16 +486,26 @@ export const PaintForm = ({
               />
               <HFTextField
                 type="number"
+                label="Fire oran"
+                name="MAXIMUMFIREORANI"
+                control={control}
+                defaultValue={formData?.MAXIMUMFIREORANI}
+                handleChange={handleFormChange}
+              />
+              <HFTextField
+                type="number"
                 label="Brut Kilo"
                 name="SIPARISBRUTKILO"
                 control={control}
                 handleChange={handleFormChange}
                 defaultValue={formData?.SIPARISBRUTKILO}
               />
+            </div>
+
+            <div className="grid grid-cols-2 gap-x-3">
               <HFTextField
                 label="Birim fiyat"
                 name="BIRIMFIYAT"
-                type="number"
                 control={control}
                 handleChange={handleFormChange}
                 defaultValue={formData?.BIRIMFIYAT}
@@ -554,6 +551,8 @@ export const PaintForm = ({
                   ]}
                   defaultValue={formData?.LABRECETEKODU}
                   handleSelect={(obj: any) => {
+                    console.log("obj", obj);
+
                     setValue("LABRECETEKODU", obj.LABRECETEKODU);
                     setValue("LABRECETEID", obj.LABRECETEID);
                     setReceteData(obj);
@@ -570,10 +569,13 @@ export const PaintForm = ({
                 renderValue={(_: string, obj: any) => obj.ATISNO}
                 disabled={!receteData?.LABRECETEID}
                 headColumns={[
-                  { id: "ATISNO", title: "ATISNO", width: 80 },
+                  { id: "ATISNO", title: "ATISNO", width: 60 },
                   {
-                    id: "LABRECETEATISID",
-                    title: "LABRECETEATISID",
+                    id: "DEGISIMTARIHI",
+                    title: "DEGISIMTARIHI",
+                    render: (val: string) => {
+                      return dayjs(val).format("DD.MM.YYYY HH:mm");
+                    },
                     width: 120,
                   },
 
@@ -608,6 +610,11 @@ export const PaintForm = ({
                 return obj.RENKID;
               }}
               defaultValue={formData?.RENKADI}
+              // defaultFilters={
+              //   receteData?.LABRECETEID
+              //     ? `LABRECETEID=${receteData?.LABRECETEID}`
+              //     : ""
+              // }
               link="renk"
               headColumns={[
                 { id: "RENKID", title: "RENKID", width: 80 },
@@ -652,7 +659,9 @@ export const PaintForm = ({
               name="SIPARISPROSESID"
               link="siparisproses"
               renderValue={(_: string, obj: any) => {
-                return obj.SIPARISPROSESID;
+                return obj.SIPARISPROSESID && obj?.ADI
+                  ? obj.SIPARISPROSESID + " - " + obj.ADI
+                  : obj.SIPARISPROSESID;
               }}
               headColumns={[
                 {
@@ -689,24 +698,14 @@ export const PaintForm = ({
               />
             </div>
 
-            <HFTextField
-              label="Melanj kodu"
-              name="MELANJKODU"
-              control={control}
-              defaultValue={formData?.MELANJKODU}
-              handleChange={handleFormChange}
-            />
-
             <div className="grid grid-cols-2 gap-x-3">
               <HFTextField
-                type="number"
-                label="Fire oran"
-                name="MAXIMUMFIREORANI"
+                label="Melanj kodu"
+                name="MELANJKODU"
                 control={control}
-                defaultValue={formData?.MAXIMUMFIREORANI}
+                defaultValue={formData?.MELANJKODU}
                 handleChange={handleFormChange}
               />
-
               <HFTextField
                 label="Hata Puan Carpan"
                 name="HATAPUANICARPANI"
@@ -747,6 +746,31 @@ export const PaintForm = ({
                 {
                   id: "ISLEMTIPIID",
                   title: "ISLEMTIPIID",
+                  width: 90,
+                },
+                { id: "ADI", title: "ADI", width: 120 },
+              ]}
+              defaultValue={formData?.ILAVEISLEMLER}
+              handleSelect={(obj: { ISLEMTIPIID: number }) => {
+                setValue("ISLEMTIPIID", obj.ISLEMTIPIID);
+                handleDirtyPlaces("ISLEMTIPIID");
+              }}
+              control={control}
+            />
+
+            <LiteOptionsTable
+              label="Siparis Tipi"
+              name="SIPARISTIPIID"
+              link="boyasiparistipi"
+              renderValue={(_: string, obj: any) => {
+                return obj.SIPARISTIPIID && obj?.ADI
+                  ? obj.SIPARISTIPIID + " - " + obj.ADI
+                  : obj.ADI;
+              }}
+              headColumns={[
+                {
+                  id: "SIPARISTIPIID",
+                  title: "SIPARISTIPIID",
                   width: 90,
                 },
                 { id: "ADI", title: "ADI", width: 120 },

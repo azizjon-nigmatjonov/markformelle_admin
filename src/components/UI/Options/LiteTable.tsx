@@ -143,11 +143,8 @@ const SearchInput = memo(
                 }}
                 onFocus={() => setIsFocus(true)}
                 autoFocus={focused}
-                className={`border rounded-[8px] pl-8 h-[30px] w-full px-1 bg-white ${
-                  error?.message && error?.type !== "typeError"
-                    ? "border-[var(--error)]"
-                    : "border-[var(--border)]"
-                } ${disabled ? "text-[var(--gray)]" : ""}`}
+                className={`input-design ${error?.message ? "error" : ""}`}
+                style={{ paddingLeft: "30px" }}
                 placeholder={t(placeholder)}
                 onChange={(e) => {
                   debouncedSearch(e.target.value);

@@ -37,15 +37,14 @@ export const PaintFormLogic = ({
 
   const createForm = useCallback(
     async (params: {}) => {
-      closeFn();
       try {
         const { data } = await axios.post(
           `${API_URL}/boyasiparisdetay/`,
           params
         );
-
-        toast.success(t("created!"));
         closeFn();
+        toast.success(t("created!"));
+
         // refetchTable(data?.LABRECETEATISID);
         return data;
       } catch (error) {

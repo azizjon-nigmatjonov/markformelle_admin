@@ -83,6 +83,7 @@ const InputUI = ({
       }
     }
   };
+  console.log("error", error);
 
   return (
     <div
@@ -98,9 +99,7 @@ const InputUI = ({
     >
       <input
         ref={inputRef}
-        className={`input-design ${
-          error?.message && error?.type !== "typeError" ? "error" : ""
-        }`}
+        className={`input-design ${error?.message ? "error" : ""}`}
         style={{ width: "100%" }}
         value={value || ""}
         onChange={(e) => onChange(e.target.value)}
@@ -138,9 +137,9 @@ const InputUI = ({
       {/* Tooltip */}
       {showTooltip && isOverflowing && (
         <div
-          className="absolute z-[100] bg-gray-900 text-white text-sm px-2 py-1 rounded shadow-lg whitespace-nowrap"
+          className="absolute z-[100] bg-[var(--main)] text-white text-sm px-2 py-1 rounded shadow-lg whitespace-nowrap"
           style={{
-            top: "-30px",
+            top: "30px",
             left: "0",
           }}
         >
