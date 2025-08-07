@@ -20,6 +20,7 @@ export const Validation = () => {
     TERMINNOTU: yup.string().optional(),
     HATAPUANICARPANI: yup.number().optional(),
     DESENID: yup.string().optional(),
+    TIPID: yup.string().optional(),
     PANTONEKODU: yup.string().optional(),
     LABRECETEID: yup.number().optional(),
     HAMADI: yup.string().optional(),

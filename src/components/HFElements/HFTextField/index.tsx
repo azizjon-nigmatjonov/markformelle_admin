@@ -83,7 +83,6 @@ const InputUI = ({
       }
     }
   };
-  console.log("error", error);
 
   return (
     <div

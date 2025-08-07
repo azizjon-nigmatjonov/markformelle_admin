@@ -30,6 +30,26 @@ const DryingPage = () => {
     endpoint: `http://srv-nav.praktik.loc:1991/WEB_ALL`,
     params: {},
   });
+
+  const optimizedData = useMemo(() => {
+    return data?.filter((item: any) => {
+      console.log("item", item.code_device === "KURUTMA-2");
+
+      if (
+        item.code_device === "KURUTMA-2" ||
+        item.code_device === "KAESAN" ||
+        item.code_device === "SANFRTUP-2" ||
+        item.code_device === "BALONSKMA1" ||
+        item.code_device === "TERSCVRME" ||
+        item.code_device === "SANTRAFJ-1"
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+  }, [data]);
+
   const [list, setList] = useState([]);
 
   useEffect(() => {
@@ -73,7 +93,7 @@ const DryingPage = () => {
   };
 
   const newData = useMemo(() => {
-    const result = list?.length ? list : data ?? [];
+    const result = list?.length ? list : optimizedData ?? [];
     const arr: any = [];
     result?.forEach((element: any) => {
       const group = element.device_group;
@@ -128,11 +148,11 @@ const DryingPage = () => {
     });
 
     return arr.sort((a: any, b: any) => a.order - b.order);
-  }, [list?.length, data, type]);
+  }, [list?.length, optimizedData, type]);
 
   const FilterUI = () => (
     <div className="flex justify-between space-x-3">
-      <GlobalSearch list={data ?? []} setList={setList} />
+      <GlobalSearch list={optimizedData ?? []} setList={setList} />
 
       <ToggleBtn type={type} setType={setType} />
     </div>

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { InputMask } from "@react-input/mask";
+import InputMask from "@mona-health/react-input-mask";
 import CLabel from "../../CElements/CLabel";
 import { Controller, Control } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -17,6 +17,7 @@ interface Props {
   handleChange?: (val?: string) => void;
   type?: string;
   disabled?: boolean;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 interface MaskInputUIProps {
@@ -31,6 +32,7 @@ interface MaskInputUIProps {
   type?: string;
   error?: boolean;
   disabled?: boolean;
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 export const MaskInputUI = ({
@@ -45,6 +47,7 @@ export const MaskInputUI = ({
   type = "text",
   error = false,
   disabled = false,
+  onKeyDown = () => {},
 }: MaskInputUIProps) => {
   useEffect(() => {
     if (defaultValue) {
@@ -72,12 +75,15 @@ export const MaskInputUI = ({
 
   return (
     <InputMask
-      onChange={(e) => {
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;
         onChange(val);
         handleChange(val);
       }}
-      onKeyDown={handleKeyDown}
+      onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+        handleKeyDown(e);
+        onKeyDown(e);
+      }}
       type={type}
       ref={maskRef}
       mask={mask}
@@ -103,6 +109,7 @@ const HFInputMask = ({
   type = "text",
   disabled,
   handleChange = () => {},
+  onKeyDown = () => {},
 }: Props) => {
   const { t } = useTranslation();
 
@@ -120,7 +127,6 @@ const HFInputMask = ({
       <Controller
         control={control}
         name={name}
-        defaultValue={defaultValue}
         rules={{
           required: required ? t("This field is required") : false,
         }}
@@ -136,6 +142,7 @@ const HFInputMask = ({
               defaultValue={defaultValue}
               type={type}
               error={!!error?.message}
+              onKeyDown={onKeyDown}
             />
           </>
         )}

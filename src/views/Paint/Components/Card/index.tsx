@@ -117,7 +117,7 @@ export const PaintPotCard = ({ element = {} }: Props) => {
           </div>
         </div>
 
-        <div className={`footer w-full pl-4`}>
+        <div className={`footer w-full`}>
           <ul
             className="w-full whitespace-nowrap"
             style={{
